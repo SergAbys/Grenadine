@@ -1,0 +1,113 @@
+/*
+ *  pizBoundedHashTable.h
+ *
+ *  Created : 27/11/11.
+ *  Copyright 2011 : Tom Javel & Jean Sapristi.
+ *
+ *  nicolas.danet@free.fr
+ *
+ *	This software is governed by the CeCILL-C license under French law and
+ *	abiding by the rules of distribution of free software. You can use, 
+ *	modify and/or redistribute the software under the terms of the CeCILL-C
+ *	license as circulated by CEA, CNRS and INRIA at the following URL
+ *	"http://www.cecill.info". 
+ *
+ *	As a counterpart to the access to the source code and rights to copy,
+ *	modify and redistribute granted by the license, users are provided only
+ *	with a limited warranty  and the software's author, the holder of the
+ *	economic rights, and the successive licensors have only limited
+ *	liability. 
+ *
+ *	In this respect, the user's attention is drawn to the risks associated
+ *	with loading, using, modifying and/or developing or reproducing the
+ *	software by the user in light of its specific status of free software,
+ *	that may mean that it is complicated to manipulate, and that also
+ *	therefore means that it is reserved for developers and experienced
+ *	professionals having in-depth computer knowledge. Users are therefore
+ *	encouraged to load and test the software's suitability as regards their
+ *	requirements in conditions enabling the security of their systems and/or 
+ *	data to be ensured and, more generally, to use and operate it in the 
+ *	same conditions as regards security. 
+ *	
+ *	The fact that you are presently reading this means that you have had
+ *	knowledge of the CeCILL-C license and that you accept its terms.
+ */
+ 
+/*
+ *	Last modified : 01/01/12.
+ */
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#ifndef PIZ_BOUNDED_HASHTABLE_H
+#define PIZ_BOUNDED_HASHTABLE_H
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#include "pizTypes.h"
+#include "pizBoundedStack.h"
+#include "pizGrowingArray.h"
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define PIZ_BOUNDED_HASHTABLE_FLAG_NONE	(0L)
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+typedef struct _PIZBoundedHashTableElement {
+	long key;
+	void *ptr;
+	} PIZBoundedHashTableElement;
+
+typedef struct _PIZBoundedHashTable {
+	long						flags;
+	long						count;
+	long						hashSize;
+	long						poolSize;
+	PIZBoundedStack				*ticketMachine;
+	PIZBoundedHashTableElement	*pool;
+	PIZGrowingArray				**hashTable;
+	} PIZBoundedHashTable;
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZ_START_C_LINKAGE
+
+PIZBoundedHashTable	*pizBoundedHashTableNew				 (long argc, long *argv);
+void				pizBoundedHashTableSetFlags			 (PIZBoundedHashTable *hashTable, long flags);
+void				pizBoundedHashTableFree				 (PIZBoundedHashTable *hashTable);
+
+void				pizBoundedHashTableClear			 (PIZBoundedHashTable *hashTable);
+PIZError			pizBoundedHashTableAdd				 (PIZBoundedHashTable *hashTable, long key, void *ptr);
+long				pizBoundedHashTableCount			 (PIZBoundedHashTable *hashTable);
+PIZError			pizBoundedHashTablePtrByKey			 (PIZBoundedHashTable *hashTable, long key, void **ptr);
+PIZError			pizBoundedHashTableRemoveByKeyAndPtr (PIZBoundedHashTable *hashTable, long key, void *ptr);
+bool				pizBoundedHashTableContainsKey		 (PIZBoundedHashTable *hashTable, long key);
+
+PIZ_END_C_LINKAGE
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#ifdef PIZ_EXTERN_INLINE
+
+PIZ_EXTERN void pizBoundedHashTableSetFlags (PIZBoundedHashTable *x, long flags)
+{
+	x->flags = flags;
+}
+
+PIZ_EXTERN long pizBoundedHashTableCount (PIZBoundedHashTable *x)
+{
+	return (x->count);
+}
+
+#endif // PIZ_EXTERN_INLINE
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#endif // PIZ_BOUNDED_HASHTABLE_H

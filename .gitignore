@@ -1,0 +1,8 @@
+.DS_Store
+
+*.plist
+*.xcconfig
+*.xcodeproj
+
+*/build
+*Hide.txt
