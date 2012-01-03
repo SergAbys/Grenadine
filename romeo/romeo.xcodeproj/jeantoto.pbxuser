@@ -1,0 +1,58 @@
+// !$*UTF8*$!
+{
+	089C1669FE841209C02AAC07 /* Project object */ = {
+		activeBuildConfigurationName = Release;
+		activeTarget = 8D01CCC60486CAD60068D4B7 /* max-external */;
+		addToTargets = (
+			8D01CCC60486CAD60068D4B7 /* max-external */,
+		);
+		breakpoints = (
+		);
+		breakpointsGroup = 968F41EB129A9DCD00CACE6F /* XCBreakpointsBucket */;
+		codeSenseManager = 96BF2F54128976F00018D097 /* Code sense */;
+		perUserDictionary = {
+			PBXPerProjectTemplateStateSaveDate = 346869754;
+			PBXWorkspaceStateSaveDate = 346869754;
+		};
+		sourceControlManager = 96BF2F53128976F00018D097 /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	8D01CCC60486CAD60068D4B7 /* max-external */ = {
+		activeExec = 0;
+	};
+	968F41EB129A9DCD00CACE6F /* XCBreakpointsBucket */ = {
+		isa = XCBreakpointsBucket;
+		name = "Project Breakpoints";
+		objects = (
+		);
+	};
+	96BF2F53128976F00018D097 /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+		scmType = "";
+	};
+	96BF2F54128976F00018D097 /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	96BF2F57128977430018D097 /* romeo.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1240.6, 6025}}";
+			sepNavSelRange = "{42, 0}";
+			sepNavVisRect = "{{0, 0}, {1231, 645}}";
+			sepNavWindowFrame = "{{1, 4}, {1276, 774}}";
+		};
+	};
+	96D1CE261407FE450063791F /* romeoHide.txt */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1234, 875}}";
+			sepNavSelRange = "{606, 0}";
+			sepNavVisRect = "{{0, 205}, {1234, 645}}";
+			sepNavWindowFrame = "{{15, -1}, {1279, 774}}";
+		};
+	};
+}
