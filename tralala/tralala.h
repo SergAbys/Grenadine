@@ -177,7 +177,7 @@
 #define FLAG_IS_PAUSED						(1<<11)
 #define FLAG_IS_MUTED						(1<<12)
 #define FLAG_INIT_PAINT_CLOCK				(1<<13)
-#define FLAG_ORIGIN_IS_SHIFT_KEY			(1<<14)
+#define FLAG_ORIGIN_HAD_SHIFT_KEY			(1<<14)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -345,7 +345,7 @@ typedef struct _tralala {
 	PIZGaloisLattice	*galoisLattice;
 	PIZFiniteState		*finiteState; 
 	PIZScaleKey			key;
-	PIZScaleType		type;											//
+	t_systhread_mutex   methodMutex;									//
 	t_systhread_mutex   algorithmMutex;
 	t_systhread_mutex   learnMutex;
 	t_systhread_mutex   paintMutex;
@@ -365,9 +365,10 @@ typedef struct _tralala {
 	t_symbol			*scaleKey;
 	t_symbol			*scaleType;
 	t_symbol			*grid;
-	long				patternSize;
+	PIZScaleType		type;
 	long				scaleCustom		[PIZ_SEQUENCE_SCALE_SIZE];		//
 	long				patternCustom	[PATTERN_MAXIMUM_SIZE];			//
+	long				patternSize;
 	long				mousePitchValue;
 	long				mouseVelocityValue;
 	long				zoomMode;
@@ -379,7 +380,6 @@ typedef struct _tralala {
 	long				saveSlotsWithPatcher;
 	long				saveChannelWithPatcher;
 	long				saveValuesWithPatcher;				
-	t_symbol			*popupFontName;
 	PIZGrowingArray		*unselectedNotes;
 	PIZGrowingArray		*selectedNotes;
 	PIZGrowingArray		*playedNotes;
@@ -403,6 +403,7 @@ typedef struct _tralala {
 	double				textWidth		[TEXT_CELL_COUNT];				////
 	bool				textIsSelected	[TEXT_CELL_COUNT];
 	t_int32_atomic		paintLock;
+	t_symbol			*popupFontName;
 	t_jrgba				backgroundColor;					
 	t_jrgba				unfocusedBorderColor;		
 	t_jrgba				unfocusedTextColor;					

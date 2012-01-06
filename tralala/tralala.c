@@ -465,11 +465,11 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 	t_dictionary		*d = NULL;
 	long				boxflags;
 	
-/*	post ("%ld", calcoffset (t_tralala, channel));
+	/*post ("%ld", calcoffset (t_tralala, channel));
 	post ("%ld", calcoffset (t_tralala, algorithmMutex));
 	post ("%ld", calcoffset (t_tralala, scaleKey));
 	post ("%ld", calcoffset (t_tralala, patternCustom));
-	post ("%ld", calcoffset (t_tralala, mousePitchValue));
+	post ("%ld", calcoffset (t_tralala, patternSize));
 	post ("%ld", calcoffset (t_tralala, unselectedNotesCopy));
 	post ("%ld", calcoffset (t_tralala, origin));
 	post ("%ld", calcoffset (t_tralala, textPosition));
@@ -510,9 +510,10 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 					x->inhibitStartClock	= clock_new (x, (method)tralala_inhibitStartTask);
 					x->inhibitBangClock		= clock_new (x, (method)tralala_inhibitBangTask);
 					
-					systhread_mutex_new (&x->algorithmMutex, SYSTHREAD_MUTEX_NORMAL);
-					systhread_mutex_new (&x->learnMutex, SYSTHREAD_MUTEX_NORMAL);
-					systhread_mutex_new (&x->paintMutex, SYSTHREAD_MUTEX_NORMAL);
+					systhread_mutex_new (&x->methodMutex,		SYSTHREAD_MUTEX_NORMAL);
+					systhread_mutex_new (&x->algorithmMutex,	SYSTHREAD_MUTEX_NORMAL);
+					systhread_mutex_new (&x->learnMutex,		SYSTHREAD_MUTEX_NORMAL);
+					systhread_mutex_new (&x->paintMutex,		SYSTHREAD_MUTEX_NORMAL);
 					
 					for (i = 0; i < TEXT_CELL_COUNT; i++) {
 							x->textLayers[i]	 = jtextlayout_create ( );
@@ -666,6 +667,10 @@ void tralala_free (t_tralala *x)
 			object_free (x->notifyClock);
 		}
 	
+	if (x->algorithmMutex) {
+			systhread_mutex_free (x->methodMutex);
+		}
+		
 	if (x->algorithmMutex) {
 			systhread_mutex_free (x->algorithmMutex);
 		}
@@ -1263,6 +1268,8 @@ t_max_err tralala_setGrid (t_tralala *x, t_object *attr, long argc, t_atom *argv
 
 void tralala_play (t_tralala *x)
 {	
+	systhread_mutex_lock (&x->methodMutex);
+	
 	x->flags &= ~FLAG_INHIBIT_START;
 	
 	clock_unset (x->goToStartClock);
@@ -1288,10 +1295,14 @@ void tralala_play (t_tralala *x)
 
 			clock_fdelay (x->runClock, 0.);
 		}
+	
+	systhread_mutex_unlock (&x->methodMutex);
 }
 
 void tralala_stop (t_tralala *x)
 {	
+	systhread_mutex_lock (&x->methodMutex);
+	
 	clock_unset (x->runClock);
 	
 	x->flags &= ~(FLAG_IS_LOOPED | FLAG_IS_RUNNING | FLAG_IS_PAUSED);
@@ -1304,10 +1315,14 @@ void tralala_stop (t_tralala *x)
 	x->flags |= FLAG_INHIBIT_START;
 	
 	clock_fdelay (x->inhibitStartClock, DEFER_CLOCK_INTERVAL);
+	
+	systhread_mutex_unlock (&x->methodMutex);
 }
 
 void tralala_loop (t_tralala *x)
 {	
+	systhread_mutex_lock (&x->methodMutex);
+	
 	if (!(x->flags & FLAG_IS_RUNNING))
 		{
 			clock_unset (x->goToStartClock);
@@ -1324,15 +1339,23 @@ void tralala_loop (t_tralala *x)
 		{
 			x->flags |= FLAG_IS_LOOPED;
 		}
+	
+	systhread_mutex_unlock (&x->methodMutex);
 }
 
 void tralala_unloop (t_tralala *x)
 {	
+	systhread_mutex_lock (&x->methodMutex);
+	
 	x->flags &= ~FLAG_IS_LOOPED;
+	
+	systhread_mutex_unlock (&x->methodMutex);
 }
 
 void tralala_pause (t_tralala *x)
 {	
+	systhread_mutex_lock (&x->methodMutex);
+	
 	if ((x->flags & FLAG_IS_RUNNING) && !(x->flags & FLAG_IS_PAUSED))
 		{
 			x->flags |= FLAG_IS_PAUSED;
@@ -1347,6 +1370,8 @@ void tralala_pause (t_tralala *x)
 			
 			clock_fdelay (x->runClock, 0.);
 		}
+	
+	systhread_mutex_unlock (&x->methodMutex);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -1544,7 +1569,9 @@ void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 }
 
 void tralala_mute (t_tralala *x, long n)
-{
+{	
+	systhread_mutex_lock (&x->methodMutex);
+	
 	if (n) 
 		{
 			x->flags |= FLAG_IS_MUTED;
@@ -1553,6 +1580,8 @@ void tralala_mute (t_tralala *x, long n)
 		{
 			x->flags &= ~FLAG_IS_MUTED;
 		}
+	
+	systhread_mutex_unlock (&x->methodMutex);
 }
 
 void tralala_forget (t_tralala *x)
@@ -2557,7 +2586,11 @@ void tralala_slotPrevious (t_tralala *x)
 
 void tralala_undo (t_tralala *x)
 {
-	long count = pizLinklistCount (x->undo);
+	long count;
+	
+	systhread_mutex_lock (&x->methodMutex);
+	
+	count = pizLinklistCount (x->undo);
 	
 	if (count > 1)
 		{
@@ -2600,11 +2633,17 @@ void tralala_undo (t_tralala *x)
 					DIRTYSLOTS
 				}
 		}
+	
+	systhread_mutex_unlock (&x->methodMutex);
 }
 
 void tralala_redo (t_tralala *x)
 {
-	long count = pizLinklistCount (x->redo);
+	long count;
+	
+	systhread_mutex_lock (&x->methodMutex);
+	
+	count = pizLinklistCount (x->redo);
 	
 	if (count)
 		{
@@ -2640,11 +2679,15 @@ void tralala_redo (t_tralala *x)
 						}
 				}
 		}
+	
+	systhread_mutex_unlock (&x->methodMutex);
 }
 
 void tralala_addUndo (t_tralala *x)
 {
 	PIZGrowingArray *newUndo = NULL;
+	
+	systhread_mutex_lock (&x->methodMutex);
 	
 	if (newUndo = pizGrowingArrayNew (INIT_GROWING_ARRAY_SIZE)) 
 		{
@@ -2675,12 +2718,18 @@ void tralala_addUndo (t_tralala *x)
 						}
 				}
 		}
+	
+	systhread_mutex_unlock (&x->methodMutex);
 }
 
 void tralala_clearUndo (t_tralala *x)
 {
+	systhread_mutex_lock (&x->methodMutex);
+	
 	pizLinklistClear (x->undo);
 	pizLinklistClear (x->redo);
+	
+	systhread_mutex_unlock (&x->methodMutex);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -3023,9 +3072,9 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 					systhread_mutex_unlock		(&x->paintMutex);
 					
 					if (SHIFT) {
-						x->flags |= FLAG_ORIGIN_IS_SHIFT_KEY;
+						x->flags |= FLAG_ORIGIN_HAD_SHIFT_KEY;
 					} else {
-						x->flags &= ~FLAG_ORIGIN_IS_SHIFT_KEY;
+						x->flags &= ~FLAG_ORIGIN_HAD_SHIFT_KEY;
 					}
 					
 					x->flags |= FLAG_ORIGIN_IS_SET;
@@ -3197,7 +3246,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 					x->flags |= FLAG_IS_LASSO;
 					DIRTYLAYER_SET(DIRTY_REFRESH)
 					
-					if (x->flags & FLAG_ORIGIN_IS_SHIFT_KEY) {
+					if (x->flags & FLAG_ORIGIN_HAD_SHIFT_KEY) {
 						if (pizSequenceSelectNotesWithLasso 
 							(x->user, &x->originCoordinates, &x->coordinates, INVERT))  {
 									DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
