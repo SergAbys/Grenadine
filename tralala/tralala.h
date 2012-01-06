@@ -285,7 +285,7 @@
 #define DIRTYCHANNEL	if (x->saveChannelWithPatcher) {									\
 								jpatcher_set_dirty (jbox_get_patcher ((t_object *)x), 1);	\
 							} 	
-#define DIRTYGRID		if (x->grid == tll_sym_automatic) { x->dirtyLayer |= DIRTY_GRID; }
+#define DIRTYGRID		if (x->grid == tll_sym_automatic) { DIRTYLAYER_SET(DIRTY_GRID) }
 #define DIRTYUNDO		tralala_addUndo (x);
 
 // -------------------------------------------------------------------------------------------------------------

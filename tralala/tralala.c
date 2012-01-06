@@ -2429,6 +2429,7 @@ void tralala_slotRecall (t_tralala *x, long n)
 			
 			DIRTYUNDO
 			DIRTYPATTR
+			DIRTYGRID
 		}
 	
 	DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE)
@@ -4400,7 +4401,7 @@ void tralala_testAutoscroll (t_tralala *x, t_object *patcherview, t_pt pt)
 
 void tralala_stopAutoscroll (t_tralala *x)
 {
-	x->dirtyLayer &= ~(DIRTY_LOCATE_LEFT | DIRTY_LOCATE_RIGHT | DIRTY_LOCATE_DOWN | DIRTY_LOCATE_UP);
+	DIRTYLAYER_UNSET(~(DIRTY_LOCATE_LEFT | DIRTY_LOCATE_RIGHT | DIRTY_LOCATE_DOWN | DIRTY_LOCATE_UP))
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -4745,17 +4746,17 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 	
 		returnedPopupValue = jpopupmenu_popup (popup, locate, 0);
 		
-		} ATOMIC_DECREMENT (&x->popupLock);
+			if (returnedPopupValue == 1000) {
+				tralala_slotNew (x); 
+			} else if (returnedPopupValue == 1001) {
+				tralala_slotNewCopy (x); 
+			} else if (returnedPopupValue == 1002) {
+				tralala_slotRemove (x, x->slotIndex); 
+			} else if (returnedPopupValue >= 5000) {
+				tralala_slotRecall (x, returnedPopupValue - 5000);
+			}
 	
-	if (returnedPopupValue == 1000) {
-		tralala_slotNew (x); 
-	} else if (returnedPopupValue == 1001) {
-		tralala_slotNewCopy (x); 
-	} else if (returnedPopupValue == 1002) {
-		tralala_slotRemove (x, x->slotIndex); 
-	} else if (returnedPopupValue >= 5000) {
-		tralala_slotRecall (x, returnedPopupValue - 5000);
-	}
+		} ATOMIC_DECREMENT (&x->popupLock);
 			
 	switch (returnedPopupValue) {
 		case 0		:	break;
