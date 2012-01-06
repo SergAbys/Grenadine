@@ -6,11 +6,11 @@
  *  nicolas.danet@free.fr
  *
  */
- 
-/*
- *	Last modified : 03/01/12.
- */
 
+/*
+ *	Last modified : 06/01/12.
+ */
+ 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
@@ -34,6 +34,150 @@
 #include "pizTransform.h"
 #include "pizArchive.h"
 #include "tralalaSymbols.h"
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define STEPS_PER_MINUTE					2500.
+#define TICKS_FOR_ONE_STEP					20
+#define STEP_PIXELS_SIZE					2.
+#define SEMITONE_PIXELS_SIZE				24.
+#define JSURFACE_MOSAIC_PITCH_SIZE			16
+#define JSURFACE_MOSAIC_STEP_SIZE			288
+
+#define DEFER_CLOCK_INTERVAL				0.
+#define PAINT_CLOCK_INTERVAL				31.
+#define LEARN_CLOCK_INTERVAL				37.
+#define FOCUS_CLOCK_INTERVAL				53.
+#define NOTIFY_CLOCK_INTERVAL				487.
+
+#define CLOCK_RANDOMIZE						10.
+
+#define MOUSEWHEEL_FACTOR					100.
+#define AUTOSCROLL_RANGE					20.
+#define AUTOSCROLL_STEP						10.
+#define HIT_ZONE_RANGE						4.
+#define VELOCITY_PAINT_OFFSET				20.
+
+#define TEMPO_MINIMUM						20
+#define TEMPO_MAXIMUM						300
+
+#define INIT_GROWING_ARRAY_SIZE				28
+
+#define LEARN_QUEUE_SIZE					256
+#define STRING_MAXIMUM_SIZE					75
+#define PATTERN_MAXIMUM_SIZE				16
+#define NOVEMBER_MAXIMUM_ITERATE			10
+#define JULIET_MAXIMUM_ITERATE				10
+
+#define LEARN_THRESHOLD_MINIMUM				4
+#define LEARN_THRESHOLD_RANGE				4
+#define LEARN_THRESHOLD_MAXIMUM				8
+
+#define PATCHING_SIZE_MINIMUM				"100. 100."
+
+#define FONTSIZE_LIST						"8 9 10 11 12 13 14 16 18 20 24 30 36 48 64 72"
+#define FONTSTYLE_LIST						"regular bold italic \"bold italic\""
+#define SCALE_TYPE_LIST						"none custom ionian dorian phrygian lydian mixolydian		\
+											aeolian locrian natural harmonic melodic \"whole tone\"		\
+											\"pentatonic major\" \"pentatonic minor\"					\
+											\"octatonic half/whole\" \"octatonic whole/half\"			\
+											\"7th major\" \"7th minor\"									\
+											\"7th dominant\" \"7th major sixth\"						\
+											\"7th minor sixth\" \"7th half-diminished\"					\
+											\"7th diminished\" \"7th dominant suspended\"				\
+											\"7th dominant sharp five\"									\
+											\"7th dominant flat five\""								
+											 
+#define PATTERN_CELL_LIST					"none whole half quarter eight sixteenth thirty-second		\
+											\"triplet whole\" \"triplet half\"							\
+											\"triplet quarter\" \"triplet eight\"						\
+											\"triplet sixteenth\" \"triplet thirty-second\"				\
+											\"dotted whole\" \"dotted half\"							\
+											\"dotted quarter\" \"dotted eight\"							\
+											\"dotted sixteenth\""
+
+#define GRID_LIST							"automatic whole half quarter eight sixteenth							\
+											\"triplet half\"											\
+											\"triplet quarter\" \"triplet eight\"						\
+											\"triplet sixteenth\"										\
+											\"dotted half\"												\
+											\"dotted quarter\" \"dotted eight\"							\
+											\"dotted sixteenth\""
+											
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define TEXT_CELL_COUNT						4
+#define TEXT_CELL_SPACE						7.
+#define TEXT_BACKGROUND_ALPHA				0.60
+#define TEXT_ORDER_VELOCITY					0
+#define TEXT_ORDER_DURATION					1
+#define TEXT_ORDER_CHANNEL					2
+#define TEXT_ORDER_PITCH					3
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define TEXT_MODE_NOTE						0
+#define TEXT_MODE_ZONE						1
+#define TEXT_MODE_MOUSE_PITCH				2
+#define TEXT_MODE_MOUSE_VELOCITY			3
+
+#define SEQUENCE_MODE_USER					0
+#define SEQUENCE_MODE_LIVE					1
+#define SEQUENCE_MODE_LISTEN				2
+
+#define ZOOM_MODE_A							0
+#define ZOOM_MODE_B							1
+#define ZOOM_MODE_C							2
+
+#define FORMAT_MODE_LONG					0
+#define FORMAT_MODE_NOTENAME				1
+#define FORMAT_MODE_TICKS					2
+
+#define MENU_SEQUENCE						0
+#define MENU_NOTE							1
+
+#define HIT_NOTHING							0
+#define	HIT_NOTE							1
+#define	HIT_START							2
+#define	HIT_END								4
+#define	HIT_DOWN							8
+#define	HIT_UP								16
+#define HIT_ZONE							32
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define DIRTY_NONE							(0L)
+#define DIRTY_REFRESH						(1<<0)
+#define DIRTY_CHANGE						(1<<1)
+#define DIRTY_GRID							(1<<2)
+#define DIRTY_NOTES							(1<<3)
+#define DIRTY_ZONE							(1<<4)	
+#define DIRTY_PLAYED						(1<<5)
+#define DIRTY_LOCATE_LEFT					(1<<6)
+#define DIRTY_LOCATE_RIGHT					(1<<7)
+#define	DIRTY_LOCATE_DOWN					(1<<8)
+#define DIRTY_LOCATE_UP						(1<<9)
+
+#define FLAG_NONE							(0L)
+#define FLAG_FOCUS							(1<<0)
+#define FLAG_HAVE_MOVED						(1<<1)
+#define FLAG_HAVE_CHANGED					(1<<2)
+#define FLAG_HAVE_BEEN_DUPLICATED			(1<<3)
+#define FLAG_ZONE_IS_SELECTED				(1<<4)
+#define FLAG_ORIGIN_IS_SET					(1<<5)
+#define FLAG_INHIBIT_START					(1<<6)
+#define FLAG_INHIBIT_BANG					(1<<7)
+#define FLAG_IS_LASSO						(1<<8)
+#define FLAG_IS_LOOPED						(1<<9)
+#define FLAG_IS_RUNNING						(1<<10)
+#define FLAG_IS_PAUSED						(1<<11)
+#define FLAG_IS_MUTED						(1<<12)
+#define FLAG_INIT_PAINT_CLOCK				(1<<13)
+#define FLAG_ORIGIN_IS_SHIFT_KEY			(1<<14)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -112,147 +256,6 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define STEPS_PER_MINUTE					2500.
-#define TICKS_FOR_ONE_STEP					20
-#define STEP_PIXELS_SIZE					2.
-#define SEMITONE_PIXELS_SIZE				24.
-#define JSURFACE_MOSAIC_PITCH_SIZE			16
-#define JSURFACE_MOSAIC_STEP_SIZE			288
-
-#define DEFER_CLOCK_INTERVAL				0.
-#define LEARN_CLOCK_INTERVAL				37.
-#define PAINT_CLOCK_INTERVAL				47.
-#define FOCUS_CLOCK_INTERVAL				53.
-#define NOTIFY_CLOCK_INTERVAL				487.
-
-#define MOUSEWHEEL_FACTOR					100.
-#define AUTOSCROLL_RANGE					20.
-#define AUTOSCROLL_STEP						10.
-#define HIT_ZONE_RANGE						4.
-#define VELOCITY_PAINT_OFFSET				20.
-
-#define TEMPO_MINIMUM						20
-#define TEMPO_MAXIMUM						300
-
-#define INIT_GROWING_ARRAY_SIZE				28
-
-#define LEARN_QUEUE_SIZE					256
-#define STRING_MAXIMUM_SIZE					75
-#define PATTERN_MAXIMUM_SIZE				16
-#define NOVEMBER_MAXIMUM_ITERATE			10
-#define JULIET_MAXIMUM_ITERATE				10
-
-#define LEARN_THRESHOLD_MINIMUM				4
-#define LEARN_THRESHOLD_RANGE				4
-#define LEARN_THRESHOLD_MAXIMUM				8
-
-#define PATCHING_SIZE_MINIMUM				"100. 100."
-#define FONTSIZE_LIST						"8 9 10 11 12 13 14 16 18 20 24 30 36 48 64 72"
-#define FONTSTYLE_LIST						"regular bold italic \"bold italic\""
-#define SCALE_TYPE_LIST						"none custom ionian dorian phrygian lydian mixolydian		\
-											aeolian locrian natural harmonic melodic \"whole tone\"		\
-											\"pentatonic major\" \"pentatonic minor\"					\
-											\"octatonic half/whole\" \"octatonic whole/half\"			\
-											\"7th major\" \"7th minor\"									\
-											\"7th dominant\" \"7th major sixth\"						\
-											\"7th minor sixth\" \"7th half-diminished\"					\
-											\"7th diminished\" \"7th dominant suspended\"				\
-											\"7th dominant sharp five\"									\
-											\"7th dominant flat five\""								
-											 
-#define PATTERN_CELL_LIST					"none whole half quarter eight sixteenth thirty-second		\
-											\"triplet whole\" \"triplet half\"							\
-											\"triplet quarter\" \"triplet eight\"						\
-											\"triplet sixteenth\" \"triplet thirty-second\"				\
-											\"dotted whole\" \"dotted half\"							\
-											\"dotted quarter\" \"dotted eight\"							\
-											\"dotted sixteenth\""
-
-#define GRID_LIST							"automatic whole half quarter eight sixteenth							\
-											\"triplet half\"											\
-											\"triplet quarter\" \"triplet eight\"						\
-											\"triplet sixteenth\"										\
-											\"dotted half\"												\
-											\"dotted quarter\" \"dotted eight\"							\
-											\"dotted sixteenth\""
-											
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define TEXT_CELL_COUNT						4
-#define TEXT_CELL_SPACE						7.
-#define TEXT_BACKGROUND_ALPHA				0.60
-#define TEXT_ORDER_VELOCITY					0
-#define TEXT_ORDER_DURATION					1
-#define TEXT_ORDER_CHANNEL					2
-#define TEXT_ORDER_PITCH					3
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define TEXT_MODE_NOTE						0
-#define TEXT_MODE_ZONE						1
-#define TEXT_MODE_MOUSE_PITCH				2
-#define TEXT_MODE_MOUSE_VELOCITY			3
-
-#define SEQUENCE_MODE_USER					0
-#define SEQUENCE_MODE_LIVE					1
-#define SEQUENCE_MODE_LISTEN				2
-
-#define ZOOM_MODE_A							0
-#define ZOOM_MODE_B							1
-#define ZOOM_MODE_C							2
-
-#define FORMAT_MODE_LONG					0
-#define FORMAT_MODE_NOTENAME				1
-#define FORMAT_MODE_TICKS					2
-
-#define MENU_SEQUENCE						0
-#define MENU_NOTE							1
-
-#define HIT_NOTHING							0
-#define	HIT_NOTE							1
-#define	HIT_START							2
-#define	HIT_END								4
-#define	HIT_DOWN							8
-#define	HIT_UP								16
-#define HIT_ZONE							32
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define DIRTY_NONE							(0)
-#define DIRTY_REFRESH						(1<<0)
-#define DIRTY_CHANGE						(1<<1)
-#define DIRTY_GRID							(1<<2)
-#define DIRTY_NOTES							(1<<3)
-#define DIRTY_ZONE							(1<<4)	
-#define DIRTY_PLAYED						(1<<5)
-#define DIRTY_LOCATE_LEFT					(1<<6)
-#define DIRTY_LOCATE_RIGHT					(1<<7)
-#define	DIRTY_LOCATE_DOWN					(1<<8)
-#define DIRTY_LOCATE_UP						(1<<9)
-
-#define FLAG_NONE							(0)
-#define FLAG_FOCUS							(1<<0)
-#define FLAG_HAVE_MOVED						(1<<1)
-#define FLAG_HAVE_CHANGED					(1<<2)
-#define FLAG_HAVE_BEEN_DUPLICATED			(1<<3)
-#define FLAG_ZONE_IS_SELECTED				(1<<4)
-#define FLAG_ORIGIN_IS_SET					(1<<5)
-#define FLAG_INHIBIT_START					(1<<6)
-#define FLAG_INHIBIT_BANG					(1<<7)
-#define FLAG_IS_LASSO						(1<<8)
-#define FLAG_IS_LOOPED						(1<<9)
-#define FLAG_IS_RUNNING						(1<<10)
-#define FLAG_IS_PAUSED						(1<<11)
-#define FLAG_IS_MUTED						(1<<12)
-#define FLAG_INIT_PAINT_CLOCK				(1<<13)
-#define FLAG_ORIGIN_IS_SHIFT_KEY			(1<<14)
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 #define VIEWTEXT		(x->viewText == 1)
 #define USER			(x->sequenceMode == 0)
 #define LIVE			(x->sequenceMode == 1)
@@ -288,12 +291,28 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define ARRAYGET(name)			PIZGrowingArray *(name) = pizArrayPoolGetArray (x->arrayPool);
-#define ARRAYRELEASE(name)		pizArrayPoolReleaseArray (x->arrayPool, (name));
-		
-//#define ARRAYGET(name)			PIZGrowingArray *(name) = pizGrowingArrayNew (28);
-//#define ARRAYRELEASE(name)		pizGrowingArrayFree (name);
-		
+#define ARRAY_GET(name)			PIZGrowingArray *(name) = pizArrayPoolGetArray (x->arrayPool);
+#define ARRAY_RELEASE(name)		pizArrayPoolReleaseArray (x->arrayPool, (name));
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#ifdef MAC_VERSION
+
+	typedef volatile uint32_t t_uint32_atomic;
+	
+	#define DIRTYLAYER_SET(mask)		OSAtomicOr32((uint32_t)(mask), (uint32_t *)&x->dirtyLayer);	
+	#define DIRTYLAYER_UNSET(mask)		OSAtomicAnd32((uint32_t)(mask), (uint32_t *)&x->dirtyLayer);
+	
+#else
+	
+	typedef volatile unsigned long t_uint32_atomic;
+	
+	#define DIRTYLAYER_SET(mask)		x->dirtyLayer |= (mask);
+	#define DIRTYLAYER_UNSET(mask)		x->dirtyLayer &= (mask);
+	
+#endif
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 	
@@ -305,18 +324,18 @@ typedef struct _tralala {
 	PIZSequence			*live;
 	PIZSequence			*listen;
 	PIZGrowingArray		*result;
-	PIZArrayPool		*arrayPool;
-	t_int32_atomic		popupLock;			
+	PIZArrayPool		*arrayPool;			
 	long				flags;
 	long				runIndex;
 	long				tempo;
-	long				chance;											//
-	long				velocity;							
+	long				chance;	
+	long				velocity;										//						
 	long				channel; 
 	long				slotIndex;  
 	long				learnCycle;
 	long				learnThreshold;
-	long				dirtyLayer;
+	t_int32_atomic		popupLock;
+	t_uint32_atomic		dirtyLayer;
 	PIZLinklist			*slots;
 	PIZLinklist			*undo;
 	PIZLinklist			*redo;
@@ -381,8 +400,9 @@ typedef struct _tralala {
 	t_pt				point;
 	t_jtextlayout		*textLayers		[TEXT_CELL_COUNT];				//
 	double				textPosition	[TEXT_CELL_COUNT];
-	double				textWidth		[TEXT_CELL_COUNT];				//
+	double				textWidth		[TEXT_CELL_COUNT];				////
 	bool				textIsSelected	[TEXT_CELL_COUNT];
+	t_int32_atomic		paintLock;
 	t_jrgba				backgroundColor;					
 	t_jrgba				unfocusedBorderColor;		
 	t_jrgba				unfocusedTextColor;					

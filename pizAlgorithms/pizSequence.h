@@ -124,6 +124,9 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#define PIZ_LOCK				pthread_mutex_lock (&x->lock);
+#define PIZ_UNLOCK				pthread_mutex_unlock (&x->lock);
+
 #define PIZ_MAP_FLAG			(pizItemset1024SetAtIndex (&x->mapFlags, 1024));	
 #define PIZ_NEED_TO_MAKE_MAP	(pizItemset1024IsSetAtIndex (&x->mapFlags, 1024))
 
