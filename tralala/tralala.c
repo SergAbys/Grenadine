@@ -1297,8 +1297,7 @@ void tralala_stop (t_tralala *x)
 	x->flags &= ~(FLAG_IS_LOOPED | FLAG_IS_RUNNING | FLAG_IS_PAUSED);
 	x->runIndex	= -1;
 	
-	if (pizSequenceIsAtEnd (x->live))
-		{
+	if (pizSequenceIsAtEnd (x->live)) {
 			clock_fdelay (x->goToStartClock, DEFER_CLOCK_INTERVAL);
 		}
 	
@@ -1500,8 +1499,8 @@ void tralala_setLiveByUser (t_tralala *x)
 	
 	if (!err)
 		{
-			pizSequenceClear (x->live);
-			pizSequenceAddNotesWithArray (x->live, tempArrayA, PIZ_SEQUENCE_ADD_MODE_PATTERN);
+			pizSequenceAddNotesWithArray (x->live, tempArrayA, 
+				PIZ_SEQUENCE_ADD_MODE_PATTERN | PIZ_SEQUENCE_ADD_MODE_CLEAR);
 			
 			pizSequenceSetZoneWithArray (x->live, tempArrayB);
 			pizSequenceSetZoneWithArray (x->listen, tempArrayB);

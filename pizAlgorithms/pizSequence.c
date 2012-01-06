@@ -34,7 +34,7 @@
  */
  
 /*
- *	Last modified : 02/01/12.
+ *	Last modified : 06/01/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -463,6 +463,10 @@ PIZError pizSequenceAddNotesWithArray (PIZSequence *x, PIZGrowingArray *array, l
 	
 	PIZ_LOCK
 	
+	if (mode & PIZ_SEQUENCE_ADD_MODE_CLEAR) {
+			pizSequenceLocalClear (x);
+		}
+		
 	if (array)
 		{
 			long i, count;
@@ -473,8 +477,7 @@ PIZError pizSequenceAddNotesWithArray (PIZSequence *x, PIZGrowingArray *array, l
 			count	= pizGrowingArrayCount (array) / PIZ_SEQUENCE_NOTE_SIZE;
 			ptr		= pizGrowingArrayPtr (array);
 			
-			for (i = (count - 1); i >= 0; i--) 
-				{
+			for (i = (count - 1); i >= 0; i--) {
 					if (!(pizSequenceLocalAddNote (x, ptr + (i * PIZ_SEQUENCE_NOTE_SIZE), mode))) {
 							err |= PIZ_ERROR;
 						}
@@ -492,7 +495,7 @@ PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, PIZCoordinates *coor
 	long values[PIZ_SEQUENCE_NOTE_SIZE];
 	
 	PIZ_LOCK
-	
+		
 	values[PIZ_SEQUENCE_POSITION]		= coordinates->position;
 	values[PIZ_SEQUENCE_PITCH]			= coordinates->pitch;
 	values[PIZ_SEQUENCE_VELOCITY]		= PIZ_SEQUENCE_NOTE_DEFAULT_VELOCITY;

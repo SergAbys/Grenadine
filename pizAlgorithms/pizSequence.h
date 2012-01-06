@@ -34,7 +34,7 @@
  */
  
 /*
- *	Last modified : 02/01/12.
+ *	Last modified : 06/01/12.
  */					
 
 // -------------------------------------------------------------------------------------------------------------
@@ -110,6 +110,7 @@
 #define PIZ_SEQUENCE_ADD_MODE_CLIP					(1<<3)
 #define PIZ_SEQUENCE_ADD_MODE_ORIGIN				(1<<4)
 #define PIZ_SEQUENCE_ADD_MODE_UNSELECT				(1<<5)
+#define PIZ_SEQUENCE_ADD_MODE_CLEAR					(1<<6)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -280,8 +281,9 @@ PIZError		pizSequenceSetCustomPatternWithArray	(PIZSequence *x, PIZGrowingArray 
 void			pizSequenceClear						(PIZSequence *x);	
 
 PIZError		pizSequenceSetZoneWithArray				(PIZSequence *x, PIZGrowingArray *a);
+
 PIZError		pizSequenceAddNotesWithArray			(PIZSequence *x, PIZGrowingArray *a, long mode);
-PIZError		pizSequenceAddNoteWithCoordinates		(PIZSequence *x, PIZCoordinates *c, long mode);
+PIZError		pizSequenceAddNoteWithCoordinates		(PIZSequence *x, PIZCoordinates *c,	 long mode);
 
 PIZError		pizSequenceZoneToArray					(PIZSequence *x, PIZGrowingArray *a);
 PIZError		pizSequenceNotesToArray					(PIZSequence *x, 

@@ -95,8 +95,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 347532877;
-			PBXWorkspaceStateSaveDate = 347532877;
+			PBXPerProjectTemplateStateSaveDate = 347537088;
+			PBXWorkspaceStateSaveDate = 347537088;
 		};
 		sourceControlManager = 965F6CC112FF252E00F96EF1 /* Source Control */;
 		userBuildSettings = {
@@ -135,9 +135,9 @@
 	};
 	9676982513B7784800FE77F4 /* tralala.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1316.21, 140025}}";
-			sepNavSelRange = "{28042, 0}";
-			sepNavVisRect = "{{0, 0}, {1233, 643}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1316.21, 140000}}";
+			sepNavSelRange = "{63392, 16}";
+			sepNavVisRect = "{{0, 31449}, {1233, 643}}";
 			sepNavWindowFrame = "{{2, 6}, {1278, 772}}";
 		};
 	};
@@ -145,7 +145,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1283.81, 17125}}";
 			sepNavSelRange = "{14996, 0}";
-			sepNavVisRect = "{{0, 1025}, {1233, 645}}";
+			sepNavVisRect = "{{0, 29}, {1233, 645}}";
 			sepNavWindowFrame = "{{2, 4}, {1278, 774}}";
 		};
 	};
