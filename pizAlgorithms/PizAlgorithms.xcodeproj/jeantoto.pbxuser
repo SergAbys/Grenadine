@@ -131,8 +131,8 @@
 	96A16F78148CF839008268A6 /* pizSequence.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1234, 28275}}";
-			sepNavSelRange = "{29291, 16}";
-			sepNavVisRect = "{{0, 27040}, {1234, 645}}";
+			sepNavSelRange = "{29323, 0}";
+			sepNavVisRect = "{{0, 26694}, {1234, 645}}";
 			sepNavWindowFrame = "{{0, 4}, {1279, 774}}";
 		};
 	};

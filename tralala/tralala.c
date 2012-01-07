@@ -3560,13 +3560,13 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 				if (!SHIFT)
 					{
 						switch (keycode) {
-							case 49	: pizSequenceSetGrid (x->user, PIZ_WHOLE_NOTE);			break;
-							case 50	: pizSequenceSetGrid (x->user, PIZ_HALF_NOTE);			break;
-							case 51	: pizSequenceSetGrid (x->user, PIZ_QUARTER_NOTE);		break;
-							case 52	: pizSequenceSetGrid (x->user, PIZ_EIGHT_NOTE);			break;
-							case 53	: pizSequenceSetGrid (x->user, PIZ_SIXTEENTH_NOTE);		break;
-							case 54	: pizSequenceSetGrid (x->user, PIZ_THIRTY_SECOND_NOTE);	break;
 							case 55	: pizSequenceSetGrid (x->user, PIZ_SNAP_NONE);			break;
+							case 54	: pizSequenceSetGrid (x->user, PIZ_WHOLE_NOTE);			break;
+							case 53	: pizSequenceSetGrid (x->user, PIZ_HALF_NOTE);			break;
+							case 52	: pizSequenceSetGrid (x->user, PIZ_QUARTER_NOTE);		break;
+							case 51	: pizSequenceSetGrid (x->user, PIZ_EIGHT_NOTE);			break;
+							case 50	: pizSequenceSetGrid (x->user, PIZ_SIXTEENTH_NOTE);		break;
+							case 49	: pizSequenceSetGrid (x->user, PIZ_THIRTY_SECOND_NOTE);	break;
 							}
 						
 						DIRTYLAYER_SET (DIRTY_GRID);
@@ -3574,13 +3574,13 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 				else
 					{
 						switch (keycode) {
-							case 49	: pizSequenceSetNoteValue (x->user, PIZ_WHOLE_NOTE);		break;
-							case 50	: pizSequenceSetNoteValue (x->user, PIZ_HALF_NOTE);			break;
-							case 51	: pizSequenceSetNoteValue (x->user, PIZ_QUARTER_NOTE);		break;
-							case 52	: pizSequenceSetNoteValue (x->user, PIZ_EIGHT_NOTE);		break;
-							case 53	: pizSequenceSetNoteValue (x->user, PIZ_SIXTEENTH_NOTE);	break;
-							case 54	: pizSequenceSetNoteValue (x->user, PIZ_THIRTY_SECOND_NOTE);break;
 							case 55	: pizSequenceSetNoteValue (x->user, PIZ_SNAP_NONE);			break;
+							case 54	: pizSequenceSetNoteValue (x->user, PIZ_WHOLE_NOTE);		break;
+							case 53	: pizSequenceSetNoteValue (x->user, PIZ_HALF_NOTE);			break;
+							case 52	: pizSequenceSetNoteValue (x->user, PIZ_QUARTER_NOTE);		break;
+							case 51	: pizSequenceSetNoteValue (x->user, PIZ_EIGHT_NOTE);		break;
+							case 50	: pizSequenceSetNoteValue (x->user, PIZ_SIXTEENTH_NOTE);	break;
+							case 49	: pizSequenceSetNoteValue (x->user, PIZ_THIRTY_SECOND_NOTE);break;
 							}
 						
 						DIRTYLAYER_SET (DIRTY_REFRESH);
@@ -5305,7 +5305,7 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
 						}
 				}
 		
-			jrgba_set (&gridColor, 0.8, 0.8, 0.8, 1.);
+			jrgba_set (&gridColor, 0.85, 0.85, 0.85, 1.);
 			jgraphics_set_source_jrgba (g, &gridColor);
 			
 			jgraphics_rectangle_draw_fast (g, 0., 0., gridWidth, gridHeight, 1.);
