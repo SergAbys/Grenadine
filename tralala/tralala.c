@@ -28,19 +28,20 @@
 
 static t_class				*tll_class;
 
-static t_jsurface			*tll_sixteenth			[3];
-static t_jsurface			*tll_sixteenthTriplet	[3];
-static t_jsurface			*tll_sixteenthDotted	[3];
-static t_jsurface			*tll_eight				[3];
-static t_jsurface			*tll_eightTriplet		[3];
-static t_jsurface			*tll_eightDotted		[3];
-static t_jsurface			*tll_quarter			[3];
-static t_jsurface			*tll_quarterTriplet		[3];
-static t_jsurface			*tll_quarterDotted		[3];
-static t_jsurface			*tll_half				[3];
-static t_jsurface			*tll_halfTriplet		[3];
-static t_jsurface			*tll_halfDotted			[3];
-static t_jsurface			*tll_whole				[3];
+static t_jsurface			*tll_thirtySecond			[3];
+static t_jsurface			*tll_sixteenth				[3];
+static t_jsurface			*tll_sixteenthTriplet		[3];
+static t_jsurface			*tll_sixteenthDotted		[3];
+static t_jsurface			*tll_eight					[3];
+static t_jsurface			*tll_eightTriplet			[3];
+static t_jsurface			*tll_eightDotted			[3];
+static t_jsurface			*tll_quarter				[3];
+static t_jsurface			*tll_quarterTriplet			[3];
+static t_jsurface			*tll_quarterDotted			[3];
+static t_jsurface			*tll_half					[3];
+static t_jsurface			*tll_halfTriplet			[3];
+static t_jsurface			*tll_halfDotted				[3];
+static t_jsurface			*tll_whole					[3];
 
 static PIZGrowingArray		*tll_clipboard			= NULL;
 static PIZError				tll_clipboardError		= PIZ_GOOD;
@@ -402,49 +403,53 @@ CLASS_ATTR_ORDER			(c, "popubgcolor",						0, "22");
 CLASS_ATTR_ORDER			(c, "popuphlttextcolor",				0, "23");
 CLASS_ATTR_ORDER			(c, "popuhltbgcolor",					0, "24");
 
-tll_sixteenth			[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "sixteenthA");
-tll_sixteenth			[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "sixteenthB");
-tll_sixteenth			[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "sixteenthC");
-tll_sixteenthTriplet	[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "sixteenthTripletA");
-tll_sixteenthTriplet	[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "sixteenthTripletB");
-tll_sixteenthTriplet	[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "sixteenthTripletC");
-tll_sixteenthDotted		[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "sixteenthDottedA");
-tll_sixteenthDotted		[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "sixteenthDottedB");
-tll_sixteenthDotted		[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "sixteenthDottedC");
+tll_thirtySecond			[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "16A");
+tll_thirtySecond			[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "32B");
+tll_thirtySecond			[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "32C");
 
-tll_eight				[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "eightA");
-tll_eight				[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "eightB");
-tll_eight				[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "eightC");
-tll_eightTriplet		[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "eightTripletA");
-tll_eightTriplet		[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "eightTripletB");
-tll_eightTriplet		[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "eightTripletC");
-tll_eightDotted			[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "eightDottedA");
-tll_eightDotted			[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "eightDottedB");
-tll_eightDotted			[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "eightDottedC");
+tll_sixteenth				[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "16A");
+tll_sixteenth				[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "16B");
+tll_sixteenth				[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "16C");
+tll_sixteenthTriplet		[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "16TA");
+tll_sixteenthTriplet		[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "16TB");
+tll_sixteenthTriplet		[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "16TC");
+tll_sixteenthDotted			[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "16DA");
+tll_sixteenthDotted			[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "16DB");
+tll_sixteenthDotted			[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "16DC");
 
-tll_quarter				[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "quarterA");
-tll_quarter				[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "quarterB");
-tll_quarter				[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "quarterC");
-tll_quarterTriplet		[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "quarterTripletA");
-tll_quarterTriplet		[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "quarterTripletB");
-tll_quarterTriplet		[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "quarterTripletC");
-tll_quarterDotted		[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "quarterDottedA");
-tll_quarterDotted		[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "quarterDottedB");
-tll_quarterDotted		[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "quarterDottedC");
+tll_eight					[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "8A");
+tll_eight					[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "8B");
+tll_eight					[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "8C");
+tll_eightTriplet			[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "8TA");
+tll_eightTriplet			[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "8TB");
+tll_eightTriplet			[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "8TC");
+tll_eightDotted				[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "8DA");
+tll_eightDotted				[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "8DB");
+tll_eightDotted				[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "8DC");
 
-tll_half				[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "halfA");
-tll_half				[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "halfB");
-tll_half				[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "halfC");
-tll_halfTriplet			[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "halfTripletA");
-tll_halfTriplet			[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "halfTripletB");
-tll_halfTriplet			[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "halfTripletC");
-tll_halfDotted			[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "halfDottedA");
-tll_halfDotted			[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "halfDottedB");
-tll_halfDotted			[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "halfDottedC");
+tll_quarter					[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "4A");
+tll_quarter					[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "4B");
+tll_quarter					[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "4C");
+tll_quarterTriplet			[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "4TA");
+tll_quarterTriplet			[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "4TB");
+tll_quarterTriplet			[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "4TC");
+tll_quarterDotted			[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "4DA");
+tll_quarterDotted			[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "4DB");
+tll_quarterDotted			[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "4DC");
 
-tll_whole				[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "wholeA");
-tll_whole				[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "wholeB");
-tll_whole				[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "wholeC");
+tll_half					[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "2A");
+tll_half					[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "2B");
+tll_half					[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "2C");
+tll_halfTriplet				[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "2TA");
+tll_halfTriplet				[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "2TB");
+tll_halfTriplet				[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "2TC");
+tll_halfDotted				[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "2DA");
+tll_halfDotted				[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "2DB");
+tll_halfDotted				[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "2DC");
+
+tll_whole					[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "1A");
+tll_whole					[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "1B");
+tll_whole					[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "1C");
 
 tll_clipboard = pizGrowingArrayNew (1);
 
@@ -5272,24 +5277,24 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
 				}
 			
 			switch (grid) {
-				case PIZ_DOTTED_WHOLE_NOTE			:	background = tll_half				[z]; break;
-				case PIZ_WHOLE_NOTE					:	background = tll_whole				[z]; break;
-				case PIZ_WHOLE_NOTE_TRIPLET			:	background = tll_halfTriplet		[z]; break;
-				case PIZ_DOTTED_HALF_NOTE			:	background = tll_halfDotted			[z]; break;
-				case PIZ_HALF_NOTE					:	background = tll_half				[z]; break;
-				case PIZ_HALF_NOTE_TRIPLET			:	background = tll_halfTriplet		[z]; break;
-				case PIZ_DOTTED_QUARTER_NOTE		:	background = tll_quarterDotted		[z]; break;
-				case PIZ_QUARTER_NOTE				:	background = tll_quarter			[z]; break;
-				case PIZ_QUARTER_NOTE_TRIPLET		:	background = tll_quarterTriplet		[z]; break;
-				case PIZ_DOTTED_EIGHT_NOTE			:	background = tll_eightDotted		[z]; break;
-				case PIZ_EIGHT_NOTE					:	background = tll_eight				[z]; break;
-				case PIZ_EIGHT_NOTE_TRIPLET			:	background = tll_eightTriplet		[z]; break;
-				case PIZ_DOTTED_SIXTEENTH_NOTE		:	background = tll_sixteenthDotted	[z]; break;
-				case PIZ_SIXTEENTH_NOTE				:	background = tll_sixteenth			[z]; break;
-				case PIZ_SIXTEENTH_NOTE_TRIPLET		:	background = tll_sixteenthTriplet	[z]; break;
-				case PIZ_THIRTY_SECOND_NOTE			:	background = tll_sixteenth			[z]; break;
-				case PIZ_THIRTY_SECOND_NOTE_TRIPLET	:	background = tll_sixteenthTriplet	[z]; break;
-				case PIZ_SNAP_NONE					:	background = tll_eight				[z]; break;
+				case PIZ_DOTTED_WHOLE_NOTE			:	background = tll_half					[z]; break;
+				case PIZ_WHOLE_NOTE					:	background = tll_whole					[z]; break;
+				case PIZ_WHOLE_NOTE_TRIPLET			:	background = tll_halfTriplet			[z]; break;
+				case PIZ_DOTTED_HALF_NOTE			:	background = tll_halfDotted				[z]; break;
+				case PIZ_HALF_NOTE					:	background = tll_half					[z]; break;
+				case PIZ_HALF_NOTE_TRIPLET			:	background = tll_halfTriplet			[z]; break;
+				case PIZ_DOTTED_QUARTER_NOTE		:	background = tll_quarterDotted			[z]; break;
+				case PIZ_QUARTER_NOTE				:	background = tll_quarter				[z]; break;
+				case PIZ_QUARTER_NOTE_TRIPLET		:	background = tll_quarterTriplet			[z]; break;
+				case PIZ_DOTTED_EIGHT_NOTE			:	background = tll_eightDotted			[z]; break;
+				case PIZ_EIGHT_NOTE					:	background = tll_eight					[z]; break;
+				case PIZ_EIGHT_NOTE_TRIPLET			:	background = tll_eightTriplet			[z]; break;
+				case PIZ_DOTTED_SIXTEENTH_NOTE		:	background = tll_sixteenthDotted		[z]; break;
+				case PIZ_SIXTEENTH_NOTE				:	background = tll_sixteenth				[z]; break;
+				case PIZ_SIXTEENTH_NOTE_TRIPLET		:	background = tll_sixteenthTriplet		[z]; break;
+				case PIZ_THIRTY_SECOND_NOTE			:	background = tll_thirtySecond			[z]; break;
+				case PIZ_THIRTY_SECOND_NOTE_TRIPLET	:	background = tll_sixteenthTriplet		[z]; break;
+				case PIZ_SNAP_NONE					:	background = tll_eight					[z]; break;
 			}
 				
 			imageWidth	= jgraphics_image_surface_get_width (background);

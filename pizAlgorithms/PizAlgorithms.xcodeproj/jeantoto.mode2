@@ -249,9 +249,18 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateExpansionKey</key>
 									<array>
 										<string>08FB7794FE84155DC02AAC07</string>
+										<string>08FB7795FE84155DC02AAC07</string>
+										<string>96AF1B7E148CFBF7001358AB</string>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
-									<array/>
+									<array>
+										<array>
+											<integer>11</integer>
+											<integer>3</integer>
+											<integer>2</integer>
+											<integer>0</integer>
+										</array>
+									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
 									<string>{{0, 0}, {501, 530}}</string>
 								</dict>
@@ -276,7 +285,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>250 132 518 616 0 0 1280 778 </string>
+								<string>218 129 518 616 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -413,8 +422,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96A079F714B7153F00AFDE73</string>
-				<string>96A079F814B7153F00AFDE73</string>
+				<string>96DF9D6314B7796C00C9EBBC</string>
+				<string>96DF9D6414B7796C00C9EBBC</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -450,7 +459,7 @@
 		<string>/Users/jeantoto/Dev/Grenadine/pizAlgorithms/PizAlgorithms.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>250 132 518 616 0 0 1280 778 </string>
+	<string>218 129 518 616 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
