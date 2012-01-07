@@ -49,7 +49,7 @@ PIZError pizSequenceEncodeSlotToArray (PIZSequence *x, PIZGrowingArray *a)
 {
 	long err = PIZ_ERROR;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	pizSequenceLocalMakeMap (x);
 	
@@ -93,7 +93,7 @@ PIZError pizSequenceEncodeSlotToArray (PIZSequence *x, PIZGrowingArray *a)
 				}
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err;
 }
@@ -102,7 +102,7 @@ PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, PIZGrowingArray *a)
 {
 	long err = PIZ_ERROR;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (a)
 		{
@@ -181,7 +181,7 @@ PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, PIZGrowingArray *a)
 				}
 		}
 
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err;
 }

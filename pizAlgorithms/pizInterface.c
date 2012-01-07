@@ -69,9 +69,9 @@ bool pizSequenceHasMarkedNote (PIZSequence *x)
 {
 	bool k;
 	
-	PIZ_LOCK
+	PIZLOCK
 	k = (x->markedNote != NULL);
-	PIZ_UNLOCK;
+	PIZUNLOCK;
 	
 	return k;
 }
@@ -80,7 +80,7 @@ long pizSequenceMarkedNoteValue (PIZSequence *x, PIZSelector selector)
 {
 	long k = -1;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (x->markedNote) 
 		{
@@ -101,14 +101,14 @@ long pizSequenceMarkedNoteValue (PIZSequence *x, PIZSelector selector)
 				}
 		}
 		
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return k;
 }
 
 void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, long value)
 {
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (x->markedNote) 
 		{
@@ -154,7 +154,7 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
 				}
 		}
 		
-	PIZ_UNLOCK
+	PIZUNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -166,7 +166,7 @@ bool pizSequenceSetTempZoneStartWithCoordinates	(PIZSequence *x, PIZCoordinates 
 	long tempStart;
 	bool haveChanged = false;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	tempStart = CLAMP (pizSequenceSnapRoundPosition (x, coordinates->position), 0, PIZ_SEQUENCE_TIMELINE_SIZE);
 	
@@ -175,7 +175,7 @@ bool pizSequenceSetTempZoneStartWithCoordinates	(PIZSequence *x, PIZCoordinates 
 			haveChanged = true;
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return haveChanged;
 }
@@ -185,7 +185,7 @@ bool pizSequenceSetTempZoneEndWithCoordinates (PIZSequence *x, PIZCoordinates *c
 	long tempEnd;
 	bool haveChanged = false;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	tempEnd	= CLAMP (pizSequenceSnapRoundPosition (x, coordinates->position), 0, PIZ_SEQUENCE_TIMELINE_SIZE);
 	
@@ -194,7 +194,7 @@ bool pizSequenceSetTempZoneEndWithCoordinates (PIZSequence *x, PIZCoordinates *c
 			haveChanged = true;
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return haveChanged;
 }
@@ -203,7 +203,7 @@ bool pizSequenceSetTempZoneDownWithCoordinates (PIZSequence *x, PIZCoordinates *
 {
 	bool haveChanged = false;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (coordinates->pitch <= interface_up)
 		{
@@ -215,7 +215,7 @@ bool pizSequenceSetTempZoneDownWithCoordinates (PIZSequence *x, PIZCoordinates *
 				}
 		}
 		
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return haveChanged;
 }
@@ -224,7 +224,7 @@ bool pizSequenceSetTempZoneUpWithCoordinates (PIZSequence *x, PIZCoordinates *co
 {
 	bool haveChanged = false;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (coordinates->pitch >= interface_down)
 		{
@@ -236,7 +236,7 @@ bool pizSequenceSetTempZoneUpWithCoordinates (PIZSequence *x, PIZCoordinates *co
 			}
 		}
 		
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return haveChanged;
 }
@@ -250,7 +250,7 @@ bool pizSequenceMoveTempZoneWithDelta (PIZSequence *x, long pitch, long position
 	bool haveChanged = false;
 	long tempStart, tempDown;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	tempStart	= CLAMP (pizSequenceSnapFloorPosition (x, interface_originStart + position), 
 						0, (PIZ_SEQUENCE_TIMELINE_SIZE - interface_originWidth));
@@ -267,7 +267,7 @@ bool pizSequenceMoveTempZoneWithDelta (PIZSequence *x, long pitch, long position
 			haveChanged = true;
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return haveChanged;
 }
@@ -276,7 +276,7 @@ PIZError pizSequenceTempZoneToArray (PIZSequence *x, PIZGrowingArray *array)
 {
 	long err = PIZ_ERROR;
 
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (array)
 		{
@@ -288,14 +288,14 @@ PIZError pizSequenceTempZoneToArray (PIZSequence *x, PIZGrowingArray *array)
 			err |= pizGrowingArrayAppend (array, interface_up);
 		}
 		
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err;
 }
 
 void pizSequenceSetTempZoneByZone (PIZSequence *x)
 {
-	PIZ_LOCK
+	PIZLOCK
 	
 	interface_start			= x->start;
 	interface_end			= x->end;
@@ -306,14 +306,14 @@ void pizSequenceSetTempZoneByZone (PIZSequence *x)
 	interface_originWidth	= (x->end - x->start);
 	interface_originHeight	= (x->up - x->down);
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 }
 
 PIZError pizSequenceSetZoneByTempZone (PIZSequence *x)
 {
 	long err = PIZ_ERROR;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (!(interface_start == interface_end))
 		{
@@ -337,7 +337,7 @@ PIZError pizSequenceSetZoneByTempZone (PIZSequence *x)
 			err = PIZ_GOOD;
 		}
 		
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err;
 }
@@ -350,7 +350,7 @@ void pizSequenceSelectAllNotes (PIZSequence *x)
 {
 	long i;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	for (i = 0; i < pizGrowingArrayCount (x->map); i++)
 		{	
@@ -368,16 +368,16 @@ void pizSequenceSelectAllNotes (PIZSequence *x)
 				}
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 }
 
 void pizSequenceUnselectAllNotes (PIZSequence *x)
 {
-	PIZ_LOCK
+	PIZLOCK
 	
 	pizSequenceUnselectNotes (x);
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 }
 
 long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, PIZCoordinates *coordinates)
@@ -385,7 +385,7 @@ long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, PIZCoordinates *coord
 	long i, count;
 	long k = 0;
 
-	PIZ_LOCK
+	PIZLOCK
 	
 	count = pizGrowingArrayCount (x->map);
 		
@@ -425,7 +425,7 @@ long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, PIZCoordinates *coord
 				}
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return k;
 }
@@ -435,7 +435,7 @@ long pizSequenceInvertNoteWithCoordinates (PIZSequence *x, PIZCoordinates *coord
 	long i, count;
 	long k = -1;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	count = pizGrowingArrayCount (x->map);
 		
@@ -482,7 +482,7 @@ long pizSequenceInvertNoteWithCoordinates (PIZSequence *x, PIZCoordinates *coord
 				}
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return k;
 }
@@ -491,7 +491,7 @@ void pizSequenceInitLasso (PIZSequence *x)
 {
 	long i;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	for (i = 0; i < pizGrowingArrayCount (x->map); i++)
 		{	
@@ -512,7 +512,7 @@ void pizSequenceInitLasso (PIZSequence *x)
 				}
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 }
 
 long pizSequenceSelectNotesWithLasso (PIZSequence *x, PIZCoordinates *c1, PIZCoordinates *c2, bool invert)
@@ -520,7 +520,7 @@ long pizSequenceSelectNotesWithLasso (PIZSequence *x, PIZCoordinates *c1, PIZCoo
 	long i, a, b, u, v;
 	long k = 0;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	a = MIN (c1->position,	c2->position);
 	b = MIN (c1->pitch,		c2->pitch);
@@ -583,7 +583,7 @@ long pizSequenceSelectNotesWithLasso (PIZSequence *x, PIZCoordinates *c1, PIZCoo
 				}
 		}
 
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return k;
 }
@@ -597,7 +597,7 @@ PIZError pizSequenceRemoveSelectedNotes (PIZSequence *x)
 	long i;
 	long err = PIZ_GOOD;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	for (i = 0; i < pizGrowingArrayCount (x->map); i++)
 		{	
@@ -627,10 +627,10 @@ PIZError pizSequenceRemoveSelectedNotes (PIZSequence *x)
 				}
 		}
 	
-	PIZ_MAP_FLAG
+	PIZMAPFLAG
 	pizSequenceLocalMakeMap (x);
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err; 
 }
@@ -643,7 +643,7 @@ PIZError pizSequenceEncodeUndoToArray (PIZSequence *x, PIZGrowingArray *a)
 {
 	long err = PIZ_ERROR;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	pizSequenceLocalMakeMap (x);
 	
@@ -685,7 +685,7 @@ PIZError pizSequenceEncodeUndoToArray (PIZSequence *x, PIZGrowingArray *a)
 				}
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err;
 }
@@ -694,7 +694,7 @@ PIZError pizSequenceDecodeUndoWithArray (PIZSequence *x, PIZGrowingArray *a)
 {
 	long err = PIZ_ERROR;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (a)
 		{
@@ -729,7 +729,7 @@ PIZError pizSequenceDecodeUndoWithArray (PIZSequence *x, PIZGrowingArray *a)
 				}
 		}
 
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err;
 }

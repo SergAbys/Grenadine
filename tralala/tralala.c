@@ -752,7 +752,7 @@ t_max_err tralala_setvalueof (t_tralala *x, long argc, t_atom *argv)
 {
 	if (argc && argv) 
 		{
-			ARRAY_GET(tempArray)
+			ARRAY_GET (tempArray);
 			
 			if (tempArray)
 				{
@@ -766,12 +766,12 @@ t_max_err tralala_setvalueof (t_tralala *x, long argc, t_atom *argv)
 					if (!err) {
 							pizSequenceDecodeSlotWithArray (x->user, tempArray);
 							
-							DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE)
+							DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE);
 							
 							DIRTYSLOTS
 						}
 					
-					ARRAY_RELEASE(tempArray);
+					ARRAY_RELEASE (tempArray);
 				}
 		}
 	
@@ -782,7 +782,7 @@ t_max_err tralala_getvalueof (t_tralala *x, long *argc, t_atom **argv)
 {
 	if (argc && argv) 
 		{
-			ARRAY_GET(tempArray)
+			ARRAY_GET (tempArray);
 			
 			if (tempArray)
 				{
@@ -805,7 +805,7 @@ t_max_err tralala_getvalueof (t_tralala *x, long *argc, t_atom **argv)
 								}
 						}
 					
-					ARRAY_RELEASE(tempArray)
+					ARRAY_RELEASE (tempArray);
 				}
 		}
 
@@ -826,7 +826,7 @@ t_max_err tralala_setSequenceMode (t_tralala *x, t_object *attr, long argc, t_at
 					
 			x->sequenceMode = CLAMP (k, SEQUENCE_MODE_USER, SEQUENCE_MODE_LISTEN);
 
-			DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE | DIRTY_GRID)
+			DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE | DIRTY_GRID);
 		}
 
 	return MAX_ERR_NONE;
@@ -931,7 +931,7 @@ t_max_err tralala_setScaleKey (t_tralala *x, t_object *attr, long argc, t_atom *
 								}
 							else
 								{
-									ARRAY_GET(tempArray)
+									ARRAY_GET (tempArray);
 									
 									if (tempArray)
 										{
@@ -943,11 +943,11 @@ t_max_err tralala_setScaleKey (t_tralala *x, t_object *attr, long argc, t_atom *
 												
 											pizSequenceSetCustomScaleWithArray (x->live, x->key, tempArray);
 											
-											ARRAY_RELEASE(tempArray);
+											ARRAY_RELEASE (tempArray);
 										}
 								}
 							
-							DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+							DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 						}
 				}
 		}
@@ -1038,7 +1038,7 @@ t_max_err tralala_setScaleType (t_tralala *x, t_object *attr, long argc, t_atom 
 										} 
 									else 
 										{
-											ARRAY_GET(tempArray)
+											ARRAY_GET (tempArray);
 											
 											if (tempArray) 
 												{
@@ -1051,12 +1051,12 @@ t_max_err tralala_setScaleType (t_tralala *x, t_object *attr, long argc, t_atom 
 													pizSequenceSetCustomScaleWithArray (x->live, x->key, 
 														tempArray);
 													
-													ARRAY_RELEASE(tempArray)
+													ARRAY_RELEASE (tempArray);
 												}
 										}
 									
 									if (LIVE) {
-											DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+											DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 										}
 								}
 						}
@@ -1076,7 +1076,7 @@ t_max_err tralala_setScaleCustom (t_tralala *x, t_object *attr, long argc, t_ato
 			
 			if (x->type == PIZ_TYPE_CUSTOM)
 				{
-					ARRAY_GET(tempArray)
+					ARRAY_GET (tempArray);
 							
 					if (tempArray)
 						{
@@ -1088,11 +1088,11 @@ t_max_err tralala_setScaleCustom (t_tralala *x, t_object *attr, long argc, t_ato
 								
 							pizSequenceSetCustomScaleWithArray (x->live, x->key, tempArray);
 							
-							ARRAY_RELEASE(tempArray)
+							ARRAY_RELEASE (tempArray);
 						}
 					
 					if (LIVE) {
-							DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+							DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 						}
 				}
 		}
@@ -1160,10 +1160,10 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
 									x->patternCell = temp;
 									
 									if (pizSequenceApplyPattern (x->live) && LIVE) {
-											DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+											DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 										}
 									
-									DIRTYLAYER_SET(DIRTY_GRID)
+									DIRTYLAYER_SET (DIRTY_GRID);
 								}
 						}
 					
@@ -1178,7 +1178,7 @@ t_max_err tralala_setPatternCustom (t_tralala *x, t_object *attr, long argc, t_a
 {
 	if (argv)
 		{	
-			ARRAY_GET(tempArray)
+			ARRAY_GET (tempArray);
 
 			x->patternSize = MIN (argc, PATTERN_MAXIMUM_SIZE);
 			
@@ -1197,11 +1197,11 @@ t_max_err tralala_setPatternCustom (t_tralala *x, t_object *attr, long argc, t_a
 					if (x->patternCell != tll_sym_none)
 						{
 							if (pizSequenceApplyPattern (x->live) && LIVE) {
-									DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+									DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 								}
 						}
 					
-					ARRAY_RELEASE(tempArray)
+					ARRAY_RELEASE (tempArray);
 				}
 		}
 
@@ -1403,8 +1403,8 @@ void tralala_copy (t_tralala *x)
 {
 	PIZError err = PIZ_GOOD;
 	
-	ARRAY_GET(tempArrayA)
-	ARRAY_GET(tempArrayB)
+	ARRAY_GET (tempArrayA);
+	ARRAY_GET (tempArrayB);
 	
 	if (tempArrayA && tempArrayB) 
 		{
@@ -1433,12 +1433,12 @@ void tralala_copy (t_tralala *x)
 			}
 		}
 	
-	ARRAY_RELEASE(tempArrayA)
-	ARRAY_RELEASE(tempArrayB)
+	ARRAY_RELEASE (tempArrayA);
+	ARRAY_RELEASE (tempArrayB);
 	
 	if (LIVE)
 		{
-			DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+			DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 		}
 }
 
@@ -1447,7 +1447,7 @@ void tralala_enter (t_tralala *x)
 	tralala_setLiveByUser (x);
 	
 	if (LIVE) {
-			DIRTYLAYER_SET(DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE)
+			DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE);
 		}
 }
 
@@ -1455,8 +1455,8 @@ void tralala_setLiveByUser (t_tralala *x)
 {
 	PIZError err = PIZ_GOOD;
 	
-	ARRAY_GET(tempArrayA)
-	ARRAY_GET(tempArrayB)
+	ARRAY_GET (tempArrayA);
+	ARRAY_GET (tempArrayB);
 	
 	if (tempArrayA && tempArrayB) 
 		{
@@ -1477,12 +1477,12 @@ void tralala_setLiveByUser (t_tralala *x)
 			pizSequenceSetZoneWithArray (x->listen, tempArrayB);
 			
 			if (pizSequenceApplyAmbitus (x->listen) && LISTEN) {
-					DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+					DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 				}
 		}
 	
-	ARRAY_RELEASE(tempArrayA)
-	ARRAY_RELEASE(tempArrayB)
+	ARRAY_RELEASE (tempArrayA);
+	ARRAY_RELEASE (tempArrayB);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -1706,7 +1706,7 @@ void tralala_handleMessages (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 						{
 							tralala_willChange (x);
 							
-							DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE)
+							DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE);
 							
 							if (USER) {
 									DIRTYSLOTS 
@@ -1756,7 +1756,7 @@ bool tralala_sequenceNote (t_tralala *x, PIZSequence *sequence, long argc, t_ato
 			long i; 
 			long err = PIZ_ERROR;
 			
-			ARRAY_GET(tempArray)
+			ARRAY_GET (tempArray);
 			
 			if (tempArray)
 				{
@@ -1802,7 +1802,7 @@ bool tralala_sequenceNote (t_tralala *x, PIZSequence *sequence, long argc, t_ato
 					draw = !(pizSequenceAddNotesWithArray (sequence, tempArray, mode));
 				}	
 			
-			ARRAY_RELEASE(tempArray)
+			ARRAY_RELEASE (tempArray);
 		}
 	
 	return draw;
@@ -1817,7 +1817,7 @@ bool tralala_sequenceZone (t_tralala *x, PIZSequence *sequence, long argc, t_ato
 			long i; 
 			long err = PIZ_ERROR;
 			
-			ARRAY_GET(tempArray)
+			ARRAY_GET (tempArray);
 			
 			if (tempArray)
 				{
@@ -1852,14 +1852,14 @@ bool tralala_sequenceZone (t_tralala *x, PIZSequence *sequence, long argc, t_ato
 							
 							if (pizSequenceApplyAmbitus (x->listen) && LISTEN) 
 								{
-									DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+									DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 								}
 							
 							draw = true;
 						}
 				}
 			
-			ARRAY_RELEASE(tempArray)
+			ARRAY_RELEASE (tempArray);
 		}
 	
 	return draw;
@@ -1874,7 +1874,7 @@ bool tralala_sequenceDump (t_tralala *x, PIZSequence *sequence, long argc, t_ato
 					long		i, count;
 					PIZError	err = PIZ_GOOD;
 					
-					ARRAY_GET(tempArray)
+					ARRAY_GET (tempArray);
 	
 					if (tempArray) 
 						{
@@ -1918,7 +1918,7 @@ bool tralala_sequenceDump (t_tralala *x, PIZSequence *sequence, long argc, t_ato
 							outlet_anything  (x->rightOutlet, tll_sym_end, 0, NULL);
 						}
 					
-					ARRAY_RELEASE(tempArray)
+					ARRAY_RELEASE (tempArray);
 				} 
 			else if (atom_getsym (argv) == tll_sym_zone && (sequence != x->listen)) 
 				{	
@@ -1926,7 +1926,7 @@ bool tralala_sequenceDump (t_tralala *x, PIZSequence *sequence, long argc, t_ato
 					long		start, end, down, up;
 					PIZError	err = PIZ_GOOD;
 					
-					ARRAY_GET(tempArray)
+					ARRAY_GET (tempArray);
 	
 					if (tempArray) 
 						{
@@ -1954,7 +1954,7 @@ bool tralala_sequenceDump (t_tralala *x, PIZSequence *sequence, long argc, t_ato
 							outlet_anything  (x->rightOutlet, tll_sym_zone, 4, zone);
 						}
 					
-					ARRAY_RELEASE(tempArray)
+					ARRAY_RELEASE (tempArray);
 				}
 			else if ((atom_getsym (argv) == tll_sym_count))
 				{
@@ -2195,7 +2195,7 @@ bool tralala_sequenceCycle (t_tralala *x, PIZSequence *sequence, long argc, t_at
 		{
 			long i;
 			
-			ARRAY_GET(tempArray)
+			ARRAY_GET (tempArray);
 			
 			if (tempArray) 
 				{
@@ -2209,7 +2209,7 @@ bool tralala_sequenceCycle (t_tralala *x, PIZSequence *sequence, long argc, t_at
 				
 					draw = pizSequenceCycle (sequence, x->key, tempArray);
 					
-					ARRAY_RELEASE(tempArray)
+					ARRAY_RELEASE (tempArray);
 				}
 		}
 
@@ -2405,10 +2405,10 @@ void tralala_slotRecall (t_tralala *x, long n)
 			DIRTYUNDO
 			DIRTYPATTR
 			
-			DIRTYLAYER_SET(DIRTY_GRID)
+			DIRTYLAYER_SET (DIRTY_GRID);
 		}
 	
-	DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE)
+	DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE);
 }
 
 void tralala_slotStore (t_tralala *x)
@@ -2574,7 +2574,7 @@ void tralala_undo (t_tralala *x)
 				}
 			
 			if (!err) {
-					DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE)
+					DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE);
 					
 					DIRTYPATTR
 					DIRTYSLOTS
@@ -2618,7 +2618,7 @@ void tralala_redo (t_tralala *x)
 									pizSequenceDecodeUndoWithArray (x->user, next);
 									pizLinklistRemoveByPtr (x->redo, next);
 									
-									DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE)
+									DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE);
 							
 									DIRTYPATTR
 									DIRTYSLOTS
@@ -2936,7 +2936,7 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 	if (USER && CMD && !RIGHT && !CAPS)
 		{
 			if (!pizSequenceAddNoteWithCoordinates (x->user, &x->coordinates, PIZ_SEQUENCE_ADD_MODE_SNAP)) {
-					DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+					DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 					
 					DIRTYSLOTS
 					DIRTYPATTR
@@ -2945,7 +2945,7 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 		}
 	else if (USER && VIEWTEXT && !RIGHT && !CAPS && (tralala_hitTextWithPoint (x, patcherview, pt)))
 		{
-			DIRTYLAYER_SET(DIRTY_REFRESH)
+			DIRTYLAYER_SET (DIRTY_REFRESH);
 		}
 	else if (USER && !CTRL && !RIGHT && CAPS && (x->hitTest = tralala_hitZoneWithPoint (x, pt)))
 		{
@@ -2953,7 +2953,7 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 			
 			pizSequenceSetTempZoneByZone (x->user);
 
-			DIRTYLAYER_SET(DIRTY_ZONE | DIRTY_CHANGE)
+			DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_CHANGE);
 		}
 	else if (USER && SHIFT && !RIGHT && !CAPS)
 		{
@@ -2961,12 +2961,12 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 			
 			if (k != -1) {
 					x->hitTest = k;
-					DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+					DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 				}
 		}
 	else if (USER && !CAPS && (x->hitTest = pizSequenceSelectNoteWithCoordinates (x->user, &x->coordinates)))
 		{
-			DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+			DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 						
 			if (RIGHT) {
 					tralala_popupRightClickMenu	(x, pt, MENU_NOTE);
@@ -2981,10 +2981,10 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 	else if (USER)
 		{
 			pizSequenceUnselectAllNotes (x->user);
-			DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+			DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 					
 			tralala_unselectAllText (x);
-			DIRTYLAYER_SET(DIRTY_REFRESH)
+			DIRTYLAYER_SET (DIRTY_REFRESH);
 		}
 }
 
@@ -3056,7 +3056,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 						}
 					}
 					
-					DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+					DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 				}
 			else if ((x->hitTest == HIT_NOTE) && !err)
 				{
@@ -3065,7 +3065,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 						{
 							tralala_duplicateSelectedNotes (x);
 							
-							DIRTYLAYER_SET(DIRTY_NOTES)
+							DIRTYLAYER_SET (DIRTY_NOTES);
 							tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_COPYING);
 						}
 					else if (CTRL && !(x->flags & FLAG_HAVE_MOVED))
@@ -3079,14 +3079,14 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 											tralala_changeSelectedNotesVelocity (x, UP);
 											
 											x->flags |= FLAG_HAVE_CHANGED;
-											DIRTYLAYER_SET(DIRTY_NOTES)
+											DIRTYLAYER_SET (DIRTY_NOTES);
 										}
 									else if ((pt.y - x->previous.y) > 0.5)
 										{
 											tralala_changeSelectedNotesVelocity (x, DOWN);
 											
 											x->flags |= FLAG_HAVE_CHANGED;
-											DIRTYLAYER_SET(DIRTY_NOTES)
+											DIRTYLAYER_SET (DIRTY_NOTES);
 										}
 								}
 							else if (tralala_changeSelectedNotesDuration (x, deltaPosition))
@@ -3094,7 +3094,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 									tralala_testAutoscroll (x, patcherview, pt);
 									
 									x->flags |= FLAG_HAVE_CHANGED;
-									DIRTYLAYER_SET(DIRTY_NOTES)
+									DIRTYLAYER_SET (DIRTY_NOTES);
 								}
 						}
 					else 
@@ -3102,7 +3102,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 							if (tralala_moveSelectedNotes (x, deltaPosition, deltaPitch))
 								{
 									x->flags |= FLAG_HAVE_MOVED;
-									DIRTYLAYER_SET(DIRTY_NOTES)
+									DIRTYLAYER_SET (DIRTY_NOTES);
 								}
 							
 							if (CMD)
@@ -3116,7 +3116,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 									if (x->textMode != TEXT_MODE_NOTE)
 										{
 											x->textMode = TEXT_MODE_NOTE;
-											DIRTYLAYER_SET(DIRTY_REFRESH)
+											DIRTYLAYER_SET (DIRTY_REFRESH);
 										}
 								}
 							
@@ -3130,7 +3130,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 					tralala_testAutoscroll (x, patcherview, pt);
 					
 					if (draw) {
-							DIRTYLAYER_SET(DIRTY_ZONE | DIRTY_CHANGE)
+							DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_CHANGE);
 						}
 				}
 			else if (x->hitTest)
@@ -3169,7 +3169,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 					tralala_testAutoscroll (x, patcherview, pt);
 
 					if (draw) {
-							DIRTYLAYER_SET(DIRTY_ZONE | DIRTY_CHANGE)
+							DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_CHANGE);
 						} 
 				}
 			else if (CAPS)
@@ -3179,22 +3179,22 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 					
 					tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_DRAGGINGHAND);
 					
-					DIRTYLAYER_SET(DIRTY_REFRESH)
+					DIRTYLAYER_SET (DIRTY_REFRESH);
 				} 
 			else if (!CMD) 
 				{
 					x->flags |= FLAG_IS_LASSO;
-					DIRTYLAYER_SET(DIRTY_REFRESH)
+					DIRTYLAYER_SET (DIRTY_REFRESH);
 					
 					if (x->flags & FLAG_ORIGIN_HAD_SHIFT_KEY) {
 						if (pizSequenceSelectNotesWithLasso 
 							(x->user, &x->originCoordinates, &x->coordinates, INVERT))  {
-									DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+									DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 							}
 						}
 					else if (pizSequenceSelectNotesWithLasso 
 						(x->user, &x->originCoordinates, &x->coordinates, SELECT)) {
-							DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+							DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 						}
 					
 					tralala_testAutoscroll (x, patcherview, pt);
@@ -3220,7 +3220,7 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
 			if (tralala_hasSelectedText (x, &selectedText))
 				{
 					tralala_unselectAllText (x);
-					DIRTYLAYER_SET(DIRTY_REFRESH)
+					DIRTYLAYER_SET (DIRTY_REFRESH);
 					
 					DIRTYSLOTS 
 					DIRTYPATTR
@@ -3231,7 +3231,7 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
 				{
 					pizSequenceSetZoneByTempZone (x->user);
 					x->flags &= ~FLAG_ZONE_IS_SELECTED;
-					DIRTYLAYER_SET(DIRTY_ZONE | DIRTY_CHANGE)
+					DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_CHANGE);
 					
 					DIRTYSLOTS 
 					DIRTYPATTR
@@ -3260,7 +3260,7 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
 					
 					pizSequenceInitLasso (x->user);
 					
-					DIRTYLAYER_SET(DIRTY_REFRESH)
+					DIRTYLAYER_SET (DIRTY_REFRESH);
 					
 					DIRTYSLOTS 
 					DIRTYPATTR
@@ -3275,7 +3275,7 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
 		{
 			if (!CAPS) {
 				x->textMode = TEXT_MODE_NOTE;
-				DIRTYLAYER_SET(DIRTY_REFRESH)
+				DIRTYLAYER_SET (DIRTY_REFRESH);
 			}
 		}
 	
@@ -3293,7 +3293,7 @@ void tralala_mouseleave (t_tralala *x, t_object *patcherview, t_pt pt, long modi
 	
 	if (x->textMode != TEXT_MODE_NOTE) {
 			x->textMode = TEXT_MODE_NOTE;
-			DIRTYLAYER_SET(DIRTY_REFRESH)
+			DIRTYLAYER_SET (DIRTY_REFRESH);
 		}
 }
 
@@ -3316,7 +3316,7 @@ void tralala_mousemove (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 					
 					x->textMode = TEXT_MODE_MOUSE_PITCH;
 					x->mousePitchValue = x->coordinates.pitch;
-					DIRTYLAYER_SET(DIRTY_REFRESH)
+					DIRTYLAYER_SET (DIRTY_REFRESH);
 				}
 			else if (USER && CAPS)
 				{
@@ -3338,7 +3338,7 @@ void tralala_mousemove (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 					if (x->textMode != TEXT_MODE_ZONE)
 						{
 							x->textMode = TEXT_MODE_ZONE;
-							DIRTYLAYER_SET(DIRTY_REFRESH)
+							DIRTYLAYER_SET (DIRTY_REFRESH);
 						}
 				}
 			else 
@@ -3348,7 +3348,7 @@ void tralala_mousemove (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 					if (x->textMode != TEXT_MODE_NOTE) 
 						{
 							x->textMode = TEXT_MODE_NOTE;
-							DIRTYLAYER_SET(DIRTY_REFRESH)
+							DIRTYLAYER_SET (DIRTY_REFRESH);
 						}
 				}
 		}
@@ -3395,14 +3395,14 @@ void tralala_mousewheel	(t_tralala *x, t_object *view, t_pt pt, long modifiers, 
 					x->windowOffsetY = round (x->windowOffsetY);
 				}
 			
-			DIRTYLAYER_SET(DIRTY_ZONE | DIRTY_NOTES)
+			DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES);
 		}
 	else
 		{
 			x->windowOffsetX = round (x->windowOffsetX - (x_inc * MOUSEWHEEL_FACTOR));
 			x->windowOffsetY = round (x->windowOffsetY - (y_inc * MOUSEWHEEL_FACTOR));
 			
-			DIRTYLAYER_SET(DIRTY_REFRESH)
+			DIRTYLAYER_SET (DIRTY_REFRESH);
 		}
 }
 
@@ -3427,7 +3427,7 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 		DIRTYSLOTS 
 		DIRTYPATTR
 		DIRTYUNDO
-		DIRTYLAYER_SET(DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE)
+		DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE);
 		
 	} else if (keycode == JKEY_DOWNARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
 	
@@ -3436,14 +3436,14 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 		DIRTYSLOTS 
 		DIRTYPATTR
 		DIRTYUNDO
-		DIRTYLAYER_SET(DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE)
+		DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE);
 		
 	} else if (keycode == JKEY_ENTER) {
 	
 		tralala_setLiveByUser (x);
 		
 		if (LIVE) {
-				DIRTYLAYER_SET(DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE)
+				DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE);
 			}
 		
 	} else if (keycode == JKEY_RIGHTARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
@@ -3462,7 +3462,7 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 	
 		pizSequenceRemoveSelectedNotes (x->user);
 		
-		DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+		DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 		DIRTYSLOTS 
 		DIRTYPATTR
 		DIRTYUNDO
@@ -3472,14 +3472,14 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 			{
 				pizSequenceSelectAllNotes (x->user);
 				
-				DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+				DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 			}
 		else if (COPY) 
 			{
 				pizGrowingArrayClear (tll_clipboard);
 				tll_clipboardError = pizSequenceNotesToArray (x->user, NULL, tll_clipboard);
 				
-				DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+				DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 			}
 		else if (CUT) 
 			{
@@ -3487,7 +3487,7 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 				tll_clipboardError = pizSequenceNotesToArray (x->user, NULL, tll_clipboard);
 				pizSequenceRemoveSelectedNotes (x->user);
 				
-				DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+				DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 			}
 		else if (PASTE) 
 			{
@@ -3534,7 +3534,7 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 								pizSequenceAddNotesWithArray 
 									(x->user, tll_clipboard, PIZ_SEQUENCE_ADD_MODE_SNAP);
 									
-								DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+								DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
 							}
 					}
 			}
@@ -3569,7 +3569,7 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 							case 55	: pizSequenceSetGrid (x->user, PIZ_SNAP_NONE);			break;
 							}
 						
-						DIRTYLAYER_SET(DIRTY_GRID)
+						DIRTYLAYER_SET (DIRTY_GRID);
 					}
 				else
 					{
@@ -3583,7 +3583,7 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 							case 55	: pizSequenceSetNoteValue (x->user, PIZ_SNAP_NONE);			break;
 							}
 						
-						DIRTYLAYER_SET(DIRTY_REFRESH)
+						DIRTYLAYER_SET (DIRTY_REFRESH);
 					}
 			} ATOMIC_DECREMENT (&x->popupLock);
 			
@@ -3622,10 +3622,10 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 			
 			if (!SHIFT) {
 				pizSequenceSetGrid (x->user, new);
-				DIRTYLAYER_SET(DIRTY_GRID)
+				DIRTYLAYER_SET (DIRTY_GRID);
 			} else {
 				pizSequenceSetNoteValue (x->user, new);
-				DIRTYLAYER_SET(DIRTY_REFRESH)
+				DIRTYLAYER_SET (DIRTY_REFRESH);
 			}
 		} ATOMIC_DECREMENT (&x->popupLock);
 		
@@ -3664,10 +3664,10 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 			
 			if (!SHIFT) {
 				pizSequenceSetGrid (x->user, new);
-				DIRTYLAYER_SET(DIRTY_GRID)
+				DIRTYLAYER_SET (DIRTY_GRID);
 			} else {
 				pizSequenceSetNoteValue (x->user, new);
-				DIRTYLAYER_SET(DIRTY_REFRESH)
+				DIRTYLAYER_SET (DIRTY_REFRESH);
 			}
 		} ATOMIC_DECREMENT (&x->popupLock);
 		
@@ -3698,13 +3698,13 @@ void tralala_focuslost (t_tralala *x, t_object *patcherview)
 					pizSequenceSetZoneByTempZone (x->user);
 					
 					x->flags &= ~FLAG_ZONE_IS_SELECTED;
-					DIRTYLAYER_SET(DIRTY_CHANGE)
+					DIRTYLAYER_SET (DIRTY_CHANGE);
 				}
 			
 			if (x->flags & FLAG_IS_LASSO)
 				{
 					x->flags &= ~FLAG_IS_LASSO;
-					DIRTYLAYER_SET(DIRTY_REFRESH)
+					DIRTYLAYER_SET (DIRTY_REFRESH);
 				}
 		
 			tralala_stopAutoscroll (x);
@@ -3715,15 +3715,15 @@ void tralala_focuslost (t_tralala *x, t_object *patcherview)
 	if (x->textMode != TEXT_MODE_NOTE)
 		{
 			x->textMode = TEXT_MODE_NOTE;
-			DIRTYLAYER_SET(DIRTY_REFRESH)
+			DIRTYLAYER_SET (DIRTY_REFRESH);
 		}
 
-	DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED)
+	DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED);
 }
 
 void tralala_patcherview_vis (t_tralala *x, t_object *patcherview)
 {
-	DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED)
+	DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED);
 	
 	clock_fdelay (x->paintClock, 0.);
 }
@@ -3783,7 +3783,7 @@ void tralala_paint (t_tralala *x, t_object *patcherview)
 		}
 	else
 		{
-			DIRTYLAYER_SET(DIRTY_REFRESH)
+			DIRTYLAYER_SET (DIRTY_REFRESH);
 			
 			ATOMIC_DECREMENT (&x->paintLock);
 		}
@@ -3813,7 +3813,7 @@ void tralala_paintTask (t_tralala *x)
 	
 	if (ATOMIC_INCREMENT (&x->paintLock) == 1) {
 	
-	DIRTYLAYER_UNSET(~(DIRTY_GRID | DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE | DIRTY_REFRESH | DIRTY_PLAYED))
+	DIRTYLAYER_UNSET (~(DIRTY_GRID | DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE | DIRTY_REFRESH | DIRTY_PLAYED));
 								
 	if (LIVE && !(dirty & DIRTY_CHANGE) && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1)))
 		{
@@ -3937,7 +3937,7 @@ void tralala_focusTask (t_tralala *x)
 {
 	x->flags |= FLAG_FOCUS;
 	
-	DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED)
+	DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED);
 }
 
 void tralala_notifyTask (t_tralala *x)
@@ -4493,22 +4493,22 @@ void tralala_testAutoscroll (t_tralala *x, t_object *patcherview, t_pt pt)
 	jbox_get_rect_for_view ((t_object *)x, patcherview, &rect);	
 	
 	if (pt.x < AUTOSCROLL_RANGE) {
-			DIRTYLAYER_SET(DIRTY_LOCATE_LEFT)
+			DIRTYLAYER_SET (DIRTY_LOCATE_LEFT);
 			stop = false;
 		}
 		
 	if ((rect.width - pt.x) < AUTOSCROLL_RANGE) {
-			DIRTYLAYER_SET(DIRTY_LOCATE_RIGHT)
+			DIRTYLAYER_SET (DIRTY_LOCATE_RIGHT);
 			stop = false;
 		}
 		
 	if ((rect.height - pt.y) < AUTOSCROLL_RANGE) {
-			DIRTYLAYER_SET(DIRTY_LOCATE_DOWN)
+			DIRTYLAYER_SET (DIRTY_LOCATE_DOWN);
 			stop = false;
 		}
 		
 	if (pt.y < AUTOSCROLL_RANGE) {
-			DIRTYLAYER_SET(DIRTY_LOCATE_UP)
+			DIRTYLAYER_SET (DIRTY_LOCATE_UP);
 			stop = false;
 		}
 		
@@ -4519,7 +4519,7 @@ void tralala_testAutoscroll (t_tralala *x, t_object *patcherview, t_pt pt)
 
 void tralala_stopAutoscroll (t_tralala *x)
 {
-	DIRTYLAYER_UNSET(~(DIRTY_LOCATE_LEFT | DIRTY_LOCATE_RIGHT | DIRTY_LOCATE_DOWN | DIRTY_LOCATE_UP))
+	DIRTYLAYER_UNSET (~(DIRTY_LOCATE_LEFT | DIRTY_LOCATE_RIGHT | DIRTY_LOCATE_DOWN | DIRTY_LOCATE_UP));
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -4928,17 +4928,17 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 				
 			x->flags &= ~FLAG_HAVE_CHANGED;
 				
-			DIRTYLAYER_SET(DIRTY_NOTES)
+			DIRTYLAYER_SET (DIRTY_NOTES);
 			
 			DIRTYUNDO
 		}
 	
 	if (returnedPopupValue >= 10 && returnedPopupValue <= 27) {
-			DIRTYLAYER_SET(DIRTY_GRID)
+			DIRTYLAYER_SET (DIRTY_GRID);
 		}
 	
 	if (returnedPopupValue >= 300 && returnedPopupValue <= 317) {
-			DIRTYLAYER_SET(DIRTY_GRID)
+			DIRTYLAYER_SET (DIRTY_GRID);
 		}
 		
 	jfont_destroy (font);

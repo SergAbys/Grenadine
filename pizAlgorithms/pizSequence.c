@@ -143,7 +143,7 @@ void pizSequenceFree (PIZSequence *x)
 {
 	if (x)
 		{
-			PIZ_LOCK
+			PIZLOCK
 			
 			if (x->timeline)
 				{
@@ -177,7 +177,7 @@ void pizSequenceFree (PIZSequence *x)
 					free (x->notes2);
 				}
 				
-			PIZ_UNLOCK
+			PIZUNLOCK
 			
 			pthread_mutex_destroy (&x->lock);
 			
@@ -193,9 +193,9 @@ long pizSequenceCount (PIZSequence *x)
 {	
 	long k; 
 	
-	PIZ_LOCK
+	PIZLOCK
 	k = x->count;
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return k;
 }	
@@ -204,9 +204,9 @@ long pizSequenceIndex (PIZSequence *x)
 {
 	long k;
 	
-	PIZ_LOCK
+	PIZLOCK
 	k = x->index;
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return k;
 }
@@ -215,9 +215,9 @@ long pizSequenceChannel	(PIZSequence *x)
 {
 	long k;
 	
-	PIZ_LOCK
+	PIZLOCK
 	k = x->channel;
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return k;
 }
@@ -226,9 +226,9 @@ long pizSequenceVelocity (PIZSequence *x)
 {
 	long k;
 	
-	PIZ_LOCK
+	PIZLOCK
 	k = x->velocity;
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return k;
 }
@@ -237,9 +237,9 @@ PIZSnapValue pizSequenceGrid (PIZSequence *x)
 {
 	long k;
 	
-	PIZ_LOCK
+	PIZLOCK
 	k = x->grid;
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return k;
 }
@@ -248,9 +248,9 @@ PIZSnapValue pizSequenceNoteValue (PIZSequence *x)
 {
 	long k;
 	
-	PIZ_LOCK
+	PIZLOCK
 	k = x->noteValue;
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return k;
 }
@@ -260,37 +260,37 @@ PIZSnapValue pizSequenceNoteValue (PIZSequence *x)
 
 void pizSequenceSetChance (PIZSequence *x, long value)
 {
-	PIZ_LOCK
+	PIZLOCK
 	x->chance = CLAMP (value, 0, 100);
-	PIZ_UNLOCK
+	PIZUNLOCK
 }
 
 void pizSequenceSetChannel (PIZSequence *x, long channel)
 {
-	PIZ_LOCK
+	PIZLOCK
 	x->channel = CLAMP (channel, 1, PIZ_SEQUENCE_MIDI_CHANNEL);
-	PIZ_UNLOCK
+	PIZUNLOCK
 }
 
 void pizSequenceSetVelocity (PIZSequence *x, long value)
 {
-	PIZ_LOCK
+	PIZLOCK
 	x->velocity = value;
-	PIZ_UNLOCK
+	PIZUNLOCK
 }
 
 void pizSequenceSetGrid	(PIZSequence *x, PIZSnapValue snapValue)
 {
-	PIZ_LOCK
+	PIZLOCK
 	x->grid	= snapValue;
-	PIZ_UNLOCK
+	PIZUNLOCK
 }
 
 void pizSequenceSetNoteValue (PIZSequence *x, PIZSnapValue noteValue)
 {
-	PIZ_LOCK
+	PIZLOCK
 	x->noteValue = noteValue;
-	PIZ_UNLOCK
+	PIZUNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -301,7 +301,7 @@ PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type
 	long err = PIZ_ERROR;
 	long *ptr = NULL;
 
-	PIZ_LOCK
+	PIZLOCK
 	
 	switch (type) {
 		case PIZ_TYPE_NONE					: pizGrowingArrayClear (x->scale); 
@@ -348,7 +348,7 @@ PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type
 				}
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err;
 }	
@@ -357,7 +357,7 @@ PIZError pizSequenceSetCustomScaleWithArray (PIZSequence *x, PIZScaleKey key, PI
 {
 	long err = PIZ_ERROR;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (array && (pizGrowingArrayCount (array) == PIZ_SEQUENCE_SCALE_SIZE))
 		{
@@ -373,7 +373,7 @@ PIZError pizSequenceSetCustomScaleWithArray (PIZSequence *x, PIZScaleKey key, PI
 				}
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err;
 }
@@ -382,14 +382,14 @@ PIZError pizSequenceSetCustomPatternWithArray (PIZSequence *x, PIZGrowingArray *
 {
 	long err = PIZ_ERROR;
 	 
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (array) {
 			err = PIZ_GOOD;
 			err |= pizGrowingArrayCopy (x->pattern, array);
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err;
 }
@@ -400,11 +400,11 @@ PIZError pizSequenceSetCustomPatternWithArray (PIZSequence *x, PIZGrowingArray *
 
 void pizSequenceClear (PIZSequence *x)
 {
-	PIZ_LOCK
+	PIZLOCK
 	
 	pizSequenceLocalClear (x);
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -415,7 +415,7 @@ PIZError pizSequenceSetZoneWithArray (PIZSequence *x, PIZGrowingArray *array)
 {
 	long err = PIZ_ERROR;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (array && (pizGrowingArrayCount (array) == PIZ_SEQUENCE_ZONE_SIZE))
 		{
@@ -452,7 +452,7 @@ PIZError pizSequenceSetZoneWithArray (PIZSequence *x, PIZGrowingArray *array)
 				} 
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err;
 }
@@ -461,7 +461,7 @@ PIZError pizSequenceAddNotesWithArray (PIZSequence *x, PIZGrowingArray *array, l
 {
 	long err = PIZ_ERROR;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (mode & PIZ_SEQUENCE_ADD_MODE_CLEAR) {
 			pizSequenceLocalClear (x);
@@ -484,7 +484,7 @@ PIZError pizSequenceAddNotesWithArray (PIZSequence *x, PIZGrowingArray *array, l
 				}
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err;
 }
@@ -494,7 +494,7 @@ PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, PIZCoordinates *coor
 	long err = PIZ_GOOD;
 	long values[PIZ_SEQUENCE_NOTE_SIZE];
 	
-	PIZ_LOCK
+	PIZLOCK
 		
 	values[PIZ_SEQUENCE_POSITION]		= coordinates->position;
 	values[PIZ_SEQUENCE_PITCH]			= coordinates->pitch;
@@ -513,7 +513,7 @@ PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, PIZCoordinates *coor
 			err |= PIZ_ERROR;
 		}
 					
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err;
 }
@@ -526,7 +526,7 @@ PIZError pizSequenceZoneToArray (PIZSequence *x, PIZGrowingArray *array)
 {
 	long err = PIZ_ERROR;
 
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (array) 
 		{
@@ -538,7 +538,7 @@ PIZError pizSequenceZoneToArray (PIZSequence *x, PIZGrowingArray *array)
 			err |= pizGrowingArrayAppend (array, x->up);
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err;
 }
@@ -548,7 +548,7 @@ PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *a, PIZGrowing
 	long i, scale;
 	long err = PIZ_GOOD;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	pizSequenceLocalMakeMap (x);
 	
@@ -600,7 +600,7 @@ PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *a, PIZGrowing
 				}
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err;
 }
@@ -615,7 +615,7 @@ bool pizSequenceClean (PIZSequence *x, long value)
 	long index = 0;
 	bool haveChanged = false;
 
-	PIZ_LOCK
+	PIZLOCK
 		
 	scale = pizGrowingArrayCount (x->scale);
 	v = CLAMP (value, 0, PIZ_SEQUENCE_MIDI_NOTE);
@@ -673,7 +673,7 @@ bool pizSequenceClean (PIZSequence *x, long value)
 	
 	if (index)
 		{
-			PIZ_MAP_FLAG
+			PIZMAPFLAG
 			haveChanged = true;
 			
 			for (i = 0; i < index; i++)
@@ -688,7 +688,7 @@ bool pizSequenceClean (PIZSequence *x, long value)
 				}
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return haveChanged;
 }
@@ -698,7 +698,7 @@ bool pizSequenceApplyPattern (PIZSequence *x)
 	long patternSize, i;
 	bool haveChanged = false;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	patternSize = pizGrowingArrayCount (x->pattern);
 	
@@ -756,11 +756,11 @@ bool pizSequenceApplyPattern (PIZSequence *x)
 		}
 	
 	if (haveChanged) {
-			PIZ_MAP_FLAG
+			PIZMAPFLAG
 			pizSequenceLocalMakeMap (x);
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return haveChanged; 
 }
@@ -770,7 +770,7 @@ bool pizSequenceApplyAmbitus (PIZSequence *x)
 	long i, scale;
 	bool haveChanged = false;
 
-	PIZ_LOCK
+	PIZLOCK
 	
 	scale = pizGrowingArrayCount (x->scale);
 
@@ -800,7 +800,7 @@ bool pizSequenceApplyAmbitus (PIZSequence *x)
 				}
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return haveChanged;
 }
@@ -817,7 +817,7 @@ void pizSequenceTransposeOctave (PIZSequence *x, bool down)
 			step = PIZ_SEQUENCE_SCALE_SIZE;
 		}
 		
-	PIZ_LOCK
+	PIZLOCK
 		
 	x->down = CLAMP (x->down + step, 0, PIZ_SEQUENCE_MIDI_NOTE);
 	x->up	= CLAMP (x->up + step, 0, PIZ_SEQUENCE_MIDI_NOTE);
@@ -841,7 +841,7 @@ void pizSequenceTransposeOctave (PIZSequence *x, bool down)
 				}
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -852,31 +852,31 @@ bool pizSequenceIsAtEnd (PIZSequence *x)
 {
 	bool k = false;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (x->index >= x->end) {
 			k = true;
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return k;
 }
 
 void pizSequenceGoToStart (PIZSequence *x)
 {
-	PIZ_LOCK
+	PIZLOCK
 	
 	x->index = x->start;
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 }
 
 PIZError pizSequenceProceedStep	(PIZSequence *x, PIZGrowingArray *array)
 {
 	long err = PIZ_ERROR;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (x->index < x->start) {
 			x->index = x->start;
@@ -936,7 +936,7 @@ PIZError pizSequenceProceedStep	(PIZSequence *x, PIZGrowingArray *array)
 			x->index ++;
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 	
 	return err;
 }
@@ -1021,7 +1021,7 @@ PIZNote *pizSequenceLocalAddNote (PIZSequence *x, long *values, long mode)
 			
 			if (!err && !(pizItemset1024IsSetAtIndex (&x->mapFlags, newNote->position))) {
 					if (!(err |= pizGrowingArrayAppend (x->map, newNote->position))) {
-							PIZ_MAP_FLAG
+							PIZMAPFLAG
 							pizItemset1024SetAtIndex (&x->mapFlags, newNote->position);
 						}
 				}
@@ -1092,7 +1092,7 @@ long pizSequenceLocalMovePitchToAmbitus (PIZSequence *x, long pitch)
 
 void pizSequenceLocalMakeMap (PIZSequence *x)
 {
-	if (PIZ_NEED_TO_MAKE_MAP)
+	if (PIZNEEDTOMAKEMAP)
 		{
 			long i;
 					

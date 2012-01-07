@@ -34,7 +34,7 @@
  */
  
 /*
- *	Last modified : 03/01/12.
+ *	Last modified : 07/01/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -55,8 +55,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_LOCK	pthread_mutex_lock (&x->lock);
-#define PIZ_UNLOCK	pthread_mutex_unlock (&x->lock);
+#define PIZLOCK		pthread_mutex_lock (&x->lock);
+#define PIZUNLOCK	pthread_mutex_unlock (&x->lock);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -112,9 +112,9 @@ void pizArrayPoolFree (PIZArrayPool *x)
 {
 	if (x) 
 		{
-			PIZ_LOCK
+			PIZLOCK
 			pizLinklistFree (x->pool);
-			PIZ_UNLOCK
+			PIZUNLOCK
 			
 			pthread_mutex_destroy (&x->lock);
 			free (x);
@@ -126,7 +126,7 @@ PIZGrowingArray	*pizArrayPoolGetArray (PIZArrayPool *x)
 	long			err = PIZ_ERROR;
 	PIZGrowingArray	*array = NULL;
 	
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (!x->retain) 
 		{
@@ -147,20 +147,20 @@ PIZGrowingArray	*pizArrayPoolGetArray (PIZArrayPool *x)
 			x->cache = array;
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 		
 	return array;
 }
 
 void pizArrayPoolReleaseArray (PIZArrayPool *x, PIZGrowingArray *array)
 {
-	PIZ_LOCK
+	PIZLOCK
 	
 	if (array) {
 			x->retain --;
 		}
 	
-	PIZ_UNLOCK
+	PIZUNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------
