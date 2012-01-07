@@ -8,7 +8,7 @@
  */
  
 /*
- *	Last modified : 24/12/11.
+ *	Last modified : 07/01/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -68,7 +68,6 @@ void tralalaSymbolsTableAInit (tralalaSymbolsTableA *tll_symbolsA)
 	tll_symbolsA->sym_copy					= gensym ("copy");
 	tll_symbolsA->sym_tralala				= gensym ("tralala");
 	tll_symbolsA->sym_version				= gensym ("version");
-	tll_symbolsA->sym_grid					= gensym ("grid");
 	tll_symbolsA->sym_gridLayer				= gensym ("gridLayer");
 	tll_symbolsA->sym_zoneLayer				= gensym ("zoneLayer");
 	tll_symbolsA->sym_notesLayer			= gensym ("notesLayer");

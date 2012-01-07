@@ -181,7 +181,6 @@ _tralala_play
 _tralala_runTask
 _tralala_setChance
 _tralala_setChannel
-_tralala_setGrid
 _tralala_setPatternCell
 _tralala_setPatternCustom
 _tralala_setScaleCustom

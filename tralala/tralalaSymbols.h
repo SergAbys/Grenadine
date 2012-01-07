@@ -8,7 +8,7 @@
  */
  
 /*
- *	Last modified : 24/12/11.
+ *	Last modified : 07/01/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -73,7 +73,6 @@ typedef struct _tralalaSymbolsTableA {
 	t_symbol *sym_copy;
 	t_symbol *sym_tralala;
 	t_symbol *sym_version;
-	t_symbol *sym_grid;
 	t_symbol *sym_gridLayer;
 	t_symbol *sym_zoneLayer;
 	t_symbol *sym_notesLayer;
@@ -202,7 +201,6 @@ typedef struct _tralalaSymbolsTableB {
 #define tll_sym_copy					(tll_symbolsA.sym_copy)
 #define tll_sym_tralala					(tll_symbolsA.sym_tralala)
 #define tll_sym_version					(tll_symbolsA.sym_version)
-#define tll_sym_grid					(tll_symbolsA.sym_grid)
 #define tll_sym_gridLayer				(tll_symbolsA.sym_gridLayer)
 #define tll_sym_zoneLayer				(tll_symbolsA.sym_zoneLayer)
 #define tll_sym_notesLayer				(tll_symbolsA.sym_notesLayer)

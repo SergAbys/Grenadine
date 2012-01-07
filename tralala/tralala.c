@@ -8,7 +8,7 @@
  */
 
 /*
- *	Last modified : 06/01/12.
+ *	Last modified : 07/01/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -220,19 +220,12 @@ CLASS_ATTR_DEFAULT			(c, "zoommode",			0, DEFAULT_ZOOM_MODE);
 CLASS_ATTR_LABEL			(c, "zoommode",			0, "Zoom Mode");
 CLASS_ATTR_FILTER_CLIP		(c, "zoommode",			0, 2);
 
-CLASS_ATTR_SYM				(c, "grid",				0, t_tralala, grid);
-CLASS_ATTR_ENUM				(c, "grid",				0, GRID_LIST);
-CLASS_ATTR_DEFAULT			(c, "grid",				0, DEFAULT_GRID);
-CLASS_ATTR_ACCESSORS		(c, "grid",				NULL, tralala_setGrid);
-CLASS_ATTR_LABEL			(c, "grid",				0, "Grid");
-
 CLASS_STICKY_ATTR_CLEAR		(c, "category");
 
-CLASS_ATTR_ORDER			(c, "grid",				0, "101");
-CLASS_ATTR_ORDER			(c, "sequencemode",		0, "102");
-CLASS_ATTR_ORDER			(c, "zoommode",			0, "103");
-CLASS_ATTR_ORDER			(c, "windowoffsetx",	0, "104");
-CLASS_ATTR_ORDER			(c, "windowoffsety",	0, "105");
+CLASS_ATTR_ORDER			(c, "sequencemode",		0, "101");
+CLASS_ATTR_ORDER			(c, "zoommode",			0, "102");
+CLASS_ATTR_ORDER			(c, "windowoffsetx",	0, "103");
+CLASS_ATTR_ORDER			(c, "windowoffsety",	0, "104");
 
 CLASS_ATTR_INVISIBLE		(c, "textcolor", 0);
 
@@ -833,7 +826,7 @@ t_max_err tralala_setSequenceMode (t_tralala *x, t_object *attr, long argc, t_at
 					
 			x->sequenceMode = CLAMP (k, SEQUENCE_MODE_USER, SEQUENCE_MODE_LISTEN);
 
-			DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE)
+			DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE | DIRTY_GRID)
 		}
 
 	return MAX_ERR_NONE;
@@ -1169,6 +1162,8 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
 									if (pizSequenceApplyPattern (x->live) && LIVE) {
 											DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
 										}
+									
+									DIRTYLAYER_SET(DIRTY_GRID)
 								}
 						}
 					
@@ -1210,60 +1205,6 @@ t_max_err tralala_setPatternCustom (t_tralala *x, t_object *attr, long argc, t_a
 				}
 		}
 
-	return MAX_ERR_NONE;
-}
-
-t_max_err tralala_setGrid (t_tralala *x, t_object *attr, long argc, t_atom *argv)
-{
-	if (argc && argv)
-		{
-			if (ATOMIC_INCREMENT (&x->popupLock) == 1)
-				{
-					long		size = 0;
-					char		*tempString = NULL;
-					t_symbol	*temp = NULL;
-					bool		err = true;			
-
-					atom_gettext (argc, argv, &size, &tempString, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
-			
-					if (tempString)
-						{
-							temp = gensym (tempString);
-					
-							if (temp != x->grid)
-								{
-									if (temp == tll_sym_whole ||
-										temp == tll_sym_half ||
-										temp == tll_sym_quarter ||
-										temp == tll_sym_eight ||
-										temp == tll_sym_sixteenth ||
-										temp == tll_sym_halfTriplet ||
-										temp == tll_sym_quarterTriplet ||
-										temp == tll_sym_eightTriplet ||
-										temp == tll_sym_sixteenthTriplet ||
-										temp == tll_sym_dottedHalf ||
-										temp == tll_sym_dottedQuarter || 
-										temp == tll_sym_dottedEight ||
-										temp == tll_sym_dottedSixteenth ||
-										temp == tll_sym_automatic)
-										{
-											err = false;
-										}
-
-									
-									if (!err) {
-											x->grid = temp;
-											DIRTYLAYER_SET(DIRTY_GRID)
-										}
-								}
-							
-							sysmem_freeptr (tempString);
-						}
-				}
-				
-			ATOMIC_DECREMENT (&x->popupLock);
-		}
-	
 	return MAX_ERR_NONE;
 }
 
@@ -2463,7 +2404,8 @@ void tralala_slotRecall (t_tralala *x, long n)
 			
 			DIRTYUNDO
 			DIRTYPATTR
-			DIRTYGRID
+			
+			DIRTYLAYER_SET(DIRTY_GRID)
 		}
 	
 	DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE)
@@ -2752,7 +2694,6 @@ void tralala_dataToDictionary (t_tralala *x, t_dictionary *d)
 					dictionary_appendlong	(d, tll_sym_zoomMode, x->zoomMode);
 					dictionary_appendfloat	(d, tll_sym_windowOffsetX, x->windowOffsetX);
 					dictionary_appendfloat	(d, tll_sym_windowOffsetY, x->windowOffsetY); 
-					dictionary_appendsym	(d, tll_sym_grid, x->grid);
 					
 					if (x->saveSlotsWithPatcher)
 						{
@@ -2839,15 +2780,13 @@ void tralala_dataWithDictionary (t_tralala *x, t_dictionary *d)
 		{
 			if (ATOMIC_INCREMENT (&x->popupLock) == 1)
 				{
-					t_symbol	*grid = NULL;
-					long		sequenceMode = -1;
-					long		channel = -1;
+					long sequenceMode = -1;
+					long channel = -1;
 					
 					dictionary_getlong	(d, tll_sym_zoomMode, &x->zoomMode);
 					dictionary_getfloat (d, tll_sym_windowOffsetX, &x->windowOffsetX);
 					dictionary_getfloat (d, tll_sym_windowOffsetY, &x->windowOffsetY);
 					
-					dictionary_getsym	(d, tll_sym_grid, &grid);
 					dictionary_getlong	(d, tll_sym_sequenceMode, &sequenceMode);
 					
 					if (x->saveChannelWithPatcher) {
@@ -2942,10 +2881,6 @@ void tralala_dataWithDictionary (t_tralala *x, t_dictionary *d)
 					
 					ATOMIC_DECREMENT (&x->popupLock);
 					
-					if (grid) {
-							object_attr_setsym (x, tll_sym_grid, grid);
-						}
-						
 					if ((sequenceMode >= 0) && sequenceMode != x->sequenceMode) {
 							object_attr_setlong (x, tll_sym_sequenceMode, sequenceMode);
 						}
@@ -3477,177 +3412,266 @@ void tralala_mousewheel	(t_tralala *x, t_object *view, t_pt pt, long modifiers, 
 									
 void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifiers, long textcharacter)
 {
-	if (SHARP || (keycode == JKEY_SPACEBAR))
-		{
-			switch (x->sequenceMode) {
-				case SEQUENCE_MODE_USER	  : object_attr_setlong (x, tll_sym_sequenceMode, SEQUENCE_MODE_LIVE);
-											break;
-				case SEQUENCE_MODE_LIVE	  : object_attr_setlong (x, tll_sym_sequenceMode, SEQUENCE_MODE_USER);
-											break;
-				case SEQUENCE_MODE_LISTEN :	object_attr_setlong (x, tll_sym_sequenceMode, SEQUENCE_MODE_USER);
-											break;								
-				}
-		}
-	else if (keycode == JKEY_UPARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED))
-		{
-			pizSequenceTransposeOctave (x->user, UP);
-			
-			DIRTYSLOTS 
-			DIRTYPATTR
-			DIRTYUNDO
-			
-			DIRTYLAYER_SET(DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE)
-		}
-	else if (keycode == JKEY_DOWNARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED))
-		{
-			pizSequenceTransposeOctave (x->user, DOWN);
-			
-			DIRTYSLOTS 
-			DIRTYPATTR
-			DIRTYUNDO
-			
-			DIRTYLAYER_SET(DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE)
-		}
-	else if (keycode == JKEY_ENTER)
-		{
-			tralala_setLiveByUser (x);
-			
-			if (LIVE)
-				{
-					DIRTYLAYER_SET(DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE)
-				}
-		}
-	else if (keycode == JKEY_RIGHTARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED))
-		{
-			if (ATOMIC_INCREMENT (&x->popupLock) == 1)
-				{
-					tralala_slotNext (x);
-				}
-
-			ATOMIC_DECREMENT (&x->popupLock);
-		}
-	else if (keycode == JKEY_LEFTARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED))
-		{
-			if (ATOMIC_INCREMENT (&x->popupLock) == 1)
-				{
-					tralala_slotPrevious (x);
-				}
-
-			ATOMIC_DECREMENT (&x->popupLock);
-		}
-	else if (USER && ((keycode == JKEY_DELETE) || (keycode == JKEY_BACKSPACE)))
-		{
-			pizSequenceRemoveSelectedNotes (x->user);
-			
-			DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
-			
-			DIRTYSLOTS 
-			DIRTYPATTR
-			DIRTYUNDO
-		}
-	else if (USER && CMD && !(x->flags & (FLAG_HAVE_MOVED | FLAG_HAVE_CHANGED | FLAG_HAVE_BEEN_DUPLICATED)))
-		{
-			if (ALL) 
-				{
-					pizSequenceSelectAllNotes (x->user);
-					
-					DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
-				}
-			else if (COPY) 
-				{
-					pizGrowingArrayClear (tll_clipboard);
-					tll_clipboardError = pizSequenceNotesToArray (x->user, NULL, tll_clipboard);
-					
-					DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
-				}
-			else if (CUT) 
-				{
-					pizGrowingArrayClear (tll_clipboard);
-					tll_clipboardError = pizSequenceNotesToArray (x->user, NULL, tll_clipboard);
-					pizSequenceRemoveSelectedNotes (x->user);
-					
-					DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
-				}
-			else if (PASTE) 
-				{
-					if (!tll_clipboardError)
-						{
-							long count;
-							
-							if (count = (pizGrowingArrayCount (tll_clipboard) / PIZ_SEQUENCE_NOTE_SIZE))
-								{
-									long i;
-									long offsetPosition, offsetPitch;
-																
-									pizSequenceUnselectAllNotes (x->user);
-									
-									if (pizGrowingArrayValueAtIndex (tll_clipboard, PIZ_SEQUENCE_POSITION)
-										 < (PIZ_SEQUENCE_TIMELINE_SIZE / 2)) {
-										offsetPosition = pizSequenceGrid (x->user);
-									} else {
-										offsetPosition = -(pizSequenceGrid (x->user));
-									}
-										
-									if (pizGrowingArrayValueAtIndex (tll_clipboard, PIZ_SEQUENCE_PITCH)
-										< (PIZ_SEQUENCE_MIDI_NOTE / 2)) {
-										offsetPitch = 1;
-									} else {
-										offsetPitch = -1;
-									}
-									
-									for (i = 0; i < count; i++) {
-										long position = pizGrowingArrayValueAtIndex (tll_clipboard, 
-											(PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
-										long pitch = pizGrowingArrayValueAtIndex (tll_clipboard, 
-											(PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
-											
-										position	+= offsetPosition;
-										pitch		+= offsetPitch;
-										
-										pizGrowingArraySetValueAtIndex (tll_clipboard, 
-											(PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION, position);
-										pizGrowingArraySetValueAtIndex (tll_clipboard, 
-											(PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH, pitch);
-										}
-									
-									pizSequenceAddNotesWithArray 
-										(x->user, tll_clipboard, PIZ_SEQUENCE_ADD_MODE_SNAP);
-										
-									DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+	if (SHARP || (keycode == JKEY_SPACEBAR)) {
+	
+		switch (x->sequenceMode) {
+			case SEQUENCE_MODE_USER	  : object_attr_setlong (x, tll_sym_sequenceMode, SEQUENCE_MODE_LIVE); break;
+			case SEQUENCE_MODE_LIVE	  : object_attr_setlong (x, tll_sym_sequenceMode, SEQUENCE_MODE_USER); break;
+			case SEQUENCE_MODE_LISTEN :	object_attr_setlong (x, tll_sym_sequenceMode, SEQUENCE_MODE_USER); break;								
+			}
+		
+	} else if (keycode == JKEY_UPARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
+	
+		pizSequenceTransposeOctave (x->user, UP);
+		
+		DIRTYSLOTS 
+		DIRTYPATTR
+		DIRTYUNDO
+		DIRTYLAYER_SET(DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE)
+		
+	} else if (keycode == JKEY_DOWNARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
+	
+		pizSequenceTransposeOctave (x->user, DOWN);
+		
+		DIRTYSLOTS 
+		DIRTYPATTR
+		DIRTYUNDO
+		DIRTYLAYER_SET(DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE)
+		
+	} else if (keycode == JKEY_ENTER) {
+	
+		tralala_setLiveByUser (x);
+		
+		if (LIVE) {
+				DIRTYLAYER_SET(DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE)
+			}
+		
+	} else if (keycode == JKEY_RIGHTARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
+	
+		if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
+				tralala_slotNext (x);
+			} ATOMIC_DECREMENT (&x->popupLock);
+		
+	} else if (keycode == JKEY_LEFTARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
+	
+		if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
+				tralala_slotPrevious (x);
+			} ATOMIC_DECREMENT (&x->popupLock);
+		
+	} else if (USER && ((keycode == JKEY_DELETE) || (keycode == JKEY_BACKSPACE))) {
+	
+		pizSequenceRemoveSelectedNotes (x->user);
+		
+		DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+		DIRTYSLOTS 
+		DIRTYPATTR
+		DIRTYUNDO
+		
+	} else if (USER && CMD && !(x->flags & (FLAG_HAVE_MOVED | FLAG_HAVE_CHANGED | FLAG_HAVE_BEEN_DUPLICATED))) {
+		if (ALL) 
+			{
+				pizSequenceSelectAllNotes (x->user);
+				
+				DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+			}
+		else if (COPY) 
+			{
+				pizGrowingArrayClear (tll_clipboard);
+				tll_clipboardError = pizSequenceNotesToArray (x->user, NULL, tll_clipboard);
+				
+				DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+			}
+		else if (CUT) 
+			{
+				pizGrowingArrayClear (tll_clipboard);
+				tll_clipboardError = pizSequenceNotesToArray (x->user, NULL, tll_clipboard);
+				pizSequenceRemoveSelectedNotes (x->user);
+				
+				DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+			}
+		else if (PASTE) 
+			{
+				if (!tll_clipboardError)
+					{
+						long count;
+						
+						if (count = (pizGrowingArrayCount (tll_clipboard) / PIZ_SEQUENCE_NOTE_SIZE))
+							{
+								long i;
+								long offsetPosition, offsetPitch;
+															
+								pizSequenceUnselectAllNotes (x->user);
+								
+								if (pizGrowingArrayValueAtIndex (tll_clipboard, PIZ_SEQUENCE_POSITION)
+									 < (PIZ_SEQUENCE_TIMELINE_SIZE / 2)) {
+									offsetPosition = pizSequenceGrid (x->user);
+								} else {
+									offsetPosition = -(pizSequenceGrid (x->user));
 								}
-						}
-				}
-			else if (UNDO)
-				{
-					tralala_undo (x);
-				}
-			else if (REDO)
-				{
-					tralala_redo (x);
-				}
+									
+								if (pizGrowingArrayValueAtIndex (tll_clipboard, PIZ_SEQUENCE_PITCH)
+									< (PIZ_SEQUENCE_MIDI_NOTE / 2)) {
+									offsetPitch = 1;
+								} else {
+									offsetPitch = -1;
+								}
+								
+								for (i = 0; i < count; i++) {
+									long position = pizGrowingArrayValueAtIndex (tll_clipboard, 
+										(PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
+									long pitch = pizGrowingArrayValueAtIndex (tll_clipboard, 
+										(PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
+										
+									position	+= offsetPosition;
+									pitch		+= offsetPitch;
+									
+									pizGrowingArraySetValueAtIndex (tll_clipboard, 
+										(PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION, position);
+									pizGrowingArraySetValueAtIndex (tll_clipboard, 
+										(PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH, pitch);
+									}
+								
+								pizSequenceAddNotesWithArray 
+									(x->user, tll_clipboard, PIZ_SEQUENCE_ADD_MODE_SNAP);
+									
+								DIRTYLAYER_SET(DIRTY_NOTES | DIRTY_CHANGE)
+							}
+					}
+			}
+		else if (UNDO)
+			{
+				tralala_undo (x);
+			}
+		else if (REDO)
+			{
+				tralala_redo (x);
+			}
+		
+		if (ALL || COPY || CUT || PASTE) {
+				DIRTYSLOTS
+				DIRTYPATTR
+				DIRTYUNDO
+			}
 			
-			if (ALL || COPY || CUT || PASTE) {
-					DIRTYSLOTS
-					DIRTYPATTR
-					DIRTYUNDO
-				}
-		}
-	else if (keycode >= 49 && keycode <= 54)
-		{
-			if (ATOMIC_INCREMENT (&x->popupLock) == 1)
-				{
-					switch (keycode) {
-						case 49	: pizSequenceSetGrid (x->user, PIZ_WHOLE_NOTE);			DIRTYGRID break;
-						case 50	: pizSequenceSetGrid (x->user, PIZ_HALF_NOTE);			DIRTYGRID break;
-						case 51	: pizSequenceSetGrid (x->user, PIZ_QUARTER_NOTE);		DIRTYGRID break;
-						case 52	: pizSequenceSetGrid (x->user, PIZ_EIGHT_NOTE);			DIRTYGRID break;
-						case 53	: pizSequenceSetGrid (x->user, PIZ_SIXTEENTH_NOTE);		DIRTYGRID break;
-						case 54	: pizSequenceSetGrid (x->user, PIZ_THIRTY_SECOND_NOTE);	DIRTYGRID break;
-						}
-				}
-
-			ATOMIC_DECREMENT (&x->popupLock);
-		}
+	} else if (keycode >= 49 && keycode <= 55) {
+	
+		if (ATOMIC_INCREMENT (&x->popupLock) == 1)
+			{
+				if (!SHIFT)
+					{
+						switch (keycode) {
+							case 49	: pizSequenceSetGrid (x->user, PIZ_WHOLE_NOTE);			break;
+							case 50	: pizSequenceSetGrid (x->user, PIZ_HALF_NOTE);			break;
+							case 51	: pizSequenceSetGrid (x->user, PIZ_QUARTER_NOTE);		break;
+							case 52	: pizSequenceSetGrid (x->user, PIZ_EIGHT_NOTE);			break;
+							case 53	: pizSequenceSetGrid (x->user, PIZ_SIXTEENTH_NOTE);		break;
+							case 54	: pizSequenceSetGrid (x->user, PIZ_THIRTY_SECOND_NOTE);	break;
+							case 55	: pizSequenceSetGrid (x->user, PIZ_SNAP_NONE);			break;
+							}
+						
+						DIRTYLAYER_SET(DIRTY_GRID)
+					}
+				else
+					{
+						switch (keycode) {
+							case 49	: pizSequenceSetNoteValue (x->user, PIZ_WHOLE_NOTE);		break;
+							case 50	: pizSequenceSetNoteValue (x->user, PIZ_HALF_NOTE);			break;
+							case 51	: pizSequenceSetNoteValue (x->user, PIZ_QUARTER_NOTE);		break;
+							case 52	: pizSequenceSetNoteValue (x->user, PIZ_EIGHT_NOTE);		break;
+							case 53	: pizSequenceSetNoteValue (x->user, PIZ_SIXTEENTH_NOTE);	break;
+							case 54	: pizSequenceSetNoteValue (x->user, PIZ_THIRTY_SECOND_NOTE);break;
+							case 55	: pizSequenceSetNoteValue (x->user, PIZ_SNAP_NONE);			break;
+							}
+						
+						DIRTYLAYER_SET(DIRTY_REFRESH)
+					}
+			} ATOMIC_DECREMENT (&x->popupLock);
+			
+	} else if (TERNARY) {
+	
+		if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
+			
+			PIZSnapValue old, new = PIZ_SNAP_NONE;
+			
+			if (!SHIFT) {
+				old = pizSequenceGrid (x->user);
+			} else {
+				old = pizSequenceNoteValue (x->user);
+			}
+				
+			switch (old) {
+			case PIZ_DOTTED_WHOLE_NOTE			:	new = PIZ_WHOLE_NOTE_TRIPLET;			break;
+			case PIZ_WHOLE_NOTE					:	new = PIZ_WHOLE_NOTE_TRIPLET;			break;
+			case PIZ_WHOLE_NOTE_TRIPLET			:	new = PIZ_WHOLE_NOTE;					break;
+			case PIZ_DOTTED_HALF_NOTE			:	new = PIZ_HALF_NOTE_TRIPLET;			break;
+			case PIZ_HALF_NOTE					:	new = PIZ_HALF_NOTE_TRIPLET;			break;
+			case PIZ_HALF_NOTE_TRIPLET			:	new = PIZ_HALF_NOTE;					break;
+			case PIZ_DOTTED_QUARTER_NOTE		:	new = PIZ_QUARTER_NOTE_TRIPLET;			break;
+			case PIZ_QUARTER_NOTE				:	new = PIZ_QUARTER_NOTE_TRIPLET;			break;
+			case PIZ_QUARTER_NOTE_TRIPLET		:	new = PIZ_QUARTER_NOTE;					break;
+			case PIZ_DOTTED_EIGHT_NOTE			:	new = PIZ_EIGHT_NOTE_TRIPLET;			break;
+			case PIZ_EIGHT_NOTE					:	new = PIZ_EIGHT_NOTE_TRIPLET;			break;
+			case PIZ_EIGHT_NOTE_TRIPLET			:	new = PIZ_EIGHT_NOTE;					break;
+			case PIZ_DOTTED_SIXTEENTH_NOTE		:	new = PIZ_SIXTEENTH_NOTE_TRIPLET;		break;
+			case PIZ_SIXTEENTH_NOTE				:	new = PIZ_SIXTEENTH_NOTE_TRIPLET;		break;
+			case PIZ_SIXTEENTH_NOTE_TRIPLET		:	new = PIZ_SIXTEENTH_NOTE;				break;
+			case PIZ_THIRTY_SECOND_NOTE			:	new = PIZ_THIRTY_SECOND_NOTE_TRIPLET;	break;
+			case PIZ_THIRTY_SECOND_NOTE_TRIPLET	:	new = PIZ_THIRTY_SECOND_NOTE;			break;
+			case PIZ_SNAP_NONE					:	new = PIZ_SNAP_NONE;					break;
+			}
+			
+			if (!SHIFT) {
+				pizSequenceSetGrid (x->user, new);
+				DIRTYLAYER_SET(DIRTY_GRID)
+			} else {
+				pizSequenceSetNoteValue (x->user, new);
+				DIRTYLAYER_SET(DIRTY_REFRESH)
+			}
+		} ATOMIC_DECREMENT (&x->popupLock);
+		
+	} else if (DOTTED) {
+	
+		if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
+			
+			PIZSnapValue old, new = PIZ_SNAP_NONE;
+			
+			if (!SHIFT) {
+				old = pizSequenceGrid (x->user);
+			} else {
+				old = pizSequenceNoteValue (x->user);
+			}
+				
+			switch (old) {
+			case PIZ_DOTTED_WHOLE_NOTE			:	new = PIZ_WHOLE_NOTE;					break;
+			case PIZ_WHOLE_NOTE					:	new = PIZ_DOTTED_WHOLE_NOTE;			break;
+			case PIZ_WHOLE_NOTE_TRIPLET			:	new = PIZ_DOTTED_WHOLE_NOTE;			break;
+			case PIZ_DOTTED_HALF_NOTE			:	new = PIZ_HALF_NOTE;					break;
+			case PIZ_HALF_NOTE					:	new = PIZ_DOTTED_HALF_NOTE;				break;
+			case PIZ_HALF_NOTE_TRIPLET			:	new = PIZ_DOTTED_HALF_NOTE;				break;
+			case PIZ_DOTTED_QUARTER_NOTE		:	new = PIZ_QUARTER_NOTE;					break;
+			case PIZ_QUARTER_NOTE				:	new = PIZ_DOTTED_QUARTER_NOTE;			break;
+			case PIZ_QUARTER_NOTE_TRIPLET		:	new = PIZ_DOTTED_QUARTER_NOTE;			break;
+			case PIZ_DOTTED_EIGHT_NOTE			:	new = PIZ_EIGHT_NOTE;					break;
+			case PIZ_EIGHT_NOTE					:	new = PIZ_DOTTED_EIGHT_NOTE;			break;
+			case PIZ_EIGHT_NOTE_TRIPLET			:	new = PIZ_DOTTED_EIGHT_NOTE;			break;
+			case PIZ_DOTTED_SIXTEENTH_NOTE		:	new = PIZ_SIXTEENTH_NOTE;				break;
+			case PIZ_SIXTEENTH_NOTE				:	new = PIZ_DOTTED_SIXTEENTH_NOTE;		break;
+			case PIZ_SIXTEENTH_NOTE_TRIPLET		:	new = PIZ_DOTTED_SIXTEENTH_NOTE;		break;
+			case PIZ_THIRTY_SECOND_NOTE			:	new = PIZ_THIRTY_SECOND_NOTE;			break;
+			case PIZ_THIRTY_SECOND_NOTE_TRIPLET	:	new = PIZ_THIRTY_SECOND_NOTE_TRIPLET;	break;
+			case PIZ_SNAP_NONE					:	new = PIZ_SNAP_NONE;					break;
+			}
+			
+			if (!SHIFT) {
+				pizSequenceSetGrid (x->user, new);
+				DIRTYLAYER_SET(DIRTY_GRID)
+			} else {
+				pizSequenceSetNoteValue (x->user, new);
+				DIRTYLAYER_SET(DIRTY_REFRESH)
+			}
+		} ATOMIC_DECREMENT (&x->popupLock);
+		
+	}
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -4413,6 +4437,46 @@ void tralala_setStringWithLong (char *string, long longToBeFormatted, long forma
 		{
 			snprintf (string, STRING_MAXIMUM_SIZE, "%ld", longToBeFormatted * TICKS_FOR_ONE_STEP);
 		}
+	else if (formatMode == FORMAT_MODE_GRID) {
+		switch (longToBeFormatted) {
+		case PIZ_DOTTED_WHOLE_NOTE			:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_dottedWhole->s_name); break;
+		case PIZ_WHOLE_NOTE					:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_whole->s_name); break;
+		case PIZ_WHOLE_NOTE_TRIPLET			:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_wholeTriplet->s_name); break;
+		case PIZ_DOTTED_HALF_NOTE			:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_dottedHalf->s_name); break;
+		case PIZ_HALF_NOTE					:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_half->s_name); break;
+		case PIZ_HALF_NOTE_TRIPLET			:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_halfTriplet->s_name); break;
+		case PIZ_DOTTED_QUARTER_NOTE		:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_dottedQuarter->s_name); break;
+		case PIZ_QUARTER_NOTE				:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_quarter->s_name); break;
+		case PIZ_QUARTER_NOTE_TRIPLET		:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_quarterTriplet->s_name); break;
+		case PIZ_DOTTED_EIGHT_NOTE			:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_dottedEight->s_name); break;
+		case PIZ_EIGHT_NOTE					:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_eight->s_name); break;
+		case PIZ_EIGHT_NOTE_TRIPLET			:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_eightTriplet->s_name); break;
+		case PIZ_DOTTED_SIXTEENTH_NOTE		:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_dottedSixteenth->s_name); break;
+		case PIZ_SIXTEENTH_NOTE				:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_sixteenth->s_name); break;
+		case PIZ_SIXTEENTH_NOTE_TRIPLET		:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_sixteenthTriplet->s_name); break;
+		case PIZ_THIRTY_SECOND_NOTE			:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_thirtySecond->s_name); break;
+		case PIZ_THIRTY_SECOND_NOTE_TRIPLET	:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_thirtySecondTriplet->s_name); break;
+		case PIZ_SNAP_NONE					:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_none->s_name); break;
+		}
+	}
 	
 	string[STRING_MAXIMUM_SIZE - 1] = 0;
 }
@@ -4497,9 +4561,6 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 	t_jpopupmenu	*noteValuePopup;
 	t_jpopupmenu	*noteValueTripletPopup;
 	t_jpopupmenu	*noteValueDottedPopup;
-	t_jpopupmenu	*gridPopup;
-	t_jpopupmenu	*gridTripletPopup;
-	t_jpopupmenu	*gridDottedPopup;
 	t_jpopupmenu	*velocityPopup;
 	t_jpopupmenu	*noteChannelPopup;
 	t_jpopupmenu	*sequenceChannelPopup;
@@ -4526,9 +4587,6 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 	noteValuePopup			= jpopupmenu_create ( );
 	noteValueTripletPopup	= jpopupmenu_create ( );
 	noteValueDottedPopup	= jpopupmenu_create ( );
-	gridPopup				= jpopupmenu_create ( );
-	gridTripletPopup		= jpopupmenu_create ( );
-	gridDottedPopup			= jpopupmenu_create ( );
 	velocityPopup			= jpopupmenu_create ( );
 	noteChannelPopup		= jpopupmenu_create ( );
 	sequenceChannelPopup	= jpopupmenu_create ( );
@@ -4549,12 +4607,6 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 								x->popupHighlightedTextColor, x->popupHighlightedBackgroundColor);
 	jpopupmenu_setcolors	(noteValueDottedPopup, x->popupTextColor, x->popupBackgroundColor, 
 								x->popupHighlightedTextColor, x->popupHighlightedBackgroundColor);
-	jpopupmenu_setcolors	(gridPopup, x->popupTextColor, x->popupBackgroundColor, 
-								x->popupHighlightedTextColor, x->popupHighlightedBackgroundColor);
-	jpopupmenu_setcolors	(gridTripletPopup, x->popupTextColor, x->popupBackgroundColor, 
-								x->popupHighlightedTextColor, x->popupHighlightedBackgroundColor);
-	jpopupmenu_setcolors	(gridDottedPopup, x->popupTextColor, x->popupBackgroundColor, 
-								x->popupHighlightedTextColor, x->popupHighlightedBackgroundColor);
 								
 	jpopupmenu_setcolors	(velocityPopup, x->popupTextColor, x->popupBackgroundColor, 
 								x->popupHighlightedTextColor, x->popupHighlightedBackgroundColor);
@@ -4572,9 +4624,6 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 	jpopupmenu_setfont		(noteValuePopup, font);
 	jpopupmenu_setfont		(noteValueTripletPopup, font);
 	jpopupmenu_setfont		(noteValueDottedPopup, font);
-	jpopupmenu_setfont		(gridPopup, font);
-	jpopupmenu_setfont		(gridTripletPopup, font);
-	jpopupmenu_setfont		(gridDottedPopup, font);
 	jpopupmenu_setfont		(velocityPopup, font);
 	jpopupmenu_setfont		(noteChannelPopup, font);					
 	jpopupmenu_setfont		(sequenceChannelPopup, font);
@@ -4644,40 +4693,6 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 				jpopupmenu_additem		(sequenceChannelPopup, 515, "15", NULL, (channel == 15), 0, NULL);
 				jpopupmenu_additem		(sequenceChannelPopup, 516, "16", NULL, (channel == 16), 0, NULL);
 			
-				jpopupmenu_additem		(gridPopup, 801, "Whole", 
-										NULL, (x->grid == tll_sym_whole), 0, NULL);
-				jpopupmenu_additem		(gridPopup, 802, "Half", 
-										NULL, (x->grid == tll_sym_half), 0, NULL);
-				jpopupmenu_additem		(gridPopup, 803, "Quarter", 
-										NULL, (x->grid == tll_sym_quarter), 0, NULL);
-				jpopupmenu_additem		(gridPopup, 804, "Eight", 
-										NULL, (x->grid == tll_sym_eight), 0, NULL);
-				jpopupmenu_additem		(gridPopup, 805, "Sixteenth", 
-										NULL, (x->grid == tll_sym_sixteenth), 0, NULL);
-				jpopupmenu_additem		(gridTripletPopup, 806, "Half", 
-										NULL, (x->grid == tll_sym_halfTriplet), 0, NULL);
-				jpopupmenu_additem		(gridTripletPopup, 807, "Quarter", 
-										NULL, (x->grid == tll_sym_quarterTriplet), 0, NULL);
-				jpopupmenu_additem		(gridTripletPopup, 808, "Eight", 
-										NULL, (x->grid == tll_sym_eightTriplet), 0, NULL);
-				jpopupmenu_additem		(gridTripletPopup, 809, "Sixteenth", 
-										NULL, (x->grid == tll_sym_sixteenthTriplet), 0, NULL);
-				jpopupmenu_additem		(gridDottedPopup, 810, "Half", 
-										NULL, (x->grid == tll_sym_dottedHalf), 0, NULL);
-				jpopupmenu_additem		(gridDottedPopup, 811, "Quarter", 
-										NULL, (x->grid == tll_sym_dottedQuarter), 0, NULL);
-				jpopupmenu_additem		(gridDottedPopup, 812, "Eight", 
-										NULL, (x->grid == tll_sym_dottedEight), 0, NULL);
-				jpopupmenu_additem		(gridDottedPopup, 813, "Sixteenth", 
-										NULL, (x->grid == tll_sym_dottedSixteenth), 0, NULL);
-										
-				jpopupmenu_addseperator (gridPopup);
-				jpopupmenu_addsubmenu	(gridPopup,	"Triplet", gridTripletPopup, 0);
-				jpopupmenu_addsubmenu	(gridPopup,	"Dotted ", gridDottedPopup, 0);
-				jpopupmenu_addseperator (gridPopup);
-				jpopupmenu_additem		(gridPopup, 800, "Automatic", 
-										NULL, (x->grid == tll_sym_automatic), 0, NULL);
-												
 				jpopupmenu_additem		(popup, 100,	"User",		NULL, USER, 0, NULL);
 				jpopupmenu_additem		(popup, 101,	"Live",		NULL, LIVE, 0, NULL);
 				jpopupmenu_additem		(popup, 102,	"Listen",	NULL, LISTEN, 0, NULL);
@@ -4685,8 +4700,8 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 		
 				if (USER) 
 					{
-						long i;
-						long value = pizSequenceNoteValue (x->user);
+						long			i;
+						PIZSnapValue	value = pizSequenceNoteValue (x->user);
 						
 						jpopupmenu_additem		(noteValuePopup, 301, "Whole", 
 												NULL, (value == PIZ_WHOLE_NOTE), 0, NULL);
@@ -4751,7 +4766,6 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 						jpopupmenu_addsubmenu	(popup, "Value", noteValuePopup, 0);
 					}
 		
-				jpopupmenu_addsubmenu	(popup,	"Grid", gridPopup, 0);
 				jpopupmenu_addseperator (popup);
 				jpopupmenu_addsubmenu	(popup,	"Channel    ", sequenceChannelPopup, 0);
 			} 
@@ -4814,24 +4828,24 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 			
 	switch (returnedPopupValue) {
 		case 0		:	break;
-		case 10		:	pizSequenceSetGrid	(x->user, PIZ_SNAP_NONE);					DIRTYGRID break;
-		case 11		:	pizSequenceSetGrid	(x->user, PIZ_WHOLE_NOTE);					DIRTYGRID break;
-		case 12		:	pizSequenceSetGrid	(x->user, PIZ_HALF_NOTE);					DIRTYGRID break;
-		case 13		:	pizSequenceSetGrid	(x->user, PIZ_QUARTER_NOTE);				DIRTYGRID break;
-		case 14		:	pizSequenceSetGrid	(x->user, PIZ_EIGHT_NOTE);					DIRTYGRID break;
-		case 15		:	pizSequenceSetGrid	(x->user, PIZ_SIXTEENTH_NOTE);				DIRTYGRID break;
-		case 16		:	pizSequenceSetGrid	(x->user, PIZ_THIRTY_SECOND_NOTE);			DIRTYGRID break;
-		case 17		:	pizSequenceSetGrid	(x->user, PIZ_WHOLE_NOTE_TRIPLET);			DIRTYGRID break;
-		case 18		:	pizSequenceSetGrid	(x->user, PIZ_HALF_NOTE_TRIPLET);			DIRTYGRID break;
-		case 19		:	pizSequenceSetGrid	(x->user, PIZ_QUARTER_NOTE_TRIPLET);		DIRTYGRID break;
-		case 20		:	pizSequenceSetGrid	(x->user, PIZ_EIGHT_NOTE_TRIPLET);			DIRTYGRID break;
-		case 21		:	pizSequenceSetGrid	(x->user, PIZ_SIXTEENTH_NOTE_TRIPLET);		DIRTYGRID break;
-		case 22		:	pizSequenceSetGrid	(x->user, PIZ_THIRTY_SECOND_NOTE_TRIPLET);	DIRTYGRID break;
-		case 23		:	pizSequenceSetGrid	(x->user, PIZ_DOTTED_WHOLE_NOTE);			DIRTYGRID break;
-		case 24		:	pizSequenceSetGrid	(x->user, PIZ_DOTTED_HALF_NOTE);			DIRTYGRID break;
-		case 25		:	pizSequenceSetGrid	(x->user, PIZ_DOTTED_QUARTER_NOTE);			DIRTYGRID break;
-		case 26		:	pizSequenceSetGrid	(x->user, PIZ_DOTTED_EIGHT_NOTE);			DIRTYGRID break;
-		case 27		:	pizSequenceSetGrid	(x->user, PIZ_DOTTED_SIXTEENTH_NOTE);		DIRTYGRID break;
+		case 10		:	pizSequenceSetGrid	(x->user, PIZ_SNAP_NONE);					 break;
+		case 11		:	pizSequenceSetGrid	(x->user, PIZ_WHOLE_NOTE);					 break;
+		case 12		:	pizSequenceSetGrid	(x->user, PIZ_HALF_NOTE);					 break;
+		case 13		:	pizSequenceSetGrid	(x->user, PIZ_QUARTER_NOTE);				 break;
+		case 14		:	pizSequenceSetGrid	(x->user, PIZ_EIGHT_NOTE);					 break;
+		case 15		:	pizSequenceSetGrid	(x->user, PIZ_SIXTEENTH_NOTE);				 break;
+		case 16		:	pizSequenceSetGrid	(x->user, PIZ_THIRTY_SECOND_NOTE);			 break;
+		case 17		:	pizSequenceSetGrid	(x->user, PIZ_WHOLE_NOTE_TRIPLET);			 break;
+		case 18		:	pizSequenceSetGrid	(x->user, PIZ_HALF_NOTE_TRIPLET);			 break;
+		case 19		:	pizSequenceSetGrid	(x->user, PIZ_QUARTER_NOTE_TRIPLET);		 break;
+		case 20		:	pizSequenceSetGrid	(x->user, PIZ_EIGHT_NOTE_TRIPLET);			 break;
+		case 21		:	pizSequenceSetGrid	(x->user, PIZ_SIXTEENTH_NOTE_TRIPLET);		 break;
+		case 22		:	pizSequenceSetGrid	(x->user, PIZ_THIRTY_SECOND_NOTE_TRIPLET);	 break;
+		case 23		:	pizSequenceSetGrid	(x->user, PIZ_DOTTED_WHOLE_NOTE);			 break;
+		case 24		:	pizSequenceSetGrid	(x->user, PIZ_DOTTED_HALF_NOTE);			 break;
+		case 25		:	pizSequenceSetGrid	(x->user, PIZ_DOTTED_QUARTER_NOTE);			 break;
+		case 26		:	pizSequenceSetGrid	(x->user, PIZ_DOTTED_EIGHT_NOTE);			 break;
+		case 27		:	pizSequenceSetGrid	(x->user, PIZ_DOTTED_SIXTEENTH_NOTE);		 break;
 		case 50		:	tralala_setSelectedNotesVelocity (x, 0);	x->flags |= FLAG_HAVE_CHANGED; break;
 		case 51		:	tralala_setSelectedNotesVelocity (x, 8);	x->flags |= FLAG_HAVE_CHANGED; break;
 		case 52		:	tralala_setSelectedNotesVelocity (x, 16);	x->flags |= FLAG_HAVE_CHANGED; break;
@@ -4903,20 +4917,6 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 		case 514	:	object_attr_setlong (x, tll_sym_channel, 14); break;
 		case 515	:	object_attr_setlong (x, tll_sym_channel, 15); break;
 		case 516	:	object_attr_setlong (x, tll_sym_channel, 16); break;
-		case 800	:	object_attr_setsym	(x, tll_sym_grid, tll_sym_automatic);			break;
-		case 801	:	object_attr_setsym	(x, tll_sym_grid, tll_sym_whole);				break;
-		case 802	:	object_attr_setsym	(x, tll_sym_grid, tll_sym_half);				break;
-		case 803	:	object_attr_setsym	(x, tll_sym_grid, tll_sym_quarter);				break;
-		case 804	:	object_attr_setsym	(x, tll_sym_grid, tll_sym_eight);				break;
-		case 805	:	object_attr_setsym	(x, tll_sym_grid, tll_sym_sixteenth);			break;
-		case 806	:	object_attr_setsym	(x, tll_sym_grid, tll_sym_halfTriplet);			break;
-		case 807	:	object_attr_setsym	(x, tll_sym_grid, tll_sym_quarterTriplet);		break;
-		case 808	:	object_attr_setsym	(x, tll_sym_grid, tll_sym_eightTriplet);		break;
-		case 809	:	object_attr_setsym	(x, tll_sym_grid, tll_sym_sixteenthTriplet);	break;
-		case 810	:	object_attr_setsym	(x, tll_sym_grid, tll_sym_dottedHalf);			break;
-		case 811	:	object_attr_setsym	(x, tll_sym_grid, tll_sym_dottedQuarter);		break;
-		case 812	:	object_attr_setsym	(x, tll_sym_grid, tll_sym_dottedEight);			break;
-		case 813	:	object_attr_setsym	(x, tll_sym_grid, tll_sym_dottedSixteenth);		break;
 		}
 
 	if (x->flags & FLAG_HAVE_CHANGED)
@@ -4932,7 +4932,15 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 			
 			DIRTYUNDO
 		}
-			
+	
+	if (returnedPopupValue >= 10 && returnedPopupValue <= 27) {
+			DIRTYLAYER_SET(DIRTY_GRID)
+		}
+	
+	if (returnedPopupValue >= 300 && returnedPopupValue <= 317) {
+			DIRTYLAYER_SET(DIRTY_GRID)
+		}
+		
 	jfont_destroy (font);
 
 	jpopupmenu_destroy (popup);
@@ -4942,9 +4950,6 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 	jpopupmenu_destroy (noteValuePopup);
 	jpopupmenu_destroy (noteValueTripletPopup);
 	jpopupmenu_destroy (noteValueDottedPopup);
-	jpopupmenu_destroy (gridPopup);
-	jpopupmenu_destroy (gridTripletPopup);
-	jpopupmenu_destroy (gridDottedPopup);
 	jpopupmenu_destroy (velocityPopup);
 	jpopupmenu_destroy (noteChannelPopup);
 	jpopupmenu_destroy (sequenceChannelPopup);
@@ -5056,8 +5061,24 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
 				}
 			else
 				{
+					char		 temp[STRING_MAXIMUM_SIZE];
+					PIZSnapValue grid = pizSequenceGrid (x->user);
+					PIZSnapValue value = pizSequenceNoteValue (x->user);
+					
 					snprintf (textCell, STRING_MAXIMUM_SIZE, "Slot %ld", x->slotIndex);
 					textCell[STRING_MAXIMUM_SIZE - 1] = 0;
+					
+					tralala_setStringWithLong (temp, grid, FORMAT_MODE_GRID);
+					
+					snprintf (textCell, STRING_MAXIMUM_SIZE, "%s / %s", textCell, temp);
+					textCell[STRING_MAXIMUM_SIZE - 1] = 0;
+					
+					if (value != PIZ_SNAP_NONE) {
+							tralala_setStringWithLong (temp, value, FORMAT_MODE_GRID);
+					
+							snprintf (textCell, STRING_MAXIMUM_SIZE, "%s / %s", textCell, temp);
+							textCell[STRING_MAXIMUM_SIZE - 1] = 0;
+						}
 					
 					draw = true;
 				}
@@ -5225,54 +5246,15 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
 			t_rect			srcRect, destRect;
 			double			imageWidth, imageHeight, gridWidth, gridHeight;
 			t_jrgba			gridColor;
-			PIZSnapValue	grid = PIZ_SNAP_NONE;
 			t_jsurface		*background = NULL;
 			long			z = x->zoomMode;
+			PIZSnapValue	grid = PIZ_SNAP_NONE;
 			
-			if (x->grid != tll_sym_automatic) 
-				{
-					if (x->grid == tll_sym_whole) {
-							grid = PIZ_WHOLE_NOTE;
-						}
-					else if (x->grid == tll_sym_half) {
-							grid = PIZ_HALF_NOTE;
-						}
-					else if (x->grid == tll_sym_quarter) {
-							grid = PIZ_QUARTER_NOTE;
-						}
-					else if (x->grid == tll_sym_eight) {
-							grid = PIZ_EIGHT_NOTE;
-						}
-					else if (x->grid == tll_sym_sixteenth) {
-							grid = PIZ_SIXTEENTH_NOTE;
-						}
-					else if (x->grid == tll_sym_halfTriplet) {
-							grid = PIZ_HALF_NOTE_TRIPLET;
-						}
-					else if (x->grid == tll_sym_quarterTriplet) {
-							grid = PIZ_QUARTER_NOTE_TRIPLET;
-						}
-					else if (x->grid == tll_sym_eightTriplet) {
-							grid = PIZ_EIGHT_NOTE_TRIPLET;
-						}
-					else if (x->grid == tll_sym_sixteenthTriplet) {
-							grid = PIZ_SIXTEENTH_NOTE_TRIPLET;
-						}
-					else if (x->grid == tll_sym_dottedHalf) {
-							grid = PIZ_DOTTED_HALF_NOTE;
-						}
-					else if (x->grid == tll_sym_dottedQuarter) {
-							grid = PIZ_DOTTED_QUARTER_NOTE;
-						}
-					else if (x->grid == tll_sym_dottedEight) {
-							grid = PIZ_DOTTED_EIGHT_NOTE;
-						}
-					else if (x->grid == tll_sym_dottedSixteenth) {
-							grid = PIZ_DOTTED_SIXTEENTH_NOTE;
-						}
-				}
-			else
-				{
+			if (LIVE) {
+					grid = pizSequenceGrid (x->live);
+				} 
+			
+			if (grid == PIZ_SNAP_NONE) {
 					grid = pizSequenceGrid (x->user);
 				}
 			
@@ -5323,7 +5305,7 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
 						}
 				}
 		
-			jrgba_set (&gridColor, 0.9, 0.9, 0.9, 1.);
+			jrgba_set (&gridColor, 0.8, 0.8, 0.8, 1.);
 			jgraphics_set_source_jrgba (g, &gridColor);
 			
 			jgraphics_rectangle_draw_fast (g, 0., 0., gridWidth, gridHeight, 1.);

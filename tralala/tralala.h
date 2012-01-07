@@ -8,7 +8,7 @@
  */
 
 /*
- *	Last modified : 06/01/12.
+ *	Last modified : 07/01/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -97,14 +97,6 @@
 											\"dotted quarter\" \"dotted eight\"							\
 											\"dotted sixteenth\""
 
-#define GRID_LIST							"automatic whole half quarter eight sixteenth							\
-											\"triplet half\"											\
-											\"triplet quarter\" \"triplet eight\"						\
-											\"triplet sixteenth\"										\
-											\"dotted half\"												\
-											\"dotted quarter\" \"dotted eight\"							\
-											\"dotted sixteenth\""
-											
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
@@ -135,6 +127,7 @@
 #define FORMAT_MODE_LONG					0
 #define FORMAT_MODE_NOTENAME				1
 #define FORMAT_MODE_TICKS					2
+#define FORMAT_MODE_GRID					3
 
 #define MENU_SEQUENCE						0
 #define MENU_NOTE							1
@@ -186,7 +179,7 @@
 #define DEFAULT_WINDOW_OFFSET_Y						"658."
 
 #define DEFAULT_FONTNAME							"Verdana"
-#define DEFAULT_FONTSIZE							"18."
+#define DEFAULT_FONTSIZE							"20."
 #define DEFAULT_FONTFACE							"1"
 #define DEFAULT_POPUP_FONTNAME						"Arial"
 #define DEFAULT_POPUP_FONTSIZE						"14."
@@ -203,7 +196,6 @@
 #define DEFAULT_SCALE_TYPE							"none"
 #define DEFAULT_SCALE_CUSTOM						"0 0 0 0 0 0 0 0 0 0 0 0"
 #define DEFAULT_PATTERN_CELL						"none"
-#define DEFAULT_GRID								"automatic"
 #define DEFAULT_PATTERN_CUSTOM						""
 #define DEFAULT_CHANCE								"100"
 
@@ -271,6 +263,8 @@
 #define CUT				(keycode == 120)
 #define COPY			(keycode == 99)
 #define PASTE			(keycode == 118)
+#define TERNARY			(keycode == 116)
+#define DOTTED			(keycode == 100)
 #define UNDO			(!(modifiers & eShiftKey) && (keycode == 122))
 #define REDO			((modifiers & eShiftKey) && (keycode == 122)) 
 #define SELECT			0
@@ -285,7 +279,6 @@
 #define DIRTYCHANNEL	if (x->saveChannelWithPatcher) {									\
 								jpatcher_set_dirty (jbox_get_patcher ((t_object *)x), 1);	\
 							} 	
-#define DIRTYGRID		if (x->grid == tll_sym_automatic) { DIRTYLAYER_SET(DIRTY_GRID) }
 #define DIRTYUNDO		tralala_addUndo (x);
 
 // -------------------------------------------------------------------------------------------------------------
@@ -335,6 +328,7 @@ typedef struct _tralala {
 	long				learnCycle;
 	long				learnThreshold;
 	t_int32_atomic		popupLock;
+	t_int32_atomic		paintLock;
 	t_uint32_atomic		dirtyLayer;
 	PIZLinklist			*slots;
 	PIZLinklist			*undo;
@@ -344,7 +338,6 @@ typedef struct _tralala {
 	PIZFactorOracle		*factorOracle;		
 	PIZGaloisLattice	*galoisLattice;
 	PIZFiniteState		*finiteState; 
-	PIZScaleKey			key;
 	t_systhread_mutex   methodMutex;									//
 	t_systhread_mutex   algorithmMutex;
 	t_systhread_mutex   learnMutex;
@@ -364,7 +357,7 @@ typedef struct _tralala {
 	t_symbol			*patternCell;									//
 	t_symbol			*scaleKey;
 	t_symbol			*scaleType;
-	t_symbol			*grid;
+	PIZScaleKey			key;
 	PIZScaleType		type;
 	long				scaleCustom		[PIZ_SEQUENCE_SCALE_SIZE];		//
 	long				patternCustom	[PATTERN_MAXIMUM_SIZE];			//
@@ -402,7 +395,6 @@ typedef struct _tralala {
 	double				textPosition	[TEXT_CELL_COUNT];
 	double				textWidth		[TEXT_CELL_COUNT];				////
 	bool				textIsSelected	[TEXT_CELL_COUNT];
-	t_int32_atomic		paintLock;
 	t_symbol			*popupFontName;
 	t_jrgba				backgroundColor;					
 	t_jrgba				unfocusedBorderColor;		
@@ -463,7 +455,6 @@ t_max_err	tralala_setScaleType				(t_tralala *x, t_object *attr, long argc, t_at
 t_max_err	tralala_setScaleCustom				(t_tralala *x, t_object *attr, long argc, t_atom *argv);
 t_max_err	tralala_setPatternCell				(t_tralala *x, t_object *attr, long argc, t_atom *argv);
 t_max_err	tralala_setPatternCustom			(t_tralala *x, t_object *attr, long argc, t_atom *argv);
-t_max_err	tralala_setGrid						(t_tralala *x, t_object *attr, long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
