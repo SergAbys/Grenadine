@@ -144,11 +144,11 @@ typedef struct _tralalaSymbolsTableB {
 	t_symbol *sym_eightTriplet;
 	t_symbol *sym_sixteenthTriplet;
 	t_symbol *sym_thirtySecondTriplet;
-	t_symbol *sym_dottedWhole;
-	t_symbol *sym_dottedHalf;
-	t_symbol *sym_dottedQuarter;
-	t_symbol *sym_dottedEight;
-	t_symbol *sym_dottedSixteenth;
+	t_symbol *sym_wholeDotted;
+	t_symbol *sym_halfDotted;
+	t_symbol *sym_quarterDotted;
+	t_symbol *sym_eightDotted;
+	t_symbol *sym_sixteenthDotted;
 	} tralalaSymbolsTableB;
 	
 // -------------------------------------------------------------------------------------------------------------
@@ -273,11 +273,11 @@ typedef struct _tralalaSymbolsTableB {
 #define tll_sym_eightTriplet			(tll_symbolsB.sym_eightTriplet)
 #define tll_sym_sixteenthTriplet		(tll_symbolsB.sym_sixteenthTriplet)
 #define tll_sym_thirtySecondTriplet		(tll_symbolsB.sym_thirtySecondTriplet)
-#define tll_sym_dottedWhole				(tll_symbolsB.sym_dottedWhole)
-#define tll_sym_dottedHalf				(tll_symbolsB.sym_dottedHalf)
-#define tll_sym_dottedQuarter			(tll_symbolsB.sym_dottedQuarter)
-#define tll_sym_dottedEight				(tll_symbolsB.sym_dottedEight)
-#define tll_sym_dottedSixteenth			(tll_symbolsB.sym_dottedSixteenth)
+#define tll_sym_wholeDotted				(tll_symbolsB.sym_wholeDotted)
+#define tll_sym_halfDotted				(tll_symbolsB.sym_halfDotted)
+#define tll_sym_quarterDotted			(tll_symbolsB.sym_quarterDotted)
+#define tll_sym_eightDotted				(tll_symbolsB.sym_eightDotted)
+#define tll_sym_sixteenthDotted			(tll_symbolsB.sym_sixteenthDotted)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

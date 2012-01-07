@@ -34,7 +34,7 @@
  */
  
 /*
- *	Last modified : 03/01/12.
+ *	Last modified : 07/01/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -122,19 +122,19 @@ PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, PIZGrowingArray *a)
 					noteValue	= pizGrowingArrayValueAtIndex (a, 2);
 					
 					switch (grid) {
-					case PIZ_DOTTED_WHOLE_NOTE			: x->grid = PIZ_DOTTED_WHOLE_NOTE;			break;
+					case PIZ_WHOLE_NOTE_DOTTED			: x->grid = PIZ_WHOLE_NOTE_DOTTED;			break;
 					case PIZ_WHOLE_NOTE					: x->grid = PIZ_WHOLE_NOTE;					break;
 					case PIZ_WHOLE_NOTE_TRIPLET			: x->grid = PIZ_WHOLE_NOTE_TRIPLET;			break;
-					case PIZ_DOTTED_HALF_NOTE			: x->grid = PIZ_DOTTED_HALF_NOTE;			break;
+					case PIZ_HALF_NOTE_DOTTED			: x->grid = PIZ_HALF_NOTE_DOTTED;			break;
 					case PIZ_HALF_NOTE					: x->grid = PIZ_HALF_NOTE;					break;
 					case PIZ_HALF_NOTE_TRIPLET			: x->grid = PIZ_HALF_NOTE_TRIPLET;			break;
-					case PIZ_DOTTED_QUARTER_NOTE		: x->grid = PIZ_DOTTED_QUARTER_NOTE;		break;
+					case PIZ_QUARTER_NOTE_DOTTED		: x->grid = PIZ_QUARTER_NOTE_DOTTED;		break;
 					case PIZ_QUARTER_NOTE				: x->grid = PIZ_QUARTER_NOTE;				break;
 					case PIZ_QUARTER_NOTE_TRIPLET		: x->grid = PIZ_QUARTER_NOTE_TRIPLET;		break;
-					case PIZ_DOTTED_EIGHT_NOTE			: x->grid = PIZ_DOTTED_EIGHT_NOTE;			break;
+					case PIZ_EIGHT_NOTE_DOTTED			: x->grid = PIZ_EIGHT_NOTE_DOTTED;			break;
 					case PIZ_EIGHT_NOTE					: x->grid = PIZ_EIGHT_NOTE;					break;
 					case PIZ_EIGHT_NOTE_TRIPLET			: x->grid = PIZ_EIGHT_NOTE_TRIPLET;			break;	
-					case PIZ_DOTTED_SIXTEENTH_NOTE		: x->grid = PIZ_DOTTED_SIXTEENTH_NOTE;		break;
+					case PIZ_SIXTEENTH_NOTE_DOTTED		: x->grid = PIZ_SIXTEENTH_NOTE_DOTTED;		break;
 					case PIZ_SIXTEENTH_NOTE				: x->grid = PIZ_SIXTEENTH_NOTE;				break;
 					case PIZ_SIXTEENTH_NOTE_TRIPLET		: x->grid = PIZ_SIXTEENTH_NOTE_TRIPLET;		break;
 					case PIZ_THIRTY_SECOND_NOTE			: x->grid = PIZ_THIRTY_SECOND_NOTE;			break;
@@ -143,19 +143,19 @@ PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, PIZGrowingArray *a)
 					}
 					
 					switch (noteValue) {
-					case PIZ_DOTTED_WHOLE_NOTE			: x->noteValue = PIZ_DOTTED_WHOLE_NOTE;			break;
+					case PIZ_WHOLE_NOTE_DOTTED			: x->noteValue = PIZ_WHOLE_NOTE_DOTTED;			break;
 					case PIZ_WHOLE_NOTE					: x->noteValue = PIZ_WHOLE_NOTE;				break;
 					case PIZ_WHOLE_NOTE_TRIPLET			: x->noteValue = PIZ_WHOLE_NOTE_TRIPLET;		break;
-					case PIZ_DOTTED_HALF_NOTE			: x->noteValue = PIZ_DOTTED_HALF_NOTE;			break;
+					case PIZ_HALF_NOTE_DOTTED			: x->noteValue = PIZ_HALF_NOTE_DOTTED;			break;
 					case PIZ_HALF_NOTE					: x->noteValue = PIZ_HALF_NOTE;					break;
 					case PIZ_HALF_NOTE_TRIPLET			: x->noteValue = PIZ_HALF_NOTE_TRIPLET;			break;
-					case PIZ_DOTTED_QUARTER_NOTE		: x->noteValue = PIZ_DOTTED_QUARTER_NOTE;		break;
+					case PIZ_QUARTER_NOTE_DOTTED		: x->noteValue = PIZ_QUARTER_NOTE_DOTTED;		break;
 					case PIZ_QUARTER_NOTE				: x->noteValue = PIZ_QUARTER_NOTE;				break;
 					case PIZ_QUARTER_NOTE_TRIPLET		: x->noteValue = PIZ_QUARTER_NOTE_TRIPLET;		break;
-					case PIZ_DOTTED_EIGHT_NOTE			: x->noteValue = PIZ_DOTTED_EIGHT_NOTE;			break;
+					case PIZ_EIGHT_NOTE_DOTTED			: x->noteValue = PIZ_EIGHT_NOTE_DOTTED;			break;
 					case PIZ_EIGHT_NOTE					: x->noteValue = PIZ_EIGHT_NOTE;				break;
 					case PIZ_EIGHT_NOTE_TRIPLET			: x->noteValue = PIZ_EIGHT_NOTE_TRIPLET;		break;	
-					case PIZ_DOTTED_SIXTEENTH_NOTE		: x->noteValue = PIZ_DOTTED_SIXTEENTH_NOTE;		break;
+					case PIZ_SIXTEENTH_NOTE_DOTTED		: x->noteValue = PIZ_SIXTEENTH_NOTE_DOTTED;		break;
 					case PIZ_SIXTEENTH_NOTE				: x->noteValue = PIZ_SIXTEENTH_NOTE;			break;
 					case PIZ_SIXTEENTH_NOTE_TRIPLET		: x->noteValue = PIZ_SIXTEENTH_NOTE_TRIPLET;	break;
 					case PIZ_THIRTY_SECOND_NOTE			: x->noteValue = PIZ_THIRTY_SECOND_NOTE;		break;

@@ -1143,16 +1143,16 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
 								pizSequenceSetGrid (x->live, PIZ_SIXTEENTH_NOTE_TRIPLET);
 							} else if (temp == tll_sym_thirtySecondTriplet) {
 								pizSequenceSetGrid (x->live, PIZ_THIRTY_SECOND_NOTE_TRIPLET);
-							} else if (temp == tll_sym_dottedWhole) {
-								pizSequenceSetGrid (x->live, PIZ_DOTTED_WHOLE_NOTE);
-							} else if (temp == tll_sym_dottedHalf) {
-								pizSequenceSetGrid (x->live, PIZ_DOTTED_HALF_NOTE);
-							} else if (temp == tll_sym_dottedQuarter) {
-								pizSequenceSetGrid (x->live, PIZ_DOTTED_QUARTER_NOTE);
-							} else if (temp == tll_sym_dottedEight) {
-								pizSequenceSetGrid (x->live, PIZ_DOTTED_EIGHT_NOTE);
-							} else if (temp == tll_sym_dottedSixteenth) {
-								pizSequenceSetGrid (x->live, PIZ_DOTTED_SIXTEENTH_NOTE);
+							} else if (temp == tll_sym_wholeDotted) {
+								pizSequenceSetGrid (x->live, PIZ_WHOLE_NOTE_DOTTED);
+							} else if (temp == tll_sym_halfDotted) {
+								pizSequenceSetGrid (x->live, PIZ_HALF_NOTE_DOTTED);
+							} else if (temp == tll_sym_quarterDotted) {
+								pizSequenceSetGrid (x->live, PIZ_QUARTER_NOTE_DOTTED);
+							} else if (temp == tll_sym_eightDotted) {
+								pizSequenceSetGrid (x->live, PIZ_EIGHT_NOTE_DOTTED);
+							} else if (temp == tll_sym_sixteenthDotted) {
+								pizSequenceSetGrid (x->live, PIZ_SIXTEENTH_NOTE_DOTTED);
 							} else { err = true; }
 							
 							if (!err)
@@ -3600,19 +3600,19 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 			}
 				
 			switch (old) {
-			case PIZ_DOTTED_WHOLE_NOTE			:	new = PIZ_WHOLE_NOTE_TRIPLET;			break;
+			case PIZ_WHOLE_NOTE_DOTTED			:	new = PIZ_WHOLE_NOTE_TRIPLET;			break;
 			case PIZ_WHOLE_NOTE					:	new = PIZ_WHOLE_NOTE_TRIPLET;			break;
 			case PIZ_WHOLE_NOTE_TRIPLET			:	new = PIZ_WHOLE_NOTE;					break;
-			case PIZ_DOTTED_HALF_NOTE			:	new = PIZ_HALF_NOTE_TRIPLET;			break;
+			case PIZ_HALF_NOTE_DOTTED			:	new = PIZ_HALF_NOTE_TRIPLET;			break;
 			case PIZ_HALF_NOTE					:	new = PIZ_HALF_NOTE_TRIPLET;			break;
 			case PIZ_HALF_NOTE_TRIPLET			:	new = PIZ_HALF_NOTE;					break;
-			case PIZ_DOTTED_QUARTER_NOTE		:	new = PIZ_QUARTER_NOTE_TRIPLET;			break;
+			case PIZ_QUARTER_NOTE_DOTTED		:	new = PIZ_QUARTER_NOTE_TRIPLET;			break;
 			case PIZ_QUARTER_NOTE				:	new = PIZ_QUARTER_NOTE_TRIPLET;			break;
 			case PIZ_QUARTER_NOTE_TRIPLET		:	new = PIZ_QUARTER_NOTE;					break;
-			case PIZ_DOTTED_EIGHT_NOTE			:	new = PIZ_EIGHT_NOTE_TRIPLET;			break;
+			case PIZ_EIGHT_NOTE_DOTTED			:	new = PIZ_EIGHT_NOTE_TRIPLET;			break;
 			case PIZ_EIGHT_NOTE					:	new = PIZ_EIGHT_NOTE_TRIPLET;			break;
 			case PIZ_EIGHT_NOTE_TRIPLET			:	new = PIZ_EIGHT_NOTE;					break;
-			case PIZ_DOTTED_SIXTEENTH_NOTE		:	new = PIZ_SIXTEENTH_NOTE_TRIPLET;		break;
+			case PIZ_SIXTEENTH_NOTE_DOTTED		:	new = PIZ_SIXTEENTH_NOTE_TRIPLET;		break;
 			case PIZ_SIXTEENTH_NOTE				:	new = PIZ_SIXTEENTH_NOTE_TRIPLET;		break;
 			case PIZ_SIXTEENTH_NOTE_TRIPLET		:	new = PIZ_SIXTEENTH_NOTE;				break;
 			case PIZ_THIRTY_SECOND_NOTE			:	new = PIZ_THIRTY_SECOND_NOTE_TRIPLET;	break;
@@ -3642,21 +3642,21 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 			}
 				
 			switch (old) {
-			case PIZ_DOTTED_WHOLE_NOTE			:	new = PIZ_WHOLE_NOTE;					break;
-			case PIZ_WHOLE_NOTE					:	new = PIZ_DOTTED_WHOLE_NOTE;			break;
-			case PIZ_WHOLE_NOTE_TRIPLET			:	new = PIZ_DOTTED_WHOLE_NOTE;			break;
-			case PIZ_DOTTED_HALF_NOTE			:	new = PIZ_HALF_NOTE;					break;
-			case PIZ_HALF_NOTE					:	new = PIZ_DOTTED_HALF_NOTE;				break;
-			case PIZ_HALF_NOTE_TRIPLET			:	new = PIZ_DOTTED_HALF_NOTE;				break;
-			case PIZ_DOTTED_QUARTER_NOTE		:	new = PIZ_QUARTER_NOTE;					break;
-			case PIZ_QUARTER_NOTE				:	new = PIZ_DOTTED_QUARTER_NOTE;			break;
-			case PIZ_QUARTER_NOTE_TRIPLET		:	new = PIZ_DOTTED_QUARTER_NOTE;			break;
-			case PIZ_DOTTED_EIGHT_NOTE			:	new = PIZ_EIGHT_NOTE;					break;
-			case PIZ_EIGHT_NOTE					:	new = PIZ_DOTTED_EIGHT_NOTE;			break;
-			case PIZ_EIGHT_NOTE_TRIPLET			:	new = PIZ_DOTTED_EIGHT_NOTE;			break;
-			case PIZ_DOTTED_SIXTEENTH_NOTE		:	new = PIZ_SIXTEENTH_NOTE;				break;
-			case PIZ_SIXTEENTH_NOTE				:	new = PIZ_DOTTED_SIXTEENTH_NOTE;		break;
-			case PIZ_SIXTEENTH_NOTE_TRIPLET		:	new = PIZ_DOTTED_SIXTEENTH_NOTE;		break;
+			case PIZ_WHOLE_NOTE_DOTTED			:	new = PIZ_WHOLE_NOTE;					break;
+			case PIZ_WHOLE_NOTE					:	new = PIZ_WHOLE_NOTE_DOTTED;			break;
+			case PIZ_WHOLE_NOTE_TRIPLET			:	new = PIZ_WHOLE_NOTE_DOTTED;			break;
+			case PIZ_HALF_NOTE_DOTTED			:	new = PIZ_HALF_NOTE;					break;
+			case PIZ_HALF_NOTE					:	new = PIZ_HALF_NOTE_DOTTED;				break;
+			case PIZ_HALF_NOTE_TRIPLET			:	new = PIZ_HALF_NOTE_DOTTED;				break;
+			case PIZ_QUARTER_NOTE_DOTTED		:	new = PIZ_QUARTER_NOTE;					break;
+			case PIZ_QUARTER_NOTE				:	new = PIZ_QUARTER_NOTE_DOTTED;			break;
+			case PIZ_QUARTER_NOTE_TRIPLET		:	new = PIZ_QUARTER_NOTE_DOTTED;			break;
+			case PIZ_EIGHT_NOTE_DOTTED			:	new = PIZ_EIGHT_NOTE;					break;
+			case PIZ_EIGHT_NOTE					:	new = PIZ_EIGHT_NOTE_DOTTED;			break;
+			case PIZ_EIGHT_NOTE_TRIPLET			:	new = PIZ_EIGHT_NOTE_DOTTED;			break;
+			case PIZ_SIXTEENTH_NOTE_DOTTED		:	new = PIZ_SIXTEENTH_NOTE;				break;
+			case PIZ_SIXTEENTH_NOTE				:	new = PIZ_SIXTEENTH_NOTE_DOTTED;		break;
+			case PIZ_SIXTEENTH_NOTE_TRIPLET		:	new = PIZ_SIXTEENTH_NOTE_DOTTED;		break;
 			case PIZ_THIRTY_SECOND_NOTE			:	new = PIZ_THIRTY_SECOND_NOTE;			break;
 			case PIZ_THIRTY_SECOND_NOTE_TRIPLET	:	new = PIZ_THIRTY_SECOND_NOTE_TRIPLET;	break;
 			case PIZ_SNAP_NONE					:	new = PIZ_SNAP_NONE;					break;
@@ -4439,32 +4439,32 @@ void tralala_setStringWithLong (char *string, long longToBeFormatted, long forma
 		}
 	else if (formatMode == FORMAT_MODE_GRID) {
 		switch (longToBeFormatted) {
-		case PIZ_DOTTED_WHOLE_NOTE			:
-			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_dottedWhole->s_name); break;
+		case PIZ_WHOLE_NOTE_DOTTED			:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_wholeDotted->s_name); break;
 		case PIZ_WHOLE_NOTE					:
 			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_whole->s_name); break;
 		case PIZ_WHOLE_NOTE_TRIPLET			:
 			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_wholeTriplet->s_name); break;
-		case PIZ_DOTTED_HALF_NOTE			:
-			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_dottedHalf->s_name); break;
+		case PIZ_HALF_NOTE_DOTTED			:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_halfDotted->s_name); break;
 		case PIZ_HALF_NOTE					:
 			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_half->s_name); break;
 		case PIZ_HALF_NOTE_TRIPLET			:
 			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_halfTriplet->s_name); break;
-		case PIZ_DOTTED_QUARTER_NOTE		:
-			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_dottedQuarter->s_name); break;
+		case PIZ_QUARTER_NOTE_DOTTED		:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_quarterDotted->s_name); break;
 		case PIZ_QUARTER_NOTE				:
 			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_quarter->s_name); break;
 		case PIZ_QUARTER_NOTE_TRIPLET		:
 			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_quarterTriplet->s_name); break;
-		case PIZ_DOTTED_EIGHT_NOTE			:
-			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_dottedEight->s_name); break;
+		case PIZ_EIGHT_NOTE_DOTTED			:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_eightDotted->s_name); break;
 		case PIZ_EIGHT_NOTE					:
 			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_eight->s_name); break;
 		case PIZ_EIGHT_NOTE_TRIPLET			:
 			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_eightTriplet->s_name); break;
-		case PIZ_DOTTED_SIXTEENTH_NOTE		:
-			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_dottedSixteenth->s_name); break;
+		case PIZ_SIXTEENTH_NOTE_DOTTED		:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_sixteenthDotted->s_name); break;
 		case PIZ_SIXTEENTH_NOTE				:
 			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_sixteenth->s_name); break;
 		case PIZ_SIXTEENTH_NOTE_TRIPLET		:
@@ -4658,15 +4658,15 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 		jpopupmenu_additem		(snapTripletPopup, 22, "Thirty-second", 
 								NULL, (snap == PIZ_THIRTY_SECOND_NOTE_TRIPLET), 0, NULL);						
 		jpopupmenu_additem		(snapDottedPopup, 23, "Whole", 
-								NULL, (snap == PIZ_DOTTED_WHOLE_NOTE), 0, NULL);
+								NULL, (snap == PIZ_WHOLE_NOTE_DOTTED), 0, NULL);
 		jpopupmenu_additem		(snapDottedPopup, 24, "Half", 
-								NULL, (snap == PIZ_DOTTED_HALF_NOTE), 0, NULL);
+								NULL, (snap == PIZ_HALF_NOTE_DOTTED), 0, NULL);
 		jpopupmenu_additem		(snapDottedPopup, 25, "Quarter", 
-								NULL, (snap == PIZ_DOTTED_QUARTER_NOTE), 0, NULL);
+								NULL, (snap == PIZ_QUARTER_NOTE_DOTTED), 0, NULL);
 		jpopupmenu_additem		(snapDottedPopup, 26, "Eight", 
-								NULL, (snap == PIZ_DOTTED_EIGHT_NOTE), 0, NULL);
+								NULL, (snap == PIZ_EIGHT_NOTE_DOTTED), 0, NULL);
 		jpopupmenu_additem		(snapDottedPopup, 27, "Sixteenth", 
-								NULL, (snap == PIZ_DOTTED_SIXTEENTH_NOTE), 0, NULL);
+								NULL, (snap == PIZ_SIXTEENTH_NOTE_DOTTED), 0, NULL);
 								
 		jpopupmenu_addseperator (snapPopup);
 		jpopupmenu_addsubmenu	(snapPopup,	"Triplet", snapTripletPopup, 0);
@@ -4728,15 +4728,15 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 						jpopupmenu_additem		(noteValueTripletPopup, 312, "Thirty-second", 
 												NULL, (value == PIZ_THIRTY_SECOND_NOTE_TRIPLET), 0, NULL);
 						jpopupmenu_additem		(noteValueDottedPopup, 313, "Whole", 
-												NULL, (value == PIZ_DOTTED_WHOLE_NOTE), 0, NULL);
+												NULL, (value == PIZ_WHOLE_NOTE_DOTTED), 0, NULL);
 						jpopupmenu_additem		(noteValueDottedPopup, 314, "Half", 
-												NULL, (value == PIZ_DOTTED_HALF_NOTE), 0, NULL);
+												NULL, (value == PIZ_HALF_NOTE_DOTTED), 0, NULL);
 						jpopupmenu_additem		(noteValueDottedPopup, 315, "Quarter", 
-												NULL, (value == PIZ_DOTTED_QUARTER_NOTE), 0, NULL);
+												NULL, (value == PIZ_QUARTER_NOTE_DOTTED), 0, NULL);
 						jpopupmenu_additem		(noteValueDottedPopup, 316, "Eight", 
-												NULL, (value == PIZ_DOTTED_EIGHT_NOTE), 0, NULL);
+												NULL, (value == PIZ_EIGHT_NOTE_DOTTED), 0, NULL);
 						jpopupmenu_additem		(noteValueDottedPopup, 317, "Sixteenth", 
-												NULL, (value == PIZ_DOTTED_SIXTEENTH_NOTE), 0, NULL);
+												NULL, (value == PIZ_SIXTEENTH_NOTE_DOTTED), 0, NULL);
 																		
 						jpopupmenu_addseperator (noteValuePopup);
 						jpopupmenu_addsubmenu	(noteValuePopup, "Triplet ", noteValueTripletPopup, 0);
@@ -4841,11 +4841,11 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 		case 20		:	pizSequenceSetGrid	(x->user, PIZ_EIGHT_NOTE_TRIPLET);			 break;
 		case 21		:	pizSequenceSetGrid	(x->user, PIZ_SIXTEENTH_NOTE_TRIPLET);		 break;
 		case 22		:	pizSequenceSetGrid	(x->user, PIZ_THIRTY_SECOND_NOTE_TRIPLET);	 break;
-		case 23		:	pizSequenceSetGrid	(x->user, PIZ_DOTTED_WHOLE_NOTE);			 break;
-		case 24		:	pizSequenceSetGrid	(x->user, PIZ_DOTTED_HALF_NOTE);			 break;
-		case 25		:	pizSequenceSetGrid	(x->user, PIZ_DOTTED_QUARTER_NOTE);			 break;
-		case 26		:	pizSequenceSetGrid	(x->user, PIZ_DOTTED_EIGHT_NOTE);			 break;
-		case 27		:	pizSequenceSetGrid	(x->user, PIZ_DOTTED_SIXTEENTH_NOTE);		 break;
+		case 23		:	pizSequenceSetGrid	(x->user, PIZ_WHOLE_NOTE_DOTTED);			 break;
+		case 24		:	pizSequenceSetGrid	(x->user, PIZ_HALF_NOTE_DOTTED);			 break;
+		case 25		:	pizSequenceSetGrid	(x->user, PIZ_QUARTER_NOTE_DOTTED);			 break;
+		case 26		:	pizSequenceSetGrid	(x->user, PIZ_EIGHT_NOTE_DOTTED);			 break;
+		case 27		:	pizSequenceSetGrid	(x->user, PIZ_SIXTEENTH_NOTE_DOTTED);		 break;
 		case 50		:	tralala_setSelectedNotesVelocity (x, 0);	x->flags |= FLAG_HAVE_CHANGED; break;
 		case 51		:	tralala_setSelectedNotesVelocity (x, 8);	x->flags |= FLAG_HAVE_CHANGED; break;
 		case 52		:	tralala_setSelectedNotesVelocity (x, 16);	x->flags |= FLAG_HAVE_CHANGED; break;
@@ -4896,11 +4896,11 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 		case 310	:	pizSequenceSetNoteValue	(x->user, PIZ_EIGHT_NOTE_TRIPLET);			break;
 		case 311	:	pizSequenceSetNoteValue	(x->user, PIZ_SIXTEENTH_NOTE_TRIPLET);		break;
 		case 312	:	pizSequenceSetNoteValue	(x->user, PIZ_THIRTY_SECOND_NOTE_TRIPLET);	break;
-		case 313	:	pizSequenceSetNoteValue	(x->user, PIZ_DOTTED_WHOLE_NOTE);			break;
-		case 314	:	pizSequenceSetNoteValue	(x->user, PIZ_DOTTED_HALF_NOTE);			break;
-		case 315	:	pizSequenceSetNoteValue	(x->user, PIZ_DOTTED_QUARTER_NOTE);			break;
-		case 316	:	pizSequenceSetNoteValue	(x->user, PIZ_DOTTED_EIGHT_NOTE);			break;
-		case 317	:	pizSequenceSetNoteValue	(x->user, PIZ_DOTTED_SIXTEENTH_NOTE);		break;
+		case 313	:	pizSequenceSetNoteValue	(x->user, PIZ_WHOLE_NOTE_DOTTED);			break;
+		case 314	:	pizSequenceSetNoteValue	(x->user, PIZ_HALF_NOTE_DOTTED);			break;
+		case 315	:	pizSequenceSetNoteValue	(x->user, PIZ_QUARTER_NOTE_DOTTED);			break;
+		case 316	:	pizSequenceSetNoteValue	(x->user, PIZ_EIGHT_NOTE_DOTTED);			break;
+		case 317	:	pizSequenceSetNoteValue	(x->user, PIZ_SIXTEENTH_NOTE_DOTTED);		break;
 		case 501	:	object_attr_setlong (x, tll_sym_channel, 1); break;
 		case 502	:	object_attr_setlong (x, tll_sym_channel, 2); break;
 		case 503	:	object_attr_setlong (x, tll_sym_channel, 3); break;
@@ -5259,19 +5259,19 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
 				}
 			
 			switch (grid) {
-				case PIZ_DOTTED_WHOLE_NOTE			:	background = tll_half					[z]; break;
+				case PIZ_WHOLE_NOTE_DOTTED			:	background = tll_half					[z]; break;
 				case PIZ_WHOLE_NOTE					:	background = tll_whole					[z]; break;
 				case PIZ_WHOLE_NOTE_TRIPLET			:	background = tll_halfTriplet			[z]; break;
-				case PIZ_DOTTED_HALF_NOTE			:	background = tll_halfDotted				[z]; break;
+				case PIZ_HALF_NOTE_DOTTED			:	background = tll_halfDotted				[z]; break;
 				case PIZ_HALF_NOTE					:	background = tll_half					[z]; break;
 				case PIZ_HALF_NOTE_TRIPLET			:	background = tll_halfTriplet			[z]; break;
-				case PIZ_DOTTED_QUARTER_NOTE		:	background = tll_quarterDotted			[z]; break;
+				case PIZ_QUARTER_NOTE_DOTTED		:	background = tll_quarterDotted			[z]; break;
 				case PIZ_QUARTER_NOTE				:	background = tll_quarter				[z]; break;
 				case PIZ_QUARTER_NOTE_TRIPLET		:	background = tll_quarterTriplet			[z]; break;
-				case PIZ_DOTTED_EIGHT_NOTE			:	background = tll_eightDotted			[z]; break;
+				case PIZ_EIGHT_NOTE_DOTTED			:	background = tll_eightDotted			[z]; break;
 				case PIZ_EIGHT_NOTE					:	background = tll_eight					[z]; break;
 				case PIZ_EIGHT_NOTE_TRIPLET			:	background = tll_eightTriplet			[z]; break;
-				case PIZ_DOTTED_SIXTEENTH_NOTE		:	background = tll_sixteenthDotted		[z]; break;
+				case PIZ_SIXTEENTH_NOTE_DOTTED		:	background = tll_sixteenthDotted		[z]; break;
 				case PIZ_SIXTEENTH_NOTE				:	background = tll_sixteenth				[z]; break;
 				case PIZ_SIXTEENTH_NOTE_TRIPLET		:	background = tll_sixteenthTriplet		[z]; break;
 				case PIZ_THIRTY_SECOND_NOTE			:	background = tll_thirtySecond			[z]; break;
