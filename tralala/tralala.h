@@ -89,12 +89,12 @@
 											\"7th dominant sharp five\"									\
 											\"7th dominant flat five\""								
 											 
-#define PATTERN_CELL_LIST					"none whole half quarter eight sixteenth thirty-second		\
+#define PATTERN_CELL_LIST					"none whole half quarter eighth sixteenth thirty-second		\
 											\"whole triplet\" \"half triplet\"							\
-											\"quarter triplet\" \"eight triplet\"						\
+											\"quarter triplet\" \"eighth triplet\"						\
 											\"sixteenth triplet\" \"thirty-second triplet\"				\
 											\"whole dotted\" \"half dotted\"							\
-											\"quarter dotted\" \"eight dotted\"							\
+											\"quarter dotted\" \"eighth dotted\"						\
 											\"sixteenth dotted\""
 
 // -------------------------------------------------------------------------------------------------------------

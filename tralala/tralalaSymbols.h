@@ -135,19 +135,19 @@ typedef struct _tralalaSymbolsTableB {
 	t_symbol *sym_whole;
 	t_symbol *sym_half;
 	t_symbol *sym_quarter;
-	t_symbol *sym_eight;
+	t_symbol *sym_eighth;
 	t_symbol *sym_sixteenth;
 	t_symbol *sym_thirtySecond;
 	t_symbol *sym_wholeTriplet;
 	t_symbol *sym_halfTriplet;
 	t_symbol *sym_quarterTriplet;
-	t_symbol *sym_eightTriplet;
+	t_symbol *sym_eighthTriplet;
 	t_symbol *sym_sixteenthTriplet;
 	t_symbol *sym_thirtySecondTriplet;
 	t_symbol *sym_wholeDotted;
 	t_symbol *sym_halfDotted;
 	t_symbol *sym_quarterDotted;
-	t_symbol *sym_eightDotted;
+	t_symbol *sym_eighthDotted;
 	t_symbol *sym_sixteenthDotted;
 	} tralalaSymbolsTableB;
 	
@@ -264,19 +264,19 @@ typedef struct _tralalaSymbolsTableB {
 #define tll_sym_whole					(tll_symbolsB.sym_whole)
 #define tll_sym_half					(tll_symbolsB.sym_half)
 #define tll_sym_quarter					(tll_symbolsB.sym_quarter)
-#define tll_sym_eight					(tll_symbolsB.sym_eight)
+#define tll_sym_eighth					(tll_symbolsB.sym_eighth)
 #define tll_sym_sixteenth				(tll_symbolsB.sym_sixteenth)
 #define tll_sym_thirtySecond			(tll_symbolsB.sym_thirtySecond)
 #define tll_sym_wholeTriplet			(tll_symbolsB.sym_wholeTriplet)
 #define tll_sym_halfTriplet				(tll_symbolsB.sym_halfTriplet)
 #define tll_sym_quarterTriplet			(tll_symbolsB.sym_quarterTriplet)
-#define tll_sym_eightTriplet			(tll_symbolsB.sym_eightTriplet)
+#define tll_sym_eighthTriplet			(tll_symbolsB.sym_eighthTriplet)
 #define tll_sym_sixteenthTriplet		(tll_symbolsB.sym_sixteenthTriplet)
 #define tll_sym_thirtySecondTriplet		(tll_symbolsB.sym_thirtySecondTriplet)
 #define tll_sym_wholeDotted				(tll_symbolsB.sym_wholeDotted)
 #define tll_sym_halfDotted				(tll_symbolsB.sym_halfDotted)
 #define tll_sym_quarterDotted			(tll_symbolsB.sym_quarterDotted)
-#define tll_sym_eightDotted				(tll_symbolsB.sym_eightDotted)
+#define tll_sym_eighthDotted			(tll_symbolsB.sym_eighthDotted)
 #define tll_sym_sixteenthDotted			(tll_symbolsB.sym_sixteenthDotted)
 
 // -------------------------------------------------------------------------------------------------------------

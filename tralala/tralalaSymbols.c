@@ -131,19 +131,19 @@ void tralalaSymbolsTableBInit (tralalaSymbolsTableB *tll_symbolsB)
 	tll_symbolsB->sym_whole					= gensym ("whole");
 	tll_symbolsB->sym_half					= gensym ("half");
 	tll_symbolsB->sym_quarter				= gensym ("quarter");
-	tll_symbolsB->sym_eight					= gensym ("eight");
+	tll_symbolsB->sym_eighth				= gensym ("eighth");
 	tll_symbolsB->sym_sixteenth				= gensym ("sixteenth");
 	tll_symbolsB->sym_thirtySecond			= gensym ("thirty-second");
 	tll_symbolsB->sym_wholeTriplet			= gensym ("whole triplet");
 	tll_symbolsB->sym_halfTriplet			= gensym ("half triplet");
 	tll_symbolsB->sym_quarterTriplet		= gensym ("quarter triplet");
-	tll_symbolsB->sym_eightTriplet			= gensym ("eight triplet");
+	tll_symbolsB->sym_eighthTriplet			= gensym ("eighth triplet");
 	tll_symbolsB->sym_sixteenthTriplet		= gensym ("sixteenth triplet");
 	tll_symbolsB->sym_thirtySecondTriplet	= gensym ("thirty-second triplet");
 	tll_symbolsB->sym_wholeDotted			= gensym ("whole dotted");
 	tll_symbolsB->sym_halfDotted			= gensym ("half dotted");
 	tll_symbolsB->sym_quarterDotted			= gensym ("quarter dotted");
-	tll_symbolsB->sym_eightDotted			= gensym ("eight dotted");
+	tll_symbolsB->sym_eighthDotted			= gensym ("eighth dotted");
 	tll_symbolsB->sym_sixteenthDotted		= gensym ("sixteenth dotted");
 }
 

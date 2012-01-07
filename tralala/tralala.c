@@ -32,9 +32,9 @@ static t_jsurface			*tll_thirtySecond			[3];
 static t_jsurface			*tll_sixteenth				[3];
 static t_jsurface			*tll_sixteenthTriplet		[3];
 static t_jsurface			*tll_sixteenthDotted		[3];
-static t_jsurface			*tll_eight					[3];
-static t_jsurface			*tll_eightTriplet			[3];
-static t_jsurface			*tll_eightDotted			[3];
+static t_jsurface			*tll_eighth					[3];
+static t_jsurface			*tll_eighthTriplet			[3];
+static t_jsurface			*tll_eighthDotted			[3];
 static t_jsurface			*tll_quarter				[3];
 static t_jsurface			*tll_quarterTriplet			[3];
 static t_jsurface			*tll_quarterDotted			[3];
@@ -410,15 +410,15 @@ tll_sixteenthDotted			[0]	= jgraphics_image_surface_create_from_resource (module
 tll_sixteenthDotted			[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "16DB");
 tll_sixteenthDotted			[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "16DC");
 
-tll_eight					[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "8A");
-tll_eight					[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "8B");
-tll_eight					[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "8C");
-tll_eightTriplet			[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "8TA");
-tll_eightTriplet			[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "8TB");
-tll_eightTriplet			[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "8TC");
-tll_eightDotted				[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "8DA");
-tll_eightDotted				[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "8DB");
-tll_eightDotted				[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "8DC");
+tll_eighth					[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "8A");
+tll_eighth					[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "8B");
+tll_eighth					[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "8C");
+tll_eighthTriplet			[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "8TA");
+tll_eighthTriplet			[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "8TB");
+tll_eighthTriplet			[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "8TC");
+tll_eighthDotted			[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "8DA");
+tll_eighthDotted			[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "8DB");
+tll_eighthDotted			[2]	= jgraphics_image_surface_create_from_resource (moduleRef, "8DC");
 
 tll_quarter					[0]	= jgraphics_image_surface_create_from_resource (moduleRef, "4A");
 tll_quarter					[1]	= jgraphics_image_surface_create_from_resource (moduleRef, "4B");
@@ -576,7 +576,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 							x->learnThreshold		= LEARN_THRESHOLD_MINIMUM;
 							x->dirtyLayer			= (DIRTY_ZONE | DIRTY_NOTES | DIRTY_GRID | DIRTY_CHANGE);
 							
-							pizSequenceSetGrid (x->user, PIZ_EIGHT_NOTE);
+							pizSequenceSetGrid (x->user, PIZ_EIGHTH_NOTE);
 							
 							pizLinklistSetFlags (x->slots,	PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY);
 							pizLinklistSetFlags (x->undo,	PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY);
@@ -1125,8 +1125,8 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
 								pizSequenceSetGrid (x->live, PIZ_HALF_NOTE);
 							} else if (temp == tll_sym_quarter) {
 								pizSequenceSetGrid (x->live, PIZ_QUARTER_NOTE);
-							} else if (temp == tll_sym_eight) {
-								pizSequenceSetGrid (x->live, PIZ_EIGHT_NOTE);
+							} else if (temp == tll_sym_eighth) {
+								pizSequenceSetGrid (x->live, PIZ_EIGHTH_NOTE);
 							} else if (temp == tll_sym_sixteenth) {
 								pizSequenceSetGrid (x->live, PIZ_SIXTEENTH_NOTE);
 							} else if (temp == tll_sym_thirtySecond) {
@@ -1137,8 +1137,8 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
 								pizSequenceSetGrid (x->live, PIZ_HALF_NOTE_TRIPLET);
 							} else if (temp == tll_sym_quarterTriplet) {
 								pizSequenceSetGrid (x->live, PIZ_QUARTER_NOTE_TRIPLET);
-							} else if (temp == tll_sym_eightTriplet) {
-								pizSequenceSetGrid (x->live, PIZ_EIGHT_NOTE_TRIPLET);
+							} else if (temp == tll_sym_eighthTriplet) {
+								pizSequenceSetGrid (x->live, PIZ_EIGHTH_NOTE_TRIPLET);
 							} else if (temp == tll_sym_sixteenthTriplet) {
 								pizSequenceSetGrid (x->live, PIZ_SIXTEENTH_NOTE_TRIPLET);
 							} else if (temp == tll_sym_thirtySecondTriplet) {
@@ -1149,8 +1149,8 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
 								pizSequenceSetGrid (x->live, PIZ_HALF_NOTE_DOTTED);
 							} else if (temp == tll_sym_quarterDotted) {
 								pizSequenceSetGrid (x->live, PIZ_QUARTER_NOTE_DOTTED);
-							} else if (temp == tll_sym_eightDotted) {
-								pizSequenceSetGrid (x->live, PIZ_EIGHT_NOTE_DOTTED);
+							} else if (temp == tll_sym_eighthDotted) {
+								pizSequenceSetGrid (x->live, PIZ_EIGHTH_NOTE_DOTTED);
 							} else if (temp == tll_sym_sixteenthDotted) {
 								pizSequenceSetGrid (x->live, PIZ_SIXTEENTH_NOTE_DOTTED);
 							} else { err = true; }
@@ -3564,7 +3564,7 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 							case 54	: pizSequenceSetGrid (x->user, PIZ_WHOLE_NOTE);			break;
 							case 53	: pizSequenceSetGrid (x->user, PIZ_HALF_NOTE);			break;
 							case 52	: pizSequenceSetGrid (x->user, PIZ_QUARTER_NOTE);		break;
-							case 51	: pizSequenceSetGrid (x->user, PIZ_EIGHT_NOTE);			break;
+							case 51	: pizSequenceSetGrid (x->user, PIZ_EIGHTH_NOTE);		break;
 							case 50	: pizSequenceSetGrid (x->user, PIZ_SIXTEENTH_NOTE);		break;
 							case 49	: pizSequenceSetGrid (x->user, PIZ_THIRTY_SECOND_NOTE);	break;
 							}
@@ -3578,7 +3578,7 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 							case 54	: pizSequenceSetNoteValue (x->user, PIZ_WHOLE_NOTE);		break;
 							case 53	: pizSequenceSetNoteValue (x->user, PIZ_HALF_NOTE);			break;
 							case 52	: pizSequenceSetNoteValue (x->user, PIZ_QUARTER_NOTE);		break;
-							case 51	: pizSequenceSetNoteValue (x->user, PIZ_EIGHT_NOTE);		break;
+							case 51	: pizSequenceSetNoteValue (x->user, PIZ_EIGHTH_NOTE);		break;
 							case 50	: pizSequenceSetNoteValue (x->user, PIZ_SIXTEENTH_NOTE);	break;
 							case 49	: pizSequenceSetNoteValue (x->user, PIZ_THIRTY_SECOND_NOTE);break;
 							}
@@ -3609,9 +3609,9 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 			case PIZ_QUARTER_NOTE_DOTTED		:	new = PIZ_QUARTER_NOTE_TRIPLET;			break;
 			case PIZ_QUARTER_NOTE				:	new = PIZ_QUARTER_NOTE_TRIPLET;			break;
 			case PIZ_QUARTER_NOTE_TRIPLET		:	new = PIZ_QUARTER_NOTE;					break;
-			case PIZ_EIGHT_NOTE_DOTTED			:	new = PIZ_EIGHT_NOTE_TRIPLET;			break;
-			case PIZ_EIGHT_NOTE					:	new = PIZ_EIGHT_NOTE_TRIPLET;			break;
-			case PIZ_EIGHT_NOTE_TRIPLET			:	new = PIZ_EIGHT_NOTE;					break;
+			case PIZ_EIGHTH_NOTE_DOTTED			:	new = PIZ_EIGHTH_NOTE_TRIPLET;			break;
+			case PIZ_EIGHTH_NOTE				:	new = PIZ_EIGHTH_NOTE_TRIPLET;			break;
+			case PIZ_EIGHTH_NOTE_TRIPLET		:	new = PIZ_EIGHTH_NOTE;					break;
 			case PIZ_SIXTEENTH_NOTE_DOTTED		:	new = PIZ_SIXTEENTH_NOTE_TRIPLET;		break;
 			case PIZ_SIXTEENTH_NOTE				:	new = PIZ_SIXTEENTH_NOTE_TRIPLET;		break;
 			case PIZ_SIXTEENTH_NOTE_TRIPLET		:	new = PIZ_SIXTEENTH_NOTE;				break;
@@ -3651,9 +3651,9 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
 			case PIZ_QUARTER_NOTE_DOTTED		:	new = PIZ_QUARTER_NOTE;					break;
 			case PIZ_QUARTER_NOTE				:	new = PIZ_QUARTER_NOTE_DOTTED;			break;
 			case PIZ_QUARTER_NOTE_TRIPLET		:	new = PIZ_QUARTER_NOTE_DOTTED;			break;
-			case PIZ_EIGHT_NOTE_DOTTED			:	new = PIZ_EIGHT_NOTE;					break;
-			case PIZ_EIGHT_NOTE					:	new = PIZ_EIGHT_NOTE_DOTTED;			break;
-			case PIZ_EIGHT_NOTE_TRIPLET			:	new = PIZ_EIGHT_NOTE_DOTTED;			break;
+			case PIZ_EIGHTH_NOTE_DOTTED			:	new = PIZ_EIGHTH_NOTE;					break;
+			case PIZ_EIGHTH_NOTE				:	new = PIZ_EIGHTH_NOTE_DOTTED;			break;
+			case PIZ_EIGHTH_NOTE_TRIPLET		:	new = PIZ_EIGHTH_NOTE_DOTTED;			break;
 			case PIZ_SIXTEENTH_NOTE_DOTTED		:	new = PIZ_SIXTEENTH_NOTE;				break;
 			case PIZ_SIXTEENTH_NOTE				:	new = PIZ_SIXTEENTH_NOTE_DOTTED;		break;
 			case PIZ_SIXTEENTH_NOTE_TRIPLET		:	new = PIZ_SIXTEENTH_NOTE_DOTTED;		break;
@@ -4457,12 +4457,12 @@ void tralala_setStringWithLong (char *string, long longToBeFormatted, long forma
 			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_quarter->s_name); break;
 		case PIZ_QUARTER_NOTE_TRIPLET		:
 			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_quarterTriplet->s_name); break;
-		case PIZ_EIGHT_NOTE_DOTTED			:
-			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_eightDotted->s_name); break;
-		case PIZ_EIGHT_NOTE					:
-			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_eight->s_name); break;
-		case PIZ_EIGHT_NOTE_TRIPLET			:
-			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_eightTriplet->s_name); break;
+		case PIZ_EIGHTH_NOTE_DOTTED			:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_eighthDotted->s_name); break;
+		case PIZ_EIGHTH_NOTE					:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_eighth->s_name); break;
+		case PIZ_EIGHTH_NOTE_TRIPLET			:
+			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_eighthTriplet->s_name); break;
 		case PIZ_SIXTEENTH_NOTE_DOTTED		:
 			snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_sixteenthDotted->s_name); break;
 		case PIZ_SIXTEENTH_NOTE				:
@@ -4639,8 +4639,8 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 								NULL, (snap == PIZ_HALF_NOTE), 0, NULL);
 		jpopupmenu_additem		(snapPopup, 13, "Quarter", 
 								NULL, (snap == PIZ_QUARTER_NOTE), 0, NULL);
-		jpopupmenu_additem		(snapPopup, 14, "Eight", 
-								NULL, (snap == PIZ_EIGHT_NOTE), 0, NULL);
+		jpopupmenu_additem		(snapPopup, 14, "Eighth", 
+								NULL, (snap == PIZ_EIGHTH_NOTE), 0, NULL);
 		jpopupmenu_additem		(snapPopup, 15, "Sixteenth", 
 								NULL, (snap == PIZ_SIXTEENTH_NOTE), 0, NULL);
 		jpopupmenu_additem		(snapPopup, 16, "Thirty-second", 
@@ -4651,8 +4651,8 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 								NULL, (snap == PIZ_HALF_NOTE_TRIPLET), 0, NULL);
 		jpopupmenu_additem		(snapTripletPopup, 19, "Quarter", 
 								NULL, (snap == PIZ_QUARTER_NOTE_TRIPLET), 0, NULL);
-		jpopupmenu_additem		(snapTripletPopup, 20, "Eight", 
-								NULL, (snap == PIZ_EIGHT_NOTE_TRIPLET), 0, NULL);
+		jpopupmenu_additem		(snapTripletPopup, 20, "Eighth", 
+								NULL, (snap == PIZ_EIGHTH_NOTE_TRIPLET), 0, NULL);
 		jpopupmenu_additem		(snapTripletPopup, 21, "Sixteenth", 
 								NULL, (snap == PIZ_SIXTEENTH_NOTE_TRIPLET), 0, NULL);
 		jpopupmenu_additem		(snapTripletPopup, 22, "Thirty-second", 
@@ -4663,8 +4663,8 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 								NULL, (snap == PIZ_HALF_NOTE_DOTTED), 0, NULL);
 		jpopupmenu_additem		(snapDottedPopup, 25, "Quarter", 
 								NULL, (snap == PIZ_QUARTER_NOTE_DOTTED), 0, NULL);
-		jpopupmenu_additem		(snapDottedPopup, 26, "Eight", 
-								NULL, (snap == PIZ_EIGHT_NOTE_DOTTED), 0, NULL);
+		jpopupmenu_additem		(snapDottedPopup, 26, "Eighth", 
+								NULL, (snap == PIZ_EIGHTH_NOTE_DOTTED), 0, NULL);
 		jpopupmenu_additem		(snapDottedPopup, 27, "Sixteenth", 
 								NULL, (snap == PIZ_SIXTEENTH_NOTE_DOTTED), 0, NULL);
 								
@@ -4709,8 +4709,8 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 												NULL, (value == PIZ_HALF_NOTE), 0, NULL);
 						jpopupmenu_additem		(noteValuePopup, 303, "Quarter", 
 												NULL, (value == PIZ_QUARTER_NOTE), 0, NULL);
-						jpopupmenu_additem		(noteValuePopup, 304, "Eight", 
-												NULL, (value == PIZ_EIGHT_NOTE), 0, NULL);
+						jpopupmenu_additem		(noteValuePopup, 304, "Eighth", 
+												NULL, (value == PIZ_EIGHTH_NOTE), 0, NULL);
 						jpopupmenu_additem		(noteValuePopup, 305, "Sixteenth", 
 												NULL, (value == PIZ_SIXTEENTH_NOTE), 0, NULL);
 						jpopupmenu_additem		(noteValuePopup, 306, "Thirty-second", 
@@ -4721,8 +4721,8 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 												NULL, (value == PIZ_HALF_NOTE_TRIPLET), 0, NULL);
 						jpopupmenu_additem		(noteValueTripletPopup, 309, "Quarter", 
 												NULL, (value == PIZ_QUARTER_NOTE_TRIPLET), 0, NULL);
-						jpopupmenu_additem		(noteValueTripletPopup, 310, "Eight", 
-												NULL, (value == PIZ_EIGHT_NOTE_TRIPLET), 0, NULL);
+						jpopupmenu_additem		(noteValueTripletPopup, 310, "Eighth", 
+												NULL, (value == PIZ_EIGHTH_NOTE_TRIPLET), 0, NULL);
 						jpopupmenu_additem		(noteValueTripletPopup, 311, "Sixteenth", 
 												NULL, (value == PIZ_SIXTEENTH_NOTE_TRIPLET), 0, NULL);
 						jpopupmenu_additem		(noteValueTripletPopup, 312, "Thirty-second", 
@@ -4733,8 +4733,8 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 												NULL, (value == PIZ_HALF_NOTE_DOTTED), 0, NULL);
 						jpopupmenu_additem		(noteValueDottedPopup, 315, "Quarter", 
 												NULL, (value == PIZ_QUARTER_NOTE_DOTTED), 0, NULL);
-						jpopupmenu_additem		(noteValueDottedPopup, 316, "Eight", 
-												NULL, (value == PIZ_EIGHT_NOTE_DOTTED), 0, NULL);
+						jpopupmenu_additem		(noteValueDottedPopup, 316, "Eighth", 
+												NULL, (value == PIZ_EIGHTH_NOTE_DOTTED), 0, NULL);
 						jpopupmenu_additem		(noteValueDottedPopup, 317, "Sixteenth", 
 												NULL, (value == PIZ_SIXTEENTH_NOTE_DOTTED), 0, NULL);
 																		
@@ -4832,19 +4832,19 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 		case 11		:	pizSequenceSetGrid	(x->user, PIZ_WHOLE_NOTE);					 break;
 		case 12		:	pizSequenceSetGrid	(x->user, PIZ_HALF_NOTE);					 break;
 		case 13		:	pizSequenceSetGrid	(x->user, PIZ_QUARTER_NOTE);				 break;
-		case 14		:	pizSequenceSetGrid	(x->user, PIZ_EIGHT_NOTE);					 break;
+		case 14		:	pizSequenceSetGrid	(x->user, PIZ_EIGHTH_NOTE);					 break;
 		case 15		:	pizSequenceSetGrid	(x->user, PIZ_SIXTEENTH_NOTE);				 break;
 		case 16		:	pizSequenceSetGrid	(x->user, PIZ_THIRTY_SECOND_NOTE);			 break;
 		case 17		:	pizSequenceSetGrid	(x->user, PIZ_WHOLE_NOTE_TRIPLET);			 break;
 		case 18		:	pizSequenceSetGrid	(x->user, PIZ_HALF_NOTE_TRIPLET);			 break;
 		case 19		:	pizSequenceSetGrid	(x->user, PIZ_QUARTER_NOTE_TRIPLET);		 break;
-		case 20		:	pizSequenceSetGrid	(x->user, PIZ_EIGHT_NOTE_TRIPLET);			 break;
+		case 20		:	pizSequenceSetGrid	(x->user, PIZ_EIGHTH_NOTE_TRIPLET);			 break;
 		case 21		:	pizSequenceSetGrid	(x->user, PIZ_SIXTEENTH_NOTE_TRIPLET);		 break;
 		case 22		:	pizSequenceSetGrid	(x->user, PIZ_THIRTY_SECOND_NOTE_TRIPLET);	 break;
 		case 23		:	pizSequenceSetGrid	(x->user, PIZ_WHOLE_NOTE_DOTTED);			 break;
 		case 24		:	pizSequenceSetGrid	(x->user, PIZ_HALF_NOTE_DOTTED);			 break;
 		case 25		:	pizSequenceSetGrid	(x->user, PIZ_QUARTER_NOTE_DOTTED);			 break;
-		case 26		:	pizSequenceSetGrid	(x->user, PIZ_EIGHT_NOTE_DOTTED);			 break;
+		case 26		:	pizSequenceSetGrid	(x->user, PIZ_EIGHTH_NOTE_DOTTED);			 break;
 		case 27		:	pizSequenceSetGrid	(x->user, PIZ_SIXTEENTH_NOTE_DOTTED);		 break;
 		case 50		:	tralala_setSelectedNotesVelocity (x, 0);	x->flags |= FLAG_HAVE_CHANGED; break;
 		case 51		:	tralala_setSelectedNotesVelocity (x, 8);	x->flags |= FLAG_HAVE_CHANGED; break;
@@ -4887,19 +4887,19 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 		case 301	:	pizSequenceSetNoteValue	(x->user, PIZ_WHOLE_NOTE);					break;
 		case 302	:	pizSequenceSetNoteValue	(x->user, PIZ_HALF_NOTE);					break;
 		case 303	:	pizSequenceSetNoteValue	(x->user, PIZ_QUARTER_NOTE);				break;
-		case 304	:	pizSequenceSetNoteValue	(x->user, PIZ_EIGHT_NOTE);					break;
+		case 304	:	pizSequenceSetNoteValue	(x->user, PIZ_EIGHTH_NOTE);					break;
 		case 305	:	pizSequenceSetNoteValue	(x->user, PIZ_SIXTEENTH_NOTE);				break;
 		case 306	:	pizSequenceSetNoteValue	(x->user, PIZ_THIRTY_SECOND_NOTE);			break;
 		case 307	:	pizSequenceSetNoteValue	(x->user, PIZ_WHOLE_NOTE_TRIPLET);			break;
 		case 308	:	pizSequenceSetNoteValue	(x->user, PIZ_HALF_NOTE_TRIPLET);			break;
 		case 309	:	pizSequenceSetNoteValue	(x->user, PIZ_QUARTER_NOTE_TRIPLET);		break;
-		case 310	:	pizSequenceSetNoteValue	(x->user, PIZ_EIGHT_NOTE_TRIPLET);			break;
+		case 310	:	pizSequenceSetNoteValue	(x->user, PIZ_EIGHTH_NOTE_TRIPLET);			break;
 		case 311	:	pizSequenceSetNoteValue	(x->user, PIZ_SIXTEENTH_NOTE_TRIPLET);		break;
 		case 312	:	pizSequenceSetNoteValue	(x->user, PIZ_THIRTY_SECOND_NOTE_TRIPLET);	break;
 		case 313	:	pizSequenceSetNoteValue	(x->user, PIZ_WHOLE_NOTE_DOTTED);			break;
 		case 314	:	pizSequenceSetNoteValue	(x->user, PIZ_HALF_NOTE_DOTTED);			break;
 		case 315	:	pizSequenceSetNoteValue	(x->user, PIZ_QUARTER_NOTE_DOTTED);			break;
-		case 316	:	pizSequenceSetNoteValue	(x->user, PIZ_EIGHT_NOTE_DOTTED);			break;
+		case 316	:	pizSequenceSetNoteValue	(x->user, PIZ_EIGHTH_NOTE_DOTTED);			break;
 		case 317	:	pizSequenceSetNoteValue	(x->user, PIZ_SIXTEENTH_NOTE_DOTTED);		break;
 		case 501	:	object_attr_setlong (x, tll_sym_channel, 1); break;
 		case 502	:	object_attr_setlong (x, tll_sym_channel, 2); break;
@@ -5124,7 +5124,7 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
 					tralala_setStringWithLong (textDown, down, FORMAT_MODE_NOTENAME);
 					tralala_setStringWithLong (textUp, up, FORMAT_MODE_NOTENAME);
 					
-					if (grid == PIZ_QUARTER_NOTE || grid == PIZ_EIGHT_NOTE || grid == PIZ_SIXTEENTH_NOTE) 
+					if (grid == PIZ_QUARTER_NOTE || grid == PIZ_EIGHTH_NOTE || grid == PIZ_SIXTEENTH_NOTE) 
 						{
 							long temp = (end - start) / grid;
 							
@@ -5133,7 +5133,7 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
 									s = temp;
 								}
 							
-							if ((grid == PIZ_EIGHT_NOTE && s == 8) || (grid == PIZ_SIXTEENTH_NOTE && s == 16)) 
+							if ((grid == PIZ_EIGHTH_NOTE && s == 8) || (grid == PIZ_SIXTEENTH_NOTE && s == 16)) 
 								{
 									s = 4;
 									grid = PIZ_QUARTER_NOTE;
@@ -5142,7 +5142,7 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
 							if ((grid == PIZ_QUARTER_NOTE && s == 6) || (grid == PIZ_SIXTEENTH_NOTE && s == 24))
 								{
 									s = 12;
-									grid = PIZ_EIGHT_NOTE;
+									grid = PIZ_EIGHTH_NOTE;
 								}
 						}
 					
@@ -5150,7 +5150,7 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
 						{
 							if (grid == PIZ_QUARTER_NOTE) {
 								snprintf (textCell, STRING_MAXIMUM_SIZE, "%s %s : %ld/4", textDown, textUp, s);
-							} else if (grid == PIZ_EIGHT_NOTE) {
+							} else if (grid == PIZ_EIGHTH_NOTE) {
 								snprintf (textCell, STRING_MAXIMUM_SIZE, "%s %s : %ld/8", textDown, textUp, s);
 							} else if (grid == PIZ_SIXTEENTH_NOTE) {
 								snprintf (textCell, STRING_MAXIMUM_SIZE, "%s %s : %ld/16", textDown, textUp, s);
@@ -5268,15 +5268,15 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
 				case PIZ_QUARTER_NOTE_DOTTED		:	background = tll_quarterDotted			[z]; break;
 				case PIZ_QUARTER_NOTE				:	background = tll_quarter				[z]; break;
 				case PIZ_QUARTER_NOTE_TRIPLET		:	background = tll_quarterTriplet			[z]; break;
-				case PIZ_EIGHT_NOTE_DOTTED			:	background = tll_eightDotted			[z]; break;
-				case PIZ_EIGHT_NOTE					:	background = tll_eight					[z]; break;
-				case PIZ_EIGHT_NOTE_TRIPLET			:	background = tll_eightTriplet			[z]; break;
+				case PIZ_EIGHTH_NOTE_DOTTED			:	background = tll_eighthDotted			[z]; break;
+				case PIZ_EIGHTH_NOTE				:	background = tll_eighth					[z]; break;
+				case PIZ_EIGHTH_NOTE_TRIPLET		:	background = tll_eighthTriplet			[z]; break;
 				case PIZ_SIXTEENTH_NOTE_DOTTED		:	background = tll_sixteenthDotted		[z]; break;
 				case PIZ_SIXTEENTH_NOTE				:	background = tll_sixteenth				[z]; break;
 				case PIZ_SIXTEENTH_NOTE_TRIPLET		:	background = tll_sixteenthTriplet		[z]; break;
 				case PIZ_THIRTY_SECOND_NOTE			:	background = tll_thirtySecond			[z]; break;
 				case PIZ_THIRTY_SECOND_NOTE_TRIPLET	:	background = tll_sixteenthTriplet		[z]; break;
-				case PIZ_SNAP_NONE					:	background = tll_eight					[z]; break;
+				case PIZ_SNAP_NONE					:	background = tll_eighth					[z]; break;
 			}
 				
 			imageWidth	= jgraphics_image_surface_get_width (background);

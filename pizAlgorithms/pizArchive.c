@@ -131,9 +131,9 @@ PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, PIZGrowingArray *a)
 					case PIZ_QUARTER_NOTE_DOTTED		: x->grid = PIZ_QUARTER_NOTE_DOTTED;		break;
 					case PIZ_QUARTER_NOTE				: x->grid = PIZ_QUARTER_NOTE;				break;
 					case PIZ_QUARTER_NOTE_TRIPLET		: x->grid = PIZ_QUARTER_NOTE_TRIPLET;		break;
-					case PIZ_EIGHT_NOTE_DOTTED			: x->grid = PIZ_EIGHT_NOTE_DOTTED;			break;
-					case PIZ_EIGHT_NOTE					: x->grid = PIZ_EIGHT_NOTE;					break;
-					case PIZ_EIGHT_NOTE_TRIPLET			: x->grid = PIZ_EIGHT_NOTE_TRIPLET;			break;	
+					case PIZ_EIGHTH_NOTE_DOTTED			: x->grid = PIZ_EIGHTH_NOTE_DOTTED;			break;
+					case PIZ_EIGHTH_NOTE				: x->grid = PIZ_EIGHTH_NOTE;				break;
+					case PIZ_EIGHTH_NOTE_TRIPLET		: x->grid = PIZ_EIGHTH_NOTE_TRIPLET;		break;	
 					case PIZ_SIXTEENTH_NOTE_DOTTED		: x->grid = PIZ_SIXTEENTH_NOTE_DOTTED;		break;
 					case PIZ_SIXTEENTH_NOTE				: x->grid = PIZ_SIXTEENTH_NOTE;				break;
 					case PIZ_SIXTEENTH_NOTE_TRIPLET		: x->grid = PIZ_SIXTEENTH_NOTE_TRIPLET;		break;
@@ -152,9 +152,9 @@ PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, PIZGrowingArray *a)
 					case PIZ_QUARTER_NOTE_DOTTED		: x->noteValue = PIZ_QUARTER_NOTE_DOTTED;		break;
 					case PIZ_QUARTER_NOTE				: x->noteValue = PIZ_QUARTER_NOTE;				break;
 					case PIZ_QUARTER_NOTE_TRIPLET		: x->noteValue = PIZ_QUARTER_NOTE_TRIPLET;		break;
-					case PIZ_EIGHT_NOTE_DOTTED			: x->noteValue = PIZ_EIGHT_NOTE_DOTTED;			break;
-					case PIZ_EIGHT_NOTE					: x->noteValue = PIZ_EIGHT_NOTE;				break;
-					case PIZ_EIGHT_NOTE_TRIPLET			: x->noteValue = PIZ_EIGHT_NOTE_TRIPLET;		break;	
+					case PIZ_EIGHTH_NOTE_DOTTED			: x->noteValue = PIZ_EIGHTH_NOTE_DOTTED;		break;
+					case PIZ_EIGHTH_NOTE				: x->noteValue = PIZ_EIGHTH_NOTE;				break;
+					case PIZ_EIGHTH_NOTE_TRIPLET		: x->noteValue = PIZ_EIGHTH_NOTE_TRIPLET;		break;	
 					case PIZ_SIXTEENTH_NOTE_DOTTED		: x->noteValue = PIZ_SIXTEENTH_NOTE_DOTTED;		break;
 					case PIZ_SIXTEENTH_NOTE				: x->noteValue = PIZ_SIXTEENTH_NOTE;			break;
 					case PIZ_SIXTEENTH_NOTE_TRIPLET		: x->noteValue = PIZ_SIXTEENTH_NOTE_TRIPLET;	break;

@@ -285,7 +285,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>217 195 571 506 0 0 1280 778 </string>
+								<string>233 225 571 506 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -422,8 +422,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96A37EFD14B8A9DC00008525</string>
-				<string>96A37EFE14B8A9DC00008525</string>
+				<string>96A37F4A14B8B43300008525</string>
+				<string>96A37F4B14B8B43300008525</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -460,7 +460,7 @@
 		<string>/Users/jeantoto/Dev/Grenadine/tralala/tralala.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>217 195 571 506 0 0 1280 778 </string>
+	<string>233 225 571 506 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -674,7 +674,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96A37EFF14B8A9DC00008525</string>
+				<string>96A37F4C14B8B43300008525</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
