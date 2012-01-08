@@ -464,14 +464,13 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 	long				boxflags;
 	
 	/*post ("%ld", calcoffset (t_tralala, channel));
-	post ("%ld", calcoffset (t_tralala, algorithmMutex));
-	post ("%ld", calcoffset (t_tralala, scaleKey));
+	post ("%ld", calcoffset (t_tralala, paintMutex));
+	post ("%ld", calcoffset (t_tralala, popupFontName));
 	post ("%ld", calcoffset (t_tralala, patternCustom));
-	post ("%ld", calcoffset (t_tralala, patternSize));
-	post ("%ld", calcoffset (t_tralala, unselectedNotesCopy));
-	post ("%ld", calcoffset (t_tralala, origin));
-	post ("%ld", calcoffset (t_tralala, textPosition));
-	post ("%ld", calcoffset (t_tralala, textIsSelected));*/
+	post ("%ld", calcoffset (t_tralala, mousePitchValue));
+	post ("%ld", calcoffset (t_tralala, playedNotesCopy));
+	post ("%ld", calcoffset (t_tralala, previous));
+	post ("%ld", calcoffset (t_tralala, textLayers));*/
 	
 	if (d = object_dictionaryarg (argc, argv))
 		{

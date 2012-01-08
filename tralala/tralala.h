@@ -66,7 +66,7 @@
 
 #define LEARN_QUEUE_SIZE					256
 #define STRING_MAXIMUM_SIZE					75
-#define PATTERN_MAXIMUM_SIZE				16
+#define PATTERN_MAXIMUM_SIZE				26
 #define NOVEMBER_MAXIMUM_ITERATE			10
 #define JULIET_MAXIMUM_ITERATE				10
 
@@ -332,8 +332,6 @@ typedef struct _tralala {
 	long				slotIndex;  
 	long				learnCycle;
 	long				learnThreshold;
-	t_int32_atomic		popupLock;
-	t_int32_atomic		paintLock;
 	t_uint32_atomic		dirtyLayer;
 	PIZLinklist			*slots;
 	PIZLinklist			*undo;
@@ -343,9 +341,9 @@ typedef struct _tralala {
 	PIZFactorOracle		*factorOracle;		
 	PIZGaloisLattice	*galoisLattice;
 	PIZFiniteState		*finiteState; 
-	t_systhread_mutex   methodMutex;									//
+	t_systhread_mutex   methodMutex;	
 	t_systhread_mutex   algorithmMutex;
-	t_systhread_mutex   learnMutex;
+	t_systhread_mutex   learnMutex;										//
 	t_systhread_mutex   paintMutex;
 	void				*paintClock;
 	void				*learnClock;
@@ -359,15 +357,20 @@ typedef struct _tralala {
 	void				*middleLeftOutlet;
 	void				*middleRightOutlet;
 	void				*rightOutlet;
-	t_symbol			*patternCell;									//
+	t_symbol			*patternCell;									
 	t_symbol			*scaleKey;
-	t_symbol			*scaleType;
-	PIZScaleKey			key;
-	PIZScaleType		type;
+	t_symbol			*scaleType;										//
+	t_symbol			*popupFontName;
+	double				popupFontSize;
+	long				popupFontFace;
 	long				scaleCustom		[PIZ_SEQUENCE_SCALE_SIZE];		//
-	long				patternCustom	[PATTERN_MAXIMUM_SIZE];			//
-	PIZSnapValue		cell;
+	long				patternCustom	[PATTERN_MAXIMUM_SIZE];	
 	long				patternSize;
+	PIZSnapValue		cell;
+	PIZScaleKey			key;				
+	PIZScaleType		type;
+	t_int32_atomic		popupLock;
+	t_int32_atomic		paintLock;										//
 	long				mousePitchValue;
 	long				mouseVelocityValue;
 	long				zoomMode;
@@ -377,31 +380,28 @@ typedef struct _tralala {
 	long				hitTest;			
 	long				saveSlotsWithPatcher;
 	long				saveChannelWithPatcher;
-	long				saveValuesWithPatcher;				
+	long				saveValuesWithPatcher;	
 	PIZGrowingArray		*unselectedNotes;
 	PIZGrowingArray		*selectedNotes;
 	PIZGrowingArray		*playedNotes;
-	PIZGrowingArray		*zone;											//
+	PIZGrowingArray		*zone;											
 	PIZGrowingArray		*unselectedNotesCopy;
-	PIZGrowingArray		*selectedNotesCopy;
+	PIZGrowingArray		*selectedNotesCopy;								//
 	PIZGrowingArray		*playedNotesCopy;
 	PIZGrowingArray		*zoneCopy;
 	PIZGrowingArray		*originNotes;
 	PIZCoordinates		originCoordinates;					
 	PIZCoordinates		coordinates;	
-	t_jmouse_cursortype	cursorType;
-	double				popupFontSize;				
 	double				windowOffsetX;
-	double				windowOffsetY;									//
+	double				windowOffsetY;
+	t_jmouse_cursortype	cursorType;
 	t_pt				origin;								
-	t_pt				previous;										
+	t_pt				previous;										//
 	t_pt				point;
-	t_jtextlayout		*textLayers		[TEXT_CELL_COUNT];				//
-	double				textPosition	[TEXT_CELL_COUNT];
-	double				textWidth		[TEXT_CELL_COUNT];				////
+	double				textPosition	[TEXT_CELL_COUNT];				////
+	double				textWidth		[TEXT_CELL_COUNT];
 	bool				textIsSelected	[TEXT_CELL_COUNT];
-	long				popupFontFace;
-	t_symbol			*popupFontName;
+	t_jtextlayout		*textLayers		[TEXT_CELL_COUNT];				
 	t_jrgba				backgroundColor;					
 	t_jrgba				unfocusedBorderColor;		
 	t_jrgba				unfocusedTextColor;					
