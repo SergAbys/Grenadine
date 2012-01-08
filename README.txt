@@ -1,3 +1,4 @@
+This is a project for generative music with agents in maxMSP environment ; Pure Data port is planned. 
 
 This is a project for generative music with agents in maxMSP environment ; Pure Data port is planned. 
 
@@ -9,3 +10,4 @@ max/MSP algorithms wrappers.
 
 * Tralala :
 max/MSP GUI prototype wrapper.
+
