@@ -1,4 +1,0 @@
-// Paths
-C74SUPPORT = $(SRCROOT)/../../c74support
-HEADER_SEARCH_PATHS = /Developer/Headers/FlatCarbon "$(C74SUPPORT)/max-includes" "$(C74SUPPORT)/msp-includes"
-

@@ -67,7 +67,6 @@
 		9699D9DF1413A0F900F86BD8 /* pizMarkovModel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pizMarkovModel.c; sourceTree = "<group>"; };
 		969BA88414AF6780006B9729 /* pizArrayPool.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizArrayPool.c; sourceTree = "<group>"; };
 		969BA88514AF6780006B9729 /* pizArrayPool.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizArrayPool.h; sourceTree = "<group>"; };
-		969C24CF14AA126200748CF7 /* pizAlgorithms.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; name = pizAlgorithms.xcconfig; path = ../pizAlgorithms.xcconfig; sourceTree = "<group>"; };
 		96A16F77148CF839008268A6 /* pizTransform.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizTransform.c; sourceTree = "<group>"; };
 		96A16F78148CF839008268A6 /* pizSequence.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizSequence.c; sourceTree = "<group>"; };
 		96A16F7B148CF848008268A6 /* pizInterface.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizInterface.c; sourceTree = "<group>"; };
@@ -118,7 +117,6 @@
 		08FB7794FE84155DC02AAC07 /* PizAlgorithms */ = {
 			isa = PBXGroup;
 			children = (
-				969C24CF14AA126200748CF7 /* pizAlgorithms.xcconfig */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6A0FF2B0290797F04C91782 /* Documentation */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
@@ -341,7 +339,6 @@
 		};
 		1DEB91ED08733DB70010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 969C24CF14AA126200748CF7 /* pizAlgorithms.xcconfig */;
 			buildSettings = {
 				ARCHS = (
 					ppc,
