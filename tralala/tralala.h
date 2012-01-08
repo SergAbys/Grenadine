@@ -8,7 +8,7 @@
  */
 
 /*
- *	Last modified : 07/01/12.
+ *	Last modified : 08/01/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -366,6 +366,7 @@ typedef struct _tralala {
 	PIZScaleType		type;
 	long				scaleCustom		[PIZ_SEQUENCE_SCALE_SIZE];		//
 	long				patternCustom	[PATTERN_MAXIMUM_SIZE];			//
+	PIZSnapValue		cell;
 	long				patternSize;
 	long				mousePitchValue;
 	long				mouseVelocityValue;
@@ -373,8 +374,7 @@ typedef struct _tralala {
 	long				sequenceMode;
 	long				textMode;
 	long				viewText;
-	long				hitTest;
-	long				popupFontFace;			
+	long				hitTest;			
 	long				saveSlotsWithPatcher;
 	long				saveChannelWithPatcher;
 	long				saveValuesWithPatcher;				
@@ -400,6 +400,7 @@ typedef struct _tralala {
 	double				textPosition	[TEXT_CELL_COUNT];
 	double				textWidth		[TEXT_CELL_COUNT];				////
 	bool				textIsSelected	[TEXT_CELL_COUNT];
+	long				popupFontFace;
 	t_symbol			*popupFontName;
 	t_jrgba				backgroundColor;					
 	t_jrgba				unfocusedBorderColor;		

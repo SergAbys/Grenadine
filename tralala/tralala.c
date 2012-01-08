@@ -574,6 +574,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 							x->cursorType			= JMOUSE_CURSOR_ARROW;
 							x->learnCycle			= PIZ_ALGORITHM_NONE;
 							x->learnThreshold		= LEARN_THRESHOLD_MINIMUM;
+							x->cell					= PIZ_SNAP_NONE;
 							x->dirtyLayer			= (DIRTY_ZONE | DIRTY_NOTES | DIRTY_GRID | DIRTY_CHANGE);
 							
 							pizSequenceSetGrid (x->user, PIZ_EIGHTH_NOTE);
@@ -1118,41 +1119,41 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
 					if (temp != x->patternCell)
 						{
 							if (temp == tll_sym_none) {
-								pizSequenceSetGrid (x->live, PIZ_SNAP_NONE);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_SNAP_NONE);
 							} else if (temp == tll_sym_whole) {
-								pizSequenceSetGrid (x->live, PIZ_WHOLE_NOTE);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_WHOLE_NOTE);
 							} else if (temp == tll_sym_half) {
-								pizSequenceSetGrid (x->live, PIZ_HALF_NOTE);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_HALF_NOTE);
 							} else if (temp == tll_sym_quarter) {
-								pizSequenceSetGrid (x->live, PIZ_QUARTER_NOTE);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_QUARTER_NOTE);
 							} else if (temp == tll_sym_eighth) {
-								pizSequenceSetGrid (x->live, PIZ_EIGHTH_NOTE);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_EIGHTH_NOTE);
 							} else if (temp == tll_sym_sixteenth) {
-								pizSequenceSetGrid (x->live, PIZ_SIXTEENTH_NOTE);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_SIXTEENTH_NOTE);
 							} else if (temp == tll_sym_thirtySecond) {
-								pizSequenceSetGrid (x->live, PIZ_THIRTY_SECOND_NOTE);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_THIRTY_SECOND_NOTE);
 							} else if (temp == tll_sym_wholeTriplet) {
-								pizSequenceSetGrid (x->live, PIZ_WHOLE_NOTE_TRIPLET);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_WHOLE_NOTE_TRIPLET);
 							} else if (temp == tll_sym_halfTriplet) {
-								pizSequenceSetGrid (x->live, PIZ_HALF_NOTE_TRIPLET);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_HALF_NOTE_TRIPLET);
 							} else if (temp == tll_sym_quarterTriplet) {
-								pizSequenceSetGrid (x->live, PIZ_QUARTER_NOTE_TRIPLET);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_QUARTER_NOTE_TRIPLET);
 							} else if (temp == tll_sym_eighthTriplet) {
-								pizSequenceSetGrid (x->live, PIZ_EIGHTH_NOTE_TRIPLET);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_EIGHTH_NOTE_TRIPLET);
 							} else if (temp == tll_sym_sixteenthTriplet) {
-								pizSequenceSetGrid (x->live, PIZ_SIXTEENTH_NOTE_TRIPLET);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_SIXTEENTH_NOTE_TRIPLET);
 							} else if (temp == tll_sym_thirtySecondTriplet) {
-								pizSequenceSetGrid (x->live, PIZ_THIRTY_SECOND_NOTE_TRIPLET);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_THIRTY_SECOND_NOTE_TRIPLET);
 							} else if (temp == tll_sym_wholeDotted) {
-								pizSequenceSetGrid (x->live, PIZ_WHOLE_NOTE_DOTTED);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_WHOLE_NOTE_DOTTED);
 							} else if (temp == tll_sym_halfDotted) {
-								pizSequenceSetGrid (x->live, PIZ_HALF_NOTE_DOTTED);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_HALF_NOTE_DOTTED);
 							} else if (temp == tll_sym_quarterDotted) {
-								pizSequenceSetGrid (x->live, PIZ_QUARTER_NOTE_DOTTED);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_QUARTER_NOTE_DOTTED);
 							} else if (temp == tll_sym_eighthDotted) {
-								pizSequenceSetGrid (x->live, PIZ_EIGHTH_NOTE_DOTTED);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_EIGHTH_NOTE_DOTTED);
 							} else if (temp == tll_sym_sixteenthDotted) {
-								pizSequenceSetGrid (x->live, PIZ_SIXTEENTH_NOTE_DOTTED);
+								pizSequenceSetGrid (x->live, x->cell = PIZ_SIXTEENTH_NOTE_DOTTED);
 							} else { err = true; }
 							
 							if (!err)
@@ -5272,7 +5273,7 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
 			PIZSnapValue	grid = PIZ_SNAP_NONE;
 			
 			if (LIVE) {
-					grid = pizSequenceGrid (x->live);
+					grid = x->cell;
 				} 
 			
 			if (grid == PIZ_SNAP_NONE) {
