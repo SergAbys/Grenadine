@@ -8,7 +8,7 @@
  */
 
 /*
- *	Last modified : 07/01/12.
+ *	Last modified : 08/01/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -2943,9 +2943,13 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 					DIRTYUNDO
 				} 
 		}
-	else if (USER && VIEWTEXT && !RIGHT && !CAPS && (tralala_hitTextWithPoint (x, patcherview, pt)))
+	else if (USER && VIEWTEXT && !RIGHT && !CAPS && (x->hitTest = tralala_hitTextWithPoint (x, patcherview, pt)))
 		{
 			DIRTYLAYER_SET (DIRTY_REFRESH);
+		}
+	else if (x->hitTest & HIT_LOCK)
+		{
+			;
 		}
 	else if (USER && !CTRL && !RIGHT && CAPS && (x->hitTest = tralala_hitZoneWithPoint (x, pt)))
 		{
@@ -3057,6 +3061,10 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 					}
 					
 					DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
+				}
+			else if (x->hitTest & HIT_LOCK)
+				{
+					;
 				}
 			else if ((x->hitTest == HIT_NOTE) && !err)
 				{
@@ -4172,44 +4180,58 @@ long tralala_hitZoneWithPoint (t_tralala *x, t_pt pt)
 	f = ((pt.y > (zoneRect.y + (HIT_ZONE_RANGE / 2.))) 
 			&& (pt.y < (zoneRect.y + zoneRect.height - (HIT_ZONE_RANGE / 2.))));
 						
-	hitTest |= ((a && f)<<1); 
-	hitTest |= ((b && f)<<2); 
-	hitTest |= ((d && c)<<3); 
-	hitTest |= ((e && c)<<4);  
-	hitTest |= ((c && f)<<5);
+	if (a && f) {
+			hitTest |= HIT_START;
+		}
+	if (b && f) {
+			hitTest |= HIT_END;
+		}
+	if (d && c) {
+			hitTest |= HIT_DOWN;
+		}
+	if (e && c) {
+			hitTest |= HIT_UP;
+		}
+	if (c && f) {
+			hitTest |= HIT_ZONE;
+		}
 	
 	return hitTest;
 }
 
-bool tralala_hitTextWithPoint (t_tralala *x, t_object *patcherview, t_pt pt)
+long tralala_hitTextWithPoint (t_tralala *x, t_object *patcherview, t_pt pt)
 {
-	bool isHit = false;
-	
-	if (pizSequenceHasMarkedNote (x->user))
-		{
-			long	i, numlines;
-			double	textWidth, textHeight, fontSize, h1, h2; 
-			t_rect	rect;
+	long	isHit = HIT_NOTHING;
+	long	i, numlines;
+	double	textWidth, textHeight, fontSize, h1, h2; 
+	t_rect	rect;
 			
-			jbox_get_rect_for_view ((t_object *)x, patcherview, &rect);
-			fontSize = jbox_get_fontsize ((t_object *)x);
-			jtextlayout_measure (x->textLayers[0], 0, -1, 1, &textWidth, &textHeight, &numlines);
+	jbox_get_rect_for_view ((t_object *)x, patcherview, &rect);
+	fontSize = jbox_get_fontsize ((t_object *)x);
+	jtextlayout_measure (x->textLayers[0], 0, -1, 1, &textWidth, &textHeight, &numlines);
 
-			h1 = rect.height - (TEXT_CELL_SPACE + fontSize);
-			h2 = h1 + textHeight;
-			
-			for (i = 0; i < TEXT_CELL_COUNT; i++)
-				{
-					if ((pt.y > h1) && (pt.y < h2)) {
-						if ((pt.x > x->textPosition[i]) && (pt.x < (x->textPosition[i] + x->textWidth[i]))) {
-							tralala_unselectAllText (x);
-							x->textIsSelected[i] = true;
-							isHit = true;
-						}
-					}
-				}
-		}
+	h1 = rect.height - (TEXT_CELL_SPACE + fontSize);
+	h2 = h1 + textHeight;
 	
+	if ((pt.y > h1) && (pt.y < h2)) {
+		if (pizSequenceHasMarkedNote (x->user)) {
+			if ((pt.x > 0) && (pt.x < (x->textPosition[TEXT_CELL_COUNT - 1] 
+				+ x->textWidth[TEXT_CELL_COUNT - 1] + TEXT_CELL_SPACE))) {
+					isHit = HIT_LOCK;
+				}
+		
+			for (i = 0; i < TEXT_CELL_COUNT; i++) {
+				if ((pt.x > x->textPosition[i]) && (pt.x < (x->textPosition[i] + x->textWidth[i]))) {
+						tralala_unselectAllText (x);
+						x->textIsSelected[i] = true;
+						isHit = HIT_TEXT;
+					}
+			}
+		} else if ((pt.x > x->textPosition[0]) && (pt.x < (x->textPosition[0] + x->textWidth[0]))) {
+			isHit = HIT_LOCK;
+		}
+	}
+
 	return isHit;
 }
 
@@ -4973,7 +4995,7 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
 	t_symbol						*fontName = NULL;
 	t_rect							rect;
 	long							fontSlant, fontWeight, numlines;
-	double							fontSize, textHeight, textWidth;
+	double							fontSize, textHeight;
 	t_atom							color[4];
 	char							textCell[STRING_MAXIMUM_SIZE];
 	t_jrgba							backgroundTextColor;
@@ -5202,9 +5224,10 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
 			(rect.height - (fontSize + TEXT_CELL_SPACE)), (rect.width - k), fontSize, 
 			(t_jgraphics_text_justification) (JGRAPHICS_TEXT_JUSTIFICATION_LEFT), flags);
 		
-		jtextlayout_measure (x->textLayers[0], 0, -1, 1, &textWidth, &textHeight, &numlines);
+		jtextlayout_measure (x->textLayers[0], 0, -1, 1, &x->textWidth[0], &textHeight, &numlines);
 		
-		k += textWidth + TEXT_CELL_SPACE;
+		x->textPosition[0] = TEXT_CELL_SPACE;
+		k += x->textWidth[0] + TEXT_CELL_SPACE;
 		
 		if (x->flags & FLAG_FOCUS)
 			{
@@ -5215,10 +5238,8 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
 				jtextlayout_settextcolor (x->textLayers[0], &x->unfocusedTextColor);
 			}
 		
-		jgraphics_set_source_jrgba (g, &backgroundTextColor);
-
-		jgraphics_rectangle_fill_fast (g, 0., (rect.height - (fontSize + TEXT_CELL_SPACE)), 
-			k, textHeight);
+		jgraphics_set_source_jrgba		(g, &backgroundTextColor);
+		jgraphics_rectangle_fill_fast	(g, 0., (rect.height - (fontSize + TEXT_CELL_SPACE)), k, textHeight);
 
 		jtextlayout_draw (x->textLayers[0], g);
 	}

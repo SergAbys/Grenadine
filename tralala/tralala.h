@@ -132,13 +132,18 @@
 #define MENU_SEQUENCE						0
 #define MENU_NOTE							1
 
-#define HIT_NOTHING							0
-#define	HIT_NOTE							1
-#define	HIT_START							2
-#define	HIT_END								4
-#define	HIT_DOWN							8
-#define	HIT_UP								16
-#define HIT_ZONE							32
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define HIT_NOTHING							(0L)
+#define	HIT_NOTE							(1<<0)
+#define	HIT_START							(1<<1)
+#define	HIT_END								(1<<2)
+#define	HIT_DOWN							(1<<3)
+#define	HIT_UP								(1<<4)
+#define HIT_ZONE							(1<<5)
+#define HIT_TEXT							(1<<6)
+#define HIT_LOCK							(1<<7)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -596,7 +601,7 @@ PIZ_LOCAL void	tralala_setSelectedNotesVelocity			(t_tralala *x, long velocity);
 PIZ_LOCAL void	tralala_setSelectedNotesChannel				(t_tralala *x, long channel);
 
 PIZ_LOCAL long  tralala_hitZoneWithPoint					(t_tralala *x, t_pt pt);
-PIZ_LOCAL bool	tralala_hitTextWithPoint					(t_tralala *x, t_object *patcherview, t_pt pt);
+PIZ_LOCAL long	tralala_hitTextWithPoint					(t_tralala *x, t_object *patcherview, t_pt pt);
 PIZ_LOCAL bool	tralala_hitNotesByRunIndex					(t_tralala *x);
 
 PIZ_LOCAL bool	tralala_setCursorType						(t_tralala *x, t_object *patcherview, 
