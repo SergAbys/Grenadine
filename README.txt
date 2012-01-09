@@ -1,13 +1,15 @@
-This is a project for generative music with agents in maxMSP environment.
+This is a project for generative music with agents,
+in maxMSP environment (Pure Data port is planned). 
+
+Layout of the Grenadine repository :
 
 * pizAlgorithms : 
-  static library in C with machine-learning algorithms, data 
+  static library in C with, machine-learning, data 
   structures, and everything for the Grenadine project.
 
 * Ufo :
-  max/MSP algorithms wrappers.
+  max/MSP wrappers for algorithms.
 
 * Tralala :
-  max/MSP prototype GUI wrapper.
+  max/MSP GUI sequencer.
 
-Pure Data port is planned. 
