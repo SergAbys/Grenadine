@@ -34,7 +34,7 @@
  */
  
 /*
- *	Last modified : 03/01/12.
+ *	Last modified : 09/01/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -252,7 +252,7 @@ bool pizSequenceMoveTempZoneWithDelta (PIZSequence *x, long pitch, long position
 	
 	PIZLOCK
 	
-	tempStart	= CLAMP (pizSequenceSnapFloorPosition (x, interface_originStart + position), 
+	tempStart	= CLAMP (pizSequenceSnapRoundPosition (x, interface_originStart + position), 
 						0, (PIZ_SEQUENCE_TIMELINE_SIZE - interface_originWidth));
 	tempDown	= CLAMP (interface_originDown + pitch, 
 						0, (PIZ_SEQUENCE_MIDI_NOTE - interface_originHeight));
