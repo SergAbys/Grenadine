@@ -1,16 +1,11 @@
+/**
+ * \file	pizGaloisLattice.h
+ * \details	Thanks : Robert Godin, Rokia Missaoui, Hassan Alaoui.
+ * \author	Jean Sapristi
+ * \date	15 janvier 2012
+ */
+
 /*
- *  pizGaloisLattice.h
- *
- *	(Treillis de Galois / Diagramme de Hasse).
- *
- *	Variation autour de : "Incremental concept formation algorithms based 
- *	on Galois (concept) lattices", par Robert Godin, Rokia Missaoui, Hassan Alaoui.
- *
- *  Created : 02/06/11.
- *  Copyright 2011 : Tom Javel & Jean Sapristi.
- *
- *  nicolas.danet@free.fr
- *
  *	This software is governed by the CeCILL-C license under French law and
  *	abiding by the rules of distribution of free software. You can use, 
  *	modify and/or redistribute the software under the terms of the CeCILL-C
@@ -38,10 +33,6 @@
  *	knowledge of the CeCILL-C license and that you accept its terms.
  */
  
-/*
- *	Last modified : 17/12/11.
- */
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 

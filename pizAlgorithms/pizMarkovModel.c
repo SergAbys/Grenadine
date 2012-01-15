@@ -1,11 +1,10 @@
 /*
- *  pizMarkovModel.c
- *
- *  Created : 04/09/11.
- *  Copyright 2011 : Tom Javel & Jean Sapristi.
- *
- *  nicolas.danet@free.fr
- *
+ * \file	pizMarkovModel.c
+ * \author	Jean Sapristi
+ * \date	15 janvier 2012
+ */
+ 
+/*
  *	This software is governed by the CeCILL-C license under French law and
  *	abiding by the rules of distribution of free software. You can use, 
  *	modify and/or redistribute the software under the terms of the CeCILL-C
@@ -33,10 +32,6 @@
  *	knowledge of the CeCILL-C license and that you accept its terms.
  */
  
-/*
- *	Last modified : 29/12/11.
- */
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 

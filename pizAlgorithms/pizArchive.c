@@ -1,11 +1,10 @@
 /*
- *  pizArchive.c
- *
- *  Created : 03/01/12.
- *  Copyright 2012 : Tom Javel & Jean Sapristi.
- *
- *  nicolas.danet@free.fr
- *
+ * \file	pizArchive.c
+ * \author	Jean Sapristi
+ * \date	15 janvier 2012
+ */
+ 
+/*
  *	This software is governed by the CeCILL-C license under French law and
  *	abiding by the rules of distribution of free software. You can use, 
  *	modify and/or redistribute the software under the terms of the CeCILL-C
@@ -31,10 +30,6 @@
  *	
  *	The fact that you are presently reading this means that you have had
  *	knowledge of the CeCILL-C license and that you accept its terms.
- */
- 
-/*
- *	Last modified : 07/01/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------

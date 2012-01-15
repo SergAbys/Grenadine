@@ -1,9 +1,10 @@
 /*
- *  pizKohonenMap.c
- *
- *  Created : 27/08/11.
- *  Copyright 2011 : Tom Javel & Jean Sapristi.
- *
+ * \file	pizKohonenMap.c
+ * \author	Jean Sapristi
+ * \date	15 janvier 2012
+ */
+ 
+/*
  *  nicolas.danet@free.fr
  *
  *	This software is governed by the CeCILL-C license under French law and
@@ -31,10 +32,6 @@
  *	
  *	The fact that you are presently reading this means that you have had
  *	knowledge of the CeCILL-C license and that you accept its terms.
- */
- 
-/*
- *	Last modified : 29/12/11.
  */
 
 // -------------------------------------------------------------------------------------------------------------
