@@ -1,7 +1,7 @@
 /*
  * \file	pizTransform.c
  * \author	Jean Sapristi
- * \date	15 janvier 2012
+ * \date	21 janvier 2012
  */
  
 /*
@@ -122,7 +122,7 @@ bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm flag, void *algor
 							
 							if (h < x->chance) 
 								{	
-									note->midi[PIZ_PITCH] = x->values1[k];
+									note->data[PIZ_PITCH] = x->values1[k];
 									k ++;
 									
 									haveChanged = true;
@@ -173,11 +173,11 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
 							pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
 							
 							if (scale) {
-								offset = pizGrowingArrayValueAtIndex (x->scale, note->midi[PIZ_PITCH] % scale);
+								offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_PITCH] % scale);
 							}
 							
 							key = ((long)(note->position / (double)x->grid) * (PIZ_SEQUENCE_MIDI_NOTE + 1)) 
-								+ (note->midi[PIZ_PITCH] + offset);
+								+ (note->data[PIZ_PITCH] + offset);
 							
 							pizBoundedHashTableAdd (x->hashTable, key, (void *)note);
 							
@@ -210,13 +210,13 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
 							pizLinklistPtrAtIndex (x->timeline[p], q, (void **)&note);						
 							
 							if (scale) {
-								offset = pizGrowingArrayValueAtIndex (x->scale, note->midi[PIZ_PITCH] % scale);
+								offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_PITCH] % scale);
 							}
 							
-							pitch = note->midi[PIZ_PITCH] + offset;
+							pitch = note->data[PIZ_PITCH] + offset;
 							
 							hCenter = (((long)(note->position / (double)x->grid)) * (PIZ_SEQUENCE_MIDI_NOTE + 1))
-									+ (note->midi[PIZ_PITCH] + offset);
+									+ (note->data[PIZ_PITCH] + offset);
 							
 							err |= (note->position < x->start);
 							err |= (note->position >= x->end);
@@ -378,9 +378,9 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
 											= ((long)(hPat[j] / (double)(PIZ_SEQUENCE_MIDI_NOTE + 1))) * x->grid;
 										values[PIZ_SEQUENCE_PITCH] = hPat[j] % (PIZ_SEQUENCE_MIDI_NOTE + 1);
 											
-										values[PIZ_SEQUENCE_VELOCITY]		= noteToCopy->midi[PIZ_VELOCITY];
-										values[PIZ_SEQUENCE_DURATION]		= noteToCopy->midi[PIZ_DURATION];
-										values[PIZ_SEQUENCE_CHANNEL]		= noteToCopy->midi[PIZ_CHANNEL];
+										values[PIZ_SEQUENCE_VELOCITY]		= noteToCopy->data[PIZ_VELOCITY];
+										values[PIZ_SEQUENCE_DURATION]		= noteToCopy->data[PIZ_DURATION];
+										values[PIZ_SEQUENCE_CHANNEL]		= noteToCopy->data[PIZ_CHANNEL];
 										values[PIZ_SEQUENCE_IS_SELECTED]	= false;
 										values[PIZ_SEQUENCE_IS_MARKED]		= false;
 										
@@ -484,11 +484,11 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
 								
 								if (scale) {
 										offset = pizGrowingArrayValueAtIndex (x->scale, 
-											note->midi[PIZ_PITCH] % scale);
+											note->data[PIZ_PITCH] % scale);
 									}
 					
 								key = ((long)(note->position / (double)x->grid) * (PIZ_SEQUENCE_MIDI_NOTE + 1)) 
-									+ note->midi[PIZ_PITCH] + offset;
+									+ note->data[PIZ_PITCH] + offset;
 								
 								pizBoundedHashTableAdd (x->hashTable, key, (void *)note);
 								
@@ -548,10 +548,10 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
 						}
 						
 						if (scale) {
-							offset = pizGrowingArrayValueAtIndex (x->scale, note1->midi[PIZ_PITCH] % scale);
+							offset = pizGrowingArrayValueAtIndex (x->scale, note1->data[PIZ_PITCH] % scale);
 						}
 									
-						newKey = (newPosition * (PIZ_SEQUENCE_MIDI_NOTE + 1)) + note1->midi[PIZ_PITCH] + offset;
+						newKey = (newPosition * (PIZ_SEQUENCE_MIDI_NOTE + 1)) + note1->data[PIZ_PITCH] + offset;
 						
 						if (!pizBoundedHashTableContainsKey (x->hashTable, newKey))
 							{
@@ -560,10 +560,10 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
 								newPosition *= x->grid;
 								
 								values[PIZ_SEQUENCE_POSITION]		= newPosition;
-								values[PIZ_SEQUENCE_PITCH]			= note1->midi[PIZ_PITCH] + offset;
-								values[PIZ_SEQUENCE_VELOCITY]		= note1->midi[PIZ_VELOCITY];
-								values[PIZ_SEQUENCE_DURATION]		= note1->midi[PIZ_DURATION];
-								values[PIZ_SEQUENCE_CHANNEL]		= note1->midi[PIZ_CHANNEL];
+								values[PIZ_SEQUENCE_PITCH]			= note1->data[PIZ_PITCH] + offset;
+								values[PIZ_SEQUENCE_VELOCITY]		= note1->data[PIZ_VELOCITY];
+								values[PIZ_SEQUENCE_DURATION]		= note1->data[PIZ_DURATION];
+								values[PIZ_SEQUENCE_CHANNEL]		= note1->data[PIZ_CHANNEL];
 								values[PIZ_SEQUENCE_IS_SELECTED]	= false;
 								values[PIZ_SEQUENCE_IS_MARKED]		= false;
 
@@ -629,7 +629,7 @@ bool pizSequenceRotate (PIZSequence *x, PIZSelector selector, long shift)
 		}
 
 	for (i = 0; i < k; i++) {
-			x->values1[i] = x->notes1[(i + shift) % k]->midi[selector];
+			x->values1[i] = x->notes1[(i + shift) % k]->data[selector];
 		}
 				
 	pizSequenceLocalFillValues (x, selector, k, 0);
@@ -651,7 +651,7 @@ bool pizSequenceScramble (PIZSequence *x, PIZSelector selector)
 	k = pizSequenceLocalPickUpNotes (x);
 	
 	for (i = 0; i < k; i++) {
-			x->values1[i] = x->notes1[i]->midi[selector];
+			x->values1[i] = x->notes1[i]->data[selector];
 		}
 		
 	for (i = (k - 1); i > 0; i--) {
@@ -690,7 +690,7 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, long down)
 	if (selector == PIZ_PITCH) 
 		{
 			for (i = 0; i < k; i++) { 
-					long pitch = x->notes1[i]->midi[PIZ_PITCH];
+					long pitch = x->notes1[i]->data[PIZ_PITCH];
 									
 					if (scale) {
 							pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
@@ -702,7 +702,7 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, long down)
 	else 
 		{
 			for (i = 0; i < k; i++) { 
-					x->values1[x->notes1[i]->midi[selector]] ++; 
+					x->values1[x->notes1[i]->data[selector]] ++; 
 				}	
 		}
 		
@@ -713,7 +713,7 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, long down)
 	if (selector == PIZ_PITCH)
 		{
 			for (i = (k - 1); i >= 0; i--) {
-					long pitch = x->notes1[i]->midi[PIZ_PITCH];
+					long pitch = x->notes1[i]->data[PIZ_PITCH];
 									
 					if (scale) {
 							pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
@@ -726,13 +726,13 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, long down)
 	else 
 		{
 			for (i = (k - 1); i >= 0; i--) {	
-					x->notes2[x->values1[x->notes1[i]->midi[selector]] - 1] = x->notes1[i];
-					x->values1[x->notes1[i]->midi[selector]] --;
+					x->notes2[x->values1[x->notes1[i]->data[selector]] - 1] = x->notes1[i];
+					x->values1[x->notes1[i]->data[selector]] --;
 				}
 		}
 	
 	for (i = 0; i < k; i++) {
-			x->values1[i] = x->notes2[i]->midi[selector];
+			x->values1[i] = x->notes2[i]->data[selector];
 		}
 				
 	pizSequenceLocalFillValues (x, selector, k, down);
@@ -770,18 +770,18 @@ bool pizSequenceChange (PIZSequence *x, PIZSelector selector, long value)
 				
 			if (h < x->chance) {
 					switch (selector) {
-						case PIZ_PITCH	  : note->midi[PIZ_PITCH] = CLAMP (note->midi[PIZ_PITCH] + value, 
+						case PIZ_PITCH	  : note->data[PIZ_PITCH] = CLAMP (note->data[PIZ_PITCH] + value, 
 											0, PIZ_SEQUENCE_MIDI_NOTE); 
 											break;
-						case PIZ_VELOCITY :	note->midi[PIZ_VELOCITY] = CLAMP (note->midi[PIZ_VELOCITY] + value, 
+						case PIZ_VELOCITY :	note->data[PIZ_VELOCITY] = CLAMP (note->data[PIZ_VELOCITY] + value, 
 											0, PIZ_SEQUENCE_MIDI_VELOCITY); 
 											break;
 						case PIZ_DURATION :	max1 = PIZ_SEQUENCE_TIMELINE_SIZE - note->position;
 											max2 = MIN (max1, PIZ_SEQUENCE_MAXIMUM_DURATION);
-											note->midi[PIZ_DURATION] = CLAMP (note->midi[PIZ_DURATION] + value, 
+											note->data[PIZ_DURATION] = CLAMP (note->data[PIZ_DURATION] + value, 
 											1, max2); 
 											break;
-						case PIZ_CHANNEL  :	note->midi[PIZ_CHANNEL] = CLAMP (note->midi[PIZ_CHANNEL] + value, 
+						case PIZ_CHANNEL  :	note->data[PIZ_CHANNEL] = CLAMP (note->data[PIZ_CHANNEL] + value, 
 											0, PIZ_SEQUENCE_MIDI_CHANNEL); 
 											break;
 					}
@@ -823,15 +823,15 @@ bool pizSequenceSet (PIZSequence *x, PIZSelector selector, long value)
 					
 					if (h < x->chance) {
 						switch (selector) {
-							case PIZ_PITCH	  :	note->midi[PIZ_PITCH] = CLAMP (value, 0, PIZ_SEQUENCE_MIDI_NOTE); 
+							case PIZ_PITCH	  :	note->data[PIZ_PITCH] = CLAMP (value, 0, PIZ_SEQUENCE_MIDI_NOTE); 
 												break;
-							case PIZ_VELOCITY :	note->midi[PIZ_VELOCITY] = CLAMP (value, 0, 
+							case PIZ_VELOCITY :	note->data[PIZ_VELOCITY] = CLAMP (value, 0, 
 												PIZ_SEQUENCE_MIDI_VELOCITY); 
 												break;
 							case PIZ_DURATION :	max1 = PIZ_SEQUENCE_TIMELINE_SIZE - note->position;
 												max2 = MIN (max1, PIZ_SEQUENCE_MAXIMUM_DURATION);
-												note->midi[PIZ_DURATION] = CLAMP (value, 1, max2); break;
-							case PIZ_CHANNEL  :	note->midi[PIZ_CHANNEL] = CLAMP (value, 0, 
+												note->data[PIZ_DURATION] = CLAMP (value, 1, max2); break;
+							case PIZ_CHANNEL  :	note->data[PIZ_CHANNEL] = CLAMP (value, 0, 
 												PIZ_SEQUENCE_MIDI_CHANNEL); break;
 						}
 						
@@ -882,18 +882,18 @@ bool pizSequenceRandom (PIZSequence *x, PIZSelector selector, long minValue, lon
 						long value = minValue + (long)(range * (rand ( ) / (RAND_MAX + 1.0)));
 						
 						switch (selector) {
-						case PIZ_PITCH	  : note->midi[PIZ_PITCH] = CLAMP (note->midi[PIZ_PITCH] + value, 
+						case PIZ_PITCH	  : note->data[PIZ_PITCH] = CLAMP (note->data[PIZ_PITCH] + value, 
 											0, PIZ_SEQUENCE_MIDI_NOTE); 
 											break;
-						case PIZ_VELOCITY :	note->midi[PIZ_VELOCITY] = CLAMP (note->midi[PIZ_VELOCITY] + value, 
+						case PIZ_VELOCITY :	note->data[PIZ_VELOCITY] = CLAMP (note->data[PIZ_VELOCITY] + value, 
 											0, PIZ_SEQUENCE_MIDI_VELOCITY); 
 											break;
 						case PIZ_DURATION :	max1 = PIZ_SEQUENCE_TIMELINE_SIZE - note->position;
 											max2 = MIN (max1, PIZ_SEQUENCE_MAXIMUM_DURATION);
-											note->midi[PIZ_DURATION] = CLAMP (note->midi[PIZ_DURATION] + value, 
+											note->data[PIZ_DURATION] = CLAMP (note->data[PIZ_DURATION] + value, 
 											1, max2); 
 											break;
-						case PIZ_CHANNEL  :	note->midi[PIZ_CHANNEL] = CLAMP (note->midi[PIZ_CHANNEL] + value, 
+						case PIZ_CHANNEL  :	note->data[PIZ_CHANNEL] = CLAMP (note->data[PIZ_CHANNEL] + value, 
 											0, PIZ_SEQUENCE_MIDI_CHANNEL); 
 											break;
 						}
@@ -1012,7 +1012,7 @@ bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, PIZGrowingArray *a)
 											long pitch, tempPitch;
 											long offset = 0;
 											
-											pitch = note->midi[PIZ_PITCH];
+											pitch = note->data[PIZ_PITCH];
 											
 											if (scale) {
 												offset += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
@@ -1025,8 +1025,8 @@ bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, PIZGrowingArray *a)
 											
 											pitch += s[pitch % PIZ_SEQUENCE_SCALE_SIZE];
 									
-											if (pitch != (note->midi[PIZ_PITCH] + offset)) {
-												note->midi[PIZ_PITCH] = CLAMP (pitch, 0, PIZ_SEQUENCE_MIDI_NOTE);
+											if (pitch != (note->data[PIZ_PITCH] + offset)) {
+												note->data[PIZ_PITCH] = CLAMP (pitch, 0, PIZ_SEQUENCE_MIDI_NOTE);
 												haveChanged = true;
 											}
 										}
@@ -1080,23 +1080,23 @@ void pizSequenceLocalFillValues (PIZSequence *x, PIZSelector selector, long k, b
 	if (selector == PIZ_DURATION) {
 		if (!reverse) {
 			for (i = 0; i < k; i++) {
-					x->notes1[i]->midi[PIZ_DURATION] = MIN (x->values1[i], 
+					x->notes1[i]->data[PIZ_DURATION] = MIN (x->values1[i], 
 						PIZ_SEQUENCE_TIMELINE_SIZE - x->notes1[i]->position);
 				}
 		} else {
 			for (i = 0; i < k; i++) {
-					x->notes1[i]->midi[PIZ_DURATION] = MIN (x->values1[(k - 1) - i], 
+					x->notes1[i]->data[PIZ_DURATION] = MIN (x->values1[(k - 1) - i], 
 						PIZ_SEQUENCE_TIMELINE_SIZE - x->notes1[i]->position);
 				}
 		}
 	} else {
 		if (!reverse) {
 			for (i = 0; i < k; i++) {
-				x->notes1[i]->midi[selector] = x->values1[i];
+				x->notes1[i]->data[selector] = x->values1[i];
 			}
 		} else {
 			for (i = 0; i < k; i++) {
-				x->notes1[i]->midi[selector] = x->values1[(k - 1) - i];
+				x->notes1[i]->data[selector] = x->values1[(k - 1) - i];
 			}
 		}
 	}

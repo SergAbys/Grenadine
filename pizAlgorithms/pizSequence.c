@@ -1,7 +1,7 @@
 /*
  * \file	pizSequence.c
  * \author	Jean Sapristi
- * \date	15 janvier 2012
+ * \date	21 janvier 2012
  */
  
 /*
@@ -564,7 +564,7 @@ PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *a, PIZGrowing
 					
 					pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
 					
-					pitch = note->midi[PIZ_PITCH];
+					pitch = note->data[PIZ_PITCH];
 					
 					if (scale) {
 							pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
@@ -574,9 +574,9 @@ PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *a, PIZGrowing
 						{
 							err |= pizGrowingArrayAppend (b, note->position);
 							err |= pizGrowingArrayAppend (b, CLAMP (pitch, 0, PIZ_SEQUENCE_MIDI_NOTE));
-							err |= pizGrowingArrayAppend (b, note->midi[PIZ_VELOCITY]);
-							err |= pizGrowingArrayAppend (b, note->midi[PIZ_DURATION]);
-							err |= pizGrowingArrayAppend (b, note->midi[PIZ_CHANNEL]);
+							err |= pizGrowingArrayAppend (b, note->data[PIZ_VELOCITY]);
+							err |= pizGrowingArrayAppend (b, note->data[PIZ_DURATION]);
+							err |= pizGrowingArrayAppend (b, note->data[PIZ_CHANNEL]);
 							err |= pizGrowingArrayAppend (b, note->isSelected);
 							err |= pizGrowingArrayAppend (b, (note == x->markedNote));
 						}
@@ -584,9 +584,9 @@ PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *a, PIZGrowing
 						{
 							err |= pizGrowingArrayAppend (a, note->position);
 							err |= pizGrowingArrayAppend (a, CLAMP (pitch, 0, PIZ_SEQUENCE_MIDI_NOTE));
-							err |= pizGrowingArrayAppend (a, note->midi[PIZ_VELOCITY]);
-							err |= pizGrowingArrayAppend (a, note->midi[PIZ_DURATION]);
-							err |= pizGrowingArrayAppend (a, note->midi[PIZ_CHANNEL]);
+							err |= pizGrowingArrayAppend (a, note->data[PIZ_VELOCITY]);
+							err |= pizGrowingArrayAppend (a, note->data[PIZ_DURATION]);
+							err |= pizGrowingArrayAppend (a, note->data[PIZ_CHANNEL]);
 							err |= pizGrowingArrayAppend (a, note->isSelected);
 							err |= pizGrowingArrayAppend (a, (note == x->markedNote));
 						}
@@ -633,7 +633,7 @@ bool pizSequenceClean (PIZSequence *x, long value)
 					
 					pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
 					
-					pitch = note->midi[PIZ_PITCH];
+					pitch = note->data[PIZ_PITCH];
 							
 					if (scale) {
 							pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
@@ -724,10 +724,10 @@ bool pizSequenceApplyPattern (PIZSequence *x)
 							long	values[PIZ_SEQUENCE_NOTE_SIZE + 1];
 							
 							values[PIZ_SEQUENCE_POSITION]		= newPosition;
-							values[PIZ_SEQUENCE_PITCH]			= note->midi[PIZ_PITCH];
-							values[PIZ_SEQUENCE_VELOCITY]		= note->midi[PIZ_VELOCITY];
-							values[PIZ_SEQUENCE_DURATION]		= note->midi[PIZ_DURATION];
-							values[PIZ_SEQUENCE_CHANNEL]		= note->midi[PIZ_CHANNEL];
+							values[PIZ_SEQUENCE_PITCH]			= note->data[PIZ_PITCH];
+							values[PIZ_SEQUENCE_VELOCITY]		= note->data[PIZ_VELOCITY];
+							values[PIZ_SEQUENCE_DURATION]		= note->data[PIZ_DURATION];
+							values[PIZ_SEQUENCE_CHANNEL]		= note->data[PIZ_CHANNEL];
 							values[PIZ_SEQUENCE_IS_SELECTED]	= note->isSelected;
 							values[PIZ_SEQUENCE_IS_MARKED]		= false;
 							values[PIZ_SEQUENCE_NOTE_SIZE]		= note->originPosition;
@@ -784,11 +784,11 @@ bool pizSequenceApplyAmbitus (PIZSequence *x)
 					
 					pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
 					
-					tempPitch = pizSequenceLocalMovePitchToAmbitus (x, note->midi[PIZ_PITCH]);
+					tempPitch = pizSequenceLocalMovePitchToAmbitus (x, note->data[PIZ_PITCH]);
 					
-					if (note->midi[PIZ_PITCH] != tempPitch) {
+					if (note->data[PIZ_PITCH] != tempPitch) {
 							haveChanged = true;
-							note->midi[PIZ_PITCH] = tempPitch;
+							note->data[PIZ_PITCH] = tempPitch;
 						}
 						
 					note = nextNote;
@@ -830,7 +830,7 @@ void pizSequenceTransposeOctave (PIZSequence *x, bool down)
 				{
 					pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
 
-					note->midi[PIZ_PITCH] = CLAMP (note->midi[PIZ_PITCH] + step, 0, PIZ_SEQUENCE_MIDI_NOTE);
+					note->data[PIZ_PITCH] = CLAMP (note->data[PIZ_PITCH] + step, 0, PIZ_SEQUENCE_MIDI_NOTE);
 					
 					note = nextNote;
 				}
@@ -897,7 +897,7 @@ PIZError pizSequenceProceedStep	(PIZSequence *x, PIZGrowingArray *array)
 							
 							pizLinklistNextByPtr (x->timeline[x->index], (void *)note, (void **)&nextNote);
 							
-							pitch = note->midi[PIZ_PITCH];
+							pitch = note->data[PIZ_PITCH];
 							
 							if (scale) {
 									pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
@@ -905,8 +905,8 @@ PIZError pizSequenceProceedStep	(PIZSequence *x, PIZGrowingArray *array)
 							
 							if ((pitch >= x->down) && (pitch <= x->up))
 								{
-									long velocity		= note->midi[PIZ_VELOCITY];
-									long noteChannel	= note->midi[PIZ_CHANNEL];
+									long velocity		= note->data[PIZ_VELOCITY];
+									long noteChannel	= note->data[PIZ_CHANNEL];
 											
 									if (velocity) {
 											velocity += x->velocity;
@@ -920,7 +920,7 @@ PIZError pizSequenceProceedStep	(PIZSequence *x, PIZGrowingArray *array)
 											(array, CLAMP (pitch, 0, PIZ_SEQUENCE_MIDI_NOTE));
 									err |= pizGrowingArrayAppend 
 											(array, CLAMP (velocity, 0, PIZ_SEQUENCE_MIDI_VELOCITY));
-									err |= pizGrowingArrayAppend (array, note->midi[PIZ_DURATION]);
+									err |= pizGrowingArrayAppend (array, note->data[PIZ_DURATION]);
 									err |= pizGrowingArrayAppend (array, noteChannel);
 								}
 							
@@ -992,10 +992,10 @@ PIZNote *pizSequenceLocalAddNote (PIZSequence *x, long *values, long mode)
 	if (!err && (newNote = (PIZNote *)malloc (sizeof(PIZNote))))
 		{
 			newNote->flags				= PIZ_SEQUENCE_NOTE_FLAG_NONE;
-			newNote->midi[PIZ_PITCH]	= pitch;
-			newNote->midi[PIZ_VELOCITY]	= velocity;
-			newNote->midi[PIZ_DURATION]	= duration;
-			newNote->midi[PIZ_CHANNEL]	= channel;
+			newNote->data[PIZ_PITCH]	= pitch;
+			newNote->data[PIZ_VELOCITY]	= velocity;
+			newNote->data[PIZ_DURATION]	= duration;
+			newNote->data[PIZ_CHANNEL]	= channel;
 			newNote->isSelected			= isSelected;
 			newNote->position			= position;
 		

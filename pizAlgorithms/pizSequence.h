@@ -1,7 +1,7 @@
 /**
  * \file	pizSequence.h
  * \author	Jean Sapristi
- * \date	15 janvier 2012
+ * \date	21 janvier 2012
  */
  
 /*
@@ -211,7 +211,7 @@ typedef enum _PIZSelector {
 
 typedef struct _PIZNote {
 	long	flags;
-	long	midi[4];
+	long	data[4];
 	long	isSelected;
 	long	position;
 	long	originPosition;

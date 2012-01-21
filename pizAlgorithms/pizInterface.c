@@ -1,7 +1,7 @@
 /*
  * \file	pizInterface.c
  * \author	Jean Sapristi
- * \date	15 janvier 2012
+ * \date	21 janvier 2012
  */
  
 /*
@@ -81,18 +81,18 @@ long pizSequenceMarkedNoteValue (PIZSequence *x, PIZSelector selector)
 		{
 			if (selector == PIZ_CHANNEL)
 				{
-					if (x->markedNote->midi[PIZ_CHANNEL] == PIZ_SEQUENCE_NOTE_CHANNEL_NONE)
+					if (x->markedNote->data[PIZ_CHANNEL] == PIZ_SEQUENCE_NOTE_CHANNEL_NONE)
 						{
 							k = x->channel;
 						}
 					else
 						{
-							k = x->markedNote->midi[PIZ_CHANNEL];
+							k = x->markedNote->data[PIZ_CHANNEL];
 						}
 				}
 			else
 				{
-					k = x->markedNote->midi[selector];
+					k = x->markedNote->data[selector];
 				}
 		}
 		
@@ -110,7 +110,7 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
 			if (selector == PIZ_DURATION)
 				{
 					long err = PIZ_GOOD;
-					long temp = x->markedNote->midi[PIZ_DURATION];
+					long temp = x->markedNote->data[PIZ_DURATION];
 					
 					if (value > 0) {
 						temp += x->grid;
@@ -125,24 +125,24 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
 					err |= (temp <= 0);
 					
 					if (!err) {
-							x->markedNote->midi[PIZ_DURATION] = temp;
+							x->markedNote->data[PIZ_DURATION] = temp;
 						}
 				}
 			else
 				{
-					x->markedNote->midi[selector] += value;
+					x->markedNote->data[selector] += value;
 					
 					switch (selector) {
-						case PIZ_PITCH		:	x->markedNote->midi[PIZ_PITCH] = 
-												CLAMP (x->markedNote->midi[PIZ_PITCH], 
+						case PIZ_PITCH		:	x->markedNote->data[PIZ_PITCH] = 
+												CLAMP (x->markedNote->data[PIZ_PITCH], 
 												0, PIZ_SEQUENCE_MIDI_NOTE);
 												break;
-						case PIZ_VELOCITY	:	x->markedNote->midi[PIZ_VELOCITY] = 
-												CLAMP (x->markedNote->midi[PIZ_VELOCITY], 
+						case PIZ_VELOCITY	:	x->markedNote->data[PIZ_VELOCITY] = 
+												CLAMP (x->markedNote->data[PIZ_VELOCITY], 
 												0, PIZ_SEQUENCE_MIDI_VELOCITY);
 												break;
-						case PIZ_CHANNEL	:	x->markedNote->midi[PIZ_CHANNEL] = 
-												CLAMP (x->markedNote->midi[PIZ_CHANNEL], 
+						case PIZ_CHANNEL	:	x->markedNote->data[PIZ_CHANNEL] = 
+												CLAMP (x->markedNote->data[PIZ_CHANNEL], 
 												0, PIZ_SEQUENCE_MIDI_CHANNEL);
 												break;
 						}
@@ -398,7 +398,7 @@ long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, PIZCoordinates *coord
 					pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
 					
 					if (((coordinates->position >= p) && (coordinates->position <= 
-						(p + note->midi[PIZ_DURATION]))) && (coordinates->pitch == note->midi[PIZ_PITCH])) 
+						(p + note->data[PIZ_DURATION]))) && (coordinates->pitch == note->data[PIZ_PITCH])) 
 						{
 							if (!note->isSelected)
 								{
@@ -448,7 +448,7 @@ long pizSequenceInvertNoteWithCoordinates (PIZSequence *x, PIZCoordinates *coord
 					pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
 					
 					if (((coordinates->position >= p) && (coordinates->position <= 
-						(p + note->midi[PIZ_DURATION]))) && (coordinates->pitch == note->midi[PIZ_PITCH]))
+						(p + note->data[PIZ_DURATION]))) && (coordinates->pitch == note->data[PIZ_PITCH]))
 						{
 							if (note->isSelected) 
 								{
@@ -535,8 +535,8 @@ long pizSequenceSelectNotesWithLasso (PIZSequence *x, PIZCoordinates *c1, PIZCoo
 				{
 					pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
 					
-					if ((note->midi[PIZ_PITCH] >= b && note->midi[PIZ_PITCH] <= v) && ((p >= a && p <= u) || 
-						(((p + note->midi[PIZ_DURATION]) >= a) && ((p + note->midi[PIZ_DURATION]) <= u))))
+					if ((note->data[PIZ_PITCH] >= b && note->data[PIZ_PITCH] <= v) && ((p >= a && p <= u) || 
+						(((p + note->data[PIZ_DURATION]) >= a) && ((p + note->data[PIZ_DURATION]) <= u))))
 						{
 							if (invert) 
 								{
@@ -668,10 +668,10 @@ PIZError pizSequenceEncodeUndoToArray (PIZSequence *x, PIZGrowingArray *a)
 							pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
 							
 							err |= pizGrowingArrayAppend (a, note->originPosition);
-							err |= pizGrowingArrayAppend (a, note->midi[PIZ_PITCH]);
-							err |= pizGrowingArrayAppend (a, note->midi[PIZ_VELOCITY]);
-							err |= pizGrowingArrayAppend (a, note->midi[PIZ_DURATION]);
-							err |= pizGrowingArrayAppend (a, note->midi[PIZ_CHANNEL]);
+							err |= pizGrowingArrayAppend (a, note->data[PIZ_PITCH]);
+							err |= pizGrowingArrayAppend (a, note->data[PIZ_VELOCITY]);
+							err |= pizGrowingArrayAppend (a, note->data[PIZ_DURATION]);
+							err |= pizGrowingArrayAppend (a, note->data[PIZ_CHANNEL]);
 							err |= pizGrowingArrayAppend (a, note->isSelected);
 							err |= pizGrowingArrayAppend (a, (note == x->markedNote));
 							

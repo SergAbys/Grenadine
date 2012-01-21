@@ -1,7 +1,7 @@
 /*
  * \file	pizArchive.c
  * \author	Jean Sapristi
- * \date	15 janvier 2012
+ * \date	21 janvier 2012
  */
  
 /*
@@ -76,10 +76,10 @@ PIZError pizSequenceEncodeSlotToArray (PIZSequence *x, PIZGrowingArray *a)
 							pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
 							
 							err |= pizGrowingArrayAppend (a, note->originPosition);
-							err |= pizGrowingArrayAppend (a, note->midi[PIZ_PITCH]);
-							err |= pizGrowingArrayAppend (a, note->midi[PIZ_VELOCITY]);
-							err |= pizGrowingArrayAppend (a, note->midi[PIZ_DURATION]);
-							err |= pizGrowingArrayAppend (a, note->midi[PIZ_CHANNEL]);
+							err |= pizGrowingArrayAppend (a, note->data[PIZ_PITCH]);
+							err |= pizGrowingArrayAppend (a, note->data[PIZ_VELOCITY]);
+							err |= pizGrowingArrayAppend (a, note->data[PIZ_DURATION]);
+							err |= pizGrowingArrayAppend (a, note->data[PIZ_CHANNEL]);
 							err |= pizGrowingArrayAppend (a, note->isSelected);
 							err |= pizGrowingArrayAppend (a, (note == x->markedNote));
 							
