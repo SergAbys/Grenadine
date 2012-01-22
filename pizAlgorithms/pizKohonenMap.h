@@ -6,6 +6,9 @@
  */
  
 /*
+ *  Copyright (c) 2011, Jean Sapristi & Tom Javel, 
+ *  "nicolas.danet@free.fr".
+ *
  *  This software is governed by the CeCILL-C license under French law and
  *  abiding by the rules of distribution of free software. You can use, 
  *  modify and/or redistribute the software under the terms of the CeCILL-C
