@@ -8,8 +8,8 @@
 		);
 		codeSenseManager = 9600EBEA11FDAFDD0040A13A /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 347705622;
-			PBXWorkspaceStateSaveDate = 347705622;
+			PBXPerProjectTemplateStateSaveDate = 348935126;
+			PBXWorkspaceStateSaveDate = 348935126;
 		};
 		sourceControlManager = 9600EBE911FDAFDD0040A13A /* Source Control */;
 		userBuildSettings = {
@@ -32,9 +32,9 @@
 	};
 	96965DE712B523C200691CC5 /* quebec.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1273, 5475}}";
-			sepNavSelRange = "{1435, 0}";
-			sepNavVisRect = "{{0, 832}, {1231, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1231, 5475}}";
+			sepNavSelRange = "{1441, 0}";
+			sepNavVisRect = "{{0, 0}, {1231, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1276, 774}}";
 		};
 	};

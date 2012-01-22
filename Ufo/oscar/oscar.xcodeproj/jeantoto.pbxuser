@@ -8,8 +8,8 @@
 		);
 		codeSenseManager = 9692FBD711EDA7DA0074FAD7 /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 347705399;
-			PBXWorkspaceStateSaveDate = 347705399;
+			PBXPerProjectTemplateStateSaveDate = 348931818;
+			PBXWorkspaceStateSaveDate = 348931818;
 		};
 		sourceControlManager = 9692FBD611EDA7DA0074FAD7 /* Source Control */;
 		userBuildSettings = {
@@ -32,9 +32,9 @@
 	};
 	9692FBE711EDA8A20074FAD7 /* oscar.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1273, 6975}}";
-			sepNavSelRange = "{42, 0}";
-			sepNavVisRect = "{{0, 2588}, {1237, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1237, 6725}}";
+			sepNavSelRange = "{6314, 0}";
+			sepNavVisRect = "{{0, 3895}, {1237, 645}}";
 			sepNavWindowFrame = "{{-1, 4}, {1282, 774}}";
 		};
 	};

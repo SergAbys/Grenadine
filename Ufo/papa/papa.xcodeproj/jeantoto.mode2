@@ -256,7 +256,8 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>7</integer>
+											<integer>3</integer>
+											<integer>2</integer>
 											<integer>0</integer>
 										</array>
 									</array>
@@ -423,8 +424,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D12F9114B990FA0013AA74</string>
-				<string>96D12F9214B990FA0013AA74</string>
+				<string>96D570F114CC474B0091BEE1</string>
+				<string>96D570F214CC474B0091BEE1</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -457,8 +458,7 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D52069F1CE1000CFCEE</string>
-		<string>/Users/jeantoto/Dev/Grenadine/ufo/papa/papa.xcodeproj</string>
+		<string>/Users/jeantoto/Dev/Grenadine/Ufo/papa/papa.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>216 213 448 420 0 0 1280 778 </string>

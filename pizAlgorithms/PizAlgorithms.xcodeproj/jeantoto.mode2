@@ -249,9 +249,18 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateExpansionKey</key>
 									<array>
 										<string>08FB7794FE84155DC02AAC07</string>
+										<string>08FB7795FE84155DC02AAC07</string>
+										<string>96AF1B7F148CFC19001358AB</string>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
-									<array/>
+									<array>
+										<array>
+											<integer>4</integer>
+											<integer>3</integer>
+											<integer>1</integer>
+											<integer>0</integer>
+										</array>
+									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
 									<string>{{0, 0}, {501, 530}}</string>
 								</dict>
@@ -276,7 +285,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>166 117 518 616 0 0 1280 778 </string>
+								<string>371 100 518 616 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -413,8 +422,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D586BD14CA97A400A2DA01</string>
-				<string>96D586BE14CA97A400A2DA01</string>
+				<string>969CFA9814CC576A00D52846</string>
+				<string>969CFA9914CC576A00D52846</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -447,11 +456,10 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/pizAlgorithms/PizAlgorithms.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>166 117 518 616 0 0 1280 778 </string>
+	<string>371 100 518 616 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -665,7 +673,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D586BF14CA97A400A2DA01</string>
+				<string>96D5708A14CC40FA0091BEE1</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

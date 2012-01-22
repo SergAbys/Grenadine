@@ -71,7 +71,7 @@
 		96A16F78148CF839008268A6 /* pizSequence.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizSequence.c; sourceTree = "<group>"; };
 		96A16F7B148CF848008268A6 /* pizInterface.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizInterface.c; sourceTree = "<group>"; };
 		96A16F7D148CF856008268A6 /* pizTransform.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizTransform.h; sourceTree = "<group>"; };
-		96A16F7E148CF856008268A6 /* pizSequence.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizSequence.h; sourceTree = "<group>"; };
+		96A16F7E148CF856008268A6 /* pizSequence.h */ = {isa = PBXFileReference; fileEncoding = 30; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = pizSequence.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		96A16F81148CF85B008268A6 /* pizInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizInterface.h; sourceTree = "<group>"; };
 		96CFA9841408E892009EA9FC /* pizKohonenMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pizKohonenMap.h; sourceTree = "<group>"; };
 		96CFA9851408E892009EA9FC /* pizKohonenMap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pizKohonenMap.c; sourceTree = "<group>"; };
