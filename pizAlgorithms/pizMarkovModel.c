@@ -5,6 +5,9 @@
  */
  
 /*
+ *  Copyright (c) 2011, Jean Sapristi & Tom Javel, 
+ *  "nicolas.danet@free.fr".
+ *
  *  This software is governed by the CeCILL-C license under French law and
  *  abiding by the rules of distribution of free software. You can use, 
  *  modify and/or redistribute the software under the terms of the CeCILL-C
@@ -286,45 +289,6 @@ PIZError pizMarkovModelProceed (PIZMarkovModel *x, long argc, long *argv)
                     argc --;
                     j ++;
                 }
-        }
-    
-    return err;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void pizMarkovModelSetPersistence (PIZMarkovModel *x, double f)
-{
-    if (f >= 0.) {
-            x->persistence = f;
-        }
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZError pizMarkovModelEncodeNodeToArray (PIZMarkovModel *x, long n, PIZGrowingArray *array)
-{
-    long err = PIZ_ERROR;
-    
-    if ((n >= 0) && (n < x->graphSize) && array)
-        {
-            long i;
-            
-            err = PIZ_GOOD;
-            
-            err |= pizGrowingArrayAppend (array, (long)(x->start[n] * 100.));
-            err |= pizGrowingArrayAppend (array, x->graphSize);
-            err |= pizGrowingArrayAppend (array, PIZ_ALPHABET_SIZE);
-            
-            for (i = 0; i < x->graphSize; i++) {
-                err |= pizGrowingArrayAppend (array, (long)(x->transition[(n * x->graphSize) + i] * 100.));
-            }
-            
-            for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
-                err |= pizGrowingArrayAppend (array, (long)(x->emission[(n * PIZ_ALPHABET_SIZE) + i] * 100.));
-            }
         }
     
     return err;

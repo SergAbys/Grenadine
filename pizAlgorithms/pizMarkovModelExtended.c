@@ -1,7 +1,7 @@
 /*
- * \file    pizBoundedStack.c
+ * \file    pizMarkovModelExtended.c
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    22 janvier 2012
  */
  
 /*
@@ -34,98 +34,55 @@
  *  The fact that you are presently reading this means that you have had
  *  knowledge of the CeCILL-C license and that you accept its terms.
  */
+ 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#include "pizMarkovModel.h"
+ 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define PIZ_ALPHABET_SIZE           128
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizBoundedStack.h"
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#include <stdlib.h>
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZBoundedStack *pizBoundedStackNew (long size)
+void pizMarkovModelSetPersistence (PIZMarkovModel *x, double f)
 {
-    PIZBoundedStack *x = NULL;
-    
-    if (size > 1 && (x = (PIZBoundedStack *)malloc (sizeof(PIZBoundedStack))))
-        {
-            if (x->boundedStackValues = (long *)malloc (size * sizeof(long)))
-                {
-                    x->bound        = size;
-                    x->stack        = 0;
-                    x->poppedValue  = -1;
-                }
-            else
-                {
-                    free (x);
-                    x = NULL;
-                }
-        }
-    
-    return x;
-}
-
-void pizBoundedStackFree (PIZBoundedStack *x)
-{
-    if (x)
-        {
-            free (x->boundedStackValues);
-            x->boundedStackValues = NULL;
-            
-            free (x);
+    if (f >= 0.) {
+            x->persistence = f;
         }
 }
 
-void pizBoundedStackClear (PIZBoundedStack *x)
-{
-    x->stack = 0;
-}
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
-long pizBoundedStackCount (PIZBoundedStack *x)
+PIZError pizMarkovModelEncodeNodeToArray (PIZMarkovModel *x, long n, PIZGrowingArray *array)
 {
-    return (x->stack);
-}
-
-PIZError pizBoundedStackPush (PIZBoundedStack *x, long value) 
-{   
     long err = PIZ_ERROR;
     
-    if (x->stack < x->bound)
+    if ((n >= 0) && (n < x->graphSize) && array)
         {
+            long i;
+            
             err = PIZ_GOOD;
             
-            x->boundedStackValues[x->stack] = value;
-            x->stack ++;
+            err |= pizGrowingArrayAppend (array, (long)(x->start[n] * 100.));
+            err |= pizGrowingArrayAppend (array, x->graphSize);
+            err |= pizGrowingArrayAppend (array, PIZ_ALPHABET_SIZE);
+            
+            for (i = 0; i < x->graphSize; i++) {
+                err |= pizGrowingArrayAppend (array, (long)(x->transition[(n * x->graphSize) + i] * 100.));
+            }
+            
+            for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
+                err |= pizGrowingArrayAppend (array, (long)(x->emission[(n * PIZ_ALPHABET_SIZE) + i] * 100.));
+            }
         }
     
     return err;
 }
-
-PIZError pizBoundedStackPop (PIZBoundedStack *x)
-{
-    long err = PIZ_ERROR;
-    
-    if (x->stack)
-        {
-            err = PIZ_GOOD;
-            
-            x->poppedValue = x->boundedStackValues[x->stack - 1];
-            
-            x->stack --;
-        }
-    
-    return err;
-}
-
-long pizBoundedStackPoppedValue (PIZBoundedStack *x)
-{
-    return (x->poppedValue);
-}   
 
 // -------------------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------:x

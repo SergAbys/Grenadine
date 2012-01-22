@@ -5,6 +5,9 @@
  */
  
 /*
+ *  Copyright (c) 2011, Jean Sapristi & Tom Javel, 
+ *  "nicolas.danet@free.fr".
+ *
  *  This software is governed by the CeCILL-C license under French law and
  *  abiding by the rules of distribution of free software. You can use, 
  *  modify and/or redistribute the software under the terms of the CeCILL-C
@@ -430,8 +433,8 @@ PIZError pizNeuralGasProceed (PIZNeuralGas *x, long argc, long *argv)
                                     if (pizItemset128IsSetAtIndex (&x->map, j))
                                         {
                                             if (!h) {
-                                                p = j;
-                                                break;
+                                                    p = j;
+                                                    break;
                                                 }
                                             
                                             h --;
@@ -445,115 +448,6 @@ PIZError pizNeuralGasProceed (PIZNeuralGas *x, long argc, long *argv)
                 }
             
             err = PIZ_GOOD;
-        }
-    
-    return err;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-long pizNeuralGasLambda (PIZNeuralGas *x)
-{
-    return (x->lambda);
-}
-
-void pizNeuralGasSetLambda (PIZNeuralGas *x, long n)
-{
-    x->lambda = MAX (n, 1);
-}
-
-double pizNeuralGasEpsilon1 (PIZNeuralGas *x)
-{
-    return (x->epsilon1);
-}
-
-void pizNeuralGasSetEpsilon1 (PIZNeuralGas *x, double f)
-{
-    if (f > 0. && f < 1.) {
-            x->epsilon1 = f;
-        }
-}
-
-double pizNeuralGasEpsilon2 (PIZNeuralGas *x)
-{
-    return (x->epsilon2);
-}
-
-void pizNeuralGasSetEpsilon2 (PIZNeuralGas *x, double f)
-{
-    if (f > 0. && f < 1.) {
-            x->epsilon2 = f;
-        }
-}
-
-double pizNeuralGasAlpha (PIZNeuralGas *x)
-{
-    return (x->alpha);
-}
-
-void pizNeuralGasSetAlpha (PIZNeuralGas *x, double f)
-{
-    if (f > 0. && f < 1.) {
-            x->alpha = f;
-        }
-}
-
-double pizNeuralGasBeta (PIZNeuralGas *x)
-{
-    return (x->beta);
-}
-
-void pizNeuralGasSetBeta (PIZNeuralGas *x, double f)
-{
-    if (f > 0. && f < 1.) {
-            x->beta = f;
-        }
-}
-
-double pizNeuralGasKappa (PIZNeuralGas *x)
-{
-    return (x->kappa);
-}
-
-void pizNeuralGasSetKappa (PIZNeuralGas *x, double f)
-{
-    if (f > 0.) {
-            x->kappa = f;
-        }
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZError pizNeuralGasEncodeVectorToArray (PIZNeuralGas *x, long n, PIZGrowingArray *array)
-{
-    long err = PIZ_ERROR;
-    
-    if ((n >= 0) && (n < x->mapSize) && array)
-        {
-            long i;
-            long k = 0;
-            
-            err = PIZ_GOOD;
-            
-            for (i = 0; i < PIZ_STOCK_SIZE; i++)
-                {
-                    if (pizItemset128IsSetAtIndex (&x->map, i))
-                        {
-                            if (k == n)
-                                {
-                                    long j;
-                                    
-                                    for (j = 0; j < x->vectorSize; j++) {
-                                        err |= pizGrowingArrayAppend (array, (long)(floor ((*(x->vectorStock 
-                                                + (n * x->vectorSize) + j)) + 0.5)));
-                                        }
-                                }
-                            
-                            k ++;
-                        }
-                }
         }
     
     return err;

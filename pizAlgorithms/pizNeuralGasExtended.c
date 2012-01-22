@@ -1,7 +1,7 @@
 /*
- * \file    pizBoundedStack.c
+ * \file    pizNeuralGas.c
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    22 janvier 2012
  */
  
 /*
@@ -38,94 +38,125 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizBoundedStack.h"
+#include "pizNeuralGas.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include <stdlib.h>
+#include <math.h>   
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZBoundedStack *pizBoundedStackNew (long size)
+#define PIZ_STOCK_SIZE (PIZ_ITEMSET128_SIZE_IN_BIT)
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+long pizNeuralGasLambda (PIZNeuralGas *x)
 {
-    PIZBoundedStack *x = NULL;
-    
-    if (size > 1 && (x = (PIZBoundedStack *)malloc (sizeof(PIZBoundedStack))))
-        {
-            if (x->boundedStackValues = (long *)malloc (size * sizeof(long)))
-                {
-                    x->bound        = size;
-                    x->stack        = 0;
-                    x->poppedValue  = -1;
-                }
-            else
-                {
-                    free (x);
-                    x = NULL;
-                }
-        }
-    
-    return x;
+    return (x->lambda);
 }
 
-void pizBoundedStackFree (PIZBoundedStack *x)
+void pizNeuralGasSetLambda (PIZNeuralGas *x, long n)
 {
-    if (x)
-        {
-            free (x->boundedStackValues);
-            x->boundedStackValues = NULL;
-            
-            free (x);
+    x->lambda = MAX (n, 1);
+}
+
+double pizNeuralGasEpsilon1 (PIZNeuralGas *x)
+{
+    return (x->epsilon1);
+}
+
+void pizNeuralGasSetEpsilon1 (PIZNeuralGas *x, double f)
+{
+    if (f > 0. && f < 1.) {
+            x->epsilon1 = f;
         }
 }
 
-void pizBoundedStackClear (PIZBoundedStack *x)
+double pizNeuralGasEpsilon2 (PIZNeuralGas *x)
 {
-    x->stack = 0;
+    return (x->epsilon2);
 }
 
-long pizBoundedStackCount (PIZBoundedStack *x)
+void pizNeuralGasSetEpsilon2 (PIZNeuralGas *x, double f)
 {
-    return (x->stack);
+    if (f > 0. && f < 1.) {
+            x->epsilon2 = f;
+        }
 }
 
-PIZError pizBoundedStackPush (PIZBoundedStack *x, long value) 
-{   
+double pizNeuralGasAlpha (PIZNeuralGas *x)
+{
+    return (x->alpha);
+}
+
+void pizNeuralGasSetAlpha (PIZNeuralGas *x, double f)
+{
+    if (f > 0. && f < 1.) {
+            x->alpha = f;
+        }
+}
+
+double pizNeuralGasBeta (PIZNeuralGas *x)
+{
+    return (x->beta);
+}
+
+void pizNeuralGasSetBeta (PIZNeuralGas *x, double f)
+{
+    if (f > 0. && f < 1.) {
+            x->beta = f;
+        }
+}
+
+double pizNeuralGasKappa (PIZNeuralGas *x)
+{
+    return (x->kappa);
+}
+
+void pizNeuralGasSetKappa (PIZNeuralGas *x, double f)
+{
+    if (f > 0.) {
+            x->kappa = f;
+        }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZError pizNeuralGasEncodeVectorToArray (PIZNeuralGas *x, long n, PIZGrowingArray *array)
+{
     long err = PIZ_ERROR;
     
-    if (x->stack < x->bound)
+    if ((n >= 0) && (n < x->mapSize) && array)
         {
+            long i;
+            long k = 0;
+            
             err = PIZ_GOOD;
             
-            x->boundedStackValues[x->stack] = value;
-            x->stack ++;
+            for (i = 0; i < PIZ_STOCK_SIZE; i++)
+                {
+                    if (pizItemset128IsSetAtIndex (&x->map, i))
+                        {
+                            if (k == n) {
+                                long j;
+                                
+                                for (j = 0; j < x->vectorSize; j++) {
+                                    err |= pizGrowingArrayAppend (array, (long)(floor ((*(x->vectorStock 
+                                            + (n * x->vectorSize) + j)) + 0.5)));
+                                    }
+                            }
+                            
+                            k ++;
+                        }
+                }
         }
     
     return err;
 }
-
-PIZError pizBoundedStackPop (PIZBoundedStack *x)
-{
-    long err = PIZ_ERROR;
-    
-    if (x->stack)
-        {
-            err = PIZ_GOOD;
-            
-            x->poppedValue = x->boundedStackValues[x->stack - 1];
-            
-            x->stack --;
-        }
-    
-    return err;
-}
-
-long pizBoundedStackPoppedValue (PIZBoundedStack *x)
-{
-    return (x->poppedValue);
-}   
 
 // -------------------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------:x

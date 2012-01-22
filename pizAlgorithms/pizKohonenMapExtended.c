@@ -1,7 +1,7 @@
 /*
- * \file    pizBoundedStack.c
+ * \file    pizKohonenMapExtended.c
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    22 janvier 2012
  */
  
 /*
@@ -38,94 +38,67 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizBoundedStack.h"
+#include "pizKohonenMap.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include <stdlib.h>
+#include <math.h>
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZBoundedStack *pizBoundedStackNew (long size)
+long pizKohonenMapRange (PIZKohonenMap *x)
 {
-    PIZBoundedStack *x = NULL;
-    
-    if (size > 1 && (x = (PIZBoundedStack *)malloc (sizeof(PIZBoundedStack))))
-        {
-            if (x->boundedStackValues = (long *)malloc (size * sizeof(long)))
-                {
-                    x->bound        = size;
-                    x->stack        = 0;
-                    x->poppedValue  = -1;
-                }
-            else
-                {
-                    free (x);
-                    x = NULL;
-                }
+    return (x->range);
+}
+
+void pizKohonenMapSetRange (PIZKohonenMap *x, long n)
+{
+    x->range = MAX (n, 1);
+}
+
+long pizKohonenMapTraining (PIZKohonenMap *x)
+{
+    return (x->training);
+}
+
+void pizKohonenMapSetTraining (PIZKohonenMap *x, long n)
+{
+    x->training = MAX (n, 1);
+}
+
+double pizKohonenMapStep (PIZKohonenMap *x)
+{
+    return (x->step);
+}
+
+void pizKohonenMapSetStep (PIZKohonenMap *x, double f)
+{
+    if (f > 0.) {
+            x->step = f;
         }
-    
-    return x;
 }
 
-void pizBoundedStackFree (PIZBoundedStack *x)
-{
-    if (x)
-        {
-            free (x->boundedStackValues);
-            x->boundedStackValues = NULL;
-            
-            free (x);
-        }
-}
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
-void pizBoundedStackClear (PIZBoundedStack *x)
-{
-    x->stack = 0;
-}
-
-long pizBoundedStackCount (PIZBoundedStack *x)
-{
-    return (x->stack);
-}
-
-PIZError pizBoundedStackPush (PIZBoundedStack *x, long value) 
-{   
-    long err = PIZ_ERROR;
-    
-    if (x->stack < x->bound)
-        {
-            err = PIZ_GOOD;
-            
-            x->boundedStackValues[x->stack] = value;
-            x->stack ++;
-        }
-    
-    return err;
-}
-
-PIZError pizBoundedStackPop (PIZBoundedStack *x)
+PIZError pizKohonenMapEncodeVectorToArray (PIZKohonenMap *x, long n, PIZGrowingArray *array)
 {
     long err = PIZ_ERROR;
     
-    if (x->stack)
-        {
-            err = PIZ_GOOD;
-            
-            x->poppedValue = x->boundedStackValues[x->stack - 1];
-            
-            x->stack --;
+    if ((n >= 0) && (n < x->mapSize) && array) {
+        long i;
+        
+        err = PIZ_GOOD;
+        
+        for (i = 0; i < x->vectorSize; i++) {
+            err |= pizGrowingArrayAppend (array, (long)(floor ((*(x->map + (n * x->vectorSize) + i)) + 0.5)));
         }
+    }
     
     return err;
 }
-
-long pizBoundedStackPoppedValue (PIZBoundedStack *x)
-{
-    return (x->poppedValue);
-}   
 
 // -------------------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------:x

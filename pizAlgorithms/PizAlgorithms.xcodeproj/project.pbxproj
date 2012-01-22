@@ -15,10 +15,13 @@
 		961EB1D913D7F15700BD76B1 /* pizGaloisLattice.c in Sources */ = {isa = PBXBuildFile; fileRef = 961EB1D313D7F15700BD76B1 /* pizGaloisLattice.c */; };
 		963192101482169D00E63964 /* pizBoundedHashTable.c in Sources */ = {isa = PBXBuildFile; fileRef = 9631920E1482169D00E63964 /* pizBoundedHashTable.c */; };
 		963192111482169D00E63964 /* pizBoundedHashTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 9631920F1482169D00E63964 /* pizBoundedHashTable.h */; };
+		96749BE714CC5AA200BA3990 /* pizNeuralGasExtended.c in Sources */ = {isa = PBXBuildFile; fileRef = 96749BE614CC5AA200BA3990 /* pizNeuralGasExtended.c */; };
+		96749BF314CC5C3C00BA3990 /* pizMarkovModelExtended.c in Sources */ = {isa = PBXBuildFile; fileRef = 96749BF214CC5C3C00BA3990 /* pizMarkovModelExtended.c */; };
 		9699D9E01413A0F900F86BD8 /* pizMarkovModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 9699D9DE1413A0F900F86BD8 /* pizMarkovModel.h */; };
 		9699D9E11413A0F900F86BD8 /* pizMarkovModel.c in Sources */ = {isa = PBXBuildFile; fileRef = 9699D9DF1413A0F900F86BD8 /* pizMarkovModel.c */; };
 		969BA88614AF6780006B9729 /* pizArrayPool.c in Sources */ = {isa = PBXBuildFile; fileRef = 969BA88414AF6780006B9729 /* pizArrayPool.c */; };
 		969BA88714AF6780006B9729 /* pizArrayPool.h in Headers */ = {isa = PBXBuildFile; fileRef = 969BA88514AF6780006B9729 /* pizArrayPool.h */; };
+		969CFAAE14CC581900D52846 /* pizKohonenMapExtended.c in Sources */ = {isa = PBXBuildFile; fileRef = 969CFAAD14CC581900D52846 /* pizKohonenMapExtended.c */; };
 		96A16F79148CF839008268A6 /* pizTransform.c in Sources */ = {isa = PBXBuildFile; fileRef = 96A16F77148CF839008268A6 /* pizTransform.c */; };
 		96A16F7A148CF839008268A6 /* pizSequence.c in Sources */ = {isa = PBXBuildFile; fileRef = 96A16F78148CF839008268A6 /* pizSequence.c */; };
 		96A16F7C148CF848008268A6 /* pizInterface.c in Sources */ = {isa = PBXBuildFile; fileRef = 96A16F7B148CF848008268A6 /* pizInterface.c */; };
@@ -63,10 +66,13 @@
 		961EB1D313D7F15700BD76B1 /* pizGaloisLattice.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizGaloisLattice.c; sourceTree = "<group>"; };
 		9631920E1482169D00E63964 /* pizBoundedHashTable.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizBoundedHashTable.c; sourceTree = "<group>"; };
 		9631920F1482169D00E63964 /* pizBoundedHashTable.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizBoundedHashTable.h; sourceTree = "<group>"; };
+		96749BE614CC5AA200BA3990 /* pizNeuralGasExtended.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizNeuralGasExtended.c; sourceTree = "<group>"; };
+		96749BF214CC5C3C00BA3990 /* pizMarkovModelExtended.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizMarkovModelExtended.c; sourceTree = "<group>"; };
 		9699D9DE1413A0F900F86BD8 /* pizMarkovModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pizMarkovModel.h; sourceTree = "<group>"; };
 		9699D9DF1413A0F900F86BD8 /* pizMarkovModel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pizMarkovModel.c; sourceTree = "<group>"; };
 		969BA88414AF6780006B9729 /* pizArrayPool.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizArrayPool.c; sourceTree = "<group>"; };
 		969BA88514AF6780006B9729 /* pizArrayPool.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizArrayPool.h; sourceTree = "<group>"; };
+		969CFAAD14CC581900D52846 /* pizKohonenMapExtended.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizKohonenMapExtended.c; sourceTree = "<group>"; };
 		96A16F77148CF839008268A6 /* pizTransform.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizTransform.c; sourceTree = "<group>"; };
 		96A16F78148CF839008268A6 /* pizSequence.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizSequence.c; sourceTree = "<group>"; };
 		96A16F7B148CF848008268A6 /* pizInterface.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizInterface.c; sourceTree = "<group>"; };
@@ -172,8 +178,11 @@
 				961EB1D313D7F15700BD76B1 /* pizGaloisLattice.c */,
 				96E60FEE14989B9500CE103D /* pizGaloisLatticeExtended.c */,
 				96CFA9851408E892009EA9FC /* pizKohonenMap.c */,
+				969CFAAD14CC581900D52846 /* pizKohonenMapExtended.c */,
 				96D4D77E140E07E600FF970D /* pizNeuralGas.c */,
+				96749BE614CC5AA200BA3990 /* pizNeuralGasExtended.c */,
 				9699D9DF1413A0F900F86BD8 /* pizMarkovModel.c */,
+				96749BF214CC5C3C00BA3990 /* pizMarkovModelExtended.c */,
 			);
 			name = Algorithms;
 			sourceTree = "<group>";
@@ -310,6 +319,9 @@
 				96E6103114989E6300CE103D /* pizGrowingArrayExtended.c in Sources */,
 				969BA88614AF6780006B9729 /* pizArrayPool.c in Sources */,
 				96D450BB14B2DDFE00816531 /* pizArchive.c in Sources */,
+				969CFAAE14CC581900D52846 /* pizKohonenMapExtended.c in Sources */,
+				96749BE714CC5AA200BA3990 /* pizNeuralGasExtended.c in Sources */,
+				96749BF314CC5C3C00BA3990 /* pizMarkovModelExtended.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

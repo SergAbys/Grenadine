@@ -1,11 +1,12 @@
 /*
  * \file    pizKohonenMap.c
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    22 janvier 2012
  */
  
 /*
- *  nicolas.danet@free.fr
+ *  Copyright (c) 2011, Jean Sapristi & Tom Javel, 
+ *  "nicolas.danet@free.fr".
  *
  *  This software is governed by the CeCILL-C license under French law and
  *  abiding by the rules of distribution of free software. You can use, 
@@ -218,61 +219,6 @@ PIZError pizKohonenMapProceed (PIZKohonenMap *x, long argc, long *argv)
             
             err = PIZ_GOOD;
         }
-    
-    return err;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-long pizKohonenMapRange (PIZKohonenMap *x)
-{
-    return (x->range);
-}
-
-void pizKohonenMapSetRange (PIZKohonenMap *x, long n)
-{
-    x->range = MAX (n, 1);
-}
-
-long pizKohonenMapTraining (PIZKohonenMap *x)
-{
-    return (x->training);
-}
-
-void pizKohonenMapSetTraining (PIZKohonenMap *x, long n)
-{
-    x->training = MAX (n, 1);
-}
-
-double pizKohonenMapStep (PIZKohonenMap *x)
-{
-    return (x->step);
-}
-
-void pizKohonenMapSetStep (PIZKohonenMap *x, double f)
-{
-    if (f > 0.) {
-            x->step = f;
-        }
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZError pizKohonenMapEncodeVectorToArray (PIZKohonenMap *x, long n, PIZGrowingArray *array)
-{
-    long err = PIZ_ERROR;
-    
-    if ((n >= 0) && (n < x->mapSize) && array) {
-        long i;
-        
-        err = PIZ_GOOD;
-        
-        for (i = 0; i < x->vectorSize; i++) {
-            err |= pizGrowingArrayAppend (array, (long)(floor ((*(x->map + (n * x->vectorSize) + i)) + 0.5)));
-        }
-    }
     
     return err;
 }
