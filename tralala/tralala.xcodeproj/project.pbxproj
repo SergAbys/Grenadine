@@ -54,6 +54,7 @@
 		96D8DAAF142CE346007F5BAD /* tralalaHide.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96D8DAAE142CE346007F5BAD /* tralalaHide.txt */; };
 		96E7B0F314B75F4E00B2C894 /* 32B.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E7B0ED14B75F4E00B2C894 /* 32B.png */; };
 		96E7B0F414B75F4E00B2C894 /* 32C.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E7B0EE14B75F4E00B2C894 /* 32C.png */; };
+		96F5C26F14CC7AFC004ECAEA /* tralalaGUI.c in Sources */ = {isa = PBXBuildFile; fileRef = 96F5C26E14CC7AFC004ECAEA /* tralalaGUI.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -107,6 +108,7 @@
 		96D8DAAE142CE346007F5BAD /* tralalaHide.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = tralalaHide.txt; sourceTree = "<group>"; };
 		96E7B0ED14B75F4E00B2C894 /* 32B.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 32B.png; sourceTree = "<group>"; };
 		96E7B0EE14B75F4E00B2C894 /* 32C.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 32C.png; sourceTree = "<group>"; };
+		96F5C26E14CC7AFC004ECAEA /* tralalaGUI.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tralalaGUI.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +159,7 @@
 			children = (
 				96CB9E2913C1A24600C00CC4 /* tralala.h */,
 				9676982513B7784800FE77F4 /* tralala.c */,
+				96F5C26E14CC7AFC004ECAEA /* tralalaGUI.c */,
 				9675499913F3A758005CDE9E /* tralalaSymbols.h */,
 				9675499A13F3A758005CDE9E /* tralalaSymbols.c */,
 			);
@@ -315,6 +318,7 @@
 			files = (
 				9676982713B7784800FE77F4 /* tralala.c in Sources */,
 				9675499B13F3A758005CDE9E /* tralalaSymbols.c in Sources */,
+				96F5C26F14CC7AFC004ECAEA /* tralalaGUI.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
