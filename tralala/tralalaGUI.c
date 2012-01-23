@@ -163,7 +163,7 @@ void tralala_addUndo (t_tralala *x)
                                 {
                                     if (pizSequenceUndoIsEqualToUndo (newUndo, lastUndo)) {
                                             addUndo = false;
-                                        }
+                                        } 
                                 }
                         }
                         

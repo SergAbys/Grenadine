@@ -724,16 +724,13 @@ bool pizSequenceUndoIsEqualToUndo (const PIZGrowingArray *a, const PIZGrowingArr
             k = 6;
             
             for (i = 0; i < n; i++) {
-                d |= (*(ptrA + k + (i * PIZ_SEQUENCE_NOTE_SIZE) + PIZ_SEQUENCE_POSITION) 
-                        != *(ptrB + k + (i * PIZ_SEQUENCE_NOTE_SIZE) + PIZ_SEQUENCE_POSITION));
-                d |= (*(ptrA + k + (i * PIZ_SEQUENCE_NOTE_SIZE) + PIZ_SEQUENCE_PITCH) 
-                        != *(ptrB + k + (i * PIZ_SEQUENCE_NOTE_SIZE) + PIZ_SEQUENCE_PITCH));
-                d |= (*(ptrA + k + (i * PIZ_SEQUENCE_NOTE_SIZE) + PIZ_SEQUENCE_VELOCITY) 
-                        != *(ptrB + k + (i * PIZ_SEQUENCE_NOTE_SIZE) + PIZ_SEQUENCE_VELOCITY));
-                d |= (*(ptrA + k + (i * PIZ_SEQUENCE_NOTE_SIZE) + PIZ_SEQUENCE_DURATION) 
-                        != *(ptrB + k + (i * PIZ_SEQUENCE_NOTE_SIZE) + PIZ_SEQUENCE_DURATION));
-                d |= (*(ptrA + k + (i * PIZ_SEQUENCE_NOTE_SIZE) + PIZ_SEQUENCE_CHANNEL) 
-                        != *(ptrB + k + (i * PIZ_SEQUENCE_NOTE_SIZE) + PIZ_SEQUENCE_CHANNEL));
+                d |= (*(ptrA + k + PIZ_SEQUENCE_POSITION)   != *(ptrB + k + PIZ_SEQUENCE_POSITION));
+                d |= (*(ptrA + k + PIZ_SEQUENCE_PITCH)      != *(ptrB + k + PIZ_SEQUENCE_PITCH));
+                d |= (*(ptrA + k + PIZ_SEQUENCE_VELOCITY)   != *(ptrB + k + PIZ_SEQUENCE_VELOCITY));
+                d |= (*(ptrA + k + PIZ_SEQUENCE_DURATION)   != *(ptrB + k + PIZ_SEQUENCE_DURATION));
+                d |= (*(ptrA + k + PIZ_SEQUENCE_CHANNEL)    != *(ptrB + k + PIZ_SEQUENCE_CHANNEL));
+                
+                k += PIZ_SEQUENCE_NOTE_SIZE;
                 
                 if (d) {
                         break;
