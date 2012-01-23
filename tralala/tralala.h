@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 22/01/12.
+ *  Last modified : 23/01/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -88,7 +88,7 @@
                                             \"7th diminished\" \"7th dominant suspended\"               \
                                             \"7th dominant sharp five\"                                 \
                                             \"7th dominant flat five\""                             
-                                             
+
 #define PATTERN_CELL_LIST                   "none whole half quarter eighth sixteenth thirty-second     \
                                             \"whole triplet\" \"half triplet\"                          \
                                             \"quarter triplet\" \"eighth triplet\"                      \
@@ -445,73 +445,55 @@ typedef struct _tralala {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void        *tralala_new                        (t_symbol *s, long argc, t_atom *argv);
-void        tralala_free                        (t_tralala *x);
-void        tralala_assist                      (t_tralala *x, void *b, long m, long a, char *s);
-void        tralala_jsave                       (t_tralala *x, t_dictionary *d);
-t_max_err   tralala_setvalueof                  (t_tralala *x, long argc, t_atom *argv);
-t_max_err   tralala_getvalueof                  (t_tralala *x, long *argc, t_atom **argv);
+void            *tralala_new                    (t_symbol *s, long argc, t_atom *argv);
+void            tralala_free                    (t_tralala *x);
+void            tralala_assist                  (t_tralala *x, void *b, long m, long a, char *s);
+void            tralala_jsave                   (t_tralala *x, t_dictionary *d);
+t_max_err       tralala_setvalueof              (t_tralala *x, long argc, t_atom *argv);
+t_max_err       tralala_getvalueof              (t_tralala *x, long *argc, t_atom **argv);
 
-t_max_err   tralala_setSequenceMode             (t_tralala *x, t_object *attr, long argc, t_atom *argv);
-t_max_err   tralala_setChannel                  (t_tralala *x, t_object *attr, long argc, t_atom *argv);
-t_max_err   tralala_setVelocity                 (t_tralala *x, t_object *attr, long argc, t_atom *argv);
-t_max_err   tralala_setChance                   (t_tralala *x, t_object *attr, long argc, t_atom *argv);
-t_max_err   tralala_setScaleKey                 (t_tralala *x, t_object *attr, long argc, t_atom *argv);
-t_max_err   tralala_setScaleType                (t_tralala *x, t_object *attr, long argc, t_atom *argv);
-t_max_err   tralala_setScaleCustom              (t_tralala *x, t_object *attr, long argc, t_atom *argv);
-t_max_err   tralala_setPatternCell              (t_tralala *x, t_object *attr, long argc, t_atom *argv);
-t_max_err   tralala_setPatternCustom            (t_tralala *x, t_object *attr, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_dataToDictionary        (t_tralala *x, t_dictionary *d);
+PIZ_LOCAL void  tralala_dataWithDictionary      (t_tralala *x, t_dictionary *d);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
+t_max_err       tralala_setSequenceMode         (t_tralala *x, t_object *attr, long argc, t_atom *argv);
+t_max_err       tralala_setChannel              (t_tralala *x, t_object *attr, long argc, t_atom *argv);
+t_max_err       tralala_setVelocity             (t_tralala *x, t_object *attr, long argc, t_atom *argv);
+t_max_err       tralala_setChance               (t_tralala *x, t_object *attr, long argc, t_atom *argv);
+t_max_err       tralala_setScaleKey             (t_tralala *x, t_object *attr, long argc, t_atom *argv);
+t_max_err       tralala_setScaleType            (t_tralala *x, t_object *attr, long argc, t_atom *argv);
+t_max_err       tralala_setScaleCustom          (t_tralala *x, t_object *attr, long argc, t_atom *argv);
+t_max_err       tralala_setPatternCell          (t_tralala *x, t_object *attr, long argc, t_atom *argv);
+t_max_err       tralala_setPatternCustom        (t_tralala *x, t_object *attr, long argc, t_atom *argv);
 
-void        tralala_play                        (t_tralala *x);
-void        tralala_stop                        (t_tralala *x);
-void        tralala_loop                        (t_tralala *x);
-void        tralala_unloop                      (t_tralala *x);
-void        tralala_pause                       (t_tralala *x);
+void            tralala_play                    (t_tralala *x);
+void            tralala_stop                    (t_tralala *x);
+void            tralala_loop                    (t_tralala *x);
+void            tralala_unloop                  (t_tralala *x);
+void            tralala_pause                   (t_tralala *x);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void        tralala_runTask                     (t_tralala *x);
-void        tralala_goToStartTask               (t_tralala *x);
-void        tralala_inhibitStartTask            (t_tralala *x);
-void        tralala_inhibitBangTask             (t_tralala *x);
+void            tralala_runTask                 (t_tralala *x);
+void            tralala_goToStartTask           (t_tralala *x);
+void            tralala_inhibitStartTask        (t_tralala *x);
+void            tralala_inhibitBangTask         (t_tralala *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void        tralala_copy                        (t_tralala *x);
-void        tralala_enter                       (t_tralala *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
+void            tralala_copy                    (t_tralala *x);
+void            tralala_enter                   (t_tralala *x);
 
 PIZ_LOCAL void  tralala_setLiveByUser           (t_tralala *x);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
+void            tralala_int                     (t_tralala *x, long n);
+void            tralala_list                    (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+void            tralala_mute                    (t_tralala *x, long n);
+void            tralala_forget                  (t_tralala *x);
 
-void        tralala_int                         (t_tralala *x, long n);
-void        tralala_list                        (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-void        tralala_mute                        (t_tralala *x, long n);
-void        tralala_forget                      (t_tralala *x);
+void            tralala_learnTask               (t_tralala *x);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void        tralala_learnTask                   (t_tralala *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void        tralala_slot                        (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-void        tralala_anything                    (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-void        tralala_handleMessages              (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
+void            tralala_slot                    (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+void            tralala_anything                (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+void            tralala_handleMessages          (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 
 PIZ_LOCAL bool  tralala_sequenceClear           (t_tralala *x, PIZSequence *sequence);
 PIZ_LOCAL bool  tralala_sequenceClean           (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv);
@@ -531,9 +513,6 @@ PIZ_LOCAL bool  tralala_sequenceZoulou          (t_tralala *x, PIZSequence *sequ
 PIZ_LOCAL bool  tralala_sequenceRomeo           (t_tralala *x, PIZSequence *sequence);
 PIZ_LOCAL bool  tralala_sequenceUniform         (t_tralala *x, PIZSequence *sequence);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 PIZ_LOCAL void  tralala_slotNew                 (t_tralala *x);
 PIZ_LOCAL void  tralala_slotNewCopy             (t_tralala *x);
 
@@ -549,47 +528,63 @@ PIZ_LOCAL void  tralala_slotPrevious            (t_tralala *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void  tralala_dataToDictionary        (t_tralala *x, t_dictionary *d);
-PIZ_LOCAL void  tralala_dataWithDictionary      (t_tralala *x, t_dictionary *d);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 PIZ_LOCAL void  tralala_undo                    (t_tralala *x);
 PIZ_LOCAL void  tralala_redo                    (t_tralala *x);
 PIZ_LOCAL void  tralala_addUndo                 (t_tralala *x);
 PIZ_LOCAL void  tralala_clearUndo               (t_tralala *x);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
+void            tralala_mousedown               (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
+void            tralala_mousedrag               (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
+void            tralala_mouseup                 (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
+void            tralala_mouseenter              (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
+void            tralala_mouseleave              (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
+void            tralala_mousemove               (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
 
-void        tralala_mousedown                   (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
-void        tralala_mousedrag                   (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
-void        tralala_mouseup                     (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
-void        tralala_mouseenter                  (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
-void        tralala_mouseleave                  (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
-void        tralala_mousemove                   (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
-
-void        tralala_mousewheel                  (t_tralala *x, t_object *view, t_pt pt, long modifiers, 
+void            tralala_mousewheel              (t_tralala *x, t_object *view, t_pt pt, long modifiers, 
                                                 double x_inc, double y_inc);
 
-void        tralala_key                         (t_tralala *x, t_object *patcherview, 
+void            tralala_key                     (t_tralala *x, t_object *patcherview, 
                                                 long keycode, long modifiers, long textcharacter);
 
-void        tralala_focusgained                 (t_tralala *x, t_object *patcherview);
-void        tralala_focuslost                   (t_tralala *x, t_object *patcherview);
-void        tralala_patcherview_vis             (t_tralala *x, t_object *patcherview);
-void        tralala_patcherview_invis           (t_tralala *x, t_object *patcherview);
+PIZ_LOCAL void  tralala_popupRightClickMenu     (t_tralala *x, t_pt pt, long menuMode);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void        tralala_paint                       (t_tralala *x, t_object *patcherview);
-void        tralala_getdrawparams               (t_tralala *x, t_object *patcherview, t_jboxdrawparams *params);
+void            tralala_paint                   (t_tralala *x, t_object *patcherview);
+void            tralala_getdrawparams           (t_tralala *x, t_object *patcherview, t_jboxdrawparams *params);
 
-void        tralala_paintTask                   (t_tralala *x);
-void        tralala_focusTask                   (t_tralala *x);
-void        tralala_notifyTask                  (t_tralala *x);
+void            tralala_focusgained             (t_tralala *x, t_object *patcherview);
+void            tralala_focuslost               (t_tralala *x, t_object *patcherview);
+void            tralala_patcherview_vis         (t_tralala *x, t_object *patcherview);
+void            tralala_patcherview_invis       (t_tralala *x, t_object *patcherview);
+
+void            tralala_paintTask               (t_tralala *x);
+void            tralala_focusTask               (t_tralala *x);
+void            tralala_notifyTask              (t_tralala *x);
+
+PIZ_LOCAL void  tralala_paintText               (t_tralala *x, t_object *patcherview);
+PIZ_LOCAL void  tralala_paintGrid               (t_tralala *x, t_object *patcherview);
+PIZ_LOCAL void  tralala_paintNotes              (t_tralala *x, t_object *patcherview);
+PIZ_LOCAL void  tralala_paintPlayedNotes        (t_tralala *x, t_object *patcherview);
+
+PIZ_LOCAL void  tralala_paintNoteCandycane      (t_tralala *x, 
+                                                t_jgraphics *g,
+                                                long position,
+                                                long pitch,
+                                                long velocity,
+                                                long duration); 
+
+PIZ_LOCAL void  tralala_paintNoteWithColor      (t_tralala *x, 
+                                                t_jgraphics *g,
+                                                long position,
+                                                long pitch,
+                                                long velocity,
+                                                long duration,
+                                                t_jrgba *color);
+
+PIZ_LOCAL void  tralala_paintZone               (t_tralala *x, t_object *patcherview);
+PIZ_LOCAL void  tralala_paintLasso              (t_tralala *x, t_object *patcherview);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -607,64 +602,34 @@ PIZ_LOCAL bool  tralala_hitNotesByRunIndex                  (t_tralala *x);
 
 PIZ_LOCAL bool  tralala_setCursorType                       (t_tralala *x, t_object *patcherview, 
                                                             t_jmouse_cursortype type);
-                                                            
+
 PIZ_LOCAL bool  tralala_setCoordinatesWithPoint             (t_tralala *x, 
                                                             PIZCoordinates *coordinates, 
                                                             t_pt pt);
-                                                            
+
 PIZ_LOCAL void  tralala_setRectWithZoneValues               (t_tralala *x, 
                                                             t_rect *zoneRect, 
                                                             long start, 
                                                             long end, 
                                                             long down, 
                                                             long up);
-                                                            
+
 PIZ_LOCAL void  tralala_setRectWithCoordinatesAndDuration   (t_tralala *x, 
                                                             t_rect *noteRect, 
                                                             PIZCoordinates *coordinates, 
                                                             long duration); 
-                                                            
-PIZ_LOCAL void  tralala_unselectAllText                     (t_tralala *x);
-PIZ_LOCAL bool  tralala_hasSelectedText                     (t_tralala *x, long *selectedText);
+
 PIZ_LOCAL void  tralala_setStringWithLong                   (char *string, 
                                                             long longToBeFormatted, 
                                                             long formatMode);
 
-PIZ_LOCAL void  tralala_testAutoscroll                      (t_tralala *x, t_object *patcherview, t_pt pt);
-PIZ_LOCAL void  tralala_stopAutoscroll                      (t_tralala *x);
+PIZ_LOCAL void  tralala_unselectAllText                     (t_tralala *x);
+PIZ_LOCAL bool  tralala_hasSelectedText                     (t_tralala *x, long *selectedText);
 
 PIZ_LOCAL void  tralala_willChange                          (t_tralala *x);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_LOCAL void  tralala_popupRightClickMenu                 (t_tralala *x, t_pt pt, long menuMode);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_LOCAL void  tralala_paintText                           (t_tralala *x, t_object *patcherview);
-PIZ_LOCAL void  tralala_paintGrid                           (t_tralala *x, t_object *patcherview);
-PIZ_LOCAL void  tralala_paintNotes                          (t_tralala *x, t_object *patcherview);
-PIZ_LOCAL void  tralala_paintPlayedNotes                    (t_tralala *x, t_object *patcherview);
-
-PIZ_LOCAL void  tralala_paintNoteCandycane                  (t_tralala *x, 
-                                                            t_jgraphics *g,
-                                                            long position,
-                                                            long pitch,
-                                                            long velocity,
-                                                            long duration); 
-                                                                                                            
-PIZ_LOCAL void  tralala_paintNoteWithColor                  (t_tralala *x, 
-                                                            t_jgraphics *g,
-                                                            long position,
-                                                            long pitch,
-                                                            long velocity,
-                                                            long duration,
-                                                            t_jrgba *color);
-                                                            
-PIZ_LOCAL void  tralala_paintZone                           (t_tralala *x, t_object *patcherview);
-PIZ_LOCAL void  tralala_paintLasso                          (t_tralala *x, t_object *patcherview);
+PIZ_LOCAL void  tralala_testAutoscroll                      (t_tralala *x, t_object *patcherview, t_pt pt);
+PIZ_LOCAL void  tralala_stopAutoscroll                      (t_tralala *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
