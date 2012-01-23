@@ -56,16 +56,12 @@ void        pizSequenceChangeMarkedNoteValue            (PIZSequence *x, PIZSele
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-bool        pizSequenceSetTempZoneStartWithCoordinates  (PIZSequence *x, const PIZCoordinates *c);
-bool        pizSequenceSetTempZoneEndWithCoordinates    (PIZSequence *x, const PIZCoordinates *c);
-bool        pizSequenceSetTempZoneDownWithCoordinates   (PIZSequence *x, const PIZCoordinates *c);
-bool        pizSequenceSetTempZoneUpWithCoordinates     (PIZSequence *x, const PIZCoordinates *c);
-
+void        pizSequenceSetTempZoneByZone                (PIZSequence *x);
+bool        pizSequenceSetTempZoneWithCoordinates       (PIZSequence *x, const PIZCoordinates *c, long side);
 bool        pizSequenceMoveTempZoneWithDelta            (PIZSequence *x, long pitch, long position);
 
 PIZError    pizSequenceTempZoneToArray                  (PIZSequence *x, PIZGrowingArray *a);
 
-void        pizSequenceSetTempZoneByZone                (PIZSequence *x);
 PIZError    pizSequenceSetZoneByTempZone                (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------

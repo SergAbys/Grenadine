@@ -431,15 +431,17 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                                 (SEMITONE_PIXELS_SIZE / 2. * f)) / (SEMITONE_PIXELS_SIZE * f)));
                                 
                     switch (x->hitTest) {
-                    case HIT_START: draw = pizSequenceSetTempZoneStartWithCoordinates 
-                                      (x->user, &x->coordinates); break;
-                    case HIT_END  : draw = pizSequenceSetTempZoneEndWithCoordinates
-                                      (x->user, &x->coordinates); break;
-                    case HIT_DOWN : draw = pizSequenceSetTempZoneDownWithCoordinates (x->user, &c1); break;
-                    case HIT_UP   : draw = pizSequenceSetTempZoneUpWithCoordinates (x->user, &c2); break;
+                    case HIT_START: draw = pizSequenceSetTempZoneWithCoordinates 
+                                        (x->user, &x->coordinates, PIZ_SEQUENCE_START); break;
+                    case HIT_END  : draw = pizSequenceSetTempZoneWithCoordinates
+                                        (x->user, &x->coordinates, PIZ_SEQUENCE_END); break;
+                    case HIT_DOWN : draw = pizSequenceSetTempZoneWithCoordinates 
+                                        (x->user, &c1, PIZ_SEQUENCE_DOWN); break;
+                    case HIT_UP   : draw = pizSequenceSetTempZoneWithCoordinates 
+                                        (x->user, &c2, PIZ_SEQUENCE_UP); break;
                     case (HIT_START | HIT_END)  
-                                  : draw = pizSequenceSetTempZoneEndWithCoordinates (x->user, &x->coordinates);
-                                      break;
+                                  : draw = pizSequenceSetTempZoneWithCoordinates 
+                                        (x->user, &x->coordinates, PIZ_SEQUENCE_END); break;
                     }
                 
                     tralala_testAutoscroll (x, patcherview, pt);

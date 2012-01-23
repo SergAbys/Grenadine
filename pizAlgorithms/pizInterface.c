@@ -159,89 +159,63 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-bool pizSequenceSetTempZoneStartWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates)
+void pizSequenceSetTempZoneByZone (PIZSequence *x)
 {
-    long tempStart;
-    bool haveChanged = false;
-    
     PIZLOCK
     
-    tempStart = CLAMP (pizSequenceSnapRoundPosition (x, coordinates->position), 0, PIZ_SEQUENCE_TIMELINE_SIZE);
-    
-    if (interface_start != tempStart) {
-            interface_start = tempStart;
-            haveChanged = true;
-        }
+    interface_start         = x->start;
+    interface_end           = x->end;
+    interface_down          = x->down;
+    interface_up            = x->up;
+    interface_originStart   = x->start;
+    interface_originDown    = x->down;
+    interface_originWidth   = (x->end - x->start);
+    interface_originHeight  = (x->up - x->down);
     
     PIZUNLOCK
-    
-    return haveChanged;
 }
 
-bool pizSequenceSetTempZoneEndWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates)
+bool pizSequenceSetTempZoneWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates, long side)
 {
-    long tempEnd;
+    long tempValue = -1;
     bool haveChanged = false;
     
     PIZLOCK
     
-    tempEnd = CLAMP (pizSequenceSnapRoundPosition (x, coordinates->position), 0, PIZ_SEQUENCE_TIMELINE_SIZE);
-    
-    if (interface_end != tempEnd) {
-            interface_end = tempEnd;
-            haveChanged = true;
+    switch (side) {
+        case PIZ_SEQUENCE_START :   tempValue = CLAMP (pizSequenceSnapRoundPosition (x, coordinates->position), 
+                                        0, PIZ_SEQUENCE_TIMELINE_SIZE); break;
+        case PIZ_SEQUENCE_END   :   tempValue = CLAMP (pizSequenceSnapRoundPosition (x, coordinates->position), 
+                                        0, PIZ_SEQUENCE_TIMELINE_SIZE); break;
+        case PIZ_SEQUENCE_DOWN  :   if (coordinates->pitch <= interface_up) {
+                                        tempValue = CLAMP (coordinates->pitch, 0, PIZ_SEQUENCE_MIDI_NOTE);
+                                    } break;
+        case PIZ_SEQUENCE_UP    :   if (coordinates->pitch >= interface_down) {
+                                        tempValue = CLAMP (coordinates->pitch, 0, PIZ_SEQUENCE_MIDI_NOTE);
+                                    } break;
         }
     
-    PIZUNLOCK
-    
-    return haveChanged;
-}
-
-bool pizSequenceSetTempZoneDownWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates)
-{
-    bool haveChanged = false;
-    
-    PIZLOCK
-    
-    if (coordinates->pitch <= interface_up)
+    if (tempValue != -1)
         {
-            long tempDown = CLAMP (coordinates->pitch, 0, PIZ_SEQUENCE_MIDI_NOTE);
-            
-            if (interface_down != tempDown) {
-                    interface_down = tempDown;
-                    haveChanged = true;
-                }
-        }
-        
-    PIZUNLOCK
-    
-    return haveChanged;
-}
-
-bool pizSequenceSetTempZoneUpWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates)
-{
-    bool haveChanged = false;
-    
-    PIZLOCK
-    
-    if (coordinates->pitch >= interface_down)
-        {
-            long tempUp = CLAMP (coordinates->pitch, 0, PIZ_SEQUENCE_MIDI_NOTE);
-            
-            if (interface_up != tempUp) {
-                interface_up = tempUp;
+            if ((side == PIZ_SEQUENCE_START) && (interface_start != tempValue)) {
+                interface_start = tempValue;
+                haveChanged = true;
+            } else if ((side == PIZ_SEQUENCE_END) && (interface_end != tempValue)) {
+                interface_end = tempValue;
+                haveChanged = true;
+            } else if ((side == PIZ_SEQUENCE_DOWN) && (interface_down != tempValue)) {
+                interface_down = tempValue;
+                haveChanged = true;
+            } else if ((side == PIZ_SEQUENCE_UP) && (interface_up != tempValue)) {
+                interface_up = tempValue;
                 haveChanged = true;
             }
         }
-        
+    
     PIZUNLOCK
     
     return haveChanged;
 }
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
 bool pizSequenceMoveTempZoneWithDelta (PIZSequence *x, long pitch, long position)
 {
@@ -251,9 +225,9 @@ bool pizSequenceMoveTempZoneWithDelta (PIZSequence *x, long pitch, long position
     PIZLOCK
     
     tempStart   = CLAMP (pizSequenceSnapRoundPosition (x, interface_originStart + position), 
-                        0, (PIZ_SEQUENCE_TIMELINE_SIZE - interface_originWidth));
+                    0, (PIZ_SEQUENCE_TIMELINE_SIZE - interface_originWidth));
     tempDown    = CLAMP (interface_originDown + pitch, 
-                        0, (PIZ_SEQUENCE_MIDI_NOTE - interface_originHeight));
+                    0, (PIZ_SEQUENCE_MIDI_NOTE - interface_originHeight));
     
     if ((tempStart != interface_start) || (tempDown != interface_down))
         {
@@ -291,21 +265,9 @@ PIZError pizSequenceTempZoneToArray (PIZSequence *x, PIZGrowingArray *a)
     return err;
 }
 
-void pizSequenceSetTempZoneByZone (PIZSequence *x)
-{
-    PIZLOCK
-    
-    interface_start         = x->start;
-    interface_end           = x->end;
-    interface_down          = x->down;
-    interface_up            = x->up;
-    interface_originStart   = x->start;
-    interface_originDown    = x->down;
-    interface_originWidth   = (x->end - x->start);
-    interface_originHeight  = (x->up - x->down);
-    
-    PIZUNLOCK
-}
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZError pizSequenceSetZoneByTempZone (PIZSequence *x)
 {
@@ -484,6 +446,10 @@ long pizSequenceInvertNoteWithCoordinates (PIZSequence *x, const PIZCoordinates 
     
     return k;
 }
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void pizSequenceInitLasso (PIZSequence *x)
 {
