@@ -143,7 +143,7 @@ PIZError pizGrowingArrayCopy (PIZGrowingArray *x, const PIZGrowingArray *toCopy)
 
 PIZError pizGrowingArrayAppendArray (PIZGrowingArray *x, const PIZGrowingArray *toAppend)
 {
-    PIZError err = PIZ_GOOD;
+    PIZError err = (x == toAppend);
     
     if ((toAppend->index + x->index) > x->size)
         {
