@@ -1,7 +1,7 @@
 /*
  * \file    pizTransform.c
  * \author  Jean Sapristi
- * \date    21 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -961,7 +961,7 @@ bool pizSequenceKillNotes (PIZSequence *x)
     return haveChanged;
 }
 
-bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, PIZGrowingArray *a)
+bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a)
 {
     bool haveChanged = false;
 

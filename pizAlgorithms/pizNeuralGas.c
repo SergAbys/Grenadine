@@ -1,7 +1,7 @@
 /*
  * \file    pizNeuralGas.c
  * \author  Jean Sapristi
- * \date    22 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -406,12 +406,7 @@ void pizNeuralGasClear (PIZNeuralGas *x)
     x->mapSize = 2;
 }
 
-long pizNeuralGasCount (PIZNeuralGas *x)
-{
-    return x->count;
-}
-
-PIZError pizNeuralGasProceed (PIZNeuralGas *x, long argc, long *argv)
+PIZError pizNeuralGasProceed (const PIZNeuralGas *x, long argc, long *argv)
 {
     long err = PIZ_ERROR;
     
@@ -451,6 +446,11 @@ PIZError pizNeuralGasProceed (PIZNeuralGas *x, long argc, long *argv)
         }
     
     return err;
+}
+
+long pizNeuralGasCount (const PIZNeuralGas *x)
+{
+    return x->count;
 }
 
 // -------------------------------------------------------------------------------------------------------------

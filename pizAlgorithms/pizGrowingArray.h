@@ -1,7 +1,7 @@
 /**
  * \file    pizGrowingArray.h
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -60,23 +60,24 @@ typedef struct _PIZGrowingArray {
 
 PIZ_START_C_LINKAGE
 
-PIZGrowingArray     *pizGrowingArrayNew                 (long size);
-void                pizGrowingArrayFree                 (PIZGrowingArray *array);
+PIZGrowingArray     *pizGrowingArrayNew              (long size);
+void                pizGrowingArrayFree              (PIZGrowingArray *x);
 
-void                pizGrowingArrayClear                (PIZGrowingArray *array);
-PIZError            pizGrowingArrayAppend               (PIZGrowingArray *array, long value);
-long                pizGrowingArrayCount                (PIZGrowingArray *array);
-long                pizGrowingArrayValueAtIndex         (PIZGrowingArray *array, long index);
-void                pizGrowingArraySetValueAtIndex      (PIZGrowingArray *array, long index, long value);
+void                pizGrowingArrayClear             (PIZGrowingArray *x);
+PIZError            pizGrowingArrayAppend            (PIZGrowingArray *x, long value);
+void                pizGrowingArraySetValueAtIndex   (PIZGrowingArray *x, long index, long value);
 
-long                *pizGrowingArrayPtr                 (PIZGrowingArray *array);   
-void                pizGrowingArrayRemoveIndex          (PIZGrowingArray *array, long index);
-PIZError            pizGrowingArrayRemoveLastValue      (PIZGrowingArray *array);
-long                pizGrowingArrayFirstIndexOfValue    (PIZGrowingArray *array, long value);
-bool                pizGrowingArrayContainsValue        (PIZGrowingArray *array, long value);
-PIZError            pizGrowingArrayCopy                 (PIZGrowingArray *array, PIZGrowingArray *toBeCopied);
-PIZError            pizGrowingArrayAppendArray          (PIZGrowingArray *array, PIZGrowingArray *toAppend);
-PIZError            pizGrowingArrayAppendPtr            (PIZGrowingArray *array, long argc, long *argv);
+long                pizGrowingArrayCount             (const PIZGrowingArray *x);
+long                pizGrowingArrayValueAtIndex      (const PIZGrowingArray *x, long index);
+long                *pizGrowingArrayPtr              (const PIZGrowingArray *x); 
+  
+void                pizGrowingArrayRemoveIndex       (PIZGrowingArray *x, long index);
+PIZError            pizGrowingArrayRemoveLastValue   (PIZGrowingArray *x);
+long                pizGrowingArrayFirstIndexOfValue (const PIZGrowingArray *x, long value);
+bool                pizGrowingArrayContainsValue     (const PIZGrowingArray *x, long value);
+PIZError            pizGrowingArrayCopy              (PIZGrowingArray *x, const PIZGrowingArray *toCopy);
+PIZError            pizGrowingArrayAppendArray       (PIZGrowingArray *x, const PIZGrowingArray *toAppend);
+PIZError            pizGrowingArrayAppendPtr         (PIZGrowingArray *x, long argc, long *argv);
 
 PIZ_END_C_LINKAGE
 
@@ -90,24 +91,24 @@ PIZ_EXTERN void pizGrowingArrayClear (PIZGrowingArray *x)
     x->index = 0;
 }
 
-PIZ_EXTERN long pizGrowingArrayCount (PIZGrowingArray *x)
-{
-    return (x->index);
-}
-
-PIZ_EXTERN long pizGrowingArrayValueAtIndex (PIZGrowingArray *x, long index)
-{   
-    return (x->growingArrayValues[index]);
-}
-
 PIZ_EXTERN void pizGrowingArraySetValueAtIndex (PIZGrowingArray *x, long index, long value)
 {
     x->growingArrayValues[index] = value;
 }
 
-PIZ_EXTERN long *pizGrowingArrayPtr (PIZGrowingArray *array)
+PIZ_EXTERN long pizGrowingArrayCount (const PIZGrowingArray *x)
 {
-    return (array->growingArrayValues);
+    return (x->index);
+}
+
+PIZ_EXTERN long pizGrowingArrayValueAtIndex (const PIZGrowingArray *x, long index)
+{   
+    return (x->growingArrayValues[index]);
+}
+
+PIZ_EXTERN long *pizGrowingArrayPtr (const PIZGrowingArray *x)
+{
+    return (x->growingArrayValues);
 }
 
 #endif // PIZ_EXTERN_INLINE

@@ -1,7 +1,7 @@
 /*
  * \file    pizMarkovModel.c
  * \author  Jean Sapristi
- * \date    22 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -169,6 +169,23 @@ void pizMarkovModelFree (PIZMarkovModel *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+void pizMarkovModelClear (PIZMarkovModel *x)
+{
+    long i;
+                    
+    x->count = 0;
+                    
+    pizMarkovModelFillStochastically (x->graphSize, x->start);
+                    
+    for (i = 0; i < x->graphSize; i++) {
+            pizMarkovModelFillStochastically (x->graphSize, x->transition + (i * x->graphSize));
+        }
+        
+    for (i = 0; i < x->graphSize; i++) {
+            pizMarkovModelFillStochastically (PIZ_ALPHABET_SIZE, x->emission + (i * PIZ_ALPHABET_SIZE));
+        }
+}
+
 PIZError pizMarkovModelAdd (PIZMarkovModel *x, long argc, long *argv)
 {
     long err = PIZ_ERROR;
@@ -192,29 +209,7 @@ PIZError pizMarkovModelAdd (PIZMarkovModel *x, long argc, long *argv)
     return err;
 }
 
-void pizMarkovModelClear (PIZMarkovModel *x)
-{
-    long i;
-                    
-    x->count = 0;
-                    
-    pizMarkovModelFillStochastically (x->graphSize, x->start);
-                    
-    for (i = 0; i < x->graphSize; i++) {
-            pizMarkovModelFillStochastically (x->graphSize, x->transition + (i * x->graphSize));
-        }
-        
-    for (i = 0; i < x->graphSize; i++) {
-            pizMarkovModelFillStochastically (PIZ_ALPHABET_SIZE, x->emission + (i * PIZ_ALPHABET_SIZE));
-        }
-}
-
-long pizMarkovModelCount (PIZMarkovModel *x)
-{
-    return (x->count);
-}
-
-PIZError pizMarkovModelProceed (PIZMarkovModel *x, long argc, long *argv)
+PIZError pizMarkovModelProceed (const PIZMarkovModel *x, long argc, long *argv)
 {
     long err = PIZ_ERROR;
     
@@ -292,6 +287,11 @@ PIZError pizMarkovModelProceed (PIZMarkovModel *x, long argc, long *argv)
         }
     
     return err;
+}
+
+long pizMarkovModelCount (const PIZMarkovModel *x)
+{
+    return (x->count);
 }
 
 // -------------------------------------------------------------------------------------------------------------

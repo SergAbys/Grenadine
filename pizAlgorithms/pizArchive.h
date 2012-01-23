@@ -1,7 +1,7 @@
 /**
  * \file    pizArchive.h
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -50,7 +50,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 PIZError    pizSequenceEncodeSlotToArray        (PIZSequence *x, PIZGrowingArray *a);
-PIZError    pizSequenceDecodeSlotWithArray      (PIZSequence *x, PIZGrowingArray *a);
+PIZError    pizSequenceDecodeSlotWithArray      (PIZSequence *x, const PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

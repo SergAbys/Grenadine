@@ -2,7 +2,7 @@
  * \file    pizMarkovModel.h
  * \details Thanks : T.Brouard, M. Slimane, J.-P. Asselin de Beauville, G. Venturini.
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
 
 /*
@@ -86,27 +86,27 @@ PIZ_START_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 
 PIZMarkovModel  *pizMarkovModelNew                  (long argc, long *argv);
-void            pizMarkovModelFree                  (PIZMarkovModel *markovModel);
+void            pizMarkovModelFree                  (PIZMarkovModel *x);
 
-PIZError        pizMarkovModelAdd                   (PIZMarkovModel *markovModel, long argc, long *argv);
-void            pizMarkovModelClear                 (PIZMarkovModel *markovModel);
-long            pizMarkovModelCount                 (PIZMarkovModel *markovModel);
-PIZError        pizMarkovModelProceed               (PIZMarkovModel *markovModel, long argc, long *argv);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void            pizMarkovModelSetPersistence        (PIZMarkovModel *markovModel, double f);
+void            pizMarkovModelClear                 (PIZMarkovModel *x);
+PIZError        pizMarkovModelAdd                   (PIZMarkovModel *x, long argc, long *argv);
+PIZError        pizMarkovModelProceed               (const PIZMarkovModel *x, long argc, long *argv);
+long            pizMarkovModelCount                 (const PIZMarkovModel *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError        pizMarkovModelEncodeNodeToArray     (PIZMarkovModel *x, long n, PIZGrowingArray *array);
+void            pizMarkovModelSetPersistence        (PIZMarkovModel *x, double f);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void  pizMarkovModelBaumWelch             (PIZMarkovModel *markovModel, long argc, long *argv);
+PIZError        pizMarkovModelEncodeNodeToArray     (const PIZMarkovModel *x, long n, PIZGrowingArray *a);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZ_LOCAL void  pizMarkovModelBaumWelch             (PIZMarkovModel *x, long argc, long *argv);
 PIZ_LOCAL void  pizMarkovModelFillStochastically    (long argc, double *argv);
 
 // -------------------------------------------------------------------------------------------------------------

@@ -76,17 +76,18 @@ typedef struct _PIZLinklist {
 PIZ_START_C_LINKAGE
 
 PIZLinklist     *pizLinklistNew             (void);
-void            pizLinklistSetFlags         (PIZLinklist *linklist, long flags);
-void            pizLinklistFree             (PIZLinklist *linklist);
+void            pizLinklistSetFlags         (PIZLinklist *x, long flags);
+void            pizLinklistFree             (PIZLinklist *x);
 
-void            pizLinklistClear            (PIZLinklist *linklist);
-PIZError        pizLinklistAppend           (PIZLinklist *linklist, void *ptr);
-PIZError        pizLinklistInsert           (PIZLinklist *linklist, void *ptr);
-long            pizLinklistCount            (PIZLinklist *linklist);
-PIZError        pizLinklistPtrAtIndex       (PIZLinklist *linklist, long index, void **ptr);
-PIZError        pizLinklistNextByPtr        (PIZLinklist *linklist, void *ptr, void **nextPtr);
-PIZError        pizLinklistRemoveByPtr      (PIZLinklist *linklist, void *ptr);
-PIZError        pizLinklistSwapByIndexes    (PIZLinklist *linklist, long m, long n);
+void            pizLinklistClear            (PIZLinklist *x);
+PIZError        pizLinklistAppend           (PIZLinklist *x, void *ptr);
+PIZError        pizLinklistInsert           (PIZLinklist *x, void *ptr);
+PIZError        pizLinklistPtrAtIndex       (PIZLinklist *x, long index, void **ptr);
+PIZError        pizLinklistNextByPtr        (PIZLinklist *x, void *ptr, void **nextPtr);
+PIZError        pizLinklistRemoveByPtr      (PIZLinklist *x, void *ptr);
+PIZError        pizLinklistSwapByIndexes    (PIZLinklist *x, long m, long n);
+
+long            pizLinklistCount            (const PIZLinklist *x);
 
 PIZ_END_C_LINKAGE
 
@@ -100,7 +101,7 @@ PIZ_EXTERN void pizLinklistSetFlags (PIZLinklist *x, long flags)
     x->flags = flags;
 }
 
-PIZ_EXTERN long pizLinklistCount (PIZLinklist *x)
+PIZ_EXTERN long pizLinklistCount (const PIZLinklist *x)
 {
     return (x->count);
 }

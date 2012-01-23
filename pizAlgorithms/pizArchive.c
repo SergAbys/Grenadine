@@ -96,7 +96,7 @@ PIZError pizSequenceEncodeSlotToArray (PIZSequence *x, PIZGrowingArray *a)
     return err;
 }
 
-PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, PIZGrowingArray *a)
+PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, const PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     

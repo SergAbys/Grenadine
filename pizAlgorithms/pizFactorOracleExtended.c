@@ -1,7 +1,7 @@
 /*
  * \file    pizFactorOracleExtended.c
  * \author  Jean Sapristi
- * \date    22 janvier 2012
+ * \date    23 janvier 2012
  */
 
 /*
@@ -43,21 +43,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-long pizFactorOracleBackwardThreshold (PIZFactorOracle *x)
-{
-    return x->backwardThreshold;
-}
-
 void pizFactorOracleSetBackwardThreshold (PIZFactorOracle *x, long n)
 {
     if (n >= 0) {
             x->backwardThreshold = n;
         }
-}
-
-double pizFactorOracleStraightRatio (PIZFactorOracle *x)
-{
-    return x->straightRatio;
 }
 
 void pizFactorOracleSetStraightRatio (PIZFactorOracle *x, double f)
@@ -67,22 +57,32 @@ void pizFactorOracleSetStraightRatio (PIZFactorOracle *x, double f)
         }
 }
 
+long pizFactorOracleBackwardThreshold (const PIZFactorOracle *x)
+{
+    return x->backwardThreshold;
+}
+
+double pizFactorOracleStraightRatio (const PIZFactorOracle *x)
+{
+    return x->straightRatio;
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizFactorOracleEncodeNodeToArray (PIZFactorOracle *x, long node, PIZGrowingArray *array)
+PIZError pizFactorOracleEncodeNodeToArray (const PIZFactorOracle *x, long node, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     
-    if ((node < x->index) && array)
+    if ((node < x->index) && a)
         {
             err = PIZ_GOOD;
             
-            err |= pizGrowingArrayAppend        (array, x->nodes[node].referTo);
-            err |= pizGrowingArrayAppend        (array, x->nodes[node].lengthRepeatedSuffix);
-            err |= pizGrowingArrayAppend        (array, pizGrowingArrayCount (x->nodes[node].arcDestinations));
-            err |= pizGrowingArrayAppendArray   (array, x->nodes[node].arcDestinations);
-            err |= pizGrowingArrayAppendArray   (array, x->nodes[node].arcValues);
+            err |= pizGrowingArrayAppend        (a, x->nodes[node].referTo);
+            err |= pizGrowingArrayAppend        (a, x->nodes[node].lengthRepeatedSuffix);
+            err |= pizGrowingArrayAppend        (a, pizGrowingArrayCount (x->nodes[node].arcDestinations));
+            err |= pizGrowingArrayAppendArray   (a, x->nodes[node].arcDestinations);
+            err |= pizGrowingArrayAppendArray   (a, x->nodes[node].arcValues);
         }
     
     return err;

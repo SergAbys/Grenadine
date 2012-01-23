@@ -1,7 +1,7 @@
 /*
  * \file    pizMarkovModelExtended.c
  * \author  Jean Sapristi
- * \date    22 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -58,26 +58,26 @@ void pizMarkovModelSetPersistence (PIZMarkovModel *x, double f)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizMarkovModelEncodeNodeToArray (PIZMarkovModel *x, long n, PIZGrowingArray *array)
+PIZError pizMarkovModelEncodeNodeToArray (const PIZMarkovModel *x, long n, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     
-    if ((n >= 0) && (n < x->graphSize) && array)
+    if ((n >= 0) && (n < x->graphSize) && a)
         {
             long i;
             
             err = PIZ_GOOD;
             
-            err |= pizGrowingArrayAppend (array, (long)(x->start[n] * 100.));
-            err |= pizGrowingArrayAppend (array, x->graphSize);
-            err |= pizGrowingArrayAppend (array, PIZ_ALPHABET_SIZE);
+            err |= pizGrowingArrayAppend (a, (long)(x->start[n] * 100.));
+            err |= pizGrowingArrayAppend (a, x->graphSize);
+            err |= pizGrowingArrayAppend (a, PIZ_ALPHABET_SIZE);
             
             for (i = 0; i < x->graphSize; i++) {
-                err |= pizGrowingArrayAppend (array, (long)(x->transition[(n * x->graphSize) + i] * 100.));
+                err |= pizGrowingArrayAppend (a, (long)(x->transition[(n * x->graphSize) + i] * 100.));
             }
             
             for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
-                err |= pizGrowingArrayAppend (array, (long)(x->emission[(n * PIZ_ALPHABET_SIZE) + i] * 100.));
+                err |= pizGrowingArrayAppend (a, (long)(x->emission[(n * PIZ_ALPHABET_SIZE) + i] * 100.));
             }
         }
     

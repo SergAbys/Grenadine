@@ -1,7 +1,7 @@
 /*
  * \file    pizNeuralGas.c
  * \author  Jean Sapristi
- * \date    22 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -53,19 +53,9 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-long pizNeuralGasLambda (PIZNeuralGas *x)
-{
-    return (x->lambda);
-}
-
 void pizNeuralGasSetLambda (PIZNeuralGas *x, long n)
 {
     x->lambda = MAX (n, 1);
-}
-
-double pizNeuralGasEpsilon1 (PIZNeuralGas *x)
-{
-    return (x->epsilon1);
 }
 
 void pizNeuralGasSetEpsilon1 (PIZNeuralGas *x, double f)
@@ -75,21 +65,11 @@ void pizNeuralGasSetEpsilon1 (PIZNeuralGas *x, double f)
         }
 }
 
-double pizNeuralGasEpsilon2 (PIZNeuralGas *x)
-{
-    return (x->epsilon2);
-}
-
 void pizNeuralGasSetEpsilon2 (PIZNeuralGas *x, double f)
 {
     if (f > 0. && f < 1.) {
             x->epsilon2 = f;
         }
-}
-
-double pizNeuralGasAlpha (PIZNeuralGas *x)
-{
-    return (x->alpha);
 }
 
 void pizNeuralGasSetAlpha (PIZNeuralGas *x, double f)
@@ -99,21 +79,11 @@ void pizNeuralGasSetAlpha (PIZNeuralGas *x, double f)
         }
 }
 
-double pizNeuralGasBeta (PIZNeuralGas *x)
-{
-    return (x->beta);
-}
-
 void pizNeuralGasSetBeta (PIZNeuralGas *x, double f)
 {
     if (f > 0. && f < 1.) {
             x->beta = f;
         }
-}
-
-double pizNeuralGasKappa (PIZNeuralGas *x)
-{
-    return (x->kappa);
 }
 
 void pizNeuralGasSetKappa (PIZNeuralGas *x, double f)
@@ -123,14 +93,44 @@ void pizNeuralGasSetKappa (PIZNeuralGas *x, double f)
         }
 }
 
+long pizNeuralGasLambda (const PIZNeuralGas *x)
+{
+    return (x->lambda);
+}
+
+double pizNeuralGasEpsilon1 (const PIZNeuralGas *x)
+{
+    return (x->epsilon1);
+}
+
+double pizNeuralGasEpsilon2 (const PIZNeuralGas *x)
+{
+    return (x->epsilon2);
+}
+
+double pizNeuralGasAlpha (const PIZNeuralGas *x)
+{
+    return (x->alpha);
+}
+
+double pizNeuralGasBeta (const PIZNeuralGas *x)
+{
+    return (x->beta);
+}
+
+double pizNeuralGasKappa (const PIZNeuralGas *x)
+{
+    return (x->kappa);
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizNeuralGasEncodeVectorToArray (PIZNeuralGas *x, long n, PIZGrowingArray *array)
+PIZError pizNeuralGasEncodeVectorToArray (const PIZNeuralGas *x, long n, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     
-    if ((n >= 0) && (n < x->mapSize) && array)
+    if ((n >= 0) && (n < x->mapSize) && a)
         {
             long i;
             long k = 0;
@@ -145,7 +145,7 @@ PIZError pizNeuralGasEncodeVectorToArray (PIZNeuralGas *x, long n, PIZGrowingArr
                                 long j;
                                 
                                 for (j = 0; j < x->vectorSize; j++) {
-                                    err |= pizGrowingArrayAppend (array, (long)(floor ((*(x->vectorStock 
+                                    err |= pizGrowingArrayAppend (a, (long)(floor ((*(x->vectorStock 
                                             + (n * x->vectorSize) + j)) + 0.5)));
                                     }
                             }

@@ -1,7 +1,7 @@
 /*
  * \file    pizInterface.c
  * \author  Jean Sapristi
- * \date    21 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -159,7 +159,7 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-bool pizSequenceSetTempZoneStartWithCoordinates (PIZSequence *x, PIZCoordinates *coordinates)
+bool pizSequenceSetTempZoneStartWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates)
 {
     long tempStart;
     bool haveChanged = false;
@@ -178,7 +178,7 @@ bool pizSequenceSetTempZoneStartWithCoordinates (PIZSequence *x, PIZCoordinates 
     return haveChanged;
 }
 
-bool pizSequenceSetTempZoneEndWithCoordinates (PIZSequence *x, PIZCoordinates *coordinates)
+bool pizSequenceSetTempZoneEndWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates)
 {
     long tempEnd;
     bool haveChanged = false;
@@ -197,7 +197,7 @@ bool pizSequenceSetTempZoneEndWithCoordinates (PIZSequence *x, PIZCoordinates *c
     return haveChanged;
 }
 
-bool pizSequenceSetTempZoneDownWithCoordinates (PIZSequence *x, PIZCoordinates *coordinates)
+bool pizSequenceSetTempZoneDownWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates)
 {
     bool haveChanged = false;
     
@@ -218,7 +218,7 @@ bool pizSequenceSetTempZoneDownWithCoordinates (PIZSequence *x, PIZCoordinates *
     return haveChanged;
 }
 
-bool pizSequenceSetTempZoneUpWithCoordinates (PIZSequence *x, PIZCoordinates *coordinates)
+bool pizSequenceSetTempZoneUpWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates)
 {
     bool haveChanged = false;
     
@@ -270,20 +270,20 @@ bool pizSequenceMoveTempZoneWithDelta (PIZSequence *x, long pitch, long position
     return haveChanged;
 }
 
-PIZError pizSequenceTempZoneToArray (PIZSequence *x, PIZGrowingArray *array)
+PIZError pizSequenceTempZoneToArray (PIZSequence *x, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
 
     PIZLOCK
     
-    if (array)
+    if (a)
         {
             err = PIZ_GOOD;
             
-            err |= pizGrowingArrayAppend (array, interface_start);
-            err |= pizGrowingArrayAppend (array, interface_end);
-            err |= pizGrowingArrayAppend (array, interface_down);
-            err |= pizGrowingArrayAppend (array, interface_up);
+            err |= pizGrowingArrayAppend (a, interface_start);
+            err |= pizGrowingArrayAppend (a, interface_end);
+            err |= pizGrowingArrayAppend (a, interface_down);
+            err |= pizGrowingArrayAppend (a, interface_up);
         }
         
     PIZUNLOCK
@@ -378,7 +378,7 @@ void pizSequenceUnselectAllNotes (PIZSequence *x)
     PIZUNLOCK
 }
 
-long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, PIZCoordinates *coordinates)
+long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates)
 {
     long i, count;
     long k = 0;
@@ -428,7 +428,7 @@ long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, PIZCoordinates *coord
     return k;
 }
 
-long pizSequenceInvertNoteWithCoordinates (PIZSequence *x, PIZCoordinates *coordinates)
+long pizSequenceInvertNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates)
 {
     long i, count;
     long k = -1;
@@ -513,7 +513,8 @@ void pizSequenceInitLasso (PIZSequence *x)
     PIZUNLOCK
 }
 
-long pizSequenceSelectNotesWithLasso (PIZSequence *x, PIZCoordinates *c1, PIZCoordinates *c2, bool invert)
+long pizSequenceSelectNotesWithLasso (PIZSequence *x, const PIZCoordinates *c1, const PIZCoordinates *c2, 
+    bool invert)
 {
     long i, a, b, u, v;
     long k = 0;
@@ -688,7 +689,7 @@ PIZError pizSequenceEncodeUndoToArray (PIZSequence *x, PIZGrowingArray *a)
     return err;
 }
 
-PIZError pizSequenceDecodeUndoWithArray (PIZSequence *x, PIZGrowingArray *a)
+PIZError pizSequenceDecodeUndoWithArray (PIZSequence *x, const PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     
@@ -736,7 +737,7 @@ PIZError pizSequenceDecodeUndoWithArray (PIZSequence *x, PIZGrowingArray *a)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-bool pizSequenceUndoIsEqualToUndo (PIZGrowingArray *a, PIZGrowingArray *b)
+bool pizSequenceUndoIsEqualToUndo (const PIZGrowingArray *a, const PIZGrowingArray *b)
 {
     bool isEqual = false;
     long count = pizGrowingArrayCount (a);

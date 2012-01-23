@@ -1,7 +1,7 @@
 /*
  * \file    pizGaloisLatticeExtended.c
  * \author  Jean Sapristi
- * \date    22 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -43,18 +43,18 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizGaloisLatticeEncodeConceptsByCardinalToArray (PIZGaloisLattice *x, long n, PIZGrowingArray *array)
+PIZError pizGaloisLatticeEncodeConceptsByCardinalToArray (const PIZGaloisLattice *x, long n, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     
-    if ((n > 0) && (n < PIZ_ITEMSET128_SIZE_IN_BIT) && array)
+    if ((n > 0) && (n < PIZ_ITEMSET128_SIZE_IN_BIT) && a)
         {
             long i;
             long count = pizGrowingArrayCount (x->mapByCardinal[n]);
             
             err = PIZ_GOOD;
             
-            err |= pizGrowingArrayAppend (array, count);
+            err |= pizGrowingArrayAppend (a, count);
             
             for (i = 0; i < count; i++)
                 {
@@ -64,7 +64,7 @@ PIZError pizGaloisLatticeEncodeConceptsByCardinalToArray (PIZGaloisLattice *x, l
                     for (j = 0; j < PIZ_ITEMSET128_SIZE_IN_BIT; j++)
                         {
                             if (pizItemset128IsSetAtIndex (&(x->stock[p].itemset), j)) {
-                                    err |= pizGrowingArrayAppend (array, j);
+                                    err |= pizGrowingArrayAppend (a, j);
                                 }
                         }
                 }

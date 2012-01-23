@@ -1,7 +1,7 @@
 /*
  * \file    pizKohonenMap.c
  * \author  Jean Sapristi
- * \date    22 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -194,12 +194,7 @@ void pizKohonenMapClear (PIZKohonenMap *x)
         }
 }
 
-long pizKohonenMapCount (PIZKohonenMap *x)
-{
-    return (x->count);
-}
-
-PIZError pizKohonenMapProceed (PIZKohonenMap *x, long argc, long *argv)
+PIZError pizKohonenMapProceed (const PIZKohonenMap *x, long argc, long *argv)
 {
     long err = PIZ_ERROR;
     
@@ -221,6 +216,11 @@ PIZError pizKohonenMapProceed (PIZKohonenMap *x, long argc, long *argv)
         }
     
     return err;
+}
+
+long pizKohonenMapCount (const PIZKohonenMap *x)
+{
+    return (x->count);
 }
 
 // -------------------------------------------------------------------------------------------------------------

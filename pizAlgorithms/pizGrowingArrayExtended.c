@@ -1,7 +1,7 @@
 /*
  * \file    pizGrowingArrayExtended.c
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -49,11 +49,6 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-long *pizGrowingArrayPtr (PIZGrowingArray *array)
-{
-    return (array->growingArrayValues);
-}
-
 void pizGrowingArrayRemoveIndex (PIZGrowingArray *array, long index)
 {
     if (index >= 0 && index < array->index)
@@ -82,7 +77,7 @@ PIZError pizGrowingArrayRemoveLastValue (PIZGrowingArray *x)
     return err;
 }
 
-long pizGrowingArrayFirstIndexOfValue (PIZGrowingArray *x, long value)
+long pizGrowingArrayFirstIndexOfValue (const PIZGrowingArray *x, long value)
 {
     long i;
     long k = PIZ_ERROR;
@@ -99,7 +94,7 @@ long pizGrowingArrayFirstIndexOfValue (PIZGrowingArray *x, long value)
     return k;
 }
 
-bool pizGrowingArrayContainsValue (PIZGrowingArray *x, long value)
+bool pizGrowingArrayContainsValue (const PIZGrowingArray *x, long value)
 {
     long i;
     long k = false;
@@ -116,18 +111,18 @@ bool pizGrowingArrayContainsValue (PIZGrowingArray *x, long value)
     return k;
 }
 
-PIZError pizGrowingArrayCopy (PIZGrowingArray *x, PIZGrowingArray *toBeCopied)
+PIZError pizGrowingArrayCopy (PIZGrowingArray *x, const PIZGrowingArray *toCopy)
 {
     PIZError err = PIZ_GOOD;
     
-    if (toBeCopied->index > x->size)
+    if (toCopy->index > x->size)
         {
             long *newGrowingArrayValues = NULL;
             
             if (newGrowingArrayValues = (long *)realloc 
-                (x->growingArrayValues, toBeCopied->size * sizeof(long)))
+                (x->growingArrayValues, toCopy->size * sizeof(long)))
                 {
-                    x->size = toBeCopied->size;
+                    x->size = toCopy->size;
                     x->growingArrayValues = newGrowingArrayValues;
                 }
             else
@@ -138,15 +133,15 @@ PIZError pizGrowingArrayCopy (PIZGrowingArray *x, PIZGrowingArray *toBeCopied)
     
     if (!err)
         {
-            x->index = toBeCopied->index;
+            x->index = toCopy->index;
             
-            memcpy (x->growingArrayValues, toBeCopied->growingArrayValues, (toBeCopied->index * sizeof(long)));
+            memcpy (x->growingArrayValues, toCopy->growingArrayValues, (toCopy->index * sizeof(long)));
         }
     
     return err;
 }
 
-PIZError pizGrowingArrayAppendArray (PIZGrowingArray *x, PIZGrowingArray *toAppend)
+PIZError pizGrowingArrayAppendArray (PIZGrowingArray *x, const PIZGrowingArray *toAppend)
 {
     PIZError err = PIZ_GOOD;
     

@@ -2,7 +2,7 @@
  * \file    pizKohonenMap.h
  * \details Thanks : Jean-philippe Rennard.
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -76,27 +76,27 @@ PIZ_START_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 
 PIZKohonenMap   *pizKohonenMapNew               (long argc, long *argv);
-void            pizKohonenMapFree               (PIZKohonenMap *kohonenMap);
+void            pizKohonenMapFree               (PIZKohonenMap *x);
 
-PIZError        pizKohonenMapAdd                (PIZKohonenMap *kohonenMap, long argc, long *argv);
-void            pizKohonenMapClear              (PIZKohonenMap *kohonenMap);
-long            pizKohonenMapCount              (PIZKohonenMap *kohonenMap);
-PIZError        pizKohonenMapProceed            (PIZKohonenMap *kohonenMap, long argc, long *argv);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-long            pizKohonenMapRange              (PIZKohonenMap *kohonenMap);
-void            pizKohonenMapSetRange           (PIZKohonenMap *kohonenMap, long n);
-long            pizKohonenMapTraining           (PIZKohonenMap *kohonenMap);
-void            pizKohonenMapSetTraining        (PIZKohonenMap *kohonenMap, long n);
-double          pizKohonenMapStep               (PIZKohonenMap *kohonenMap);
-void            pizKohonenMapSetStep            (PIZKohonenMap *kohonenMap, double f);
+PIZError        pizKohonenMapAdd                (PIZKohonenMap *x, long argc, long *argv);
+void            pizKohonenMapClear              (PIZKohonenMap *x);
+PIZError        pizKohonenMapProceed            (const PIZKohonenMap *x, long argc, long *argv);
+long            pizKohonenMapCount              (const PIZKohonenMap *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizKohonenMapEncodeVectorToArray       (PIZKohonenMap *x, long n, PIZGrowingArray *array);
+void            pizKohonenMapSetRange           (PIZKohonenMap *x, long n);
+void            pizKohonenMapSetTraining        (PIZKohonenMap *x, long n);
+void            pizKohonenMapSetStep            (PIZKohonenMap *x, double f);
+long            pizKohonenMapRange              (const PIZKohonenMap *x);
+long            pizKohonenMapTraining           (const PIZKohonenMap *x);
+double          pizKohonenMapStep               (const PIZKohonenMap *x);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZError pizKohonenMapEncodeVectorToArray       (const PIZKohonenMap *x, long n, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

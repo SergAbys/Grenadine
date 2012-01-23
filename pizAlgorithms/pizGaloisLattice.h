@@ -2,7 +2,7 @@
  * \file    pizGaloisLattice.h
  * \details Thanks : Robert Godin, Rokia Missaoui, Hassan Alaoui.
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
 
 /*
@@ -89,24 +89,25 @@ PIZ_START_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 
 PIZGaloisLattice    *pizGaloisLatticeNew        (long argc, long *argv);
-void                pizGaloisLatticeFree        (PIZGaloisLattice *galoisLattice);
+void                pizGaloisLatticeFree        (PIZGaloisLattice *x);
 
-PIZError            pizGaloisLatticeAdd         (PIZGaloisLattice *galoisLattice, long argc, long *argv);
-void                pizGaloisLatticeClear       (PIZGaloisLattice *galoisLattice);
-long                pizGaloisLatticeCount       (PIZGaloisLattice *galoisLattice);
-PIZError            pizGaloisLatticeProceed     (PIZGaloisLattice *galoisLattice, long argc, long *argv);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_LOCAL void      pizGaloisLatticeReconnect   (PIZGaloisLattice *galoisLattice, long g, long n);
-PIZ_LOCAL PIZError  pizGaloisLatticeMakeMap     (PIZGaloisLattice *galoisLattice);
-PIZ_LOCAL void      pizGaloisLatticeKillConcept (PIZGaloisLattice *galoisLattice, long n);
+PIZError            pizGaloisLatticeAdd         (PIZGaloisLattice *x, long argc, long *argv);
+void                pizGaloisLatticeClear       (PIZGaloisLattice *x);
+PIZError            pizGaloisLatticeProceed     (PIZGaloisLattice *x, long argc, long *argv);
+long                pizGaloisLatticeCount       (const PIZGaloisLattice *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizGaloisLatticeEncodeConceptsByCardinalToArray (PIZGaloisLattice *x, long n, PIZGrowingArray *array);
+PIZ_LOCAL void      pizGaloisLatticeReconnect   (PIZGaloisLattice *x, long g, long n);
+PIZ_LOCAL PIZError  pizGaloisLatticeMakeMap     (PIZGaloisLattice *x);
+PIZ_LOCAL void      pizGaloisLatticeKillConcept (PIZGaloisLattice *x, long n);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZError pizGaloisLatticeEncodeConceptsByCardinalToArray    (const PIZGaloisLattice *x, long n, 
+                                                            PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

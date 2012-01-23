@@ -1,7 +1,7 @@
 /**
  * \file    pizBoundedHashTable.h
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -77,15 +77,15 @@ typedef struct _PIZBoundedHashTable {
 PIZ_START_C_LINKAGE
 
 PIZBoundedHashTable *pizBoundedHashTableNew              (long argc, long *argv);
-void                pizBoundedHashTableSetFlags          (PIZBoundedHashTable *hashTable, long flags);
-void                pizBoundedHashTableFree              (PIZBoundedHashTable *hashTable);
+void                pizBoundedHashTableSetFlags          (PIZBoundedHashTable *x, long flags);
+void                pizBoundedHashTableFree              (PIZBoundedHashTable *x);
 
-void                pizBoundedHashTableClear             (PIZBoundedHashTable *hashTable);
-PIZError            pizBoundedHashTableAdd               (PIZBoundedHashTable *hashTable, long key, void *ptr);
-long                pizBoundedHashTableCount             (PIZBoundedHashTable *hashTable);
-PIZError            pizBoundedHashTablePtrByKey          (PIZBoundedHashTable *hashTable, long key, void **ptr);
-PIZError            pizBoundedHashTableRemoveByKeyAndPtr (PIZBoundedHashTable *hashTable, long key, void *ptr);
-bool                pizBoundedHashTableContainsKey       (PIZBoundedHashTable *hashTable, long key);
+void                pizBoundedHashTableClear             (PIZBoundedHashTable *x);
+PIZError            pizBoundedHashTableAdd               (PIZBoundedHashTable *x, long key, void *ptr);
+PIZError            pizBoundedHashTableRemoveByKeyAndPtr (PIZBoundedHashTable *x, long key, void *ptr);
+long                pizBoundedHashTableCount             (const PIZBoundedHashTable *x);
+PIZError            pizBoundedHashTablePtrByKey          (const PIZBoundedHashTable *x, long key, void **ptr);
+bool                pizBoundedHashTableContainsKey       (const PIZBoundedHashTable *x, long key);
 
 PIZ_END_C_LINKAGE
 
@@ -99,7 +99,7 @@ PIZ_EXTERN void pizBoundedHashTableSetFlags (PIZBoundedHashTable *x, long flags)
     x->flags = flags;
 }
 
-PIZ_EXTERN long pizBoundedHashTableCount (PIZBoundedHashTable *x)
+PIZ_EXTERN long pizBoundedHashTableCount (const PIZBoundedHashTable *x)
 {
     return (x->count);
 }

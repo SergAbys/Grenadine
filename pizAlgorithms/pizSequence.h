@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    21 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -249,70 +249,70 @@ typedef struct _PIZSequence {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZSequence     *pizSequenceNew                         (void);
-void            pizSequenceFree                         (PIZSequence *x);
+PIZSequence  *pizSequenceNew                       (void);
+void         pizSequenceFree                       (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-long            pizSequenceCount                        (PIZSequence *x);
-long            pizSequenceIndex                        (PIZSequence *x);
-long            pizSequenceChannel                      (PIZSequence *x);
-long            pizSequenceVelocity                     (PIZSequence *x);
-PIZSnapValue    pizSequenceGrid                         (PIZSequence *x);
-PIZSnapValue    pizSequenceNoteValue                    (PIZSequence *x);
+long         pizSequenceCount                      (PIZSequence *x);
+long         pizSequenceIndex                      (PIZSequence *x);
+long         pizSequenceChannel                    (PIZSequence *x);
+long         pizSequenceVelocity                   (PIZSequence *x);
+PIZSnapValue pizSequenceGrid                       (PIZSequence *x);
+PIZSnapValue pizSequenceNoteValue                  (PIZSequence *x);
 
-void            pizSequenceSetChance                    (PIZSequence *x, long value);
-void            pizSequenceSetChannel                   (PIZSequence *x, long channel);
-void            pizSequenceSetVelocity                  (PIZSequence *x, long value);
-void            pizSequenceSetGrid                      (PIZSequence *x, PIZSnapValue snapValue);
-void            pizSequenceSetNoteValue                 (PIZSequence *x, PIZSnapValue noteValue);
+void         pizSequenceSetChance                  (PIZSequence *x, long value);
+void         pizSequenceSetChannel                 (PIZSequence *x, long channel);
+void         pizSequenceSetVelocity                (PIZSequence *x, long value);
+void         pizSequenceSetGrid                    (PIZSequence *x, PIZSnapValue snapValue);
+void         pizSequenceSetNoteValue               (PIZSequence *x, PIZSnapValue noteValue);
 
-PIZError        pizSequenceSetScale                     (PIZSequence *x, PIZScaleKey key, PIZScaleType type);
-PIZError        pizSequenceSetCustomScaleWithArray      (PIZSequence *x, PIZScaleKey key, PIZGrowingArray *a);
-PIZError        pizSequenceSetCustomPatternWithArray    (PIZSequence *x, PIZGrowingArray *a);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void            pizSequenceClear                        (PIZSequence *x);
-
-PIZError        pizSequenceSetZoneWithArray             (PIZSequence *x, PIZGrowingArray *a);
-
-PIZError        pizSequenceAddNotesWithArray            (PIZSequence *x, PIZGrowingArray *a, long mode);
-PIZError        pizSequenceAddNoteWithCoordinates       (PIZSequence *x, PIZCoordinates *c,  long mode);
-
-PIZError        pizSequenceZoneToArray                  (PIZSequence *x, PIZGrowingArray *a);
-PIZError        pizSequenceNotesToArray                 (PIZSequence *x, 
-                                                        PIZGrowingArray *unselectedNotes,
-                                                        PIZGrowingArray *selectedNotes);
+PIZError     pizSequenceSetScale                   (PIZSequence *x, PIZScaleKey key, PIZScaleType type);
+PIZError     pizSequenceSetCustomScaleWithArray    (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a);
+PIZError     pizSequenceSetCustomPatternWithArray  (PIZSequence *x, const PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-bool            pizSequenceClean                        (PIZSequence *x, long value);
-bool            pizSequenceApplyPattern                 (PIZSequence *x);
-bool            pizSequenceApplyAmbitus                 (PIZSequence *x);
-void            pizSequenceTransposeOctave              (PIZSequence *x, bool down);
+void         pizSequenceClear                      (PIZSequence *x);
+
+PIZError     pizSequenceSetZoneWithArray           (PIZSequence *x, const PIZGrowingArray *a);
+
+PIZError     pizSequenceAddNotesWithArray          (PIZSequence *x, const PIZGrowingArray *a, long mode);
+PIZError     pizSequenceAddNoteWithCoordinates     (PIZSequence *x, const PIZCoordinates *c,  long mode);
+
+PIZError     pizSequenceZoneToArray                (PIZSequence *x, PIZGrowingArray *a);
+PIZError     pizSequenceNotesToArray               (PIZSequence *x, 
+                                                   PIZGrowingArray *unselectedNotes,
+                                                   PIZGrowingArray *selectedNotes);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-bool            pizSequenceIsAtEnd                      (PIZSequence *x);
-void            pizSequenceGoToStart                    (PIZSequence *x);
-PIZError        pizSequenceProceedStep                  (PIZSequence *x, PIZGrowingArray *a);
+bool         pizSequenceClean                      (PIZSequence *x, long value);
+bool         pizSequenceApplyPattern               (PIZSequence *x);
+bool         pizSequenceApplyAmbitus               (PIZSequence *x);
+void         pizSequenceTransposeOctave            (PIZSequence *x, bool down);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL   PIZNote *pizSequenceLocalAddNote            (PIZSequence *x, long *values, long mode);
+bool         pizSequenceIsAtEnd                    (PIZSequence *x);
+void         pizSequenceGoToStart                  (PIZSequence *x);
+PIZError     pizSequenceProceedStep                (PIZSequence *x, PIZGrowingArray *a);
 
-PIZ_LOCAL   void    pizSequenceLocalClear               (PIZSequence *x);
-PIZ_LOCAL   void    pizSequenceLocalMakeMap             (PIZSequence *x);
-PIZ_LOCAL   long    pizSequenceLocalMovePitchToAmbitus  (PIZSequence *x, long pitch);
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
-PIZ_INLINE  long    pizSequenceSnapFloorPosition        (PIZSequence *x, long toBeSnapped);
-PIZ_INLINE  long    pizSequenceSnapPositionToPattern    (PIZSequence *x, long toBeSnapped, long patternSize);
+PIZ_LOCAL  PIZNote *pizSequenceLocalAddNote            (PIZSequence *x, long *values, long mode);
+
+PIZ_LOCAL  void    pizSequenceLocalClear               (PIZSequence *x);
+PIZ_LOCAL  void    pizSequenceLocalMakeMap             (PIZSequence *x);
+PIZ_LOCAL  long    pizSequenceLocalMovePitchToAmbitus  (PIZSequence *x, long pitch);
+
+PIZ_INLINE long    pizSequenceSnapFloorPosition        (const PIZSequence *x, long toSnapped);
+PIZ_INLINE long    pizSequenceSnapPositionToPattern    (const PIZSequence *x, long toSnapped, long patternSize);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

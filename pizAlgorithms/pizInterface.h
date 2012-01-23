@@ -1,7 +1,7 @@
 /**
  * \file    pizInterface.h
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -49,56 +49,56 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-bool            pizSequenceHasMarkedNote                    (PIZSequence *x);
-long            pizSequenceMarkedNoteValue                  (PIZSequence *x, PIZSelector selector);
-void            pizSequenceChangeMarkedNoteValue            (PIZSequence *x, PIZSelector selector, long value);
+bool        pizSequenceHasMarkedNote                    (PIZSequence *x);
+long        pizSequenceMarkedNoteValue                  (PIZSequence *x, PIZSelector selector);
+void        pizSequenceChangeMarkedNoteValue            (PIZSequence *x, PIZSelector selector, long value);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-bool            pizSequenceSetTempZoneStartWithCoordinates  (PIZSequence *x, PIZCoordinates *c);
-bool            pizSequenceSetTempZoneEndWithCoordinates    (PIZSequence *x, PIZCoordinates *c);
-bool            pizSequenceSetTempZoneDownWithCoordinates   (PIZSequence *x, PIZCoordinates *c);
-bool            pizSequenceSetTempZoneUpWithCoordinates     (PIZSequence *x, PIZCoordinates *c);
+bool        pizSequenceSetTempZoneStartWithCoordinates  (PIZSequence *x, const PIZCoordinates *c);
+bool        pizSequenceSetTempZoneEndWithCoordinates    (PIZSequence *x, const PIZCoordinates *c);
+bool        pizSequenceSetTempZoneDownWithCoordinates   (PIZSequence *x, const PIZCoordinates *c);
+bool        pizSequenceSetTempZoneUpWithCoordinates     (PIZSequence *x, const PIZCoordinates *c);
 
-bool            pizSequenceMoveTempZoneWithDelta            (PIZSequence *x, long pitch, long position);
+bool        pizSequenceMoveTempZoneWithDelta            (PIZSequence *x, long pitch, long position);
 
-PIZError        pizSequenceTempZoneToArray                  (PIZSequence *x, PIZGrowingArray *array);
+PIZError    pizSequenceTempZoneToArray                  (PIZSequence *x, PIZGrowingArray *a);
 
-void            pizSequenceSetTempZoneByZone                (PIZSequence *x);
-PIZError        pizSequenceSetZoneByTempZone                (PIZSequence *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void            pizSequenceSelectAllNotes                   (PIZSequence *x);
-void            pizSequenceUnselectAllNotes                 (PIZSequence *x);
-
-long            pizSequenceSelectNoteWithCoordinates        (PIZSequence *x, PIZCoordinates *c);
-long            pizSequenceInvertNoteWithCoordinates        (PIZSequence *x, PIZCoordinates *c);
-
-void            pizSequenceInitLasso                        (PIZSequence *x);
-long            pizSequenceSelectNotesWithLasso             (PIZSequence *x, 
-                                                            PIZCoordinates *c1, 
-                                                            PIZCoordinates *c2,
-                                                            bool invert);
-
-PIZError        pizSequenceRemoveSelectedNotes              (PIZSequence *x);
+void        pizSequenceSetTempZoneByZone                (PIZSequence *x);
+PIZError    pizSequenceSetZoneByTempZone                (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError        pizSequenceEncodeUndoToArray                (PIZSequence *x, PIZGrowingArray *a);
-PIZError        pizSequenceDecodeUndoWithArray              (PIZSequence *x, PIZGrowingArray *a);
+void        pizSequenceSelectAllNotes                   (PIZSequence *x);
+void        pizSequenceUnselectAllNotes                 (PIZSequence *x);
 
-bool            pizSequenceUndoIsEqualToUndo                (PIZGrowingArray *a, PIZGrowingArray *b);
+long        pizSequenceSelectNoteWithCoordinates        (PIZSequence *x, const PIZCoordinates *c);
+long        pizSequenceInvertNoteWithCoordinates        (PIZSequence *x, const PIZCoordinates *c);
+
+void        pizSequenceInitLasso                        (PIZSequence *x);
+long        pizSequenceSelectNotesWithLasso             (PIZSequence *x, 
+                                                        const PIZCoordinates *c1, 
+                                                        const PIZCoordinates *c2,
+                                                        bool invert);
+
+PIZError    pizSequenceRemoveSelectedNotes              (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_INLINE void     pizSequenceUnselectNotes                (PIZSequence *x);
-PIZ_INLINE long     pizSequenceSnapRoundDuration            (PIZSequence *x, long toBeSnapped);
-PIZ_INLINE long     pizSequenceSnapRoundPosition            (PIZSequence *x, long toBeSnapped);
+PIZError    pizSequenceEncodeUndoToArray                (PIZSequence *x, PIZGrowingArray *a);
+PIZError    pizSequenceDecodeUndoWithArray              (PIZSequence *x, const PIZGrowingArray *a);
+
+bool        pizSequenceUndoIsEqualToUndo                (const PIZGrowingArray *a, const PIZGrowingArray *b);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZ_INLINE void     pizSequenceUnselectNotes            (PIZSequence *x);
+PIZ_INLINE long     pizSequenceSnapRoundDuration        (PIZSequence *x, long toSnapped);
+PIZ_INLINE long     pizSequenceSnapRoundPosition        (PIZSequence *x, long toSnapped);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

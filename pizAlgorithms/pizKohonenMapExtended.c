@@ -1,7 +1,7 @@
 /*
  * \file    pizKohonenMapExtended.c
  * \author  Jean Sapristi
- * \date    22 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -48,29 +48,14 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-long pizKohonenMapRange (PIZKohonenMap *x)
-{
-    return (x->range);
-}
-
 void pizKohonenMapSetRange (PIZKohonenMap *x, long n)
 {
     x->range = MAX (n, 1);
 }
 
-long pizKohonenMapTraining (PIZKohonenMap *x)
-{
-    return (x->training);
-}
-
 void pizKohonenMapSetTraining (PIZKohonenMap *x, long n)
 {
     x->training = MAX (n, 1);
-}
-
-double pizKohonenMapStep (PIZKohonenMap *x)
-{
-    return (x->step);
 }
 
 void pizKohonenMapSetStep (PIZKohonenMap *x, double f)
@@ -80,20 +65,35 @@ void pizKohonenMapSetStep (PIZKohonenMap *x, double f)
         }
 }
 
+long pizKohonenMapRange (const PIZKohonenMap *x)
+{
+    return (x->range);
+}
+
+long pizKohonenMapTraining (const PIZKohonenMap *x)
+{
+    return (x->training);
+}
+
+double pizKohonenMapStep (const PIZKohonenMap *x)
+{
+    return (x->step);
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizKohonenMapEncodeVectorToArray (PIZKohonenMap *x, long n, PIZGrowingArray *array)
+PIZError pizKohonenMapEncodeVectorToArray (const PIZKohonenMap *x, long n, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     
-    if ((n >= 0) && (n < x->mapSize) && array) {
+    if ((n >= 0) && (n < x->mapSize) && a) {
         long i;
         
         err = PIZ_GOOD;
         
         for (i = 0; i < x->vectorSize; i++) {
-            err |= pizGrowingArrayAppend (array, (long)(floor ((*(x->map + (n * x->vectorSize) + i)) + 0.5)));
+            err |= pizGrowingArrayAppend (a, (long)(floor ((*(x->map + (n * x->vectorSize) + i)) + 0.5)));
         }
     }
     

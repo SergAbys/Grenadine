@@ -1,7 +1,7 @@
 /*
  * \file    pizFactorOracle.c
  * \author  Jean Sapristi
- * \date    22 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -271,11 +271,6 @@ void pizFactorOracleClear (PIZFactorOracle *x)
     pizGrowingArrayClear (x->nodes[0].arcDestinations);
 }
 
-long pizFactorOracleCount (PIZFactorOracle *x)
-{
-    return (x->index - 1);
-}
-
 PIZError pizFactorOracleProceed (PIZFactorOracle *x, long argc, long *argv)
 {
     long err = PIZ_ERROR;
@@ -329,6 +324,11 @@ PIZError pizFactorOracleProceed (PIZFactorOracle *x, long argc, long *argv)
         }
     
     return err;
+}
+
+long pizFactorOracleCount (const PIZFactorOracle *x)
+{
+    return (x->index - 1);
 }
 
 // -------------------------------------------------------------------------------------------------------------

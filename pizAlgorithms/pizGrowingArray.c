@@ -1,7 +1,7 @@
 /*
  * \file    pizGrowingArray.c
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -115,19 +115,24 @@ PIZError pizGrowingArrayAppend (PIZGrowingArray *x, long value)
     return err;
 }
 
-long pizGrowingArrayCount (PIZGrowingArray *x)
+void pizGrowingArraySetValueAtIndex (PIZGrowingArray *x, long index, long value)
+{
+    x->growingArrayValues[index] = value;
+}
+
+long pizGrowingArrayCount (const PIZGrowingArray *x)
 {
     return (x->index);
 }
 
-long pizGrowingArrayValueAtIndex (PIZGrowingArray *x, long index)
+long pizGrowingArrayValueAtIndex (const PIZGrowingArray *x, long index)
 {   
     return (x->growingArrayValues[index]);
 }
 
-void pizGrowingArraySetValueAtIndex (PIZGrowingArray *x, long index, long value)
+long *pizGrowingArrayPtr (const PIZGrowingArray *array)
 {
-    x->growingArrayValues[index] = value;
+    return (array->growingArrayValues);
 }
 
 // -------------------------------------------------------------------------------------------------------------

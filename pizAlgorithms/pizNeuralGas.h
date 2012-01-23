@@ -2,7 +2,7 @@
  * \file    pizNeuralGas.h
  * \details Thanks : Jim Holmström.
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -95,33 +95,34 @@ PIZ_START_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 
 PIZNeuralGas    *pizNeuralGasNew                (long argc, long *argv);
-void            pizNeuralGasFree                (PIZNeuralGas *neuralGas);
+void            pizNeuralGasFree                (PIZNeuralGas *x);
 
-PIZError        pizNeuralGasAdd                 (PIZNeuralGas *neuralGas, long argc, long *argv);
-void            pizNeuralGasClear               (PIZNeuralGas *neuralGas);
-long            pizNeuralGasCount               (PIZNeuralGas *neuralGas);
-PIZError        pizNeuralGasProceed             (PIZNeuralGas *neuralGas, long argc, long *argv);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-long            pizNeuralGasLambda              (PIZNeuralGas *neuralGas);
-void            pizNeuralGasSetLambda           (PIZNeuralGas *neuralGas, long n);
-double          pizNeuralGasEpsilon1            (PIZNeuralGas *neuralGas);
-void            pizNeuralGasSetEpsilon1         (PIZNeuralGas *neuralGas, double f);
-double          pizNeuralGasEpsilon2            (PIZNeuralGas *neuralGas);
-void            pizNeuralGasSetEpsilon2         (PIZNeuralGas *neuralGas, double f);
-double          pizNeuralGasAlpha               (PIZNeuralGas *neuralGas);
-void            pizNeuralGasSetAlpha            (PIZNeuralGas *neuralGas, double f);
-double          pizNeuralGasBeta                (PIZNeuralGas *neuralGas);
-void            pizNeuralGasSetBeta             (PIZNeuralGas *neuralGas, double f);
-double          pizNeuralGasKappa               (PIZNeuralGas *neuralGas);
-void            pizNeuralGasSetKappa            (PIZNeuralGas *neuralGas, double f);
+PIZError        pizNeuralGasAdd                 (PIZNeuralGas *x, long argc, long *argv);
+void            pizNeuralGasClear               (PIZNeuralGas *x);
+PIZError        pizNeuralGasProceed             (const PIZNeuralGas *x, long argc, long *argv);
+long            pizNeuralGasCount               (const PIZNeuralGas *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizNeuralGasEncodeVectorToArray        (PIZNeuralGas *x, long n, PIZGrowingArray *array);
+void            pizNeuralGasSetLambda           (PIZNeuralGas *x, long n);
+void            pizNeuralGasSetEpsilon1         (PIZNeuralGas *x, double f);
+void            pizNeuralGasSetEpsilon2         (PIZNeuralGas *x, double f);
+void            pizNeuralGasSetAlpha            (PIZNeuralGas *x, double f);
+void            pizNeuralGasSetBeta             (PIZNeuralGas *x, double f);
+void            pizNeuralGasSetKappa            (PIZNeuralGas *x, double f);
+
+long            pizNeuralGasLambda              (const PIZNeuralGas *x);
+double          pizNeuralGasEpsilon1            (const PIZNeuralGas *x);
+double          pizNeuralGasEpsilon2            (const PIZNeuralGas *x);
+double          pizNeuralGasAlpha               (const PIZNeuralGas *x);
+double          pizNeuralGasBeta                (const PIZNeuralGas *x);
+double          pizNeuralGasKappa               (const PIZNeuralGas *x);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZError pizNeuralGasEncodeVectorToArray        (const PIZNeuralGas *x, long n, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

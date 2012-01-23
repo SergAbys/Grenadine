@@ -1,7 +1,7 @@
 /*
  * \file    pizFiniteState.c
  * \author  Jean Sapristi
- * \date    22 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -264,11 +264,6 @@ void pizFiniteStateClear (PIZFiniteState *x)
         }
 }
 
-long pizFiniteStateCount (PIZFiniteState *x)
-{
-    return (x->count);
-}
-
 PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)
 {
     long err = PIZ_ERROR;
@@ -350,6 +345,11 @@ PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)
         }
     
     return err;
+}
+
+long pizFiniteStateCount (const PIZFiniteState *x)
+{
+    return (x->count);
 }
 
 // -------------------------------------------------------------------------------------------------------------

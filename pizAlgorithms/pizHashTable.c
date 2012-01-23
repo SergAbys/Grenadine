@@ -1,7 +1,7 @@
 /*
  * \file    pizHashTable.c
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -149,7 +149,7 @@ PIZError pizHashTableAdd (PIZHashTable *x, long key, void *ptr)
             err = PIZ_GOOD;
             
             if (!x->hashTable[p]) {
-                x->hashTable[p] = pizLinklistNew ( );
+                    x->hashTable[p] = pizLinklistNew ( );
                 }
             
             if (x->hashTable[p]) 
@@ -179,49 +179,6 @@ PIZError pizHashTableAdd (PIZHashTable *x, long key, void *ptr)
             else
                 {
                     err |= PIZ_MEMORY;
-                }
-        }
-    
-    return err;
-}
-
-long pizHashTableCount (PIZHashTable *x)
-{
-    return (x->count);
-}
-
-PIZError pizHashTablePtrByKey (PIZHashTable *x, long key, void **ptr)
-{
-    long err = PIZ_ERROR;
-    
-    if (*ptr)
-        {
-            (*ptr) = NULL;
-        }
-    
-    if (key >= 0)
-        {
-            long p = key % x->size;
-            
-            if (x->hashTable[p])
-                {
-                    PIZHashTableElement *element = NULL;
-                    PIZHashTableElement *nextElement = NULL;
-                                    
-                    pizLinklistPtrAtIndex (x->hashTable[p], 0, (void **)&element);
-                                    
-                    while (element) {
-                        pizLinklistNextByPtr (x->hashTable[p], (void *)element, (void **)&nextElement);
-                        
-                        if (element->key == key)
-                            {
-                                (*ptr) = element->ptr;
-                                err = PIZ_GOOD;
-                                break; 
-                            }
-                            
-                        element = nextElement;
-                    }
                 }
         }
     
@@ -268,7 +225,45 @@ PIZError pizHashTableRemoveByKeyAndPtr (PIZHashTable *x, long key, void *ptr)
     return err;
 }
 
-bool pizHashTableContainsKey (PIZHashTable *x, long key)
+PIZError pizHashTablePtrByKey (const PIZHashTable *x, long key, void **ptr)
+{
+    long err = PIZ_ERROR;
+    
+    if (*ptr)
+        {
+            (*ptr) = NULL;
+        }
+    
+    if (key >= 0)
+        {
+            long p = key % x->size;
+            
+            if (x->hashTable[p])
+                {
+                    PIZHashTableElement *element = NULL;
+                    PIZHashTableElement *nextElement = NULL;
+                                    
+                    pizLinklistPtrAtIndex (x->hashTable[p], 0, (void **)&element);
+                                    
+                    while (element) {
+                        pizLinklistNextByPtr (x->hashTable[p], (void *)element, (void **)&nextElement);
+                        
+                        if (element->key == key)
+                            {
+                                (*ptr) = element->ptr;
+                                err = PIZ_GOOD;
+                                break; 
+                            }
+                            
+                        element = nextElement;
+                    }
+                }
+        }
+    
+    return err;
+}
+
+bool pizHashTableContainsKey (const PIZHashTable *x, long key)
 {
     bool k = false;
     
@@ -298,6 +293,11 @@ bool pizHashTableContainsKey (PIZHashTable *x, long key)
         }
     
     return k;
+}
+
+long pizHashTableCount (const PIZHashTable *x)
+{
+    return (x->count);
 }
 
 // -------------------------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /**
  * \file    pizBoundedStack.h
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -62,13 +62,13 @@ typedef struct _PIZBoundedStack {
 PIZ_START_C_LINKAGE
 
 PIZBoundedStack *pizBoundedStackNew         (long size);
-void            pizBoundedStackFree         (PIZBoundedStack *lifo);
+void            pizBoundedStackFree         (PIZBoundedStack *x);
 
-void            pizBoundedStackClear        (PIZBoundedStack *lifo);
-long            pizBoundedStackCount        (PIZBoundedStack *lifo);
-PIZError        pizBoundedStackPush         (PIZBoundedStack *lifo, long value);
-PIZError        pizBoundedStackPop          (PIZBoundedStack *lifo);
-long            pizBoundedStackPoppedValue  (PIZBoundedStack *lifo);
+void            pizBoundedStackClear        (PIZBoundedStack *x);
+PIZError        pizBoundedStackPush         (PIZBoundedStack *x, long value);
+PIZError        pizBoundedStackPop          (PIZBoundedStack *x);
+long            pizBoundedStackCount        (const PIZBoundedStack *x);
+long            pizBoundedStackPoppedValue  (const PIZBoundedStack *x);
 
 PIZ_END_C_LINKAGE
 
@@ -82,12 +82,12 @@ PIZ_EXTERN void pizBoundedStackClear (PIZBoundedStack *x)
     x->stack = 0;
 }
 
-PIZ_EXTERN long pizBoundedStackCount (PIZBoundedStack *x)
+PIZ_EXTERN long pizBoundedStackCount (const PIZBoundedStack *x)
 {
     return (x->stack);
 }
 
-PIZ_EXTERN long pizBoundedStackPoppedValue (PIZBoundedStack *x)
+PIZ_EXTERN long pizBoundedStackPoppedValue (const PIZBoundedStack *x)
 {
     return (x->poppedValue);
 }

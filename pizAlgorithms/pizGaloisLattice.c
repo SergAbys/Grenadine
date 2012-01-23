@@ -1,7 +1,7 @@
 /*
  * \file    pizGaloisLattice.c
  * \author  Jean Sapristi
- * \date    22 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -393,11 +393,6 @@ void pizGaloisLatticeClear (PIZGaloisLattice *x)
     x->previousShuttle  = -1;
 }
 
-long pizGaloisLatticeCount (PIZGaloisLattice *x)
-{
-    return (x->count);
-}
-
 PIZError pizGaloisLatticeProceed (PIZGaloisLattice *x, long argc, long *argv)
 {
     long err = PIZ_ERROR;
@@ -469,6 +464,11 @@ PIZError pizGaloisLatticeProceed (PIZGaloisLattice *x, long argc, long *argv)
         }
     
     return err;
+}
+
+long pizGaloisLatticeCount (const PIZGaloisLattice *x)
+{
+    return (x->count);
 }
 
 // -------------------------------------------------------------------------------------------------------------

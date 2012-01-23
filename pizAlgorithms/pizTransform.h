@@ -1,7 +1,7 @@
 /**
  * \file    pizTransform.h
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -80,7 +80,7 @@ bool pizSequenceChange              (PIZSequence *x, PIZSelector selector, long 
 bool pizSequenceSet                 (PIZSequence *x, PIZSelector selector, long value);
 bool pizSequenceRandom              (PIZSequence *x, PIZSelector selector, long minValue, long maxValue);
 bool pizSequenceKillNotes           (PIZSequence *x);
-bool pizSequenceCycle               (PIZSequence *x, PIZScaleKey key, PIZGrowingArray *a);
+bool pizSequenceCycle               (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

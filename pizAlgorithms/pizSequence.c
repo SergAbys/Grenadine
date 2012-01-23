@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    21 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -351,7 +351,7 @@ PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type
     return err;
 }   
                                                     
-PIZError pizSequenceSetCustomScaleWithArray (PIZSequence *x, PIZScaleKey key, PIZGrowingArray *array)
+PIZError pizSequenceSetCustomScaleWithArray (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *array)
 {
     long err = PIZ_ERROR;
     
@@ -376,7 +376,7 @@ PIZError pizSequenceSetCustomScaleWithArray (PIZSequence *x, PIZScaleKey key, PI
     return err;
 }
 
-PIZError pizSequenceSetCustomPatternWithArray (PIZSequence *x, PIZGrowingArray *array)
+PIZError pizSequenceSetCustomPatternWithArray (PIZSequence *x, const PIZGrowingArray *array)
 {
     long err = PIZ_ERROR;
      
@@ -409,7 +409,7 @@ void pizSequenceClear (PIZSequence *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizSequenceSetZoneWithArray (PIZSequence *x, PIZGrowingArray *array)
+PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *array)
 {
     long err = PIZ_ERROR;
     
@@ -455,7 +455,7 @@ PIZError pizSequenceSetZoneWithArray (PIZSequence *x, PIZGrowingArray *array)
     return err;
 }
 
-PIZError pizSequenceAddNotesWithArray (PIZSequence *x, PIZGrowingArray *array, long mode)
+PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *array, long mode)
 {
     long err = PIZ_ERROR;
     
@@ -487,7 +487,7 @@ PIZError pizSequenceAddNotesWithArray (PIZSequence *x, PIZGrowingArray *array, l
     return err;
 }
 
-PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, PIZCoordinates *coordinates, long mode)
+PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates, long mode)
 {
     long err = PIZ_GOOD;
     long values[PIZ_SEQUENCE_NOTE_SIZE];
@@ -1111,18 +1111,18 @@ void pizSequenceLocalMakeMap (PIZSequence *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_INLINE long pizSequenceSnapFloorPosition (PIZSequence *x, long positionToBeSnapped)
+PIZ_INLINE long pizSequenceSnapFloorPosition (const PIZSequence *x, long toSnapped)
 {
-    return (floor (positionToBeSnapped / (double)x->grid)) * x->grid;
+    return (floor (toSnapped / (double)x->grid)) * x->grid;
 }
 
-PIZ_INLINE long pizSequenceSnapPositionToPattern (PIZSequence *x, long positionToBeSnapped, long patternSize)
+PIZ_INLINE long pizSequenceSnapPositionToPattern (const PIZSequence *x, long toSnapped, long patternSize)
 {
-    long k = (long)(floor ((double)positionToBeSnapped / (double)x->grid)) % patternSize;
-    positionToBeSnapped = (long)(floor ((double)positionToBeSnapped / (double)x->grid)) * x->grid;
-    positionToBeSnapped += pizGrowingArrayValueAtIndex (x->pattern, k) * x->grid;
+    long k = (long)(floor ((double)toSnapped / (double)x->grid)) % patternSize;
+    toSnapped = (long)(floor ((double)toSnapped / (double)x->grid)) * x->grid;
+    toSnapped += pizGrowingArrayValueAtIndex (x->pattern, k) * x->grid;
 
-    return positionToBeSnapped;
+    return toSnapped;
 }
 
 // -------------------------------------------------------------------------------------------------------------

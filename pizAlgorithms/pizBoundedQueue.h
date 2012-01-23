@@ -1,7 +1,7 @@
 /**
  * \file    pizBoundedQueue.h
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -64,14 +64,14 @@ typedef struct _PIZBoundedQueue {
 PIZ_START_C_LINKAGE
 
 PIZBoundedQueue     *pizBoundedQueueNew         (long size);
-void                pizBoundedQueueFree         (PIZBoundedQueue *fifo);
+void                pizBoundedQueueFree         (PIZBoundedQueue *x);
 
-void                pizBoundedQueueClear        (PIZBoundedQueue *fifo);
-PIZError            pizBoundedQueueAppend       (PIZBoundedQueue *fifo, long value);
-long                pizBoundedQueueCount        (PIZBoundedQueue *fifo);
-PIZError            pizBoundedQueuePop          (PIZBoundedQueue *fifo);
-PIZError            pizBoundedQueuePopLastValue (PIZBoundedQueue *fifo);
-long                pizBoundedQueuePoppedValue  (PIZBoundedQueue *fifo);
+void                pizBoundedQueueClear        (PIZBoundedQueue *x);
+PIZError            pizBoundedQueueAppend       (PIZBoundedQueue *x, long value);
+PIZError            pizBoundedQueuePop          (PIZBoundedQueue *x);
+PIZError            pizBoundedQueuePopLastValue (PIZBoundedQueue *x);
+long                pizBoundedQueueCount        (const PIZBoundedQueue *x);
+long                pizBoundedQueuePoppedValue  (const PIZBoundedQueue *x);
 
 PIZ_END_C_LINKAGE
 
@@ -87,13 +87,13 @@ PIZ_EXTERN void pizBoundedQueueClear (PIZBoundedQueue *x)
     x->count    = 0;
 }
 
-PIZ_EXTERN long pizBoundedQueueCount (PIZBoundedQueue *x)
+PIZ_EXTERN long pizBoundedQueueCount (const PIZBoundedQueue *x)
 {
     return (x->count);
 }
 
 
-PIZ_EXTERN long pizBoundedQueuePoppedValue (PIZBoundedQueue *x)
+PIZ_EXTERN long pizBoundedQueuePoppedValue (const PIZBoundedQueue *x)
 {
     return (x->poppedValue);
 }

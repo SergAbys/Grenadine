@@ -1,7 +1,7 @@
 /*
  * \file    pizQueue.c
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -130,11 +130,6 @@ PIZError pizQueueAppend (PIZQueue *x, long value)
     return err;
 }
 
-long pizQueueCount (PIZQueue *x)
-{
-    return (x->count);
-}
-
 PIZError pizQueuePop (PIZQueue *x)
 {
     long            err = PIZ_ERROR;
@@ -211,7 +206,12 @@ PIZError pizQueuePopLastValue (PIZQueue *x)
     return err;
 }
 
-long pizQueuePoppedValue (PIZQueue *x)
+long pizQueueCount (const PIZQueue *x)
+{
+    return (x->count);
+}
+
+long pizQueuePoppedValue (const PIZQueue *x)
 {
     return (x->poppedValue);
 }

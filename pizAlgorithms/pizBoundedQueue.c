@@ -1,7 +1,7 @@
 /*
  * \file    pizBoundedQueue.c
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -115,11 +115,6 @@ PIZError pizBoundedQueueAppend (PIZBoundedQueue *x, long value)
     return err;
 }
 
-long pizBoundedQueueCount (PIZBoundedQueue *x)
-{
-    return (x->count);
-}
-
 PIZError pizBoundedQueuePop (PIZBoundedQueue *x)
 {
     long err = PIZ_ERROR;
@@ -170,7 +165,12 @@ PIZError pizBoundedQueuePopLastValue (PIZBoundedQueue *x)
     return err;
 }
 
-long pizBoundedQueuePoppedValue (PIZBoundedQueue *x)
+long pizBoundedQueueCount (const PIZBoundedQueue *x)
+{
+    return (x->count);
+}
+
+long pizBoundedQueuePoppedValue (const PIZBoundedQueue *x)
 {
     return (x->poppedValue);
 }

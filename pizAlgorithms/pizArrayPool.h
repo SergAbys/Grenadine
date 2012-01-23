@@ -70,10 +70,10 @@ typedef struct _PIZArrayPool {
 PIZ_START_C_LINKAGE
 
 PIZArrayPool        *pizArrayPoolNew            (long argc, long *argv);
-void                pizArrayPoolFree            (PIZArrayPool *pool);
+void                pizArrayPoolFree            (PIZArrayPool *x);
 
-PIZGrowingArray     *pizArrayPoolGetArray       (PIZArrayPool *pool);
-void                pizArrayPoolReleaseArray    (PIZArrayPool *pool, PIZGrowingArray *array);
+PIZGrowingArray     *pizArrayPoolGetArray       (PIZArrayPool *x);
+void                pizArrayPoolReleaseArray    (PIZArrayPool *x, PIZGrowingArray *array);
 
 PIZ_END_C_LINKAGE
 

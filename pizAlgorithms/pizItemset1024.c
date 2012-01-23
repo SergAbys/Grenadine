@@ -1,7 +1,7 @@
 /*
  * \file    pizItemset1024.c
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -67,29 +67,12 @@ void pizItemset1024UnsetAtIndex (PIZItemset1024 *itemset, long index)
     itemset->items[i] &= ~m;
 }
     
-bool pizItemset1024IsSetAtIndex (PIZItemset1024 *itemset, long index) 
-{
-    unsigned long k = 0;
-
-    long i, p;
-
-    i = index / PIZ_ITEMSET1024_SIZE_OF_ULONG;
-    p = index % PIZ_ITEMSET1024_SIZE_OF_ULONG;
-    
-    k = itemset->items[i];
-
-    k >>= p;
-    k  &= 1;
-    
-    return (k != 0);
-}
-
 void pizItemset1024Clear (PIZItemset1024 *itemset)  
 {
     memset (itemset->items, 0, sizeof(long) * PIZ_ITEMSET1024_SIZE_IN_WORD);
 }
     
-long pizItemset1024Count (PIZItemset1024 *itemset)
+long pizItemset1024Count (const PIZItemset1024 *itemset)
 {
     long i;
     long k = 0;
@@ -108,27 +91,44 @@ long pizItemset1024Count (PIZItemset1024 *itemset)
     return k;
 }
 
-void pizItemset1024Union (PIZItemset1024 *a, PIZItemset1024 *b, PIZItemset1024 *result) 
+bool pizItemset1024IsSetAtIndex (const PIZItemset1024 *itemset, long index) 
+{
+    unsigned long k = 0;
+
+    long i, p;
+
+    i = index / PIZ_ITEMSET1024_SIZE_OF_ULONG;
+    p = index % PIZ_ITEMSET1024_SIZE_OF_ULONG;
+    
+    k = itemset->items[i];
+
+    k >>= p;
+    k  &= 1;
+    
+    return (k != 0);
+}
+
+void pizItemset1024Union (const PIZItemset1024 *a, const PIZItemset1024 *b, PIZItemset1024 *r) 
 {
     long i;
     
     for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++)
         {
-            result->items[i] = a->items[i] | b->items[i];
+            r->items[i] = a->items[i] | b->items[i];
         }
 }
 
-void pizItemset1024Intersection (PIZItemset1024 *a, PIZItemset1024 *b, PIZItemset1024 *result) 
+void pizItemset1024Intersection (const PIZItemset1024 *a, const PIZItemset1024 *b, PIZItemset1024 *r) 
 {
     long i;
     
     for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++)
         {
-            result->items[i] = a->items[i] & b->items[i];
+            r->items[i] = a->items[i] & b->items[i];
         }
 }
 
-bool pizItemset1024IsIncluded (PIZItemset1024 *a, PIZItemset1024 *b)
+bool pizItemset1024IsIncluded (const PIZItemset1024 *a, const PIZItemset1024 *b)
 {
     long i;
     bool k = true;
@@ -144,7 +144,7 @@ bool pizItemset1024IsIncluded (PIZItemset1024 *a, PIZItemset1024 *b)
     return k;
 }
 
-bool pizItemset1024IsEqual (PIZItemset1024 *a, PIZItemset1024 *b)
+bool pizItemset1024IsEqual (const PIZItemset1024 *a, const PIZItemset1024 *b)
 {
     long i;
     long k = true;

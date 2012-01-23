@@ -1,7 +1,7 @@
 /**
  * \file    pizQueue.h
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
 
 /*
@@ -68,14 +68,15 @@ typedef struct _PIZQueue {
 PIZ_START_C_LINKAGE
 
 PIZQueue        *pizQueueNew            (void);
-void            pizQueueFree            (PIZQueue *fifo);
+void            pizQueueFree            (PIZQueue *x);
 
-void            pizQueueClear           (PIZQueue *fifo);
-PIZError        pizQueueAppend          (PIZQueue *fifo, long value);
-long            pizQueueCount           (PIZQueue *fifo);
-PIZError        pizQueuePop             (PIZQueue *fifo);
-PIZError        pizQueuePopLastValue    (PIZQueue *fifo);
-long            pizQueuePoppedValue     (PIZQueue *fifo);
+void            pizQueueClear           (PIZQueue *x);
+PIZError        pizQueueAppend          (PIZQueue *x, long value);
+PIZError        pizQueuePop             (PIZQueue *x);
+PIZError        pizQueuePopLastValue    (PIZQueue *x);
+
+long            pizQueueCount           (const PIZQueue *x);
+long            pizQueuePoppedValue     (const PIZQueue *x);
 
 PIZ_END_C_LINKAGE
 
@@ -84,13 +85,13 @@ PIZ_END_C_LINKAGE
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN long pizQueueCount (PIZQueue *x)
+PIZ_EXTERN long pizQueueCount (const PIZQueue *x)
 {
     return (x->count);
 }
 
 
-PIZ_EXTERN long pizQueuePoppedValue (PIZQueue *x)
+PIZ_EXTERN long pizQueuePoppedValue (const PIZQueue *x)
 {
     return (x->poppedValue);
 }

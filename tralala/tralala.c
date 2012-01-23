@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 22/01/12.
+ *  Last modified : 23/01/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -41,12 +41,11 @@ t_jsurface              *tll_halfTriplet        [3];
 t_jsurface              *tll_halfDotted         [3];
 t_jsurface              *tll_whole              [3];
 
-PIZGrowingArray         *tll_clipboard;
-
 tralalaSymbolsTableA    tll_symbolsA;
 tralalaSymbolsTableB    tll_symbolsB;
 
-static t_class          *tll_class;
+PIZGrowingArray         *tll_clipboard = NULL;
+static t_class          *tll_class = NULL;
 
 int main (void *moduleRef) 
 {   

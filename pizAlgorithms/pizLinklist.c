@@ -191,11 +191,6 @@ PIZError pizLinklistInsert (PIZLinklist *x, void *ptr)
     return err;
 }
 
-long pizLinklistCount (PIZLinklist *x)
-{
-    return (x->count);
-}
-
 PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr)
 {
     long                i = 0;
@@ -400,6 +395,11 @@ PIZError pizLinklistSwapByIndexes (PIZLinklist *x, long m, long n)
         }
     
     return err;
+}
+
+long pizLinklistCount (const PIZLinklist *x)
+{
+    return (x->count);
 }
 
 // -------------------------------------------------------------------------------------------------------------

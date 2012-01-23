@@ -1,7 +1,7 @@
 /**
  * \file    pizItemset1024.h
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -71,13 +71,14 @@ PIZ_START_C_LINKAGE
 
 void pizItemset1024SetAtIndex       (PIZItemset1024 *itemset, long index);
 void pizItemset1024UnsetAtIndex     (PIZItemset1024 *itemset, long index);
-bool pizItemset1024IsSetAtIndex     (PIZItemset1024 *itemset, long index);
 void pizItemset1024Clear            (PIZItemset1024 *itemset);
-long pizItemset1024Count            (PIZItemset1024 *itemset);
-void pizItemset1024Union            (PIZItemset1024 *a, PIZItemset1024 *b, PIZItemset1024 *result);
-void pizItemset1024Intersection     (PIZItemset1024 *a, PIZItemset1024 *b, PIZItemset1024 *result);
-bool pizItemset1024IsIncluded       (PIZItemset1024 *a, PIZItemset1024 *b);
-bool pizItemset1024IsEqual          (PIZItemset1024 *a, PIZItemset1024 *b);
+
+long pizItemset1024Count            (const PIZItemset1024 *itemset);
+bool pizItemset1024IsSetAtIndex     (const PIZItemset1024 *itemset, long index);
+void pizItemset1024Union            (const PIZItemset1024 *a, const PIZItemset1024 *b, PIZItemset1024 *r);
+void pizItemset1024Intersection     (const PIZItemset1024 *a, const PIZItemset1024 *b, PIZItemset1024 *r);
+bool pizItemset1024IsIncluded       (const PIZItemset1024 *a, const PIZItemset1024 *b);
+bool pizItemset1024IsEqual          (const PIZItemset1024 *a, const PIZItemset1024 *b);
 
 PIZ_END_C_LINKAGE
 
@@ -108,31 +109,14 @@ PIZ_EXTERN void pizItemset1024UnsetAtIndex (PIZItemset1024 *itemset, long index)
     m = 1 << p;
     
     itemset->items[i] &= ~m;
-}
-    
-PIZ_EXTERN bool pizItemset1024IsSetAtIndex (PIZItemset1024 *itemset, long index) 
-{
-    unsigned long k = 0;
-
-    long i, p;
-
-    i = index / PIZ_ITEMSET1024_SIZE_OF_ULONG;
-    p = index % PIZ_ITEMSET1024_SIZE_OF_ULONG;
-    
-    k = itemset->items[i];
-
-    k >>= p;
-    k  &= 1;
-    
-    return (k != 0);
-}
+}    
 
 PIZ_EXTERN void pizItemset1024Clear (PIZItemset1024 *itemset)  
 {
     memset (itemset->items, 0, sizeof(long) * PIZ_ITEMSET1024_SIZE_IN_WORD);
 }
     
-PIZ_EXTERN long pizItemset1024Count (PIZItemset1024 *itemset)
+PIZ_EXTERN long pizItemset1024Count (const PIZItemset1024 *itemset)
 {
     long i;
     long k = 0;
@@ -151,27 +135,44 @@ PIZ_EXTERN long pizItemset1024Count (PIZItemset1024 *itemset)
     return k;
 }
 
-PIZ_EXTERN void pizItemset1024Union (PIZItemset1024 *a, PIZItemset1024 *b, PIZItemset1024 *result) 
+PIZ_EXTERN bool pizItemset1024IsSetAtIndex (const PIZItemset1024 *itemset, long index) 
+{
+    unsigned long k = 0;
+
+    long i, p;
+
+    i = index / PIZ_ITEMSET1024_SIZE_OF_ULONG;
+    p = index % PIZ_ITEMSET1024_SIZE_OF_ULONG;
+    
+    k = itemset->items[i];
+
+    k >>= p;
+    k  &= 1;
+    
+    return (k != 0);
+}
+
+PIZ_EXTERN void pizItemset1024Union (const PIZItemset1024 *a, const PIZItemset1024 *b, PIZItemset1024 *r) 
 {
     long i;
     
     for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++)
         {
-            result->items[i] = a->items[i] | b->items[i];
+            r->items[i] = a->items[i] | b->items[i];
         }
 }
 
-PIZ_EXTERN void pizItemset1024Intersection (PIZItemset1024 *a, PIZItemset1024 *b, PIZItemset1024 *result) 
+PIZ_EXTERN void pizItemset1024Intersection (const PIZItemset1024 *a, const PIZItemset1024 *b, PIZItemset1024 *r) 
 {
     long i;
     
     for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++)
         {
-            result->items[i] = a->items[i] & b->items[i];
+            r->items[i] = a->items[i] & b->items[i];
         }
 }
 
-PIZ_EXTERN bool pizItemset1024IsIncluded (PIZItemset1024 *a, PIZItemset1024 *b)
+PIZ_EXTERN bool pizItemset1024IsIncluded (const PIZItemset1024 *a, const PIZItemset1024 *b)
 {
     long i;
     bool k = true;
@@ -187,7 +188,7 @@ PIZ_EXTERN bool pizItemset1024IsIncluded (PIZItemset1024 *a, PIZItemset1024 *b)
     return k;
 }
 
-PIZ_EXTERN bool pizItemset1024IsEqual (PIZItemset1024 *a, PIZItemset1024 *b)
+PIZ_EXTERN bool pizItemset1024IsEqual (const PIZItemset1024 *a, const PIZItemset1024 *b)
 {
     long i;
     long k = true;

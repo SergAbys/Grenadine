@@ -1,7 +1,7 @@
 /*
  * \file    pizBoundedHashTable.c
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -197,47 +197,6 @@ PIZError pizBoundedHashTableAdd (PIZBoundedHashTable *x, long key, void *ptr)
     return err;
 }
 
-long pizBoundedHashTableCount (PIZBoundedHashTable *x)
-{
-    return (x->count);
-}
-
-PIZError pizBoundedHashTablePtrByKey (PIZBoundedHashTable *x, long key, void **ptr)
-{
-    long err = PIZ_ERROR;
-    
-    if (*ptr)
-        {
-            (*ptr) = NULL;
-        }
-    
-    if (key >= 0)
-        {
-            long p = key % x->hashSize;
-            
-            if (x->hashTable[p])
-                {   
-                    long count, i, index;
-                    
-                    if (count = pizGrowingArrayCount (x->hashTable[p]))
-                        {
-                            for (i = 0; i < count; i++)
-                                {
-                                    index = pizGrowingArrayValueAtIndex (x->hashTable[p], i);
-                                    
-                                    if (x->pool[index].key == key) {
-                                            (*ptr) = x->pool[index].ptr;
-                                            err = PIZ_GOOD;
-                                            break;
-                                        }
-                                }
-                        }
-                }
-        }
-
-    return err;
-}
-
 PIZError pizBoundedHashTableRemoveByKeyAndPtr (PIZBoundedHashTable *x, long key, void *ptr)
 {
     long err = PIZ_ERROR;
@@ -273,7 +232,48 @@ PIZError pizBoundedHashTableRemoveByKeyAndPtr (PIZBoundedHashTable *x, long key,
     return err;
 }
 
-bool pizBoundedHashTableContainsKey (PIZBoundedHashTable *x, long key)
+long pizBoundedHashTableCount (const PIZBoundedHashTable *x)
+{
+    return (x->count);
+}
+
+PIZError pizBoundedHashTablePtrByKey (const PIZBoundedHashTable *x, long key, void **ptr)
+{
+    long err = PIZ_ERROR;
+    
+    if (*ptr)
+        {
+            (*ptr) = NULL;
+        }
+    
+    if (key >= 0)
+        {
+            long p = key % x->hashSize;
+            
+            if (x->hashTable[p])
+                {   
+                    long count, i, index;
+                    
+                    if (count = pizGrowingArrayCount (x->hashTable[p]))
+                        {
+                            for (i = 0; i < count; i++)
+                                {
+                                    index = pizGrowingArrayValueAtIndex (x->hashTable[p], i);
+                                    
+                                    if (x->pool[index].key == key) {
+                                            (*ptr) = x->pool[index].ptr;
+                                            err = PIZ_GOOD;
+                                            break;
+                                        }
+                                }
+                        }
+                }
+        }
+
+    return err;
+}
+
+bool pizBoundedHashTableContainsKey (const PIZBoundedHashTable *x, long key)
 {
     bool k = false;
     

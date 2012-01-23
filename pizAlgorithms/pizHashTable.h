@@ -1,7 +1,7 @@
 /**
  * \file    pizHashTable.h
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
  
 /*
@@ -74,15 +74,16 @@ typedef struct _PIZHashTable {
 PIZ_START_C_LINKAGE
 
 PIZHashTable    *pizHashTableNew                    (long argc, long *argv);
-void            pizHashTableSetFlags                (PIZHashTable *hashTable, long flags);
-void            pizHashTableFree                    (PIZHashTable *hashTable);
+void            pizHashTableSetFlags                (PIZHashTable *x, long flags);
+void            pizHashTableFree                    (PIZHashTable *x);
 
-void            pizHashTableClear                   (PIZHashTable *hashTable);
-PIZError        pizHashTableAdd                     (PIZHashTable *hashTable, long key, void *ptr);
-long            pizHashTableCount                   (PIZHashTable *hashTable);
-PIZError        pizHashTablePtrByKey                (PIZHashTable *hashTable, long key, void **ptr);
-PIZError        pizHashTableRemoveByKeyAndPtr       (PIZHashTable *hashTable, long key, void *ptr);
-bool            pizHashTableContainsKey             (PIZHashTable *hashTable, long key);
+void            pizHashTableClear                   (PIZHashTable *x);
+PIZError        pizHashTableAdd                     (PIZHashTable *x, long key, void *ptr);
+PIZError        pizHashTableRemoveByKeyAndPtr       (PIZHashTable *x, long key, void *ptr);
+
+PIZError        pizHashTablePtrByKey                (const PIZHashTable *x, long key, void **ptr);
+bool            pizHashTableContainsKey             (const PIZHashTable *x, long key);
+long            pizHashTableCount                   (const PIZHashTable *x);
 
 PIZ_END_C_LINKAGE
 
@@ -96,7 +97,7 @@ PIZ_EXTERN void pizHashTableSetFlags (PIZHashTable *x, long flags)
     x->flags = flags;
 }
 
-PIZ_EXTERN long pizHashTableCount (PIZHashTable *x)
+PIZ_EXTERN long pizHashTableCount (const PIZHashTable *x)
 {
     return (x->count);
 }

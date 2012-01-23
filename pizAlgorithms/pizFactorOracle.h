@@ -2,7 +2,7 @@
  * \file    pizFactorOracle.h
  * \details Thanks : Matthieu Raffinot, Maxime Crochemore, Cyril Allauzen, Arnaud Lefebvre et Thierry Lecroq.
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    23 janvier 2012
  */
 
 /*
@@ -86,22 +86,22 @@ PIZ_START_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 
 PIZFactorOracle *pizFactorOracleNew                 (long argc, long *argv);
-void            pizFactorOracleFree                 (PIZFactorOracle *factorOracle);
+void            pizFactorOracleFree                 (PIZFactorOracle *x);
 
-PIZError        pizFactorOracleAdd                  (PIZFactorOracle *factorOracle, long argc, long *argv);
-void            pizFactorOracleClear                (PIZFactorOracle *factorOracle);
-long            pizFactorOracleCount                (PIZFactorOracle *factorOracle);
-PIZError        pizFactorOracleProceed              (PIZFactorOracle *factorOracle, long argc, long *argv);
+PIZError        pizFactorOracleAdd                  (PIZFactorOracle *x, long argc, long *argv);
+void            pizFactorOracleClear                (PIZFactorOracle *x);
+PIZError        pizFactorOracleProceed              (PIZFactorOracle *x, long argc, long *argv);
+long            pizFactorOracleCount                (const PIZFactorOracle *x);
 
-long            pizFactorOracleBackwardThreshold    (PIZFactorOracle *factorOracle);
-void            pizFactorOracleSetBackwardThreshold (PIZFactorOracle *factorOracle, long n);
-double          pizFactorOracleStraightRatio        (PIZFactorOracle *factorOracle);
-void            pizFactorOracleSetStraightRatio     (PIZFactorOracle *factorOracle, double f);
+void            pizFactorOracleSetBackwardThreshold (PIZFactorOracle *x, long n);
+void            pizFactorOracleSetStraightRatio     (PIZFactorOracle *x, double f);
+long            pizFactorOracleBackwardThreshold    (const PIZFactorOracle *x);
+double          pizFactorOracleStraightRatio        (const PIZFactorOracle *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError        pizFactorOracleEncodeNodeToArray    (PIZFactorOracle *x, long node, PIZGrowingArray *array);
+PIZError        pizFactorOracleEncodeNodeToArray    (const PIZFactorOracle *x, long node, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
