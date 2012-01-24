@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 23/01/12.
+ *  Last modified : 24/01/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -1198,8 +1198,6 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
                 jpopupmenu_additem      (noteChannelPopup, 215, "15", NULL, 0, 0, NULL);
                 jpopupmenu_additem      (noteChannelPopup, 216, "16", NULL, 0, 0, NULL);
 
-                jpopupmenu_addsubmenu   (popup, "Snap", snapPopup, 0);
-                jpopupmenu_addseperator (popup);
                 jpopupmenu_addsubmenu   (popup, "Velocity   ", velocityPopup, 0);
                 jpopupmenu_addsubmenu   (popup, "Channel",  noteChannelPopup, 0);
             }
