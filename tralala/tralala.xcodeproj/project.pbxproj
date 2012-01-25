@@ -10,9 +10,6 @@
 		9665E26D13B77366008C158A /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9665E26C13B77366008C158A /* MaxAPI.framework */; };
 		9675499B13F3A758005CDE9E /* tralalaSymbols.c in Sources */ = {isa = PBXBuildFile; fileRef = 9675499A13F3A758005CDE9E /* tralalaSymbols.c */; };
 		9676982713B7784800FE77F4 /* tralala.c in Sources */ = {isa = PBXBuildFile; fileRef = 9676982513B7784800FE77F4 /* tralala.c */; };
-		969C133014CDB5DB00DA9B02 /* tralalaHI.c in Sources */ = {isa = PBXBuildFile; fileRef = 969C132F14CDB5DB00DA9B02 /* tralalaHI.c */; };
-		969C134014CDB96200DA9B02 /* tralalaMessages.c in Sources */ = {isa = PBXBuildFile; fileRef = 969C133F14CDB96200DA9B02 /* tralalaMessages.c */; };
-		969C135F14CDBD7E00DA9B02 /* tralalaLibrary.c in Sources */ = {isa = PBXBuildFile; fileRef = 969C135E14CDBD7E00DA9B02 /* tralalaLibrary.c */; };
 		96A0DC9914A4B8CC00895D0E /* 8A.png in Resources */ = {isa = PBXBuildFile; fileRef = 96A0DC7214A4B8CC00895D0E /* 8A.png */; };
 		96A0DC9A14A4B8CC00895D0E /* 8B.png in Resources */ = {isa = PBXBuildFile; fileRef = 96A0DC7314A4B8CC00895D0E /* 8B.png */; };
 		96A0DC9B14A4B8CC00895D0E /* 8C.png in Resources */ = {isa = PBXBuildFile; fileRef = 96A0DC7414A4B8CC00895D0E /* 8C.png */; };
@@ -57,7 +54,6 @@
 		96D8DAAF142CE346007F5BAD /* tralalaHide.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96D8DAAE142CE346007F5BAD /* tralalaHide.txt */; };
 		96E7B0F314B75F4E00B2C894 /* 32B.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E7B0ED14B75F4E00B2C894 /* 32B.png */; };
 		96E7B0F414B75F4E00B2C894 /* 32C.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E7B0EE14B75F4E00B2C894 /* 32C.png */; };
-		96F5C26F14CC7AFC004ECAEA /* tralalaGUI.c in Sources */ = {isa = PBXBuildFile; fileRef = 96F5C26E14CC7AFC004ECAEA /* tralalaGUI.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,9 +62,6 @@
 		9675499913F3A758005CDE9E /* tralalaSymbols.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tralalaSymbols.h; sourceTree = "<group>"; };
 		9675499A13F3A758005CDE9E /* tralalaSymbols.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tralalaSymbols.c; sourceTree = "<group>"; };
 		9676982513B7784800FE77F4 /* tralala.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tralala.c; sourceTree = "<group>"; };
-		969C132F14CDB5DB00DA9B02 /* tralalaHI.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tralalaHI.c; sourceTree = "<group>"; };
-		969C133F14CDB96200DA9B02 /* tralalaMessages.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tralalaMessages.c; sourceTree = "<group>"; };
-		969C135E14CDBD7E00DA9B02 /* tralalaLibrary.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tralalaLibrary.c; sourceTree = "<group>"; };
 		96A0DC7214A4B8CC00895D0E /* 8A.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 8A.png; sourceTree = "<group>"; };
 		96A0DC7314A4B8CC00895D0E /* 8B.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 8B.png; sourceTree = "<group>"; };
 		96A0DC7414A4B8CC00895D0E /* 8C.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 8C.png; sourceTree = "<group>"; };
@@ -114,7 +107,6 @@
 		96D8DAAE142CE346007F5BAD /* tralalaHide.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = tralalaHide.txt; sourceTree = "<group>"; };
 		96E7B0ED14B75F4E00B2C894 /* 32B.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 32B.png; sourceTree = "<group>"; };
 		96E7B0EE14B75F4E00B2C894 /* 32C.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 32C.png; sourceTree = "<group>"; };
-		96F5C26E14CC7AFC004ECAEA /* tralalaGUI.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tralalaGUI.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,10 +158,6 @@
 				96CB9E2913C1A24600C00CC4 /* tralala.h */,
 				9675499913F3A758005CDE9E /* tralalaSymbols.h */,
 				9676982513B7784800FE77F4 /* tralala.c */,
-				969C133F14CDB96200DA9B02 /* tralalaMessages.c */,
-				969C132F14CDB5DB00DA9B02 /* tralalaHI.c */,
-				96F5C26E14CC7AFC004ECAEA /* tralalaGUI.c */,
-				969C135E14CDBD7E00DA9B02 /* tralalaLibrary.c */,
 				9675499A13F3A758005CDE9E /* tralalaSymbols.c */,
 			);
 			name = Source;
@@ -327,10 +315,6 @@
 			files = (
 				9676982713B7784800FE77F4 /* tralala.c in Sources */,
 				9675499B13F3A758005CDE9E /* tralalaSymbols.c in Sources */,
-				96F5C26F14CC7AFC004ECAEA /* tralalaGUI.c in Sources */,
-				969C133014CDB5DB00DA9B02 /* tralalaHI.c in Sources */,
-				969C134014CDB96200DA9B02 /* tralalaMessages.c in Sources */,
-				969C135F14CDBD7E00DA9B02 /* tralalaLibrary.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

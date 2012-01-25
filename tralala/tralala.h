@@ -551,6 +551,10 @@ PIZ_LOCAL void  tralala_popupRightClickMenu     (t_tralala *x, t_pt pt, long men
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+void            tralala_paintTask               (t_tralala *x);
+void            tralala_focusTask               (t_tralala *x);
+void            tralala_notifyTask              (t_tralala *x);
+
 void            tralala_paint                   (t_tralala *x, t_object *patcherview);
 void            tralala_getdrawparams           (t_tralala *x, t_object *patcherview, t_jboxdrawparams *params);
 
@@ -558,10 +562,6 @@ void            tralala_focusgained             (t_tralala *x, t_object *patcher
 void            tralala_focuslost               (t_tralala *x, t_object *patcherview);
 void            tralala_patcherview_vis         (t_tralala *x, t_object *patcherview);
 void            tralala_patcherview_invis       (t_tralala *x, t_object *patcherview);
-
-void            tralala_paintTask               (t_tralala *x);
-void            tralala_focusTask               (t_tralala *x);
-void            tralala_notifyTask              (t_tralala *x);
 
 PIZ_LOCAL void  tralala_paintText               (t_tralala *x, t_object *patcherview);
 PIZ_LOCAL void  tralala_paintGrid               (t_tralala *x, t_object *patcherview);
