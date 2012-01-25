@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 23/01/12.
+ *  Last modified : 24/01/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -653,7 +653,7 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
                         }
                 }
         
-            jrgba_set (&gridColor, 0.85, 0.85, 0.85, 1.);
+            jrgba_set (&gridColor, 0.87, 0.87, 0.87, 1.);
             jgraphics_set_source_jrgba (g, &gridColor);
             
             jgraphics_rectangle_draw_fast (g, 0., 0., gridWidth, gridHeight, 1.);
