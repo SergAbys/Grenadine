@@ -54,7 +54,7 @@ PIZBoundedQueue *pizBoundedQueueNew (long size)
     
     if (size > 0 && (x = (PIZBoundedQueue *)malloc (sizeof(PIZBoundedQueue))))
         {
-            if (x->boundedQueueValues = (long *)malloc ((size + 1) * sizeof(long)))
+            if (x->values = (long *)malloc ((size + 1) * sizeof(long)))
                 {
                     x->count        = 0;
                     x->bound        = size;
@@ -74,10 +74,9 @@ PIZBoundedQueue *pizBoundedQueueNew (long size)
 
 void pizBoundedQueueFree (PIZBoundedQueue *x)
 {
-    if (x)
-        {
-            free (x->boundedQueueValues);
-            x->boundedQueueValues = NULL;
+    if (x) {
+            free (x->values);
+            x->values = NULL;
             
             free (x);
         }
@@ -100,16 +99,13 @@ PIZError pizBoundedQueueAppend (PIZBoundedQueue *x, long value)
             
             x->count ++;
             
-            x->boundedQueueValues[x->tail] = value;
+            x->values[x->tail] = value;
             
-            if (x->tail == x->bound)
-                {
-                    x->tail = 0;
-                }
-            else
-                {
-                    x->tail ++;
-                }
+            if (x->tail == x->bound) {
+                x->tail = 0;
+            } else {
+                x->tail ++;
+            }
         }
     
     return err;
@@ -125,16 +121,13 @@ PIZError pizBoundedQueuePop (PIZBoundedQueue *x)
             
             x->count --;
             
-            x->poppedValue = x->boundedQueueValues[x->head];
+            x->poppedValue = x->values[x->head];
             
-            if (x->head == x->bound)
-                {
-                    x->head = 0;
-                }
-            else
-                {
-                    x->head ++;
-                }
+            if (x->head == x->bound) {
+                x->head = 0;
+            } else {
+                x->head ++;
+            }
         }
     
     return err;
@@ -148,18 +141,15 @@ PIZError pizBoundedQueuePopLastValue (PIZBoundedQueue *x)
         {
             err = PIZ_GOOD;
             
-            if (x->tail == 0)
-                {
-                    x->tail = x->bound;
-                }
-            else
-                {
-                    x->tail --;
-                }
+            if (x->tail == 0) {
+                x->tail = x->bound;
+            } else {
+                x->tail --;
+            }
             
             x->count --;
                     
-            x->poppedValue = x->boundedQueueValues[x->tail];
+            x->poppedValue = x->values[x->tail];
         }
     
     return err;

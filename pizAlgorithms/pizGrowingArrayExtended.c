@@ -1,7 +1,7 @@
 /*
  * \file    pizGrowingArrayExtended.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    26 janvier 2012
  */
  
 /*
@@ -56,7 +56,7 @@ void pizGrowingArrayRemoveIndex (PIZGrowingArray *array, long index)
             long i;
             
             for (i = index; i < (array->index - 1); i++) {
-                    array->growingArrayValues[i] = array->growingArrayValues[i + 1];
+                    array->values[i] = array->values[i + 1];
                 }
             
             array->index --;
@@ -67,8 +67,7 @@ PIZError pizGrowingArrayRemoveLastValue (PIZGrowingArray *x)
 {
     long err = PIZ_ERROR;
     
-    if (x->index)
-        {
+    if (x->index) {
             x->index --;
             
             err = PIZ_GOOD;
@@ -84,8 +83,7 @@ long pizGrowingArrayFirstIndexOfValue (const PIZGrowingArray *x, long value)
     
     for (i = 0; i < x->index; i++)
         {
-            if (x->growingArrayValues[i] == value)
-                {
+            if (x->values[i] == value) {
                     k = i;
                     break;
                 }
@@ -101,8 +99,7 @@ bool pizGrowingArrayContainsValue (const PIZGrowingArray *x, long value)
     
     for (i = 0; i < x->index; i++)
         {
-            if (x->growingArrayValues[i] == value)
-                {
+            if (x->values[i] == value) {
                     k = true;
                     break;
                 }
@@ -117,13 +114,12 @@ PIZError pizGrowingArrayCopy (PIZGrowingArray *x, const PIZGrowingArray *toCopy)
     
     if (toCopy->index > x->size)
         {
-            long *newGrowingArrayValues = NULL;
+            long *newValues = NULL;
             
-            if (newGrowingArrayValues = (long *)realloc 
-                (x->growingArrayValues, toCopy->size * sizeof(long)))
+            if (newValues = (long *)realloc (x->values, toCopy->size * sizeof(long)))
                 {
                     x->size = toCopy->size;
-                    x->growingArrayValues = newGrowingArrayValues;
+                    x->values = newValues;
                 }
             else
                 {
@@ -131,11 +127,15 @@ PIZError pizGrowingArrayCopy (PIZGrowingArray *x, const PIZGrowingArray *toCopy)
                 }
         }
     
-    if (!err)
+    if (!err) 
         {
-            x->index = toCopy->index;
+            long i;
             
-            memcpy (x->growingArrayValues, toCopy->growingArrayValues, (toCopy->index * sizeof(long)));
+            for (i = 0; i < toCopy->index; i++) {
+                    x->values[i] = toCopy->values[i];
+                }
+                
+            x->index = toCopy->index;
         }
     
     return err;
@@ -143,17 +143,17 @@ PIZError pizGrowingArrayCopy (PIZGrowingArray *x, const PIZGrowingArray *toCopy)
 
 PIZError pizGrowingArrayAppendArray (PIZGrowingArray *x, const PIZGrowingArray *toAppend)
 {
-    PIZError err = (x == toAppend);
+    PIZError err = PIZ_GOOD;
     
     if ((toAppend->index + x->index) > x->size)
         {
-            long *newGrowingArrayValues = NULL;
+            long *newValues = NULL;
             long newSize = toAppend->size + x->size;
 
-            if (newGrowingArrayValues = (long *)realloc (x->growingArrayValues, newSize * sizeof(long)))
+            if (newValues = (long *)realloc (x->values, newSize * sizeof(long)))
                 {
                     x->size = newSize;
-                    x->growingArrayValues = newGrowingArrayValues;
+                    x->values = newValues;
                 }
             else
                 {
@@ -161,10 +161,13 @@ PIZError pizGrowingArrayAppendArray (PIZGrowingArray *x, const PIZGrowingArray *
                 }
         }
     
-    if (!err)
+    if (!err) 
         {
-            memcpy (x->growingArrayValues + (x->index), toAppend->growingArrayValues, 
-                (toAppend->index * sizeof(long)));
+            long i;
+        
+            for (i = 0; i < toAppend->index; i++) {
+                    x->values[x->index + i] = toAppend->values[i];
+                }
             
             x->index += toAppend->index;
         }
@@ -178,17 +181,17 @@ PIZError pizGrowingArrayAppendPtr (PIZGrowingArray *x, long argc, long *argv)
     
     if ((argc + x->index) > x->size)
         {
-            long *newGrowingArrayValues = NULL;
+            long *newValues = NULL;
             long newSize = x->size * 2;
             
             while (newSize < (argc + x->index)) {
                     newSize = newSize * 2;
                 }
 
-            if (newGrowingArrayValues = (long *)realloc (x->growingArrayValues, newSize * sizeof(long)))
+            if (newValues = (long *)realloc (x->values, newSize * sizeof(long)))
                 {
                     x->size = newSize;
-                    x->growingArrayValues = newGrowingArrayValues;
+                    x->values = newValues;
                 }
             else
                 {
@@ -196,8 +199,14 @@ PIZError pizGrowingArrayAppendPtr (PIZGrowingArray *x, long argc, long *argv)
                 }
         }
     
-    if (!err) {
-            memcpy (x->growingArrayValues + (x->index), argv, (argc * sizeof(long)));
+    if (!err) 
+        {
+            long i;
+            
+            for (i = 0; i < argc; i++) {
+                    x->values[x->index + i] = argv[i];
+                }
+                
             x->index += argc;
         }
     

@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    26 janvier 2012
  */
  
 /*
@@ -617,8 +617,10 @@ bool pizSequenceClean (PIZSequence *x, long value)
         
     scale = pizGrowingArrayCount (x->scale);
     v = CLAMP (value, 0, PIZ_SEQUENCE_MIDI_NOTE);
-        
-    memset (x->values2, 0, sizeof(long) * (PIZ_SEQUENCE_MIDI_NOTE + 1));
+    
+    for (i = 0; i < (PIZ_SEQUENCE_MIDI_NOTE + 1); i++) {
+            x->values2[i] = 0;
+        }
     
     for (i = 0; i < pizGrowingArrayCount (x->map); i++)
         {   

@@ -1,7 +1,7 @@
 /*
  * \file    pizBoundedStack.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    26 janvier 2012
  */
  
 /*
@@ -54,7 +54,7 @@ PIZBoundedStack *pizBoundedStackNew (long size)
     
     if (size > 1 && (x = (PIZBoundedStack *)malloc (sizeof(PIZBoundedStack))))
         {
-            if (x->boundedStackValues = (long *)malloc (size * sizeof(long)))
+            if (x->values = (long *)malloc (size * sizeof(long)))
                 {
                     x->bound        = size;
                     x->stack        = 0;
@@ -72,10 +72,9 @@ PIZBoundedStack *pizBoundedStackNew (long size)
 
 void pizBoundedStackFree (PIZBoundedStack *x)
 {
-    if (x)
-        {
-            free (x->boundedStackValues);
-            x->boundedStackValues = NULL;
+    if (x) {
+            free (x->values);
+            x->values = NULL;
             
             free (x);
         }
@@ -90,11 +89,10 @@ PIZError pizBoundedStackPush (PIZBoundedStack *x, long value)
 {   
     long err = PIZ_ERROR;
     
-    if (x->stack < x->bound)
-        {
+    if (x->stack < x->bound) {
             err = PIZ_GOOD;
             
-            x->boundedStackValues[x->stack] = value;
+            x->values[x->stack] = value;
             x->stack ++;
         }
     
@@ -105,11 +103,10 @@ PIZError pizBoundedStackPop (PIZBoundedStack *x)
 {
     long err = PIZ_ERROR;
     
-    if (x->stack)
-        {
+    if (x->stack) {
             err = PIZ_GOOD;
             
-            x->poppedValue = x->boundedStackValues[x->stack - 1];
+            x->poppedValue = x->values[x->stack - 1];
             
             x->stack --;
         }

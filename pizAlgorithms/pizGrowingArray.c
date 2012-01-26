@@ -1,7 +1,7 @@
 /*
  * \file    pizGrowingArray.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    26 janvier 2012
  */
  
 /*
@@ -56,7 +56,7 @@ PIZGrowingArray *pizGrowingArrayNew (long size)
         {       
             size = MAX (1, size);
             
-            if (x->growingArrayValues = (long *)malloc (size * sizeof(long)))
+            if (x->values = (long *)malloc (size * sizeof(long)))
                 {
                     x->size     = size;
                     x->index    = 0;
@@ -73,10 +73,9 @@ PIZGrowingArray *pizGrowingArrayNew (long size)
 
 void pizGrowingArrayFree (PIZGrowingArray *x)
 {
-    if (x)
-        {
-            free (x->growingArrayValues);
-            x->growingArrayValues = NULL;
+    if (x) {
+            free (x->values);
+            x->values = NULL;
             
             free (x);
         }
@@ -93,12 +92,12 @@ PIZError pizGrowingArrayAppend (PIZGrowingArray *x, long value)
         
     if (x->index == x->size)
         {   
-            long *newGrowingArrayValues = NULL;
+            long *newValues = NULL;
             
-            if (newGrowingArrayValues = (long *)realloc (x->growingArrayValues, (x->size * 2) * sizeof(long)))
+            if (newValues = (long *)realloc (x->values, (x->size * 2) * sizeof(long)))
                 {
                     x->size *= 2;
-                    x->growingArrayValues = newGrowingArrayValues;
+                    x->values = newValues;
                 }
             else
                 {
@@ -106,9 +105,8 @@ PIZError pizGrowingArrayAppend (PIZGrowingArray *x, long value)
                 }
         }
     
-    if (err == PIZ_GOOD)
-        {
-            x->growingArrayValues[x->index] = value;
+    if (err == PIZ_GOOD) {
+            x->values[x->index] = value;
             x->index ++;
         }
         
@@ -117,7 +115,7 @@ PIZError pizGrowingArrayAppend (PIZGrowingArray *x, long value)
 
 void pizGrowingArraySetValueAtIndex (PIZGrowingArray *x, long index, long value)
 {
-    x->growingArrayValues[index] = value;
+    x->values[index] = value;
 }
 
 long pizGrowingArrayCount (const PIZGrowingArray *x)
@@ -127,12 +125,12 @@ long pizGrowingArrayCount (const PIZGrowingArray *x)
 
 long pizGrowingArrayValueAtIndex (const PIZGrowingArray *x, long index)
 {   
-    return (x->growingArrayValues[index]);
+    return (x->values[index]);
 }
 
 long *pizGrowingArrayPtr (const PIZGrowingArray *array)
 {
-    return (array->growingArrayValues);
+    return (array->values);
 }
 
 // -------------------------------------------------------------------------------------------------------------

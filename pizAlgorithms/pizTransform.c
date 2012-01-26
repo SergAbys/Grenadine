@@ -1,7 +1,7 @@
 /*
  * \file    pizTransform.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    26 janvier 2012
  */
  
 /*
@@ -689,7 +689,9 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, long down)
     k = pizSequenceLocalPickUpNotes (x);
     scale = pizGrowingArrayCount (x->scale);
     
-    memset (x->values1, 0, sizeof(long) * PIZ_SEQUENCE_POOL_SIZE);
+    for (i = 0; i < PIZ_SEQUENCE_POOL_SIZE; i++) {
+            x->values1[i] = 0;
+        }
     
     if (selector == PIZ_PITCH) 
         {

@@ -1,7 +1,7 @@
 /**
  * \file    pizGrowingArray.h
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    26 janvier 2012
  */
  
 /*
@@ -52,7 +52,7 @@
 typedef struct _PIZGrowingArray {
     long size;
     long index;
-    long *growingArrayValues;
+    long *values;
     } PIZGrowingArray;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -93,7 +93,7 @@ PIZ_EXTERN void pizGrowingArrayClear (PIZGrowingArray *x)
 
 PIZ_EXTERN void pizGrowingArraySetValueAtIndex (PIZGrowingArray *x, long index, long value)
 {
-    x->growingArrayValues[index] = value;
+    x->values[index] = value;
 }
 
 PIZ_EXTERN long pizGrowingArrayCount (const PIZGrowingArray *x)
@@ -103,12 +103,12 @@ PIZ_EXTERN long pizGrowingArrayCount (const PIZGrowingArray *x)
 
 PIZ_EXTERN long pizGrowingArrayValueAtIndex (const PIZGrowingArray *x, long index)
 {   
-    return (x->growingArrayValues[index]);
+    return (x->values[index]);
 }
 
 PIZ_EXTERN long *pizGrowingArrayPtr (const PIZGrowingArray *x)
 {
-    return (x->growingArrayValues);
+    return (x->values);
 }
 
 #endif // PIZ_EXTERN_INLINE
