@@ -1,7 +1,7 @@
 /*
  * \file    pizInterface.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    26 janvier 2012
  */
  
 /*
@@ -39,12 +39,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizInterface.h"
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#include <stdlib.h>
-#include <math.h>
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -121,7 +115,7 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
                         temp -= x->grid;
                     }
                         
-                    temp = pizSequenceSnapRoundDuration (x, temp);
+                    temp = pizSequenceSnapRound (x, temp);
                     
                     err |= ((x->markedNote->position + temp) > PIZ_SEQUENCE_TIMELINE_SIZE);
                     err |= (temp > PIZ_SEQUENCE_MAXIMUM_DURATION);
@@ -183,9 +177,9 @@ bool pizSequenceSetTempZoneWithCoordinates (PIZSequence *x, const PIZCoordinates
     PIZLOCK
     
     switch (side) {
-        case PIZ_SEQUENCE_START :   tempValue = CLAMP (pizSequenceSnapRoundPosition (x, coordinates->position), 
+        case PIZ_SEQUENCE_START :   tempValue = CLAMP (pizSequenceSnapRound (x, coordinates->position), 
                                         0, PIZ_SEQUENCE_TIMELINE_SIZE); break;
-        case PIZ_SEQUENCE_END   :   tempValue = CLAMP (pizSequenceSnapRoundPosition (x, coordinates->position), 
+        case PIZ_SEQUENCE_END   :   tempValue = CLAMP (pizSequenceSnapRound (x, coordinates->position), 
                                         0, PIZ_SEQUENCE_TIMELINE_SIZE); break;
         case PIZ_SEQUENCE_DOWN  :   if (coordinates->pitch <= interface_up) {
                                         tempValue = CLAMP (coordinates->pitch, 0, PIZ_SEQUENCE_MIDI_NOTE);
@@ -224,7 +218,7 @@ bool pizSequenceMoveTempZoneWithDelta (PIZSequence *x, long pitch, long position
     
     PIZLOCK
     
-    tempStart   = CLAMP (pizSequenceSnapRoundPosition (x, interface_originStart + position), 
+    tempStart   = CLAMP (pizSequenceSnapRound (x, interface_originStart + position), 
                     0, (PIZ_SEQUENCE_TIMELINE_SIZE - interface_originWidth));
     tempDown    = CLAMP (interface_originDown + pitch, 
                     0, (PIZ_SEQUENCE_MIDI_NOTE - interface_originHeight));
@@ -771,21 +765,9 @@ PIZ_INLINE void pizSequenceUnselectNotes (PIZSequence *x)
     x->markedNote = NULL;
 }
 
-PIZ_INLINE long pizSequenceSnapRoundDuration (PIZSequence *x, long durationToBeSnapped)
+PIZ_INLINE long pizSequenceSnapRound (PIZSequence *x, long toBeSnapped)
 {
-    return (long)(floor ((durationToBeSnapped / (double)x->grid) + 0.5)) * x->grid;
-}
-
-PIZ_INLINE long pizSequenceSnapRoundPosition (PIZSequence *x, long positionToBeSnapped)
-{
-    if (positionToBeSnapped > 0) 
-        {
-            return (long)(floor ((positionToBeSnapped / (double)x->grid) + 0.5)) * x->grid;
-        }
-    else
-        {
-            return (long)(ceil ((positionToBeSnapped / (double)x->grid) - 0.5)) * x->grid;
-        }
+    return MAX (((long)(((toBeSnapped / (double)x->grid) + 0.5)) * x->grid), 0);
 }
 
 // -------------------------------------------------------------------------------------------------------------

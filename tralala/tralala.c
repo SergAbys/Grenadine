@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 25/01/12.
+ *  Last modified : 26/01/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -3169,10 +3169,10 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                     c1.position = (long)((x->windowOffsetX + pt.x) / (STEP_PIXELS_SIZE * f));
                     c2.position = (long)((x->windowOffsetX + pt.x) / (STEP_PIXELS_SIZE * f));
                     
-                    c1.pitch = PIZ_SEQUENCE_MIDI_NOTE - ((long)floor ((x->windowOffsetY + pt.y - 
-                                (SEMITONE_PIXELS_SIZE / 2. * f)) / (SEMITONE_PIXELS_SIZE * f)));
-                    c2.pitch = PIZ_SEQUENCE_MIDI_NOTE - ((long)floor ((x->windowOffsetY + pt.y + 
-                                (SEMITONE_PIXELS_SIZE / 2. * f)) / (SEMITONE_PIXELS_SIZE * f)));
+                    c1.pitch = PIZ_SEQUENCE_MIDI_NOTE - MAX (((long)((x->windowOffsetY + pt.y - 
+                                (SEMITONE_PIXELS_SIZE / 2. * f)) / (SEMITONE_PIXELS_SIZE * f))), 0);
+                    c2.pitch = PIZ_SEQUENCE_MIDI_NOTE - MAX (((long)((x->windowOffsetY + pt.y + 
+                                (SEMITONE_PIXELS_SIZE / 2. * f)) / (SEMITONE_PIXELS_SIZE * f))), 0);
                                 
                     switch (x->hitTest) {
                     case HIT_START: draw = pizSequenceSetTempZoneWithCoordinates 
@@ -3196,8 +3196,8 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                 }
             else if (CAPS)
                 {
-                    x->windowOffsetX = round (x->windowOffsetX - (pt.x - x->previous.x));
-                    x->windowOffsetY = round (x->windowOffsetY - (pt.y - x->previous.y));
+                    x->windowOffsetX -= pt.x - x->previous.x;
+                    x->windowOffsetY -= pt.y - x->previous.y;
                     
                     tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_DRAGGINGHAND);
                     
@@ -3404,25 +3404,19 @@ void tralala_mousewheel (t_tralala *x, t_object *view, t_pt pt, long modifiers, 
                 {
                     x->windowOffsetX = ((2. * x->windowOffsetX) + rect.width) - (rect.width  / 2.); 
                     x->windowOffsetY = ((2. * x->windowOffsetY) + rect.height) - (rect.height  / 2.); 
-                    
-                    x->windowOffsetX = round (x->windowOffsetX);
-                    x->windowOffsetY = round (x->windowOffsetY);
                 }
             else if (k == 2)
                 {
                     x->windowOffsetX = (((2. * x->windowOffsetX) + rect.width) / 4.) - (rect.width / 2.);
                     x->windowOffsetY = (((2. * x->windowOffsetY) + rect.height) / 4.) - (rect.height / 2.);
-                    
-                    x->windowOffsetX = round (x->windowOffsetX);
-                    x->windowOffsetY = round (x->windowOffsetY);
                 }
             
             DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES);
         }
     else
         {
-            x->windowOffsetX = round (x->windowOffsetX - (x_inc * MOUSEWHEEL_FACTOR));
-            x->windowOffsetY = round (x->windowOffsetY - (y_inc * MOUSEWHEEL_FACTOR));
+            x->windowOffsetX -= x_inc * MOUSEWHEEL_FACTOR;
+            x->windowOffsetY -= y_inc * MOUSEWHEEL_FACTOR;
             
             DIRTYLAYER_SET (DIRTY_REFRESH);
         }
@@ -4909,8 +4903,8 @@ void tralala_paintPlayedNotes (t_tralala *x, t_object *patcherview)
             jbox_end_layer ((t_object*)x, patcherview, tll_sym_playedNotesLayer);
         }
         
-    jbox_paint_layer ((t_object *)x, patcherview, tll_sym_playedNotesLayer, 
-        -x->windowOffsetX, -x->windowOffsetY);
+    jbox_paint_layer ((t_object *)x, patcherview, tll_sym_playedNotesLayer, -x->windowOffsetX, 
+        -x->windowOffsetY);
 }
 
 void tralala_paintNoteCandycane (t_tralala *x, t_jgraphics *g, long position, long pitch,
@@ -5088,7 +5082,7 @@ bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitc
             pitch       += deltaPitch;
             position    += deltaPosition;
             
-            position = (long)(round (position / (double)grid)) * grid;
+            position = MAX ((long)((position / (double)grid) + 0.5) * grid, 0);
             
             pizGrowingArraySetValueAtIndex (x->selectedNotes, 
                                             (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION,
@@ -5097,8 +5091,7 @@ bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitc
                                             (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH,
                                             CLAMP (pitch, 0, PIZ_SEQUENCE_MIDI_NOTE));
             
-            if ((previousPosition != position) || (previousPitch != pitch))
-                {
+            if ((previousPosition != position) || (previousPitch != pitch)) {
                     moved = true;
                 }
         }
@@ -5131,14 +5124,13 @@ bool tralala_changeSelectedNotesDuration (t_tralala *x, long deltaPosition)
                                         (PIZ_SEQUENCE_TIMELINE_SIZE - position));
                                         
             duration += deltaPosition;
-            duration = (long)(round (duration / (double)grid)) * grid;
+            duration = MAX ((long)((duration / (double)grid) + 0.5) * grid, 0);
             
             pizGrowingArraySetValueAtIndex (x->selectedNotes, 
                                             (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION,
                                             CLAMP (duration, grid, maximum));
             
-            if (duration != previousDuration)
-                {
+            if (duration != previousDuration) {
                     changed = true;
                 }
         }
@@ -5435,8 +5427,8 @@ bool tralala_setCoordinatesWithPoint (t_tralala *x, PIZCoordinates *coordinates,
         }
     
     coordinates->position   = (long)((x->windowOffsetX + pt.x) / (STEP_PIXELS_SIZE * f));
-    coordinates->pitch      = PIZ_SEQUENCE_MIDI_NOTE - ((long)floor ((x->windowOffsetY + pt.y) / 
-                                (SEMITONE_PIXELS_SIZE * f)));
+    coordinates->pitch      = PIZ_SEQUENCE_MIDI_NOTE - MAX (((long)((x->windowOffsetY + pt.y) / 
+                                (SEMITONE_PIXELS_SIZE * f))), 0);
     
     if ((coordinates->pitch < 0) || (coordinates->pitch > PIZ_SEQUENCE_MIDI_NOTE) || 
         (coordinates->position < 0) || (coordinates->position > (PIZ_SEQUENCE_TIMELINE_SIZE - 1)))

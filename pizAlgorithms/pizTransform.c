@@ -64,6 +64,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#define TRANSFORM_CEIL(a,b)                 (((a)%(b))==0?(a)/(b):(a)/(b)+1)
+ 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 static long     transform_neighborhood[ ]   = {-256, -130, -129, -128, -127, -126, 126, 127, 128, 129, 130, 256,
                                                -2, -1, 1, 2};
 
@@ -154,9 +159,9 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
             long loop = 0;
             
             pizBoundedHashTableClear (x->hashTable);
-            
-            start       = (long)ceil (x->start / (double)x->grid);
-            end         = (long)ceil (x->end / (double)x->grid);
+
+            start       = TRANSFORM_CEIL (x->start, x->grid);
+            end         = TRANSFORM_CEIL (x->end, x->grid);
             mapCount    = pizGrowingArrayCount (x->map);
             scale       = pizGrowingArrayCount (x->scale);
             
@@ -446,8 +451,8 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
             long i, start, end, size;
             long b = 0;
             
-            start   = (long)ceil (x->start / (double)x->grid);
-            end     = (long)ceil (x->end / (double)x->grid);
+            start   = TRANSFORM_CEIL (x->start, x->grid);
+            end     = TRANSFORM_CEIL (x->end, x->grid); 
             
             if (size = (end - start)) {
                 for (i = 0; i < TRANSFORM_DIVISIONS_SIZE; i++) {

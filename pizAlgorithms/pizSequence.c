@@ -45,7 +45,6 @@
 
 #include <stdlib.h>
 #include <time.h>
-#include <math.h>
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -962,7 +961,7 @@ PIZNote *pizSequenceLocalAddNote (PIZSequence *x, long *values, long mode)
     long    isMarked    = values[PIZ_SEQUENCE_IS_MARKED];
     
     if (mode & PIZ_SEQUENCE_ADD_MODE_SNAP) {
-            position = pizSequenceSnapFloorPosition (x, position);
+            position = MAX (((long)(position / (double)x->grid)) * x->grid, 0);
         }
     
     if (mode & PIZ_SEQUENCE_ADD_MODE_PATTERN) {
@@ -1113,15 +1112,12 @@ void pizSequenceLocalMakeMap (PIZSequence *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_INLINE long pizSequenceSnapFloorPosition (const PIZSequence *x, long toSnapped)
+PIZ_INLINE long pizSequenceSnapPositionToPattern (PIZSequence *x, long toSnapped, long patternSize)
 {
-    return (floor (toSnapped / (double)x->grid)) * x->grid;
-}
-
-PIZ_INLINE long pizSequenceSnapPositionToPattern (const PIZSequence *x, long toSnapped, long patternSize)
-{
-    long k = (long)(floor ((double)toSnapped / (double)x->grid)) % patternSize;
-    toSnapped = (long)(floor ((double)toSnapped / (double)x->grid)) * x->grid;
+    long j = MAX ((long)(toSnapped / (double)x->grid), 0);
+    long k = j % patternSize;
+    
+    toSnapped = j * x->grid;
     toSnapped += pizGrowingArrayValueAtIndex (x->pattern, k) * x->grid;
 
     return toSnapped;

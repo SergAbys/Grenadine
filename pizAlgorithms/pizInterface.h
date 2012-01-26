@@ -1,7 +1,7 @@
 /**
  * \file    pizInterface.h
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    26 janvier 2012
  */
  
 /*
@@ -92,9 +92,8 @@ bool        pizSequenceUndoIsEqualToUndo                (const PIZGrowingArray *
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_INLINE void     pizSequenceUnselectNotes            (PIZSequence *x);
-PIZ_INLINE long     pizSequenceSnapRoundDuration        (PIZSequence *x, long toSnapped);
-PIZ_INLINE long     pizSequenceSnapRoundPosition        (PIZSequence *x, long toSnapped);
+PIZ_LOCAL PIZ_INLINE void pizSequenceUnselectNotes      (PIZSequence *x);
+PIZ_LOCAL PIZ_INLINE long pizSequenceSnapRound          (PIZSequence *x, long toSnapped);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

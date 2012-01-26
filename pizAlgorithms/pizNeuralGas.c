@@ -439,7 +439,7 @@ PIZError pizNeuralGasProceed (const PIZNeuralGas *x, long argc, long *argv)
                             temp = x->vectorStock + (p * x->vectorSize);
                         }
                     
-                    argv[i] = (long)floor (*(temp + (i % x->vectorSize)) + 0.5);
+                    argv[i] = (long)(*(temp + (i % x->vectorSize)) + 0.5);
                 }
             
             err = PIZ_GOOD;

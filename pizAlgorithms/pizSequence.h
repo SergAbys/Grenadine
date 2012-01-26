@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    26 janvier 2012
  */
  
 /*
@@ -305,14 +305,13 @@ PIZError     pizSequenceProceedStep                (PIZSequence *x, PIZGrowingAr
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL  PIZNote *pizSequenceLocalAddNote            (PIZSequence *x, long *values, long mode);
+PIZ_LOCAL            PIZNote *pizSequenceLocalAddNote        (PIZSequence *x, long *values, long mode);
 
-PIZ_LOCAL  void    pizSequenceLocalClear               (PIZSequence *x);
-PIZ_LOCAL  void    pizSequenceLocalMakeMap             (PIZSequence *x);
-PIZ_LOCAL  long    pizSequenceLocalMovePitchToAmbitus  (PIZSequence *x, long pitch);
+PIZ_LOCAL            void pizSequenceLocalClear              (PIZSequence *x);
+PIZ_LOCAL            void pizSequenceLocalMakeMap            (PIZSequence *x);
+PIZ_LOCAL            long pizSequenceLocalMovePitchToAmbitus (PIZSequence *x, long pitch);
 
-PIZ_INLINE long    pizSequenceSnapFloorPosition        (const PIZSequence *x, long toSnapped);
-PIZ_INLINE long    pizSequenceSnapPositionToPattern    (const PIZSequence *x, long toSnapped, long patternSize);
+PIZ_LOCAL PIZ_INLINE long pizSequenceSnapPositionToPattern   (PIZSequence *x, long toSnapped, long patternSize);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

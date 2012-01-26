@@ -1,7 +1,7 @@
 /*
  * \file    pizKohonenMap.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    26 janvier 2012
  */
  
 /*
@@ -209,7 +209,7 @@ PIZError pizKohonenMapProceed (const PIZKohonenMap *x, long argc, long *argv)
                         temp = x->map + (((long)(x->mapSize * (rand ( ) / (RAND_MAX + 1.0)))) * x->vectorSize);
                     }
                     
-                    argv[i] = (long)floor (*(temp + (i % x->vectorSize)) + 0.5);
+                    argv[i] = (long)(*(temp + (i % x->vectorSize)) + 0.5);
                 }
             
             err = PIZ_GOOD;
