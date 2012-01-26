@@ -344,7 +344,7 @@ typedef struct _tralala {
     t_systhread_mutex   methodMutex;    
     t_systhread_mutex   algorithmMutex;
     t_systhread_mutex   learnMutex;                                     //
-    t_systhread_mutex   paintMutex;
+    t_systhread_mutex   arrayMutex;
     void                *paintClock;
     void                *learnClock;
     void                *focusClock;

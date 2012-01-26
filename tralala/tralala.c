@@ -469,7 +469,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
     long                boxflags;
 
     /*post ("%ld", calcoffset (t_tralala, channel));
-    post ("%ld", calcoffset (t_tralala, paintMutex));
+    post ("%ld", calcoffset (t_tralala, arrayMutex));
     post ("%ld", calcoffset (t_tralala, popupFontName));
     post ("%ld", calcoffset (t_tralala, patternCustom));
     post ("%ld", calcoffset (t_tralala, mousePitchValue));
@@ -515,7 +515,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                     systhread_mutex_new (&x->methodMutex,       SYSTHREAD_MUTEX_NORMAL);
                     systhread_mutex_new (&x->algorithmMutex,    SYSTHREAD_MUTEX_NORMAL);
                     systhread_mutex_new (&x->learnMutex,        SYSTHREAD_MUTEX_NORMAL);
-                    systhread_mutex_new (&x->paintMutex,        SYSTHREAD_MUTEX_NORMAL);
+                    systhread_mutex_new (&x->arrayMutex,        SYSTHREAD_MUTEX_NORMAL);
                     
                     for (i = 0; i < TEXT_CELL_COUNT; i++) {
                             x->textLayers[i]     = jtextlayout_create ( );
@@ -678,8 +678,8 @@ void tralala_free (t_tralala *x)
             systhread_mutex_free (x->algorithmMutex);
         }
         
-    if (x->paintMutex) {
-            systhread_mutex_free (x->paintMutex);
+    if (x->arrayMutex) {
+            systhread_mutex_free (x->arrayMutex);
         }
     
     if (x->learnMutex) {
@@ -3023,9 +3023,9 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                     
                     tralala_setCoordinatesWithPoint (x, &x->originCoordinates, x->previous);
                     
-                    systhread_mutex_lock        (&x->paintMutex);
+                    systhread_mutex_lock        (&x->arrayMutex);
                     err |= pizGrowingArrayCopy  (x->originNotes, x->selectedNotes);
-                    systhread_mutex_unlock      (&x->paintMutex);
+                    systhread_mutex_unlock      (&x->arrayMutex);
                     
                     if (SHIFT) {
                         x->flags |= FLAG_ORIGIN_HAD_SHIFT_KEY;
@@ -3262,10 +3262,10 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
             
             if (x->flags & (FLAG_HAVE_CHANGED | FLAG_HAVE_MOVED | FLAG_HAVE_BEEN_DUPLICATED))
                 {
-                    systhread_mutex_lock            (&x->paintMutex);
+                    systhread_mutex_lock            (&x->arrayMutex);
                     pizSequenceRemoveSelectedNotes  (x->user);
                     pizSequenceAddNotesWithArray    (x->user, x->selectedNotes, PIZ_SEQUENCE_ADD_MODE_NONE);
-                    systhread_mutex_unlock          (&x->paintMutex);
+                    systhread_mutex_unlock          (&x->arrayMutex);
                     
                     x->textMode     = TEXT_MODE_NOTE;
                     x->flags        &= ~(FLAG_HAVE_MOVED | FLAG_HAVE_CHANGED | FLAG_HAVE_BEEN_DUPLICATED);
@@ -4065,10 +4065,10 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 
     if (x->flags & FLAG_HAVE_CHANGED)
         {
-            systhread_mutex_lock            (&x->paintMutex);
+            systhread_mutex_lock            (&x->arrayMutex);
             pizSequenceRemoveSelectedNotes  (x->user);
             pizSequenceAddNotesWithArray    (x->user, x->selectedNotes, PIZ_SEQUENCE_ADD_MODE_NONE);
-            systhread_mutex_unlock          (&x->paintMutex);
+            systhread_mutex_unlock          (&x->arrayMutex);
                 
             x->flags &= ~FLAG_HAVE_CHANGED;
                 
@@ -4119,13 +4119,13 @@ void tralala_paintTask (t_tralala *x)
                                 
     if (LIVE && !(dirty & DIRTY_CHANGE) && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1)))
         {
-            systhread_mutex_lock (&x->paintMutex);
+            systhread_mutex_lock (&x->arrayMutex);
             
             if (tralala_hitNotesByRunIndex (x)) {           
                     dirty |= DIRTY_PLAYED;
                 }
             
-            systhread_mutex_unlock (&x->paintMutex);
+            systhread_mutex_unlock (&x->arrayMutex);
         }
         
     if (dirty)
@@ -4170,7 +4170,7 @@ void tralala_paintTask (t_tralala *x)
                         
                             if (sequence)
                                 {
-                                    systhread_mutex_lock (&x->paintMutex);
+                                    systhread_mutex_lock (&x->arrayMutex);
                                     
                                     pizGrowingArrayClear (x->zone);
                                     
@@ -4183,7 +4183,7 @@ void tralala_paintTask (t_tralala *x)
                                             err = pizSequenceZoneToArray (sequence, x->zone);
                                         }
                                             
-                                    systhread_mutex_unlock (&x->paintMutex);
+                                    systhread_mutex_unlock (&x->arrayMutex);
                                 }
                         }
                     
@@ -4197,7 +4197,7 @@ void tralala_paintTask (t_tralala *x)
                     PIZError err = PIZ_GOOD;
                     
                     if (dirty & DIRTY_CHANGE) {
-                        systhread_mutex_lock (&x->paintMutex);
+                        systhread_mutex_lock (&x->arrayMutex);
                         
                         pizGrowingArrayClear (x->unselectedNotes);
                         pizGrowingArrayClear (x->selectedNotes);
@@ -4215,7 +4215,7 @@ void tralala_paintTask (t_tralala *x)
                                 dirty |= DIRTY_PLAYED;
                             }
                         
-                        systhread_mutex_unlock (&x->paintMutex);
+                        systhread_mutex_unlock (&x->arrayMutex);
                     }
                                                     
                     if (!err) {
@@ -4262,14 +4262,14 @@ void tralala_paint (t_tralala *x, t_object *patcherview)
     
     if (ATOMIC_INCREMENT (&x->paintLock) == 1) 
         {
-            systhread_mutex_lock (&x->paintMutex);
+            systhread_mutex_lock (&x->arrayMutex);
             
             err |= pizGrowingArrayCopy (x->unselectedNotesCopy, x->unselectedNotes);
             err |= pizGrowingArrayCopy (x->selectedNotesCopy, x->selectedNotes);
             err |= pizGrowingArrayCopy (x->playedNotesCopy, x->playedNotes);
             err |= pizGrowingArrayCopy (x->zoneCopy, x->zone);
             
-            systhread_mutex_unlock  (&x->paintMutex);
+            systhread_mutex_unlock  (&x->arrayMutex);
             
             tralala_paintGrid (x, patcherview);
             
@@ -5062,7 +5062,7 @@ bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitc
     bool moved = false;
     long grid = pizSequenceGrid (x->user);
         
-    systhread_mutex_lock (&x->paintMutex);
+    systhread_mutex_lock (&x->arrayMutex);
 
     count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
     
@@ -5096,7 +5096,7 @@ bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitc
                 }
         }
     
-    systhread_mutex_unlock (&x->paintMutex);
+    systhread_mutex_unlock (&x->arrayMutex);
     
     return moved;
 }
@@ -5108,7 +5108,7 @@ bool tralala_changeSelectedNotesDuration (t_tralala *x, long deltaPosition)
     bool changed = false;
     long grid = pizSequenceGrid (x->user);
                 
-    systhread_mutex_lock (&x->paintMutex);
+    systhread_mutex_lock (&x->arrayMutex);
 
     count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
     
@@ -5135,16 +5135,16 @@ bool tralala_changeSelectedNotesDuration (t_tralala *x, long deltaPosition)
                 }
         }
     
-    systhread_mutex_unlock (&x->paintMutex);
+    systhread_mutex_unlock (&x->arrayMutex);
     
     return changed;
 }
 
 void tralala_duplicateSelectedNotes (t_tralala *x)
 {
-    systhread_mutex_lock        (&x->paintMutex);
+    systhread_mutex_lock        (&x->arrayMutex);
     pizGrowingArrayAppendArray  (x->unselectedNotes, x->selectedNotes);
-    systhread_mutex_unlock      (&x->paintMutex);
+    systhread_mutex_unlock      (&x->arrayMutex);
             
     pizSequenceUnselectAllNotes (x->user);
             
@@ -5155,7 +5155,7 @@ void tralala_changeSelectedNotesVelocity (t_tralala *x, bool decrement)
 {
     long count;
     
-    systhread_mutex_lock (&x->paintMutex);
+    systhread_mutex_lock (&x->arrayMutex);
     
     if (count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE)
         {
@@ -5204,7 +5204,7 @@ void tralala_changeSelectedNotesVelocity (t_tralala *x, bool decrement)
                 }
         }
     
-    systhread_mutex_unlock (&x->paintMutex);
+    systhread_mutex_unlock (&x->arrayMutex);
 }
 
 void tralala_setSelectedNotesVelocity (t_tralala *x, long velocity)
@@ -5212,7 +5212,7 @@ void tralala_setSelectedNotesVelocity (t_tralala *x, long velocity)
     long i;
     long count;
     
-    systhread_mutex_lock (&x->paintMutex);
+    systhread_mutex_lock (&x->arrayMutex);
 
     count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
     
@@ -5221,7 +5221,7 @@ void tralala_setSelectedNotesVelocity (t_tralala *x, long velocity)
             CLAMP (velocity, 0, PIZ_SEQUENCE_MIDI_VELOCITY));
     }
     
-    systhread_mutex_unlock (&x->paintMutex);
+    systhread_mutex_unlock (&x->arrayMutex);
 }
 
 void tralala_setSelectedNotesChannel (t_tralala *x, long channel)
@@ -5229,7 +5229,7 @@ void tralala_setSelectedNotesChannel (t_tralala *x, long channel)
     long i;
     long count;
     
-    systhread_mutex_lock (&x->paintMutex);
+    systhread_mutex_lock (&x->arrayMutex);
 
     count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
     
@@ -5238,7 +5238,7 @@ void tralala_setSelectedNotesChannel (t_tralala *x, long channel)
             CLAMP (channel, 0, PIZ_SEQUENCE_MIDI_CHANNEL));
     }
     
-    systhread_mutex_unlock (&x->paintMutex);
+    systhread_mutex_unlock (&x->arrayMutex);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -5252,14 +5252,14 @@ long tralala_hitZoneWithPoint (t_tralala *x, t_pt pt)
     long    start, end, down, up;
     long    hitTest = HIT_NOTHING;
 
-    systhread_mutex_lock (&x->paintMutex);
+    systhread_mutex_lock (&x->arrayMutex);
 
     start   = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_START);
     end     = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_END);
     down    = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_DOWN);
     up      = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_UP);
 
-    systhread_mutex_unlock  (&x->paintMutex);
+    systhread_mutex_unlock  (&x->arrayMutex);
                         
     tralala_setRectWithZoneValues (x, &zoneRect, start, end, down, up);
     
