@@ -587,7 +587,7 @@ PIZError pizSequenceRemoveSelectedNotes (PIZSequence *x)
         }
     
     PIZMAPFLAG
-    pizSequenceLocalMakeMap (x);
+    pizSequenceMakeMap (x);
     
     PIZUNLOCK
     
@@ -604,7 +604,7 @@ PIZError pizSequenceEncodeUndoToArray (PIZSequence *x, PIZGrowingArray *a)
     
     PIZLOCK
     
-    pizSequenceLocalMakeMap (x);
+    pizSequenceMakeMap (x);
     
     if (a)
         {
@@ -661,7 +661,7 @@ PIZError pizSequenceDecodeUndoWithArray (PIZSequence *x, const PIZGrowingArray *
             
             err = PIZ_GOOD;
             
-            pizSequenceLocalClear (x);
+            pizSequenceClearLocal (x);
 
             if (t = pizGrowingArrayCount (a))
                 {
@@ -680,7 +680,7 @@ PIZError pizSequenceDecodeUndoWithArray (PIZSequence *x, const PIZGrowingArray *
                     
                     for (i = 0; i < count; i++)
                         {
-                            if (!(pizSequenceLocalAddNote (x, ptr + (i * PIZ_SEQUENCE_NOTE_SIZE) + k, 
+                            if (!(pizSequenceAddNote (x, ptr + (i * PIZ_SEQUENCE_NOTE_SIZE) + k, 
                                 PIZ_SEQUENCE_ADD_MODE_UNSELECT))) {
                                     err |= PIZ_ERROR;
                                 }

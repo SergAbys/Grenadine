@@ -1,7 +1,7 @@
 /*
  * \file    pizArchive.c
  * \author  Jean Sapristi
- * \date    21 janvier 2012
+ * \date    26 janvier 2012
  */
  
 /*
@@ -49,7 +49,7 @@ PIZError pizSequenceEncodeSlotToArray (PIZSequence *x, PIZGrowingArray *a)
     
     PIZLOCK
     
-    pizSequenceLocalMakeMap (x);
+    pizSequenceMakeMap (x);
     
     if (a)
         {
@@ -108,7 +108,7 @@ PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, const PIZGrowingArray *
             
             err = PIZ_GOOD;
             
-            pizSequenceLocalClear (x);
+            pizSequenceClearLocal (x);
 
             if (t = pizGrowingArrayCount (a))
                 {
@@ -171,7 +171,7 @@ PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, const PIZGrowingArray *
                     
                     for (i = 0; i < count; i++)
                         {
-                            if (!(pizSequenceLocalAddNote (x, ptr + (i * PIZ_SEQUENCE_NOTE_SIZE) + k, 
+                            if (!(pizSequenceAddNote (x, ptr + (i * PIZ_SEQUENCE_NOTE_SIZE) + k, 
                                 PIZ_SEQUENCE_ADD_MODE_UNSELECT))) {
                                     err |= PIZ_ERROR;
                                 }

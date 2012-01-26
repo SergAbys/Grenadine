@@ -85,8 +85,8 @@ bool pizSequenceCycle               (PIZSequence *x, PIZScaleKey key, const PIZG
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL long pizSequenceLocalPickUpNotes  (PIZSequence *x);
-PIZ_LOCAL void pizSequenceLocalFillValues   (PIZSequence *x, PIZSelector selector, long k, bool reverse);
+PIZ_LOCAL long pizSequencePickUpNotes  (PIZSequence *x);
+PIZ_LOCAL void pizSequenceFillValues   (PIZSequence *x, PIZSelector selector, long k, bool reverse);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -399,7 +399,7 @@ void pizSequenceClear (PIZSequence *x)
 {
     PIZLOCK
     
-    pizSequenceLocalClear (x);
+    pizSequenceClearLocal (x);
     
     PIZUNLOCK
 }
@@ -461,7 +461,7 @@ PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *ar
     PIZLOCK
     
     if (mode & PIZ_SEQUENCE_ADD_MODE_CLEAR) {
-            pizSequenceLocalClear (x);
+            pizSequenceClearLocal (x);
         }
         
     if (array)
@@ -475,7 +475,7 @@ PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *ar
             ptr     = pizGrowingArrayPtr (array);
             
             for (i = (count - 1); i >= 0; i--) {
-                    if (!(pizSequenceLocalAddNote (x, ptr + (i * PIZ_SEQUENCE_NOTE_SIZE), mode))) {
+                    if (!(pizSequenceAddNote (x, ptr + (i * PIZ_SEQUENCE_NOTE_SIZE), mode))) {
                             err |= PIZ_ERROR;
                         }
                 }
@@ -506,7 +506,7 @@ PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates
         values[PIZ_SEQUENCE_DURATION] = x->grid;
     }
     
-    if (!(pizSequenceLocalAddNote (x, values, mode))) {
+    if (!(pizSequenceAddNote (x, values, mode))) {
             err |= PIZ_ERROR;
         }
                     
@@ -547,7 +547,7 @@ PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *a, PIZGrowing
     
     PIZLOCK
     
-    pizSequenceLocalMakeMap (x);
+    pizSequenceMakeMap (x);
     
     scale = pizGrowingArrayCount (x->scale);
     
@@ -736,7 +736,7 @@ bool pizSequenceApplyPattern (PIZSequence *x)
                             values[PIZ_SEQUENCE_IS_MARKED]      = false;
                             values[PIZ_SEQUENCE_NOTE_SIZE]      = note->originPosition;
                             
-                            if (newNote = pizSequenceLocalAddNote (x, values, PIZ_SEQUENCE_ADD_MODE_ORIGIN))
+                            if (newNote = pizSequenceAddNote (x, values, PIZ_SEQUENCE_ADD_MODE_ORIGIN))
                                 {
                                     haveChanged = true;
                             
@@ -756,7 +756,7 @@ bool pizSequenceApplyPattern (PIZSequence *x)
     
     if (haveChanged) {
             PIZMAPFLAG
-            pizSequenceLocalMakeMap (x);
+            pizSequenceMakeMap (x);
         }
     
     PIZUNLOCK
@@ -788,7 +788,7 @@ bool pizSequenceApplyAmbitus (PIZSequence *x)
                     
                     pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
                     
-                    tempPitch = pizSequenceLocalMovePitchToAmbitus (x, note->data[PIZ_PITCH]);
+                    tempPitch = pizSequenceMovePitchToAmbitus (x, note->data[PIZ_PITCH]);
                     
                     if (note->data[PIZ_PITCH] != tempPitch) {
                             haveChanged = true;
@@ -948,7 +948,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *array)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZNote *pizSequenceLocalAddNote (PIZSequence *x, long *values, long mode)
+PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long mode)
 {
     PIZNote *newNote    = NULL;
     long    err         = PIZ_GOOD;
@@ -973,7 +973,7 @@ PIZNote *pizSequenceLocalAddNote (PIZSequence *x, long *values, long mode)
         } 
     
     if (mode & PIZ_SEQUENCE_ADD_MODE_AMBITUS) {
-            pitch = pizSequenceLocalMovePitchToAmbitus (x, pitch);
+            pitch = pizSequenceMovePitchToAmbitus (x, pitch);
         }
         
     if (mode & PIZ_SEQUENCE_ADD_MODE_UNSELECT) {
@@ -1043,7 +1043,7 @@ PIZNote *pizSequenceLocalAddNote (PIZSequence *x, long *values, long mode)
     return newNote;
 }   
 
-void pizSequenceLocalClear (PIZSequence *x)
+void pizSequenceClearLocal (PIZSequence *x)
 {
     if (x->count)
         {
@@ -1064,7 +1064,7 @@ void pizSequenceLocalClear (PIZSequence *x)
         }
 }
 
-long pizSequenceLocalMovePitchToAmbitus (PIZSequence *x, long pitch)
+long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
 {
     long scale, offset = 0;
     
@@ -1089,7 +1089,7 @@ long pizSequenceLocalMovePitchToAmbitus (PIZSequence *x, long pitch)
     return (CLAMP (pitch, 0, PIZ_SEQUENCE_MIDI_NOTE));
 }
 
-void pizSequenceLocalMakeMap (PIZSequence *x)
+void pizSequenceMakeMap (PIZSequence *x)
 {
     if (PIZNEEDTOMAKEMAP)
         {

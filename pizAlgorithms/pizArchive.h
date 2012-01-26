@@ -1,7 +1,7 @@
 /**
  * \file    pizArchive.h
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    26 janvier 2012
  */
  
 /*

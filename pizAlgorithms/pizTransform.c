@@ -110,7 +110,7 @@ bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm flag, void *algor
             long i, k = 0;  
             
             for (i = 0; i < x->count; i++) {
-                    x->values1[i] = pizSequenceLocalMovePitchToAmbitus (x, x->values1[i]);
+                    x->values1[i] = pizSequenceMovePitchToAmbitus (x, x->values1[i]);
                 }
                 
             for (i = 0; i < pizGrowingArrayCount (x->map); i++)
@@ -394,7 +394,7 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                                         values[PIZ_SEQUENCE_IS_MARKED]      = false;
                                         
                                         newNote = 
-                                            pizSequenceLocalAddNote (x, values, PIZ_SEQUENCE_ADD_MODE_CLIP);
+                                            pizSequenceAddNote (x, values, PIZ_SEQUENCE_ADD_MODE_CLIP);
                                         
                                         if (newNote) {
                                             pizBoundedHashTableAdd (x->hashTable, hPat[j], (void *)newNote);
@@ -431,7 +431,7 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
 
             if (haveChanged) {
                     PIZMAPFLAG
-                    pizSequenceLocalMakeMap (x);
+                    pizSequenceMakeMap (x);
                 }
         }
         
@@ -576,7 +576,7 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
                                 values[PIZ_SEQUENCE_IS_SELECTED]    = false;
                                 values[PIZ_SEQUENCE_IS_MARKED]      = false;
 
-                                note2 = pizSequenceLocalAddNote (x, values, PIZ_SEQUENCE_ADD_MODE_CLIP);
+                                note2 = pizSequenceAddNote (x, values, PIZ_SEQUENCE_ADD_MODE_CLIP);
                                 
                                 if (note2)
                                     {
@@ -607,7 +607,7 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
             
             if (haveChanged) {
                     PIZMAPFLAG
-                    pizSequenceLocalMakeMap (x);
+                    pizSequenceMakeMap (x);
                 }
         }
                     
@@ -629,9 +629,9 @@ bool pizSequenceRotate (PIZSequence *x, PIZSelector selector, long shift)
     
     haveChanged = (x->count > 1);
     
-    pizSequenceLocalMakeMap (x);
+    pizSequenceMakeMap (x);
     
-    k = pizSequenceLocalPickUpNotes (x);
+    k = pizSequencePickUpNotes (x);
     
     if (k && shift < 0) {
             shift = k - ((-shift) % k);
@@ -641,7 +641,7 @@ bool pizSequenceRotate (PIZSequence *x, PIZSelector selector, long shift)
             x->values1[i] = x->notes1[(i + shift) % k]->data[selector];
         }
                 
-    pizSequenceLocalFillValues (x, selector, k, 0);
+    pizSequenceFillValues (x, selector, k, 0);
     
     PIZUNLOCK
     
@@ -657,7 +657,7 @@ bool pizSequenceScramble (PIZSequence *x, PIZSelector selector)
     
     haveChanged = (x->count > 1);
     
-    k = pizSequenceLocalPickUpNotes (x);
+    k = pizSequencePickUpNotes (x);
     
     for (i = 0; i < k; i++) {
             x->values1[i] = x->notes1[i]->data[selector];
@@ -672,7 +672,7 @@ bool pizSequenceScramble (PIZSequence *x, PIZSelector selector)
             x->notes1[i] = temp;
         }
             
-    pizSequenceLocalFillValues (x, selector, k, 0);
+    pizSequenceFillValues (x, selector, k, 0);
     
     PIZUNLOCK
     
@@ -689,9 +689,9 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, long down)
     
     haveChanged = (x->count > 1);
     
-    pizSequenceLocalMakeMap (x);
+    pizSequenceMakeMap (x);
     
-    k = pizSequenceLocalPickUpNotes (x);
+    k = pizSequencePickUpNotes (x);
     scale = pizGrowingArrayCount (x->scale);
     
     for (i = 0; i < PIZ_SEQUENCE_POOL_SIZE; i++) {
@@ -746,7 +746,7 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, long down)
             x->values1[i] = x->notes2[i]->data[selector];
         }
                 
-    pizSequenceLocalFillValues (x, selector, k, down);
+    pizSequenceFillValues (x, selector, k, down);
     
     PIZUNLOCK
     
@@ -960,7 +960,7 @@ bool pizSequenceKillNotes (PIZSequence *x)
     
     if (haveChanged) {
             PIZMAPFLAG
-            pizSequenceLocalMakeMap (x);
+            pizSequenceMakeMap (x);
         }
     
     PIZUNLOCK
@@ -1057,7 +1057,7 @@ bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-long pizSequenceLocalPickUpNotes (PIZSequence *x)
+long pizSequencePickUpNotes (PIZSequence *x)
 {
     long i, k = 0;
     
@@ -1084,7 +1084,7 @@ long pizSequenceLocalPickUpNotes (PIZSequence *x)
     return k;
 }
 
-void pizSequenceLocalFillValues (PIZSequence *x, PIZSelector selector, long k, bool reverse)
+void pizSequenceFillValues (PIZSequence *x, PIZSelector selector, long k, bool reverse)
 {
     long i;
     
