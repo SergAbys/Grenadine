@@ -3892,7 +3892,7 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
                                                 NULL, (value == PIZ_SNAP_NONE), 0, NULL);
                                 
                         jpopupmenu_additem      (slotsPopup, 1000, "New", NULL, 0, 0, NULL);
-                        jpopupmenu_additem      (slotsPopup, 1001, "New Copy", NULL, 0, 0, NULL);
+                        jpopupmenu_additem      (slotsPopup, 1001, "Clone", NULL, 0, 0, NULL);
                         jpopupmenu_addseperator (slotsPopup);
                         
                         for (i = 0; i < pizLinklistCount (x->slots); i++) {
@@ -3915,42 +3915,60 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
                 jpopupmenu_addseperator (popup);
                 jpopupmenu_addsubmenu   (popup, "Channel    ", sequenceChannelPopup, 0);
             } 
-        else if (menuMode == MENU_NOTE) {
-                jpopupmenu_additem (velocityPopup, 50, "0", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 51, "8", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 52, "16", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 53, "24", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 54, "32", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 55, "40", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 56, "48", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 57, "56", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 58, "64", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 59, "72", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 60, "80", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 61, "88", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 62, "96", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 63, "104", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 64, "112", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 65, "120", NULL, 0, 0, NULL);
-                jpopupmenu_additem (velocityPopup, 66, "127", NULL, 0, 0, NULL);
+        else if (menuMode == MENU_NOTE) 
+            {
+                long count;
+                long velocity = -1;
+                long channel = -1;
+
+                systhread_mutex_lock (&x->arrayMutex);
+                
+                count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
+                
+                if (count == 1) {
+                        velocity = pizGrowingArrayValueAtIndex (x->selectedNotes, PIZ_SEQUENCE_VELOCITY);
+                        channel = pizGrowingArrayValueAtIndex (x->selectedNotes, PIZ_SEQUENCE_CHANNEL);
+                        
+                        velocity = CLAMP ((long)((velocity + 4) / 8) * 8, 0, 127);
+                    }
+
+                systhread_mutex_unlock (&x->arrayMutex);
+                
+                jpopupmenu_additem (velocityPopup, 50, "0",     NULL, (velocity == 0), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 51, "8",     NULL, (velocity == 8), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 52, "16",    NULL, (velocity == 16), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 53, "24",    NULL, (velocity == 24), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 54, "32",    NULL, (velocity == 32), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 55, "40",    NULL, (velocity == 40), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 56, "48",    NULL, (velocity == 48), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 57, "56",    NULL, (velocity == 56), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 58, "64",    NULL, (velocity == 64), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 59, "72",    NULL, (velocity == 72), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 60, "80",    NULL, (velocity == 80), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 61, "88",    NULL, (velocity == 88), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 62, "96",    NULL, (velocity == 96), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 63, "104",   NULL, (velocity == 104), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 64, "112",   NULL, (velocity == 112), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 65, "120",   NULL, (velocity == 120), 0, NULL);
+                jpopupmenu_additem (velocityPopup, 66, "127",   NULL, (velocity == 127), 0, NULL);
         
-                jpopupmenu_additem      (noteChannelPopup, 200, "0", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 201, "1", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 202, "2", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 203, "3", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 204, "4", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 205, "5", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 206, "6", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 207, "7", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 208, "8", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 209, "9", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 210, "10", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 211, "11", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 212, "12", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 213, "13", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 214, "14", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 215, "15", NULL, 0, 0, NULL);
-                jpopupmenu_additem      (noteChannelPopup, 216, "16", NULL, 0, 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 200, "0",    NULL, (channel == 0), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 201, "1",    NULL, (channel == 1), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 202, "2",    NULL, (channel == 2), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 203, "3",    NULL, (channel == 3), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 204, "4",    NULL, (channel == 4), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 205, "5",    NULL, (channel == 5), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 206, "6",    NULL, (channel == 6), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 207, "7",    NULL, (channel == 7), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 208, "8",    NULL, (channel == 8), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 209, "9",    NULL, (channel == 9), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 210, "10",   NULL, (channel == 10), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 211, "11",   NULL, (channel == 11), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 212, "12",   NULL, (channel == 12), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 213, "13",   NULL, (channel == 13), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 214, "14",   NULL, (channel == 14), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 215, "15",   NULL, (channel == 15), 0, NULL);
+                jpopupmenu_additem (noteChannelPopup, 216, "16",   NULL, (channel == 16), 0, NULL);
 
                 jpopupmenu_addsubmenu   (popup, "Velocity   ", velocityPopup, 0);
                 jpopupmenu_addsubmenu   (popup, "Channel",  noteChannelPopup, 0);
