@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 26/01/12.
+ *  Last modified : 31/01/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -4111,21 +4111,20 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 
 void tralala_paintTask (t_tralala *x) 
 {   
-    ulong dirty = x->dirtyLayer;
+    PIZError    err = PIZ_GOOD;
+    ulong       dirty = x->dirtyLayer;
     
     if (ATOMIC_INCREMENT (&x->paintLock) == 1) {
     
     DIRTYLAYER_UNSET (~(DIRTY_GRID | DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE | DIRTY_REFRESH | DIRTY_PLAYED));
-                                
-    if (LIVE && !(dirty & DIRTY_CHANGE) && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1)))
+    
+    systhread_mutex_lock (&x->arrayMutex);
+    
+    if (LIVE && !(dirty & DIRTY_CHANGE) && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1))) 
         {
-            systhread_mutex_lock (&x->arrayMutex);
-            
             if (tralala_hitNotesByRunIndex (x)) {           
                     dirty |= DIRTY_PLAYED;
                 }
-            
-            systhread_mutex_unlock (&x->arrayMutex);
         }
         
     if (dirty)
@@ -4156,8 +4155,6 @@ void tralala_paintTask (t_tralala *x)
                 
             if (dirty & DIRTY_ZONE)
                 {
-                    PIZError err = PIZ_GOOD;
-                    
                     if (dirty & DIRTY_CHANGE)
                         {
                             PIZSequence *sequence = NULL;
@@ -4170,20 +4167,13 @@ void tralala_paintTask (t_tralala *x)
                         
                             if (sequence)
                                 {
-                                    systhread_mutex_lock (&x->arrayMutex);
-                                    
                                     pizGrowingArrayClear (x->zone);
                                     
-                                    if (x->flags & FLAG_ZONE_IS_SELECTED)
-                                        {
-                                            err = pizSequenceTempZoneToArray (sequence, x->zone);
-                                        }
-                                    else
-                                        {
-                                            err = pizSequenceZoneToArray (sequence, x->zone);
-                                        }
-                                            
-                                    systhread_mutex_unlock (&x->arrayMutex);
+                                    if (x->flags & FLAG_ZONE_IS_SELECTED) {
+                                        err = pizSequenceTempZoneToArray (sequence, x->zone);
+                                    } else {
+                                        err = pizSequenceZoneToArray (sequence, x->zone);
+                                    }
                                 }
                         }
                     
@@ -4194,11 +4184,7 @@ void tralala_paintTask (t_tralala *x)
                 
             if (dirty & DIRTY_NOTES)
                 {
-                    PIZError err = PIZ_GOOD;
-                    
                     if (dirty & DIRTY_CHANGE) {
-                        systhread_mutex_lock (&x->arrayMutex);
-                        
                         pizGrowingArrayClear (x->unselectedNotes);
                         pizGrowingArrayClear (x->selectedNotes);
                             
@@ -4214,9 +4200,7 @@ void tralala_paintTask (t_tralala *x)
                                 tralala_hitNotesByRunIndex (x);
                                 dirty |= DIRTY_PLAYED;
                             }
-                        
-                        systhread_mutex_unlock (&x->arrayMutex);
-                    }
+                        }
                                                     
                     if (!err) {
                             jbox_invalidate_layer ((t_object*)x, NULL, tll_sym_notesLayer);
@@ -4226,10 +4210,21 @@ void tralala_paintTask (t_tralala *x)
             if (dirty & DIRTY_PLAYED) {
                     jbox_invalidate_layer ((t_object*)x, NULL, tll_sym_playedNotesLayer);
                 }
-                
-            jbox_redraw ((t_jbox *)x);
+            
+            err = PIZ_GOOD;
+            
+            err |= pizGrowingArrayCopy (x->unselectedNotesCopy, x->unselectedNotes);
+            err |= pizGrowingArrayCopy (x->selectedNotesCopy, x->selectedNotes);
+            err |= pizGrowingArrayCopy (x->playedNotesCopy, x->playedNotes);
+            err |= pizGrowingArrayCopy (x->zoneCopy, x->zone);
+            
+            if (!err) {
+                    jbox_redraw ((t_jbox *)x);
+                }
         }
-        
+    
+    systhread_mutex_unlock  (&x->arrayMutex);
+           
     } ATOMIC_DECREMENT (&x->paintLock);
     
     clock_fdelay (x->paintClock, PAINT_CLOCK_INTERVAL + CLOCK_RANDOMIZE * (rand ( ) / (RAND_MAX + 1.0)));
@@ -4253,8 +4248,6 @@ void tralala_notifyTask (t_tralala *x)
 
 void tralala_paint (t_tralala *x, t_object *patcherview)
 {   
-    PIZError err = PIZ_GOOD;
-    
     if (!(x->flags & FLAG_INIT_PAINT_CLOCK)) {
         clock_fdelay (x->paintClock, PAINT_CLOCK_INTERVAL + CLOCK_RANDOMIZE * (rand ( ) / (RAND_MAX + 1.0)));
         x->flags |= FLAG_INIT_PAINT_CLOCK;
@@ -4262,26 +4255,15 @@ void tralala_paint (t_tralala *x, t_object *patcherview)
     
     if (ATOMIC_INCREMENT (&x->paintLock) == 1) 
         {
-            systhread_mutex_lock (&x->arrayMutex);
-            
-            err |= pizGrowingArrayCopy (x->unselectedNotesCopy, x->unselectedNotes);
-            err |= pizGrowingArrayCopy (x->selectedNotesCopy, x->selectedNotes);
-            err |= pizGrowingArrayCopy (x->playedNotesCopy, x->playedNotes);
-            err |= pizGrowingArrayCopy (x->zoneCopy, x->zone);
-            
-            systhread_mutex_unlock  (&x->arrayMutex);
-            
             tralala_paintGrid (x, patcherview);
             
-            if (!err && !LISTEN) {
+            if (!LISTEN) {
                     tralala_paintZone (x, patcherview);
                 }
             
-            if (!err) {
-                    tralala_paintNotes (x, patcherview);
-                }
+            tralala_paintNotes (x, patcherview);
             
-            if (!err && LIVE && !(x->flags & FLAG_IS_MUTED)) {
+            if (LIVE && !(x->flags & FLAG_IS_MUTED)) {
                     tralala_paintPlayedNotes (x, patcherview);
                 }
 

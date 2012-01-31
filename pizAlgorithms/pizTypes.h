@@ -45,9 +45,9 @@
 // -------------------------------------------------------------------------------------------------------------
 
 enum {
-    PIZ_GOOD            =  0,
-    PIZ_ERROR           =  1,
-    PIZ_MEMORY          =  2,
+    PIZ_GOOD    =  0,
+    PIZ_ERROR   =  1,
+    PIZ_MEMORY  =  2,
     };
     
 typedef long PIZError;
