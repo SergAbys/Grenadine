@@ -1,7 +1,8 @@
 /**
  * \file    pizQueue.h
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    31 janvier 2012
+ * \ingroup structures
  */
 
 /*
@@ -49,17 +50,25 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief Linklist element.
+ */
+ 
 typedef struct _PIZQueueElement {
-    long                    value;
-    struct _PIZQueueElement *next;
-    struct _PIZQueueElement *previous;
+    long                    value;                  /*!< Value to store. */
+    struct _PIZQueueElement *next;                  /*!< Pointer to next element. */
+    struct _PIZQueueElement *previous;              /*!< Pointer to previous element. */
     } PIZQueueElement;
 
+/**
+ * \brief The FIFO queue.
+ */
+ 
 typedef struct _PIZQueue {
-    long            count;
-    long            poppedValue;
-    PIZQueueElement *head;
-    PIZQueueElement *tail;
+    long            count;                          /*!< Number of value in the queue. */
+    long            poppedValue;                    /*!< Last dequeued value. */
+    PIZQueueElement *head;                          /*!< Pointer to first element. */
+    PIZQueueElement *tail;                          /*!< Pointer to last element. */
     } PIZQueue;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -67,19 +76,67 @@ typedef struct _PIZQueue {
 
 PIZ_START_C_LINKAGE
 
-PIZQueue        *pizQueueNew            (void);
-void            pizQueueFree            (PIZQueue *x);
+/**
+ * \brief   Create the queue.
+ * \details In case of failure the pointer is NULL.
+ * \return  A pointer to the new queue.
+ */
+PIZQueue *pizQueueNew (void); 
 
-void            pizQueueClear           (PIZQueue *x);
-PIZError        pizQueueAppend          (PIZQueue *x, long value);
-PIZError        pizQueuePop             (PIZQueue *x);
-PIZError        pizQueuePopLastValue    (PIZQueue *x);
+/**
+ * \brief   Free the queue.
+ * \details It is safe to pass NULL pointer.
+ * \param   x A Pointer.
+ */
+void pizQueueFree (PIZQueue *x);
 
-long            pizQueueCount           (const PIZQueue *x);
-long            pizQueuePoppedValue     (const PIZQueue *x);
+/**
+ * \brief   Clear the queue.
+ * \param   x A valid pointer.
+ */
+void pizQueueClear (PIZQueue *x);
+
+/**
+ * \brief   Enqueue a value.
+ * \param   x A valid pointer.
+ * \param   value The value to append.
+ * \return  Error code.
+ */
+PIZError pizQueueAppend (PIZQueue *x, long value);
+
+/**
+ * \brief   Dequeue a value.
+ * \details To get the dequeued value use pizQueuePoppedValue(). 
+ * \param   x A valid pointer.
+ * \return  Error code (PIZ_ERROR if empty).
+ */
+PIZError pizQueuePop (PIZQueue *x);
+
+/**
+ * \brief   Dequeue last value (stack way).
+ * \details To get the dequeued value use pizQueuePoppedValue(). 
+ * \param   x A valid pointer.
+ * \return  Error code (PIZ_ERROR if empty).
+ */
+PIZError pizQueuePopLastValue (PIZQueue *x);
+
+/**
+ * \brief   Get the number of value in the queue.
+ * \param   x A valid pointer.
+ * \return  The number of value.
+ */
+long pizQueueCount (const PIZQueue *x);
+
+/**
+ * \brief   Get the dequeued value.
+ * \details This value is initialized with zero. 
+ * \param   x A valid pointer.
+ * \return  The value.
+ */
+long pizQueuePoppedValue (const PIZQueue *x);
 
 PIZ_END_C_LINKAGE
-
+ 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
@@ -89,7 +146,6 @@ PIZ_EXTERN long pizQueueCount (const PIZQueue *x)
 {
     return (x->count);
 }
-
 
 PIZ_EXTERN long pizQueuePoppedValue (const PIZQueue *x)
 {

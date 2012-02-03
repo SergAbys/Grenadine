@@ -1,7 +1,8 @@
 /**
- * \file    pizDataStructures.h
- * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \file        pizDataStructures.h
+ * \author      Jean Sapristi
+ * \date        31 janvier 2012
+ * \defgroup    structures Custom Data Structures
  */
  
 /*

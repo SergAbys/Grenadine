@@ -12,3 +12,4 @@ Layout of the Grenadine repository :
 * Tralala :
   max/MSP GUI sequencer.
 
+All that is "work in progress" : I don't care about backward compatibility.

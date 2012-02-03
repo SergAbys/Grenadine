@@ -2,6 +2,7 @@
  * \file    pizLinklist.h
  * \author  Jean Sapristi
  * \date    15 janvier 2012
+ * \ingroup structures
  */
 
 /*
@@ -49,25 +50,48 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \def     PIZ_LINKLIST_FLAG_NONE 
+ * \brief   Don't free items.
+ */
+ 
+/**
+ * \def     PIZ_LINKLIST_FLAG_FREE_MEMORY 
+ * \brief   (DEFAULT) Free items with \a free().
+ */
+ 
+/**
+ * \def     PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY 
+ * \brief   Free items with \a pizGrowingArrayFree().
+ */
+ 
 #define PIZ_LINKLIST_FLAG_NONE                  (0L)
-#define PIZ_LINKLIST_FLAG_FREE_MEMORY           (1<<0)
-#define PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY    (1<<1)
+#define PIZ_LINKLIST_FLAG_FREE_MEMORY           (1<<0L)
+#define PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY    (1<<1L)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief  Linklist element.
+ */
+ 
 typedef struct _PIZLinklistElement {
-    void                        *ptr;
-    struct _PIZLinklistElement  *next;
-    struct _PIZLinklistElement  *previous;
+    void                        *ptr;               /*!< Pointer to item. */
+    struct _PIZLinklistElement  *next;              /*!< Pointer to next element. */
+    struct _PIZLinklistElement  *previous;          /*!< Pointer to previous element. */
     } PIZLinklistElement;
 
+/**
+ * \brief The linklist.
+ */
+ 
 typedef struct _PIZLinklist {
-    long                flags;
-    long                count;
-    PIZLinklistElement  *head;
-    PIZLinklistElement  *tail;
-    PIZLinklistElement  *cache;
+    long                flags;                      /*!< Bit Flags. */
+    long                count;                      /*!< Size of the linklist. */
+    PIZLinklistElement  *head;                      /*!< Pointer to head element. */
+    PIZLinklistElement  *tail;                      /*!< Pointer to tail element. */
+    PIZLinklistElement  *cache;                     /*!< Pointer to cached element. */
     } PIZLinklist;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -75,15 +99,87 @@ typedef struct _PIZLinklist {
 
 PIZ_START_C_LINKAGE
 
-PIZLinklist     *pizLinklistNew             (void);
-void            pizLinklistSetFlags         (PIZLinklist *x, long flags);
-void            pizLinklistFree             (PIZLinklist *x);
+/**
+ * \brief   Create the linklist.
+ * \details In case of failure the pointer is NULL.
+ * \return  A pointer to the new linklist.
+ */
+PIZLinklist *pizLinklistNew (void);
 
-void            pizLinklistClear            (PIZLinklist *x);
-PIZError        pizLinklistAppend           (PIZLinklist *x, void *ptr);
-PIZError        pizLinklistInsert           (PIZLinklist *x, void *ptr);
-PIZError        pizLinklistPtrAtIndex       (PIZLinklist *x, long index, void **ptr);
-PIZError        pizLinklistNextByPtr        (PIZLinklist *x, void *ptr, void **nextPtr);
+/**
+ * \brief   Set linklist's bit flags.
+ * \param   x A valid pointer.
+ * \param   flags Bit flags.
+ */
+void pizLinklistSetFlags (PIZLinklist *x, long flags);
+
+/**
+ * \brief   Free the linklist.
+ * \details It is safe to pass NULL pointer.
+ * \param   x A Pointer.
+ */
+void pizLinklistFree (PIZLinklist *x);
+
+/**
+ * \brief   Clear the linklist.
+ * \param   x A valid pointer.
+ */
+void pizLinklistClear (PIZLinklist *x);
+
+/**
+ * \brief   Append an item's pointer to the linklist.
+ * \details The provided pointer can not be NULL.
+ * \param   x A valid pointer.
+ * \param   ptr A pointer to the item.
+ * \return  Error code.
+ */
+PIZError pizLinklistAppend (PIZLinklist *x, void *ptr);
+
+/**
+ * \brief   Insert an item's pointer in front of the linklist.
+ * \details The provided pointer can not be NULL.
+ * \param   x A valid pointer.
+ * \param   ptr A pointer to the item.
+ * \return  Error code.
+ */
+PIZError pizLinklistInsert (PIZLinklist *x, void *ptr);
+
+/**
+ * \brief   Get an item's pointer with specified index.
+ * \details If there is no item at the index, pointer is set to NULL.
+ * \param   x A valid pointer.
+ * \param   index The index (zero based).
+ * \param   ptr The adress of the pointer to set.
+ * \return  Error code.
+ */
+PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr);
+
+/**
+ * \brief   Get the next item's pointer of a given item's pointer.
+ * \details If there is no item next, pointer is set to NULL.
+ * \param   x A valid pointer.
+ * \param   ptr The item's pointer provided.
+ * \param   nextPtr The adress of the pointer to set.
+ * \return  Error code.
+ * \remark	The following shows how to traverse a linklist using cache optimization.  
+ * \code
+ *      PIZNote *note       = NULL;
+ *      PIZNote *nextNote   = NULL;
+ *           
+ *      pizLinklistPtrAtIndex (linklistPtr, 0, (void **)&note);
+ *           
+ *      while (note) {
+ *          pizLinklistNextByPtr (linklistPtr, (void *)note, (void **)&nextNote);
+ *
+ *          //pizLinklistRemoveByPtr (linklistPtr, (void *)note)); 
+ *                   
+ *          note = nextNote;
+ *      }
+ *
+ *	\endcode
+ */
+PIZError pizLinklistNextByPtr (PIZLinklist *x, void *ptr, void **nextPtr);
+
 PIZError        pizLinklistRemoveByPtr      (PIZLinklist *x, void *ptr);
 PIZError        pizLinklistSwapByIndexes    (PIZLinklist *x, long m, long n);
 

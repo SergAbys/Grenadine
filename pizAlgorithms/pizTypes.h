@@ -1,7 +1,8 @@
 /**
  * \file    pizTypes.h
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    31 janvier 2012
+ * \ingroup structures
  */
  
 /*
@@ -44,36 +45,69 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-enum {
-    PIZ_GOOD    =  0,
-    PIZ_ERROR   =  1,
-    PIZ_MEMORY  =  2,
-    };
-    
-typedef long PIZError;
+/**
+ * \brief Error codes.
+ */
+ 
+typedef enum {
+    PIZ_GOOD    =  0,                       /*!< No error. */
+    PIZ_ERROR   =  1,                       /*!< Generic error. */
+    PIZ_MEMORY  =  2,                       /*!< Memory allocation error. */
+    }PIZError;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief Compute the maximum of x and y.
+ */
+ 
 #ifndef MAX
 #define MAX(x,y) ((x)>(y)?(x):(y))
 #endif
 
+/**
+ * \brief Compute the minimum of x and y.
+ */
+ 
 #ifndef MIN
 #define MIN(x,y) ((x)<(y)?(x):(y))
 #endif
 
-#ifndef CLAMP
-#define CLAMP(x,a,b) ((x)<(a)?(a):(x)>(b)?(b):(x))
-#endif
-
+/**
+ * \brief Compute absolute value of x.
+ */
+ 
 #ifndef ABS
 #define ABS(x) ((x)<0?-(x):(x))
 #endif
 
+/**
+ * \brief Keep x between a and b.
+ */
+ 
+#ifndef CLAMP
+#define CLAMP(x,a,b) ((x)<(a)?(a):(x)>(b)?(b):(x))
+#endif
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \def   true 
+ * \brief Boolean value.
+ */
+ 
+/**
+ * \def   false 
+ * \brief Boolean value.
+ */
+ 
+/**
+ * \def   bool 
+ * \brief Boolean type.
+ */
+ 
 #ifndef __cplusplus
     #ifndef __bool_true_false_are_defined
         #define true                            1
@@ -86,6 +120,10 @@ typedef long PIZError;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief Hide the function in exported symbol table.
+ */
+ 
 #ifndef WIN_VERSION
     #define PIZ_LOCAL  __attribute__ ((visibility("hidden")))
 #else
@@ -95,6 +133,11 @@ typedef long PIZError;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \def   PIZ_INLINE
+ * \brief Inline the function.
+ */
+ 
 #ifndef WIN_VERSION
     #define PIZ_EXTERN_INLINE
     #define PIZ_INLINE inline
@@ -106,6 +149,10 @@ typedef long PIZError;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief For C++ linker.
+ */
+ 
 #ifdef __cplusplus
     #define PIZ_START_C_LINKAGE \
         extern "C" {
@@ -113,6 +160,10 @@ typedef long PIZError;
     #define PIZ_START_C_LINKAGE //
 #endif 
 
+/**
+ * \brief For C++ linker.
+ */
+ 
 #ifdef __cplusplus
     #define PIZ_END_C_LINKAGE \
         }
