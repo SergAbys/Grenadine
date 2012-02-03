@@ -138,6 +138,7 @@ bool pizItemset1024IsIncluded (const PIZItemset1024 *a, const PIZItemset1024 *b)
         {
             if (b->items[i] != (b->items[i] | a->items[i])) {
                     k = false;
+                    break;
                 }
         }
         
@@ -153,6 +154,7 @@ bool pizItemset1024IsEqual (const PIZItemset1024 *a, const PIZItemset1024 *b)
         {
             if (a->items[i] != b->items[i]) {
                     k = false;
+                    break;
                 }
         }
         

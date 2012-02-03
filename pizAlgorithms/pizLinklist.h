@@ -57,17 +57,17 @@
  
 /**
  * \def     PIZ_LINKLIST_FLAG_FREE_MEMORY 
- * \brief   (DEFAULT) Free items with \a free().
+ * \brief   (DEFAULT) Free items with \c free().
  */
  
 /**
  * \def     PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY 
- * \brief   Free items with \a pizGrowingArrayFree().
+ * \brief   Free items with \c pizGrowingArrayFree().
  */
  
 #define PIZ_LINKLIST_FLAG_NONE                  (0L)
-#define PIZ_LINKLIST_FLAG_FREE_MEMORY           (1<<0L)
-#define PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY    (1<<1L)
+#define PIZ_LINKLIST_FLAG_FREE_MEMORY           (1<<0)
+#define PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY    (1<<1)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -115,13 +115,15 @@ void pizLinklistSetFlags (PIZLinklist *x, long flags);
 
 /**
  * \brief   Free the linklist.
- * \details It is safe to pass NULL pointer.
+ * \details It is safe to pass NULL pointer. 
+ *          Item's memory is released according to flags.
  * \param   x A Pointer.
  */
 void pizLinklistFree (PIZLinklist *x);
 
 /**
  * \brief   Clear the linklist.
+ * \details Item's memory is released according to flags.
  * \param   x A valid pointer.
  */
 void pizLinklistClear (PIZLinklist *x);
@@ -131,7 +133,7 @@ void pizLinklistClear (PIZLinklist *x);
  * \details The provided pointer can not be NULL.
  * \param   x A valid pointer.
  * \param   ptr A pointer to the item.
- * \return  Error code.
+ * \return  An error code.
  */
 PIZError pizLinklistAppend (PIZLinklist *x, void *ptr);
 
@@ -140,7 +142,7 @@ PIZError pizLinklistAppend (PIZLinklist *x, void *ptr);
  * \details The provided pointer can not be NULL.
  * \param   x A valid pointer.
  * \param   ptr A pointer to the item.
- * \return  Error code.
+ * \return  An error code.
  */
 PIZError pizLinklistInsert (PIZLinklist *x, void *ptr);
 
@@ -150,7 +152,7 @@ PIZError pizLinklistInsert (PIZLinklist *x, void *ptr);
  * \param   x A valid pointer.
  * \param   index The index (zero based).
  * \param   ptr The adress of the pointer to set.
- * \return  Error code.
+ * \return  An error code.
  */
 PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr);
 
@@ -160,18 +162,18 @@ PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr);
  * \param   x A valid pointer.
  * \param   ptr The item's pointer provided.
  * \param   nextPtr The adress of the pointer to set.
- * \return  Error code.
+ * \return  An error code.
  * \remark	The following shows how to traverse a linklist using cache optimization.  
  * \code
  *      PIZNote *note       = NULL;
  *      PIZNote *nextNote   = NULL;
  *           
- *      pizLinklistPtrAtIndex (linklistPtr, 0, (void **)&note);
+ *      pizLinklistPtrAtIndex (linklist, 0, (void **)&note);
  *           
  *      while (note) {
- *          pizLinklistNextByPtr (linklistPtr, (void *)note, (void **)&nextNote);
+ *          pizLinklistNextByPtr (linklist, (void *)note, (void **)&nextNote);
  *
- *          //pizLinklistRemoveByPtr (linklistPtr, (void *)note)); 
+ *          //pizLinklistRemoveByPtr (linklist, (void *)note)); 
  *                   
  *          note = nextNote;
  *      }
@@ -180,10 +182,30 @@ PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr);
  */
 PIZError pizLinklistNextByPtr (PIZLinklist *x, void *ptr, void **nextPtr);
 
-PIZError        pizLinklistRemoveByPtr      (PIZLinklist *x, void *ptr);
-PIZError        pizLinklistSwapByIndexes    (PIZLinklist *x, long m, long n);
+/**
+ * \brief   Given an item's pointer, remove this item from the linklist.
+ * \details Item's memory is released according to flags.
+ * \param   x A valid pointer.
+ * \param   ptr The item's pointer provided.
+ * \return  An error code.
+ */
+PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr);
 
-long            pizLinklistCount            (const PIZLinklist *x);
+/**
+ * \brief   Swap item's pointers in the linklist according to specified indexes.
+ * \param   x A valid pointer.
+ * \param   m Item's index (zero based).
+ * \param   n Item's index (zero based).
+ * \return  An error code.
+ */
+PIZError pizLinklistSwapByIndexes (PIZLinklist *x, long m, long n);
+
+/**
+ * \brief   Get the number of items in the linklist.
+ * \param   x A valid pointer.
+ * \return  The number of items.
+ */
+long pizLinklistCount (const PIZLinklist *x);
 
 PIZ_END_C_LINKAGE
 

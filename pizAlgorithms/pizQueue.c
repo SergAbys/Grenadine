@@ -1,7 +1,7 @@
 /*
  * \file    pizQueue.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -54,7 +54,7 @@ PIZQueue *pizQueueNew (void)
         
     if (x = (PIZQueue *)malloc (sizeof(PIZQueue))) {
             x->count        = 0;
-            x->poppedValue  = 0;
+            x->poppedValue  = -1;
             x->head         = NULL;
             x->tail         = NULL;
         }
@@ -87,7 +87,7 @@ void pizQueueClear (PIZQueue *x)
         }
         
     x->count        = 0;
-    x->poppedValue  = 0;
+    x->poppedValue  = -1;
     x->head         = NULL;
     x->tail         = NULL;
 }

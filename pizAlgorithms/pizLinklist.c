@@ -71,8 +71,7 @@ void pizLinklistSetFlags (PIZLinklist *x, long flags)
 
 void pizLinklistFree (PIZLinklist *x)
 {
-    if (x)
-        {
+    if (x) {
             pizLinklistClear (x);
             free (x);
         }

@@ -1,7 +1,8 @@
 /**
  * \file    pizItemset128.h
  * \author  Jean Sapristi
- * \date    26 janvier 2012
+ * \date    31 janvier 2012
+ * \ingroup structures
  */
  
 /*
@@ -54,14 +55,20 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief Bit field dimensions.
+ */
 enum {
-    PIZ_ITEMSET128_SIZE_IN_WORD     = 4,
-    PIZ_ITEMSET128_SIZE_OF_ULONG    = 32,
-    PIZ_ITEMSET128_SIZE_IN_BIT      = 128
+    PIZ_ITEMSET128_SIZE_IN_WORD     = 4,                /*!< Number of \c long in the bit field. */
+    PIZ_ITEMSET128_SIZE_OF_ULONG    = 32,               /*!< Size of an \c unsigned \c long. */
+    PIZ_ITEMSET128_SIZE_IN_BIT      = 128               /*!< Number of bits in the bit field. */
     };
 
+/**
+ * \brief The 128 bits field.
+ */
 typedef struct _PIZItemset128 {
-    unsigned long items[4];
+    unsigned long items[4];                             /*!< 128 Bits field as 4 \c long */
     } PIZItemset128;
     
 // -------------------------------------------------------------------------------------------------------------
@@ -69,16 +76,77 @@ typedef struct _PIZItemset128 {
 
 PIZ_START_C_LINKAGE
 
-void pizItemset128SetAtIndex    (PIZItemset128 *itemset, long index);
-void pizItemset128UnsetAtIndex  (PIZItemset128 *itemset, long index);
-void pizItemset128Clear         (PIZItemset128 *itemset);
+/**
+ * \brief   At specified index, set/let the bit to 1.
+ * \param   itemset A valid pointer.
+ * \param   index The index (zero based).
+ * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
+ */
+void pizItemset128SetAtIndex (PIZItemset128 *itemset, long index);
 
-long pizItemset128Count         (const PIZItemset128 *itemset);
+/**
+ * \brief   At specified index, set/let the bit to 0.
+ * \param   itemset A valid pointer.
+ * \param   index The index (zero based).
+ * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
+ */
+void pizItemset128UnsetAtIndex (PIZItemset128 *itemset, long index);
+
+/**
+ * \brief   Set/let all bits to 0.
+ * \param   itemset A valid pointer.
+ */
+void pizItemset128Clear (PIZItemset128 *itemset);
+
+/**
+ * \brief   Get the number of set bits.
+ * \param   itemset A valid pointer.
+ * \return  The number of set bits.
+ */
+long pizItemset128Count (const PIZItemset128 *itemset);
+
+/**
+ * \brief   At specified index, get the value of a bit.
+ * \param   itemset A valid pointer.
+ * \param   index The index (zero based).
+ * \return  True if set, otherwise false.
+ * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
+ */
 bool pizItemset128IsSetAtIndex  (const PIZItemset128 *itemset, long index);
-void pizItemset128Union         (const PIZItemset128 *a, const PIZItemset128 *b, PIZItemset128 *r);
-void pizItemset128Intersection  (const PIZItemset128 *a, const PIZItemset128 *b, PIZItemset128 *r);
-bool pizItemset128IsIncluded    (const PIZItemset128 *a, const PIZItemset128 *b);
-bool pizItemset128IsEqual       (const PIZItemset128 *a, const PIZItemset128 *b);
+
+/**
+ * \brief   Compute union between two bit fields.
+ * \details r = a | b.
+ * \param   a A valid pointer.
+ * \param   b A valid pointer.
+ * \param   r A valid pointer.
+ */
+void pizItemset128Union (const PIZItemset128 *a, const PIZItemset128 *b, PIZItemset128 *r);
+
+/**
+ * \brief   Compute intersection between two bit fields.
+ * \details r = a & b.
+ * \param   a A valid pointer.
+ * \param   b A valid pointer.
+ * \param   r A valid pointer.
+ */
+void pizItemset128Intersection (const PIZItemset128 *a, const PIZItemset128 *b, PIZItemset128 *r);
+
+/**
+ * \brief   To know if the bit field \a a is included in the bit field \a b.
+ * \param   a A valid pointer.
+ * \param   b A valid pointer.
+ * \return  True if included, otherwise false.
+ */
+bool pizItemset128IsIncluded (const PIZItemset128 *a, const PIZItemset128 *b);
+
+/**
+ * \brief   To know if the bit field \a a is equal to the bit field \a b.
+ * \param   a A valid pointer.
+ * \param   b A valid pointer.
+ * \return  True if equal, otherwise false.
+ */
+bool pizItemset128IsEqual (const PIZItemset128 *a, const PIZItemset128 *b);
 
 PIZ_END_C_LINKAGE
 
@@ -182,6 +250,7 @@ PIZ_EXTERN bool pizItemset128IsIncluded (const PIZItemset128 *a, const PIZItemse
         {
             if (b->items[i] != (b->items[i] | a->items[i])) {
                     k = false;
+                    break;
                 }
         }
         
@@ -197,6 +266,7 @@ PIZ_EXTERN bool pizItemset128IsEqual (const PIZItemset128 *a, const PIZItemset12
         {
             if (a->items[i] != b->items[i]) {
                     k = false;
+                    break;
                 }
         }
         

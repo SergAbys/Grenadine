@@ -2,6 +2,7 @@
  * \file    pizGrowingArray.h
  * \author  Jean Sapristi
  * \date    26 janvier 2012
+ * \ingroup structures
  */
  
 /*
@@ -49,10 +50,14 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief The dynamic array.
+ */
+ 
 typedef struct _PIZGrowingArray {
-    long size;
-    long index;
-    long *values;
+    long size;                                  /*!< Current size of the array. */
+    long index;                                 /*!< Number of values in the array. */
+    long *values;                               /*!< Pointer to the array. */
     } PIZGrowingArray;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -60,12 +65,46 @@ typedef struct _PIZGrowingArray {
 
 PIZ_START_C_LINKAGE
 
-PIZGrowingArray     *pizGrowingArrayNew              (long size);
-void                pizGrowingArrayFree              (PIZGrowingArray *x);
+/**
+ * \brief   Create the dynamic array.
+ * \param   size The size of memory allocated initially.
+ * \details In case of failure the pointer is NULL.
+ * \return  A pointer to the new dynamic array.
+ */
+PIZGrowingArray *pizGrowingArrayNew (long size);
 
-void                pizGrowingArrayClear             (PIZGrowingArray *x);
-PIZError            pizGrowingArrayAppend            (PIZGrowingArray *x, long value);
-void                pizGrowingArraySetValueAtIndex   (PIZGrowingArray *x, long index, long value);
+/**
+ * \brief   Free the dynamic array.
+ * \details It is safe to pass NULL pointer.
+ * \param   x A Pointer.
+ */
+void pizGrowingArrayFree (PIZGrowingArray *x);
+
+/**
+ * \brief   Clear the dynamic array.
+ * \param   x A valid pointer.
+ */
+void pizGrowingArrayClear (PIZGrowingArray *x);
+
+/**
+ * \brief   Append a value to the array.
+ * \details In case of overtaking the memory is doubled.
+ *          Return PIZ_MEMORY if the memory can not be allocated.
+ * \param   x A valid pointer.
+ * \param   value The value to append.
+ * \return  An error code.
+ */
+PIZError pizGrowingArrayAppend (PIZGrowingArray *x, long value);
+
+/**
+ * \brief   Set the value at a specified index.
+ * \param   x A valid pointer.
+ * \param   index The index.
+ * \param   value The value.
+ * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
+ */
+void pizGrowingArraySetValueAtIndex (PIZGrowingArray *x, long index, long value);
+
 
 long                pizGrowingArrayCount             (const PIZGrowingArray *x);
 long                pizGrowingArrayValueAtIndex      (const PIZGrowingArray *x, long index);

@@ -1,7 +1,7 @@
 /*
  * \file    pizItemset128.c
  * \author  Jean Sapristi
- * \date    26 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -86,7 +86,7 @@ long pizItemset128Count (const PIZItemset128 *itemset)
             unsigned long n = itemset->items[i];
             
             while (n != 0) {
-                    k  += (n & 1);
+                    k += (n & 1);
                     n >>= 1;
                 }
         }
@@ -138,6 +138,7 @@ bool pizItemset128IsIncluded (const PIZItemset128 *a, const PIZItemset128 *b)
         {
             if (b->items[i] != (b->items[i] | a->items[i])) {
                     k = false;
+                    break;
                 }
         }
         
@@ -153,6 +154,7 @@ bool pizItemset128IsEqual (const PIZItemset128 *a, const PIZItemset128 *b)
         {
             if (a->items[i] != b->items[i]) {
                     k = false;
+                    break;
                 }
         }
         

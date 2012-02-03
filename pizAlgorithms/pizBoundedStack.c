@@ -1,7 +1,7 @@
 /*
  * \file    pizBoundedStack.c
  * \author  Jean Sapristi
- * \date    26 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -82,7 +82,8 @@ void pizBoundedStackFree (PIZBoundedStack *x)
 
 void pizBoundedStackClear (PIZBoundedStack *x)
 {
-    x->stack = 0;
+    x->stack        = 0;
+    x->poppedValue  = -1;
 }
 
 PIZError pizBoundedStackPush (PIZBoundedStack *x, long value) 

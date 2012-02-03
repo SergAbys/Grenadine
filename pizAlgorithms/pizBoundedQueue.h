@@ -2,6 +2,7 @@
  * \file    pizBoundedQueue.h
  * \author  Jean Sapristi
  * \date    26 janvier 2012
+ * \ingroup structures
  */
  
 /*
@@ -49,13 +50,17 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief The FIFO bounded queue (array).
+ */
+ 
 typedef struct _PIZBoundedQueue {
-    long count;
-    long bound;
-    long head;
-    long tail;
-    long poppedValue;
-    long *values;
+    long count;                             /*!< Number of value in the queue. */
+    long bound;                             /*!< Maximum number of value in the queue. */
+    long head;                              /*!< Index of the head of the queue. */
+    long tail;                              /*!< Index of the tail of the queue. */
+    long poppedValue;                       /*!< Last dequeued value. */
+    long *values;                           /*!< Pointer to the array. */
     } PIZBoundedQueue; 
 
 // -------------------------------------------------------------------------------------------------------------
@@ -63,15 +68,68 @@ typedef struct _PIZBoundedQueue {
 
 PIZ_START_C_LINKAGE
 
-PIZBoundedQueue     *pizBoundedQueueNew         (long size);
-void                pizBoundedQueueFree         (PIZBoundedQueue *x);
+/**
+ * \brief   Create the queue.
+ * \details In case of failure the pointer is NULL.
+ * \param   size The maximum number of values in the queue.
+ * \return  A pointer to the new queue.
+ */
+PIZBoundedQueue *pizBoundedQueueNew (long size);
 
-void                pizBoundedQueueClear        (PIZBoundedQueue *x);
-PIZError            pizBoundedQueueAppend       (PIZBoundedQueue *x, long value);
-PIZError            pizBoundedQueuePop          (PIZBoundedQueue *x);
-PIZError            pizBoundedQueuePopLastValue (PIZBoundedQueue *x);
-long                pizBoundedQueueCount        (const PIZBoundedQueue *x);
-long                pizBoundedQueuePoppedValue  (const PIZBoundedQueue *x);
+/**
+ * \brief   Free the queue.
+ * \details It is safe to pass NULL pointer.
+ * \param   x A Pointer.
+ */
+void pizBoundedQueueFree (PIZBoundedQueue *x);
+
+/**
+ * \brief   Clear the queue.
+ * \param   x A valid pointer.
+ */
+void pizBoundedQueueClear (PIZBoundedQueue *x);
+
+/**
+ * \brief   Enqueue a value.
+ * \details Return PIZ_ERROR if the number of values is over the size of the queue.
+ * \param   x A valid pointer.
+ * \param   value The value to append.
+ * \return  An error code.
+ */
+PIZError pizBoundedQueueAppend (PIZBoundedQueue *x, long value);
+
+/**
+ * \brief   Dequeue a value.
+ * \details To get the dequeued value use pizBoundedQueuePoppedValue().
+ *          Return PIZ_ERROR if the queue is empty.
+ * \param   x A valid pointer.
+ * \return  An error code.
+ */
+PIZError pizBoundedQueuePop (PIZBoundedQueue *x);
+
+/**
+ * \brief   Dequeue last value (stack way).
+ * \details To get the dequeued value use pizBoundedQueuePoppedValue().
+ *          Return PIZ_ERROR if the queue is empty.
+ * \param   x A valid pointer.
+ * \return  An error code.
+ */
+PIZError pizBoundedQueuePopLastValue (PIZBoundedQueue *x);
+
+/**
+ * \brief   Get the number of values in the queue.
+ * \param   x A valid pointer.
+ * \return  The number of values.
+ */
+long pizBoundedQueueCount (const PIZBoundedQueue *x);
+
+/**
+ * \brief   Get the dequeued value.
+ * \details This value is initialized with -1. 
+ * \param   x A valid pointer.
+ * \return  The value.
+ */
+long pizBoundedQueuePoppedValue (const PIZBoundedQueue *x);
 
 PIZ_END_C_LINKAGE
 
@@ -82,9 +140,10 @@ PIZ_END_C_LINKAGE
 
 PIZ_EXTERN void pizBoundedQueueClear (PIZBoundedQueue *x)
 {
-    x->head     = 0;
-    x->tail     = 0;
-    x->count    = 0;
+    x->head         = 0;
+    x->tail         = 0;
+    x->count        = 0;
+    x->poppedValue  = -1;
 }
 
 PIZ_EXTERN long pizBoundedQueueCount (const PIZBoundedQueue *x)

@@ -59,7 +59,7 @@ typedef enum {
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief Compute the maximum of x and y.
+ * \brief Compute the maximum of \a x and \a y.
  */
  
 #ifndef MAX
@@ -67,7 +67,7 @@ typedef enum {
 #endif
 
 /**
- * \brief Compute the minimum of x and y.
+ * \brief Compute the minimum of \a x and \a y.
  */
  
 #ifndef MIN
@@ -75,7 +75,7 @@ typedef enum {
 #endif
 
 /**
- * \brief Compute absolute value of x.
+ * \brief Compute absolute value of \a x.
  */
  
 #ifndef ABS
@@ -83,7 +83,7 @@ typedef enum {
 #endif
 
 /**
- * \brief Keep x between a and b.
+ * \brief Keep \a x between \a a and \a b.
  */
  
 #ifndef CLAMP
@@ -121,7 +121,7 @@ typedef enum {
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief Hide the function in exported symbol table.
+ * \brief Hide the function in the exported symbol table.
  */
  
 #ifndef WIN_VERSION
@@ -173,4 +173,4 @@ typedef enum {
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif
+#endif // PIZ_TYPES_H

@@ -61,7 +61,7 @@ typedef struct _PIZQueueElement {
     } PIZQueueElement;
 
 /**
- * \brief The FIFO queue.
+ * \brief The FIFO queue (linklist).
  */
  
 typedef struct _PIZQueue {
@@ -100,36 +100,38 @@ void pizQueueClear (PIZQueue *x);
  * \brief   Enqueue a value.
  * \param   x A valid pointer.
  * \param   value The value to append.
- * \return  Error code.
+ * \return  An error code.
  */
 PIZError pizQueueAppend (PIZQueue *x, long value);
 
 /**
  * \brief   Dequeue a value.
  * \details To get the dequeued value use pizQueuePoppedValue(). 
+ *          Return PIZ_ERROR if the queue is empty.
  * \param   x A valid pointer.
- * \return  Error code (PIZ_ERROR if empty).
+ * \return  An error code.
  */
 PIZError pizQueuePop (PIZQueue *x);
 
 /**
  * \brief   Dequeue last value (stack way).
  * \details To get the dequeued value use pizQueuePoppedValue(). 
+ *          Return PIZ_ERROR if the queue is empty.
  * \param   x A valid pointer.
- * \return  Error code (PIZ_ERROR if empty).
+ * \return  An error code.
  */
 PIZError pizQueuePopLastValue (PIZQueue *x);
 
 /**
- * \brief   Get the number of value in the queue.
+ * \brief   Get the number of values in the queue.
  * \param   x A valid pointer.
- * \return  The number of value.
+ * \return  The number of values.
  */
 long pizQueueCount (const PIZQueue *x);
 
 /**
  * \brief   Get the dequeued value.
- * \details This value is initialized with zero. 
+ * \details This value is initialized with -1. 
  * \param   x A valid pointer.
  * \return  The value.
  */

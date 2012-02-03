@@ -1,7 +1,7 @@
 /*
  * \file    pizBoundedQueue.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -84,9 +84,10 @@ void pizBoundedQueueFree (PIZBoundedQueue *x)
 
 void pizBoundedQueueClear (PIZBoundedQueue *x)
 {
-    x->count    = 0;
-    x->head     = 0;
-    x->tail     = 0;
+    x->count        = 0;
+    x->head         = 0;
+    x->tail         = 0;
+    x->poppedValue  = -1;
 }
 
 PIZError pizBoundedQueueAppend (PIZBoundedQueue *x, long value) 
