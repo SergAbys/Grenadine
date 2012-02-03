@@ -1,7 +1,7 @@
 /*
  * \file    pizGrowingArrayExtended.c
  * \author  Jean Sapristi
- * \date    26 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -69,7 +69,6 @@ PIZError pizGrowingArrayRemoveLastValue (PIZGrowingArray *x)
     
     if (x->index) {
             x->index --;
-            
             err = PIZ_GOOD;
         }
         

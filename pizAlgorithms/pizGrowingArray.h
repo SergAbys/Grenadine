@@ -105,15 +105,60 @@ PIZError pizGrowingArrayAppend (PIZGrowingArray *x, long value);
  */
 void pizGrowingArraySetValueAtIndex (PIZGrowingArray *x, long index, long value);
 
+/**
+ * \brief   Get the number of values in the array.
+ * \param   x A valid pointer.
+ * \return  The number of values.
+ */
+long pizGrowingArrayCount (const PIZGrowingArray *x);
 
-long                pizGrowingArrayCount             (const PIZGrowingArray *x);
-long                pizGrowingArrayValueAtIndex      (const PIZGrowingArray *x, long index);
-long                *pizGrowingArrayPtr              (const PIZGrowingArray *x); 
-  
-void                pizGrowingArrayRemoveIndex       (PIZGrowingArray *x, long index);
-PIZError            pizGrowingArrayRemoveLastValue   (PIZGrowingArray *x);
-long                pizGrowingArrayFirstIndexOfValue (const PIZGrowingArray *x, long value);
-bool                pizGrowingArrayContainsValue     (const PIZGrowingArray *x, long value);
+/**
+ * \brief   Get the value at a specified index.
+ * \param   x A valid pointer.
+ * \param   index The index.
+ * \return  The value.
+ * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
+ */
+long pizGrowingArrayValueAtIndex (const PIZGrowingArray *x, long index);
+
+/**
+ * \brief   Get the pointer to internal array.
+ * \param   x A valid pointer.
+ * \return  The pointer.
+ * \warning This function is provided for efficiency but it should be used carefully.
+ */
+long *pizGrowingArrayPtr (const PIZGrowingArray *x); 
+
+/**
+ * \brief   Remove the value at a specified index.
+ * \param   x A valid pointer.
+ * \param   index The index.
+ */
+void pizGrowingArrayRemoveIndex (PIZGrowingArray *x, long index);
+
+/**
+ * \brief   Remove the last value.
+ * \param   x A valid pointer.
+ */
+PIZError pizGrowingArrayRemoveLastValue (PIZGrowingArray *x);
+
+/**
+ * \brief   Given a value, get the index of the first equal value found.
+ * \param   x A valid pointer.
+ * \param   value The value to find.
+ * \return  The index if found, otherwise -1.
+ */
+long pizGrowingArrayFirstIndexOfValue (const PIZGrowingArray *x, long value);
+
+/**
+ * \brief   To know if the array countains the provided value.
+ * \param   x A valid pointer.
+ * \param   value The value to find.
+ * \return  True if found, otherwise false.
+ */
+bool pizGrowingArrayContainsValue (const PIZGrowingArray *x, long value);
+
+
 PIZError            pizGrowingArrayCopy              (PIZGrowingArray *x, const PIZGrowingArray *toCopy);
 PIZError            pizGrowingArrayAppendArray       (PIZGrowingArray *x, const PIZGrowingArray *toAppend);
 PIZError            pizGrowingArrayAppendPtr         (PIZGrowingArray *x, long argc, long *argv);
