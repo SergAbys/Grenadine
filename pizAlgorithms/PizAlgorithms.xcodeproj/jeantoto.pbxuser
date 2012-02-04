@@ -14,10 +14,6 @@
 			PBXPerProjectTemplateStateSaveDate = 350032031;
 			PBXWorkspaceStateSaveDate = 350032031;
 		};
-		perUserProjectItems = {
-			96D639E114DD10A300451B9C /* PBXBookmark */ = 96D639E114DD10A300451B9C /* PBXBookmark */;
-			96D639E614DD10AA00451B9C /* PBXTextBookmark */ = 96D639E614DD10AA00451B9C /* PBXTextBookmark */;
-		};
 		sourceControlManager = 96CFCDA613D7F01D004431BB /* Source Control */;
 		userBuildSettings = {
 		};
@@ -184,7 +180,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1234, 7950}}";
 			sepNavSelRange = "{13598, 0}";
-			sepNavVisRect = "{{0, 2412}, {1234, 645}}";
+			sepNavVisRect = "{{0, 6826}, {1234, 645}}";
 			sepNavWindowFrame = "{{-1, 4}, {1279, 774}}";
 		};
 	};
@@ -256,20 +252,6 @@
 			sepNavWindowFrame = "{{1, 3}, {1279, 774}}";
 		};
 	};
-	96D639E114DD10A300451B9C /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = 96DD1914144AB02200F914AE /* pizGrowingArray.h */;
-	};
-	96D639E614DD10AA00451B9C /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 96DD1914144AB02200F914AE /* pizGrowingArray.h */;
-		name = "pizGrowingArray.h: 154";
-		rLen = 0;
-		rLoc = 5639;
-		rType = 0;
-		vrLen = 960;
-		vrLoc = 5246;
-	};
 	96DD190E144AB01900F914AE /* pizDataStructures.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1234, 1550}}";
@@ -296,9 +278,9 @@
 	};
 	96DD1914144AB02200F914AE /* pizGrowingArray.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1234, 5050}}";
-			sepNavSelRange = "{5639, 0}";
-			sepNavVisRect = "{{0, 3519}, {1234, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1234, 5575}}";
+			sepNavSelRange = "{3697, 0}";
+			sepNavVisRect = "{{0, 4930}, {1234, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1279, 774}}";
 		};
 	};
@@ -433,8 +415,8 @@
 	96E6103014989E6300CE103D /* pizGrowingArrayExtended.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1234, 5400}}";
-			sepNavSelRange = "{3100, 0}";
-			sepNavVisRect = "{{0, 1863}, {1234, 645}}";
+			sepNavSelRange = "{5266, 24}";
+			sepNavVisRect = "{{0, 4510}, {1234, 645}}";
 			sepNavWindowFrame = "{{15, -1}, {1279, 774}}";
 		};
 	};

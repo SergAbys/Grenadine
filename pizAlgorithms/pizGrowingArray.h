@@ -88,8 +88,7 @@ void pizGrowingArrayClear (PIZGrowingArray *x);
 
 /**
  * \brief   Append a value to the array.
- * \details In case of overtaking the memory is doubled.
- *          Return PIZ_MEMORY if the memory can not be allocated.
+ * \details The memory is doubled in case of overtaking.
  * \param   x A valid pointer.
  * \param   value The value to append.
  * \return  An error code.
@@ -122,7 +121,7 @@ long pizGrowingArrayCount (const PIZGrowingArray *x);
 long pizGrowingArrayValueAtIndex (const PIZGrowingArray *x, long index);
 
 /**
- * \brief   Get the pointer to internal array.
+ * \brief   Retrieve the pointer to internal array.
  * \param   x A valid pointer.
  * \return  The pointer.
  * \warning This function is provided for efficiency but it should be used carefully.
@@ -158,10 +157,32 @@ long pizGrowingArrayFirstIndexOfValue (const PIZGrowingArray *x, long value);
  */
 bool pizGrowingArrayContainsValue (const PIZGrowingArray *x, long value);
 
+/**
+ * \brief   Copy a dynamic array.
+ * \details The new memory size reallocated is the memory size of the copied array in case of overtaking.
+ * \param   x A valid pointer.
+ * \param   toCopy A valid pointer to the array to be copied.
+ * \return  An error code.
+ */
+PIZError pizGrowingArrayCopy (PIZGrowingArray *x, const PIZGrowingArray *toCopy);
 
-PIZError            pizGrowingArrayCopy              (PIZGrowingArray *x, const PIZGrowingArray *toCopy);
-PIZError            pizGrowingArrayAppendArray       (PIZGrowingArray *x, const PIZGrowingArray *toAppend);
-PIZError            pizGrowingArrayAppendPtr         (PIZGrowingArray *x, long argc, long *argv);
+/**
+ * \brief   Append a dynamic array.
+ * \details The new memory size reallocated is the sum of both memory sizes in case of overtaking.
+ * \param   x A valid pointer.
+ * \param   toCopy A valid pointer to the array to be copied.
+ * \return  An error code.
+ */
+PIZError pizGrowingArrayAppendArray (PIZGrowingArray *x, const PIZGrowingArray *toAppend);
+
+/**
+ * \brief   Append an array of \c long.
+ * \details The new memory size is set according to a geometric progression of ratio 2.
+ * \param   x A valid pointer.
+ * \param   argc The number of values to append.
+ * \return  argv The pointer to the values to append.
+ */
+PIZError pizGrowingArrayAppendPtr (PIZGrowingArray *x, long argc, long *argv);
 
 PIZ_END_C_LINKAGE
 

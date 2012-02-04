@@ -185,48 +185,7 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>96D639E414DD10AA00451B9C</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>pizGrowingArray.h</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>96D639E514DD10AA00451B9C</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>pizGrowingArray.h</string>
-						<key>_historyCapacity</key>
-						<integer>40</integer>
-						<key>bookmark</key>
-						<string>96D639E614DD10AA00451B9C</string>
-						<key>history</key>
-						<array>
-							<string>96D639E114DD10A300451B9C</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {1279, 677}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>1 60 1279 718 0 0 1280 778 </string>
-			</dict>
-		</dict>
-	</array>
+	<array/>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -303,7 +262,7 @@
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 49}, {664, 461}}</string>
+									<string>{{0, 4}, {664, 461}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -326,7 +285,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>252 126 681 547 0 0 1280 778 </string>
+								<string>299 197 681 547 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -498,10 +457,9 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>/Users/jeantoto/Dev/Grenadine/pizAlgorithms/PizAlgorithms.xcodeproj</string>
-		<string>96D639E414DD10AA00451B9C</string>
 	</array>
 	<key>WindowString</key>
-	<string>252 126 681 547 0 0 1280 778 </string>
+	<string>299 197 681 547 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
