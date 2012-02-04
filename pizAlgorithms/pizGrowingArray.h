@@ -161,7 +161,7 @@ bool pizGrowingArrayContainsValue (const PIZGrowingArray *x, long value);
  * \brief   Copy a dynamic array.
  * \details The new memory size reallocated is the memory size of the copied array in case of overtaking.
  * \param   x A valid pointer.
- * \param   toCopy A valid pointer to the array to be copied.
+ * \param   toCopy A valid pointer to the dynamic array to be copied.
  * \return  An error code.
  */
 PIZError pizGrowingArrayCopy (PIZGrowingArray *x, const PIZGrowingArray *toCopy);
@@ -170,17 +170,17 @@ PIZError pizGrowingArrayCopy (PIZGrowingArray *x, const PIZGrowingArray *toCopy)
  * \brief   Append a dynamic array.
  * \details The new memory size reallocated is the sum of both memory sizes in case of overtaking.
  * \param   x A valid pointer.
- * \param   toCopy A valid pointer to the array to be copied.
+ * \param   toAppend A valid pointer to the dynamic array to be appended.
  * \return  An error code.
  */
 PIZError pizGrowingArrayAppendArray (PIZGrowingArray *x, const PIZGrowingArray *toAppend);
 
 /**
- * \brief   Append an array of \c long.
+ * \brief   Append a \c long array.
  * \details The new memory size is set according to a geometric progression of ratio 2.
  * \param   x A valid pointer.
  * \param   argc The number of values to append.
- * \return  argv The pointer to the values to append.
+ * \param   argv The pointer to the values to append.
  */
 PIZError pizGrowingArrayAppendPtr (PIZGrowingArray *x, long argc, long *argv);
 

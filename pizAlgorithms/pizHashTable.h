@@ -2,6 +2,7 @@
  * \file    pizHashTable.h
  * \author  Jean Sapristi
  * \date    23 janvier 2012
+ * \ingroup structures
  */
  
 /*
@@ -50,22 +51,42 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \def     PIZ_HASHTABLE_FLAG_NONE 
+ * \brief   (DEFAULT) Don't free items.
+ */
+ 
+/**
+ * \def     PIZ_HASHTABLE_FLAG_FREE_MEMORY 
+ * \brief   Free items with \c free().
+ */
+ 
 #define PIZ_HASHTABLE_FLAG_NONE         (0L)
 #define PIZ_HASHTABLE_FLAG_FREE_MEMORY  (1<<0)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief Hashtable element.
+ */
+ 
 typedef struct _PIZHashTableElement {
-    long key;
-    void *ptr;
+    long key;                                   /*!< The key as \c long. */
+    void *ptr;                                  /*!< Pointer to the item to store. */
     } PIZHashTableElement;
 
+/**
+ * \brief   The hashtable.
+ * \details Simple hashtable (array of linklists) with \c long keys.
+ * \remark  To obtain the hash value : index =  key % size.
+ */
+ 
 typedef struct _PIZHashTable {
-    long                flags;
-    long                count;
-    long                size;
-    PIZLinklist         **hashTable;
+    long                flags;                  /*!< Bit Flags. */
+    long                count;                  /*!< Number of elements in the hashtable. */
+    long                size;                   /*!< Number of linklists in the hashtable. */
+    PIZLinklist         **hashTable;            /*!< Pointer to the hashtable's array of linklists. */
     } PIZHashTable;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -73,17 +94,94 @@ typedef struct _PIZHashTable {
 
 PIZ_START_C_LINKAGE
 
-PIZHashTable    *pizHashTableNew                    (long argc, long *argv);
-void            pizHashTableSetFlags                (PIZHashTable *x, long flags);
-void            pizHashTableFree                    (PIZHashTable *x);
+/**
+ * \brief   Create the hashtable.
+ * \details The function accepts one argument : the size of the hashtable. 
+ *          This size should be a prime number, default is 157.
+ *          In case of failure the pointer is NULL.
+ * \param   argc The number of arguments.
+ * \param   argv A pointer to arguments.
+ * \return  A pointer to the new hashtable.
+ * \remark	The following shows how to create a hashtable.  
+ * \code
+ *      long            size = 67;
+ *      PIZHashTable    *myHashtab = NULL;
+ *           
+ *      myHashtab = pizHashTableNew (1, &size);
+ *      myHashtab = pizHashTableNew (0, NULL);  // default value.
+ *
+ *	\endcode
+ */
+PIZHashTable *pizHashTableNew (long argc, long *argv);
 
-void            pizHashTableClear                   (PIZHashTable *x);
-PIZError        pizHashTableAdd                     (PIZHashTable *x, long key, void *ptr);
-PIZError        pizHashTableRemoveByKeyAndPtr       (PIZHashTable *x, long key, void *ptr);
+/**
+ * \brief   Set hashtable's bit flags.
+ * \param   x A valid pointer.
+ * \param   flags Bit flags.
+ */
+void pizHashTableSetFlags (PIZHashTable *x, long flags);
 
-PIZError        pizHashTablePtrByKey                (const PIZHashTable *x, long key, void **ptr);
-bool            pizHashTableContainsKey             (const PIZHashTable *x, long key);
-long            pizHashTableCount                   (const PIZHashTable *x);
+/**
+ * \brief   Free the hashtable.
+ * \details It is safe to pass NULL pointer. 
+ *          Item's memory is released according to flags.
+ * \param   x A Pointer.
+ */
+void pizHashTableFree (PIZHashTable *x);
+
+/**
+ * \brief   Clear the hashtable.
+ * \details Item's memory is released according to flags.
+ * \param   x A valid pointer.
+ */
+void pizHashTableClear (PIZHashTable *x);
+
+/**
+ * \brief   Add item to the hashtable.
+ * \details The provided pointer can not be NULL. 
+ *          Key must be superior or equal to zero.
+ * \param   x A valid pointer.
+ * \param   key The key.
+ * \param   ptr A pointer to the item.
+ * \return  An error code.
+ * \remark  It is safe to add items with equal keys.
+ */
+PIZError pizHashTableAdd (PIZHashTable *x, long key, void *ptr);
+
+/**
+ * \brief   Remove an item with a given key and a given pointer.
+ * \details Item's memory is released according to flags.
+ * \param   x A valid pointer.
+ * \param   key The key.
+ * \param   ptr A pointer to the item.
+ * \return  An error code.
+ */
+PIZError pizHashTableRemoveByKeyAndPtr (PIZHashTable *x, long key, void *ptr);
+
+/**
+ * \brief   Get an item with a given key.
+ * \param   x A valid pointer.
+ * \param   key The key.
+ * \param   ptr The adress of a pointer to set.
+ * \return  An error code.
+ * \remark  In case of equal keys, older item is returned.
+ */
+PIZError pizHashTablePtrByKey (const PIZHashTable *x, long key, void **ptr);
+
+/**
+ * \brief   Test if the hashtable countains an item with a given key.
+ * \param   x A valid pointer.
+ * \param   key The key.
+ * \return  True if found the key, otherwise false.
+ */
+bool pizHashTableContainsKey (const PIZHashTable *x, long key);
+
+/**
+ * \brief   Get the number of items in the hashtable.
+ * \param   x A valid pointer.
+ * \return  The number of items in the hashtable.
+ */
+long pizHashTableCount (const PIZHashTable *x);
 
 PIZ_END_C_LINKAGE
 

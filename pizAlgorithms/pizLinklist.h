@@ -88,7 +88,7 @@ typedef struct _PIZLinklistElement {
  
 typedef struct _PIZLinklist {
     long                flags;                      /*!< Bit Flags. */
-    long                count;                      /*!< Size of the linklist. */
+    long                count;                      /*!< Number of elements in the linklist. */
     PIZLinklistElement  *head;                      /*!< Pointer to head element. */
     PIZLinklistElement  *tail;                      /*!< Pointer to tail element. */
     PIZLinklistElement  *cache;                     /*!< Pointer to cached element. */
