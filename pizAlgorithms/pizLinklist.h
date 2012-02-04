@@ -150,7 +150,7 @@ PIZError pizLinklistInsert (PIZLinklist *x, void *ptr);
  * \brief   Get an item's pointer with specified index.
  * \details If there is no item at the index, pointer is set to NULL.
  * \param   x A valid pointer.
- * \param   index The index (zero based).
+ * \param   index The index (zero-based).
  * \param   ptr The adress of the pointer to set.
  * \return  An error code.
  */
@@ -194,8 +194,8 @@ PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr);
 /**
  * \brief   Swap item's pointers in the linklist according to specified indexes.
  * \param   x A valid pointer.
- * \param   m Item's index (zero based).
- * \param   n Item's index (zero based).
+ * \param   m Item's index (zero-based).
+ * \param   n Item's index (zero-based).
  * \return  An error code.
  */
 PIZError pizLinklistSwapByIndexes (PIZLinklist *x, long m, long n);

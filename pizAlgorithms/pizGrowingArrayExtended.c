@@ -78,7 +78,7 @@ PIZError pizGrowingArrayRemoveLastValue (PIZGrowingArray *x)
 long pizGrowingArrayFirstIndexOfValue (const PIZGrowingArray *x, long value)
 {
     long i;
-    long k = PIZ_ERROR;
+    long k = -1;
     
     for (i = 0; i < x->index; i++)
         {

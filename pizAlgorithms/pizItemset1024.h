@@ -79,7 +79,7 @@ PIZ_START_C_LINKAGE
 /**
  * \brief   At specified index, set/let the bit to 1.
  * \param   itemset A valid pointer.
- * \param   index The index (zero based).
+ * \param   index The index (zero-based).
  * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
  */
 void pizItemset1024SetAtIndex (PIZItemset1024 *itemset, long index);
@@ -87,7 +87,7 @@ void pizItemset1024SetAtIndex (PIZItemset1024 *itemset, long index);
 /**
  * \brief   At specified index, set/let the bit to 0.
  * \param   itemset A valid pointer.
- * \param   index The index (zero based).
+ * \param   index The index (zero-based).
  * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
  */
 void pizItemset1024UnsetAtIndex (PIZItemset1024 *itemset, long index);
@@ -108,7 +108,7 @@ long pizItemset1024Count (const PIZItemset1024 *itemset);
 /**
  * \brief   At specified index, get the value of a bit.
  * \param   itemset A valid pointer.
- * \param   index The index (zero based).
+ * \param   index The index (zero-based).
  * \return  True if set, otherwise false.
  * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
  */
@@ -133,7 +133,7 @@ void pizItemset1024Union (const PIZItemset1024 *a, const PIZItemset1024 *b, PIZI
 void pizItemset1024Intersection (const PIZItemset1024 *a, const PIZItemset1024 *b, PIZItemset1024 *r);
 
 /**
- * \brief   To know if the bit field \a a is included in the bit field \a b.
+ * \brief   Test if the bit field \a a is included in the bit field \a b.
  * \param   a A valid pointer.
  * \param   b A valid pointer.
  * \return  True if included, otherwise false.
@@ -141,7 +141,7 @@ void pizItemset1024Intersection (const PIZItemset1024 *a, const PIZItemset1024 *
 bool pizItemset1024IsIncluded (const PIZItemset1024 *a, const PIZItemset1024 *b);
 
 /**
- * \brief   To know if the bit field \a a is equal to the bit field \a b.
+ * \brief   Test if the bit field \a a is equal to the bit field \a b.
  * \param   a A valid pointer.
  * \param   b A valid pointer.
  * \return  True if equal, otherwise false.

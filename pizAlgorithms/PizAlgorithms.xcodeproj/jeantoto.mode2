@@ -185,7 +185,48 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array/>
+	<array>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
+				<string>96D639E414DD10AA00451B9C</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>pizGrowingArray.h</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>96D639E514DD10AA00451B9C</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>pizGrowingArray.h</string>
+						<key>_historyCapacity</key>
+						<integer>40</integer>
+						<key>bookmark</key>
+						<string>96D639E614DD10AA00451B9C</string>
+						<key>history</key>
+						<array>
+							<string>96D639E114DD10A300451B9C</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {1279, 677}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>1 60 1279 718 0 0 1280 778 </string>
+			</dict>
+		</dict>
+	</array>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -255,7 +296,7 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>24</integer>
+											<integer>13</integer>
 											<integer>4</integer>
 											<integer>1</integer>
 											<integer>0</integer>
@@ -422,8 +463,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D6B3D114DC5CA300AF36AD</string>
-				<string>96D6B3D214DC5CA300AF36AD</string>
+				<string>96D639E214DD10AA00451B9C</string>
+				<string>96D639E314DD10AA00451B9C</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -456,8 +497,8 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/pizAlgorithms/PizAlgorithms.xcodeproj</string>
+		<string>96D639E414DD10AA00451B9C</string>
 	</array>
 	<key>WindowString</key>
 	<string>252 126 681 547 0 0 1280 778 </string>
@@ -674,7 +715,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D6B3D314DC5CA300AF36AD</string>
+				<string>96D639C314DD0FA000451B9C</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

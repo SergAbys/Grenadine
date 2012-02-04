@@ -99,7 +99,7 @@ PIZError pizGrowingArrayAppend (PIZGrowingArray *x, long value);
 /**
  * \brief   Set the value at a specified index.
  * \param   x A valid pointer.
- * \param   index The index.
+ * \param   index The index (zero-based).
  * \param   value The value.
  * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
  */
@@ -115,7 +115,7 @@ long pizGrowingArrayCount (const PIZGrowingArray *x);
 /**
  * \brief   Get the value at a specified index.
  * \param   x A valid pointer.
- * \param   index The index.
+ * \param   index The index (zero-based).
  * \return  The value.
  * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
  */
@@ -151,7 +151,7 @@ PIZError pizGrowingArrayRemoveLastValue (PIZGrowingArray *x);
 long pizGrowingArrayFirstIndexOfValue (const PIZGrowingArray *x, long value);
 
 /**
- * \brief   To know if the array countains the provided value.
+ * \brief   Test if the array countains the provided value.
  * \param   x A valid pointer.
  * \param   value The value to find.
  * \return  True if found, otherwise false.
