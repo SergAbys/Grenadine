@@ -422,8 +422,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D639BE14DD0F9D00451B9C</string>
-				<string>96D639BF14DD0F9D00451B9C</string>
+				<string>96D63A0214DD1C5300451B9C</string>
+				<string>96D63A0314DD1C5300451B9C</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -638,7 +638,7 @@
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 154}, {1280, 83}}</string>
+								<string>{{0, 113}, {1280, 124}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>
@@ -676,7 +676,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D639C014DD0F9D00451B9C</string>
+				<string>96D63A0414DD1C5300451B9C</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

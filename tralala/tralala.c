@@ -1673,19 +1673,20 @@ void tralala_copy (t_tralala *x)
     if (!err)
         {
             long i;
-            long mode = PIZ_SEQUENCE_ADD_MODE_PATTERN;
             long chance = object_attr_getlong (x, tll_sym_chance);
             long count = pizGrowingArrayCount (tempArrayA) / PIZ_SEQUENCE_NOTE_SIZE;
             long *ptr = pizGrowingArrayPtr (tempArrayA);
+            
+            pizGrowingArrayClear (tempArrayB);
 
             for (i = (count - 1); i >= 0; i--) {
                 if (100 * (rand ( ) / (RAND_MAX + 1.0)) < chance) {
-                        pizGrowingArrayClear (tempArrayB);
                         pizGrowingArrayAppendPtr (tempArrayB, PIZ_SEQUENCE_NOTE_SIZE, 
                             ptr + (PIZ_SEQUENCE_NOTE_SIZE * i));
-                        pizSequenceAddNotesWithArray (x->live, tempArrayB, mode);
                     }
-            }
+                }
+            
+            pizSequenceAddNotesWithArray (x->live, tempArrayB, PIZ_SEQUENCE_ADD_MODE_PATTERN);
         }
     
     ARRAY_RELEASE (tempArrayA);
