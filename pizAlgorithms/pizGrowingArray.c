@@ -1,7 +1,7 @@
 /*
  * \file    pizGrowingArray.c
  * \author  Jean Sapristi
- * \date    26 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -54,12 +54,11 @@ PIZGrowingArray *pizGrowingArrayNew (long size)
 
     if (x = (PIZGrowingArray *)malloc (sizeof(PIZGrowingArray)))
         {       
-            size = MAX (1, size);
+            x->size = MAX (1, size);
             
-            if (x->values = (long *)malloc (size * sizeof(long)))
+            if (x->values = (long *)malloc (x->size * sizeof(long)))
                 {
-                    x->size     = size;
-                    x->index    = 0;
+                    x->index = 0;
                 }
             else
                 {

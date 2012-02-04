@@ -1,7 +1,7 @@
 /*
  * \file    pizArrayPool.c
  * \author  Jean Sapristi
- * \date    15 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -150,15 +150,20 @@ PIZGrowingArray *pizArrayPoolGetArray (PIZArrayPool *x)
     return array;
 }
 
-void pizArrayPoolReleaseArray (PIZArrayPool *x, PIZGrowingArray *array)
+PIZError pizArrayPoolReleaseArray (PIZArrayPool *x, PIZGrowingArray *array)
 {
+    long err = PIZ_ERROR;
+    
     PIZLOCK
     
     if (array) {
+            err = PIZ_GOOD;
             x->retain --;
         }
     
     PIZUNLOCK
+    
+    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------

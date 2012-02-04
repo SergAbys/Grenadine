@@ -2,6 +2,7 @@
  * \file    pizArrayPool.h
  * \author  Jean Sapristi
  * \date    15 janvier 2012
+ * \ingroup structures
  */
  
 /*
@@ -56,12 +57,18 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief   The pool of dynamic arrays.
+ * \warning It is currently a very simple implementation, and should be improved ;
+ *          If an array is not released, the pool will grow dramatically for each query.
+ */
+ 
 typedef struct _PIZArrayPool {
-    pthread_mutex_t     lock;
-    long                retain;
-    long                initArraySize;
-    PIZGrowingArray     *cache;
-    PIZLinklist         *pool;
+    pthread_mutex_t     lock;                       /*!< POSIX mutex. */
+    long                retain;                     /*!< Number of arrays in use. */
+    long                initArraySize;              /*!< Memory size of new array. */
+    PIZGrowingArray     *cache;                     /*!< Pointer to the last array delivered. */
+    PIZLinklist         *pool;                      /*!< Pointer to the pool's linklist. */
     } PIZArrayPool;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -69,11 +76,48 @@ typedef struct _PIZArrayPool {
 
 PIZ_START_C_LINKAGE
 
-PIZArrayPool        *pizArrayPoolNew            (long argc, long *argv);
-void                pizArrayPoolFree            (PIZArrayPool *x);
+/**
+ * \brief   Create the pool of dynamic arrays.
+ * \details The function accepts two arguments : the number of pre-allocated arrays (default is 2)
+ *          and the size of the memory to initialize them. 
+ *          In case of failure the pointer is NULL.
+ * \param   argc The number of arguments.
+ * \param   argv A pointer to arguments.
+ * \return  A pointer to the new pool of dynamic arrays.
+ * \remark	The following shows how to create a pool of dynamic arrays.  
+ * \code
+ *      long            args[2] = {4, 32};
+ *      PIZArrayPool    *pool = NULL;
+ *           
+ *      pool = pizArrayPoolNew (2, args);  
+ *      pool = pizArrayPoolNew (0, NULL);  // default values.
+ *
+ *	\endcode
+ */
+PIZArrayPool *pizArrayPoolNew (long argc, long *argv);
 
-PIZGrowingArray     *pizArrayPoolGetArray       (PIZArrayPool *x);
-void                pizArrayPoolReleaseArray    (PIZArrayPool *x, PIZGrowingArray *array);
+/**
+ * \brief   Free the pool of dynamic arrays.
+ * \details It is safe to pass NULL pointer. 
+ * \param   x A Pointer.
+ */
+void pizArrayPoolFree (PIZArrayPool *x);
+
+/**
+ * \brief   Get a dynamic array.
+ * \details In case of failure the pointer is NULL.
+ * \param   x A valid pointer.
+ * \return  A pointer to the dynamic array.
+ */
+PIZGrowingArray *pizArrayPoolGetArray (PIZArrayPool *x);
+
+/**
+ * \brief   Release a dynamic array.
+ * \param   x A valid pointer.
+ * \param   array A pointer to the dynamic array.
+ * \return  An error code.
+ */
+PIZError pizArrayPoolReleaseArray (PIZArrayPool *x, PIZGrowingArray *array);
 
 PIZ_END_C_LINKAGE
 
