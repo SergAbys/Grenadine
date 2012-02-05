@@ -1,6 +1,9 @@
 /**
  * \file    pizKohonenMap.h
- * \details Thanks : Jean-philippe Rennard.
+ * \details Thanks : Jean-philippe Rennard. \n 
+ * \li      http://www.rennard.org/ \n
+ * \li      http://en.wikipedia.org/wiki/Self-organizing_map \n
+ * 
  * \author  Jean Sapristi
  * \date    23 janvier 2012
  */

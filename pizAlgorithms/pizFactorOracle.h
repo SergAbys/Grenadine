@@ -4,6 +4,7 @@
  *              Cyril Allauzen, Arnaud Lefebvre et Thierry Lecroq. \n
  * \li          http://www-igm.univ-mlv.fr/~lecroq/articles/awoca2000.pdf \n
  * \li          http://www.lsi.upc.edu/~marias/teaching/bom.pdf \n
+ * \li          http://en.wikipedia.org/wiki/Factor_oracle
  *
  * \author      Jean Sapristi
  * \date        31 janvier 2012
@@ -91,9 +92,8 @@ typedef struct _PIZFactorOracleNode {
     
 /**
  * \brief   The factor oracle.
- * \details Implemented with dynamic array of nodes ; 
-            For each node, arcs are stored in dynamic arrays too.
-            For efficiency node's dynamic arrays are created on \a first query and keep in memory
+ * \details Implemented with dynamic array of nodes ; For each node, arcs are stored in dynamic arrays too.
+            Node's dynamic arrays are created on \a first query and keep in memory 
             until pizFactorOracleFree() is called.
  */
      

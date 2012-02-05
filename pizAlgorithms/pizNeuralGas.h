@@ -1,6 +1,9 @@
 /**
  * \file    pizNeuralGas.h
- * \details Thanks : Jim Holmström.
+ * \details Thanks : Jim Holmström. \n
+ * \li      http://www.booru.net/download/MasterThesisProj.pdf \n
+ * \li      http://en.wikipedia.org/wiki/Neural_gas
+ *
  * \author  Jean Sapristi
  * \date    23 janvier 2012
  */

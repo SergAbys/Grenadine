@@ -1,6 +1,11 @@
 /**
  * \file    pizFiniteState.h
- * \details Kinda finite state automaton. 
+ * \details A \em kinda finite state automaton is :
+ * \li      One value per node (not in arcs).
+ * \li      Last value for each new sequence is a terminal state.
+ * \li      Nodes are crossing-over by equal values, 
+ *          until the population is collapsed under a given threshold.
+ * \li      Terminal states increase the probability of playback head's jump.
  * \author  Jean Sapristi
  * \date    23 janvier 2012
  * \ingroup algorithms
@@ -57,11 +62,15 @@
  
 typedef struct _PIZFiniteStateNode {
     long            value;                      /*!< Value of the node. */
-    bool            final;                      /*!< Value of the node. */
-    PIZItemset128   parents;
-    PIZItemset128   childs;
+    bool            final;                      /*!< Terminal node state. */
+    PIZItemset128   parents;                    /*!< Arcs (indexes as bit field). */
+    PIZItemset128   childs;                     /*!< Arcs (indexes as bit field). */
     } PIZFiniteStateNode;
-    
+
+/**
+ * \brief   The \em kinda finite state automaton.  
+ */
+ 
 typedef struct _PIZFiniteState {
     long                count;
     long                shuttle;
