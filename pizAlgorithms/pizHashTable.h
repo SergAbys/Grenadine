@@ -78,7 +78,8 @@ typedef struct _PIZHashTableElement {
 
 /**
  * \brief   The hashtable.
- * \details Simple hashtable (array of linklists) with \c long keys.
+ * \details Simple hashtable with \c long keys. 
+ *          Implemented with an array of linklists.
  * \remark  To obtain the hash value : index =  key % size.
  */
  
@@ -104,13 +105,13 @@ PIZ_START_C_LINKAGE
  * \return  A pointer to the new hashtable.
  * \remark	The following shows how to create a hashtable.  
  * \code
- *      long            size = 67;
- *      PIZHashTable    *myHashtab = NULL;
- *           
- *      myHashtab = pizHashTableNew (1, &size);
- *      myHashtab = pizHashTableNew (0, NULL);  // default value.
+ * long            size = 67;
+ * PIZHashTable    *myHashtab = NULL;
  *
- *	\endcode
+ * myHashtab = pizHashTableNew (1, &size);
+ * myHashtab = pizHashTableNew (0, NULL);  // default value.
+ *
+ * \endcode
  */
 PIZHashTable *pizHashTableNew (long argc, long *argv);
 

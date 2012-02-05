@@ -1,7 +1,9 @@
 /**
  * \file    pizFiniteState.h
+ * \details Kinda finite state automaton. 
  * \author  Jean Sapristi
  * \date    23 janvier 2012
+ * \ingroup algorithms
  */
 
 /*
@@ -49,9 +51,13 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief Finite state element.  
+ */
+ 
 typedef struct _PIZFiniteStateNode {
-    long            value;
-    bool            final;
+    long            value;                      /*!< Value of the node. */
+    bool            final;                      /*!< Value of the node. */
     PIZItemset128   parents;
     PIZItemset128   childs;
     } PIZFiniteStateNode;

@@ -73,7 +73,8 @@ typedef struct _PIZBoundedHashTableElement {
     
 /**
  * \brief   The bounded hashtable.
- * \details Bounded hashtable (array of dynamic arrays & pool) with \c long keys.
+ * \details Bounded hashtable with \c long keys.
+ *          Implemented with an array of dynamic arrays, and a pre-allocated pool of elements.
  * \remark  To obtain the hash value : index =  key % size.
  */
  
@@ -83,7 +84,7 @@ typedef struct _PIZBoundedHashTable {
     long                        hashSize;           /*!< Number of dynamic arrays in the hashtable. */
     long                        poolSize;           /*!< Maximum number of items in the hashtable. */
     PIZBoundedStack             *ticketMachine;     /*!< Ticket machine for pool management. */
-    PIZBoundedHashTableElement  *pool;              /*!< Elements pool. */
+    PIZBoundedHashTableElement  *pool;              /*!< Pool of elements. */
     PIZGrowingArray             **hashTable;        /*!< Pointer to the hashtable's array of dynamic arrays. */
     } PIZBoundedHashTable;
 
@@ -103,13 +104,13 @@ PIZ_START_C_LINKAGE
  * \return  A pointer to the new bounded hashtable.
  * \remark	The following shows how to create a bounded hashtable.  
  * \code
- *      long                    args[2] = {59, 100};
- *      PIZBoundedHashTable     *myHashtab = NULL;
- *           
- *      myHashtab = pizBoundedHashTableNew (2, args);  
- *      myHashtab = pizBoundedHashTableNew (0, NULL);  // default values.
+ * long                    args[2] = {59, 100};
+ * PIZBoundedHashTable     *myHashtab = NULL;
  *
- *	\endcode
+ * myHashtab = pizBoundedHashTableNew (2, args);  
+ * myHashtab = pizBoundedHashTableNew (0, NULL);  // default values.
+ *
+ * \endcode
  */
 PIZBoundedHashTable *pizBoundedHashTableNew (long argc, long *argv);
 

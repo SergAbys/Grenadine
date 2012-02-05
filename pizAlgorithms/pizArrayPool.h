@@ -2,6 +2,7 @@
  * \file    pizArrayPool.h
  * \author  Jean Sapristi
  * \date    15 janvier 2012
+ * \remark  Multithreaded with single global mutex.
  * \ingroup structures
  */
  
@@ -59,7 +60,8 @@
 
 /**
  * \brief   The pool of dynamic arrays.
- * \warning It is currently a very simple implementation, and should be improved ;
+ * \details Implemented with a linklist.
+ * \warning It is currently a very simple approach, and should be improved ;
  *          If an array is not released, the pool will grow dramatically for each query.
  */
  
@@ -86,13 +88,13 @@ PIZ_START_C_LINKAGE
  * \return  A pointer to the new pool of dynamic arrays.
  * \remark	The following shows how to create a pool of dynamic arrays.  
  * \code
- *      long            args[2] = {4, 32};
- *      PIZArrayPool    *pool = NULL;
- *           
- *      pool = pizArrayPoolNew (2, args);  
- *      pool = pizArrayPoolNew (0, NULL);  // default values.
+ * long            args[2] = {4, 32};
+ * PIZArrayPool    *pool = NULL;
  *
- *	\endcode
+ * pool = pizArrayPoolNew (2, args);  
+ * pool = pizArrayPoolNew (0, NULL);  // default values.
+ *
+ * \endcode
  */
 PIZArrayPool *pizArrayPoolNew (long argc, long *argv);
 

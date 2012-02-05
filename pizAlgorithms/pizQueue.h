@@ -51,7 +51,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief Linklist element.
+ * \brief Queue element.
  */
  
 typedef struct _PIZQueueElement {
@@ -61,7 +61,8 @@ typedef struct _PIZQueueElement {
     } PIZQueueElement;
 
 /**
- * \brief The FIFO queue (linklist).
+ * \brief   The queue.
+ * \details Implemented with a linklist.
  */
  
 typedef struct _PIZQueue {

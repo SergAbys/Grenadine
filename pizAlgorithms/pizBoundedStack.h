@@ -51,7 +51,8 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief The bounded stack (array).
+ * \brief   The bounded stack.
+ * \details Implemented with an array.
  */
  
 typedef struct _PIZBoundedStack {

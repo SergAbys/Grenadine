@@ -51,7 +51,8 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief The FIFO bounded queue (array).
+ * \brief   The bounded queue.
+ * \details Implemented with an array.
  */
  
 typedef struct _PIZBoundedQueue {

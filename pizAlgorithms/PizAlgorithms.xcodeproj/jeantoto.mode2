@@ -255,7 +255,7 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>16</integer>
+											<integer>11</integer>
 											<integer>4</integer>
 											<integer>1</integer>
 											<integer>0</integer>
@@ -285,7 +285,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>106 181 695 597 0 0 1280 778 </string>
+								<string>342 108 695 597 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -422,8 +422,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D98D3114DDA0A500F7F1D2</string>
-				<string>96D98D3214DDA0A500F7F1D2</string>
+				<string>96D5482514DEC77600A8D828</string>
+				<string>96D5482614DEC77600A8D828</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -456,10 +456,11 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/pizAlgorithms/PizAlgorithms.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>106 181 695 597 0 0 1280 778 </string>
+	<string>342 108 695 597 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -673,7 +674,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D98D0014DD9D0000F7F1D2</string>
+				<string>96D5482714DEC77600A8D828</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -715,8 +716,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {325, 208}}</string>
-											<string>{{325, 0}, {392, 208}}</string>
+											<string>{{0, 0}, {324, 208}}</string>
+											<string>{{324, 0}, {393, 208}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -779,14 +780,14 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D54069F1CE1000CFCEE</string>
-				<string>96D501B514B30DE900D400A4</string>
+				<string>96A5AB4C14DE955600AF5ED1</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>96D501B614B30DE900D400A4</string>
-				<string>96D501B714B30DE900D400A4</string>
-				<string>96D501B814B30DE900D400A4</string>
-				<string>96D501B914B30DE900D400A4</string>
-				<string>96D501BA14B30DE900D400A4</string>
-				<string>96D501BB14B30DE900D400A4</string>
+				<string>96A5AB4D14DE955600AF5ED1</string>
+				<string>96A5AB4E14DE955600AF5ED1</string>
+				<string>96A5AB4F14DE955600AF5ED1</string>
+				<string>96A5AB5014DE955600AF5ED1</string>
+				<string>96A5AB5114DE955600AF5ED1</string>
+				<string>96A5AB5214DE955600AF5ED1</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debug</string>

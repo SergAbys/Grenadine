@@ -1,7 +1,7 @@
 /*
  * \file    pizFactorOracle.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -50,8 +50,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_GROWING_ARRAY_INIT_SIZE     4
-#define PIZ_FACTOR_ORACLE_INIT_SIZE     32
+#define PIZ_GROWING_ARRAY_INIT_SIZE         4
+#define PIZ_FACTOR_ORACLE_INIT_SIZE         32
+
+#define PIZ_DEFAULT_STRAIGHT_RATIO          0.25
+#define PIZ_DEFAULT_BACKWARD_THRESHOLD      2
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -77,8 +80,8 @@ PIZFactorOracle *pizFactorOracleNew (long argc, long *argv)
                             x->peak                 = 1;
                             x->index                = 1;
                             x->shuttle              = 0;
-                            x->backwardThreshold    = PIZ_FACTOR_ORACLE_DEFAULT_BACKWARD_THRESHOLD;
-                            x->straightRatio        = PIZ_FACTOR_ORACLE_DEFAULT_STRAIGHT_RATIO;
+                            x->backwardThreshold    = PIZ_DEFAULT_BACKWARD_THRESHOLD;
+                            x->straightRatio        = PIZ_DEFAULT_STRAIGHT_RATIO;
                     
                             x->nodes[0].referTo                 = -1;
                             x->nodes[0].lengthRepeatedSuffix    = 0;

@@ -165,20 +165,20 @@ PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr);
  * \return  An error code.
  * \remark	The following shows how to traverse a linklist using cache optimization.  
  * \code
- *      PIZNote *note       = NULL;
- *      PIZNote *nextNote   = NULL;
- *           
- *      pizLinklistPtrAtIndex (linklist, 0, (void **)&note);
- *           
- *      while (note) {
- *          pizLinklistNextByPtr (linklist, (void *)note, (void **)&nextNote);
+ * PIZNote *note       = NULL;
+ * PIZNote *nextNote   = NULL;
  *
- *          //pizLinklistRemoveByPtr (linklist, (void *)note)); 
- *                   
- *          note = nextNote;
- *      }
+ * pizLinklistPtrAtIndex (linklist, 0, (void **)&note);
  *
- *	\endcode
+ * while (note) {
+ *      pizLinklistNextByPtr (linklist, (void *)note, (void **)&nextNote);
+ *
+ *      //pizLinklistRemoveByPtr (linklist, (void *)note)); 
+ *
+ *      note = nextNote;
+ * }
+ *
+ * \endcode
  */
 PIZError pizLinklistNextByPtr (PIZLinklist *x, void *ptr, void **nextPtr);
 
