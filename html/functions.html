@@ -73,13 +73,14 @@ Here is a list of all documented struct and union fields with links to the struc
 : <a class="el" href="struct_p_i_z_finite_state_node.html#dba716f2eb4b07f4781ba95bf8b8404f">PIZFiniteStateNode</a>
 , <a class="el" href="struct_p_i_z_galois_lattice_concept.html#4e0d73623b0e30ee22003142af4712e1">PIZGaloisLatticeConcept</a>
 <li>count
-: <a class="el" href="struct_p_i_z_finite_state.html#63931e1adf2c01ac1a7b3ff130c1312e">PIZFiniteState</a>
+: <a class="el" href="struct_p_i_z_galois_lattice.html#9e6763a8977288a87321e347e6642ca3">PIZGaloisLattice</a>
+, <a class="el" href="struct_p_i_z_finite_state.html#63931e1adf2c01ac1a7b3ff130c1312e">PIZFiniteState</a>
 , <a class="el" href="struct_p_i_z_bounded_queue.html#b5559516ed0868c7983dd540c212d7e4">PIZBoundedQueue</a>
 , <a class="el" href="struct_p_i_z_bounded_hash_table.html#e2154be6d7e5e6bc6507809069685ccc">PIZBoundedHashTable</a>
-, <a class="el" href="struct_p_i_z_hash_table.html#12d1176baa26bc4da5cecb08a567ff17">PIZHashTable</a>
+, <a class="el" href="struct_p_i_z_kohonen_map.html#29dc87d0b634405847e7df9eeb9e33fa">PIZKohonenMap</a>
 , <a class="el" href="struct_p_i_z_queue.html#21d87bbc044b79f327e0b471f60bc910">PIZQueue</a>
 , <a class="el" href="struct_p_i_z_linklist.html#24148896c309c5643aa46ff2cff2afb0">PIZLinklist</a>
-, <a class="el" href="struct_p_i_z_galois_lattice.html#9e6763a8977288a87321e347e6642ca3">PIZGaloisLattice</a>
+, <a class="el" href="struct_p_i_z_hash_table.html#12d1176baa26bc4da5cecb08a567ff17">PIZHashTable</a>
 </ul>
 <h3><a class="anchor" name="index_f">- f -</a></h3><ul>
 <li>final
@@ -138,12 +139,16 @@ Here is a list of all documented struct and union fields with links to the struc
 : <a class="el" href="struct_p_i_z_finite_state.html#9f8690c35fe7f7aa18004c72dffb57f2">PIZFiniteState</a>
 </ul>
 <h3><a class="anchor" name="index_m">- m -</a></h3><ul>
+<li>map
+: <a class="el" href="struct_p_i_z_kohonen_map.html#194a110c2243b9ccb88f5677ac7377d9">PIZKohonenMap</a>
 <li>mapByCardinal
 : <a class="el" href="struct_p_i_z_galois_lattice.html#b3128bb299fa67f1fcc63ae31adef00f">PIZGaloisLattice</a>
 <li>mapByCardinalPeak
 : <a class="el" href="struct_p_i_z_galois_lattice.html#bb0b1bfd1f38fac201a97e47bf742a71">PIZGaloisLattice</a>
 <li>mapByValue
 : <a class="el" href="struct_p_i_z_finite_state.html#0ac9ee1f1d0221230d5725b092dd3a4d">PIZFiniteState</a>
+<li>mapSize
+: <a class="el" href="struct_p_i_z_kohonen_map.html#b8ddd07df304f96cab20700e408e9bdc">PIZKohonenMap</a>
 </ul>
 <h3><a class="anchor" name="index_n">- n -</a></h3><ul>
 <li>needToMakeMap
@@ -180,6 +185,8 @@ Here is a list of all documented struct and union fields with links to the struc
 , <a class="el" href="struct_p_i_z_linklist_element.html#2a369eb2e600bca6cf497427f5517c29">PIZLinklistElement</a>
 </ul>
 <h3><a class="anchor" name="index_r">- r -</a></h3><ul>
+<li>range
+: <a class="el" href="struct_p_i_z_kohonen_map.html#072d43695d7387865e37f35761be32a8">PIZKohonenMap</a>
 <li>referTo
 : <a class="el" href="struct_p_i_z_factor_oracle_node.html#0434e8f54820ff85eee014f6d3a5fb73">PIZFactorOracleNode</a>
 <li>retain
@@ -196,6 +203,8 @@ Here is a list of all documented struct and union fields with links to the struc
 , <a class="el" href="struct_p_i_z_hash_table.html#e6d93de0962d91a149fb2f80becef40c">PIZHashTable</a>
 <li>stack
 : <a class="el" href="struct_p_i_z_bounded_stack.html#87310107ae01cee6b9eb932a01dd7ed2">PIZBoundedStack</a>
+<li>step
+: <a class="el" href="struct_p_i_z_kohonen_map.html#d6ff61ca529a7cd40cf10acfa8a60c73">PIZKohonenMap</a>
 <li>stock
 : <a class="el" href="struct_p_i_z_finite_state.html#7584571dca2489a3cdf5d282df2b2142">PIZFiniteState</a>
 , <a class="el" href="struct_p_i_z_galois_lattice.html#3aadf25dadac86517f787182fe8ce685">PIZGaloisLattice</a>
@@ -218,21 +227,25 @@ Here is a list of all documented struct and union fields with links to the struc
 <li>thresholdToMergeNodes
 : <a class="el" href="struct_p_i_z_finite_state.html#9772fd7e38bd12fba4105d10afd91809">PIZFiniteState</a>
 <li>ticketMachine
-: <a class="el" href="struct_p_i_z_galois_lattice.html#8b675986b6e159e9048161603d3d5186">PIZGaloisLattice</a>
-, <a class="el" href="struct_p_i_z_finite_state.html#3d491f3a88409fae601d850524de354d">PIZFiniteState</a>
+: <a class="el" href="struct_p_i_z_finite_state.html#3d491f3a88409fae601d850524de354d">PIZFiniteState</a>
 , <a class="el" href="struct_p_i_z_bounded_hash_table.html#5506fd9fc5afefee37c78f54d6996f6e">PIZBoundedHashTable</a>
+, <a class="el" href="struct_p_i_z_galois_lattice.html#8b675986b6e159e9048161603d3d5186">PIZGaloisLattice</a>
+<li>training
+: <a class="el" href="struct_p_i_z_kohonen_map.html#7b7eb25110d39fe0d42f10d7108c22c7">PIZKohonenMap</a>
 </ul>
 <h3><a class="anchor" name="index_v">- v -</a></h3><ul>
 <li>value
 : <a class="el" href="struct_p_i_z_finite_state_node.html#420fe56034051b141fab499201a442a3">PIZFiniteStateNode</a>
 , <a class="el" href="struct_p_i_z_queue_element.html#12c8cc7bd4779915b28a26d8487edfa6">PIZQueueElement</a>
 <li>values
-: <a class="el" href="struct_p_i_z_bounded_stack.html#0bac0ee224677c240142aee4433d2f04">PIZBoundedStack</a>
+: <a class="el" href="struct_p_i_z_growing_array.html#6bdb59aaa56127227c81476c49c4f3eb">PIZGrowingArray</a>
+, <a class="el" href="struct_p_i_z_bounded_stack.html#0bac0ee224677c240142aee4433d2f04">PIZBoundedStack</a>
 , <a class="el" href="struct_p_i_z_bounded_queue.html#f782d4a92230a25f6aebb9d9445b31ab">PIZBoundedQueue</a>
-, <a class="el" href="struct_p_i_z_growing_array.html#6bdb59aaa56127227c81476c49c4f3eb">PIZGrowingArray</a>
+<li>vectorSize
+: <a class="el" href="struct_p_i_z_kohonen_map.html#e906d28e3111882a25151b79cbfffb44">PIZKohonenMap</a>
 </ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 16:31:11 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 18:21:27 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

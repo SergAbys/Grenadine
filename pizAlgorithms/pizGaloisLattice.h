@@ -82,7 +82,7 @@ typedef struct _PIZGaloisLatticeConcept {
     } PIZGaloisLatticeConcept;
 
 /**
- * \brief   The galois lattice. 
+ * \brief   The Galois lattice. 
  * \details When the number of concepts reach a threshold, 
  *          concepts are randomly killed to keep the population under.
  * \remark  Implemented as an array of dynamic arrays, 

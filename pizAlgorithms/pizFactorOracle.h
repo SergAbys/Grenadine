@@ -179,6 +179,9 @@ PIZError pizFactorOracleProceed (PIZFactorOracle *x, long argc, long *argv);
  */
 long pizFactorOracleCount (const PIZFactorOracle *x);
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 /**
  * \brief   Set the backward threshold of the factor oracle.
  * \details This is the minimum size of repeated sequence required to go backward. 
@@ -211,9 +214,6 @@ long pizFactorOracleBackwardThreshold (const PIZFactorOracle *x);
  * \return  The straight ratio.
  */
 double pizFactorOracleStraightRatio (const PIZFactorOracle *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 
 /**
  * \brief   Encode a node to a dynamic array.

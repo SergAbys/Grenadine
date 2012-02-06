@@ -25,19 +25,470 @@
 <h1>pizKohonenMap.h File Reference</h1><code>#include &quot;<a class="el" href="piz_data_structures_8h.html">pizDataStructures.h</a>&quot;</code><br>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Data Structures</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The Kohonen map.  <a href="struct_p_i_z_kohonen_map.html#_details">More...</a><br></td></tr>
+<tr><td colspan="2"><br><h2>Functions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_kohonen_map_8h.html#47be325caeb77c0333cc84413da356d2">pizKohonenMapNew</a> (long argc, long *argv)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create the Kohonen map.  <a href="#47be325caeb77c0333cc84413da356d2"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_kohonen_map_8h.html#9d9c2fc856d26166ef859c483fecf4d9">pizKohonenMapFree</a> (<a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *x)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Free the Kohonen map.  <a href="#9d9c2fc856d26166ef859c483fecf4d9"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_kohonen_map_8h.html#3a2715901cd9bbd830b11a38151092d5">pizKohonenMapAdd</a> (<a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *x, long argc, long *argv)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Add values to the Kohonen map.  <a href="#3a2715901cd9bbd830b11a38151092d5"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_kohonen_map_8h.html#1263758996daa1210995c82715931b5a">pizKohonenMapClear</a> (<a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *x)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clear the Kohonen map.  <a href="#1263758996daa1210995c82715931b5a"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_kohonen_map_8h.html#e87a097aeb2132585800208931f66631">pizKohonenMapProceed</a> (const <a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *x, long argc, long *argv)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill a given array with Kohonen map values.  <a href="#e87a097aeb2132585800208931f66631"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_kohonen_map_8h.html#0e829b6169a16b4f746671679c59eb77">pizKohonenMapCount</a> (const <a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *x)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the number of training currently done.  <a href="#0e829b6169a16b4f746671679c59eb77"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_kohonen_map_8h.html#6dff63a383fecd33bac23cda34ae0c47">pizKohonenMapSetRange</a> (<a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *x, long n)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the influence range of the Kohonen map.  <a href="#6dff63a383fecd33bac23cda34ae0c47"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_kohonen_map_8h.html#24d12c60d48479dcf13c34f105f44393">pizKohonenMapSetTraining</a> (<a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *x, long n)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the number of training planned for the Kohonen map.  <a href="#24d12c60d48479dcf13c34f105f44393"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_kohonen_map_8h.html#4d4609d44635010fa503323972324bce">pizKohonenMapSetStep</a> (<a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *x, double f)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set the training step of the Kohonen map.  <a href="#4d4609d44635010fa503323972324bce"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_kohonen_map_8h.html#f351712891e47e1d12327b64e080739f">pizKohonenMapRange</a> (const <a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *x)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the influence range of the Kohonen map.  <a href="#f351712891e47e1d12327b64e080739f"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_kohonen_map_8h.html#392e3ba73f80d09f8a524bd61c074579">pizKohonenMapTraining</a> (const <a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *x)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the number of training planned for the Kohonen map.  <a href="#392e3ba73f80d09f8a524bd61c074579"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_kohonen_map_8h.html#5c3668590066fedf2074f664d2d0d452">pizKohonenMapStep</a> (const <a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *x)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the training step of the Kohonen map.  <a href="#5c3668590066fedf2074f664d2d0d452"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Thanks : Jean-philippe Rennard. <br>
  <ul>
-<li><a href="http://www.rennard.org/">http://www.rennard.org/</a> <br>
- </li>
 <li><a href="http://en.wikipedia.org/wiki/Self-organizing_map">http://en.wikipedia.org/wiki/Self-organizing_map</a> <br>
 </li>
 </ul>
 <dl class="author" compact><dt><b>Author:</b></dt><dd>Jean Sapristi </dd></dl>
-<dl class="date" compact><dt><b>Date:</b></dt><dd>23 janvier 2012 </dd></dl>
+<dl class="date" compact><dt><b>Date:</b></dt><dd>31 janvier 2012 </dd></dl>
+<hr><h2>Function Documentation</h2>
+<a class="anchor" name="47be325caeb77c0333cc84413da356d2"></a><!-- doxytag: member="pizKohonenMap.h::pizKohonenMapNew" ref="47be325caeb77c0333cc84413da356d2" args="(long argc, long *argv)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a>* pizKohonenMapNew           </td>
+          <td>(</td>
+          <td class="paramtype">long&nbsp;</td>
+          <td class="paramname"> <em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long *&nbsp;</td>
+          <td class="paramname"> <em>argv</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 16:31:11 2012 for Grenadine by&nbsp;
+<div class="memdoc">
+
+<p>
+Create the Kohonen map. 
+<p>
+The function accepts two arguments, the size of the map, and the size of the vectors. For the map, minimum is 1, maximum is 100, default is 20. For the vectors, minimum is 1, maximum is 256, default is 4. In case of failure the pointer is NULL. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>argc</em>&nbsp;</td><td>The number of arguments. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>argv</em>&nbsp;</td><td>A pointer yo arguments. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>A pointer to the new Kohonen map. </dd></dl>
+<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The following shows how to create a Kohonen map. <div class="fragment"><pre class="fragment"> <span class="keywordtype">long</span> args[2] = {50, 8};
+
+ <a class="code" href="struct_p_i_z_kohonen_map.html" title="The Kohonen map.">PIZKohonenMap</a> *map = pizKohonenMapNew (2, &amp;args);
+ <a class="code" href="struct_p_i_z_kohonen_map.html" title="The Kohonen map.">PIZKohonenMap</a> *map = pizKohonenMapNew (0, NULL); <span class="comment">// default values</span>
+</pre></div> </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="9d9c2fc856d26166ef859c483fecf4d9"></a><!-- doxytag: member="pizKohonenMap.h::pizKohonenMapFree" ref="9d9c2fc856d26166ef859c483fecf4d9" args="(PIZKohonenMap *x)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void pizKohonenMapFree           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *&nbsp;</td>
+          <td class="paramname"> <em>x</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Free the Kohonen map. 
+<p>
+It is safe to pass NULL pointer. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A Pointer. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="3a2715901cd9bbd830b11a38151092d5"></a><!-- doxytag: member="pizKohonenMap.h::pizKohonenMapAdd" ref="3a2715901cd9bbd830b11a38151092d5" args="(PIZKohonenMap *x, long argc, long *argv)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a> pizKohonenMapAdd           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *&nbsp;</td>
+          <td class="paramname"> <em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&nbsp;</td>
+          <td class="paramname"> <em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long *&nbsp;</td>
+          <td class="paramname"> <em>argv</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Add values to the Kohonen map. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A valid pointer. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>argc</em>&nbsp;</td><td>The number of values. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>argv</em>&nbsp;</td><td>A pointer to the values. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>An error code. </dd></dl>
+<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The Kohonen map continue to learn even when the number of training planned is reached (with last training parameters kept). </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="1263758996daa1210995c82715931b5a"></a><!-- doxytag: member="pizKohonenMap.h::pizKohonenMapClear" ref="1263758996daa1210995c82715931b5a" args="(PIZKohonenMap *x)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void pizKohonenMapClear           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *&nbsp;</td>
+          <td class="paramname"> <em>x</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Clear the Kohonen map. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A valid pointer. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="e87a097aeb2132585800208931f66631"></a><!-- doxytag: member="pizKohonenMap.h::pizKohonenMapProceed" ref="e87a097aeb2132585800208931f66631" args="(const PIZKohonenMap *x, long argc, long *argv)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a> pizKohonenMapProceed           </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *&nbsp;</td>
+          <td class="paramname"> <em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&nbsp;</td>
+          <td class="paramname"> <em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long *&nbsp;</td>
+          <td class="paramname"> <em>argv</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Fill a given array with Kohonen map values. 
+<p>
+<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>A node is randomly drawn, and the array filled with values from the vector. If the array is longer than the vector, values are copied again. </dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>argc</em>&nbsp;</td><td>Number of values to proceed. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>argv</em>&nbsp;</td><td>Pointer to the array to fill. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>An error code. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="0e829b6169a16b4f746671679c59eb77"></a><!-- doxytag: member="pizKohonenMap.h::pizKohonenMapCount" ref="0e829b6169a16b4f746671679c59eb77" args="(const PIZKohonenMap *x)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long pizKohonenMapCount           </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *&nbsp;</td>
+          <td class="paramname"> <em>x</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Get the number of training currently done. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A valid pointer. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>The number of training. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="6dff63a383fecd33bac23cda34ae0c47"></a><!-- doxytag: member="pizKohonenMap.h::pizKohonenMapSetRange" ref="6dff63a383fecd33bac23cda34ae0c47" args="(PIZKohonenMap *x, long n)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void pizKohonenMapSetRange           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *&nbsp;</td>
+          <td class="paramname"> <em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&nbsp;</td>
+          <td class="paramname"> <em>n</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Set the influence range of the Kohonen map. 
+<p>
+Default is 10. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A valid pointer. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>n</em>&nbsp;</td><td>The influence range. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="24d12c60d48479dcf13c34f105f44393"></a><!-- doxytag: member="pizKohonenMap.h::pizKohonenMapSetTraining" ref="24d12c60d48479dcf13c34f105f44393" args="(PIZKohonenMap *x, long n)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void pizKohonenMapSetTraining           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *&nbsp;</td>
+          <td class="paramname"> <em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&nbsp;</td>
+          <td class="paramname"> <em>n</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Set the number of training planned for the Kohonen map. 
+<p>
+Default is 60. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A valid pointer. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>n</em>&nbsp;</td><td>The number of training. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="4d4609d44635010fa503323972324bce"></a><!-- doxytag: member="pizKohonenMap.h::pizKohonenMapSetStep" ref="4d4609d44635010fa503323972324bce" args="(PIZKohonenMap *x, double f)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void pizKohonenMapSetStep           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *&nbsp;</td>
+          <td class="paramname"> <em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&nbsp;</td>
+          <td class="paramname"> <em>f</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Set the training step of the Kohonen map. 
+<p>
+Default is 1. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A valid pointer. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>n</em>&nbsp;</td><td>The training step. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="f351712891e47e1d12327b64e080739f"></a><!-- doxytag: member="pizKohonenMap.h::pizKohonenMapRange" ref="f351712891e47e1d12327b64e080739f" args="(const PIZKohonenMap *x)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long pizKohonenMapRange           </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *&nbsp;</td>
+          <td class="paramname"> <em>x</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Get the influence range of the Kohonen map. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A valid pointer. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>The influence range. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="392e3ba73f80d09f8a524bd61c074579"></a><!-- doxytag: member="pizKohonenMap.h::pizKohonenMapTraining" ref="392e3ba73f80d09f8a524bd61c074579" args="(const PIZKohonenMap *x)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long pizKohonenMapTraining           </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *&nbsp;</td>
+          <td class="paramname"> <em>x</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Get the number of training planned for the Kohonen map. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A valid pointer. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>The number of training planned. </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="5c3668590066fedf2074f664d2d0d452"></a><!-- doxytag: member="pizKohonenMap.h::pizKohonenMapStep" ref="5c3668590066fedf2074f664d2d0d452" args="(const PIZKohonenMap *x)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double pizKohonenMapStep           </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *&nbsp;</td>
+          <td class="paramname"> <em>x</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Get the training step of the Kohonen map. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A valid pointer. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>The training step. </dd></dl>
+
+</div>
+</div><p>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 18:21:27 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>
