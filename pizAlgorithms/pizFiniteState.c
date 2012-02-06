@@ -1,7 +1,7 @@
 /*
  * \file    pizFiniteState.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -52,6 +52,7 @@
 
 #define PIZ_STOCK_SIZE                          (PIZ_ITEMSET128_SIZE_IN_BIT)
 #define PIZ_ALPHABET_SIZE                       128
+
 #define PIZ_BOUNDED_QUEUE_SIZE                  4
 #define PIZ_INCREMENT_JUMP_CHANCE               1   
 #define PIZ_INCREMENT_FINAL_JUMP_CHANCE         5   
@@ -70,69 +71,66 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
         {
             long err = PIZ_GOOD;
             
-            if (x->stock = (PIZFiniteStateNode *)malloc 
-                (PIZ_STOCK_SIZE * sizeof(PIZFiniteStateNode)))
-                {
-                    x->count                    = 0;
-                    x->shuttle                  = -1;
-                    x->jumpChance               = 0;
-                    x->thresholdToMergeNodes    = PIZ_DEFAULT_THRESHOLD_TO_MERGE_NODES;
+            if (x->stock = (PIZFiniteStateNode *)malloc (PIZ_STOCK_SIZE * sizeof(PIZFiniteStateNode))) {
+                x->count                    = 0;
+                x->shuttle                  = -1;
+                x->jumpChance               = 0;
+                x->thresholdToMergeNodes    = PIZ_DEFAULT_THRESHOLD_TO_MERGE_NODES;
+                
+                srand ((unsigned int)time(NULL));
                     
-                    srand ((unsigned int)time(NULL));
+                if (argc && ((argv[0] > 0)  && (argv[0] <= PIZ_MAXIMUM_THRESHOLD_TO_MERGE_NODES))) {
+                        x->thresholdToMergeNodes = argv[0];
+                    }
+                
+                if (x->ticketMachine = pizBoundedStackNew (PIZ_STOCK_SIZE))
+                    {
+                        long i;
                         
-                    if (argc && ((argv[0] > 0)  && (argv[0] <= PIZ_MAXIMUM_THRESHOLD_TO_MERGE_NODES))) {
-                            x->thresholdToMergeNodes = argv[0];
-                        }
+                        for (i = (PIZ_STOCK_SIZE - 1); i >= 0; i--) {
+                                pizBoundedStackPush (x->ticketMachine, i);
+                            }
+                    }
+                else
+                    {
+                        err = PIZ_MEMORY;
+                    }
+                
+                if (x->lottery = (long *)malloc ((MAX (PIZ_ALPHABET_SIZE, PIZ_STOCK_SIZE))* sizeof(long)))
+                    {
+                        x->lotteryIndex = 0;
+                    }
+                else
+                    {
+                        err = PIZ_MEMORY;
+                    }
                     
-                    if (x->ticketMachine = pizBoundedStackNew (PIZ_STOCK_SIZE))
-                        {
-                            long i;
-                            
-                            for (i = (PIZ_STOCK_SIZE - 1); i >= 0; i--) {
-                                    pizBoundedStackPush (x->ticketMachine, i);
-                                }
-                        }
-                    else
-                        {
-                            err = PIZ_MEMORY;
-                        }
-                    
-                    if (x->lottery = (long *)malloc 
-                        ((MAX (PIZ_ALPHABET_SIZE, PIZ_STOCK_SIZE))* sizeof(long)))
-                        {
-                            x->lotteryIndex = 0;
-                        }
-                    else
-                        {
-                            err = PIZ_MEMORY;
-                        }
+                if (x->mapByValue = (PIZBoundedQueue **)malloc (PIZ_ALPHABET_SIZE * sizeof(PIZBoundedQueue *)))
+                    {
+                        long i;
                         
-                    if (x->mapByValue = (PIZBoundedQueue **)malloc 
-                        (PIZ_ALPHABET_SIZE * sizeof(PIZBoundedQueue *)))
-                        {
-                            long i;
-                            
-                            for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
+                        for (i = 0; i < PIZ_ALPHABET_SIZE; i++) 
+                            {
                                 if (!(x->mapByValue[i] = pizBoundedQueueNew (PIZ_BOUNDED_QUEUE_SIZE))) {
                                         err = PIZ_MEMORY;
                                     }
-                                }
-                        }
-                    else
-                        {
-                            err = PIZ_MEMORY;
-                        }
+                            }
+                    }
+                else
+                    {
+                        err = PIZ_MEMORY;
+                    }
+                
+                if (err) 
+                    {
+                        pizFiniteStateFree (x);
+                        x = NULL;
+                    }
                     
-                    if (err) {
-                            pizFiniteStateFree (x);
-                            x = NULL;
-                        }
-                }
-            else
-                {
-                    free (x);
-                    x = NULL;
-                }
+            } else {
+                free (x);
+                x = NULL;
+            }
         }
     
     return x;
@@ -195,40 +193,33 @@ PIZError pizFiniteStateAdd (PIZFiniteState *x, long argc, long *argv)
                             pizItemset128Clear (&(x->stock[firstNode].parents));
                             pizItemset128Clear (&(x->stock[firstNode].childs));
                             
-                            for (i = 1; i < argc; i++)
-                                {
-                                    if (!pizBoundedStackPop (x->ticketMachine))
-                                        {
-                                            nextNode = pizBoundedStackPoppedValue (x->ticketMachine);
-                                            k = CLAMP (argv[i], 0, (PIZ_ALPHABET_SIZE - 1));
-                                                    
-                                            if (!pizBoundedQueueAppend (x->mapByValue[k], nextNode))
-                                                {
-                                                    x->count ++;
-                                                    
-                                                    x->stock[nextNode].value    = k;
-                                                    x->stock[nextNode].final    = true;
-                                                    
-                                                    pizItemset128Clear (&(x->stock[nextNode].parents));
-                                                    pizItemset128Clear (&(x->stock[nextNode].childs));
-                                                    
-                                                    pizItemset128SetAtIndex 
-                                                        (&(x->stock[nextNode].parents), firstNode);
-                                                    
-                                                    x->stock[firstNode].final   = false;
-                                                    
-                                                    pizItemset128SetAtIndex 
-                                                        (&(x->stock[firstNode].childs), nextNode);
-                                                    
-                                                    firstNode = nextNode;
-                                                }
-                                            else
-                                                {
-                                                    pizBoundedStackPush (x->ticketMachine, nextNode);
-                                                    err1 = PIZ_MEMORY;
-                                                }
-                                        }
+                            for (i = 1; i < argc; i++) {
+                                if (!pizBoundedStackPop (x->ticketMachine)) {
+                                    nextNode = pizBoundedStackPoppedValue (x->ticketMachine);
+                                    k = CLAMP (argv[i], 0, (PIZ_ALPHABET_SIZE - 1));
+                                            
+                                    if (!pizBoundedQueueAppend (x->mapByValue[k], nextNode)) {
+                                        x->count ++;
+                                        
+                                        x->stock[nextNode].value = k;
+                                        x->stock[nextNode].final = true;
+                                        
+                                        pizItemset128Clear (&(x->stock[nextNode].parents));
+                                        pizItemset128Clear (&(x->stock[nextNode].childs));
+                                        
+                                        pizItemset128SetAtIndex (&(x->stock[nextNode].parents), firstNode);
+                                        
+                                        x->stock[firstNode].final = false;
+                                        
+                                        pizItemset128SetAtIndex (&(x->stock[firstNode].childs), nextNode);
+                                        
+                                        firstNode = nextNode;
+                                    } else {
+                                        pizBoundedStackPush (x->ticketMachine, nextNode);
+                                        err1 = PIZ_MEMORY;
+                                    }
                                 }
+                            }
                         }
                     else
                         {
@@ -355,7 +346,7 @@ long pizFiniteStateCount (const PIZFiniteState *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizFiniteStateMergeNodes (PIZFiniteState *x)
+PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x)
 {
     long i;
     long err = PIZ_ERROR;

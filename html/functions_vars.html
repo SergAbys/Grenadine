@@ -34,8 +34,10 @@
       <li><a href="#index_f"><span>f</span></a></li>
       <li><a href="#index_h"><span>h</span></a></li>
       <li><a href="#index_i"><span>i</span></a></li>
+      <li><a href="#index_j"><span>j</span></a></li>
       <li><a href="#index_k"><span>k</span></a></li>
       <li><a href="#index_l"><span>l</span></a></li>
+      <li><a href="#index_m"><span>m</span></a></li>
       <li><a href="#index_n"><span>n</span></a></li>
       <li><a href="#index_p"><span>p</span></a></li>
       <li><a href="#index_r"><span>r</span></a></li>
@@ -69,6 +71,7 @@
 : <a class="el" href="struct_p_i_z_finite_state_node.html#dba716f2eb4b07f4781ba95bf8b8404f">PIZFiniteStateNode</a>
 <li>count
 : <a class="el" href="struct_p_i_z_hash_table.html#12d1176baa26bc4da5cecb08a567ff17">PIZHashTable</a>
+, <a class="el" href="struct_p_i_z_finite_state.html#63931e1adf2c01ac1a7b3ff130c1312e">PIZFiniteState</a>
 , <a class="el" href="struct_p_i_z_bounded_queue.html#b5559516ed0868c7983dd540c212d7e4">PIZBoundedQueue</a>
 , <a class="el" href="struct_p_i_z_bounded_hash_table.html#e2154be6d7e5e6bc6507809069685ccc">PIZBoundedHashTable</a>
 , <a class="el" href="struct_p_i_z_linklist.html#24148896c309c5643aa46ff2cff2afb0">PIZLinklist</a>
@@ -103,6 +106,10 @@
 : <a class="el" href="struct_p_i_z_itemset1024.html#7b3bc7f035de7028351b68f454397ee2">PIZItemset1024</a>
 , <a class="el" href="struct_p_i_z_itemset128.html#4dad1cd42c0363569eeaf43d93771c59">PIZItemset128</a>
 </ul>
+<h3><a class="anchor" name="index_j">- j -</a></h3><ul>
+<li>jumpChance
+: <a class="el" href="struct_p_i_z_finite_state.html#48d09497d003f89cb41167112656315f">PIZFiniteState</a>
+</ul>
 <h3><a class="anchor" name="index_k">- k -</a></h3><ul>
 <li>key
 : <a class="el" href="struct_p_i_z_bounded_hash_table_element.html#c5ccd791b21aac28285be768b21084d5">PIZBoundedHashTableElement</a>
@@ -113,6 +120,14 @@
 : <a class="el" href="struct_p_i_z_factor_oracle_node.html#c67e2e25620f857088eb9e30a3ab025b">PIZFactorOracleNode</a>
 <li>lock
 : <a class="el" href="struct_p_i_z_array_pool.html#a0bbbf5afce5c3753f82a275487201fc">PIZArrayPool</a>
+<li>lottery
+: <a class="el" href="struct_p_i_z_finite_state.html#5b622753a4b3415fbafa701678a2bcfe">PIZFiniteState</a>
+<li>lotteryIndex
+: <a class="el" href="struct_p_i_z_finite_state.html#9f8690c35fe7f7aa18004c72dffb57f2">PIZFiniteState</a>
+</ul>
+<h3><a class="anchor" name="index_m">- m -</a></h3><ul>
+<li>mapByValue
+: <a class="el" href="struct_p_i_z_finite_state.html#0ac9ee1f1d0221230d5725b092dd3a4d">PIZFiniteState</a>
 </ul>
 <h3><a class="anchor" name="index_n">- n -</a></h3><ul>
 <li>next
@@ -152,12 +167,15 @@
 <h3><a class="anchor" name="index_s">- s -</a></h3><ul>
 <li>shuttle
 : <a class="el" href="struct_p_i_z_factor_oracle.html#5d7890426622f867552920353566a247">PIZFactorOracle</a>
+, <a class="el" href="struct_p_i_z_finite_state.html#38dde8369df4bc5bc32c0beac8fb3e7c">PIZFiniteState</a>
 <li>size
-: <a class="el" href="struct_p_i_z_factor_oracle.html#30b52fa45ac8e429c10bd0b07de4cda9">PIZFactorOracle</a>
+: <a class="el" href="struct_p_i_z_growing_array.html#c8ae64ed0d5b0136e5de3199194ea084">PIZGrowingArray</a>
 , <a class="el" href="struct_p_i_z_hash_table.html#e6d93de0962d91a149fb2f80becef40c">PIZHashTable</a>
-, <a class="el" href="struct_p_i_z_growing_array.html#c8ae64ed0d5b0136e5de3199194ea084">PIZGrowingArray</a>
+, <a class="el" href="struct_p_i_z_factor_oracle.html#30b52fa45ac8e429c10bd0b07de4cda9">PIZFactorOracle</a>
 <li>stack
 : <a class="el" href="struct_p_i_z_bounded_stack.html#87310107ae01cee6b9eb932a01dd7ed2">PIZBoundedStack</a>
+<li>stock
+: <a class="el" href="struct_p_i_z_finite_state.html#7584571dca2489a3cdf5d282df2b2142">PIZFiniteState</a>
 <li>straightRatio
 : <a class="el" href="struct_p_i_z_factor_oracle.html#6d1657358289ddbcd8eb073ba7e573e9">PIZFactorOracle</a>
 </ul>
@@ -166,8 +184,11 @@
 : <a class="el" href="struct_p_i_z_bounded_queue.html#629db7488eb51472c05fa933c320f277">PIZBoundedQueue</a>
 , <a class="el" href="struct_p_i_z_linklist.html#7be41db7228e532d5a1a593c1c251758">PIZLinklist</a>
 , <a class="el" href="struct_p_i_z_queue.html#786a5657ab8f79ee09fdf941b073f4da">PIZQueue</a>
+<li>thresholdToMergeNodes
+: <a class="el" href="struct_p_i_z_finite_state.html#9772fd7e38bd12fba4105d10afd91809">PIZFiniteState</a>
 <li>ticketMachine
 : <a class="el" href="struct_p_i_z_bounded_hash_table.html#5506fd9fc5afefee37c78f54d6996f6e">PIZBoundedHashTable</a>
+, <a class="el" href="struct_p_i_z_finite_state.html#3d491f3a88409fae601d850524de354d">PIZFiniteState</a>
 </ul>
 <h3><a class="anchor" name="index_v">- v -</a></h3><ul>
 <li>value
@@ -179,7 +200,7 @@
 , <a class="el" href="struct_p_i_z_growing_array.html#6bdb59aaa56127227c81476c49c4f3eb">PIZGrowingArray</a>
 </ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sun Feb 5 16:43:04 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Sun Feb 5 18:24:02 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

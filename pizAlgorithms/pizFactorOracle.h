@@ -104,7 +104,7 @@ typedef struct _PIZFactorOracle {
     long                shuttle;                        /*!< Playback head's index. */
     long                backwardThreshold;              /*!< Threshold for backward playback. */
     double              straightRatio;                  /*!< Threshold for straight playback. */
-    PIZFactorOracleNode *nodes;                         /*!< Pointer to array of nodes. */
+    PIZFactorOracleNode *nodes;                         /*!< Array of nodes. */
     } PIZFactorOracle;
 
 // -------------------------------------------------------------------------------------------------------------

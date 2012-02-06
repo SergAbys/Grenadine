@@ -1,13 +1,14 @@
 /**
  * \file    pizFiniteState.h
  * \details A \em kinda finite state automaton is :
- * \li      One value per node (not in arcs).
+ * \li      One value per node.
  * \li      Last value for each new sequence is a terminal state.
- * \li      Nodes are crossing-over by equal values, 
- *          until the population is collapsed under a given threshold.
+ * \li      Randomly, nodes with same value are crossing-over, 
+ *          and lonely node for a given value are killed, older first,
+ *          until the population is collapsed under the set threshold.
  * \li      Terminal states increase the probability of playback head's jump.
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    31 janvier 2012
  * \ingroup algorithms
  */
 
@@ -69,18 +70,20 @@ typedef struct _PIZFiniteStateNode {
 
 /**
  * \brief   The \em kinda finite state automaton.  
+ * \details Implemented as an array of bounded queues, one per alphabet's value (alphabet is 0-127). 
+ *          Bounded queues contains indexes of pre-allocated nodes (pool size is 128).
  */
  
 typedef struct _PIZFiniteState {
-    long                count;
-    long                shuttle;
-    long                lotteryIndex;
-    long                jumpChance;
-    long                thresholdToMergeNodes;
-    long                *lottery;
-    PIZBoundedQueue     **mapByValue;
-    PIZBoundedStack     *ticketMachine;
-    PIZFiniteStateNode  *stock;
+    long                count;                  /*!< Number of nodes in the automaton. */
+    long                shuttle;                /*!< Playback head's index. */
+    long                lotteryIndex;           /*!< Number of elements  in the lottery array. */
+    long                jumpChance;             /*!< Playback head's cumulative chance to jump. */ 
+    long                thresholdToMergeNodes;  /*!< Number of nodes threshold to start crossing-over. */ 
+    long                *lottery;               /*!< Temporary array for lottery draw. */ 
+    PIZBoundedQueue     **mapByValue;           /*!< Pointer to the array of bounded queues. */ 
+    PIZBoundedStack     *ticketMachine;         /*!< Pool management. */ 
+    PIZFiniteStateNode  *stock;                 /*!< Pool of nodes. */ 
     } PIZFiniteState;
     
 // -------------------------------------------------------------------------------------------------------------
@@ -91,18 +94,70 @@ PIZ_START_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZFiniteState  *pizFiniteStateNew          (long argc, long *argv);
-void            pizFiniteStateFree          (PIZFiniteState *x);
+/**
+ * \brief   Create the automaton.
+ * \details The function accept one argument : the threshold to start crossing-over. 
+ *          Minimum is 1, maximum is 100, default is 35.
+ *          In case of failure the pointer is NULL.
+ * \param   argc The number of arguments.
+ * \param   argv A pointer to arguments.
+ * \return  A pointer to the new automaton.
+ * \remark	The following shows how to create an automaton.  
+ * \code
+ * long args = 50;
+ *
+ * PIZFiniteState *fsa = pizFiniteStateNew (1, &args);
+ * PIZFiniteState *fsa = pizFiniteStateNew (0, NULL); // default value
+ *
+ * \endcode
+ */
+PIZFiniteState *pizFiniteStateNew (long argc, long *argv);
 
-PIZError        pizFiniteStateAdd           (PIZFiniteState *x, long argc, long *argv);
-void            pizFiniteStateClear         (PIZFiniteState *x);
-PIZError        pizFiniteStateProceed       (PIZFiniteState *x, long argc, long *argv);
-long            pizFiniteStateCount         (const PIZFiniteState *x);
+/**
+ * \brief   Free the automaton.
+ * \details It is safe to pass NULL pointer. 
+ * \param   x A Pointer.
+ */
+void pizFiniteStateFree (PIZFiniteState *x);
+
+/**
+ * \brief   Add values to the automaton.
+ * \param   x A valid pointer.
+ * \param   argc The number of values.
+ * \param   argv A pointer to the values.
+ * \return  An error code.
+ * \remark  The number of nodes can not be more than 128 at a given time, exceedings ones will be ignored.
+ */
+PIZError pizFiniteStateAdd (PIZFiniteState *x, long argc, long *argv);
+
+/**
+ * \brief   Clear the automaton.
+ * \param   x A valid pointer.
+ */
+void pizFiniteStateClear (PIZFiniteState *x);
+
+/**
+ * \brief   Fill a given array with automaton values.
+ * \details Each step the playback head randomly go in the automaton. 
+ *          It does not reverse. At the end of a branch, it jumps. 
+ *          Each step, chances to jump increase (terminal states raise it more).
+ * \param   argc Number of step to proceed.
+ * \param   argv Pointer to the \c long array to fill.
+ * \return  An error code.
+ */
+PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv);
+
+/**
+ * \brief   Get the number of nodes in the automaton.
+ * \param   x A valid pointer.
+ * \return  The number of nodes.
+ */
+long pizFiniteStateCount (const PIZFiniteState *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZError pizFiniteStateMergeNodes (PIZFiniteState *x);
+PIZ_LOCAL PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
