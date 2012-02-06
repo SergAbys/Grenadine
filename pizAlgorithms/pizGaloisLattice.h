@@ -5,7 +5,7 @@
  * \li      http://en.wikipedia.org/wiki/Formal_concept_analysis
  *
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    31 janvier 2012
  */
 
 /*
@@ -118,8 +118,7 @@ PIZ_LOCAL void      pizGaloisLatticeKillConcept (PIZGaloisLattice *x, long n);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizGaloisLatticeEncodeConceptsByCardinalToArray    (const PIZGaloisLattice *x, 
-                                                            long n, PIZGrowingArray *a);
+PIZError pizGaloisLatticeEncodeConceptsToArray (const PIZGaloisLattice *x, long n, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

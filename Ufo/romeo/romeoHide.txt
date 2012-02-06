@@ -8,7 +8,7 @@ _pizBoundedStackPush
 _pizGaloisLatticeAdd
 _pizGaloisLatticeClear
 _pizGaloisLatticeCount
-_pizGaloisLatticeEncodeConceptsByCardinalToArray
+_pizGaloisLatticeEncodeConceptsToArray
 _pizGaloisLatticeFree
 _pizGaloisLatticeNew
 _pizGaloisLatticeProceed

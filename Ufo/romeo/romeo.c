@@ -8,7 +8,7 @@
  */
  
 /*
- *  Last modified : 29/08/11.
+ *  Last modified : 31/01/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -215,7 +215,7 @@ void romeo_dump (t_romeo *x, long n)
             PIZGrowingArray *values = pizGrowingArrayNew (4);
     
             systhread_mutex_lock (&x->algorithmMutex);
-            err = pizGaloisLatticeEncodeConceptsByCardinalToArray (x->galoisLattice, n, values);
+            err = pizGaloisLatticeEncodeConceptsToArray (x->galoisLattice, n, values);
             systhread_mutex_unlock (&x->algorithmMutex);
 
             if (!err)

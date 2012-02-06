@@ -1,7 +1,7 @@
 /*
  * \file    pizGaloisLatticeExtended.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -43,7 +43,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizGaloisLatticeEncodeConceptsByCardinalToArray (const PIZGaloisLattice *x, long n, PIZGrowingArray *a)
+PIZError pizGaloisLatticeEncodeConceptsToArray (const PIZGaloisLattice *x, long n, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     
