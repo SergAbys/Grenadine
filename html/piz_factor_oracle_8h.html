@@ -45,6 +45,10 @@
 #define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_factor_oracle_8h.html#2e8de3f25bf60cd64918947a19780580">PIZ_FACTOR_ORACLE_ENCODE_ARCS</a>&nbsp;&nbsp;&nbsp;2</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Index of number of arcs in <code><a class="el" href="piz_factor_oracle_8h.html#3b83839727e3553410c8b3c136f5a422" title="Encode a node to a dynamic array.">pizFactorOracleEncodeNodeToArray()</a></code>. <br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="1d0061fa3ee6a49ab46bed50c44ab2c8"></a><!-- doxytag: member="pizFactorOracle.h::PIZ_FACTOR_ORACLE_ENCODE_DATA" ref="1d0061fa3ee6a49ab46bed50c44ab2c8" args="" -->
+#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_factor_oracle_8h.html#1d0061fa3ee6a49ab46bed50c44ab2c8">PIZ_FACTOR_ORACLE_ENCODE_DATA</a>&nbsp;&nbsp;&nbsp;3</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Index of data in <code><a class="el" href="piz_factor_oracle_8h.html#3b83839727e3553410c8b3c136f5a422" title="Encode a node to a dynamic array.">pizFactorOracleEncodeNodeToArray()</a></code>. <br></td></tr>
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_factor_oracle.html">PIZFactorOracle</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_factor_oracle_8h.html#12bb284e0cebb7e9683d17dd8c958b51">pizFactorOracleNew</a> (long argc, long *argv)</td></tr>
 
@@ -266,11 +270,11 @@ Clear the factor oracle.
 <p>
 Fill a given array with factor oracle values. 
 <p>
-<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>Each step a number between 0. and 1. is randomly drawn : if it is inferior to the straightRatio the playback head go straight, otherwise, there is half chance to go backward (if backward threshold is reached), and half chance to go forward (if arcs exist).</dd></dl>
+<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>Each step a number between 0. and 1. is randomly drawn : if it is inferior to the straightRatio the playback head moves straight, otherwise, there is half chance to moves backward (if backward threshold is reached), and half chance to moves forward (if arcs exist).</dd></dl>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>argc</em>&nbsp;</td><td>Number of step to proceed. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>argv</em>&nbsp;</td><td>Pointer to the <code>long</code> array to fill. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>argv</em>&nbsp;</td><td>Pointer to the array. </td></tr>
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>An error code. </dd></dl>
@@ -473,7 +477,7 @@ Encode a node to a dynamic array.
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A valid pointer. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>node</em>&nbsp;</td><td>The index of the node to get. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>node</em>&nbsp;</td><td>The index of the node. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>a</em>&nbsp;</td><td>A pointer to a dynamic array. </td></tr>
   </table>
 </dl>
@@ -495,8 +499,8 @@ Encode a node to a dynamic array.
               {
                   <span class="keywordtype">long</span> destination, value;
 
-                  destination = pizGrowingArrayValueAtIndex (a, <a class="code" href="piz_factor_oracle_8h.html#2e8de3f25bf60cd64918947a19780580" title="Index of number of arcs in pizFactorOracleEncodeNodeToArray().">PIZ_FACTOR_ORACLE_ENCODE_ARCS</a> + 1 + i);
-                  value       = pizGrowingArrayValueAtIndex (a, <a class="code" href="piz_factor_oracle_8h.html#2e8de3f25bf60cd64918947a19780580" title="Index of number of arcs in pizFactorOracleEncodeNodeToArray().">PIZ_FACTOR_ORACLE_ENCODE_ARCS</a> + 1 + i + k);
+                  destination = pizGrowingArrayValueAtIndex (a, <a class="code" href="piz_factor_oracle_8h.html#1d0061fa3ee6a49ab46bed50c44ab2c8" title="Index of data in pizFactorOracleEncodeNodeToArray().">PIZ_FACTOR_ORACLE_ENCODE_DATA</a> + i);
+                  value       = pizGrowingArrayValueAtIndex (a, <a class="code" href="piz_factor_oracle_8h.html#1d0061fa3ee6a49ab46bed50c44ab2c8" title="Index of data in pizFactorOracleEncodeNodeToArray().">PIZ_FACTOR_ORACLE_ENCODE_DATA</a> + i + k);
               }
       }
    
@@ -506,7 +510,7 @@ Encode a node to a dynamic array.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 15:31:10 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 16:31:11 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

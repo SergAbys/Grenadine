@@ -139,11 +139,11 @@ void pizFiniteStateClear (PIZFiniteState *x);
 
 /**
  * \brief   Fill a given array with automaton values.
- * \remark  Each step the playback head randomly goes in the automaton. 
+ * \remark  Each step the playback head randomly moves in the automaton. 
  *          It does not reverse. At the end of a branch, it jumps. 
  *          Each step, chances to jump increase (terminal states raise it more).
  * \param   argc Number of step to proceed.
- * \param   argv Pointer to the \c long array to fill.
+ * \param   argv Pointer to the array.
  * \return  An error code.
  */
 PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv);

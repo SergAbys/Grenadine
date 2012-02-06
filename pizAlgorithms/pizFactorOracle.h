@@ -162,12 +162,12 @@ void pizFactorOracleClear (PIZFactorOracle *x);
 /**
  * \brief   Fill a given array with factor oracle values.
  * \remark  Each step a number between 0. and 1. is randomly drawn : 
- *          if it is inferior to the straightRatio the playback head go straight, 
- *          otherwise, there is half chance to go backward (if backward threshold is reached), 
- *          and half chance to go forward (if arcs exist).
+ *          if it is inferior to the straightRatio the playback head moves straight, 
+ *          otherwise, there is half chance to moves backward (if backward threshold is reached), 
+ *          and half chance to moves forward (if arcs exist).
  *
  * \param   argc Number of step to proceed.
- * \param   argv Pointer to the \c long array to fill.
+ * \param   argv Pointer to the array.
  * \return  An error code.
  */
 PIZError pizFactorOracleProceed (PIZFactorOracle *x, long argc, long *argv);
@@ -218,7 +218,7 @@ double pizFactorOracleStraightRatio (const PIZFactorOracle *x);
 /**
  * \brief   Encode a node to a dynamic array.
  * \param   x A valid pointer.
- * \param   node The index of the node to get.
+ * \param   node The index of the node.
  * \param   a A pointer to a dynamic array.
  * \return  An error code.
  * \remark	An example :  

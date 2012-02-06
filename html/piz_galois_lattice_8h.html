@@ -37,6 +37,10 @@
 #define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_galois_lattice_8h.html#cc6095d933a5899cd9371042eb1787a2">PIZ_GALOIS_LATTICE_ENCODE_CONCEPTS</a>&nbsp;&nbsp;&nbsp;0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Index of number of concepts in <code><a class="el" href="piz_galois_lattice_8h.html#ac53d71a19421b54ac431dfeebec70b4" title="Encode all concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeConceptsToArray()</a></code>. <br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="778dbdb045b6a2022917fa485747ba30"></a><!-- doxytag: member="pizGaloisLattice.h::PIZ_GALOIS_LATTICE_ENCODE_DATA" ref="778dbdb045b6a2022917fa485747ba30" args="" -->
+#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_galois_lattice_8h.html#778dbdb045b6a2022917fa485747ba30">PIZ_GALOIS_LATTICE_ENCODE_DATA</a>&nbsp;&nbsp;&nbsp;1</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Index of data in <code><a class="el" href="piz_galois_lattice_8h.html#ac53d71a19421b54ac431dfeebec70b4" title="Encode all concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeConceptsToArray()</a></code>. <br></td></tr>
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_galois_lattice.html">PIZGaloisLattice</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_galois_lattice_8h.html#3233e90776f11b1262aeea54e4f2d916">pizGaloisLatticeNew</a> (long argc, long *argv)</td></tr>
 
@@ -246,11 +250,11 @@ Clear the lattice.
 <p>
 Fill a given array with lattice values. 
 <p>
-<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>While the array is not full, playback head randomly goes in the lattice (without reverse) getting values from concepts. </dd></dl>
+<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>While the array is not full, playback head randomly moves in the lattice getting values from concepts. </dd></dl>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>argc</em>&nbsp;</td><td>Number of values to proceed. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>argv</em>&nbsp;</td><td>Pointer to the <code>long</code> array to fill. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>argv</em>&nbsp;</td><td>Pointer to the array to fill. </td></tr>
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>An error code. </dd></dl>
@@ -322,7 +326,7 @@ Encode all concepts with a given size to a dynamic array.
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A valid pointer. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>n</em>&nbsp;</td><td>The size of concept to get. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>n</em>&nbsp;</td><td>The size of concepts. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>a</em>&nbsp;</td><td>A pointer to a dynamic array. </td></tr>
   </table>
 </dl>
@@ -341,7 +345,7 @@ Encode all concepts with a given size to a dynamic array.
           <span class="keywordtype">long</span> *values = NULL;
 
           <span class="keywordflow">for</span> (i = 0; i &lt; count; i++) {
-                  values = ptr + 1 + (n * i);
+                  values = ptr + <a class="code" href="piz_galois_lattice_8h.html#778dbdb045b6a2022917fa485747ba30" title="Index of data in pizGaloisLatticeEncodeConceptsToArray().">PIZ_GALOIS_LATTICE_ENCODE_DATA</a> + (n * i);
               }
       }
 
@@ -351,7 +355,7 @@ Encode all concepts with a given size to a dynamic array.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 15:31:10 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 16:31:11 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

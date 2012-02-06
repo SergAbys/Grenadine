@@ -159,10 +159,10 @@ void pizGaloisLatticeClear (PIZGaloisLattice *x);
 
 /**
  * \brief   Fill a given array with lattice values.
- * \remark  While the array is not full, playback head randomly goes in the lattice (without reverse) 
+ * \remark  While the array is not full, playback head randomly moves in the lattice 
  *          getting values from concepts.
  * \param   argc Number of values to proceed.
- * \param   argv Pointer to the \c long array to fill.
+ * \param   argv Pointer to the array to fill.
  * \return  An error code.
  */
 PIZError pizGaloisLatticeProceed (PIZGaloisLattice *x, long argc, long *argv);
@@ -187,7 +187,7 @@ PIZ_LOCAL void              pizGaloisLatticeKillConcept (PIZGaloisLattice *x, lo
 /**
  * \brief   Encode all concepts with a given size to a dynamic array.
  * \param   x A valid pointer.
- * \param   n The size of concept to get.
+ * \param   n The size of concepts.
  * \param   a A pointer to a dynamic array.
  * \return  An error code.
  * \remark	An example :  
