@@ -8,7 +8,7 @@
  */
  
 /*
- *  Last modified : 08/09/11.
+ *  Last modified : 31/01/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -272,10 +272,10 @@ void foxtrot_dump (t_foxtrot *x, long n)
                     atom_setlong (argv, pizGrowingArrayValueAtIndex (values, PIZ_MARKOV_MODEL_ENCODE_START));
                     outlet_anything (x->rightOutlet, foxtrot_sym_start, 1, argv);
                     
-                    atom_setlong_array (t, argv, t, ptr + PIZ_MARKOV_MODEL_ENCODE_VALUES);
+                    atom_setlong_array (t, argv, t, ptr + PIZ_MARKOV_MODEL_ENCODE_DATA);
                     outlet_anything (x->rightOutlet, foxtrot_sym_transitions, t, argv);
                     
-                    atom_setlong_array (e, argv, e, ptr + PIZ_MARKOV_MODEL_ENCODE_VALUES + t);
+                    atom_setlong_array (e, argv, e, ptr + PIZ_MARKOV_MODEL_ENCODE_DATA + t);
                     outlet_anything (x->rightOutlet, foxtrot_sym_emissions, e, argv);
 
                     sysmem_freeptr (argv);

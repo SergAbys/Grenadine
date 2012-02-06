@@ -58,8 +58,14 @@
  * \def     PIZ_GALOIS_LATTICE_ENCODE_CONCEPTS 
  * \brief   Index of number of concepts in \c pizGaloisLatticeEncodeConceptsToArray().
  */
+
+/**
+ * \def     PIZ_GALOIS_LATTICE_ENCODE_DATA 
+ * \brief   Index of data in \c pizGaloisLatticeEncodeConceptsToArray().
+ */
  
 #define PIZ_GALOIS_LATTICE_ENCODE_CONCEPTS  0
+#define PIZ_GALOIS_LATTICE_ENCODE_DATA      1
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -200,7 +206,7 @@ PIZ_LOCAL void              pizGaloisLatticeKillConcept (PIZGaloisLattice *x, lo
  *          long *values = NULL;
  *
  *          for (i = 0; i < count; i++) {
- *                  values = ptr + 1 + (n * i);
+ *                  values = ptr + PIZ_GALOIS_LATTICE_ENCODE_DATA + (n * i);
  *              }
  *      }
  *

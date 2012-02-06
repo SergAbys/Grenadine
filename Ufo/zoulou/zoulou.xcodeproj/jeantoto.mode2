@@ -424,8 +424,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D5482F14DECF1900A8D828</string>
-				<string>96D5483014DECF1900A8D828</string>
+				<string>96D9BA9F14E0225E00245697</string>
+				<string>96D9BAA014E0225E00245697</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -458,6 +458,9 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D54069F1CE1000CFCEE</string>
+		<string>96D9BAA714E0225E00245697</string>
+		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/Ufo/zoulou/zoulou.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -614,12 +617,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string></string>
+								<string>zoulou.c</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -675,7 +680,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D639D914DD0FBA00451B9C</string>
+				<string>96D9BA8A14E021B800245697</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -717,8 +722,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {332, 189}}</string>
-											<string>{{332, 0}, {385, 189}}</string>
+											<string>{{0, 0}, {331, 199}}</string>
+											<string>{{331, 0}, {386, 199}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -733,8 +738,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {717, 189}}</string>
-											<string>{{0, 189}, {717, 207}}</string>
+											<string>{{0, 0}, {717, 199}}</string>
+											<string>{{0, 199}, {717, 197}}</string>
 										</array>
 									</dict>
 								</dict>
@@ -781,14 +786,14 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D54069F1CE1000CFCEE</string>
-				<string>969B918B116B1A3F00DCDD2C</string>
+				<string>96D9BAA114E0225E00245697</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>969B918C116B1A3F00DCDD2C</string>
-				<string>969B918D116B1A3F00DCDD2C</string>
-				<string>969B918E116B1A3F00DCDD2C</string>
-				<string>969B918F116B1A3F00DCDD2C</string>
-				<string>969B9190116B1A3F00DCDD2C</string>
-				<string>969B9191116B1A3F00DCDD2C</string>
+				<string>96D9BAA214E0225E00245697</string>
+				<string>96D9BAA314E0225E00245697</string>
+				<string>96D9BAA414E0225E00245697</string>
+				<string>96D9BAA514E0225E00245697</string>
+				<string>96D9BAA614E0225E00245697</string>
+				<string>96D9BAA714E0225E00245697</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debug</string>

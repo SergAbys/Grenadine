@@ -8,25 +8,27 @@
  */
  
 /*
- *  Last modified : 02/09/11.
+ *  Last modified : 31/01/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include    "ext.h"
-#include    "ext_obex.h"
-#include    "ext_systhread.h"
+#include "ext.h"
+#include "ext_obex.h"
+#include "ext_systhread.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include    "pizFactorOracle.h"
+#include "pizFactorOracle.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define     MAXIMUM_LIST_SIZE           256
+#define MAXIMUM_LIST_SIZE           256
+#define DEFAULT_BACKWARD_THRESHOLD  2
+#define DEFAULT_STRAIGHT_RATIO      0.25
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -121,8 +123,8 @@ void *zoulou_new (t_symbol *s, long argc, t_atom *argv)
             
             if (x->values && x->factorOracle)
                 {
-                    x->straightRatio        = PIZ_FACTOR_ORACLE_DEFAULT_STRAIGHT_RATIO;
-                    x->backwardThreshold    = PIZ_FACTOR_ORACLE_DEFAULT_BACKWARD_THRESHOLD;
+                    x->straightRatio        = DEFAULT_STRAIGHT_RATIO;
+                    x->backwardThreshold    = DEFAULT_BACKWARD_THRESHOLD;
                     
                     x->rightOutlet  = outlet_new (x, NULL);
                     object_obex_store ((void *)x, zoulou_sym_dumpout, (t_object *)x->rightOutlet);
@@ -290,9 +292,9 @@ void zoulou_dump (t_zoulou *x, long n)
             for (i = 0; i < k; i++)
                 {
                     atom_setlong (result + 2, pizGrowingArrayValueAtIndex 
-                            (values, PIZ_FACTOR_ORACLE_ENCODE_ARCS + 1 + i));
+                            (values, PIZ_FACTOR_ORACLE_ENCODE_DATA + i));
                     atom_setlong (result + 3, pizGrowingArrayValueAtIndex 
-                            (values, PIZ_FACTOR_ORACLE_ENCODE_ARCS + 1 + i + k));
+                            (values, PIZ_FACTOR_ORACLE_ENCODE_DATA + i + k));
         
                     outlet_anything (x->rightOutlet, zoulou_sym_node, 4, result);
                 }

@@ -14,19 +14,19 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include    "ext.h"
-#include    "ext_obex.h"
-#include    "ext_systhread.h"
+#include "ext.h"
+#include "ext_obex.h"
+#include "ext_systhread.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include    "pizGaloisLattice.h"
+#include "pizGaloisLattice.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define     MAXIMUM_LIST_SIZE   256
+#define MAXIMUM_LIST_SIZE   256
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -224,12 +224,10 @@ void romeo_dump (t_romeo *x, long n)
                     long count = pizGrowingArrayValueAtIndex (values, PIZ_GALOIS_LATTICE_ENCODE_CONCEPTS);
                     long *ptr  = pizGrowingArrayPtr (values);
                                         
-                    for (i = 0; i < count; i++)
-                        {
-                            atom_setlong_array (argc, argv, argc, ptr + 1 + (n * i));
-                            
-                            outlet_list (x->rightOutlet, NULL, argc, argv);
-                        }
+                    for (i = 0; i < count; i++) {
+                        atom_setlong_array (argc, argv, argc, ptr + PIZ_GALOIS_LATTICE_ENCODE_DATA + (n * i));
+                        outlet_list (x->rightOutlet, NULL, argc, argv);
+                    }
                 }
                 
             sysmem_freeptr (argv);

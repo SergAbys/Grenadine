@@ -70,10 +70,16 @@
  * \def     PIZ_FACTOR_ORACLE_ENCODE_ARCS
  * \brief   Index of number of arcs in \c pizFactorOracleEncodeNodeToArray().
  */
+
+/**
+ * \def     PIZ_FACTOR_ORACLE_ENCODE_DATA
+ * \brief   Index of data in \c pizFactorOracleEncodeNodeToArray().
+ */
  
 #define PIZ_FACTOR_ORACLE_ENCODE_REFER      0
 #define PIZ_FACTOR_ORACLE_ENCODE_LRS        1
 #define PIZ_FACTOR_ORACLE_ENCODE_ARCS       2
+#define PIZ_FACTOR_ORACLE_ENCODE_DATA       3
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -234,8 +240,8 @@ double pizFactorOracleStraightRatio (const PIZFactorOracle *x);
  *              {
  *                  long destination, value;
  *
- *                  destination = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_ENCODE_ARCS + 1 + i);
- *                  value       = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_ENCODE_ARCS + 1 + i + k);
+ *                  destination = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_ENCODE_DATA + i);
+ *                  value       = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_ENCODE_DATA + i + k);
  *              }
  *      }
  *   
