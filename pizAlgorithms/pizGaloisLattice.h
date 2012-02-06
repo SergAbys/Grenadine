@@ -55,7 +55,7 @@
 
 /**
  * \def     PIZ_FACTOR_ORACLE_ENCODE_REFER 
- * \brief   Index of number of concepts in \c pizGaloisLatticeEncodeConceptsByCardinalToArray().
+ * \brief   Index of number of concepts in \c pizGaloisLatticeEncodeConceptsToArray().
  */
  
 #define PIZ_GALOIS_LATTICE_ENCODE_CONCEPTS  0
@@ -74,22 +74,29 @@ typedef struct _PIZGaloisLatticeConcept {
     PIZItemset128   childs;                             /*!< Arcs (indexes as bit field). */
     } PIZGaloisLatticeConcept;
 
+/**
+ * \brief   The Galois Lattice.  
+ * \remark  Implemented as an array of dynamic arrays, 
+ *          one per possible cardinal (the size of alphabet : 128). 
+ *          Dynamic arrays contains indexes of pre-allocated concepts (pool size is 128 too).
+ */
+ 
 typedef struct _PIZGaloisLattice {
-    PIZItemset128           itemsetToBeAdded;
-    PIZItemset128           itemsetIntersection;
-    long                    count;
-    long                    thresholdToKillConcepts;
-    long                    targetedConcept;
-    long                    shuttle;
-    long                    previousShuttle;
-    long                    itemsetIntersectionCardinal;
-    long                    mapByCardinalPeak;
-    long                    tempMapByCardinalPeak;              //
-    bool                    needToMakeMap;
-    PIZGrowingArray         **mapByCardinal;
-    PIZGrowingArray         **tempMapByCardinal;
-    PIZBoundedStack         *ticketMachine;
-    PIZGaloisLatticeConcept *stock;
+    PIZItemset128           itemsetToBeAdded;            /*!< Values to add (as bit field). */
+    PIZItemset128           itemsetIntersection;         /*!< Temporary intersection between concepts. */
+    long                    count;                       /*!< Number of concepts in the lattice. */
+    long                    thresholdToKillConcepts;     /*!< Number of concepts to start killing. */
+    long                    targetedConcept;             /*!< Index of a marked concept. */ 
+    long                    shuttle;                     /*!< Index of the playback head. */
+    long                    previousShuttle;             /*!< Previous index of the playback head. */
+    long                    itemsetIntersectionCardinal; /*!< Cardinal of the temporary intersection. */
+    long                    mapByCardinalPeak;           /*!< Maximum cardinal reached in the map. */
+    long                    tempMapByCardinalPeak;       /*!< Maximum cardinal reached in the temporary map. */
+    bool                    needToMakeMap;               /*!< Flag (set after birth or death). */
+    PIZGrowingArray         **mapByCardinal;             /*!< Concept sorts by cardinal. */
+    PIZGrowingArray         **tempMapByCardinal;         /*!< Temporay map to build lattice. */
+    PIZBoundedStack         *ticketMachine;              /*!< Pool management. */
+    PIZGaloisLatticeConcept *stock;                      /*!< Pool of concepts. */
     } PIZGaloisLattice;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -100,8 +107,26 @@ PIZ_START_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZGaloisLattice    *pizGaloisLatticeNew        (long argc, long *argv);
-void                pizGaloisLatticeFree        (PIZGaloisLattice *x);
+/**
+ * \brief   Create the lattice.
+ * \details The function accept one argument : the threshold to start crossing-over. 
+ *          Minimum is 1, maximum is 100, default is 35.
+ *          In case of failure the pointer is NULL.
+ * \param   argc The number of arguments.
+ * \param   argv A pointer to arguments.
+ * \return  A pointer to the new automaton.
+ * \remark	The following shows how to create an automaton.  
+ * \code
+ * long args = 50;
+ *
+ * PIZFiniteState *fsa = pizFiniteStateNew (1, &args);
+ * PIZFiniteState *fsa = pizFiniteStateNew (0, NULL); // default value
+ *
+ * \endcode
+ */
+PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv);
+
+void pizGaloisLatticeFree (PIZGaloisLattice *x);
 
 PIZError            pizGaloisLatticeAdd         (PIZGaloisLattice *x, long argc, long *argv);
 void                pizGaloisLatticeClear       (PIZGaloisLattice *x);

@@ -47,7 +47,7 @@ PIZError pizGaloisLatticeEncodeConceptsToArray (const PIZGaloisLattice *x, long 
 {
     long err = PIZ_ERROR;
     
-    if ((n > 0) && (n < PIZ_ITEMSET128_SIZE_IN_BIT) && a)
+    if ((n > 0) && (n < PIZ_ITEMSET128_SIZE_IN_BITS) && a)
         {
             long i;
             long count = pizGrowingArrayCount (x->mapByCardinal[n]);
@@ -61,7 +61,7 @@ PIZError pizGaloisLatticeEncodeConceptsToArray (const PIZGaloisLattice *x, long 
                     long j;
                     long p = pizGrowingArrayValueAtIndex (x->mapByCardinal[n], i);
                     
-                    for (j = 0; j < PIZ_ITEMSET128_SIZE_IN_BIT; j++)
+                    for (j = 0; j < PIZ_ITEMSET128_SIZE_IN_BITS; j++)
                         {
                             if (pizItemset128IsSetAtIndex (&(x->stock[p].itemset), j)) {
                                     err |= pizGrowingArrayAppend (a, j);

@@ -50,7 +50,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_STOCK_SIZE              (PIZ_ITEMSET128_SIZE_IN_BIT)
+#define PIZ_STOCK_SIZE              (PIZ_ITEMSET128_SIZE_IN_BITS)
 #define PIZ_MAXIMUM_VECTOR_SIZE     256
 #define PIZ_ALPHABET_SIZE           128
 
@@ -234,7 +234,7 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
                                 x->vectorStock[(winner1 * x->vectorSize) + i]);
                         }
                     
-                    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_BIT; i++)
+                    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_BITS; i++)
                         {
                             if (pizItemset128IsSetAtIndex (&x->headStock[winner1].arcs, i))
                                 {
@@ -275,7 +275,7 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
                                         }
                                 }
                             
-                            for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_BIT; i++)
+                            for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_BITS; i++)
                                 {
                                     if (pizItemset128IsSetAtIndex (&x->headStock[maxError1].arcs, i))
                                         {
@@ -325,7 +325,7 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
                             
                             if ((maxError1Value / minUtilityValue) > x->kappa)
                                 {
-                                    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_BIT; i++) {
+                                    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_BITS; i++) {
                                         if (pizItemset128IsSetAtIndex (&x->headStock[minUtility].arcs, i)) {
                                             pizItemset128UnsetAtIndex (&x->headStock[i].arcs, minUtility);
                                         }

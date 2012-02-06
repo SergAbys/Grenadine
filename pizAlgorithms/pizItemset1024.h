@@ -59,9 +59,9 @@
  * \brief Bit field dimensions.
  */
 enum {
-    PIZ_ITEMSET1024_SIZE_IN_WORD    = 32,               /*!< Number of \c long in the bit field. */
+    PIZ_ITEMSET1024_SIZE_IN_WORDS   = 32,               /*!< Number of \c long in the bit field. */
     PIZ_ITEMSET1024_SIZE_OF_ULONG   = 32,               /*!< Size of an \c unsigned \c long. */
-    PIZ_ITEMSET1024_SIZE_IN_BIT     = 1024              /*!< Number of bits in the bit field. */
+    PIZ_ITEMSET1024_SIZE_IN_BITS    = 1024              /*!< Number of bits in the bit field. */
     };
 
 /**
@@ -183,7 +183,7 @@ PIZ_EXTERN void pizItemset1024Clear (PIZItemset1024 *itemset)
 {
     long i;
     
-    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++) {
+    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORDS; i++) {
             itemset->items[i] = 0;
         }
 }
@@ -193,7 +193,7 @@ PIZ_EXTERN long pizItemset1024Count (const PIZItemset1024 *itemset)
     long i;
     long k = 0;
     
-    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++)
+    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORDS; i++)
         {
             unsigned long n = itemset->items[i];
             
@@ -227,7 +227,7 @@ PIZ_EXTERN void pizItemset1024Union (const PIZItemset1024 *a, const PIZItemset10
 {
     long i;
     
-    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++) {
+    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORDS; i++) {
             r->items[i] = a->items[i] | b->items[i];
         }
 }
@@ -236,7 +236,7 @@ PIZ_EXTERN void pizItemset1024Intersection (const PIZItemset1024 *a, const PIZIt
 {
     long i;
     
-    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++) {
+    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORDS; i++) {
             r->items[i] = a->items[i] & b->items[i];
         }
 }
@@ -246,7 +246,7 @@ PIZ_EXTERN bool pizItemset1024IsIncluded (const PIZItemset1024 *a, const PIZItem
     long i;
     bool k = true;
             
-    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++)
+    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORDS; i++)
         {
             if (b->items[i] != (b->items[i] | a->items[i])) {
                     k = false;
@@ -262,7 +262,7 @@ PIZ_EXTERN bool pizItemset1024IsEqual (const PIZItemset1024 *a, const PIZItemset
     long i;
     long k = true;
             
-    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++)
+    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORDS; i++)
         {
             if (a->items[i] != b->items[i]) {
                     k = false;

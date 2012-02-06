@@ -77,10 +77,10 @@ typedef struct _PIZFiniteStateNode {
  
 typedef struct _PIZFiniteState {
     long                count;                  /*!< Number of nodes in the automaton. */
-    long                shuttle;                /*!< Playback head's index. */
+    long                shuttle;                /*!< Index of the playback head. */
     long                lotteryIndex;           /*!< Number of elements in the lottery array. */
-    long                jumpChance;             /*!< Playback head's cumulative chance to jump. */ 
-    long                thresholdToMergeNodes;  /*!< Number of nodes threshold to start crossing-over. */ 
+    long                jumpChance;             /*!< Cumulative chance to jump when reading. */ 
+    long                thresholdToMergeNodes;  /*!< Number of nodes to start crossing-over. */ 
     long                *lottery;               /*!< Temporary array for lottery drawing. */ 
     PIZBoundedQueue     **mapByValue;           /*!< Pointer to the array of bounded queues. */ 
     PIZBoundedStack     *ticketMachine;         /*!< Pool management. */ 

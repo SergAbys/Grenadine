@@ -101,7 +101,7 @@ typedef struct _PIZFactorOracle {
     long                size;                           /*!< Current number of nodes allocated. */
     long                peak;                           /*!< Maximum number of nodes reached. */
     long                index;                          /*!< Current number of nodes. */
-    long                shuttle;                        /*!< Playback head's index. */
+    long                shuttle;                        /*!< Index of the playback head. */
     long                backwardThreshold;              /*!< Threshold for backward playback. */
     double              straightRatio;                  /*!< Threshold for straight playback. */
     PIZFactorOracleNode *nodes;                         /*!< Array of nodes. */

@@ -50,15 +50,15 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_STOCK_SIZE                          (PIZ_ITEMSET128_SIZE_IN_BIT)
+#define PIZ_STOCK_SIZE                          (PIZ_ITEMSET128_SIZE_IN_BITS)
 #define PIZ_ALPHABET_SIZE                       128
 
 #define PIZ_BOUNDED_QUEUE_SIZE                  4
 #define PIZ_INCREMENT_JUMP_CHANCE               1   
 #define PIZ_INCREMENT_FINAL_JUMP_CHANCE         5   
 
-#define PIZ_DEFAULT_THRESHOLD_TO_MERGE_NODES    (PIZ_ITEMSET128_SIZE_IN_BIT - 93)
-#define PIZ_MAXIMUM_THRESHOLD_TO_MERGE_NODES    (PIZ_ITEMSET128_SIZE_IN_BIT - 28)
+#define PIZ_DEFAULT_THRESHOLD_TO_MERGE_NODES    (PIZ_ITEMSET128_SIZE_IN_BITS - 93)
+#define PIZ_MAXIMUM_THRESHOLD_TO_MERGE_NODES    (PIZ_ITEMSET128_SIZE_IN_BITS - 28)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

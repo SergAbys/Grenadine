@@ -71,7 +71,7 @@ void pizItemset1024Clear (PIZItemset1024 *itemset)
 {
     long i;
     
-    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++) {
+    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORDS; i++) {
             itemset->items[i] = 0;
         }
 }
@@ -81,7 +81,7 @@ long pizItemset1024Count (const PIZItemset1024 *itemset)
     long i;
     long k = 0;
     
-    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++)
+    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORDS; i++)
         {
             unsigned long n = itemset->items[i];
             
@@ -115,7 +115,7 @@ void pizItemset1024Union (const PIZItemset1024 *a, const PIZItemset1024 *b, PIZI
 {
     long i;
     
-    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++) {
+    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORDS; i++) {
             r->items[i] = a->items[i] | b->items[i];
         }
 }
@@ -124,7 +124,7 @@ void pizItemset1024Intersection (const PIZItemset1024 *a, const PIZItemset1024 *
 {
     long i;
     
-    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++) {
+    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORDS; i++) {
             r->items[i] = a->items[i] & b->items[i];
         }
 }
@@ -134,7 +134,7 @@ bool pizItemset1024IsIncluded (const PIZItemset1024 *a, const PIZItemset1024 *b)
     long i;
     bool k = true;
             
-    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++)
+    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORDS; i++)
         {
             if (b->items[i] != (b->items[i] | a->items[i])) {
                     k = false;
@@ -150,7 +150,7 @@ bool pizItemset1024IsEqual (const PIZItemset1024 *a, const PIZItemset1024 *b)
     long i;
     long k = true;
             
-    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORD; i++)
+    for (i = 0; i < PIZ_ITEMSET1024_SIZE_IN_WORDS; i++)
         {
             if (a->items[i] != b->items[i]) {
                     k = false;
