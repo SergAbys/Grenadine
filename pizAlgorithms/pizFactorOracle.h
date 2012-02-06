@@ -57,29 +57,29 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \def     PIZ_FACTOR_ORACLE_ENCODE_REFER 
+ * \def     PIZ_FACTOR_ORACLE_REFER 
  * \brief   Index of referTo in \c pizFactorOracleEncodeNodeToArray().
  */
 
 /**
- * \def     PIZ_FACTOR_ORACLE_ENCODE_LRS 
+ * \def     PIZ_FACTOR_ORACLE_LRS 
  * \brief   Index of lengthRepeatedSuffix in \c pizFactorOracleEncodeNodeToArray().
  */
 
 /**
- * \def     PIZ_FACTOR_ORACLE_ENCODE_ARCS
+ * \def     PIZ_FACTOR_ORACLE_ARCS
  * \brief   Index of number of arcs in \c pizFactorOracleEncodeNodeToArray().
  */
 
 /**
- * \def     PIZ_FACTOR_ORACLE_ENCODE_DATA
+ * \def     PIZ_FACTOR_ORACLE_DATA
  * \brief   Index of data in \c pizFactorOracleEncodeNodeToArray().
  */
  
-#define PIZ_FACTOR_ORACLE_ENCODE_REFER      0
-#define PIZ_FACTOR_ORACLE_ENCODE_LRS        1
-#define PIZ_FACTOR_ORACLE_ENCODE_ARCS       2
-#define PIZ_FACTOR_ORACLE_ENCODE_DATA       3
+#define PIZ_FACTOR_ORACLE_REFER      0
+#define PIZ_FACTOR_ORACLE_LRS        1
+#define PIZ_FACTOR_ORACLE_ARCS       2
+#define PIZ_FACTOR_ORACLE_DATA       3
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -232,16 +232,16 @@ double pizFactorOracleStraightRatio (const PIZFactorOracle *x);
  *      {
  *          long i, k, ref, lrs;
  *           
- *          ref = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_ENCODE_REFER);
- *          lrs = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_ENCODE_LRS);
- *          k   = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_ENCODE_ARCS);
+ *          ref = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_REFER);
+ *          lrs = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_LRS);
+ *          k   = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_ARCS);
  *
  *          for (i = 0; i < k; i++) 
  *              {
  *                  long destination, value;
  *
- *                  destination = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_ENCODE_DATA + i);
- *                  value       = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_ENCODE_DATA + i + k);
+ *                  destination = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_DATA + i);
+ *                  value       = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_DATA + i + k);
  *              }
  *      }
  *   

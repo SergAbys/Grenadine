@@ -221,11 +221,11 @@ void romeo_dump (t_romeo *x, long n)
             if (!err)
                 {
                     long i;
-                    long count = pizGrowingArrayValueAtIndex (values, PIZ_GALOIS_LATTICE_ENCODE_CONCEPTS);
+                    long count = pizGrowingArrayValueAtIndex (values, PIZ_GALOIS_LATTICE_CONCEPTS);
                     long *ptr  = pizGrowingArrayPtr (values);
                                         
                     for (i = 0; i < count; i++) {
-                        atom_setlong_array (argc, argv, argc, ptr + PIZ_GALOIS_LATTICE_ENCODE_DATA + (n * i));
+                        atom_setlong_array (argc, argv, argc, ptr + PIZ_GALOIS_LATTICE_DATA + (n * i));
                         outlet_list (x->rightOutlet, NULL, argc, argv);
                     }
                 }

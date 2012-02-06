@@ -8,25 +8,28 @@
  */
  
 /*
- *  Last modified : 30/08/11.
+ *  Last modified : 31/01/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include    "ext.h"
-#include    "ext_obex.h"
-#include    "ext_systhread.h"
+#include "ext.h"
+#include "ext_obex.h"
+#include "ext_systhread.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include    "pizKohonenMap.h"
+#include "pizKohonenMap.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define     MAXIMUM_LIST_SIZE   256
+#define MAXIMUM_LIST_SIZE   256
+#define DEFAULT_RANGE       10
+#define DEFAULT_TRAINING    60
+#define DEFAULT_STEP        1.
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -130,9 +133,9 @@ void *charlie_new (t_symbol *s, long argc, t_atom *argv)
                                     
             if (x->values && x->kohonenMap)
                 {
-                    x->range    = PIZ_KOHONEN_MAP_DEFAULT_RANGE;
-                    x->training = PIZ_KOHONEN_MAP_DEFAULT_TRAINING;
-                    x->step     = PIZ_KOHONEN_MAP_DEFAULT_STEP;
+                    x->range    = DEFAULT_RANGE;
+                    x->training = DEFAULT_TRAINING;
+                    x->step     = DEFAULT_STEP;
                     
                     x->rightOutlet  = outlet_new (x, NULL);
                     object_obex_store ((void *)x, gensym ("dumpout"), (t_object *)x->rightOutlet);

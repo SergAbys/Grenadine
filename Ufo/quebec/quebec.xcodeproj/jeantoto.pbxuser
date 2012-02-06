@@ -8,8 +8,8 @@
 		);
 		codeSenseManager = 9600EBEA11FDAFDD0040A13A /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 348935126;
-			PBXWorkspaceStateSaveDate = 348935126;
+			PBXPerProjectTemplateStateSaveDate = 350235694;
+			PBXWorkspaceStateSaveDate = 350235694;
 		};
 		sourceControlManager = 9600EBE911FDAFDD0040A13A /* Source Control */;
 		userBuildSettings = {
@@ -34,7 +34,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1231, 5475}}";
 			sepNavSelRange = "{1441, 0}";
-			sepNavVisRect = "{{0, 0}, {1231, 645}}";
+			sepNavVisRect = "{{0, 3}, {1231, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1276, 774}}";
 		};
 	};

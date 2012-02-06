@@ -274,9 +274,9 @@ void zoulou_dump (t_zoulou *x, long n)
             long    lrs;
             t_atom  result[4];
             
-            ref = pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_ENCODE_REFER);
-            lrs = pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_ENCODE_LRS);
-            k   = pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_ENCODE_ARCS);
+            ref = pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_REFER);
+            lrs = pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_LRS);
+            k   = pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_ARCS);
             
             atom_setlong        (result, n);
             atom_setsym         (result + 1, zoulou_sym_ref);
@@ -289,15 +289,12 @@ void zoulou_dump (t_zoulou *x, long n)
             
             atom_setsym         (result + 1, zoulou_sym_arc);
             
-            for (i = 0; i < k; i++)
-                {
-                    atom_setlong (result + 2, pizGrowingArrayValueAtIndex 
-                            (values, PIZ_FACTOR_ORACLE_ENCODE_DATA + i));
-                    atom_setlong (result + 3, pizGrowingArrayValueAtIndex 
-                            (values, PIZ_FACTOR_ORACLE_ENCODE_DATA + i + k));
+            for (i = 0; i < k; i++) {
+                atom_setlong (result + 2, pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i));
+                atom_setlong (result + 3, pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i + k));
         
-                    outlet_anything (x->rightOutlet, zoulou_sym_node, 4, result);
-                }
+                outlet_anything (x->rightOutlet, zoulou_sym_node, 4, result);
+            }
         }
     
     pizGrowingArrayFree (values);

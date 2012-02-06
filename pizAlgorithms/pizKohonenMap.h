@@ -1,11 +1,11 @@
 /**
  * \file    pizKohonenMap.h
  * \details Thanks : Jean-philippe Rennard. \n 
- * \li      http://www.rennard.org/ \n
  * \li      http://en.wikipedia.org/wiki/Self-organizing_map \n
  * 
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    31 janvier 2012
+ * \ingroup algorithms
  */
  
 /*
@@ -53,12 +53,6 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_KOHONEN_MAP_DEFAULT_RANGE               10
-#define PIZ_KOHONEN_MAP_DEFAULT_TRAINING            60
-#define PIZ_KOHONEN_MAP_DEFAULT_STEP                1.
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZKohonenMap {
     long            mapSize;

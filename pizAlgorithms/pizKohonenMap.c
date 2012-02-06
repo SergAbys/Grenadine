@@ -56,6 +56,9 @@
 
 #define PIZ_DEFAULT_MAP_SIZE            20
 #define PIZ_DEFAULT_VECTOR_SIZE         4
+#define PIZ_DEFAULT_RANGE               10
+#define PIZ_DEFAULT_TRAINING            60
+#define PIZ_DEFAULT_STEP                1.
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -69,9 +72,9 @@ PIZKohonenMap *pizKohonenMapNew (long argc, long *argv)
             x->mapSize      = PIZ_DEFAULT_MAP_SIZE;
             x->vectorSize   = PIZ_DEFAULT_VECTOR_SIZE;
             
-            x->range        = PIZ_KOHONEN_MAP_DEFAULT_RANGE;
-            x->training     = PIZ_KOHONEN_MAP_DEFAULT_TRAINING;
-            x->step         = PIZ_KOHONEN_MAP_DEFAULT_STEP;
+            x->range        = PIZ_DEFAULT_RANGE;
+            x->training     = PIZ_DEFAULT_TRAINING;
+            x->step         = PIZ_DEFAULT_STEP;
             
             if (argc && ((argv[0] > 0) && (argv[0] <= PIZ_MAXIMUM_MAP_SIZE))) {
                     x->mapSize  = argv[0];

@@ -53,10 +53,10 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_MARKOV_MODEL_ENCODE_START           0
-#define PIZ_MARKOV_MODEL_ENCODE_TRANSITIONS     1
-#define PIZ_MARKOV_MODEL_ENCODE_EMISSIONS       2
-#define PIZ_MARKOV_MODEL_ENCODE_DATA            3
+#define PIZ_MARKOV_MODEL_START           0
+#define PIZ_MARKOV_MODEL_TRANSITIONS     1
+#define PIZ_MARKOV_MODEL_EMISSIONS       2
+#define PIZ_MARKOV_MODEL_DATA            3
 
 #define PIZ_MARKOV_MODEL_DEFAULT_PERSISTENCE    0.5
 

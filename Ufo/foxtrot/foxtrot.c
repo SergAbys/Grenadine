@@ -14,19 +14,19 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include    "ext.h"
-#include    "ext_obex.h"
-#include    "ext_systhread.h"
+#include "ext.h"
+#include "ext_obex.h"
+#include "ext_systhread.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include    "pizMarkovModel.h"
+#include "pizMarkovModel.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define     MAXIMUM_LIST_SIZE   256
+#define MAXIMUM_LIST_SIZE   256
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -260,8 +260,8 @@ void foxtrot_dump (t_foxtrot *x, long n)
     
     if (!err)
         {
-            long t = pizGrowingArrayValueAtIndex (values, PIZ_MARKOV_MODEL_ENCODE_TRANSITIONS);
-            long e = pizGrowingArrayValueAtIndex (values, PIZ_MARKOV_MODEL_ENCODE_EMISSIONS);
+            long t = pizGrowingArrayValueAtIndex (values, PIZ_MARKOV_MODEL_TRANSITIONS);
+            long e = pizGrowingArrayValueAtIndex (values, PIZ_MARKOV_MODEL_EMISSIONS);
     
             size = MAX (t, e);
             
@@ -269,13 +269,13 @@ void foxtrot_dump (t_foxtrot *x, long n)
                 {
                     long *ptr = pizGrowingArrayPtr (values);
 
-                    atom_setlong (argv, pizGrowingArrayValueAtIndex (values, PIZ_MARKOV_MODEL_ENCODE_START));
+                    atom_setlong (argv, pizGrowingArrayValueAtIndex (values, PIZ_MARKOV_MODEL_START));
                     outlet_anything (x->rightOutlet, foxtrot_sym_start, 1, argv);
                     
-                    atom_setlong_array (t, argv, t, ptr + PIZ_MARKOV_MODEL_ENCODE_DATA);
+                    atom_setlong_array (t, argv, t, ptr + PIZ_MARKOV_MODEL_DATA);
                     outlet_anything (x->rightOutlet, foxtrot_sym_transitions, t, argv);
                     
-                    atom_setlong_array (e, argv, e, ptr + PIZ_MARKOV_MODEL_ENCODE_DATA + t);
+                    atom_setlong_array (e, argv, e, ptr + PIZ_MARKOV_MODEL_DATA + t);
                     outlet_anything (x->rightOutlet, foxtrot_sym_emissions, e, argv);
 
                     sysmem_freeptr (argv);
