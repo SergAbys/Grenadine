@@ -60,7 +60,7 @@
 
 /**
  * \brief   The pool of dynamic arrays.
- * \details Implemented with a linklist.
+ * \remark  Implemented with a linklist.
  * \warning It is currently a very simple approach, and should be improved ;
  *          If an array is not released, the pool will grow dramatically for each query.
  */

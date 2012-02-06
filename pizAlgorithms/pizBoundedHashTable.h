@@ -73,9 +73,9 @@ typedef struct _PIZBoundedHashTableElement {
     
 /**
  * \brief   The bounded hashtable.
- * \details Bounded hashtable with \c long keys.
+ * \remark  Bounded hashtable with \c long keys.
  *          Implemented with an array of dynamic arrays, and a pre-allocated pool of elements.
- * \remark  To obtain the hash value : index =  key % size.
+ *          To obtain the hash value : index =  key % size.
  */
  
 typedef struct _PIZBoundedHashTable {

@@ -1,12 +1,13 @@
 /**
  * \file    pizFiniteState.h
- * \details A \em kinda finite state automaton is :
+ * \details A \em KINDA finite state automaton is :
  * \li      One value per node.
  * \li      Last value for each new sequence is a terminal state.
- * \li      Randomly, nodes with same value are crossing-over, 
- *          and lonely node for a given value are killed, older first,
- *          until the population is collapsed under the set threshold.
+ * \li      Randomly, oldest first, nodes with same value are crossing-over, 
+ *          lonely node for a given value are killed, 
+ *          until the population is collapsed under the defined threshold.
  * \li      Terminal states increase the probability of playback head's jump.
+ *
  * \author  Jean Sapristi
  * \date    31 janvier 2012
  * \ingroup algorithms
@@ -69,18 +70,18 @@ typedef struct _PIZFiniteStateNode {
     } PIZFiniteStateNode;
 
 /**
- * \brief   The \em kinda finite state automaton.  
- * \details Implemented as an array of bounded queues, one per alphabet's value (alphabet is 0-127). 
+ * \brief   The \em KINDA finite state automaton.  
+ * \remark  Implemented as an array of bounded queues, one per alphabet's value (alphabet is 0-127). 
  *          Bounded queues contains indexes of pre-allocated nodes (pool size is 128).
  */
  
 typedef struct _PIZFiniteState {
     long                count;                  /*!< Number of nodes in the automaton. */
     long                shuttle;                /*!< Playback head's index. */
-    long                lotteryIndex;           /*!< Number of elements  in the lottery array. */
+    long                lotteryIndex;           /*!< Number of elements in the lottery array. */
     long                jumpChance;             /*!< Playback head's cumulative chance to jump. */ 
     long                thresholdToMergeNodes;  /*!< Number of nodes threshold to start crossing-over. */ 
-    long                *lottery;               /*!< Temporary array for lottery draw. */ 
+    long                *lottery;               /*!< Temporary array for lottery drawing. */ 
     PIZBoundedQueue     **mapByValue;           /*!< Pointer to the array of bounded queues. */ 
     PIZBoundedStack     *ticketMachine;         /*!< Pool management. */ 
     PIZFiniteStateNode  *stock;                 /*!< Pool of nodes. */ 
@@ -138,7 +139,7 @@ void pizFiniteStateClear (PIZFiniteState *x);
 
 /**
  * \brief   Fill a given array with automaton values.
- * \details Each step the playback head randomly go in the automaton. 
+ * \remark  Each step the playback head randomly go in the automaton. 
  *          It does not reverse. At the end of a branch, it jumps. 
  *          Each step, chances to jump increase (terminal states raise it more).
  * \param   argc Number of step to proceed.

@@ -53,16 +53,25 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \def     PIZ_FACTOR_ORACLE_ENCODE_REFER 
+ * \brief   Index of number of concepts in \c pizGaloisLatticeEncodeConceptsByCardinalToArray().
+ */
+ 
 #define PIZ_GALOIS_LATTICE_ENCODE_CONCEPTS  0
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief Galois lattice element.  
+ */
+ 
 typedef struct _PIZGaloisLatticeConcept {
-    long            cardinal;
-    PIZItemset128   itemset;
-    PIZItemset128   parents;
-    PIZItemset128   childs;
+    long            cardinal;                           /*!< Number of values in the concept. */
+    PIZItemset128   itemset;                            /*!< Values in the concept (as bit field). */
+    PIZItemset128   parents;                            /*!< Arcs (indexes as bit field). */
+    PIZItemset128   childs;                             /*!< Arcs (indexes as bit field). */
     } PIZGaloisLatticeConcept;
 
 typedef struct _PIZGaloisLattice {
@@ -109,8 +118,8 @@ PIZ_LOCAL void      pizGaloisLatticeKillConcept (PIZGaloisLattice *x, long n);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizGaloisLatticeEncodeConceptsByCardinalToArray    (const PIZGaloisLattice *x, long n, 
-                                                            PIZGrowingArray *a);
+PIZError pizGaloisLatticeEncodeConceptsByCardinalToArray    (const PIZGaloisLattice *x, 
+                                                            long n, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

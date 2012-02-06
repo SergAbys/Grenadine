@@ -80,7 +80,7 @@
 
 /**
  * \brief   Factor oracle element.  
- * \details The arc from one node to next node (straight) is the first.
+ * \remark  The arc from one node to next node (straight) is the first.
  */
  
 typedef struct _PIZFactorOracleNode {
@@ -92,7 +92,7 @@ typedef struct _PIZFactorOracleNode {
     
 /**
  * \brief   The factor oracle.
- * \details Implemented with dynamic array of nodes ; For each node, arcs are stored in dynamic arrays too.
+ * \remark  Implemented with dynamic array of nodes ; For each node, arcs are stored in dynamic arrays too.
             Node's dynamic arrays are created on \a first query and keep in memory 
             until pizFactorOracleFree() is called.
  */
@@ -155,7 +155,7 @@ void pizFactorOracleClear (PIZFactorOracle *x);
 
 /**
  * \brief   Fill a given array with factor oracle values.
- * \details Each step a number between 0. and 1. is randomly drawn : 
+ * \remark  Each step a number between 0. and 1. is randomly drawn : 
  *          if it is inferior to the straightRatio the playback head go straight, 
  *          otherwise, there is half chance to go backward (if backward threshold is reached), 
  *          and half chance to go forward (if arcs exist).

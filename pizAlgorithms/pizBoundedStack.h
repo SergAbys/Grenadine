@@ -52,7 +52,7 @@
 
 /**
  * \brief   The bounded stack.
- * \details Implemented with an array.
+ * \remark  Implemented with an array.
  */
  
 typedef struct _PIZBoundedStack {
@@ -115,7 +115,7 @@ long pizBoundedStackCount (const PIZBoundedStack *x);
 
 /**
  * \brief   Get the unstacked value.
- * \details This value is initialized with -1. 
+ * \remark  This value is initialized with -1. 
  * \param   x A valid pointer.
  * \return  The value.
  */

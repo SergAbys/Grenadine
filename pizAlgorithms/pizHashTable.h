@@ -78,9 +78,9 @@ typedef struct _PIZHashTableElement {
 
 /**
  * \brief   The hashtable.
- * \details Simple hashtable with \c long keys. 
+ * \remark  Simple hashtable with \c long keys. 
  *          Implemented with an array of linklists.
- * \remark  To obtain the hash value : index =  key % size.
+ *          To obtain the hash value : index =  key % size.
  */
  
 typedef struct _PIZHashTable {

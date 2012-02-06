@@ -61,8 +61,8 @@ typedef struct _PIZQueueElement {
     } PIZQueueElement;
 
 /**
- * \brief   The queue.
- * \details Implemented with a linklist.
+ * \brief  The queue.
+ * \remark Implemented with a linklist.
  */
  
 typedef struct _PIZQueue {
@@ -132,7 +132,7 @@ long pizQueueCount (const PIZQueue *x);
 
 /**
  * \brief   Get the dequeued value.
- * \details This value is initialized with -1. 
+ * \remark  This value is initialized with -1. 
  * \param   x A valid pointer.
  * \return  The value.
  */

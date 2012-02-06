@@ -52,7 +52,7 @@
 
 /**
  * \brief   The bounded queue.
- * \details Implemented with an array.
+ * \remark  Implemented with an array.
  */
  
 typedef struct _PIZBoundedQueue {
@@ -126,7 +126,7 @@ long pizBoundedQueueCount (const PIZBoundedQueue *x);
 
 /**
  * \brief   Get the dequeued value.
- * \details This value is initialized with -1. 
+ * \remark  This value is initialized with -1. 
  * \param   x A valid pointer.
  * \return  The value.
  */

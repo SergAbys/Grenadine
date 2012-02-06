@@ -35,29 +35,32 @@
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_finite_state_8h.html#a7fd64f54b364f731af9cddacdd9c1f4">pizFiniteStateNew</a> (long argc, long *argv)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create the KFSA.  <a href="#a7fd64f54b364f731af9cddacdd9c1f4"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create the automaton.  <a href="#a7fd64f54b364f731af9cddacdd9c1f4"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_finite_state_8h.html#1603c1a4edaa8b35a576689abff56001">pizFiniteStateFree</a> (<a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *x)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Free the KFSA.  <a href="#1603c1a4edaa8b35a576689abff56001"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Free the automaton.  <a href="#1603c1a4edaa8b35a576689abff56001"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_finite_state_8h.html#df6bcfd1cb96e116123f6a1c039491ea">pizFiniteStateAdd</a> (<a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *x, long argc, long *argv)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Add values to the KFSA.  <a href="#df6bcfd1cb96e116123f6a1c039491ea"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Add values to the automaton.  <a href="#df6bcfd1cb96e116123f6a1c039491ea"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_finite_state_8h.html#20fe74a292f881cacd69489a9ae61387">pizFiniteStateClear</a> (<a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *x)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clear the KFSA.  <a href="#20fe74a292f881cacd69489a9ae61387"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clear the automaton.  <a href="#20fe74a292f881cacd69489a9ae61387"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_finite_state_8h.html#7e9867efc2c2b117a87afd93ad75a551">pizFiniteStateProceed</a> (<a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *x, long argc, long *argv)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill a given array with KFSA values.  <a href="#7e9867efc2c2b117a87afd93ad75a551"></a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill a given array with automaton values.  <a href="#7e9867efc2c2b117a87afd93ad75a551"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_finite_state_8h.html#b6369cbe30d5291db57a3a5c12af7476">pizFiniteStateCount</a> (const <a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *x)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the number of nodes in the automaton.  <a href="#b6369cbe30d5291db57a3a5c12af7476"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-A <em>kinda</em> finite state automaton is : <ul>
-<li>One value per node (not in arcs). </li>
+A <em>KINDA</em> finite state automaton is : <ul>
+<li>One value per node. </li>
 <li>Last value for each new sequence is a terminal state. </li>
-<li>Nodes are randomly crossing-over by equal values, until the population is collapsed under a given threshold. </li>
-<li>Terminal states increase the probability of playback head's jump. <dl class="author" compact><dt><b>Author:</b></dt><dd>Jean Sapristi </dd></dl>
-<dl class="date" compact><dt><b>Date:</b></dt><dd>31 janvier 2012 </dd></dl>
-</li>
+<li>Randomly, oldest first, nodes with same value are crossing-over, lonely node for a given value are killed, until the population is collapsed under the defined threshold. </li>
+<li>Terminal states increase the probability of playback head's jump.</li>
 </ul>
+<dl class="author" compact><dt><b>Author:</b></dt><dd>Jean Sapristi </dd></dl>
+<dl class="date" compact><dt><b>Date:</b></dt><dd>31 janvier 2012 </dd></dl>
 <hr><h2>Function Documentation</h2>
 <a class="anchor" name="a7fd64f54b364f731af9cddacdd9c1f4"></a><!-- doxytag: member="pizFiniteState.h::pizFiniteStateNew" ref="a7fd64f54b364f731af9cddacdd9c1f4" args="(long argc, long *argv)" -->
 <div class="memitem">
@@ -85,7 +88,7 @@ A <em>kinda</em> finite state automaton is : <ul>
 <div class="memdoc">
 
 <p>
-Create the KFSA. 
+Create the automaton. 
 <p>
 The function accept one argument : the threshold to start crossing-over. Minimum is 1, maximum is 100, default is 35. In case of failure the pointer is NULL. <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -93,8 +96,8 @@ The function accept one argument : the threshold to start crossing-over. Minimum
     <tr><td valign="top"></td><td valign="top"><em>argv</em>&nbsp;</td><td>A pointer to arguments. </td></tr>
   </table>
 </dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>A pointer to the new KFSA. </dd></dl>
-<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The following shows how to create a KFSA. <div class="fragment"><pre class="fragment"> <span class="keywordtype">long</span> args = 50;
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>A pointer to the new automaton. </dd></dl>
+<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The following shows how to create an automaton. <div class="fragment"><pre class="fragment"> <span class="keywordtype">long</span> args = 50;
 
  <a class="code" href="struct_p_i_z_finite_state.html" title="The kinda finite state automaton.">PIZFiniteState</a> *fsa = pizFiniteStateNew (1, &amp;args);
  <a class="code" href="struct_p_i_z_finite_state.html" title="The kinda finite state automaton.">PIZFiniteState</a> *fsa = pizFiniteStateNew (0, NULL); <span class="comment">// default value</span>
@@ -119,7 +122,7 @@ The function accept one argument : the threshold to start crossing-over. Minimum
 <div class="memdoc">
 
 <p>
-Free the KFSA. 
+Free the automaton. 
 <p>
 It is safe to pass NULL pointer. <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -161,7 +164,7 @@ It is safe to pass NULL pointer. <dl compact><dt><b>Parameters:</b></dt><dd>
 <div class="memdoc">
 
 <p>
-Add values to the KFSA. 
+Add values to the automaton. 
 <p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -171,6 +174,7 @@ Add values to the KFSA.
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>An error code. </dd></dl>
+<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The number of nodes can not be more than 128 at a given time, exceedings ones will be ignored. </dd></dl>
 
 </div>
 </div><p>
@@ -191,7 +195,7 @@ Add values to the KFSA.
 <div class="memdoc">
 
 <p>
-Clear the KFSA. 
+Clear the automaton. 
 <p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -233,9 +237,9 @@ Clear the KFSA.
 <div class="memdoc">
 
 <p>
-Fill a given array with KFSA values. 
+Fill a given array with automaton values. 
 <p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
+Each step the playback head randomly go in the automaton. It does not reverse. At the end of a branch, it jumps. Each step, chances to jump increase (terminal states raise it more). <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>argc</em>&nbsp;</td><td>Number of step to proceed. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>argv</em>&nbsp;</td><td>Pointer to the <code>long</code> array to fill. </td></tr>
@@ -245,8 +249,36 @@ Fill a given array with KFSA values.
 
 </div>
 </div><p>
+<a class="anchor" name="b6369cbe30d5291db57a3a5c12af7476"></a><!-- doxytag: member="pizFiniteState.h::pizFiniteStateCount" ref="b6369cbe30d5291db57a3a5c12af7476" args="(const PIZFiniteState *x)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long pizFiniteStateCount           </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *&nbsp;</td>
+          <td class="paramname"> <em>x</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Sun Feb 5 18:24:02 2012 for Grenadine by&nbsp;
+<div class="memdoc">
+
+<p>
+Get the number of nodes in the automaton. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A valid pointer. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>The number of nodes. </dd></dl>
+
+</div>
+</div><p>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 08:15:46 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>
