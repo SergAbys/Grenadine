@@ -6,6 +6,7 @@
  *
  * \author  Jean Sapristi
  * \date    31 janvier 2012
+ * \ingroup algorithms
  */
 
 /*
@@ -54,7 +55,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \def     PIZ_FACTOR_ORACLE_ENCODE_REFER 
+ * \def     PIZ_GALOIS_LATTICE_ENCODE_CONCEPTS 
  * \brief   Index of number of concepts in \c pizGaloisLatticeEncodeConceptsToArray().
  */
  
@@ -75,10 +76,12 @@ typedef struct _PIZGaloisLatticeConcept {
     } PIZGaloisLatticeConcept;
 
 /**
- * \brief   The Galois Lattice.  
+ * \brief   The galois lattice. 
+ * \details When the number of concepts reach a threshold, 
+ *          concepts are randomly killed to keep the population under.
  * \remark  Implemented as an array of dynamic arrays, 
- *          one per possible cardinal (the size of alphabet : 128). 
- *          Dynamic arrays contains indexes of pre-allocated concepts (pool size is 128 too).
+ *          one for each possible cardinal (the size of alphabet). 
+ *          Dynamic arrays contains indexes of pre-allocated concepts (pool size is 128).
  */
  
 typedef struct _PIZGaloisLattice {
@@ -93,7 +96,7 @@ typedef struct _PIZGaloisLattice {
     long                    mapByCardinalPeak;           /*!< Maximum cardinal reached in the map. */
     long                    tempMapByCardinalPeak;       /*!< Maximum cardinal reached in the temporary map. */
     bool                    needToMakeMap;               /*!< Flag (set after birth or death). */
-    PIZGrowingArray         **mapByCardinal;             /*!< Concept sorts by cardinal. */
+    PIZGrowingArray         **mapByCardinal;             /*!< Concepts sort by cardinal. */
     PIZGrowingArray         **tempMapByCardinal;         /*!< Temporay map to build lattice. */
     PIZBoundedStack         *ticketMachine;              /*!< Pool management. */
     PIZGaloisLatticeConcept *stock;                      /*!< Pool of concepts. */
@@ -109,15 +112,15 @@ PIZ_START_C_LINKAGE
 
 /**
  * \brief   Create the lattice.
- * \details The function accept one argument : the threshold to start crossing-over. 
- *          Minimum is 1, maximum is 100, default is 35.
+ * \details The function accept one argument : the threshold to start killing nodes. 
+ *          Minimum is 1, maximum is 100, default is 50.
  *          In case of failure the pointer is NULL.
  * \param   argc The number of arguments.
  * \param   argv A pointer to arguments.
- * \return  A pointer to the new automaton.
- * \remark	The following shows how to create an automaton.  
+ * \return  A pointer to the new lattice.
+ * \remark	The following shows how to create a lattice.  
  * \code
- * long args = 50;
+ * long args = 75;
  *
  * PIZFiniteState *fsa = pizFiniteStateNew (1, &args);
  * PIZFiniteState *fsa = pizFiniteStateNew (0, NULL); // default value
@@ -126,23 +129,85 @@ PIZ_START_C_LINKAGE
  */
 PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv);
 
+/**
+ * \brief   Free the lattice.
+ * \details It is safe to pass NULL pointer. 
+ * \param   x A Pointer.
+ */
 void pizGaloisLatticeFree (PIZGaloisLattice *x);
 
-PIZError            pizGaloisLatticeAdd         (PIZGaloisLattice *x, long argc, long *argv);
-void                pizGaloisLatticeClear       (PIZGaloisLattice *x);
-PIZError            pizGaloisLatticeProceed     (PIZGaloisLattice *x, long argc, long *argv);
-long                pizGaloisLatticeCount       (const PIZGaloisLattice *x);
+/**
+ * \brief   Add values to the lattice.
+ * \param   x A valid pointer.
+ * \param   argc The number of values.
+ * \param   argv A pointer to the values.
+ * \return  An error code.
+ */
+PIZError pizGaloisLatticeAdd (PIZGaloisLattice *x, long argc, long *argv);
+
+/**
+ * \brief   Clear the lattice.
+ * \param   x A valid pointer.
+ */
+void pizGaloisLatticeClear (PIZGaloisLattice *x);
+
+/**
+ * \brief   Fill a given array with lattice values.
+ * \remark  While the array is not full, playback head randomly goes in the lattice (without reverse) 
+ *          getting values from concepts.
+ * \param   argc Number of values to proceed.
+ * \param   argv Pointer to the \c long array to fill.
+ * \return  An error code.
+ */
+PIZError pizGaloisLatticeProceed (PIZGaloisLattice *x, long argc, long *argv);
+
+/**
+ * \brief   Get the number of concepts in the lattice.
+ * \param   x A valid pointer.
+ * \return  The number of concepts.
+ */
+long pizGaloisLatticeCount (const PIZGaloisLattice *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void      pizGaloisLatticeReconnect   (PIZGaloisLattice *x, long g, long n);
-PIZ_LOCAL PIZError  pizGaloisLatticeMakeMap     (PIZGaloisLattice *x);
-PIZ_LOCAL void      pizGaloisLatticeKillConcept (PIZGaloisLattice *x, long n);
+PIZ_LOCAL PIZ_INLINE void   pizGaloisLatticeReconnect   (PIZGaloisLattice *x, long g, long n);
+PIZ_LOCAL PIZError          pizGaloisLatticeMakeMap     (PIZGaloisLattice *x);
+PIZ_LOCAL void              pizGaloisLatticeKillConcept (PIZGaloisLattice *x, long n);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief   Encode all concepts with a given size to a dynamic array.
+ * \param   x A valid pointer.
+ * \param   n The size of concept to get.
+ * \param   a A pointer to a dynamic array.
+ * \return  An error code.
+ * \remark	An example :  
+ * \code
+ * long             err = PIZ_GOOD;
+ * long             n = 4;
+ * PIZGrowingArray  *a = pizGrowingArrayNew (16);
+ *
+ * err = pizGaloisLatticeEncodeConceptsToArray (lattice, n, a);
+ *
+ * if (!err)
+ *      {
+ *          long i;
+ *          long count = pizGrowingArrayValueAtIndex (a, PIZ_GALOIS_LATTICE_ENCODE_CONCEPTS);
+ *          long *ptr  = pizGrowingArrayPtr (a);
+ *          long *values = NULL;
+ *
+ *          for (i = 0; i < count; i++) {
+ *                  values = ptr + 1 + (n * i);
+ *              }
+ *      }
+ *
+ *  pizGrowingArrayFree (a);
+ *
+ * \endcode
+ */
 PIZError pizGaloisLatticeEncodeConceptsToArray (const PIZGaloisLattice *x, long n, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------

@@ -462,7 +462,7 @@ long pizGaloisLatticeCount (const PIZGaloisLattice *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void pizGaloisLatticeReconnect (PIZGaloisLattice *x, long g, long n)
+PIZ_INLINE void pizGaloisLatticeReconnect (PIZGaloisLattice *x, long g, long n)
 {
     long i;
     

@@ -22,7 +22,7 @@
   </div>
 </div>
 <div class="contents">
-<h1>PIZFiniteState Struct Reference</h1><!-- doxytag: class="PIZFiniteState" -->The <em>kinda</em> finite state automaton.  
+<h1>PIZFiniteState Struct Reference</h1><!-- doxytag: class="PIZFiniteState" -->The <em>KINDA</em> finite state automaton.  
 <a href="#_details">More...</a>
 <p>
 <code>#include &lt;pizFiniteState.h&gt;</code>
@@ -50,9 +50,10 @@
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-The <em>kinda</em> finite state automaton. 
+The <em>KINDA</em> finite state automaton. 
 <p>
-Implemented as an array of bounded queues, one per alphabet's value (alphabet is 0-127). Bounded queues contains indexes of pre-allocated nodes (pool size is 128). <hr><h2>Field Documentation</h2>
+<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>Implemented as an array of bounded queues, one per alphabet's value (alphabet is 0-127). Bounded queues contains indexes of pre-allocated nodes (pool size is 128). </dd></dl>
+<hr><h2>Field Documentation</h2>
 <a class="anchor" name="63931e1adf2c01ac1a7b3ff130c1312e"></a><!-- doxytag: member="PIZFiniteState::count" ref="63931e1adf2c01ac1a7b3ff130c1312e" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -80,7 +81,7 @@ Number of nodes in the automaton.
 <div class="memdoc">
 
 <p>
-Playback head's index. 
+Index of the playback head. 
 </div>
 </div><p>
 <a class="anchor" name="9f8690c35fe7f7aa18004c72dffb57f2"></a><!-- doxytag: member="PIZFiniteState::lotteryIndex" ref="9f8690c35fe7f7aa18004c72dffb57f2" args="" -->
@@ -110,7 +111,7 @@ Number of elements in the lottery array.
 <div class="memdoc">
 
 <p>
-Playback head's cumulative chance to jump. 
+Cumulative chance to jump when reading. 
 </div>
 </div><p>
 <a class="anchor" name="9772fd7e38bd12fba4105d10afd91809"></a><!-- doxytag: member="PIZFiniteState::thresholdToMergeNodes" ref="9772fd7e38bd12fba4105d10afd91809" args="" -->
@@ -125,7 +126,7 @@ Playback head's cumulative chance to jump.
 <div class="memdoc">
 
 <p>
-Number of nodes threshold to start crossing-over. 
+Number of nodes to start crossing-over. 
 </div>
 </div><p>
 <a class="anchor" name="5b622753a4b3415fbafa701678a2bcfe"></a><!-- doxytag: member="PIZFiniteState::lottery" ref="5b622753a4b3415fbafa701678a2bcfe" args="" -->
@@ -140,7 +141,7 @@ Number of nodes threshold to start crossing-over.
 <div class="memdoc">
 
 <p>
-Temporary array for lottery draw. 
+Temporary array for lottery drawing. 
 </div>
 </div><p>
 <a class="anchor" name="0ac9ee1f1d0221230d5725b092dd3a4d"></a><!-- doxytag: member="PIZFiniteState::mapByValue" ref="0ac9ee1f1d0221230d5725b092dd3a4d" args="" -->
@@ -191,7 +192,7 @@ Pool of nodes.
 <hr>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="piz_finite_state_8h.html">pizFiniteState.h</a></ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 08:15:46 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 15:31:10 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

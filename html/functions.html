@@ -67,15 +67,19 @@ Here is a list of all documented struct and union fields with links to the struc
 <li>cache
 : <a class="el" href="struct_p_i_z_array_pool.html#abc9407a7a267ea35094a9f2531fa5a1">PIZArrayPool</a>
 , <a class="el" href="struct_p_i_z_linklist.html#57cb164501465eba41bf75b8308ead2c">PIZLinklist</a>
+<li>cardinal
+: <a class="el" href="struct_p_i_z_galois_lattice_concept.html#91115bf4a5b2b3e70b7dc23e3c05bbde">PIZGaloisLatticeConcept</a>
 <li>childs
 : <a class="el" href="struct_p_i_z_finite_state_node.html#dba716f2eb4b07f4781ba95bf8b8404f">PIZFiniteStateNode</a>
+, <a class="el" href="struct_p_i_z_galois_lattice_concept.html#4e0d73623b0e30ee22003142af4712e1">PIZGaloisLatticeConcept</a>
 <li>count
-: <a class="el" href="struct_p_i_z_hash_table.html#12d1176baa26bc4da5cecb08a567ff17">PIZHashTable</a>
-, <a class="el" href="struct_p_i_z_finite_state.html#63931e1adf2c01ac1a7b3ff130c1312e">PIZFiniteState</a>
+: <a class="el" href="struct_p_i_z_finite_state.html#63931e1adf2c01ac1a7b3ff130c1312e">PIZFiniteState</a>
 , <a class="el" href="struct_p_i_z_bounded_queue.html#b5559516ed0868c7983dd540c212d7e4">PIZBoundedQueue</a>
 , <a class="el" href="struct_p_i_z_bounded_hash_table.html#e2154be6d7e5e6bc6507809069685ccc">PIZBoundedHashTable</a>
-, <a class="el" href="struct_p_i_z_linklist.html#24148896c309c5643aa46ff2cff2afb0">PIZLinklist</a>
+, <a class="el" href="struct_p_i_z_hash_table.html#12d1176baa26bc4da5cecb08a567ff17">PIZHashTable</a>
 , <a class="el" href="struct_p_i_z_queue.html#21d87bbc044b79f327e0b471f60bc910">PIZQueue</a>
+, <a class="el" href="struct_p_i_z_linklist.html#24148896c309c5643aa46ff2cff2afb0">PIZLinklist</a>
+, <a class="el" href="struct_p_i_z_galois_lattice.html#9e6763a8977288a87321e347e6642ca3">PIZGaloisLattice</a>
 </ul>
 <h3><a class="anchor" name="index_f">- f -</a></h3><ul>
 <li>final
@@ -105,6 +109,14 @@ Here is a list of all documented struct and union fields with links to the struc
 <li>items
 : <a class="el" href="struct_p_i_z_itemset1024.html#7b3bc7f035de7028351b68f454397ee2">PIZItemset1024</a>
 , <a class="el" href="struct_p_i_z_itemset128.html#4dad1cd42c0363569eeaf43d93771c59">PIZItemset128</a>
+<li>itemset
+: <a class="el" href="struct_p_i_z_galois_lattice_concept.html#d4f615bc65b28aa8822cb7ea20ace262">PIZGaloisLatticeConcept</a>
+<li>itemsetIntersection
+: <a class="el" href="struct_p_i_z_galois_lattice.html#8a53adcfa5688f1e3618d4016c425792">PIZGaloisLattice</a>
+<li>itemsetIntersectionCardinal
+: <a class="el" href="struct_p_i_z_galois_lattice.html#0216fe737bbeb3c468f9b8e11fac15f4">PIZGaloisLattice</a>
+<li>itemsetToBeAdded
+: <a class="el" href="struct_p_i_z_galois_lattice.html#f8766bc22508269c94aa752e51d05ebe">PIZGaloisLattice</a>
 </ul>
 <h3><a class="anchor" name="index_j">- j -</a></h3><ul>
 <li>jumpChance
@@ -126,10 +138,16 @@ Here is a list of all documented struct and union fields with links to the struc
 : <a class="el" href="struct_p_i_z_finite_state.html#9f8690c35fe7f7aa18004c72dffb57f2">PIZFiniteState</a>
 </ul>
 <h3><a class="anchor" name="index_m">- m -</a></h3><ul>
+<li>mapByCardinal
+: <a class="el" href="struct_p_i_z_galois_lattice.html#b3128bb299fa67f1fcc63ae31adef00f">PIZGaloisLattice</a>
+<li>mapByCardinalPeak
+: <a class="el" href="struct_p_i_z_galois_lattice.html#bb0b1bfd1f38fac201a97e47bf742a71">PIZGaloisLattice</a>
 <li>mapByValue
 : <a class="el" href="struct_p_i_z_finite_state.html#0ac9ee1f1d0221230d5725b092dd3a4d">PIZFiniteState</a>
 </ul>
 <h3><a class="anchor" name="index_n">- n -</a></h3><ul>
+<li>needToMakeMap
+: <a class="el" href="struct_p_i_z_galois_lattice.html#9b6f702d44533c9ccc2cba678493afac">PIZGaloisLattice</a>
 <li>next
 : <a class="el" href="struct_p_i_z_linklist_element.html#341858614eae2a8ad8951fea90521ded">PIZLinklistElement</a>
 , <a class="el" href="struct_p_i_z_queue_element.html#1fd33dce37cf7c6eb7f94662d0078fc6">PIZQueueElement</a>
@@ -139,24 +157,27 @@ Here is a list of all documented struct and union fields with links to the struc
 <h3><a class="anchor" name="index_p">- p -</a></h3><ul>
 <li>parents
 : <a class="el" href="struct_p_i_z_finite_state_node.html#9c89b5f4157a49a6d77723ef458d67d1">PIZFiniteStateNode</a>
+, <a class="el" href="struct_p_i_z_galois_lattice_concept.html#443e7ea758debee5c837d9f284532306">PIZGaloisLatticeConcept</a>
 <li>peak
 : <a class="el" href="struct_p_i_z_factor_oracle.html#0cb8ad4b8d749d62a0cfe08f6344e66b">PIZFactorOracle</a>
 <li>pool
-: <a class="el" href="struct_p_i_z_bounded_hash_table.html#322480bd584e5dc0eaef353223eba12e">PIZBoundedHashTable</a>
-, <a class="el" href="struct_p_i_z_array_pool.html#d8362915a08c9e370c48a2e1304f7c8f">PIZArrayPool</a>
+: <a class="el" href="struct_p_i_z_array_pool.html#d8362915a08c9e370c48a2e1304f7c8f">PIZArrayPool</a>
+, <a class="el" href="struct_p_i_z_bounded_hash_table.html#322480bd584e5dc0eaef353223eba12e">PIZBoundedHashTable</a>
 <li>poolSize
 : <a class="el" href="struct_p_i_z_bounded_hash_table.html#2aeed679ed5f00b20459d53a87475798">PIZBoundedHashTable</a>
 <li>poppedValue
-: <a class="el" href="struct_p_i_z_queue.html#6498acab4dc95841f71a0823e65beee5">PIZQueue</a>
+: <a class="el" href="struct_p_i_z_bounded_stack.html#aad22df4b1a860f25bc3494effba7708">PIZBoundedStack</a>
+, <a class="el" href="struct_p_i_z_queue.html#6498acab4dc95841f71a0823e65beee5">PIZQueue</a>
 , <a class="el" href="struct_p_i_z_bounded_queue.html#d895d8ac2562ed1c912901fc7eebe745">PIZBoundedQueue</a>
-, <a class="el" href="struct_p_i_z_bounded_stack.html#aad22df4b1a860f25bc3494effba7708">PIZBoundedStack</a>
 <li>previous
 : <a class="el" href="struct_p_i_z_linklist_element.html#6c44afcbc015ba1af9999ff3eb6a60cb">PIZLinklistElement</a>
 , <a class="el" href="struct_p_i_z_queue_element.html#be3a4e66a5052a4812b22b1367d25030">PIZQueueElement</a>
+<li>previousShuttle
+: <a class="el" href="struct_p_i_z_galois_lattice.html#deff4298372cbba3f2870f83a27ddbd5">PIZGaloisLattice</a>
 <li>ptr
-: <a class="el" href="struct_p_i_z_hash_table_element.html#6011943b2e347518f5a6f51305d20adf">PIZHashTableElement</a>
+: <a class="el" href="struct_p_i_z_bounded_hash_table_element.html#60c9115030810889b0c926b289718af4">PIZBoundedHashTableElement</a>
+, <a class="el" href="struct_p_i_z_hash_table_element.html#6011943b2e347518f5a6f51305d20adf">PIZHashTableElement</a>
 , <a class="el" href="struct_p_i_z_linklist_element.html#2a369eb2e600bca6cf497427f5517c29">PIZLinklistElement</a>
-, <a class="el" href="struct_p_i_z_bounded_hash_table_element.html#60c9115030810889b0c926b289718af4">PIZBoundedHashTableElement</a>
 </ul>
 <h3><a class="anchor" name="index_r">- r -</a></h3><ul>
 <li>referTo
@@ -168,14 +189,16 @@ Here is a list of all documented struct and union fields with links to the struc
 <li>shuttle
 : <a class="el" href="struct_p_i_z_factor_oracle.html#5d7890426622f867552920353566a247">PIZFactorOracle</a>
 , <a class="el" href="struct_p_i_z_finite_state.html#38dde8369df4bc5bc32c0beac8fb3e7c">PIZFiniteState</a>
+, <a class="el" href="struct_p_i_z_galois_lattice.html#4f6c384bfb742914a65bd9cab665f1a2">PIZGaloisLattice</a>
 <li>size
-: <a class="el" href="struct_p_i_z_growing_array.html#c8ae64ed0d5b0136e5de3199194ea084">PIZGrowingArray</a>
+: <a class="el" href="struct_p_i_z_factor_oracle.html#30b52fa45ac8e429c10bd0b07de4cda9">PIZFactorOracle</a>
+, <a class="el" href="struct_p_i_z_growing_array.html#c8ae64ed0d5b0136e5de3199194ea084">PIZGrowingArray</a>
 , <a class="el" href="struct_p_i_z_hash_table.html#e6d93de0962d91a149fb2f80becef40c">PIZHashTable</a>
-, <a class="el" href="struct_p_i_z_factor_oracle.html#30b52fa45ac8e429c10bd0b07de4cda9">PIZFactorOracle</a>
 <li>stack
 : <a class="el" href="struct_p_i_z_bounded_stack.html#87310107ae01cee6b9eb932a01dd7ed2">PIZBoundedStack</a>
 <li>stock
 : <a class="el" href="struct_p_i_z_finite_state.html#7584571dca2489a3cdf5d282df2b2142">PIZFiniteState</a>
+, <a class="el" href="struct_p_i_z_galois_lattice.html#3aadf25dadac86517f787182fe8ce685">PIZGaloisLattice</a>
 <li>straightRatio
 : <a class="el" href="struct_p_i_z_factor_oracle.html#6d1657358289ddbcd8eb073ba7e573e9">PIZFactorOracle</a>
 </ul>
@@ -184,11 +207,20 @@ Here is a list of all documented struct and union fields with links to the struc
 : <a class="el" href="struct_p_i_z_bounded_queue.html#629db7488eb51472c05fa933c320f277">PIZBoundedQueue</a>
 , <a class="el" href="struct_p_i_z_linklist.html#7be41db7228e532d5a1a593c1c251758">PIZLinklist</a>
 , <a class="el" href="struct_p_i_z_queue.html#786a5657ab8f79ee09fdf941b073f4da">PIZQueue</a>
+<li>targetedConcept
+: <a class="el" href="struct_p_i_z_galois_lattice.html#ab18c522674cf7507c58d4d3ad34b5d9">PIZGaloisLattice</a>
+<li>tempMapByCardinal
+: <a class="el" href="struct_p_i_z_galois_lattice.html#b23b4ad4a39c86ac26801741b79a869b">PIZGaloisLattice</a>
+<li>tempMapByCardinalPeak
+: <a class="el" href="struct_p_i_z_galois_lattice.html#da178fa90e510fa615b799998f043512">PIZGaloisLattice</a>
+<li>thresholdToKillConcepts
+: <a class="el" href="struct_p_i_z_galois_lattice.html#8bd26a160d197319875a958a5508fa65">PIZGaloisLattice</a>
 <li>thresholdToMergeNodes
 : <a class="el" href="struct_p_i_z_finite_state.html#9772fd7e38bd12fba4105d10afd91809">PIZFiniteState</a>
 <li>ticketMachine
-: <a class="el" href="struct_p_i_z_bounded_hash_table.html#5506fd9fc5afefee37c78f54d6996f6e">PIZBoundedHashTable</a>
+: <a class="el" href="struct_p_i_z_galois_lattice.html#8b675986b6e159e9048161603d3d5186">PIZGaloisLattice</a>
 , <a class="el" href="struct_p_i_z_finite_state.html#3d491f3a88409fae601d850524de354d">PIZFiniteState</a>
+, <a class="el" href="struct_p_i_z_bounded_hash_table.html#5506fd9fc5afefee37c78f54d6996f6e">PIZBoundedHashTable</a>
 </ul>
 <h3><a class="anchor" name="index_v">- v -</a></h3><ul>
 <li>value
@@ -200,7 +232,7 @@ Here is a list of all documented struct and union fields with links to the struc
 , <a class="el" href="struct_p_i_z_growing_array.html#6bdb59aaa56127227c81476c49c4f3eb">PIZGrowingArray</a>
 </ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 08:15:46 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 15:31:10 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

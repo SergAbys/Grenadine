@@ -31,7 +31,7 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Finite state element.  <a href="struct_p_i_z_finite_state_node.html#_details">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The <em>kinda</em> finite state automaton.  <a href="struct_p_i_z_finite_state.html#_details">More...</a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The <em>KINDA</em> finite state automaton.  <a href="struct_p_i_z_finite_state.html#_details">More...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_finite_state_8h.html#a7fd64f54b364f731af9cddacdd9c1f4">pizFiniteStateNew</a> (long argc, long *argv)</td></tr>
 
@@ -99,8 +99,8 @@ The function accept one argument : the threshold to start crossing-over. Minimum
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>A pointer to the new automaton. </dd></dl>
 <dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The following shows how to create an automaton. <div class="fragment"><pre class="fragment"> <span class="keywordtype">long</span> args = 50;
 
- <a class="code" href="struct_p_i_z_finite_state.html" title="The kinda finite state automaton.">PIZFiniteState</a> *fsa = pizFiniteStateNew (1, &amp;args);
- <a class="code" href="struct_p_i_z_finite_state.html" title="The kinda finite state automaton.">PIZFiniteState</a> *fsa = pizFiniteStateNew (0, NULL); <span class="comment">// default value</span>
+ <a class="code" href="struct_p_i_z_finite_state.html" title="The KINDA finite state automaton.">PIZFiniteState</a> *fsa = pizFiniteStateNew (1, &amp;args);
+ <a class="code" href="struct_p_i_z_finite_state.html" title="The KINDA finite state automaton.">PIZFiniteState</a> *fsa = pizFiniteStateNew (0, NULL); <span class="comment">// default value</span>
 </pre></div> </dd></dl>
 
 </div>
@@ -239,7 +239,8 @@ Clear the automaton.
 <p>
 Fill a given array with automaton values. 
 <p>
-Each step the playback head randomly go in the automaton. It does not reverse. At the end of a branch, it jumps. Each step, chances to jump increase (terminal states raise it more). <dl compact><dt><b>Parameters:</b></dt><dd>
+<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>Each step the playback head randomly goes in the automaton. It does not reverse. At the end of a branch, it jumps. Each step, chances to jump increase (terminal states raise it more). </dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>argc</em>&nbsp;</td><td>Number of step to proceed. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>argv</em>&nbsp;</td><td>Pointer to the <code>long</code> array to fill. </td></tr>
@@ -278,7 +279,7 @@ Get the number of nodes in the automaton.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 08:15:46 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 15:31:10 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>
