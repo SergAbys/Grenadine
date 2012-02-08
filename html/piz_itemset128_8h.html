@@ -30,74 +30,47 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The 128 bits field.  <a href="struct_p_i_z_itemset128.html#_details">More...</a><br></td></tr>
-<tr><td colspan="2"><br><h2>Enumerations</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">enum &nbsp;</td><td class="memItemRight" valign="bottom">{ <br>
-&nbsp;&nbsp;<a class="el" href="piz_itemset128_8h.html#df764cbdea00d65edcd07bb9953ad2b7314913cf47b39beb6b0f67d6dc8c2aaa">PIZ_ITEMSET128_SIZE_IN_WORDS</a> =  4, 
-<br>
-&nbsp;&nbsp;<a class="el" href="piz_itemset128_8h.html#df764cbdea00d65edcd07bb9953ad2b769acd1c9b6e83d2df36b04b8eb4742ac">PIZ_ITEMSET128_SIZE_OF_ULONG</a> =  32, 
-<br>
-&nbsp;&nbsp;<a class="el" href="piz_itemset128_8h.html#df764cbdea00d65edcd07bb9953ad2b71b7a9ed88675d2a58b87a510c78b5c4b">PIZ_ITEMSET128_SIZE_IN_BITS</a> =  128
-<br>
- }</td></tr>
+<tr><td colspan="2"><br><h2>Defines</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_itemset128_8h.html#92b9ffea61d9421c9c7bce0126295a5e">PIZ_ITEMSET128_SIZE</a>&nbsp;&nbsp;&nbsp;128</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Bit field dimensions.  <a href="piz_itemset128_8h.html#df764cbdea00d65edcd07bb9953ad2b7">More...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_itemset128_8h.html#d1696a684722fd25367b5353d02ce7c1">pizItemset128SetAtIndex</a> (<a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> *itemset, long index)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">At specified index, set/let the bit to 1.  <a href="#d1696a684722fd25367b5353d02ce7c1"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_itemset128_8h.html#279e1bb1ffe0ca18cfc5a1818673a0b4">pizItemset128UnsetAtIndex</a> (<a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> *itemset, long index)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">At specified index, set/let the bit to 0.  <a href="#279e1bb1ffe0ca18cfc5a1818673a0b4"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_itemset128_8h.html#8dd193d2141f552f535d36359f49ecf6">pizItemset128Clear</a> (<a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> *itemset)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set/let all bits to 0.  <a href="#8dd193d2141f552f535d36359f49ecf6"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_itemset128_8h.html#a4bae142700f2735185c9fc2addaff2e">pizItemset128Count</a> (const <a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> *itemset)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the number of set bits.  <a href="#a4bae142700f2735185c9fc2addaff2e"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_itemset128_8h.html#dbd130f79327aad80cc706bc2e539d79">pizItemset128IsSetAtIndex</a> (const <a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> *itemset, long index)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">At specified index, get the value of a bit.  <a href="#dbd130f79327aad80cc706bc2e539d79"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_itemset128_8h.html#caa2bd2e1d1bc1f510e8b6ed40db78e1">pizItemset128Union</a> (const <a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> *a, const <a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> *b, <a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> *r)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Compute union between two bit fields.  <a href="#caa2bd2e1d1bc1f510e8b6ed40db78e1"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_itemset128_8h.html#096361837a52905ccdcee4e0bf9cf3ff">pizItemset128Intersection</a> (const <a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> *a, const <a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> *b, <a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> *r)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Compute intersection between two bit fields.  <a href="#096361837a52905ccdcee4e0bf9cf3ff"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_itemset128_8h.html#2dc27e734ee8f83ec9189ae552b62c26">pizItemset128IsIncluded</a> (const <a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> *a, const <a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> *b)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Test if the bit field <em>a</em> is included in the bit field <em>b</em>.  <a href="#2dc27e734ee8f83ec9189ae552b62c26"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_itemset128_8h.html#434a44b3685ec8f09fa0d3c6b467951d">pizItemset128IsEqual</a> (const <a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> *a, const <a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> *b)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Test if the bit field <em>a</em> is equal to the bit field <em>b</em>.  <a href="#434a44b3685ec8f09fa0d3c6b467951d"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 <dl class="author" compact><dt><b>Author:</b></dt><dd>Jean Sapristi </dd></dl>
 <dl class="date" compact><dt><b>Date:</b></dt><dd>31 janvier 2012 </dd></dl>
-<hr><h2>Enumeration Type Documentation</h2>
-<a class="anchor" name="df764cbdea00d65edcd07bb9953ad2b7"></a><!-- doxytag: member="pizItemset128.h::@1" ref="df764cbdea00d65edcd07bb9953ad2b7" args="" -->
+<hr><h2>Define Documentation</h2>
+<a class="anchor" name="92b9ffea61d9421c9c7bce0126295a5e"></a><!-- doxytag: member="pizItemset128.h::PIZ_ITEMSET128_SIZE" ref="92b9ffea61d9421c9c7bce0126295a5e" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">anonymous enum          </td>
+          <td class="memname">#define PIZ_ITEMSET128_SIZE&nbsp;&nbsp;&nbsp;128          </td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
 <p>
-Bit field dimensions. 
+Number of bits in the bit field. 
 <p>
-<dl compact><dt><b>Enumerator: </b></dt><dd>
-<table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" name="df764cbdea00d65edcd07bb9953ad2b7314913cf47b39beb6b0f67d6dc8c2aaa"></a><!-- doxytag: member="PIZ_ITEMSET128_SIZE_IN_WORDS" ref="df764cbdea00d65edcd07bb9953ad2b7314913cf47b39beb6b0f67d6dc8c2aaa" args="" -->PIZ_ITEMSET128_SIZE_IN_WORDS</em>&nbsp;</td><td>
-Number of <code>long</code> in the bit field. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="df764cbdea00d65edcd07bb9953ad2b769acd1c9b6e83d2df36b04b8eb4742ac"></a><!-- doxytag: member="PIZ_ITEMSET128_SIZE_OF_ULONG" ref="df764cbdea00d65edcd07bb9953ad2b769acd1c9b6e83d2df36b04b8eb4742ac" args="" -->PIZ_ITEMSET128_SIZE_OF_ULONG</em>&nbsp;</td><td>
-Size of an <code>unsigned</code> <code>long</code>. </td></tr>
-<tr><td valign="top"><em><a class="anchor" name="df764cbdea00d65edcd07bb9953ad2b71b7a9ed88675d2a58b87a510c78b5c4b"></a><!-- doxytag: member="PIZ_ITEMSET128_SIZE_IN_BITS" ref="df764cbdea00d65edcd07bb9953ad2b71b7a9ed88675d2a58b87a510c78b5c4b" args="" -->PIZ_ITEMSET128_SIZE_IN_BITS</em>&nbsp;</td><td>
-Number of bits in the bit field. </td></tr>
-</table>
-</dl>
 
 </div>
 </div><p>
@@ -437,7 +410,7 @@ Test if the bit field <em>a</em> is equal to the bit field <em>b</em>.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Tue Feb 7 16:16:41 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 16:39:21 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

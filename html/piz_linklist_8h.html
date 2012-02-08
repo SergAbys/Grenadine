@@ -33,56 +33,91 @@
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The linklist.  <a href="struct_p_i_z_linklist.html#_details">More...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Defines</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="d67703d1d6fba25be32b6d14d2b54914"></a><!-- doxytag: member="pizLinklist.h::PIZ_LINKLIST_FLAG_NONE" ref="d67703d1d6fba25be32b6d14d2b54914" args="" -->
-#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#d67703d1d6fba25be32b6d14d2b54914">PIZ_LINKLIST_FLAG_NONE</a>&nbsp;&nbsp;&nbsp;(0L)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#d67703d1d6fba25be32b6d14d2b54914">PIZ_LINKLIST_FLAG_NONE</a>&nbsp;&nbsp;&nbsp;(0L)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Don't free items. <br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="3925b81f6b8f9f2c7e8b13bdb2e3e3bd"></a><!-- doxytag: member="pizLinklist.h::PIZ_LINKLIST_FLAG_FREE_MEMORY" ref="3925b81f6b8f9f2c7e8b13bdb2e3e3bd" args="" -->
-#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#3925b81f6b8f9f2c7e8b13bdb2e3e3bd">PIZ_LINKLIST_FLAG_FREE_MEMORY</a>&nbsp;&nbsp;&nbsp;(1&lt;&lt;0)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#3925b81f6b8f9f2c7e8b13bdb2e3e3bd">PIZ_LINKLIST_FLAG_FREE_MEMORY</a>&nbsp;&nbsp;&nbsp;(1&lt;&lt;0)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">(DEFAULT) Free items with <code>free()</code>. <br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="c770375fb8dd3f86c1ceb0b73e51ff94"></a><!-- doxytag: member="pizLinklist.h::PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY" ref="c770375fb8dd3f86c1ceb0b73e51ff94" args="" -->
-#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#c770375fb8dd3f86c1ceb0b73e51ff94">PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY</a>&nbsp;&nbsp;&nbsp;(1&lt;&lt;1)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#c770375fb8dd3f86c1ceb0b73e51ff94">PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY</a>&nbsp;&nbsp;&nbsp;(1&lt;&lt;1)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Free items with <code><a class="el" href="piz_growing_array_8h.html#4af53cc894d341b233608b86e0e8564d" title="Free the dynamic array.">pizGrowingArrayFree()</a></code>. <br></td></tr>
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#98d06386951d39c628f179b3124f92f7">pizLinklistNew</a> (void)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create the linklist.  <a href="#98d06386951d39c628f179b3124f92f7"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#2a791a5a4f2985f626eddfd72bd8e59a">pizLinklistSetFlags</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x, long flags)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set linklist's bit flags.  <a href="#2a791a5a4f2985f626eddfd72bd8e59a"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#c1f51c4efd744eb74eba949f3044620b">pizLinklistFree</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Free the linklist.  <a href="#c1f51c4efd744eb74eba949f3044620b"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#60b7e5aaa6f7636ac69717ece296308f">pizLinklistClear</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clear the linklist.  <a href="#60b7e5aaa6f7636ac69717ece296308f"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#36d49a5f5e19bf7d8d2f38f545aae4ca">pizLinklistAppend</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x, void *ptr)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Append an item's pointer to the linklist.  <a href="#36d49a5f5e19bf7d8d2f38f545aae4ca"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#179ced97d657e361cf3922655c176cf5">pizLinklistInsert</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x, void *ptr)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Insert an item's pointer in front of the linklist.  <a href="#179ced97d657e361cf3922655c176cf5"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#e95a431ac43f44e7c9bb94cce4ac8e71">pizLinklistPtrAtIndex</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x, long index, void **ptr)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get an item's pointer with specified index.  <a href="#e95a431ac43f44e7c9bb94cce4ac8e71"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#a6a2792ee2b0e6a3511f4a75d371b549">pizLinklistNextByPtr</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x, void *ptr, void **nextPtr)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the next item's pointer of a given item's pointer.  <a href="#a6a2792ee2b0e6a3511f4a75d371b549"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#5e437b268e670b188830d03f188310de">pizLinklistRemoveByPtr</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x, void *ptr)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Given an item's pointer, remove this item from the linklist.  <a href="#5e437b268e670b188830d03f188310de"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#9847efbc9540168cc7739f1992d60f6d">pizLinklistSwapByIndexes</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x, long m, long n)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Swap item's pointers in the linklist according to specified indexes.  <a href="#9847efbc9540168cc7739f1992d60f6d"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#03a39141ec1350aabc6af6df5ddbf975">pizLinklistCount</a> (const <a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the number of items in the linklist.  <a href="#03a39141ec1350aabc6af6df5ddbf975"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 <dl class="author" compact><dt><b>Author:</b></dt><dd>Jean Sapristi </dd></dl>
 <dl class="date" compact><dt><b>Date:</b></dt><dd>15 janvier 2012 </dd></dl>
+<hr><h2>Define Documentation</h2>
+<a class="anchor" name="d67703d1d6fba25be32b6d14d2b54914"></a><!-- doxytag: member="pizLinklist.h::PIZ_LINKLIST_FLAG_NONE" ref="d67703d1d6fba25be32b6d14d2b54914" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PIZ_LINKLIST_FLAG_NONE&nbsp;&nbsp;&nbsp;(0L)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Don't free items. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="3925b81f6b8f9f2c7e8b13bdb2e3e3bd"></a><!-- doxytag: member="pizLinklist.h::PIZ_LINKLIST_FLAG_FREE_MEMORY" ref="3925b81f6b8f9f2c7e8b13bdb2e3e3bd" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PIZ_LINKLIST_FLAG_FREE_MEMORY&nbsp;&nbsp;&nbsp;(1&lt;&lt;0)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+(DEFAULT) Free items with <code>free()</code>. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="c770375fb8dd3f86c1ceb0b73e51ff94"></a><!-- doxytag: member="pizLinklist.h::PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY" ref="c770375fb8dd3f86c1ceb0b73e51ff94" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY&nbsp;&nbsp;&nbsp;(1&lt;&lt;1)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Free items with <code><a class="el" href="piz_growing_array_8h.html#4af53cc894d341b233608b86e0e8564d" title="Free the dynamic array.">pizGrowingArrayFree()</a></code>. 
+<p>
+
+</div>
+</div><p>
 <hr><h2>Function Documentation</h2>
 <a class="anchor" name="98d06386951d39c628f179b3124f92f7"></a><!-- doxytag: member="pizLinklist.h::pizLinklistNew" ref="98d06386951d39c628f179b3124f92f7" args="(void)" -->
 <div class="memitem">
@@ -489,7 +524,7 @@ Get the number of items in the linklist.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Tue Feb 7 16:16:41 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 16:39:21 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

@@ -55,6 +55,7 @@
 
 #define PIZ_DEFAULT_GRAPH_SIZE      6
 #define PIZ_DEFAULT_VECTOR_SIZE     6
+#define PIZ_DEFAULT_PERSISTENCE     0.5
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -67,7 +68,7 @@ PIZMarkovModel *pizMarkovModelNew (long argc, long *argv)
         {
             x->vectorSize   = PIZ_DEFAULT_VECTOR_SIZE;
             x->graphSize    = PIZ_DEFAULT_GRAPH_SIZE;
-            x->persistence  = PIZ_MARKOV_MODEL_DEFAULT_PERSISTENCE;
+            x->persistence  = PIZ_DEFAULT_PERSISTENCE;
             
             if (argc && ((argv[0] > 0)  && (argv[0] <= PIZ_MAXIMUM_GRAPH_SIZE))) {
                     x->graphSize = argv[0];
@@ -196,7 +197,7 @@ PIZError pizMarkovModelAdd (PIZMarkovModel *x, long argc, long *argv)
             err = PIZ_GOOD;
     
             for (t = 0; t < argc; t++) {
-                argv[t] = CLAMP (argv[t], 0, PIZ_ALPHABET_SIZE - 1); 
+                    argv[t] = CLAMP (argv[t], 0, PIZ_ALPHABET_SIZE - 1); 
                 }   
                 
             for (t = 0; t < argc; t += x->vectorSize) {

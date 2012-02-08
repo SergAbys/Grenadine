@@ -32,12 +32,6 @@
 <tr><td colspan="2"><br><h2>Data Fields</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_neural_gas.html#ac6ad7a6e1690187cd273218d2aa851b">map</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_neural_gas_head.html">PIZNeuralGasHead</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_neural_gas.html#582f39d5fb70ef0f0af91514c163a44f">headStock</a></td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_bounded_stack.html">PIZBoundedStack</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_neural_gas.html#f6e60fe79f9e2b253254f6284be5e586">ticketMachine</a></td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">double *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_neural_gas.html#46efe00e780a22b135e25b2978bd7b7c">vectorStock</a></td></tr>
-
 <tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_neural_gas.html#52f06e03279887ce6107e6d05ae48ae7">count</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_neural_gas.html#ad66f58fbea9c91fb9b70f8e20466a2d">vectorSize</a></td></tr>
@@ -58,6 +52,12 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_neural_gas.html#d973547189d4cd8361d32a4eb03cd417">kappa</a></td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_neural_gas.html#46efe00e780a22b135e25b2978bd7b7c">vectorStock</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_neural_gas_head.html">PIZNeuralGasHead</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_neural_gas.html#582f39d5fb70ef0f0af91514c163a44f">headStock</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_bounded_stack.html">PIZBoundedStack</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_neural_gas.html#f6e60fe79f9e2b253254f6284be5e586">ticketMachine</a></td></tr>
+
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 The neural gas. 
@@ -76,52 +76,7 @@ The neural gas.
 <div class="memdoc">
 
 <p>
-Pool's in use flags (as bit field). 
-</div>
-</div><p>
-<a class="anchor" name="582f39d5fb70ef0f0af91514c163a44f"></a><!-- doxytag: member="PIZNeuralGas::headStock" ref="582f39d5fb70ef0f0af91514c163a44f" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="struct_p_i_z_neural_gas_head.html">PIZNeuralGasHead</a>* <a class="el" href="struct_p_i_z_neural_gas.html#582f39d5fb70ef0f0af91514c163a44f">PIZNeuralGas::headStock</a>          </td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Pool of heads. 
-</div>
-</div><p>
-<a class="anchor" name="f6e60fe79f9e2b253254f6284be5e586"></a><!-- doxytag: member="PIZNeuralGas::ticketMachine" ref="f6e60fe79f9e2b253254f6284be5e586" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="struct_p_i_z_bounded_stack.html">PIZBoundedStack</a>* <a class="el" href="struct_p_i_z_neural_gas.html#f6e60fe79f9e2b253254f6284be5e586">PIZNeuralGas::ticketMachine</a>          </td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Pool management. 
-</div>
-</div><p>
-<a class="anchor" name="46efe00e780a22b135e25b2978bd7b7c"></a><!-- doxytag: member="PIZNeuralGas::vectorStock" ref="46efe00e780a22b135e25b2978bd7b7c" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">double* <a class="el" href="struct_p_i_z_neural_gas.html#46efe00e780a22b135e25b2978bd7b7c">PIZNeuralGas::vectorStock</a>          </td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Pool of vectors. 
+In use (as bit field). 
 </div>
 </div><p>
 <a class="anchor" name="52f06e03279887ce6107e6d05ae48ae7"></a><!-- doxytag: member="PIZNeuralGas::count" ref="52f06e03279887ce6107e6d05ae48ae7" args="" -->
@@ -274,10 +229,55 @@ Decrease error factor.
 Utility threshold. 
 </div>
 </div><p>
+<a class="anchor" name="46efe00e780a22b135e25b2978bd7b7c"></a><!-- doxytag: member="PIZNeuralGas::vectorStock" ref="46efe00e780a22b135e25b2978bd7b7c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double* <a class="el" href="struct_p_i_z_neural_gas.html#46efe00e780a22b135e25b2978bd7b7c">PIZNeuralGas::vectorStock</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Pool of vectors. 
+</div>
+</div><p>
+<a class="anchor" name="582f39d5fb70ef0f0af91514c163a44f"></a><!-- doxytag: member="PIZNeuralGas::headStock" ref="582f39d5fb70ef0f0af91514c163a44f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_p_i_z_neural_gas_head.html">PIZNeuralGasHead</a>* <a class="el" href="struct_p_i_z_neural_gas.html#582f39d5fb70ef0f0af91514c163a44f">PIZNeuralGas::headStock</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Pool of heads. 
+</div>
+</div><p>
+<a class="anchor" name="f6e60fe79f9e2b253254f6284be5e586"></a><!-- doxytag: member="PIZNeuralGas::ticketMachine" ref="f6e60fe79f9e2b253254f6284be5e586" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_p_i_z_bounded_stack.html">PIZBoundedStack</a>* <a class="el" href="struct_p_i_z_neural_gas.html#f6e60fe79f9e2b253254f6284be5e586">PIZNeuralGas::ticketMachine</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Pool management. 
+</div>
+</div><p>
 <hr>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="piz_neural_gas_8h.html">pizNeuralGas.h</a></ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Tue Feb 7 16:16:41 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 16:39:21 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

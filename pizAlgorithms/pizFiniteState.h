@@ -1,6 +1,6 @@
 /**
  * \file    pizFiniteState.h
- * \details A \em KINDA finite state automaton is :
+ * \details A \em kinda finite state automaton is :
  * \li      One value per node.
  * \li      Last value for each new sequence is a terminal state.
  * \li      Randomly, oldest first, nodes with same value are crossing-over, 
@@ -70,7 +70,7 @@ typedef struct _PIZFiniteStateNode {
     } PIZFiniteStateNode;
 
 /**
- * \brief   The \em KINDA finite state automaton.  
+ * \brief   The \em kinda finite state automaton.  
  * \remark  Implemented as an array of bounded queues, one per alphabet's value (alphabet is 0-127). 
  *          Bounded queues contains indexes of pre-allocated nodes (pool size is 128).
  */

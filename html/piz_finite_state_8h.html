@@ -31,29 +31,23 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Finite state element.  <a href="struct_p_i_z_finite_state_node.html#_details">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The <em>KINDA</em> finite state automaton.  <a href="struct_p_i_z_finite_state.html#_details">More...</a><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The <em>kinda</em> finite state automaton.  <a href="struct_p_i_z_finite_state.html#_details">More...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_finite_state_8h.html#a7fd64f54b364f731af9cddacdd9c1f4">pizFiniteStateNew</a> (long argc, long *argv)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create the automaton.  <a href="#a7fd64f54b364f731af9cddacdd9c1f4"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_finite_state_8h.html#1603c1a4edaa8b35a576689abff56001">pizFiniteStateFree</a> (<a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *x)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Free the automaton.  <a href="#1603c1a4edaa8b35a576689abff56001"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_finite_state_8h.html#df6bcfd1cb96e116123f6a1c039491ea">pizFiniteStateAdd</a> (<a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *x, long argc, long *argv)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Add values to the automaton.  <a href="#df6bcfd1cb96e116123f6a1c039491ea"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_finite_state_8h.html#20fe74a292f881cacd69489a9ae61387">pizFiniteStateClear</a> (<a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *x)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clear the automaton.  <a href="#20fe74a292f881cacd69489a9ae61387"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_finite_state_8h.html#7e9867efc2c2b117a87afd93ad75a551">pizFiniteStateProceed</a> (<a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *x, long argc, long *argv)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill a given array with automaton values.  <a href="#7e9867efc2c2b117a87afd93ad75a551"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_finite_state_8h.html#b6369cbe30d5291db57a3a5c12af7476">pizFiniteStateCount</a> (const <a class="el" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *x)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the number of nodes in the automaton.  <a href="#b6369cbe30d5291db57a3a5c12af7476"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-A <em>KINDA</em> finite state automaton is : <ul>
+A <em>kinda</em> finite state automaton is : <ul>
 <li>One value per node. </li>
 <li>Last value for each new sequence is a terminal state. </li>
 <li>Randomly, oldest first, nodes with same value are crossing-over, lonely node for a given value are killed, until the population is collapsed under the defined threshold. </li>
@@ -99,8 +93,8 @@ The function accept one argument : the threshold to start crossing-over. Minimum
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>A pointer to the new automaton. </dd></dl>
 <dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The following shows how to create an automaton. <div class="fragment"><pre class="fragment"> <span class="keywordtype">long</span> args = 50;
 
- <a class="code" href="struct_p_i_z_finite_state.html" title="The KINDA finite state automaton.">PIZFiniteState</a> *fsa = pizFiniteStateNew (1, &amp;args);
- <a class="code" href="struct_p_i_z_finite_state.html" title="The KINDA finite state automaton.">PIZFiniteState</a> *fsa = pizFiniteStateNew (0, NULL); <span class="comment">// default value</span>
+ <a class="code" href="struct_p_i_z_finite_state.html" title="The kinda finite state automaton.">PIZFiniteState</a> *fsa = pizFiniteStateNew (1, &amp;args);
+ <a class="code" href="struct_p_i_z_finite_state.html" title="The kinda finite state automaton.">PIZFiniteState</a> *fsa = pizFiniteStateNew (0, NULL); <span class="comment">// default value</span>
 </pre></div> </dd></dl>
 
 </div>
@@ -279,7 +273,7 @@ Get the number of nodes in the automaton.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Tue Feb 7 16:16:41 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 16:39:21 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

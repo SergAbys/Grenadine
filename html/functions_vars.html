@@ -33,6 +33,7 @@
       <li><a href="#index_c"><span>c</span></a></li>
       <li><a href="#index_e"><span>e</span></a></li>
       <li><a href="#index_f"><span>f</span></a></li>
+      <li><a href="#index_g"><span>g</span></a></li>
       <li><a href="#index_h"><span>h</span></a></li>
       <li><a href="#index_i"><span>i</span></a></li>
       <li><a href="#index_j"><span>j</span></a></li>
@@ -81,17 +82,20 @@
 : <a class="el" href="struct_p_i_z_finite_state_node.html#dba716f2eb4b07f4781ba95bf8b8404f">PIZFiniteStateNode</a>
 , <a class="el" href="struct_p_i_z_galois_lattice_concept.html#4e0d73623b0e30ee22003142af4712e1">PIZGaloisLatticeConcept</a>
 <li>count
-: <a class="el" href="struct_p_i_z_hash_table.html#12d1176baa26bc4da5cecb08a567ff17">PIZHashTable</a>
+: <a class="el" href="struct_p_i_z_kohonen_map.html#29dc87d0b634405847e7df9eeb9e33fa">PIZKohonenMap</a>
+, <a class="el" href="struct_p_i_z_hash_table.html#12d1176baa26bc4da5cecb08a567ff17">PIZHashTable</a>
 , <a class="el" href="struct_p_i_z_galois_lattice.html#9e6763a8977288a87321e347e6642ca3">PIZGaloisLattice</a>
 , <a class="el" href="struct_p_i_z_finite_state.html#63931e1adf2c01ac1a7b3ff130c1312e">PIZFiniteState</a>
 , <a class="el" href="struct_p_i_z_bounded_queue.html#b5559516ed0868c7983dd540c212d7e4">PIZBoundedQueue</a>
 , <a class="el" href="struct_p_i_z_bounded_hash_table.html#e2154be6d7e5e6bc6507809069685ccc">PIZBoundedHashTable</a>
-, <a class="el" href="struct_p_i_z_linklist.html#24148896c309c5643aa46ff2cff2afb0">PIZLinklist</a>
+, <a class="el" href="struct_p_i_z_markov_model.html#6a943fed33a0216de099193efd059402">PIZMarkovModel</a>
 , <a class="el" href="struct_p_i_z_queue.html#21d87bbc044b79f327e0b471f60bc910">PIZQueue</a>
 , <a class="el" href="struct_p_i_z_neural_gas.html#52f06e03279887ce6107e6d05ae48ae7">PIZNeuralGas</a>
-, <a class="el" href="struct_p_i_z_kohonen_map.html#29dc87d0b634405847e7df9eeb9e33fa">PIZKohonenMap</a>
+, <a class="el" href="struct_p_i_z_linklist.html#24148896c309c5643aa46ff2cff2afb0">PIZLinklist</a>
 </ul>
 <h3><a class="anchor" name="index_e">- e -</a></h3><ul>
+<li>emission
+: <a class="el" href="struct_p_i_z_markov_model.html#2395d16b2f2e33eda7274fdca03e1910">PIZMarkovModel</a>
 <li>epsilon1
 : <a class="el" href="struct_p_i_z_neural_gas.html#378b5aac4ba67eaa5cfc378837f07f1f">PIZNeuralGas</a>
 <li>epsilon2
@@ -106,6 +110,10 @@
 : <a class="el" href="struct_p_i_z_linklist.html#8d7bca12211ed83e796cda9a7ed1ab87">PIZLinklist</a>
 , <a class="el" href="struct_p_i_z_hash_table.html#23e0d930fa0c154acbd02b8d24ff5d93">PIZHashTable</a>
 , <a class="el" href="struct_p_i_z_bounded_hash_table.html#04aaf449c5cda34a256ff302b7e8ecd5">PIZBoundedHashTable</a>
+</ul>
+<h3><a class="anchor" name="index_g">- g -</a></h3><ul>
+<li>graphSize
+: <a class="el" href="struct_p_i_z_markov_model.html#cbdf91387bf30cac35b98c0a1b127ede">PIZMarkovModel</a>
 </ul>
 <h3><a class="anchor" name="index_h">- h -</a></h3><ul>
 <li>hashSize
@@ -192,24 +200,26 @@
 , <a class="el" href="struct_p_i_z_galois_lattice_concept.html#443e7ea758debee5c837d9f284532306">PIZGaloisLatticeConcept</a>
 <li>peak
 : <a class="el" href="struct_p_i_z_factor_oracle.html#0cb8ad4b8d749d62a0cfe08f6344e66b">PIZFactorOracle</a>
+<li>persistence
+: <a class="el" href="struct_p_i_z_markov_model.html#6047a21808ce4dae357634813228774c">PIZMarkovModel</a>
 <li>pool
 : <a class="el" href="struct_p_i_z_array_pool.html#d8362915a08c9e370c48a2e1304f7c8f">PIZArrayPool</a>
 , <a class="el" href="struct_p_i_z_bounded_hash_table.html#322480bd584e5dc0eaef353223eba12e">PIZBoundedHashTable</a>
 <li>poolSize
 : <a class="el" href="struct_p_i_z_bounded_hash_table.html#2aeed679ed5f00b20459d53a87475798">PIZBoundedHashTable</a>
 <li>poppedValue
-: <a class="el" href="struct_p_i_z_bounded_stack.html#aad22df4b1a860f25bc3494effba7708">PIZBoundedStack</a>
+: <a class="el" href="struct_p_i_z_bounded_queue.html#d895d8ac2562ed1c912901fc7eebe745">PIZBoundedQueue</a>
+, <a class="el" href="struct_p_i_z_bounded_stack.html#aad22df4b1a860f25bc3494effba7708">PIZBoundedStack</a>
 , <a class="el" href="struct_p_i_z_queue.html#6498acab4dc95841f71a0823e65beee5">PIZQueue</a>
-, <a class="el" href="struct_p_i_z_bounded_queue.html#d895d8ac2562ed1c912901fc7eebe745">PIZBoundedQueue</a>
 <li>previous
 : <a class="el" href="struct_p_i_z_linklist_element.html#6c44afcbc015ba1af9999ff3eb6a60cb">PIZLinklistElement</a>
 , <a class="el" href="struct_p_i_z_queue_element.html#be3a4e66a5052a4812b22b1367d25030">PIZQueueElement</a>
 <li>previousShuttle
 : <a class="el" href="struct_p_i_z_galois_lattice.html#deff4298372cbba3f2870f83a27ddbd5">PIZGaloisLattice</a>
 <li>ptr
-: <a class="el" href="struct_p_i_z_bounded_hash_table_element.html#60c9115030810889b0c926b289718af4">PIZBoundedHashTableElement</a>
+: <a class="el" href="struct_p_i_z_linklist_element.html#2a369eb2e600bca6cf497427f5517c29">PIZLinklistElement</a>
 , <a class="el" href="struct_p_i_z_hash_table_element.html#6011943b2e347518f5a6f51305d20adf">PIZHashTableElement</a>
-, <a class="el" href="struct_p_i_z_linklist_element.html#2a369eb2e600bca6cf497427f5517c29">PIZLinklistElement</a>
+, <a class="el" href="struct_p_i_z_bounded_hash_table_element.html#60c9115030810889b0c926b289718af4">PIZBoundedHashTableElement</a>
 </ul>
 <h3><a class="anchor" name="index_r">- r -</a></h3><ul>
 <li>range
@@ -230,6 +240,8 @@
 , <a class="el" href="struct_p_i_z_hash_table.html#e6d93de0962d91a149fb2f80becef40c">PIZHashTable</a>
 <li>stack
 : <a class="el" href="struct_p_i_z_bounded_stack.html#87310107ae01cee6b9eb932a01dd7ed2">PIZBoundedStack</a>
+<li>start
+: <a class="el" href="struct_p_i_z_markov_model.html#088da1d68c1f69999af01add388248b9">PIZMarkovModel</a>
 <li>step
 : <a class="el" href="struct_p_i_z_kohonen_map.html#d6ff61ca529a7cd40cf10acfa8a60c73">PIZKohonenMap</a>
 <li>stock
@@ -245,21 +257,29 @@
 , <a class="el" href="struct_p_i_z_queue.html#786a5657ab8f79ee09fdf941b073f4da">PIZQueue</a>
 <li>targetedConcept
 : <a class="el" href="struct_p_i_z_galois_lattice.html#ab18c522674cf7507c58d4d3ad34b5d9">PIZGaloisLattice</a>
+<li>tempEmission
+: <a class="el" href="struct_p_i_z_markov_model.html#46dae5c366d4df5c09d3c76f25861c24">PIZMarkovModel</a>
 <li>tempMapByCardinal
 : <a class="el" href="struct_p_i_z_galois_lattice.html#b23b4ad4a39c86ac26801741b79a869b">PIZGaloisLattice</a>
 <li>tempMapByCardinalPeak
 : <a class="el" href="struct_p_i_z_galois_lattice.html#da178fa90e510fa615b799998f043512">PIZGaloisLattice</a>
+<li>tempStart
+: <a class="el" href="struct_p_i_z_markov_model.html#804a9d24ec290bee98063c16fec5af38">PIZMarkovModel</a>
+<li>tempTransition
+: <a class="el" href="struct_p_i_z_markov_model.html#b9c1e76df40d730178865ab23baa57a4">PIZMarkovModel</a>
 <li>thresholdToKillConcepts
 : <a class="el" href="struct_p_i_z_galois_lattice.html#8bd26a160d197319875a958a5508fa65">PIZGaloisLattice</a>
 <li>thresholdToMergeNodes
 : <a class="el" href="struct_p_i_z_finite_state.html#9772fd7e38bd12fba4105d10afd91809">PIZFiniteState</a>
 <li>ticketMachine
-: <a class="el" href="struct_p_i_z_bounded_hash_table.html#5506fd9fc5afefee37c78f54d6996f6e">PIZBoundedHashTable</a>
+: <a class="el" href="struct_p_i_z_finite_state.html#3d491f3a88409fae601d850524de354d">PIZFiniteState</a>
 , <a class="el" href="struct_p_i_z_galois_lattice.html#8b675986b6e159e9048161603d3d5186">PIZGaloisLattice</a>
-, <a class="el" href="struct_p_i_z_finite_state.html#3d491f3a88409fae601d850524de354d">PIZFiniteState</a>
 , <a class="el" href="struct_p_i_z_neural_gas.html#f6e60fe79f9e2b253254f6284be5e586">PIZNeuralGas</a>
+, <a class="el" href="struct_p_i_z_bounded_hash_table.html#5506fd9fc5afefee37c78f54d6996f6e">PIZBoundedHashTable</a>
 <li>training
 : <a class="el" href="struct_p_i_z_kohonen_map.html#7b7eb25110d39fe0d42f10d7108c22c7">PIZKohonenMap</a>
+<li>transition
+: <a class="el" href="struct_p_i_z_markov_model.html#a4c5d74af8255d55314d8809c1257e08">PIZMarkovModel</a>
 </ul>
 <h3><a class="anchor" name="index_u">- u -</a></h3><ul>
 <li>utility
@@ -274,13 +294,14 @@
 , <a class="el" href="struct_p_i_z_growing_array.html#6bdb59aaa56127227c81476c49c4f3eb">PIZGrowingArray</a>
 , <a class="el" href="struct_p_i_z_bounded_queue.html#f782d4a92230a25f6aebb9d9445b31ab">PIZBoundedQueue</a>
 <li>vectorSize
-: <a class="el" href="struct_p_i_z_kohonen_map.html#e906d28e3111882a25151b79cbfffb44">PIZKohonenMap</a>
+: <a class="el" href="struct_p_i_z_markov_model.html#2736df2059b1677b40135c56ce55ca04">PIZMarkovModel</a>
 , <a class="el" href="struct_p_i_z_neural_gas.html#ad66f58fbea9c91fb9b70f8e20466a2d">PIZNeuralGas</a>
+, <a class="el" href="struct_p_i_z_kohonen_map.html#e906d28e3111882a25151b79cbfffb44">PIZKohonenMap</a>
 <li>vectorStock
 : <a class="el" href="struct_p_i_z_neural_gas.html#46efe00e780a22b135e25b2978bd7b7c">PIZNeuralGas</a>
 </ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Tue Feb 7 16:16:41 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 16:39:21 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

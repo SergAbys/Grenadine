@@ -110,12 +110,12 @@ int main (void)
     CLASS_ATTR_FILTER_CLIP  (c, "epsilon2",     0., 1.);
     
     CLASS_ATTR_DOUBLE       (c, "alpha",        0, t_yankee, alpha);
-    CLASS_ATTR_LABEL        (c, "alpha",        0, "Decrease Winners Error Factor");
+    CLASS_ATTR_LABEL        (c, "alpha",        0, "Decrease Generators Error Factor");
     CLASS_ATTR_ACCESSORS    (c, "alpha",        NULL, yankee_setAlpha);
     CLASS_ATTR_FILTER_CLIP  (c, "alpha",        0., 1.);
     
     CLASS_ATTR_DOUBLE       (c, "beta",         0, t_yankee, beta);
-    CLASS_ATTR_LABEL        (c, "beta",         0, "Decrease Error Factor");
+    CLASS_ATTR_LABEL        (c, "beta",         0, "Decrease Global Error Factor");
     CLASS_ATTR_ACCESSORS    (c, "beta",         NULL, yankee_setBeta);
     CLASS_ATTR_FILTER_CLIP  (c, "beta",         0., 1.);
     

@@ -6,6 +6,7 @@
  *
  * \author  Jean Sapristi
  * \date    31 janvier 2012
+ * \ingroup algorithms
  */
 
 /*
@@ -53,29 +54,55 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_MARKOV_MODEL_START           0
-#define PIZ_MARKOV_MODEL_TRANSITIONS     1
-#define PIZ_MARKOV_MODEL_EMISSIONS       2
-#define PIZ_MARKOV_MODEL_DATA            3
+/**
+ * \def     PIZ_MARKOV_MODEL_START 
+ * \brief   Index of start probability of the node in \c pizMarkovModelEncodeNodeToArray.
+ */
 
-#define PIZ_MARKOV_MODEL_DEFAULT_PERSISTENCE    0.5
+/**
+ * \def     PIZ_MARKOV_MODEL_TRANSITIONS 
+ * \brief   Index of number of transitions of the node in \c pizMarkovModelEncodeNodeToArray.
+ */
+ 
+/**
+ * \def     PIZ_MARKOV_MODEL_EMISSIONS 
+ * \brief   Index of number of emmissions of the node in \c pizMarkovModelEncodeNodeToArray.
+ */
+
+/**
+ * \def     PIZ_MARKOV_MODEL_DATA 
+ * \brief   Index of data in \c pizMarkovModelEncodeNodeToArray.
+ */
+ 
+#define PIZ_MARKOV_MODEL_START          0
+#define PIZ_MARKOV_MODEL_TRANSITIONS    1
+#define PIZ_MARKOV_MODEL_EMISSIONS      2
+#define PIZ_MARKOV_MODEL_DATA           3
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
 #define PIZ_ALPHABET_SIZE               128
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief   The hidden markov model.
+ * \remark  Implemented simply with arrays.
+ */
+ 
 typedef struct _PIZMarkovModel {
-    long    count;
-    long    vectorSize;
-    long    graphSize;
-    double  persistence;
-    double  *start;
-    double  *emission;
-    double  *transition;
-    double  *tempStart;
-    double  *tempEmission;
-    double  *tempTransition;
+    long    count;                              /*!< Number of learning iterations performed. */
+    long    vectorSize;                         /*!< Size of learning vectors. */
+    long    graphSize;                          /*!< Number of nodes in the HMM. */
+    double  persistence;                        /*!< Ratio between old and new HMM after learning. */
+    double  *start;                             /*!< Start probabilities. */
+    double  *emission;                          /*!< Emission probabilities. */
+    double  *transition;                        /*!< Transition probabilities. */
+    double  *tempStart;                         /*!< Reestimated start probabilities. */
+    double  *tempEmission;                      /*!< Reestimated emission probabilities. */
+    double  *tempTransition;                    /*!< Reestimated transition probabilities. */
     double  *alpha;
     double  *tempAlpha;
     double  *beta;

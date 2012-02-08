@@ -58,8 +58,8 @@
  */
  
 typedef struct _PIZNeuralGasHead {
-    double          error;                      /*!< Cumulative error factor of the node. */
-    double          utility;                    /*!< Cumulative utility factor of the node. */
+    double          error;                      /*!< Cumulative error of the node. */
+    double          utility;                    /*!< Cumulative utility of the node. */
     PIZItemset128   arcs;                       /*!< Arcs (indexes as bit field). */
     }PIZNeuralGasHead;
 
@@ -74,10 +74,7 @@ typedef struct _PIZNeuralGasHead {
  */
  
 typedef struct _PIZNeuralGas {
-    PIZItemset128       map;                    /*!< Pool's in use flags (as bit field). */
-    PIZBoundedStack     *ticketMachine;         /*!< Pool management. */
-    PIZNeuralGasHead    *headStock;             /*!< Pool of heads. */
-    double              *vectorStock;           /*!< Pool of vectors. */
+    PIZItemset128       map;                    /*!< In use (as bit field). */
     long                count;                  /*!< Number of learning iterations performed. */
     long                vectorSize;             /*!< Size of a node's vector. */
     long                mapSize;                /*!< Number of nodes in the neural gas. */
@@ -85,9 +82,12 @@ typedef struct _PIZNeuralGas {
     long                lambda;                 /*!< New node rate. */
     double              epsilon1;               /*!< Move winner factor. */
     double              epsilon2;               /*!< Move neighbours factor. */
-    double              alpha;                  /*!< Decrease winners error factor. */
-    double              beta;                   /*!< Decrease error factor. */
+    double              alpha;                  /*!< Decrease generators error factor. */
+    double              beta;                   /*!< Decrease global error factor. */
     double              kappa;                  /*!< Utility threshold. */
+    double              *vectorStock;           /*!< Pool of vectors. */
+    PIZNeuralGasHead    *headStock;             /*!< Pool of heads. */
+    PIZBoundedStack     *ticketMachine;         /*!< Pool management. */
     } PIZNeuralGas;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -163,7 +163,7 @@ long pizNeuralGasCount (const PIZNeuralGas *x);
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief   Set the frequence of node's birth and death in the neural gas.
+ * \brief   Set the period of node's birth and death in the neural gas.
  * \details Default is 1 time out of 2.
  * \param   x A valid pointer.
  * \param   n The new node rate.
@@ -171,44 +171,98 @@ long pizNeuralGasCount (const PIZNeuralGas *x);
 void pizNeuralGasSetLambda (PIZNeuralGas *x, long n);
 
 /**
- * \brief   Set the moving factor of the winner node in the neural gas.
+ * \brief   Set the move factor of the winner node in the neural gas.
  * \details Default is 0.5 ; (must be [0., 1.]).
  * \param   x A valid pointer.
- * \param   n The move winner factor.
+ * \param   n The move factor.
  */
 void pizNeuralGasSetEpsilon1 (PIZNeuralGas *x, double f);
 
 /**
- * \brief   Set the moving factor of the neighboors of the winner node in the neural gas.
+ * \brief   Set the move factor of neighboors nodes in the neural gas.
  * \details Default is 0.25 ; (must be [0., 1.]).
  * \param   x A valid pointer.
- * \param   n The move neighboors factor.
+ * \param   n The move factor.
  */
 void pizNeuralGasSetEpsilon2 (PIZNeuralGas *x, double f);
 
 /**
- * \brief   Set the error's decrease factor of winners nodes in the neural gas.
+ * \brief   Set the error decrease factor of generators in the neural gas.
  * \details Default is 0.5 ; (must be [0., 1.]).
  * \param   x A valid pointer.
  * \param   n The decrease factor.
  */
 void pizNeuralGasSetAlpha (PIZNeuralGas *x, double f);
 
+/**
+ * \brief   Set the global error decrease factor in the neural gas.
+ * \details Default is 0.1 ; (must be [0., 1.]).
+ * \param   x A valid pointer.
+ * \param   n The decrease factor.
+ */
 void pizNeuralGasSetBeta (PIZNeuralGas *x, double f);
 
+/**
+ * \brief   Set the utility threshold of the neural gas.
+ * \details Default is 10.
+ * \param   x A valid pointer.
+ * \param   n The utility threshold.
+ */
 void pizNeuralGasSetKappa (PIZNeuralGas *x, double f);
-    
+
+/**
+ * \brief   Get the new node rate of the neural gas.
+ * \param   x A valid pointer.
+ * \return  The new node rate.
+ */
 long pizNeuralGasLambda (const PIZNeuralGas *x);
+
+/**
+ * \brief   Get the winner move factor of the neural gas.
+ * \param   x A valid pointer.
+ * \return  The winner move factor.
+ */
 double pizNeuralGasEpsilon1 (const PIZNeuralGas *x);
+
+/**
+ * \brief   Get the neighboors move factor of the neural gas.
+ * \param   x A valid pointer.
+ * \return  The neighboors move factor.
+ */
 double pizNeuralGasEpsilon2 (const PIZNeuralGas *x);
+
+/**
+ * \brief   Get the generators error decrease factor of the neural gas.
+ * \param   x A valid pointer.
+ * \return  The generators error decrease factor.
+ */
 double pizNeuralGasAlpha (const PIZNeuralGas *x);
+
+/**
+ * \brief   Get the global error decrease factor of the neural gas.
+ * \param   x A valid pointer.
+ * \return  The global error decrease factor.
+ */
 double pizNeuralGasBeta (const PIZNeuralGas *x);
+
+/**
+ * \brief   Get the utility threshold of the neural gas.
+ * \param   x A valid pointer.
+ * \return  The utility threshold.
+ */
 double pizNeuralGasKappa (const PIZNeuralGas *x);
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizNeuralGasEncodeVectorToArray        (const PIZNeuralGas *x, long n, PIZGrowingArray *a);
+/**
+ * \brief   Encode the vector of a node to a dynamic array.
+ * \param   x A valid pointer.
+ * \param   n The index of the node.
+ * \param   a A pointer to a dynamic array.
+ * \return  An error code.
+ */
+PIZError pizNeuralGasEncodeVectorToArray (const PIZNeuralGas *x, long n, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

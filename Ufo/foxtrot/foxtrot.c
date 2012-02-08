@@ -26,7 +26,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define MAXIMUM_LIST_SIZE   256
+#define MAXIMUM_LIST_SIZE       256
+#define DEFAULT_PERSISTENCE     0.5
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -122,7 +123,7 @@ void *foxtrot_new (t_symbol *s, long argc, t_atom *argv)
                                     
             if (x->values && x->markovModel)
                 {
-                    x->persistence = PIZ_MARKOV_MODEL_DEFAULT_PERSISTENCE;
+                    x->persistence = DEFAULT_PERSISTENCE;
                     
                     x->rightOutlet  = outlet_new (x, NULL);
                     object_obex_store ((void *)x, foxtrot_sym_dumpout, (t_object *)x->rightOutlet);

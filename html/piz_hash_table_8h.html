@@ -34,46 +34,68 @@
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The hashtable.  <a href="struct_p_i_z_hash_table.html#_details">More...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Defines</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="19894a8e22ee22cea0310376a282e519"></a><!-- doxytag: member="pizHashTable.h::PIZ_HASHTABLE_FLAG_NONE" ref="19894a8e22ee22cea0310376a282e519" args="" -->
-#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#19894a8e22ee22cea0310376a282e519">PIZ_HASHTABLE_FLAG_NONE</a>&nbsp;&nbsp;&nbsp;(0L)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#19894a8e22ee22cea0310376a282e519">PIZ_HASHTABLE_FLAG_NONE</a>&nbsp;&nbsp;&nbsp;(0L)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">(DEFAULT) Don't free items. <br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="anchor" name="bb92e66ba74839d9876e07925ff4d37f"></a><!-- doxytag: member="pizHashTable.h::PIZ_HASHTABLE_FLAG_FREE_MEMORY" ref="bb92e66ba74839d9876e07925ff4d37f" args="" -->
-#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#bb92e66ba74839d9876e07925ff4d37f">PIZ_HASHTABLE_FLAG_FREE_MEMORY</a>&nbsp;&nbsp;&nbsp;(1&lt;&lt;0)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#bb92e66ba74839d9876e07925ff4d37f">PIZ_HASHTABLE_FLAG_FREE_MEMORY</a>&nbsp;&nbsp;&nbsp;(1&lt;&lt;0)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Free items with <code>free()</code>. <br></td></tr>
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_hash_table.html">PIZHashTable</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#4882f9b45f3bdd0088962a495d06f4e5">pizHashTableNew</a> (long argc, long *argv)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create the hashtable.  <a href="#4882f9b45f3bdd0088962a495d06f4e5"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#66f6edfb0b860fa2115f6c50b944952a">pizHashTableSetFlags</a> (<a class="el" href="struct_p_i_z_hash_table.html">PIZHashTable</a> *x, long flags)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set hashtable's bit flags.  <a href="#66f6edfb0b860fa2115f6c50b944952a"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#21d91e815101a8cd80013f92052aa5ed">pizHashTableFree</a> (<a class="el" href="struct_p_i_z_hash_table.html">PIZHashTable</a> *x)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Free the hashtable.  <a href="#21d91e815101a8cd80013f92052aa5ed"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#c235a661aec991623df6350f0108cc28">pizHashTableClear</a> (<a class="el" href="struct_p_i_z_hash_table.html">PIZHashTable</a> *x)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Clear the hashtable.  <a href="#c235a661aec991623df6350f0108cc28"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#66f676858c6906472a804b679858d6eb">pizHashTableAdd</a> (<a class="el" href="struct_p_i_z_hash_table.html">PIZHashTable</a> *x, long key, void *ptr)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Add item to the hashtable.  <a href="#66f676858c6906472a804b679858d6eb"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#55fac9b540719fe52b61c12740421521">pizHashTableRemoveByKeyAndPtr</a> (<a class="el" href="struct_p_i_z_hash_table.html">PIZHashTable</a> *x, long key, void *ptr)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove an item with a given key and a given pointer.  <a href="#55fac9b540719fe52b61c12740421521"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#21c25490374eeba61fc0acafda1e1f2f">pizHashTablePtrByKey</a> (const <a class="el" href="struct_p_i_z_hash_table.html">PIZHashTable</a> *x, long key, void **ptr)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get an item with a given key.  <a href="#21c25490374eeba61fc0acafda1e1f2f"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#d4006bc2bed25611b606958de9834308">pizHashTableContainsKey</a> (const <a class="el" href="struct_p_i_z_hash_table.html">PIZHashTable</a> *x, long key)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Test if the hashtable countains an item with a given key.  <a href="#d4006bc2bed25611b606958de9834308"></a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#dbd32e4c924ea18e556237624f26d4c3">pizHashTableCount</a> (const <a class="el" href="struct_p_i_z_hash_table.html">PIZHashTable</a> *x)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the number of items in the hashtable.  <a href="#dbd32e4c924ea18e556237624f26d4c3"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 <dl class="author" compact><dt><b>Author:</b></dt><dd>Jean Sapristi </dd></dl>
 <dl class="date" compact><dt><b>Date:</b></dt><dd>23 janvier 2012 </dd></dl>
+<hr><h2>Define Documentation</h2>
+<a class="anchor" name="19894a8e22ee22cea0310376a282e519"></a><!-- doxytag: member="pizHashTable.h::PIZ_HASHTABLE_FLAG_NONE" ref="19894a8e22ee22cea0310376a282e519" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PIZ_HASHTABLE_FLAG_NONE&nbsp;&nbsp;&nbsp;(0L)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+(DEFAULT) Don't free items. 
+<p>
+
+</div>
+</div><p>
+<a class="anchor" name="bb92e66ba74839d9876e07925ff4d37f"></a><!-- doxytag: member="pizHashTable.h::PIZ_HASHTABLE_FLAG_FREE_MEMORY" ref="bb92e66ba74839d9876e07925ff4d37f" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PIZ_HASHTABLE_FLAG_FREE_MEMORY&nbsp;&nbsp;&nbsp;(1&lt;&lt;0)          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Free items with <code>free()</code>. 
+<p>
+
+</div>
+</div><p>
 <hr><h2>Function Documentation</h2>
 <a class="anchor" name="4882f9b45f3bdd0088962a495d06f4e5"></a><!-- doxytag: member="pizHashTable.h::pizHashTableNew" ref="4882f9b45f3bdd0088962a495d06f4e5" args="(long argc, long *argv)" -->
 <div class="memitem">
@@ -414,7 +436,7 @@ Get the number of items in the hashtable.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Tue Feb 7 16:16:41 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 16:39:21 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>
