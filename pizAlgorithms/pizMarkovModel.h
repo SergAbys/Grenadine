@@ -5,7 +5,7 @@
  * \li      http://en.wikipedia.org/wiki/Hidden_Markov_model 
  *
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    31 janvier 2012
  */
 
 /*
@@ -59,6 +59,8 @@
 #define PIZ_MARKOV_MODEL_DATA            3
 
 #define PIZ_MARKOV_MODEL_DEFAULT_PERSISTENCE    0.5
+
+#define PIZ_ALPHABET_SIZE               128
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

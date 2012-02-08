@@ -1,7 +1,7 @@
 /*
  * \file    pizKohonenMap.c
  * \author  Jean Sapristi
- * \date    26 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -50,9 +50,9 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#define PIZ_ALPHABET_SIZE               128
 #define PIZ_MAXIMUM_MAP_SIZE            100
 #define PIZ_MAXIMUM_VECTOR_SIZE         256
-#define PIZ_ALPHABET_SIZE               128
 
 #define PIZ_DEFAULT_MAP_SIZE            20
 #define PIZ_DEFAULT_VECTOR_SIZE         4

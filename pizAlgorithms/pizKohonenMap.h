@@ -55,15 +55,16 @@
 
 /**
  * \brief   The Kohonen map.
+ * \details This is a \a ONE dimension self-organizing map.
  * \remark  Implemented simply as an array.
  */
  
 typedef struct _PIZKohonenMap {
     long            mapSize;                /*!< Number of nodes in the Kohonen map. */
     long            vectorSize;             /*!< Size of node's vector.*/
-    long            count;                  /*!< Number of training done. */
-    long            range;                  /*!< Influence range. */
-    long            training;               /*!< Number of training planned. */
+    long            count;                  /*!< Number of learning iterations performed. */
+    long            range;                  /*!< Neighborhood influence. */
+    long            training;               /*!< Number of learning iterations planned. */
     double          step;                   /*!< Learning step. */
     double          *map;                   /*!< The data. */
     } PIZKohonenMap;
@@ -79,11 +80,11 @@ PIZ_START_C_LINKAGE
 /**
  * \brief   Create the Kohonen map.
  * \details The function accepts two arguments, the size of the map, and the size of the vectors.
- *          For the map, minimum is 1, maximum is 100, default is 20.
- *          For the vectors, minimum is 1, maximum is 256, default is 4.
+ *          For the map, maximum is 100, default is 20.
+ *          For the vectors, maximum is 256, default is 4.
  *          In case of failure the pointer is NULL.
  * \param   argc The number of arguments.
- * \param   argv A pointer yo arguments.
+ * \param   argv A pointer to arguments.
  * \return  A pointer to the new Kohonen map.
  * \remark	The following shows how to create a Kohonen map.  
  * \code
@@ -109,8 +110,8 @@ void pizKohonenMapFree (PIZKohonenMap *x);
  * \param   argc The number of values.
  * \param   argv A pointer to the values.
  * \return  An error code.
- * \remark  The Kohonen map continue to learn even when the number of training planned is reached 
- *          (with last training parameters kept).
+ * \remark  Values provided are clipped [0, 127].
+ *          The Kohonen map continue to learn even when the number of learnings planned is reached.
  */
 PIZError pizKohonenMapAdd (PIZKohonenMap *x, long argc, long *argv);
 
@@ -131,9 +132,9 @@ void pizKohonenMapClear (PIZKohonenMap *x);
 PIZError pizKohonenMapProceed (const PIZKohonenMap *x, long argc, long *argv);
 
 /**
- * \brief   Get the number of training currently done.
+ * \brief   Get the number of learnings currently performed.
  * \param   x A valid pointer.
- * \return  The number of training.
+ * \return  The number of learnings.
  */
 long pizKohonenMapCount (const PIZKohonenMap *x);
 
@@ -141,51 +142,57 @@ long pizKohonenMapCount (const PIZKohonenMap *x);
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief   Set the influence range of the Kohonen map.
+ * \brief   Set the neighborhood influence of the Kohonen map.
  * \details Default is 10.
  * \param   x A valid pointer.
- * \param   n The influence range.
+ * \param   n The neighborhood influence.
  */
 void pizKohonenMapSetRange (PIZKohonenMap *x, long n);
 
 /**
- * \brief   Set the number of training planned for the Kohonen map.
+ * \brief   Set the number of learning iterations planned for the Kohonen map.
  * \details Default is 60.
  * \param   x A valid pointer.
- * \param   n The number of training.
+ * \param   n The number of learning iterations.
  */
 void pizKohonenMapSetTraining (PIZKohonenMap *x, long n);
 
 /**
- * \brief   Set the training step of the Kohonen map.
+ * \brief   Set the learning step of the Kohonen map.
  * \details Default is 1.
  * \param   x A valid pointer.
- * \param   n The training step.
+ * \param   n The learning step.
  */
 void pizKohonenMapSetStep (PIZKohonenMap *x, double f);
 
 /**
- * \brief   Get the influence range of the Kohonen map.
+ * \brief   Get the neighborhood influence of the Kohonen map.
  * \param   x A valid pointer.
- * \return  The influence range.
+ * \return  The neighborhood influence.
  */
 long pizKohonenMapRange (const PIZKohonenMap *x);
 
 /**
- * \brief   Get the number of training planned for the Kohonen map.
+ * \brief   Get the number of learning iterations planned for the Kohonen map.
  * \param   x A valid pointer.
- * \return  The number of training planned.
+ * \return  The number of learning iterations planned.
  */
 long pizKohonenMapTraining (const PIZKohonenMap *x);
 
 /**
- * \brief   Get the training step of the Kohonen map.
+ * \brief   Get the learning step of the Kohonen map.
  * \param   x A valid pointer.
- * \return  The training step.
+ * \return  The learning step.
  */
 double pizKohonenMapStep (const PIZKohonenMap *x);
 
-
+/**
+ * \brief   Encode the vector of a node to a dynamic array.
+ * \param   x A valid pointer.
+ * \param   n The index of the node.
+ * \param   a A pointer to a dynamic array.
+ * \return  An error code.
+ */
 PIZError pizKohonenMapEncodeVectorToArray (const PIZKohonenMap *x, long n, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------

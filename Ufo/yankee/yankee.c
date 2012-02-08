@@ -8,15 +8,15 @@
  */
  
 /*
- *  Last modified : 03/09/11.
+ *  Last modified : 31/01/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include    "ext.h"
-#include    "ext_obex.h"
-#include    "ext_systhread.h"
+#include "ext.h"
+#include "ext_obex.h"
+#include "ext_systhread.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -26,7 +26,13 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define MAXIMUM_LIST_SIZE   256
+#define MAXIMUM_LIST_SIZE       256
+#define DEFAULT_LAMBDA          2
+#define DEFAULT_ALPHA           0.5
+#define DEFAULT_BETA            0.1
+#define DEFAULT_EPSILON1        0.5
+#define DEFAULT_EPSILON2        0.25
+#define DEFAULT_KAPPA           10
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -153,12 +159,12 @@ void *yankee_new (t_symbol *s, long argc, t_atom *argv)
                                     
             if (x->values && x->neuralGas)
                 {
-                    x->lambda       = PIZ_NEURAL_GAS_DEFAULT_LAMBDA;
-                    x->epsilon1     = PIZ_NEURAL_GAS_DEFAULT_EPSILON1;
-                    x->epsilon2     = PIZ_NEURAL_GAS_DEFAULT_EPSILON2;
-                    x->alpha        = PIZ_NEURAL_GAS_DEFAULT_ALPHA;
-                    x->beta         = PIZ_NEURAL_GAS_DEFAULT_BETA;
-                    x->kappa        = (long)PIZ_NEURAL_GAS_DEFAULT_KAPPA;
+                    x->lambda       = DEFAULT_LAMBDA;
+                    x->epsilon1     = DEFAULT_EPSILON1;
+                    x->epsilon2     = DEFAULT_EPSILON2;
+                    x->alpha        = DEFAULT_ALPHA;
+                    x->beta         = DEFAULT_BETA;
+                    x->kappa        = DEFAULT_KAPPA;
                     
                     x->rightOutlet  = outlet_new (x, NULL);
                     object_obex_store ((void *)x, gensym ("dumpout"), (t_object *)x->rightOutlet);

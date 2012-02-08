@@ -82,7 +82,7 @@ int main (void)
     class_addmethod (c, (method)object_obex_dumpout,    "dumpout",  A_CANT, 0);
     
     CLASS_ATTR_LONG         (c, "range",        0, t_charlie, range);
-    CLASS_ATTR_LABEL        (c, "range",        0, "Influence Range");
+    CLASS_ATTR_LABEL        (c, "range",        0, "Range of Neighborhood Influence");
     CLASS_ATTR_ACCESSORS    (c, "range",        NULL, charlie_setRange);
     CLASS_ATTR_FILTER_MIN   (c, "range",        1);
     

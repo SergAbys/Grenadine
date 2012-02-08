@@ -50,8 +50,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_GROWING_ARRAY_INIT_SIZE         4
 #define PIZ_FACTOR_ORACLE_INIT_SIZE         32
+#define PIZ_GROWING_ARRAY_INIT_SIZE         4
 
 #define PIZ_DEFAULT_STRAIGHT_RATIO          0.25
 #define PIZ_DEFAULT_BACKWARD_THRESHOLD      2

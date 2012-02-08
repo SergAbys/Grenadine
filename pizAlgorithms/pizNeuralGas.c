@@ -1,7 +1,7 @@
 /*
  * \file    pizNeuralGas.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -50,13 +50,18 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_STOCK_SIZE              (PIZ_ITEMSET128_SIZE_IN_BITS)
-#define PIZ_MAXIMUM_VECTOR_SIZE     256
-#define PIZ_ALPHABET_SIZE           128
+#define PIZ_ALPHABET_SIZE               128
+#define PIZ_MAXIMUM_VECTOR_SIZE         256
 
-#define PIZ_DEFAULT_VECTOR_SIZE     4
-#define PIZ_DEFAULT_MAXIMUM_SIZE    20
-    
+#define PIZ_DEFAULT_VECTOR_SIZE         4
+#define PIZ_DEFAULT_MAXIMUM_SIZE        20
+#define PIZ_DEFAULT_LAMBDA              2
+#define PIZ_DEFAULT_ALPHA               0.5
+#define PIZ_DEFAULT_BETA                0.1
+#define PIZ_DEFAULT_EPSILON1            0.5
+#define PIZ_DEFAULT_EPSILON2            0.25
+#define PIZ_DEFAULT_KAPPA               10.
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
@@ -68,7 +73,7 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
         {
             long err = PIZ_GOOD;
             
-            if (x->headStock = (PIZNeuralGasHead *)malloc (PIZ_STOCK_SIZE * sizeof(PIZNeuralGasHead)))
+            if (x->headStock = (PIZNeuralGasHead *)malloc (PIZ_ITEMSET128_SIZE * sizeof(PIZNeuralGasHead)))
                 {
                     long k;
                     
@@ -76,16 +81,16 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
                     x->vectorSize   = PIZ_DEFAULT_VECTOR_SIZE;
                     x->maximumSize  = PIZ_DEFAULT_MAXIMUM_SIZE;
                     
-                    x->lambda       = PIZ_NEURAL_GAS_DEFAULT_LAMBDA;
-                    x->epsilon1     = PIZ_NEURAL_GAS_DEFAULT_EPSILON1;
-                    x->epsilon2     = PIZ_NEURAL_GAS_DEFAULT_EPSILON2;
-                    x->alpha        = PIZ_NEURAL_GAS_DEFAULT_ALPHA;
-                    x->beta         = PIZ_NEURAL_GAS_DEFAULT_BETA;
-                    x->kappa        = PIZ_NEURAL_GAS_DEFAULT_KAPPA;
+                    x->lambda       = PIZ_DEFAULT_LAMBDA;
+                    x->epsilon1     = PIZ_DEFAULT_EPSILON1;
+                    x->epsilon2     = PIZ_DEFAULT_EPSILON2;
+                    x->alpha        = PIZ_DEFAULT_ALPHA;
+                    x->beta         = PIZ_DEFAULT_BETA;
+                    x->kappa        = PIZ_DEFAULT_KAPPA;
                     
                     srand ((unsigned int)time(NULL));
                     
-                    if (argc && ((argv[0] > 1)  && (argv[0] <= PIZ_STOCK_SIZE))) {
+                    if (argc && ((argv[0] > 1)  && (argv[0] <= PIZ_ITEMSET128_SIZE))) {
                             x->maximumSize = argv[0];
                         }
                     
@@ -93,17 +98,17 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
                             x->vectorSize = argv[1];
                         }
                     
-                    k = PIZ_STOCK_SIZE * x->vectorSize;
+                    k = PIZ_ITEMSET128_SIZE * x->vectorSize;
                     
                     if (!(x->vectorStock = (double *)malloc (k * sizeof(double)))) {
                             err = PIZ_MEMORY;
                         }
                         
-                    if (x->ticketMachine = pizBoundedStackNew (PIZ_STOCK_SIZE))
+                    if (x->ticketMachine = pizBoundedStackNew (PIZ_ITEMSET128_SIZE))
                         {
                             long i;
                             
-                            for (i = (PIZ_STOCK_SIZE - 1); i > 1; i--) {
+                            for (i = (PIZ_ITEMSET128_SIZE - 1); i > 1; i--) {
                                     pizBoundedStackPush (x->ticketMachine, i);
                                 }
                         }
@@ -112,10 +117,7 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
                             err = PIZ_MEMORY;
                         }
                     
-                    if (err) {
-                        pizNeuralGasFree (x);
-                        x = NULL;
-                    } else {
+                    if (!err) {
                         long i;
                             
                         for (i = 0; i < (x->vectorSize * 2); i++) {
@@ -139,6 +141,9 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
                         pizItemset128SetAtIndex (&x->map, 1);
                         
                         x->mapSize = 2;
+                    } else {
+                        pizNeuralGasFree (x);
+                        x = NULL;
                     }
                 }
             else
@@ -188,184 +193,151 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
                     argv[t] = CLAMP (argv[t], 0, PIZ_ALPHABET_SIZE - 1); 
                 }
                         
-            for (t = 0; t < k; t++)
-                {   
-                    long            i;
-                    long            winner1             = -1;
-                    long            winner2             = -1;
-                    double          dist1               = 0.;
-                    double          dist2               = 0.;
+            for (t = 0; t < k; t++) {   
+                long            i, j;
+                long            winner1             = -1;
+                long            winner2             = -1;
+                double          dist1               = 0.;
+                double          dist2               = 0.;
+                
+                for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+                
+                    double e = 0.;
                     
-                    for (i = 0; i < PIZ_STOCK_SIZE; i++)
-                        {
-                            double e = 0.;
-
-                            if (pizItemset128IsSetAtIndex (&x->map, i))
-                                {
-                                    long j;
-                                    
-                                    for (j = 0; j < x->vectorSize; j++) {
-                                            e += pow (x->vectorStock[(i * x->vectorSize) + j] 
-                                                - argv[(t * x->vectorSize) + j], 2);
-                                        }
-                                    
-                                    if ((e < dist1) || (winner1 == -1))
-                                        {
-                                            dist2   = dist1;
-                                            winner2 = winner1;
-                                            
-                                            dist1   = e;
-                                            winner1 = i;
-                                        }
-                                    else if ((e < dist2) || (winner2 == -1))
-                                        {
-                                            dist2   = e;
-                                            winner2 = i;
-                                        }
-                                }
+                    if (pizItemset128IsSetAtIndex (&x->map, i)) {
+                    
+                        for (j = 0; j < x->vectorSize; j++) {
+                        e += pow (x->vectorStock[(i * x->vectorSize) + j] - argv[(t * x->vectorSize) + j], 2);
                         }
+                        
+                        if ((e < dist1) || (winner1 == -1)) {
+                            dist2   = dist1;
+                            winner2 = winner1;
+                            dist1   = e;
+                            winner1 = i;
+                        } else if ((e < dist2) || (winner2 == -1)) {
+                            dist2   = e;
+                            winner2 = i;
+                        }
+                    }
+                }
 
-                    x->headStock[winner1].error     += dist1;
-                    x->headStock[winner1].utility   += (dist2 - dist1);
+                x->headStock[winner1].error     += dist1;
+                x->headStock[winner1].utility   += (dist2 - dist1);
+                
+                for (i = 0; i < x->vectorSize; i++) {
+                    x->vectorStock[(winner1 * x->vectorSize) + i] += x->epsilon1 
+                        * (argv[(t * x->vectorSize) + i] - x->vectorStock[(winner1 * x->vectorSize) + i]);
+                }
+                
+                for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+                    if (pizItemset128IsSetAtIndex (&x->headStock[winner1].arcs, i)) {
+                        for (j = 0; j < x->vectorSize; j++) {
+                            x->vectorStock[(i * x->vectorSize) + j] += x->epsilon2 * 
+                                (argv[(t * x->vectorSize) + j] - x->vectorStock[(i * x->vectorSize) + j]);
+                        }
+                    }
+                }
+                
+                if (!(x->count % x->lambda)) {
+                    long    maxError1 = -1;
+                    long    maxError2 = -1;
+                    long    minUtility = -1;
+                    double  maxError1Value = 0.;
+                    double  maxError2Value = 0.;
+                    double  minUtilityValue = 0.;
                     
-                    for (i = 0; i < x->vectorSize; i++) {
-                            x->vectorStock[(winner1 * x->vectorSize) + i] += 
-                                x->epsilon1 * (argv[(t * x->vectorSize) + i] - 
-                                x->vectorStock[(winner1 * x->vectorSize) + i]);
+                    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+                        if (pizItemset128IsSetAtIndex (&x->map, i)) {
+                            if ((x->headStock[i].error > maxError1Value) || (maxError1 == -1)) {
+                                    maxError1       = i;
+                                    maxError1Value  = x->headStock[i].error;
+                                }   
+                            
+                            if ((x->headStock[i].utility < minUtilityValue) || (minUtility == -1)) {
+                                    minUtility      = i;
+                                    minUtilityValue = x->headStock[i].utility;
+                                }
+                            }
                         }
                     
-                    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_BITS; i++)
-                        {
-                            if (pizItemset128IsSetAtIndex (&x->headStock[winner1].arcs, i))
-                                {
-                                    long j;
-                                    
-                                    for (j = 0; j < x->vectorSize; j++) {
-                                            x->vectorStock[(i * x->vectorSize) + j] +=
-                                                x->epsilon2 * (argv[(t * x->vectorSize) + j] - 
-                                                x->vectorStock[(i * x->vectorSize) + j]);
-                                        }
-                                }
-                        }
-                    
-                    if (!(x->count % x->lambda))
-                        {
-                            long    maxError1 = -1;
-                            long    maxError2 = -1;
-                            long    minUtility = -1;
-                            double  maxError1Value = 0.;
-                            double  maxError2Value = 0.;
-                            double  minUtilityValue = 0.;
-                            
-                            for (i = 0; i < PIZ_STOCK_SIZE; i++)
-                                {
-                                    if (pizItemset128IsSetAtIndex (&x->map, i))
-                                        {
-                                            if ((x->headStock[i].error > maxError1Value) || 
-                                                (maxError1 == -1)) {
-                                                    maxError1       = i;
-                                                    maxError1Value  = x->headStock[i].error;
-                                                }   
-                                            
-                                            if ((x->headStock[i].utility < minUtilityValue) || 
-                                                (minUtility == -1)) {
-                                                    minUtility      = i;
-                                                    minUtilityValue = x->headStock[i].utility;
-                                                }
-                                        }
-                                }
-                            
-                            for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_BITS; i++)
-                                {
-                                    if (pizItemset128IsSetAtIndex (&x->headStock[maxError1].arcs, i))
-                                        {
-                                            if ((x->headStock[i].error > maxError2Value) || 
-                                                (maxError2 == -1)) {
-                                                    maxError2       = i;
-                                                    maxError2Value  = x->headStock[i].error;
-                                                }
-                                        }
-                                }
-                            
-                            if ((x->mapSize < x->maximumSize) && !(pizBoundedStackPop (x->ticketMachine)))
-                                {
-                                    long p = pizBoundedStackPoppedValue (x->ticketMachine);
-                                    
-                                    pizItemset128Clear (&x->headStock[p].arcs);
-        
-                                    for (i = 0; i < x->vectorSize; i++) {
-                                            x->vectorStock[(p * x->vectorSize) + i] = 
-                                                (x->vectorStock[(maxError1 * x->vectorSize) + i] +
-                                                x->vectorStock[(maxError2 * x->vectorSize) + i]) / 2.;
-                                        }
-
-                                    pizItemset128UnsetAtIndex (&x->headStock[maxError1].arcs, maxError2);
-                                    pizItemset128UnsetAtIndex (&x->headStock[maxError2].arcs, maxError1);
-                                    
-                                    pizItemset128SetAtIndex (&x->headStock[maxError1].arcs, p);
-                                    pizItemset128SetAtIndex (&x->headStock[maxError2].arcs, p);
-                                    pizItemset128SetAtIndex (&x->headStock[p].arcs, maxError1);
-                                    pizItemset128SetAtIndex (&x->headStock[p].arcs, maxError2);
-                                    
-                                    x->headStock[maxError1].error   = x->alpha * 
-                                                                        x->headStock[maxError1].error;
-                                    x->headStock[maxError2].error   = x->alpha * 
-                                                                        x->headStock[maxError2].error;
-                                    
-                                    x->headStock[p].error   =  (x->headStock[maxError1].error +
-                                                                x->headStock[maxError2].error) / 2.;
-                                                                
-                                    x->headStock[p].utility =  (x->headStock[maxError1].utility + 
-                                                                x->headStock[maxError2].utility) / 2.;
-                                    
-                                    pizItemset128SetAtIndex (&x->map, p);
-                                    
-                                    x->mapSize ++;
-                                }
-                            
-                            if ((maxError1Value / minUtilityValue) > x->kappa)
-                                {
-                                    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_BITS; i++) {
-                                        if (pizItemset128IsSetAtIndex (&x->headStock[minUtility].arcs, i)) {
-                                            pizItemset128UnsetAtIndex (&x->headStock[i].arcs, minUtility);
-                                        }
+                    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+                        if (pizItemset128IsSetAtIndex (&x->headStock[maxError1].arcs, i)) {
+                                if ((x->headStock[i].error > maxError2Value) || (maxError2 == -1)) {
+                                        maxError2       = i;
+                                        maxError2Value  = x->headStock[i].error;
                                     }
-                                    
-                                    pizItemset128UnsetAtIndex (&x->map, minUtility);
+                            }
+                        }
+                    
+                    if ((x->mapSize < x->maximumSize) && !(pizBoundedStackPop (x->ticketMachine))) {
+                        long p = pizBoundedStackPoppedValue (x->ticketMachine);
+                        
+                        pizItemset128Clear (&x->headStock[p].arcs);
+
+                        for (i = 0; i < x->vectorSize; i++) {
+                        x->vectorStock[(p * x->vectorSize) + i] = (x->vectorStock[(maxError1 * x->vectorSize) 
+                            + i] + x->vectorStock[(maxError2 * x->vectorSize) + i]) / 2.;
+                        }
+
+                        pizItemset128UnsetAtIndex (&x->headStock[maxError1].arcs, maxError2);
+                        pizItemset128UnsetAtIndex (&x->headStock[maxError2].arcs, maxError1);
+                        
+                        pizItemset128SetAtIndex (&x->headStock[maxError1].arcs, p);
+                        pizItemset128SetAtIndex (&x->headStock[maxError2].arcs, p);
+                        pizItemset128SetAtIndex (&x->headStock[p].arcs, maxError1);
+                        pizItemset128SetAtIndex (&x->headStock[p].arcs, maxError2);
+                        
+                        x->headStock[maxError1].error = x->alpha * x->headStock[maxError1].error;
+                        x->headStock[maxError2].error = x->alpha * x->headStock[maxError2].error;
+                        
+                        x->headStock[p].error = (x->headStock[maxError1].error 
+                            + x->headStock[maxError2].error) / 2.;
+                                                    
+                        x->headStock[p].utility = (x->headStock[maxError1].utility 
+                            + x->headStock[maxError2].utility) / 2.;
+                        
+                        pizItemset128SetAtIndex (&x->map, p);
+                        
+                        x->mapSize ++;
+                    }
+                    
+                    if ((maxError1Value / minUtilityValue) > x->kappa) {
+                        for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+                            if (pizItemset128IsSetAtIndex (&x->headStock[minUtility].arcs, i)) {
+                                pizItemset128UnsetAtIndex (&x->headStock[i].arcs, minUtility);
+                            }
+                        }
+                        
+                        pizItemset128UnsetAtIndex (&x->map, minUtility);
+                        x->mapSize --;
+                        pizBoundedStackPush (x->ticketMachine, minUtility);
+                    }
+                    
+                    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+                        if (pizItemset128IsSetAtIndex (&x->map, i)) {
+                            if (!pizItemset128Count (&x->headStock[i].arcs)) {
+                                    pizItemset128UnsetAtIndex (&x->map, i);
                                     x->mapSize --;
-                                    pizBoundedStackPush (x->ticketMachine, minUtility);
+                                    pizBoundedStackPush (x->ticketMachine, i);
                                 }
-                            
-                            for (i = 0; i < PIZ_STOCK_SIZE; i++)
-                                {
-                                    if (pizItemset128IsSetAtIndex (&x->map, i))
-                                        {
-                                            if (!pizItemset128Count (&x->headStock[i].arcs)) {
-                                                    pizItemset128UnsetAtIndex (&x->map, i);
-                                                    x->mapSize --;
-                                                    pizBoundedStackPush (x->ticketMachine, i);
-                                                }
-                                        }
-                                }
-                        }
-                    
-                    for (i = 0; i < PIZ_STOCK_SIZE; i++)
-                        {
-                            if (pizItemset128IsSetAtIndex (&x->map, i)) {
-                                    x->headStock[i].error   -= x->beta * x->headStock[i].error;
-                                    x->headStock[i].utility -= x->beta * x->headStock[i].utility;
-                                }
-                        }
-                    
-                    if (x->mapSize == 0)
-                        {
-                            pizNeuralGasClear (x);
-                        }
-                    else
-                        {
-                            x->count ++;
+                            }
                         }
                 }
+                
+                for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+                    if (pizItemset128IsSetAtIndex (&x->map, i)) {
+                            x->headStock[i].error   -= x->beta * x->headStock[i].error;
+                            x->headStock[i].utility -= x->beta * x->headStock[i].utility;
+                        }
+                }
+                
+                if (!x->mapSize) {
+                    pizNeuralGasClear (x);
+                } else {
+                    x->count ++;
+                }
+            }
         }
         
     return err;
@@ -399,7 +371,7 @@ void pizNeuralGasClear (PIZNeuralGas *x)
     
     pizBoundedStackClear (x->ticketMachine);
     
-    for (i = (PIZ_STOCK_SIZE - 1); i > 1; i--) {
+    for (i = (PIZ_ITEMSET128_SIZE - 1); i > 1; i--) {
             pizBoundedStackPush (x->ticketMachine, i);
         }
     
@@ -423,18 +395,16 @@ PIZError pizNeuralGasProceed (const PIZNeuralGas *x, long argc, long *argv)
                             long p = -1;
                             long h = (long)(x->mapSize * (rand ( ) / (RAND_MAX + 1.0)));
                             
-                            for (j = 0; j < PIZ_STOCK_SIZE; j++)
-                                {
-                                    if (pizItemset128IsSetAtIndex (&x->map, j))
-                                        {
-                                            if (!h) {
-                                                    p = j;
-                                                    break;
-                                                }
-                                            
-                                            h --;
+                            for (j = 0; j < PIZ_ITEMSET128_SIZE; j++) {
+                                if (pizItemset128IsSetAtIndex (&x->map, j)) {
+                                    if (!h) {
+                                            p = j;
+                                            break;
                                         }
+                                    
+                                    h --;
                                 }
+                            }
                             
                             temp = x->vectorStock + (p * x->vectorSize);
                         }

@@ -1,7 +1,7 @@
 /*
  * \file    pizKohonenMapExtended.c
  * \author  Jean Sapristi
- * \date    26 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*

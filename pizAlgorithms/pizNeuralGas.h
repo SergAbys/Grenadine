@@ -2,10 +2,10 @@
  * \file    pizNeuralGas.h
  * \details Thanks : Jim Holmström. \n
  * \li      http://www.booru.net/download/MasterThesisProj.pdf \n
- * \li      http://en.wikipedia.org/wiki/Neural_gas
  *
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    31 janvier 2012
+ * \ingroup algorithms
  */
  
 /*
@@ -53,40 +53,41 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_NEURAL_GAS_DEFAULT_LAMBDA           2
-#define PIZ_NEURAL_GAS_DEFAULT_ALPHA            0.5
-#define PIZ_NEURAL_GAS_DEFAULT_BETA             0.1
-#define PIZ_NEURAL_GAS_DEFAULT_EPSILON1         0.5
-#define PIZ_NEURAL_GAS_DEFAULT_EPSILON2         0.25
-#define PIZ_NEURAL_GAS_DEFAULT_KAPPA            10.
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
+/**
+ * \brief Neural gas element.  
+ */
+ 
 typedef struct _PIZNeuralGasHead {
-    double          error;
-    double          utility;
-    PIZItemset128   arcs;
+    double          error;                      /*!< Cumulative error factor of the node. */
+    double          utility;                    /*!< Cumulative utility factor of the node. */
+    PIZItemset128   arcs;                       /*!< Arcs (indexes as bit field). */
     }PIZNeuralGasHead;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief   The neural gas. 
+ * \remark  Implemented with two synchronized pools  
+ *          (one of pre-allocated heads, one of pre-allocated vectors), 
+ *          and a map to mark slots used. 
+ */
+ 
 typedef struct _PIZNeuralGas {
-    PIZItemset128       map;
-    PIZNeuralGasHead    *headStock;
-    PIZBoundedStack     *ticketMachine;
-    double              *vectorStock;
-    long                count;
-    long                vectorSize;
-    long                mapSize;
-    long                maximumSize;
-    long                lambda;
-    double              epsilon1;
-    double              epsilon2;                   //
-    double              alpha;
-    double              beta;
-    double              kappa;
+    PIZItemset128       map;                    /*!< Pool's in use flags (as bit field). */
+    PIZBoundedStack     *ticketMachine;         /*!< Pool management. */
+    PIZNeuralGasHead    *headStock;             /*!< Pool of heads. */
+    double              *vectorStock;           /*!< Pool of vectors. */
+    long                count;                  /*!< Number of learning iterations performed. */
+    long                vectorSize;             /*!< Size of a node's vector. */
+    long                mapSize;                /*!< Number of nodes in the neural gas. */
+    long                maximumSize;            /*!< Maximum number of nodes in the neural gas. */
+    long                lambda;                 /*!< New node rate. */
+    double              epsilon1;               /*!< Move winner factor. */
+    double              epsilon2;               /*!< Move neighbours factor. */
+    double              alpha;                  /*!< Decrease winners error factor. */
+    double              beta;                   /*!< Decrease error factor. */
+    double              kappa;                  /*!< Utility threshold. */
     } PIZNeuralGas;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -97,31 +98,113 @@ PIZ_START_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZNeuralGas    *pizNeuralGasNew                (long argc, long *argv);
-void            pizNeuralGasFree                (PIZNeuralGas *x);
+/**
+ * \brief   Create the neural gas.
+ * \details The function accepts two arguments, the maximum size of the neural gas, and the size of the vectors.
+ *          For the neural gas size, maximum is 128, default is 20.
+ *          For the vectors, maximum is 256, default is 4.
+ *          In case of failure the pointer is NULL.
+ * \param   argc The number of arguments.
+ * \param   argv A pointer to arguments.
+ * \return  A pointer to the new neural gas.
+ * \remark	The following shows how to create a neural gas.  
+ * \code
+ * long args[2] = {50, 8};
+ *
+ * PIZKohonenMap *map = pizKohonenMapNew (2, &args);
+ * PIZKohonenMap *map = pizKohonenMapNew (0, NULL); // default values
+ *
+ * \endcode
+ */
+PIZNeuralGas *pizNeuralGasNew (long argc, long *argv);
 
-PIZError        pizNeuralGasAdd                 (PIZNeuralGas *x, long argc, long *argv);
-void            pizNeuralGasClear               (PIZNeuralGas *x);
-PIZError        pizNeuralGasProceed             (const PIZNeuralGas *x, long argc, long *argv);
-long            pizNeuralGasCount               (const PIZNeuralGas *x);
+/**
+ * \brief   Free the neural gas.
+ * \details It is safe to pass NULL pointer. 
+ * \param   x A Pointer.
+ */
+void pizNeuralGasFree (PIZNeuralGas *x);
+
+/**
+ * \brief   Add values to the neural gas.
+ * \param   x A valid pointer.
+ * \param   argc The number of values.
+ * \param   argv A pointer to the values.
+ * \return  An error code.
+ * \remark  The birth and death of nodes occurs according to lambda value (1 time out of lambda).
+ *          Values provided are clipped [0, 127].
+ */
+PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv);
+
+/**
+ * \brief   Clear the neural gas.
+ * \param   x A valid pointer.
+ */
+void pizNeuralGasClear (PIZNeuralGas *x);
+
+/**
+ * \brief   Fill a given array with neural gas values.
+ * \remark  A node is randomly drawn, and the array filled with values from the node's vector. 
+ *          While the array is not full, process is iterated.
+ * \param   argc Number of values to proceed.
+ * \param   argv Pointer to the array to fill.
+ * \return  An error code.
+ */
+PIZError pizNeuralGasProceed (const PIZNeuralGas *x, long argc, long *argv);
+
+/**
+ * \brief   Get the number of learnings currently performed.
+ * \param   x A valid pointer.
+ * \return  The number of learnings.
+ */
+long pizNeuralGasCount (const PIZNeuralGas *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void            pizNeuralGasSetLambda           (PIZNeuralGas *x, long n);
-void            pizNeuralGasSetEpsilon1         (PIZNeuralGas *x, double f);
-void            pizNeuralGasSetEpsilon2         (PIZNeuralGas *x, double f);
-void            pizNeuralGasSetAlpha            (PIZNeuralGas *x, double f);
-void            pizNeuralGasSetBeta             (PIZNeuralGas *x, double f);
-void            pizNeuralGasSetKappa            (PIZNeuralGas *x, double f);
+/**
+ * \brief   Set the frequence of node's birth and death in the neural gas.
+ * \details Default is 1 time out of 2.
+ * \param   x A valid pointer.
+ * \param   n The new node rate.
+ */
+void pizNeuralGasSetLambda (PIZNeuralGas *x, long n);
 
-long            pizNeuralGasLambda              (const PIZNeuralGas *x);
-double          pizNeuralGasEpsilon1            (const PIZNeuralGas *x);
-double          pizNeuralGasEpsilon2            (const PIZNeuralGas *x);
-double          pizNeuralGasAlpha               (const PIZNeuralGas *x);
-double          pizNeuralGasBeta                (const PIZNeuralGas *x);
-double          pizNeuralGasKappa               (const PIZNeuralGas *x);
+/**
+ * \brief   Set the moving factor of the winner node in the neural gas.
+ * \details Default is 0.5 ; (must be [0., 1.]).
+ * \param   x A valid pointer.
+ * \param   n The move winner factor.
+ */
+void pizNeuralGasSetEpsilon1 (PIZNeuralGas *x, double f);
 
+/**
+ * \brief   Set the moving factor of the neighboors of the winner node in the neural gas.
+ * \details Default is 0.25 ; (must be [0., 1.]).
+ * \param   x A valid pointer.
+ * \param   n The move neighboors factor.
+ */
+void pizNeuralGasSetEpsilon2 (PIZNeuralGas *x, double f);
+
+/**
+ * \brief   Set the error's decrease factor of winners nodes in the neural gas.
+ * \details Default is 0.5 ; (must be [0., 1.]).
+ * \param   x A valid pointer.
+ * \param   n The decrease factor.
+ */
+void pizNeuralGasSetAlpha (PIZNeuralGas *x, double f);
+
+void pizNeuralGasSetBeta (PIZNeuralGas *x, double f);
+
+void pizNeuralGasSetKappa (PIZNeuralGas *x, double f);
+    
+long pizNeuralGasLambda (const PIZNeuralGas *x);
+double pizNeuralGasEpsilon1 (const PIZNeuralGas *x);
+double pizNeuralGasEpsilon2 (const PIZNeuralGas *x);
+double pizNeuralGasAlpha (const PIZNeuralGas *x);
+double pizNeuralGasBeta (const PIZNeuralGas *x);
+double pizNeuralGasKappa (const PIZNeuralGas *x);
+    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 

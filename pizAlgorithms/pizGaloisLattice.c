@@ -50,12 +50,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#define PIZ_TICKET_MACHINE_SIZE                     126
 #define PIZ_GROWING_ARRAY_INIT_SIZE                 4
-#define PIZ_STOCK_SIZE                              (PIZ_ITEMSET128_SIZE_IN_BITS)
-#define PIZ_TICKET_MACHINE_SIZE                     (PIZ_ITEMSET128_SIZE_IN_BITS - 2)
 
-#define PIZ_DEFAULT_THRESHOLD_TO_KILL_CONCEPTS      (PIZ_ITEMSET128_SIZE_IN_BITS - 78)
-#define PIZ_MAXIMUM_THRESHOLD_TO_KILL_CONCEPTS      (PIZ_ITEMSET128_SIZE_IN_BITS - 28)
+#define PIZ_MAXIMUM_THRESHOLD_TO_KILL_CONCEPTS      100
+#define PIZ_DEFAULT_THRESHOLD_TO_KILL_CONCEPTS      50
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -68,7 +67,8 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
         {
             long err = PIZ_GOOD;
             
-            if (x->stock = (PIZGaloisLatticeConcept *)calloc (PIZ_STOCK_SIZE, sizeof(PIZGaloisLatticeConcept)))
+            if (x->stock = (PIZGaloisLatticeConcept *)calloc (PIZ_ITEMSET128_SIZE, 
+                sizeof(PIZGaloisLatticeConcept)))
                 {
                     long i;
                     
@@ -83,18 +83,18 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
                             x->thresholdToKillConcepts = argv[0];
                         }
                     
-                    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_BITS; i++) {
+                    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
                             pizItemset128SetAtIndex (&(x->stock[1].itemset), i);
                         }
                     
                     x->stock[0].cardinal = 0;
-                    x->stock[1].cardinal = PIZ_ITEMSET128_SIZE_IN_BITS;
+                    x->stock[1].cardinal = PIZ_ITEMSET128_SIZE;
                     
                     pizItemset128SetAtIndex (&(x->stock[0].childs), 1);
                     pizItemset128SetAtIndex (&(x->stock[1].parents), 0);
                     
                     if (x->ticketMachine = pizBoundedStackNew (PIZ_TICKET_MACHINE_SIZE)) {
-                            for (i = (PIZ_STOCK_SIZE - 1); i > 1; i--) {
+                            for (i = (PIZ_ITEMSET128_SIZE - 1); i > 1; i--) {
                                     pizBoundedStackPush (x->ticketMachine, i);
                                 }
                         }
@@ -103,9 +103,9 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
                             err = PIZ_MEMORY;
                         }
                         
-                    if (x->mapByCardinal = (PIZGrowingArray **)malloc ((PIZ_ITEMSET128_SIZE_IN_BITS + 1) 
+                    if (x->mapByCardinal = (PIZGrowingArray **)malloc ((PIZ_ITEMSET128_SIZE + 1) 
                         * sizeof(PIZGrowingArray *))) {
-                            for (i = 0; i < (PIZ_ITEMSET128_SIZE_IN_BITS + 1); i++) {
+                            for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
                                 if (!(x->mapByCardinal[i] = pizGrowingArrayNew (PIZ_GROWING_ARRAY_INIT_SIZE))) {
                                         err = PIZ_MEMORY;
                                     }
@@ -116,9 +116,9 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
                             err = PIZ_MEMORY;
                         }
                     
-                    if (x->tempMapByCardinal = (PIZGrowingArray **)malloc ((PIZ_ITEMSET128_SIZE_IN_BITS + 1) 
+                    if (x->tempMapByCardinal = (PIZGrowingArray **)malloc ((PIZ_ITEMSET128_SIZE + 1) 
                         * sizeof(PIZGrowingArray *))) {
-                            for (i = 0; i < (PIZ_ITEMSET128_SIZE_IN_BITS + 1); i++) {
+                            for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
                                 if (!(x->tempMapByCardinal[i] 
                                     = pizGrowingArrayNew (PIZ_GROWING_ARRAY_INIT_SIZE))) {
                                         err = PIZ_MEMORY;
@@ -132,7 +132,7 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
                     
                     if (!err) {
                             err |= pizGrowingArrayAppend (x->mapByCardinal[0], 0);
-                            err |= pizGrowingArrayAppend (x->mapByCardinal[PIZ_ITEMSET128_SIZE_IN_BITS], 1);
+                            err |= pizGrowingArrayAppend (x->mapByCardinal[PIZ_ITEMSET128_SIZE], 1);
                         }
                     
                     if (err) {
@@ -158,7 +158,7 @@ void pizGaloisLatticeFree (PIZGaloisLattice *x)
                 {
                     long i;
 
-                    for (i = 0; i < (PIZ_ITEMSET128_SIZE_IN_BITS + 1); i++) {
+                    for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
                             pizGrowingArrayFree (x->mapByCardinal[i]);
                             x->mapByCardinal[i] = NULL;
                         }
@@ -171,7 +171,7 @@ void pizGaloisLatticeFree (PIZGaloisLattice *x)
                 {
                     long i;
 
-                    for (i = 0; i < (PIZ_ITEMSET128_SIZE_IN_BITS + 1); i++) {
+                    for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
                             pizGrowingArrayFree (x->tempMapByCardinal[i]);
                             x->tempMapByCardinal[i] = NULL;
                         }
@@ -206,7 +206,7 @@ PIZError pizGaloisLatticeAdd (PIZGaloisLattice *x, long argc, long *argv)
     
             for (j = 0; j < argc; j++)
                 {
-                    if ((argv[j] >= 0) && (argv[j] < PIZ_ITEMSET128_SIZE_IN_BITS)) {
+                    if ((argv[j] >= 0) && (argv[j] < PIZ_ITEMSET128_SIZE)) {
                             pizItemset128SetAtIndex (&(x->itemsetToBeAdded), argv[j]);
                         }
                 }
@@ -215,7 +215,7 @@ PIZError pizGaloisLatticeAdd (PIZGaloisLattice *x, long argc, long *argv)
         }
 
     pizGrowingArrayClear (x->tempMapByCardinal[0]);
-    pizGrowingArrayClear (x->tempMapByCardinal[PIZ_ITEMSET128_SIZE_IN_BITS]);
+    pizGrowingArrayClear (x->tempMapByCardinal[PIZ_ITEMSET128_SIZE]);
     
     for (i = 1; i <= x->tempMapByCardinalPeak; i++) {
             pizGrowingArrayClear (x->tempMapByCardinal[i]);
@@ -223,7 +223,7 @@ PIZError pizGaloisLatticeAdd (PIZGaloisLattice *x, long argc, long *argv)
     
     x->tempMapByCardinalPeak = 0;
     
-    for (i = 0; i < (PIZ_ITEMSET128_SIZE_IN_BITS + 1); i++)
+    for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++)
         {
             long j;
             
@@ -360,7 +360,7 @@ void pizGaloisLatticeClear (PIZGaloisLattice *x)
     pizItemset128SetAtIndex (&(x->stock[0].childs), 1);
     pizItemset128SetAtIndex (&(x->stock[1].parents), 0);
                     
-    for (i = 2; i < PIZ_STOCK_SIZE; i++)
+    for (i = 2; i < PIZ_ITEMSET128_SIZE; i++)
         {
             if (x->stock[i].cardinal) {
                     x->stock[i].cardinal = 0;
@@ -372,7 +372,7 @@ void pizGaloisLatticeClear (PIZGaloisLattice *x)
     
     pizBoundedStackClear (x->ticketMachine);
                                 
-    for (i = (PIZ_STOCK_SIZE - 1); i > 1; i--) {
+    for (i = (PIZ_ITEMSET128_SIZE - 1); i > 1; i--) {
             pizBoundedStackPush (x->ticketMachine, i);
         }
         
@@ -398,20 +398,20 @@ PIZError pizGaloisLatticeProceed (PIZGaloisLattice *x, long argc, long *argv)
                 {
                     long i;
                     long indexConnections = 0;
-                    long connections[PIZ_STOCK_SIZE];
+                    long connections[PIZ_ITEMSET128_SIZE];
                     
                     if (x->shuttle > 1)
                         {
                             long j;
-                            long t = (long)(PIZ_ITEMSET128_SIZE_IN_BITS * (rand ( ) / (RAND_MAX + 1.0)));
+                            long t = (long)(PIZ_ITEMSET128_SIZE * (rand ( ) / (RAND_MAX + 1.0)));
                                                         
-                            for (j = 0; j < PIZ_ITEMSET128_SIZE_IN_BITS; j++)
+                            for (j = 0; j < PIZ_ITEMSET128_SIZE; j++)
                                 {
                                     if (pizItemset128IsSetAtIndex (&(x->stock[x->shuttle].itemset),
-                                        (t + j) % PIZ_ITEMSET128_SIZE_IN_BITS))
+                                        (t + j) % PIZ_ITEMSET128_SIZE))
                                         {
                                             if (argc) {
-                                                    argv[k] = (t + j) % PIZ_ITEMSET128_SIZE_IN_BITS;
+                                                    argv[k] = (t + j) % PIZ_ITEMSET128_SIZE;
                                                     
                                                     argc --;
                                                     k ++;
@@ -420,7 +420,7 @@ PIZError pizGaloisLatticeProceed (PIZGaloisLattice *x, long argc, long *argv)
                                 }
                         }
                     
-                    for (i = 0; i < PIZ_STOCK_SIZE; i++)
+                    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++)
                         {
                             if (pizItemset128IsSetAtIndex (&(x->stock[x->shuttle].childs), i) || 
                                 pizItemset128IsSetAtIndex (&(x->stock[x->shuttle].parents), i))
@@ -479,7 +479,7 @@ PIZ_INLINE void pizGaloisLatticeReconnect (PIZGaloisLattice *x, long g, long n)
                             long t;
                             long isParentOfGenerator = true;
                             
-                            for (t = 0; t < PIZ_STOCK_SIZE; t++)
+                            for (t = 0; t < PIZ_ITEMSET128_SIZE; t++)
                                 {
                                     if (pizItemset128IsSetAtIndex (&(x->stock[p].childs), t))
                                         {
@@ -522,7 +522,7 @@ PIZError pizGaloisLatticeMakeMap (PIZGaloisLattice *x)
     
     x->mapByCardinalPeak = 0;
         
-    for (i = 2; i < PIZ_STOCK_SIZE; i++)
+    for (i = 2; i < PIZ_ITEMSET128_SIZE; i++)
         {
             if (x->stock[i].cardinal)
                 {
@@ -549,7 +549,7 @@ void pizGaloisLatticeKillConcept (PIZGaloisLattice *x, long n)
         {
             long i;
                 
-            for (i = 0; i < PIZ_STOCK_SIZE; i++)
+            for (i = 0; i < PIZ_ITEMSET128_SIZE; i++)
                 {
                     if (pizItemset128IsSetAtIndex (&(x->stock[n].parents), i))
                         {

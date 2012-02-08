@@ -43,22 +43,21 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include <stdlib.h>
-#include <math.h>
-#include <time.h>
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZ_STOCK_SIZE                          (PIZ_ITEMSET128_SIZE_IN_BITS)
 #define PIZ_ALPHABET_SIZE                       128
 
 #define PIZ_BOUNDED_QUEUE_SIZE                  4
 #define PIZ_INCREMENT_JUMP_CHANCE               1   
-#define PIZ_INCREMENT_FINAL_JUMP_CHANCE         5   
+#define PIZ_INCREMENT_FINAL_JUMP_CHANCE         5 
+ 
+#define PIZ_MAXIMUM_THRESHOLD_TO_MERGE_NODES    100
+#define PIZ_DEFAULT_THRESHOLD_TO_MERGE_NODES    35
 
-#define PIZ_DEFAULT_THRESHOLD_TO_MERGE_NODES    (PIZ_ITEMSET128_SIZE_IN_BITS - 93)
-#define PIZ_MAXIMUM_THRESHOLD_TO_MERGE_NODES    (PIZ_ITEMSET128_SIZE_IN_BITS - 28)
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -71,7 +70,7 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
         {
             long err = PIZ_GOOD;
             
-            if (x->stock = (PIZFiniteStateNode *)malloc (PIZ_STOCK_SIZE * sizeof(PIZFiniteStateNode))) {
+            if (x->stock = (PIZFiniteStateNode *)malloc (PIZ_ITEMSET128_SIZE * sizeof(PIZFiniteStateNode))) {
                 x->count                    = 0;
                 x->shuttle                  = -1;
                 x->jumpChance               = 0;
@@ -83,11 +82,11 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
                         x->thresholdToMergeNodes = argv[0];
                     }
                 
-                if (x->ticketMachine = pizBoundedStackNew (PIZ_STOCK_SIZE))
+                if (x->ticketMachine = pizBoundedStackNew (PIZ_ITEMSET128_SIZE))
                     {
                         long i;
                         
-                        for (i = (PIZ_STOCK_SIZE - 1); i >= 0; i--) {
+                        for (i = (PIZ_ITEMSET128_SIZE - 1); i >= 0; i--) {
                                 pizBoundedStackPush (x->ticketMachine, i);
                             }
                     }
@@ -96,7 +95,8 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
                         err = PIZ_MEMORY;
                     }
                 
-                if (x->lottery = (long *)malloc ((MAX (PIZ_ALPHABET_SIZE, PIZ_STOCK_SIZE))* sizeof(long)))
+                if (x->lottery = (long *)malloc ((MAX (PIZ_ALPHABET_SIZE, PIZ_ITEMSET128_SIZE)) 
+                    * sizeof(long)))
                     {
                         x->lotteryIndex = 0;
                     }
@@ -250,7 +250,7 @@ void pizFiniteStateClear (PIZFiniteState *x)
     
     pizBoundedStackClear (x->ticketMachine);
     
-    for (i = (PIZ_STOCK_SIZE - 1); i >= 0; i--) {
+    for (i = (PIZ_ITEMSET128_SIZE - 1); i >= 0; i--) {
             pizBoundedStackPush (x->ticketMachine, i);
         }
 }
@@ -303,7 +303,7 @@ PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)
                     
                     if (!jump)
                         {
-                            for (i = 0; i < PIZ_STOCK_SIZE; i++)
+                            for (i = 0; i < PIZ_ITEMSET128_SIZE; i++)
                                 {
                                     if (pizItemset128IsSetAtIndex (&(x->stock[x->shuttle].childs), i)) {
                                             x->lottery[x->lotteryIndex] = i;
@@ -379,7 +379,7 @@ PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x)
                     pizBoundedQueuePop (x->mapByValue[x->lottery[h]]);
                     a = pizBoundedQueuePoppedValue (x->mapByValue[x->lottery[h]]);
                     
-                    for (j = 0; j < PIZ_STOCK_SIZE; j++)
+                    for (j = 0; j < PIZ_ITEMSET128_SIZE; j++)
                         {
                             if (pizItemset128IsSetAtIndex (&(x->stock[a].parents), j)) {
                                     pizItemset128UnsetAtIndex (&(x->stock[j].childs), a);
@@ -420,7 +420,7 @@ PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x)
                     x->stock[a].childs  = tempChilds;
                     x->stock[a].parents = tempParents;
                     
-                    for (j = 0; j < PIZ_STOCK_SIZE; j++)
+                    for (j = 0; j < PIZ_ITEMSET128_SIZE; j++)
                         {
                             if (pizItemset128IsSetAtIndex (&(x->stock[b].parents), j)) {
                                     pizItemset128UnsetAtIndex   (&(x->stock[j].childs), b);

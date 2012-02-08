@@ -1,7 +1,7 @@
 /*
  * \file    pizMarkovModel.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -52,7 +52,6 @@
 
 #define PIZ_MAXIMUM_GRAPH_SIZE      32
 #define PIZ_MAXIMUM_VECTOR_SIZE     32
-#define PIZ_ALPHABET_SIZE           128
 
 #define PIZ_DEFAULT_GRAPH_SIZE      6
 #define PIZ_DEFAULT_VECTOR_SIZE     6

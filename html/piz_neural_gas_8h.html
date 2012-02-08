@@ -25,18 +25,151 @@
 <h1>pizNeuralGas.h File Reference</h1><code>#include &quot;<a class="el" href="piz_data_structures_8h.html">pizDataStructures.h</a>&quot;</code><br>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Data Structures</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_neural_gas_head.html">PIZNeuralGasHead</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Neural gas element.  <a href="struct_p_i_z_neural_gas_head.html#_details">More...</a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_neural_gas.html">PIZNeuralGas</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The neural gas.  <a href="struct_p_i_z_neural_gas.html#_details">More...</a><br></td></tr>
+<tr><td colspan="2"><br><h2>Functions</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_neural_gas.html">PIZNeuralGas</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_neural_gas_8h.html#4d5e5116b2e292fec2ee54e173699d6e">pizNeuralGasNew</a> (long argc, long *argv)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Create the neural gas.  <a href="#4d5e5116b2e292fec2ee54e173699d6e"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_neural_gas_8h.html#6b29dc6db390edf5eeeae5ed4e12b2f6">pizNeuralGasFree</a> (<a class="el" href="struct_p_i_z_neural_gas.html">PIZNeuralGas</a> *x)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Free the neural gas.  <a href="#6b29dc6db390edf5eeeae5ed4e12b2f6"></a><br></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_neural_gas_8h.html#13e7ee5249d7b1081c8e5243f01163eb">pizNeuralGasAdd</a> (<a class="el" href="struct_p_i_z_neural_gas.html">PIZNeuralGas</a> *x, long argc, long *argv)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Add values to the neural gas.  <a href="#13e7ee5249d7b1081c8e5243f01163eb"></a><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Thanks : Jim Holmström. <br>
  <ul>
 <li><a href="http://www.booru.net/download/MasterThesisProj.pdf">http://www.booru.net/download/MasterThesisProj.pdf</a> <br>
- </li>
-<li><a href="http://en.wikipedia.org/wiki/Neural_gas">http://en.wikipedia.org/wiki/Neural_gas</a></li>
+</li>
 </ul>
 <dl class="author" compact><dt><b>Author:</b></dt><dd>Jean Sapristi </dd></dl>
-<dl class="date" compact><dt><b>Date:</b></dt><dd>23 janvier 2012 </dd></dl>
+<dl class="date" compact><dt><b>Date:</b></dt><dd>31 janvier 2012 </dd></dl>
+<hr><h2>Function Documentation</h2>
+<a class="anchor" name="4d5e5116b2e292fec2ee54e173699d6e"></a><!-- doxytag: member="pizNeuralGas.h::pizNeuralGasNew" ref="4d5e5116b2e292fec2ee54e173699d6e" args="(long argc, long *argv)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_p_i_z_neural_gas.html">PIZNeuralGas</a>* pizNeuralGasNew           </td>
+          <td>(</td>
+          <td class="paramtype">long&nbsp;</td>
+          <td class="paramname"> <em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long *&nbsp;</td>
+          <td class="paramname"> <em>argv</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Feb 6 18:21:27 2012 for Grenadine by&nbsp;
+<div class="memdoc">
+
+<p>
+Create the neural gas. 
+<p>
+The function accepts two arguments, the maximum size of the neural gas, and the size of the vectors. For the neural gas size, maximum is 128, default is 20. For the vectors, maximum is 256, default is 4. In case of failure the pointer is NULL. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>argc</em>&nbsp;</td><td>The number of arguments. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>argv</em>&nbsp;</td><td>A pointer to arguments. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>A pointer to the new neural gas. </dd></dl>
+<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The following shows how to create a neural gas. <div class="fragment"><pre class="fragment"> <span class="keywordtype">long</span> args[2] = {50, 8};
+
+ <a class="code" href="struct_p_i_z_kohonen_map.html" title="The Kohonen map.">PIZKohonenMap</a> *map = pizKohonenMapNew (2, &amp;args);
+ <a class="code" href="struct_p_i_z_kohonen_map.html" title="The Kohonen map.">PIZKohonenMap</a> *map = pizKohonenMapNew (0, NULL); <span class="comment">// default values</span>
+</pre></div> </dd></dl>
+
+</div>
+</div><p>
+<a class="anchor" name="6b29dc6db390edf5eeeae5ed4e12b2f6"></a><!-- doxytag: member="pizNeuralGas.h::pizNeuralGasFree" ref="6b29dc6db390edf5eeeae5ed4e12b2f6" args="(PIZNeuralGas *x)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void pizNeuralGasFree           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_p_i_z_neural_gas.html">PIZNeuralGas</a> *&nbsp;</td>
+          <td class="paramname"> <em>x</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Free the neural gas. 
+<p>
+It is safe to pass NULL pointer. <dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A Pointer. </td></tr>
+  </table>
+</dl>
+
+</div>
+</div><p>
+<a class="anchor" name="13e7ee5249d7b1081c8e5243f01163eb"></a><!-- doxytag: member="pizNeuralGas.h::pizNeuralGasAdd" ref="13e7ee5249d7b1081c8e5243f01163eb" args="(PIZNeuralGas *x, long argc, long *argv)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a> pizNeuralGasAdd           </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_p_i_z_neural_gas.html">PIZNeuralGas</a> *&nbsp;</td>
+          <td class="paramname"> <em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&nbsp;</td>
+          <td class="paramname"> <em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long *&nbsp;</td>
+          <td class="paramname"> <em>argv</em></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Add values to the neural gas. 
+<p>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A valid pointer. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>argc</em>&nbsp;</td><td>The number of values. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>argv</em>&nbsp;</td><td>A pointer to the values. </td></tr>
+  </table>
+</dl>
+<dl class="return" compact><dt><b>Returns:</b></dt><dd>An error code. </dd></dl>
+<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>Values provided are clipped [0, 127]. </dd></dl>
+
+</div>
+</div><p>
+</div>
+<hr size="1"><address style="text-align: right;"><small>Generated on Tue Feb 7 16:16:41 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>
