@@ -28,11 +28,6 @@
 <tr><td colspan="2"><br><h2>Data Structures</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html">PIZGaloisLattice</a></td></tr>
 
-<tr><td colspan="2"><br><h2>Defines</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_galois_lattice_8h.html#5f625bbff4311b880a69e4e4da4e427b">PIZ_GALOIS_LATTICE_CONCEPTS</a>&nbsp;&nbsp;&nbsp;0</td></tr>
-
-<tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_galois_lattice_8h.html#cfd5d1677bcf8be43bcc4cb2df051337">PIZ_GALOIS_LATTICE_DATA</a>&nbsp;&nbsp;&nbsp;1</td></tr>
-
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_galois_lattice.html">PIZGaloisLattice</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_galois_lattice_8h.html#3233e90776f11b1262aeea54e4f2d916">pizGaloisLatticeNew</a> (long argc, long *argv)</td></tr>
 
@@ -46,8 +41,6 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_galois_lattice_8h.html#aee9674a3386efaf8f648af115e769c3">pizGaloisLatticeCount</a> (const <a class="el" href="struct_p_i_z_galois_lattice.html">PIZGaloisLattice</a> *x)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_galois_lattice_8h.html#ac53d71a19421b54ac431dfeebec70b4">pizGaloisLatticeEncodeConceptsToArray</a> (const <a class="el" href="struct_p_i_z_galois_lattice.html">PIZGaloisLattice</a> *x, long n, PIZGrowingArray *a)</td></tr>
-
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Thanks : Robert Godin, Rokia Missaoui, Hassan Alaoui. <br>
@@ -58,41 +51,6 @@ Thanks : Robert Godin, Rokia Missaoui, Hassan Alaoui. <br>
 </ul>
 <dl class="author" compact><dt><b>Author:</b></dt><dd>Jean Sapristi </dd></dl>
 <dl class="date" compact><dt><b>Date:</b></dt><dd>31 janvier 2012 </dd></dl>
-<hr><h2>Define Documentation</h2>
-<a class="anchor" name="5f625bbff4311b880a69e4e4da4e427b"></a><!-- doxytag: member="pizGaloisLattice.h::PIZ_GALOIS_LATTICE_CONCEPTS" ref="5f625bbff4311b880a69e4e4da4e427b" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define PIZ_GALOIS_LATTICE_CONCEPTS&nbsp;&nbsp;&nbsp;0          </td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Index of number of concepts in <code><a class="el" href="piz_galois_lattice_8h.html#ac53d71a19421b54ac431dfeebec70b4" title="Encode concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeConceptsToArray()</a></code>. 
-<p>
-
-</div>
-</div><p>
-<a class="anchor" name="cfd5d1677bcf8be43bcc4cb2df051337"></a><!-- doxytag: member="pizGaloisLattice.h::PIZ_GALOIS_LATTICE_DATA" ref="cfd5d1677bcf8be43bcc4cb2df051337" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define PIZ_GALOIS_LATTICE_DATA&nbsp;&nbsp;&nbsp;1          </td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>
-Index of data in <code><a class="el" href="piz_galois_lattice_8h.html#ac53d71a19421b54ac431dfeebec70b4" title="Encode concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeConceptsToArray()</a></code>. 
-<p>
-
-</div>
-</div><p>
 <hr><h2>Function Documentation</h2>
 <a class="anchor" name="3233e90776f11b1262aeea54e4f2d916"></a><!-- doxytag: member="pizGaloisLattice.h::pizGaloisLatticeNew" ref="3233e90776f11b1262aeea54e4f2d916" args="(long argc, long *argv)" -->
 <div class="memitem">
@@ -309,73 +267,8 @@ Get the number of concepts in the lattice.
 
 </div>
 </div><p>
-<a class="anchor" name="ac53d71a19421b54ac431dfeebec70b4"></a><!-- doxytag: member="pizGaloisLattice.h::pizGaloisLatticeEncodeConceptsToArray" ref="ac53d71a19421b54ac431dfeebec70b4" args="(const PIZGaloisLattice *x, long n, PIZGrowingArray *a)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a> pizGaloisLatticeEncodeConceptsToArray           </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="struct_p_i_z_galois_lattice.html">PIZGaloisLattice</a> *&nbsp;</td>
-          <td class="paramname"> <em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">long&nbsp;</td>
-          <td class="paramname"> <em>n</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">PIZGrowingArray *&nbsp;</td>
-          <td class="paramname"> <em>a</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
-        </tr>
-      </table>
 </div>
-<div class="memdoc">
-
-<p>
-Encode concepts with a given size to a dynamic array. 
-<p>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A valid pointer. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>n</em>&nbsp;</td><td>The size of concepts. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>a</em>&nbsp;</td><td>A pointer to a dynamic array. </td></tr>
-  </table>
-</dl>
-<dl class="return" compact><dt><b>Returns:</b></dt><dd>An error code. </dd></dl>
-<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>An example : <div class="fragment"><pre class="fragment"> <span class="keywordtype">long</span>             err = <a class="code" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced9a1b011b02c4fe25b1614cab56a5b320">PIZ_GOOD</a>;
- <span class="keywordtype">long</span>             n = 4;
- PIZGrowingArray  *a = pizGrowingArrayNew (16);
-
- err = <a class="code" href="piz_galois_lattice_8h.html#ac53d71a19421b54ac431dfeebec70b4" title="Encode concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeConceptsToArray</a> (lattice, n, a);
-
- <span class="keywordflow">if</span> (!err)
-      {
-          <span class="keywordtype">long</span> i;
-          <span class="keywordtype">long</span> count = pizGrowingArrayValueAtIndex (a, <a class="code" href="piz_galois_lattice_8h.html#5f625bbff4311b880a69e4e4da4e427b" title="Index of number of concepts in pizGaloisLatticeEncodeConceptsToArray().">PIZ_GALOIS_LATTICE_CONCEPTS</a>);
-          <span class="keywordtype">long</span> *ptr  = pizGrowingArrayPtr (a);
-          <span class="keywordtype">long</span> *values = NULL;
-
-          <span class="keywordflow">for</span> (i = 0; i &lt; count; i++) {
-                  values = ptr + <a class="code" href="piz_galois_lattice_8h.html#cfd5d1677bcf8be43bcc4cb2df051337" title="Index of data in pizGaloisLatticeEncodeConceptsToArray().">PIZ_GALOIS_LATTICE_DATA</a> + (n * i);
-              }
-      }
-
-  pizGrowingArrayFree (a);
-</pre></div> </dd></dl>
-
-</div>
-</div><p>
-</div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 18:21:33 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Thu Feb 9 14:45:03 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

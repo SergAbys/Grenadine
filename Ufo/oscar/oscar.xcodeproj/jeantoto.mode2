@@ -424,8 +424,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D9BB3414E02C2800245697</string>
-				<string>96D9BB3514E02C2800245697</string>
+				<string>96A05CA014E405D90028A323</string>
+				<string>96A05CA114E405D90028A323</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -458,6 +458,7 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/Ufo/oscar/oscar.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -675,7 +676,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D570E814CC47140091BEE1</string>
+				<string>96A05CA214E405D90028A323</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

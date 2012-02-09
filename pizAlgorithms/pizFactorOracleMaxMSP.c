@@ -1,9 +1,9 @@
 /*
- * \file    pizMarkovModelExtended.c
+ * \file    pizFactorOracleExtended.c
  * \author  Jean Sapristi
  * \date    31 janvier 2012
  */
- 
+
 /*
  *  Copyright (c) 2011, Jean Sapristi & Tom Javel, 
  *  "nicolas.danet@free.fr".
@@ -34,46 +34,54 @@
  *  The fact that you are presently reading this means that you have had
  *  knowledge of the CeCILL-C license and that you accept its terms.
  */
- 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#include "pizMarkovModel.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void pizMarkovModelSetPersistence (PIZMarkovModel *x, double f)
+#include "pizMaxMSP.h"
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+void pizFactorOracleSetBackwardThreshold (PIZFactorOracle *x, long n)
 {
-    if (f >= 0.) {
-            x->persistence = f;
+    if (n >= 0) {
+            x->backwardThreshold = n;
         }
+}
+
+void pizFactorOracleSetStraightRatio (PIZFactorOracle *x, double f)
+{
+    if ((f >= 0.) && (f <= 1.)) {
+            x->straightRatio = f;
+        }
+}
+
+long pizFactorOracleBackwardThreshold (const PIZFactorOracle *x)
+{
+    return x->backwardThreshold;
+}
+
+double pizFactorOracleStraightRatio (const PIZFactorOracle *x)
+{
+    return x->straightRatio;
 }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizMarkovModelEncodeNodeToArray (const PIZMarkovModel *x, long n, PIZGrowingArray *a)
+PIZError pizFactorOracleEncodeNodeToArray (const PIZFactorOracle *x, long node, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     
-    if ((n >= 0) && (n < x->graphSize) && a)
-        {
-            long i;
-            
+    if ((node < x->index) && a) {
             err = PIZ_GOOD;
             
-            err |= pizGrowingArrayAppend (a, (long)(x->start[n] * 100.));
-            err |= pizGrowingArrayAppend (a, x->graphSize);
-            err |= pizGrowingArrayAppend (a, PIZ_ALPHABET_SIZE);
-            
-            for (i = 0; i < x->graphSize; i++) {
-                err |= pizGrowingArrayAppend (a, (long)(x->transition[(n * x->graphSize) + i] * 100.));
-            }
-            
-            for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
-                err |= pizGrowingArrayAppend (a, (long)(x->emission[(n * PIZ_ALPHABET_SIZE) + i] * 100.));
-            }
+            err |= pizGrowingArrayAppend        (a, x->nodes[node].referTo);
+            err |= pizGrowingArrayAppend        (a, x->nodes[node].lengthRepeatedSuffix);
+            err |= pizGrowingArrayAppend        (a, pizGrowingArrayCount (x->nodes[node].arcDestinations));
+            err |= pizGrowingArrayAppendArray   (a, x->nodes[node].arcDestinations);
+            err |= pizGrowingArrayAppendArray   (a, x->nodes[node].arcValues);
         }
     
     return err;

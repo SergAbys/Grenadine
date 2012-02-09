@@ -425,8 +425,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96DC74A914E2CF5F00119E2E</string>
-				<string>96DC74AA14E2CF5F00119E2E</string>
+				<string>96A05CE514E406550028A323</string>
+				<string>96A05CE614E406550028A323</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -459,6 +459,7 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/Ufo/yankee/yankee.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -676,7 +677,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96DB93BB14E1100A00AE7CEE</string>
+				<string>96A05CE714E406550028A323</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

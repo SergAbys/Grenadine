@@ -27,9 +27,9 @@
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Data Fields</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZItemset128&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#f8766bc22508269c94aa752e51d05ebe">itemsetToBeAdded</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZItemset128&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#7b7a94de1e9087cd76614dd8f5fdd09e">toBeAdded</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZItemset128&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#8a53adcfa5688f1e3618d4016c425792">itemsetIntersection</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZItemset128&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#991d1200e4436a087b413d0aa01110fc">intersection</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#9e6763a8977288a87321e347e6642ca3">count</a></td></tr>
 
@@ -41,17 +41,17 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#deff4298372cbba3f2870f83a27ddbd5">previousShuttle</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#0216fe737bbeb3c468f9b8e11fac15f4">itemsetIntersectionCardinal</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#593520bc72b465542c55d64f07f64381">intersectionCardinal</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#bb0b1bfd1f38fac201a97e47bf742a71">mapByCardinalPeak</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#6e98458a1d5250c600136adb3dac51ce">mapPeak</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#da178fa90e510fa615b799998f043512">tempMapByCardinalPeak</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#d412c03091a49c27556c353a29d0ed37">tempMapPeak</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#9b6f702d44533c9ccc2cba678493afac">needToMakeMap</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZGrowingArray **&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#b3128bb299fa67f1fcc63ae31adef00f">mapByCardinal</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZGrowingArray **&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#56ec5cda2111672e6f0c744e00ce6bf6">map</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZGrowingArray **&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#b23b4ad4a39c86ac26801741b79a869b">tempMapByCardinal</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZGrowingArray **&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#c166c007311324642989e61f8836595e">tempMap</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_bounded_stack.html">PIZBoundedStack</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#8b675986b6e159e9048161603d3d5186">ticketMachine</a></td></tr>
 
@@ -61,12 +61,12 @@
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 When the number of concepts reach a threshold, concepts are randomly killed to keep the population under. <dl class="remark" compact><dt><b>Remarks:</b></dt><dd>Implemented with an array of dynamic arrays, one for each possible cardinal (the size of alphabet). Dynamic arrays contains indexes of pre-allocated concepts (pool size is 128). </dd></dl>
 <hr><h2>Field Documentation</h2>
-<a class="anchor" name="f8766bc22508269c94aa752e51d05ebe"></a><!-- doxytag: member="PIZGaloisLattice::itemsetToBeAdded" ref="f8766bc22508269c94aa752e51d05ebe" args="" -->
+<a class="anchor" name="7b7a94de1e9087cd76614dd8f5fdd09e"></a><!-- doxytag: member="PIZGaloisLattice::toBeAdded" ref="7b7a94de1e9087cd76614dd8f5fdd09e" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">PIZItemset128 <a class="el" href="struct_p_i_z_galois_lattice.html#f8766bc22508269c94aa752e51d05ebe">PIZGaloisLattice::itemsetToBeAdded</a>          </td>
+          <td class="memname">PIZItemset128 <a class="el" href="struct_p_i_z_galois_lattice.html#7b7a94de1e9087cd76614dd8f5fdd09e">PIZGaloisLattice::toBeAdded</a>          </td>
         </tr>
       </table>
 </div>
@@ -76,12 +76,12 @@ When the number of concepts reach a threshold, concepts are randomly killed to k
 Values to add (as bit field). 
 </div>
 </div><p>
-<a class="anchor" name="8a53adcfa5688f1e3618d4016c425792"></a><!-- doxytag: member="PIZGaloisLattice::itemsetIntersection" ref="8a53adcfa5688f1e3618d4016c425792" args="" -->
+<a class="anchor" name="991d1200e4436a087b413d0aa01110fc"></a><!-- doxytag: member="PIZGaloisLattice::intersection" ref="991d1200e4436a087b413d0aa01110fc" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">PIZItemset128 <a class="el" href="struct_p_i_z_galois_lattice.html#8a53adcfa5688f1e3618d4016c425792">PIZGaloisLattice::itemsetIntersection</a>          </td>
+          <td class="memname">PIZItemset128 <a class="el" href="struct_p_i_z_galois_lattice.html#991d1200e4436a087b413d0aa01110fc">PIZGaloisLattice::intersection</a>          </td>
         </tr>
       </table>
 </div>
@@ -166,12 +166,12 @@ Index of the playback head.
 Previous index of the playback head. 
 </div>
 </div><p>
-<a class="anchor" name="0216fe737bbeb3c468f9b8e11fac15f4"></a><!-- doxytag: member="PIZGaloisLattice::itemsetIntersectionCardinal" ref="0216fe737bbeb3c468f9b8e11fac15f4" args="" -->
+<a class="anchor" name="593520bc72b465542c55d64f07f64381"></a><!-- doxytag: member="PIZGaloisLattice::intersectionCardinal" ref="593520bc72b465542c55d64f07f64381" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">long <a class="el" href="struct_p_i_z_galois_lattice.html#0216fe737bbeb3c468f9b8e11fac15f4">PIZGaloisLattice::itemsetIntersectionCardinal</a>          </td>
+          <td class="memname">long <a class="el" href="struct_p_i_z_galois_lattice.html#593520bc72b465542c55d64f07f64381">PIZGaloisLattice::intersectionCardinal</a>          </td>
         </tr>
       </table>
 </div>
@@ -181,12 +181,12 @@ Previous index of the playback head.
 Cardinal of the temporary intersection. 
 </div>
 </div><p>
-<a class="anchor" name="bb0b1bfd1f38fac201a97e47bf742a71"></a><!-- doxytag: member="PIZGaloisLattice::mapByCardinalPeak" ref="bb0b1bfd1f38fac201a97e47bf742a71" args="" -->
+<a class="anchor" name="6e98458a1d5250c600136adb3dac51ce"></a><!-- doxytag: member="PIZGaloisLattice::mapPeak" ref="6e98458a1d5250c600136adb3dac51ce" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">long <a class="el" href="struct_p_i_z_galois_lattice.html#bb0b1bfd1f38fac201a97e47bf742a71">PIZGaloisLattice::mapByCardinalPeak</a>          </td>
+          <td class="memname">long <a class="el" href="struct_p_i_z_galois_lattice.html#6e98458a1d5250c600136adb3dac51ce">PIZGaloisLattice::mapPeak</a>          </td>
         </tr>
       </table>
 </div>
@@ -196,12 +196,12 @@ Cardinal of the temporary intersection.
 Maximum cardinal reached in the map. 
 </div>
 </div><p>
-<a class="anchor" name="da178fa90e510fa615b799998f043512"></a><!-- doxytag: member="PIZGaloisLattice::tempMapByCardinalPeak" ref="da178fa90e510fa615b799998f043512" args="" -->
+<a class="anchor" name="d412c03091a49c27556c353a29d0ed37"></a><!-- doxytag: member="PIZGaloisLattice::tempMapPeak" ref="d412c03091a49c27556c353a29d0ed37" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">long <a class="el" href="struct_p_i_z_galois_lattice.html#da178fa90e510fa615b799998f043512">PIZGaloisLattice::tempMapByCardinalPeak</a>          </td>
+          <td class="memname">long <a class="el" href="struct_p_i_z_galois_lattice.html#d412c03091a49c27556c353a29d0ed37">PIZGaloisLattice::tempMapPeak</a>          </td>
         </tr>
       </table>
 </div>
@@ -226,12 +226,12 @@ Maximum cardinal reached in the temporary map.
 Flag (set after birth or death). 
 </div>
 </div><p>
-<a class="anchor" name="b3128bb299fa67f1fcc63ae31adef00f"></a><!-- doxytag: member="PIZGaloisLattice::mapByCardinal" ref="b3128bb299fa67f1fcc63ae31adef00f" args="" -->
+<a class="anchor" name="56ec5cda2111672e6f0c744e00ce6bf6"></a><!-- doxytag: member="PIZGaloisLattice::map" ref="56ec5cda2111672e6f0c744e00ce6bf6" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">PIZGrowingArray** <a class="el" href="struct_p_i_z_galois_lattice.html#b3128bb299fa67f1fcc63ae31adef00f">PIZGaloisLattice::mapByCardinal</a>          </td>
+          <td class="memname">PIZGrowingArray** <a class="el" href="struct_p_i_z_galois_lattice.html#56ec5cda2111672e6f0c744e00ce6bf6">PIZGaloisLattice::map</a>          </td>
         </tr>
       </table>
 </div>
@@ -241,12 +241,12 @@ Flag (set after birth or death).
 Concepts sort by cardinal. 
 </div>
 </div><p>
-<a class="anchor" name="b23b4ad4a39c86ac26801741b79a869b"></a><!-- doxytag: member="PIZGaloisLattice::tempMapByCardinal" ref="b23b4ad4a39c86ac26801741b79a869b" args="" -->
+<a class="anchor" name="c166c007311324642989e61f8836595e"></a><!-- doxytag: member="PIZGaloisLattice::tempMap" ref="c166c007311324642989e61f8836595e" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">PIZGrowingArray** <a class="el" href="struct_p_i_z_galois_lattice.html#b23b4ad4a39c86ac26801741b79a869b">PIZGaloisLattice::tempMapByCardinal</a>          </td>
+          <td class="memname">PIZGrowingArray** <a class="el" href="struct_p_i_z_galois_lattice.html#c166c007311324642989e61f8836595e">PIZGaloisLattice::tempMap</a>          </td>
         </tr>
       </table>
 </div>
@@ -289,7 +289,7 @@ Pool of concepts.
 <hr>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="piz_galois_lattice_8h.html">pizGaloisLattice.h</a></ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 18:21:33 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Thu Feb 9 14:45:03 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

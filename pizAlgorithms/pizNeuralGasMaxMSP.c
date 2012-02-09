@@ -38,7 +38,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizNeuralGas.h"
+#include "pizMaxMSP.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -120,30 +120,28 @@ PIZError pizNeuralGasEncodeVectorToArray (const PIZNeuralGas *x, long n, PIZGrow
 {
     long err = PIZ_ERROR;
     
-    if ((n >= 0) && (n < x->mapSize) && a)
-        {
-            long i;
-            long k = 0;
-            
-            err = PIZ_GOOD;
-            
-            for (i = 0; i < PIZ_ITEMSET128_SIZE; i++)
-                {
-                    if (pizItemset128IsSetAtIndex (&x->map, i))
-                        {
-                            if (k == n) {
-                                long j;
-                                
-                                for (j = 0; j < x->vectorSize; j++) {
-                                        err |= pizGrowingArrayAppend (a, (long)(((*(x->vectorStock 
-                                            + (n * x->vectorSize) + j)) + 0.5)));
-                                    }
-                            }
-                            
-                            k ++;
-                        }
+    if ((n >= 0) && (n < x->mapSize) && a) {
+        long i;
+        long k = 0;
+        
+        err = PIZ_GOOD;
+        
+        for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+            if (pizItemset128IsSetAtIndex (&x->map, i)) {
+                if (k == n) {
+                
+                    long j;
+                    
+                    for (j = 0; j < x->vectorSize; j++) {
+                        err |= pizGrowingArrayAppend 
+                            (a, (long)(((*(x->vectorStock + (n * x->vectorSize) + j)) + 0.5)));
+                    }
                 }
+                
+                k ++;
+            }
         }
+    }
     
     return err;
 }

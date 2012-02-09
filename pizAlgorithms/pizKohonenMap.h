@@ -42,8 +42,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_FACTOR_ORACLE_H
-#define PIZ_FACTOR_ORACLE_H
+#ifndef PIZ_KOHONEN_MAP_H
+#define PIZ_KOHONEN_MAP_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -140,65 +140,8 @@ long pizKohonenMapCount (const PIZKohonenMap *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Set the neighborhood influence of the Kohonen map.
- * \details Default is 10.
- * \param   x A valid pointer.
- * \param   n The neighborhood influence.
- */
-void pizKohonenMapSetRange (PIZKohonenMap *x, long n);
-
-/**
- * \brief   Set the number of learning iterations planned for the Kohonen map.
- * \details Default is 60.
- * \param   x A valid pointer.
- * \param   n The number of learning iterations.
- */
-void pizKohonenMapSetTraining (PIZKohonenMap *x, long n);
-
-/**
- * \brief   Set the learning step of the Kohonen map.
- * \details Default is 1.
- * \param   x A valid pointer.
- * \param   n The learning step.
- */
-void pizKohonenMapSetStep (PIZKohonenMap *x, double f);
-
-/**
- * \brief   Get the neighborhood influence of the Kohonen map.
- * \param   x A valid pointer.
- * \return  The neighborhood influence.
- */
-long pizKohonenMapRange (const PIZKohonenMap *x);
-
-/**
- * \brief   Get the number of learning iterations planned for the Kohonen map.
- * \param   x A valid pointer.
- * \return  The number of learning iterations planned.
- */
-long pizKohonenMapTraining (const PIZKohonenMap *x);
-
-/**
- * \brief   Get the learning step of the Kohonen map.
- * \param   x A valid pointer.
- * \return  The learning step.
- */
-double pizKohonenMapStep (const PIZKohonenMap *x);
-
-/**
- * \brief   Encode the vector of a node to a dynamic array.
- * \param   x A valid pointer.
- * \param   n The index of the node.
- * \param   a A pointer to a dynamic array.
- * \return  An error code.
- */
-PIZError pizKohonenMapEncodeVectorToArray (const PIZKohonenMap *x, long n, PIZGrowingArray *a);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 PIZ_END_C_LINKAGE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif
+#endif // PIZ_KOHONEN_MAP

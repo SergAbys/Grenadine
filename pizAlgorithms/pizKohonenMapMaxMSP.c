@@ -1,5 +1,5 @@
 /*
- * \file    pizGaloisLatticeExtended.c
+ * \file    pizKohonenMapExtended.c
  * \author  Jean Sapristi
  * \date    31 janvier 2012
  */
@@ -38,37 +38,59 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizGaloisLattice.h"
+#include "pizMaxMSP.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizGaloisLatticeEncodeConceptsToArray (const PIZGaloisLattice *x, long n, PIZGrowingArray *a)
+void pizKohonenMapSetRange (PIZKohonenMap *x, long n)
+{
+    x->range = MAX (n, 1);
+}
+
+void pizKohonenMapSetTraining (PIZKohonenMap *x, long n)
+{
+    x->training = MAX (n, 1);
+}
+
+void pizKohonenMapSetStep (PIZKohonenMap *x, double f)
+{
+    if (f > 0.) {
+            x->step = f;
+        }
+}
+
+long pizKohonenMapRange (const PIZKohonenMap *x)
+{
+    return (x->range);
+}
+
+long pizKohonenMapTraining (const PIZKohonenMap *x)
+{
+    return (x->training);
+}
+
+double pizKohonenMapStep (const PIZKohonenMap *x)
+{
+    return (x->step);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZError pizKohonenMapEncodeVectorToArray (const PIZKohonenMap *x, long n, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     
-    if ((n > 0) && (n < PIZ_ITEMSET128_SIZE) && a)
-        {
-            long i;
-            long count = pizGrowingArrayCount (x->mapByCardinal[n]);
-            
-            err = PIZ_GOOD;
-            
-            err |= pizGrowingArrayAppend (a, count);
-            
-            for (i = 0; i < count; i++)
-                {
-                    long j;
-                    long p = pizGrowingArrayValueAtIndex (x->mapByCardinal[n], i);
-                    
-                    for (j = 0; j < PIZ_ITEMSET128_SIZE; j++)
-                        {
-                            if (pizItemset128IsSetAtIndex (&(x->stock[p].itemset), j)) {
-                                    err |= pizGrowingArrayAppend (a, j);
-                                }
-                        }
-                }
+    if ((n >= 0) && (n < x->mapSize) && a) {
+        long i;
+        
+        err = PIZ_GOOD;
+        
+        for (i = 0; i < x->vectorSize; i++) {
+            err |= pizGrowingArrayAppend (a, (long)(((*(x->map + (n * x->vectorSize) + i)) + 0.5)));
         }
+    }
     
     return err;
 }

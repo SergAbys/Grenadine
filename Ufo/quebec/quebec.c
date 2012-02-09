@@ -194,14 +194,14 @@ void quebec_dumpTitle (t_quebec *x)
                     atom_setparse (&argc, &argv, text);
                     
                     if (argc && argv) {
-                            if ((atom_gettype (argv + 1) == A_SYM) && (x->title != atom_getsym (argv + 1)))
-                                {
-                                    x->title = atom_getsym (argv + 1);
-                                    outlet_anything  (x->rightOutlet, gensym ("title"), 1, argv + 1);
-                                }
-                        
-                            sysmem_freeptr (argv);
-                        }
+                        if ((atom_gettype (argv + 1) == A_SYM) && (x->title != atom_getsym (argv + 1)))
+                            {
+                                x->title = atom_getsym (argv + 1);
+                                outlet_anything  (x->rightOutlet, gensym ("title"), 1, argv + 1);
+                            }
+                    
+                        sysmem_freeptr (argv);
+                    }
                 }
         }
 }

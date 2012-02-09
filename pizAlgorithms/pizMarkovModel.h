@@ -55,39 +55,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \def     PIZ_MARKOV_MODEL_START 
- * \brief   Index of node's start probability in \c pizMarkovModelEncodeNodeToArray().
- */
-
-/**
- * \def     PIZ_MARKOV_MODEL_TRANSITIONS 
- * \brief   Index of node's number of transitions in \c pizMarkovModelEncodeNodeToArray().
- */
- 
-/**
- * \def     PIZ_MARKOV_MODEL_EMISSIONS 
- * \brief   Index of node's number of emmissions in \c pizMarkovModelEncodeNodeToArray().
- */
-
-/**
- * \def     PIZ_MARKOV_MODEL_DATA 
- * \brief   Index of data in \c pizMarkovModelEncodeNodeToArray.
- */
- 
-#define PIZ_MARKOV_MODEL_START          0
-#define PIZ_MARKOV_MODEL_TRANSITIONS    1
-#define PIZ_MARKOV_MODEL_EMISSIONS      2
-#define PIZ_MARKOV_MODEL_DATA           3
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZ_ALPHABET_SIZE 128
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-/**
  * \remark Implemented simply with arrays.
  */
  
@@ -105,7 +72,7 @@ typedef struct _PIZMarkovModel {
     double  *alpha;                             /*!< Forward values. */
     double  *tempAlpha;                         /*!< Rescaled forward values. */
     double  *beta;                              /*!< Backward values. */
-    double  *coefficient;                       /*!< Rescaling coefficient. */
+    double  *coefficient;                       /*!< Rescaling coefficients. */
     } PIZMarkovModel;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -180,61 +147,6 @@ long pizMarkovModelCount (const PIZMarkovModel *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Set the persistence ratio of learning.
- * \remark  HMM = ((old * persistence) + new) / (persistence + 1.)
- * \param   x A valid pointer.
- * \param   n The new persistence.
- */
-void pizMarkovModelSetPersistence (PIZMarkovModel *x, double f);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-/**
- * \brief   Encode node's probabilities to a dynamic array.
- * \param   x A valid pointer.
- * \param   n The index of the node.
- * \param   a A pointer to a dynamic array.
- * \return  An error code.
- * \remark	The values obtained (percents) are approximations.
- *          An example :  
- * \code
- *  long            err = PIZ_GOOD;
- *  long            n = 4;
- *  PIZGrowingArray *a = pizGrowingArrayNew (256);
- *
- *  err = pizMarkovModelEncodeNodeToArray (hmm, n, a);
- *
- *  if (!err)
- *      {
- *          long i;
- *          long start_probability, transition_probability, emission_probability;
- *          long t = pizGrowingArrayValueAtIndex (a, PIZ_MARKOV_MODEL_TRANSITIONS);
- *          long e = pizGrowingArrayValueAtIndex (a, PIZ_MARKOV_MODEL_EMISSIONS);
- *          long *ptr = pizGrowingArrayPtr (a);
- *
- *          start_probability = pizGrowingArrayValueAtIndex (a, PIZ_MARKOV_MODEL_START);
- *
- *          for (i = 0; i < t; i++) {
- *                  transition_probability = ptr + PIZ_MARKOV_MODEL_DATA + i;
- *              }
- *          
- *          for (i = t; i < (t + e); i++) {
- *                  emission_probability = ptr + PIZ_MARKOV_MODEL_DATA + i;
- *              }          
- *
- *      }
- *
- *  pizGrowingArrayFree (a);
- *
- * \endcode
- */
-PIZError pizMarkovModelEncodeNodeToArray (const PIZMarkovModel *x, long n, PIZGrowingArray *a);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 PIZ_LOCAL PIZ_INLINE void   pizMarkovModelBaumWelch             (PIZMarkovModel *x, long argc, long *argv);
 PIZ_LOCAL void              pizMarkovModelFillStochastically    (long argc, double *argv);
 
@@ -245,4 +157,4 @@ PIZ_END_C_LINKAGE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif
+#endif  // PIZ_MARKOV_MODEL_H

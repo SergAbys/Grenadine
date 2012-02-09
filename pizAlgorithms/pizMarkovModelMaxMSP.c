@@ -1,5 +1,5 @@
 /*
- * \file    pizKohonenMapExtended.c
+ * \file    pizMarkovModelExtended.c
  * \author  Jean Sapristi
  * \date    31 janvier 2012
  */
@@ -34,61 +34,44 @@
  *  The fact that you are presently reading this means that you have had
  *  knowledge of the CeCILL-C license and that you accept its terms.
  */
+ 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#include "pizMaxMSP.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizKohonenMap.h"
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void pizKohonenMapSetRange (PIZKohonenMap *x, long n)
+void pizMarkovModelSetPersistence (PIZMarkovModel *x, double f)
 {
-    x->range = MAX (n, 1);
-}
-
-void pizKohonenMapSetTraining (PIZKohonenMap *x, long n)
-{
-    x->training = MAX (n, 1);
-}
-
-void pizKohonenMapSetStep (PIZKohonenMap *x, double f)
-{
-    if (f > 0.) {
-            x->step = f;
+    if (f >= 0.) {
+            x->persistence = f;
         }
 }
 
-long pizKohonenMapRange (const PIZKohonenMap *x)
-{
-    return (x->range);
-}
-
-long pizKohonenMapTraining (const PIZKohonenMap *x)
-{
-    return (x->training);
-}
-
-double pizKohonenMapStep (const PIZKohonenMap *x)
-{
-    return (x->step);
-}
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizKohonenMapEncodeVectorToArray (const PIZKohonenMap *x, long n, PIZGrowingArray *a)
+PIZError pizMarkovModelEncodeNodeToArray (const PIZMarkovModel *x, long n, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     
-    if ((n >= 0) && (n < x->mapSize) && a) {
+    if ((n >= 0) && (n < x->graphSize) && a) {
         long i;
         
         err = PIZ_GOOD;
         
-        for (i = 0; i < x->vectorSize; i++) {
-            err |= pizGrowingArrayAppend (a, (long)(((*(x->map + (n * x->vectorSize) + i)) + 0.5)));
+        err |= pizGrowingArrayAppend (a, (long)(x->start[n] * 100.));
+        err |= pizGrowingArrayAppend (a, x->graphSize);
+        err |= pizGrowingArrayAppend (a, PIZ_ALPHABET_SIZE);
+        
+        for (i = 0; i < x->graphSize; i++) {
+            err |= pizGrowingArrayAppend (a, (long)(x->transition[(n * x->graphSize) + i] * 100.));
+        }
+        
+        for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
+            err |= pizGrowingArrayAppend (a, (long)(x->emission[(n * PIZ_ALPHABET_SIZE) + i] * 100.));
         }
     }
     

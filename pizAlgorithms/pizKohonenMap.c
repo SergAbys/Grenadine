@@ -86,21 +86,18 @@ PIZKohonenMap *pizKohonenMapNew (long argc, long *argv)
             
             srand ((unsigned int)time(NULL));
                     
-            if (x->map = (double *)malloc (sizeof(double) * (x->mapSize * x->vectorSize)))
-                {
-                    long i;
-                    
-                    x->count = 0;
-                    
-                    for (i = 0; i < (x->mapSize * x->vectorSize); i++) {
-                            x->map[i] = PIZ_ALPHABET_SIZE * (rand ( ) / (RAND_MAX + 1.0));
-                        }
+            if (x->map = (double *)malloc (sizeof(double) * (x->mapSize * x->vectorSize))) {
+                long i;
+                
+                x->count = 0;
+                
+                for (i = 0; i < (x->mapSize * x->vectorSize); i++) {
+                    x->map[i] = PIZ_ALPHABET_SIZE * (rand ( ) / (RAND_MAX + 1.0));
                 }
-            else
-                {
-                    pizKohonenMapFree (x);
-                    x = NULL;
-                }
+            } else {
+                pizKohonenMapFree (x);
+                x = NULL;
+            }
         }
     
     return x;
@@ -108,15 +105,14 @@ PIZKohonenMap *pizKohonenMapNew (long argc, long *argv)
 
 void pizKohonenMapFree (PIZKohonenMap *x)
 {
-    if (x)
-        {
-            if (x->map) {
-                    free (x->map);
-                    x->map = NULL;
-                }
-            
-            free (x);
+    if (x) {
+        if (x->map) {
+            free (x->map);
+            x->map = NULL;
         }
+        
+        free (x);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -126,62 +122,61 @@ PIZError pizKohonenMapAdd (PIZKohonenMap *x, long argc, long *argv)
 {
     long err = PIZ_ERROR;
     
-    if (argc && argv)
-        {
-            long t;
-            long k = (argc / x->vectorSize);
+    if (argc && argv) {
+    
+        long t;
+        long k = (argc / x->vectorSize);
+        
+        err = PIZ_GOOD;
+        
+        for (t = 0; t < argc; t++) {
+                argv[t] = CLAMP (argv[t], 0, PIZ_ALPHABET_SIZE - 1); 
+            }
+                    
+        for (t = 0; t < k; t++) {
+            long    i;
+            double  sigma, eta ;
+            double  dist1 = 0.;
+            double  dist2 = 0.;
+            long    winner = 0;
             
-            err = PIZ_GOOD;
-            
-            for (t = 0; t < argc; t++) {
-                    argv[t] = CLAMP (argv[t], 0, PIZ_ALPHABET_SIZE - 1); 
+            for (i = 0; i < x->vectorSize; i++) {
+                    dist1 += pow (x->map[i] - argv[(t * x->vectorSize) + i], 2);
                 }
-                        
-            for (t = 0; t < k; t++)
-                {
-                    long    i;
-                    double  sigma, eta ;
-                    double  dist1 = 0.;
-                    double  dist2 = 0.;
-                    long    winner = 0;
-                    
-                    for (i = 0; i < x->vectorSize; i++) {
-                            dist1 += pow (x->map[i] - argv[(t * x->vectorSize) + i], 2);
-                        }
-                    
-                    dist1 = sqrt (dist1);
-                        
-                    for (i = 1; i < x->mapSize; i++) {
-                        long j;
-                                        
-                        for (j = 0; j < x->vectorSize; j++) {
-                            dist2 += pow (x->map[(i * x->vectorSize) + j] - argv[(t * x->vectorSize) + j], 2);
-                        }
-                        
-                        dist2 = sqrt (dist2);
+            
+            dist1 = sqrt (dist1);
+                
+            for (i = 1; i < x->mapSize; i++) {
+                long j;
+                                
+                for (j = 0; j < x->vectorSize; j++) {
+                    dist2 += pow (x->map[(i * x->vectorSize) + j] - argv[(t * x->vectorSize) + j], 2);
+                }
+                
+                dist2 = sqrt (dist2);
 
-                        if (dist2 < dist1) {
-                                dist1 = dist2;
-                                winner = i;
-                            }
-                        }
-                    
-                    x->count = MIN (x->count + 1, x->training);
-                    
-                    sigma = x->range * exp (- x->count / (x->training / log (x->range)));
-                    eta = x->step * exp (- x->count / (double)x->training);
-                    
-                    for (i = 0; i < x->mapSize; i++) {
-                        long    j;
-                        double  phi = exp (- pow (i - winner, 2) / (2 * pow (sigma, 2)));
-                        
-                        for (j = 0; j < x->vectorSize; j++) {
-                                x->map[(i * x->vectorSize) + j] += eta * phi * (argv[(t * x->vectorSize) + j] 
-                                    - x->map[(i * x->vectorSize) + j]);
-                            }
-                        }
+                if (dist2 < dist1) {
+                        dist1 = dist2;
+                        winner = i;
+                    }
                 }
+            
+            x->count = MIN (x->count + 1, x->training);
+            
+            sigma = x->range * exp (- x->count / (x->training / log (x->range)));
+            eta = x->step * exp (- x->count / (double)x->training);
+            
+            for (i = 0; i < x->mapSize; i++) {
+                long    j;
+                double  phi = exp (- pow (i - winner, 2) / (2 * pow (sigma, 2)));
+                
+                for (j = 0; j < x->vectorSize; j++) {
+                    x->map[(i * x->vectorSize) + j] += eta * phi * (argv[(t * x->vectorSize) + j] 
+                        - x->map[(i * x->vectorSize) + j]);
+                }
+            }
         }
+    }
         
     return err;
 }
@@ -201,22 +196,20 @@ PIZError pizKohonenMapProceed (const PIZKohonenMap *x, long argc, long *argv)
 {
     long err = PIZ_ERROR;
     
-    if (argc && argv)
-        {
-            long    i;
-            double  *temp = NULL;
+    if (argc && argv) {
+        long    i;
+        double  *temp = NULL;
+        
+        for (i = 0; i < argc; i++) {
+            if ((i % x->vectorSize) == 0) {
+                temp = x->map + (((long)(x->mapSize * (rand ( ) / (RAND_MAX + 1.0)))) * x->vectorSize);
+            }
             
-            for (i = 0; i < argc; i++)
-                {
-                    if ((i % x->vectorSize) == 0) {
-                        temp = x->map + (((long)(x->mapSize * (rand ( ) / (RAND_MAX + 1.0)))) * x->vectorSize);
-                    }
-                    
-                    argv[i] = (long)(*(temp + (i % x->vectorSize)) + 0.5);
-                }
-            
-            err = PIZ_GOOD;
+            argv[i] = (long)(*(temp + (i % x->vectorSize)) + 0.5);
         }
+        
+        err = PIZ_GOOD;
+    }
     
     return err;
 }

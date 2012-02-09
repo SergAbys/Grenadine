@@ -56,34 +56,6 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \def     PIZ_FACTOR_ORACLE_REFER 
- * \brief   Index of referTo in \c pizFactorOracleEncodeNodeToArray().
- */
-
-/**
- * \def     PIZ_FACTOR_ORACLE_LRS 
- * \brief   Index of lengthRepeatedSuffix in \c pizFactorOracleEncodeNodeToArray().
- */
-
-/**
- * \def     PIZ_FACTOR_ORACLE_ARCS
- * \brief   Index of number of arcs in \c pizFactorOracleEncodeNodeToArray().
- */
-
-/**
- * \def     PIZ_FACTOR_ORACLE_DATA
- * \brief   Index of data in \c pizFactorOracleEncodeNodeToArray().
- */
- 
-#define PIZ_FACTOR_ORACLE_REFER      0
-#define PIZ_FACTOR_ORACLE_LRS        1
-#define PIZ_FACTOR_ORACLE_ARCS       2
-#define PIZ_FACTOR_ORACLE_DATA       3
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 /** 
  * \remark  The arc from one node to next node (straight) is the first.
  */
@@ -180,80 +152,8 @@ long pizFactorOracleCount (const PIZFactorOracle *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Set the backward threshold of the factor oracle.
- * \details This is the minimum size of repeated sequence required to go backward. 
- *          Default value is 2.
- * \param   x A valid pointer.
- * \param   n The backward threshold.
- * \return  The number of nodes.
- */
-void pizFactorOracleSetBackwardThreshold (PIZFactorOracle *x, long n);
-
-/**
- * \brief   Set the straight ratio of the factor oracle.
- * \details This is the chance to the playback head to go straight for each step in the automaton.
- *          Minimum is 0., maximum is 1., default value is 0.25.
- * \param   x A valid pointer.
- * \param   n The straight ratio.
- */
-void pizFactorOracleSetStraightRatio (PIZFactorOracle *x, double f);
-
-/**
- * \brief   Get the backward threshold of the factor oracle.
- * \param   x A valid pointer.
- * \return  The backward threshold.
- */
-long pizFactorOracleBackwardThreshold (const PIZFactorOracle *x);
-
-/**
- * \brief   Get the straight ratio of the factor oracle.
- * \param   x A valid pointer.
- * \return  The straight ratio.
- */
-double pizFactorOracleStraightRatio (const PIZFactorOracle *x);
-
-/**
- * \brief   Encode a node to a dynamic array.
- * \param   x A valid pointer.
- * \param   node The index of the node.
- * \param   a A pointer to a dynamic array.
- * \return  An error code.
- * \remark	An example :  
- * \code
- * long             err = PIZ_GOOD;
- * PIZGrowingArray  *a = pizGrowingArrayNew (16);
- *
- * err = pizFactorOracleEncodeNodeToArray (x->factorOracle, node, a);
- *
- * if (!err)
- *      {
- *          long i, k, ref, lrs;
- *           
- *          ref = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_REFER);
- *          lrs = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_LRS);
- *          k   = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_ARCS);
- *
- *          for (i = 0; i < k; i++) 
- *              {
- *                  long destination, value;
- *
- *                  destination = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_DATA + i);
- *                  value       = pizGrowingArrayValueAtIndex (a, PIZ_FACTOR_ORACLE_DATA + i + k);
- *              }
- *      }
- *   
- * pizGrowingArrayFree (a);
- *
- * \endcode
- */
-PIZError pizFactorOracleEncodeNodeToArray (const PIZFactorOracle *x, long node, PIZGrowingArray *a);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 PIZ_END_C_LINKAGE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif
+#endif // PIZ_FACTOR_ORACLE_H

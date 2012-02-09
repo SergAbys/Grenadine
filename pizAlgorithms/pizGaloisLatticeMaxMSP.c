@@ -1,9 +1,9 @@
 /*
- * \file    pizFactorOracleExtended.c
+ * \file    pizGaloisLatticeExtended.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    31 janvier 2012
  */
-
+ 
 /*
  *  Copyright (c) 2011, Jean Sapristi & Tom Javel, 
  *  "nicolas.danet@free.fr".
@@ -38,52 +38,34 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "PIZFactorOracle.h"
+#include "pizMaxMSP.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void pizFactorOracleSetBackwardThreshold (PIZFactorOracle *x, long n)
-{
-    if (n >= 0) {
-            x->backwardThreshold = n;
-        }
-}
-
-void pizFactorOracleSetStraightRatio (PIZFactorOracle *x, double f)
-{
-    if ((f >= 0.) && (f <= 1.)) {
-            x->straightRatio = f;
-        }
-}
-
-long pizFactorOracleBackwardThreshold (const PIZFactorOracle *x)
-{
-    return x->backwardThreshold;
-}
-
-double pizFactorOracleStraightRatio (const PIZFactorOracle *x)
-{
-    return x->straightRatio;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZError pizFactorOracleEncodeNodeToArray (const PIZFactorOracle *x, long node, PIZGrowingArray *a)
+PIZError pizGaloisLatticeEncodeConceptsToArray (const PIZGaloisLattice *x, long n, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     
-    if ((node < x->index) && a)
-        {
-            err = PIZ_GOOD;
+    if ((n > 0) && (n < PIZ_ITEMSET128_SIZE) && a) {
+        long i;
+        long count = pizGrowingArrayCount (x->map[n]);
+        
+        err = PIZ_GOOD;
+        
+        err |= pizGrowingArrayAppend (a, count);
+        
+        for (i = 0; i < count; i++) {
+            long j;
+            long p = pizGrowingArrayValueAtIndex (x->map[n], i);
             
-            err |= pizGrowingArrayAppend        (a, x->nodes[node].referTo);
-            err |= pizGrowingArrayAppend        (a, x->nodes[node].lengthRepeatedSuffix);
-            err |= pizGrowingArrayAppend        (a, pizGrowingArrayCount (x->nodes[node].arcDestinations));
-            err |= pizGrowingArrayAppendArray   (a, x->nodes[node].arcDestinations);
-            err |= pizGrowingArrayAppendArray   (a, x->nodes[node].arcValues);
+            for (j = 0; j < PIZ_ITEMSET128_SIZE; j++) {
+                if (pizItemset128IsSetAtIndex (&(x->stock[p].itemset), j)) {
+                        err |= pizGrowingArrayAppend (a, j);
+                    }
+            }
         }
+    }
     
     return err;
 }

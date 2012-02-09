@@ -55,22 +55,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \def     PIZ_GALOIS_LATTICE_CONCEPTS 
- * \brief   Index of number of concepts in \c pizGaloisLatticeEncodeConceptsToArray().
- */
-
-/**
- * \def     PIZ_GALOIS_LATTICE_DATA 
- * \brief   Index of data in \c pizGaloisLatticeEncodeConceptsToArray().
- */
- 
-#define PIZ_GALOIS_LATTICE_CONCEPTS  0
-#define PIZ_GALOIS_LATTICE_DATA      1
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-/**
  *   
  */
  
@@ -90,21 +74,21 @@ typedef struct _PIZGaloisLatticeConcept {
  */
  
 typedef struct _PIZGaloisLattice {
-    PIZItemset128           itemsetToBeAdded;            /*!< Values to add (as bit field). */
-    PIZItemset128           itemsetIntersection;         /*!< Temporary intersection between concepts. */
-    long                    count;                       /*!< Number of concepts in the lattice. */
-    long                    thresholdToKillConcepts;     /*!< Number of concepts to start killing. */
-    long                    targetedConcept;             /*!< Index of a marked concept. */ 
-    long                    shuttle;                     /*!< Index of the playback head. */
-    long                    previousShuttle;             /*!< Previous index of the playback head. */
-    long                    itemsetIntersectionCardinal; /*!< Cardinal of the temporary intersection. */
-    long                    mapByCardinalPeak;           /*!< Maximum cardinal reached in the map. */
-    long                    tempMapByCardinalPeak;       /*!< Maximum cardinal reached in the temporary map. */
-    bool                    needToMakeMap;               /*!< Flag (set after birth or death). */
-    PIZGrowingArray         **mapByCardinal;             /*!< Concepts sort by cardinal. */
-    PIZGrowingArray         **tempMapByCardinal;         /*!< Temporay map to build lattice. */
-    PIZBoundedStack         *ticketMachine;              /*!< Pool management. */
-    PIZGaloisLatticeConcept *stock;                      /*!< Pool of concepts. */
+    PIZItemset128           toBeAdded;                  /*!< Values to add (as bit field). */
+    PIZItemset128           intersection;               /*!< Temporary intersection between concepts. */
+    long                    count;                      /*!< Number of concepts in the lattice. */
+    long                    thresholdToKillConcepts;    /*!< Number of concepts to start killing. */
+    long                    targetedConcept;            /*!< Index of a marked concept. */ 
+    long                    shuttle;                    /*!< Index of the playback head. */
+    long                    previousShuttle;            /*!< Previous index of the playback head. */
+    long                    intersectionCardinal;       /*!< Cardinal of the temporary intersection. */
+    long                    mapPeak;                    /*!< Maximum cardinal reached in the map. */
+    long                    tempMapPeak;                /*!< Maximum cardinal reached in the temporary map. */
+    bool                    needToMakeMap;              /*!< Flag (set after birth or death). */
+    PIZGrowingArray         **map;                      /*!< Concepts sort by cardinal. */
+    PIZGrowingArray         **tempMap;                  /*!< Temporay map to build lattice. */
+    PIZBoundedStack         *ticketMachine;             /*!< Pool management. */
+    PIZGaloisLatticeConcept *stock;                     /*!< Pool of concepts. */
     } PIZGaloisLattice;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -176,41 +160,6 @@ long pizGaloisLatticeCount (const PIZGaloisLattice *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Encode concepts with a given size to a dynamic array.
- * \param   x A valid pointer.
- * \param   n The size of concepts.
- * \param   a A pointer to a dynamic array.
- * \return  An error code.
- * \remark	An example :  
- * \code
- * long             err = PIZ_GOOD;
- * long             n = 4;
- * PIZGrowingArray  *a = pizGrowingArrayNew (16);
- *
- * err = pizGaloisLatticeEncodeConceptsToArray (lattice, n, a);
- *
- * if (!err)
- *      {
- *          long i;
- *          long count = pizGrowingArrayValueAtIndex (a, PIZ_GALOIS_LATTICE_CONCEPTS);
- *          long *ptr  = pizGrowingArrayPtr (a);
- *          long *values = NULL;
- *
- *          for (i = 0; i < count; i++) {
- *                  values = ptr + PIZ_GALOIS_LATTICE_DATA + (n * i);
- *              }
- *      }
- *
- *  pizGrowingArrayFree (a);
- *
- * \endcode
- */
-PIZError pizGaloisLatticeEncodeConceptsToArray (const PIZGaloisLattice *x, long n, PIZGrowingArray *a);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 PIZ_LOCAL PIZ_INLINE void   pizGaloisLatticeReconnect   (PIZGaloisLattice *x, long g, long n);
 PIZ_LOCAL PIZError          pizGaloisLatticeMakeMap     (PIZGaloisLattice *x);
 PIZ_LOCAL void              pizGaloisLatticeKillConcept (PIZGaloisLattice *x, long n);
@@ -222,4 +171,4 @@ PIZ_END_C_LINKAGE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif
+#endif // PIZ_GALOIS_LATTICE_H
