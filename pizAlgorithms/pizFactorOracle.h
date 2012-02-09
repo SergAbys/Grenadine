@@ -69,7 +69,7 @@ typedef struct _PIZFactorOracleNode {
     
 /**
  * \remark  Implemented with dynamic array of nodes ; For each node, arcs are stored in dynamic arrays too.
-            Node's dynamic arrays are created on \a first query and keep in memory 
+            Node's dynamic arrays are created on the \a first query and keep in memory 
             until pizFactorOracleFree() is called.
  */
      

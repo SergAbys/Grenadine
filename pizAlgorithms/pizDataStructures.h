@@ -2,7 +2,6 @@
  * \file        pizDataStructures.h
  * \author      Jean Sapristi
  * \date        31 janvier 2012
- * \defgroup    maxMSP     Max/MSP
  * \defgroup    algorithms Algorithms
  * \defgroup    structures Custom Data Structures
  */

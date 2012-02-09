@@ -1,8 +1,12 @@
 /**
- * \file    pizMaxMSP.h
- * \author  Jean Sapristi
- * \date    31 janvier 2012
- * \ingroup maxMSP     
+ * \file        pizMaxMSP.h
+ * \author      Jean Sapristi
+ * \date        31 janvier 2012
+ * \defgroup    zoulou [Zoulou]
+ * \defgroup    romeo [Romeo]
+ * \defgroup    charlie [Charlie]
+ * \defgroup    yankee [Yankee]
+ * \defgroup    foxtrot [Foxtrot]
  */
  
 /*
@@ -55,23 +59,32 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#define PIZ_ALPHABET_SIZE 128
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 /**
  * \def     PIZ_FACTOR_ORACLE_REFER 
+ * \ingroup zoulou
  * \brief   Index of referTo in \c pizFactorOracleEncodeNodeToArray().
  */
 
 /**
  * \def     PIZ_FACTOR_ORACLE_LRS 
+ * \ingroup zoulou
  * \brief   Index of lengthRepeatedSuffix in \c pizFactorOracleEncodeNodeToArray().
  */
 
 /**
  * \def     PIZ_FACTOR_ORACLE_ARCS
+ * \ingroup zoulou
  * \brief   Index of number of arcs in \c pizFactorOracleEncodeNodeToArray().
  */
 
 /**
  * \def     PIZ_FACTOR_ORACLE_DATA
+ * \ingroup zoulou
  * \brief   Index of data in \c pizFactorOracleEncodeNodeToArray().
  */
  
@@ -80,58 +93,6 @@
 #define PIZ_FACTOR_ORACLE_ARCS      2
 #define PIZ_FACTOR_ORACLE_DATA      3
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-/**
- * \def     PIZ_GALOIS_LATTICE_CONCEPTS 
- * \brief   Index of number of concepts in \c pizGaloisLatticeEncodeConceptsToArray().
- */
-
-/**
- * \def     PIZ_GALOIS_LATTICE_DATA 
- * \brief   Index of data in \c pizGaloisLatticeEncodeConceptsToArray().
- */
- 
-#define PIZ_GALOIS_LATTICE_CONCEPTS     0
-#define PIZ_GALOIS_LATTICE_DATA         1
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-/**
- * \def     PIZ_MARKOV_MODEL_START 
- * \brief   Index of node's start probability in \c pizMarkovModelEncodeNodeToArray().
- */
-
-/**
- * \def     PIZ_MARKOV_MODEL_TRANSITIONS 
- * \brief   Index of node's number of transitions in \c pizMarkovModelEncodeNodeToArray().
- */
- 
-/**
- * \def     PIZ_MARKOV_MODEL_EMISSIONS 
- * \brief   Index of node's number of emmissions in \c pizMarkovModelEncodeNodeToArray().
- */
-
-/**
- * \def     PIZ_MARKOV_MODEL_DATA 
- * \brief   Index of data in \c pizMarkovModelEncodeNodeToArray.
- */
- 
-#define PIZ_MARKOV_MODEL_START          0
-#define PIZ_MARKOV_MODEL_TRANSITIONS    1
-#define PIZ_MARKOV_MODEL_EMISSIONS      2
-#define PIZ_MARKOV_MODEL_DATA           3
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZ_ALPHABET_SIZE               128
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 /**
  * \brief   Set the backward threshold of the factor oracle.
  * \details This is the minimum size of repeated sequence required to go backward. 
@@ -139,6 +100,7 @@
  * \param   x A valid pointer.
  * \param   n The backward threshold.
  * \return  The number of nodes.
+ * \ingroup zoulou
  */
 void pizFactorOracleSetBackwardThreshold (PIZFactorOracle *x, long n);
 
@@ -148,6 +110,7 @@ void pizFactorOracleSetBackwardThreshold (PIZFactorOracle *x, long n);
  *          Minimum is 0., maximum is 1., default value is 0.25.
  * \param   x A valid pointer.
  * \param   n The straight ratio.
+ * \ingroup zoulou
  */
 void pizFactorOracleSetStraightRatio (PIZFactorOracle *x, double f);
 
@@ -155,6 +118,7 @@ void pizFactorOracleSetStraightRatio (PIZFactorOracle *x, double f);
  * \brief   Get the backward threshold of the factor oracle.
  * \param   x A valid pointer.
  * \return  The backward threshold.
+ * \ingroup zoulou
  */
 long pizFactorOracleBackwardThreshold (const PIZFactorOracle *x);
 
@@ -162,163 +126,9 @@ long pizFactorOracleBackwardThreshold (const PIZFactorOracle *x);
  * \brief   Get the straight ratio of the factor oracle.
  * \param   x A valid pointer.
  * \return  The straight ratio.
+ * \ingroup zoulou
  */
 double pizFactorOracleStraightRatio (const PIZFactorOracle *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-/**
- * \brief   Set the neighborhood influence of the Kohonen map.
- * \details Default is 10.
- * \param   x A valid pointer.
- * \param   n The neighborhood influence.
- */
-void pizKohonenMapSetRange (PIZKohonenMap *x, long n);
-
-/**
- * \brief   Set the number of learning iterations planned for the Kohonen map.
- * \details Default is 60.
- * \param   x A valid pointer.
- * \param   n The number of learning iterations.
- */
-void pizKohonenMapSetTraining (PIZKohonenMap *x, long n);
-
-/**
- * \brief   Set the learning step of the Kohonen map.
- * \details Default is 1.
- * \param   x A valid pointer.
- * \param   n The learning step.
- */
-void pizKohonenMapSetStep (PIZKohonenMap *x, double f);
-
-/**
- * \brief   Get the neighborhood influence of the Kohonen map.
- * \param   x A valid pointer.
- * \return  The neighborhood influence.
- */
-long pizKohonenMapRange (const PIZKohonenMap *x);
-
-/**
- * \brief   Get the number of learning iterations planned for the Kohonen map.
- * \param   x A valid pointer.
- * \return  The number of learning iterations planned.
- */
-long pizKohonenMapTraining (const PIZKohonenMap *x);
-
-/**
- * \brief   Get the learning step of the Kohonen map.
- * \param   x A valid pointer.
- * \return  The learning step.
- */
-double pizKohonenMapStep (const PIZKohonenMap *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-/**
- * \brief   Set the period of node's birth and death in the neural gas.
- * \details Default is 1 time out of 2.
- * \param   x A valid pointer.
- * \param   n The new node rate.
- */
-void pizNeuralGasSetLambda (PIZNeuralGas *x, long n);
-
-/**
- * \brief   Set the move factor of the winner node in the neural gas.
- * \details Default is 0.5 ; (must be [0., 1.]).
- * \param   x A valid pointer.
- * \param   n The move factor.
- */
-void pizNeuralGasSetEpsilon1 (PIZNeuralGas *x, double f);
-
-/**
- * \brief   Set the move factor of neighboors nodes in the neural gas.
- * \details Default is 0.25 ; (must be [0., 1.]).
- * \param   x A valid pointer.
- * \param   n The move factor.
- */
-void pizNeuralGasSetEpsilon2 (PIZNeuralGas *x, double f);
-
-/**
- * \brief   Set the error decrease factor of generators in the neural gas.
- * \details Default is 0.5 ; (must be [0., 1.]).
- * \param   x A valid pointer.
- * \param   n The decrease factor.
- */
-void pizNeuralGasSetAlpha (PIZNeuralGas *x, double f);
-
-/**
- * \brief   Set the global error decrease factor in the neural gas.
- * \details Default is 0.1 ; (must be [0., 1.]).
- * \param   x A valid pointer.
- * \param   n The decrease factor.
- */
-void pizNeuralGasSetBeta (PIZNeuralGas *x, double f);
-
-/**
- * \brief   Set the utility threshold of the neural gas.
- * \details Default is 10.
- * \param   x A valid pointer.
- * \param   n The utility threshold.
- */
-void pizNeuralGasSetKappa (PIZNeuralGas *x, double f);
-
-/**
- * \brief   Get the new node rate of the neural gas.
- * \param   x A valid pointer.
- * \return  The new node rate.
- */
-long pizNeuralGasLambda (const PIZNeuralGas *x);
-
-/**
- * \brief   Get the winner move factor of the neural gas.
- * \param   x A valid pointer.
- * \return  The winner move factor.
- */
-double pizNeuralGasEpsilon1 (const PIZNeuralGas *x);
-
-/**
- * \brief   Get the neighboors move factor of the neural gas.
- * \param   x A valid pointer.
- * \return  The neighboors move factor.
- */
-double pizNeuralGasEpsilon2 (const PIZNeuralGas *x);
-
-/**
- * \brief   Get the generators error decrease factor of the neural gas.
- * \param   x A valid pointer.
- * \return  The generators error decrease factor.
- */
-double pizNeuralGasAlpha (const PIZNeuralGas *x);
-
-/**
- * \brief   Get the global error decrease factor of the neural gas.
- * \param   x A valid pointer.
- * \return  The global error decrease factor.
- */
-double pizNeuralGasBeta (const PIZNeuralGas *x);
-
-/**
- * \brief   Get the utility threshold of the neural gas.
- * \param   x A valid pointer.
- * \return  The utility threshold.
- */
-double pizNeuralGasKappa (const PIZNeuralGas *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-/**
- * \brief   Set the persistence ratio of learning.
- * \remark  HMM = ((old * persistence) + new) / (persistence + 1.)
- * \param   x A valid pointer.
- * \param   n The new persistence.
- */
-void pizMarkovModelSetPersistence (PIZMarkovModel *x, double f);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 
 /**
  * \brief   Encode a node to a dynamic array.
@@ -353,9 +163,27 @@ void pizMarkovModelSetPersistence (PIZMarkovModel *x, double f);
  * pizGrowingArrayFree (a);
  *
  * \endcode
+ * \ingroup zoulou
  */
 PIZError pizFactorOracleEncodeNodeToArray (const PIZFactorOracle *x, long node, PIZGrowingArray *a);
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+/**
+ * \def     PIZ_GALOIS_LATTICE_CONCEPTS 
+ * \ingroup romeo
+ * \brief   Index of number of concepts in \c pizGaloisLatticeEncodeConceptsToArray().
+ */
+
+/**
+ * \def     PIZ_GALOIS_LATTICE_DATA 
+ * \ingroup romeo
+ * \brief   Index of data in \c pizGaloisLatticeEncodeConceptsToArray().
+ */
+ 
+#define PIZ_GALOIS_LATTICE_CONCEPTS     0
+#define PIZ_GALOIS_LATTICE_DATA         1
 
 /**
  * \brief   Encode concepts with a given size to a dynamic array.
@@ -386,17 +214,63 @@ PIZError pizFactorOracleEncodeNodeToArray (const PIZFactorOracle *x, long node, 
  *  pizGrowingArrayFree (a);
  *
  * \endcode
+ * \ingroup romeo
  */
 PIZError pizGaloisLatticeEncodeConceptsToArray (const PIZGaloisLattice *x, long n, PIZGrowingArray *a);
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 /**
- * \brief   Encode the vector of a node to a dynamic array.
+ * \brief   Set the neighborhood influence of the Kohonen map.
+ * \details Default is 10.
  * \param   x A valid pointer.
- * \param   n The index of the node.
- * \param   a A pointer to a dynamic array.
- * \return  An error code.
+ * \param   n The neighborhood influence.
+ * \ingroup charlie
  */
-PIZError pizKohonenMapEncodeVectorToArray (const PIZKohonenMap *x, long n, PIZGrowingArray *a);
+void pizKohonenMapSetRange (PIZKohonenMap *x, long n);
+
+/**
+ * \brief   Set the number of learning iterations planned for the Kohonen map.
+ * \details Default is 60.
+ * \param   x A valid pointer.
+ * \param   n The number of learning iterations.
+ * \ingroup charlie
+ */
+void pizKohonenMapSetTraining (PIZKohonenMap *x, long n);
+
+/**
+ * \brief   Set the learning step of the Kohonen map.
+ * \details Default is 1.
+ * \param   x A valid pointer.
+ * \param   n The learning step.
+ * \ingroup charlie
+ */
+void pizKohonenMapSetStep (PIZKohonenMap *x, double f);
+
+/**
+ * \brief   Get the neighborhood influence of the Kohonen map.
+ * \param   x A valid pointer.
+ * \return  The neighborhood influence.
+ * \ingroup charlie
+ */
+long pizKohonenMapRange (const PIZKohonenMap *x);
+
+/**
+ * \brief   Get the number of learning iterations planned for the Kohonen map.
+ * \param   x A valid pointer.
+ * \return  The number of learning iterations planned.
+ * \ingroup charlie
+ */
+long pizKohonenMapTraining (const PIZKohonenMap *x);
+
+/**
+ * \brief   Get the learning step of the Kohonen map.
+ * \param   x A valid pointer.
+ * \return  The learning step.
+ * \ingroup charlie
+ */
+double pizKohonenMapStep (const PIZKohonenMap *x);
 
 /**
  * \brief   Encode the vector of a node to a dynamic array.
@@ -404,8 +278,165 @@ PIZError pizKohonenMapEncodeVectorToArray (const PIZKohonenMap *x, long n, PIZGr
  * \param   n The index of the node.
  * \param   a A pointer to a dynamic array.
  * \return  An error code.
+ * \ingroup charlie
+ */
+PIZError pizKohonenMapEncodeVectorToArray (const PIZKohonenMap *x, long n, PIZGrowingArray *a);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+/**
+ * \brief   Set the period of node's birth and death in the neural gas.
+ * \details Default is 1 time out of 2.
+ * \param   x A valid pointer.
+ * \param   n The new node rate.
+ * \ingroup yankee
+ */
+void pizNeuralGasSetLambda (PIZNeuralGas *x, long n);
+
+/**
+ * \brief   Set the move factor of the winner node in the neural gas.
+ * \details Default is 0.5 ; (must be [0., 1.]).
+ * \param   x A valid pointer.
+ * \param   n The move factor.
+ * \ingroup yankee
+ */
+void pizNeuralGasSetEpsilon1 (PIZNeuralGas *x, double f);
+
+/**
+ * \brief   Set the move factor of neighboors nodes in the neural gas.
+ * \details Default is 0.25 ; (must be [0., 1.]).
+ * \param   x A valid pointer.
+ * \param   n The move factor.
+ * \ingroup yankee
+ */
+void pizNeuralGasSetEpsilon2 (PIZNeuralGas *x, double f);
+
+/**
+ * \brief   Set the error decrease factor of generators in the neural gas.
+ * \details Default is 0.5 ; (must be [0., 1.]).
+ * \param   x A valid pointer.
+ * \param   n The decrease factor.
+ * \ingroup yankee
+ */
+void pizNeuralGasSetAlpha (PIZNeuralGas *x, double f);
+
+/**
+ * \brief   Set the global error decrease factor in the neural gas.
+ * \details Default is 0.1 ; (must be [0., 1.]).
+ * \param   x A valid pointer.
+ * \param   n The decrease factor.
+ * \ingroup yankee
+ */
+void pizNeuralGasSetBeta (PIZNeuralGas *x, double f);
+
+/**
+ * \brief   Set the utility threshold of the neural gas.
+ * \details Default is 10.
+ * \param   x A valid pointer.
+ * \param   n The utility threshold.
+ * \ingroup yankee
+ */
+void pizNeuralGasSetKappa (PIZNeuralGas *x, double f);
+
+/**
+ * \brief   Get the new node rate of the neural gas.
+ * \param   x A valid pointer.
+ * \return  The new node rate.
+ * \ingroup yankee
+ */
+long pizNeuralGasLambda (const PIZNeuralGas *x);
+
+/**
+ * \brief   Get the winner move factor of the neural gas.
+ * \param   x A valid pointer.
+ * \return  The winner move factor.
+ * \ingroup yankee
+ */
+double pizNeuralGasEpsilon1 (const PIZNeuralGas *x);
+
+/**
+ * \brief   Get the neighboors move factor of the neural gas.
+ * \param   x A valid pointer.
+ * \return  The neighboors move factor.
+ * \ingroup yankee
+ */
+double pizNeuralGasEpsilon2 (const PIZNeuralGas *x);
+
+/**
+ * \brief   Get the generators error decrease factor of the neural gas.
+ * \param   x A valid pointer.
+ * \return  The generators error decrease factor.
+ * \ingroup yankee
+ */
+double pizNeuralGasAlpha (const PIZNeuralGas *x);
+
+/**
+ * \brief   Get the global error decrease factor of the neural gas.
+ * \param   x A valid pointer.
+ * \return  The global error decrease factor.
+ * \ingroup yankee
+ */
+double pizNeuralGasBeta (const PIZNeuralGas *x);
+
+/**
+ * \brief   Get the utility threshold of the neural gas.
+ * \param   x A valid pointer.
+ * \return  The utility threshold.
+ * \ingroup yankee
+ */
+double pizNeuralGasKappa (const PIZNeuralGas *x);
+
+/**
+ * \brief   Encode the vector of a node to a dynamic array.
+ * \param   x A valid pointer.
+ * \param   n The index of the node.
+ * \param   a A pointer to a dynamic array.
+ * \return  An error code.
+ * \ingroup yankee
  */
 PIZError pizNeuralGasEncodeVectorToArray (const PIZNeuralGas *x, long n, PIZGrowingArray *a);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+/**
+ * \def     PIZ_MARKOV_MODEL_START 
+ * \ingroup foxtrot
+ * \brief   Index of node's start probability in \c pizMarkovModelEncodeNodeToArray().
+ */
+
+/**
+ * \def     PIZ_MARKOV_MODEL_TRANSITIONS 
+ * \ingroup foxtrot
+ * \brief   Index of node's number of transitions in \c pizMarkovModelEncodeNodeToArray().
+ */
+ 
+/**
+ * \def     PIZ_MARKOV_MODEL_EMISSIONS 
+ * \ingroup foxtrot
+ * \brief   Index of node's number of emmissions in \c pizMarkovModelEncodeNodeToArray().
+ */
+
+/**
+ * \def     PIZ_MARKOV_MODEL_DATA 
+ * \ingroup foxtrot
+ * \brief   Index of data in \c pizMarkovModelEncodeNodeToArray.
+ */
+ 
+#define PIZ_MARKOV_MODEL_START          0
+#define PIZ_MARKOV_MODEL_TRANSITIONS    1
+#define PIZ_MARKOV_MODEL_EMISSIONS      2
+#define PIZ_MARKOV_MODEL_DATA           3
+
+/**
+ * \brief   Set the persistence ratio of learning.
+ * \remark  HMM = ((old * persistence) + new) / (persistence + 1.)
+ * \param   x A valid pointer.
+ * \param   n The new persistence.
+ * \ingroup foxtrot
+ */
+void pizMarkovModelSetPersistence (PIZMarkovModel *x, double f);
 
 /**
  * \brief   Encode node's probabilities to a dynamic array.
@@ -445,6 +476,7 @@ PIZError pizNeuralGasEncodeVectorToArray (const PIZNeuralGas *x, long n, PIZGrow
  *  pizGrowingArrayFree (a);
  *
  * \endcode
+ * \ingroup foxtrot
  */
 PIZError pizMarkovModelEncodeNodeToArray (const PIZMarkovModel *x, long n, PIZGrowingArray *a);
 

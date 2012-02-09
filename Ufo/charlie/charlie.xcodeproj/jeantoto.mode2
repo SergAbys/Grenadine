@@ -424,8 +424,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96A05C8414E405A80028A323</string>
-				<string>96A05C8514E405A80028A323</string>
+				<string>96E00BD214E421B000D1C83D</string>
+				<string>96E00BD314E421B000D1C83D</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -458,7 +458,6 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/Ufo/charlie/charlie.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
