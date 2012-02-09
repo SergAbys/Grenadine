@@ -22,10 +22,7 @@
   </div>
 </div>
 <div class="contents">
-<h1>PIZArrayPool Struct Reference</h1><!-- doxytag: class="PIZArrayPool" -->The pool of dynamic arrays.  
-<a href="#_details">More...</a>
-<p>
-<code>#include &lt;pizArrayPool.h&gt;</code>
+<h1>PIZArrayPool Struct Reference</h1><!-- doxytag: class="PIZArrayPool" --><code>#include &lt;pizArrayPool.h&gt;</code>
 <p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
@@ -36,14 +33,12 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_array_pool.html#a7ba476f4fd0384f16a0aac3101ed90b">initArraySize</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_array_pool.html#abc9407a7a267ea35094a9f2531fa5a1">cache</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZGrowingArray *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_array_pool.html#abc9407a7a267ea35094a9f2531fa5a1">cache</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_array_pool.html#d8362915a08c9e370c48a2e1304f7c8f">pool</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZLinklist *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_array_pool.html#d8362915a08c9e370c48a2e1304f7c8f">pool</a></td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-The pool of dynamic arrays. 
-<p>
 <dl class="remark" compact><dt><b>Remarks:</b></dt><dd>Implemented with a linklist. </dd></dl>
 <dl class="warning" compact><dt><b>Warning:</b></dt><dd>It is currently a very simple approach, and should be improved ; If an array is not released, the pool will grow dramatically for each query. </dd></dl>
 <hr><h2>Field Documentation</h2>
@@ -89,7 +84,7 @@ Number of arrays in use.
 <div class="memdoc">
 
 <p>
-Memory size of new array. 
+Memory size of the new arrays. 
 </div>
 </div><p>
 <a class="anchor" name="abc9407a7a267ea35094a9f2531fa5a1"></a><!-- doxytag: member="PIZArrayPool::cache" ref="abc9407a7a267ea35094a9f2531fa5a1" args="" -->
@@ -97,7 +92,7 @@ Memory size of new array.
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a>* <a class="el" href="struct_p_i_z_array_pool.html#abc9407a7a267ea35094a9f2531fa5a1">PIZArrayPool::cache</a>          </td>
+          <td class="memname">PIZGrowingArray* <a class="el" href="struct_p_i_z_array_pool.html#abc9407a7a267ea35094a9f2531fa5a1">PIZArrayPool::cache</a>          </td>
         </tr>
       </table>
 </div>
@@ -112,7 +107,7 @@ Pointer to the last array delivered.
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a>* <a class="el" href="struct_p_i_z_array_pool.html#d8362915a08c9e370c48a2e1304f7c8f">PIZArrayPool::pool</a>          </td>
+          <td class="memname">PIZLinklist* <a class="el" href="struct_p_i_z_array_pool.html#d8362915a08c9e370c48a2e1304f7c8f">PIZArrayPool::pool</a>          </td>
         </tr>
       </table>
 </div>
@@ -125,7 +120,7 @@ Pointer to the pool's linklist.
 <hr>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="piz_array_pool_8h.html">pizArrayPool.h</a></ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 16:39:21 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 18:21:33 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

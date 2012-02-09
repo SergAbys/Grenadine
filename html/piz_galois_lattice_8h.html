@@ -26,12 +26,8 @@
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Data Structures</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice_concept.html">PIZGaloisLatticeConcept</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Galois lattice element.  <a href="struct_p_i_z_galois_lattice_concept.html#_details">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html">PIZGaloisLattice</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The Galois lattice.  <a href="struct_p_i_z_galois_lattice.html#_details">More...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Defines</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_galois_lattice_8h.html#5f625bbff4311b880a69e4e4da4e427b">PIZ_GALOIS_LATTICE_CONCEPTS</a>&nbsp;&nbsp;&nbsp;0</td></tr>
 
@@ -50,7 +46,7 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_galois_lattice_8h.html#aee9674a3386efaf8f648af115e769c3">pizGaloisLatticeCount</a> (const <a class="el" href="struct_p_i_z_galois_lattice.html">PIZGaloisLattice</a> *x)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_galois_lattice_8h.html#ac53d71a19421b54ac431dfeebec70b4">pizGaloisLatticeEncodeConceptsToArray</a> (const <a class="el" href="struct_p_i_z_galois_lattice.html">PIZGaloisLattice</a> *x, long n, <a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a> *a)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_galois_lattice_8h.html#ac53d71a19421b54ac431dfeebec70b4">pizGaloisLatticeEncodeConceptsToArray</a> (const <a class="el" href="struct_p_i_z_galois_lattice.html">PIZGaloisLattice</a> *x, long n, PIZGrowingArray *a)</td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
@@ -75,7 +71,7 @@ Thanks : Robert Godin, Rokia Missaoui, Hassan Alaoui. <br>
 <div class="memdoc">
 
 <p>
-Index of number of concepts in <code><a class="el" href="piz_galois_lattice_8h.html#ac53d71a19421b54ac431dfeebec70b4" title="Encode all concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeConceptsToArray()</a></code>. 
+Index of number of concepts in <code><a class="el" href="piz_galois_lattice_8h.html#ac53d71a19421b54ac431dfeebec70b4" title="Encode concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeConceptsToArray()</a></code>. 
 <p>
 
 </div>
@@ -92,7 +88,7 @@ Index of number of concepts in <code><a class="el" href="piz_galois_lattice_8h.h
 <div class="memdoc">
 
 <p>
-Index of data in <code><a class="el" href="piz_galois_lattice_8h.html#ac53d71a19421b54ac431dfeebec70b4" title="Encode all concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeConceptsToArray()</a></code>. 
+Index of data in <code><a class="el" href="piz_galois_lattice_8h.html#ac53d71a19421b54ac431dfeebec70b4" title="Encode concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeConceptsToArray()</a></code>. 
 <p>
 
 </div>
@@ -135,8 +131,8 @@ The function accept one argument : the threshold to start killing nodes. Minimum
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>A pointer to the new lattice. </dd></dl>
 <dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The following shows how to create a lattice. <div class="fragment"><pre class="fragment"> <span class="keywordtype">long</span> args = 75;
 
- <a class="code" href="struct_p_i_z_finite_state.html" title="The kinda finite state automaton.">PIZFiniteState</a> *fsa = pizFiniteStateNew (1, &amp;args);
- <a class="code" href="struct_p_i_z_finite_state.html" title="The kinda finite state automaton.">PIZFiniteState</a> *fsa = pizFiniteStateNew (0, NULL); <span class="comment">// default value</span>
+ <a class="code" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *fsa = pizFiniteStateNew (1, &amp;args);
+ <a class="code" href="struct_p_i_z_finite_state.html">PIZFiniteState</a> *fsa = pizFiniteStateNew (0, NULL); <span class="comment">// default value</span>
 </pre></div> </dd></dl>
 
 </div>
@@ -332,7 +328,7 @@ Get the number of concepts in the lattice.
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a> *&nbsp;</td>
+          <td class="paramtype">PIZGrowingArray *&nbsp;</td>
           <td class="paramname"> <em>a</em></td><td>&nbsp;</td>
         </tr>
         <tr>
@@ -345,7 +341,7 @@ Get the number of concepts in the lattice.
 <div class="memdoc">
 
 <p>
-Encode all concepts with a given size to a dynamic array. 
+Encode concepts with a given size to a dynamic array. 
 <p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
@@ -357,9 +353,9 @@ Encode all concepts with a given size to a dynamic array.
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>An error code. </dd></dl>
 <dl class="remark" compact><dt><b>Remarks:</b></dt><dd>An example : <div class="fragment"><pre class="fragment"> <span class="keywordtype">long</span>             err = <a class="code" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced9a1b011b02c4fe25b1614cab56a5b320">PIZ_GOOD</a>;
  <span class="keywordtype">long</span>             n = 4;
- <a class="code" href="struct_p_i_z_growing_array.html" title="The dynamic array.">PIZGrowingArray</a>  *a = pizGrowingArrayNew (16);
+ PIZGrowingArray  *a = pizGrowingArrayNew (16);
 
- err = <a class="code" href="piz_galois_lattice_8h.html#ac53d71a19421b54ac431dfeebec70b4" title="Encode all concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeConceptsToArray</a> (lattice, n, a);
+ err = <a class="code" href="piz_galois_lattice_8h.html#ac53d71a19421b54ac431dfeebec70b4" title="Encode concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeConceptsToArray</a> (lattice, n, a);
 
  <span class="keywordflow">if</span> (!err)
       {
@@ -379,7 +375,7 @@ Encode all concepts with a given size to a dynamic array.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 16:39:21 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 18:21:33 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

@@ -54,7 +54,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief Neural gas element.  
+ *   
  */
  
 typedef struct _PIZNeuralGasHead {
@@ -67,8 +67,8 @@ typedef struct _PIZNeuralGasHead {
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief   The neural gas. 
- * \remark  Implemented with two synchronized pools  
+ * \remark  Version with no arc's age and modifications about birth and death events.
+ *          Implemented with two synchronized pools  
  *          (one of pre-allocated heads, one of pre-allocated vectors), 
  *          and a map to mark slots used. 
  */

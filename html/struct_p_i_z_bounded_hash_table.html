@@ -22,10 +22,7 @@
   </div>
 </div>
 <div class="contents">
-<h1>PIZBoundedHashTable Struct Reference</h1><!-- doxytag: class="PIZBoundedHashTable" -->The bounded hashtable.  
-<a href="#_details">More...</a>
-<p>
-<code>#include &lt;pizBoundedHashTable.h&gt;</code>
+<h1>PIZBoundedHashTable Struct Reference</h1><!-- doxytag: class="PIZBoundedHashTable" --><code>#include &lt;pizBoundedHashTable.h&gt;</code>
 <p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
@@ -40,14 +37,12 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_bounded_stack.html">PIZBoundedStack</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_bounded_hash_table.html#5506fd9fc5afefee37c78f54d6996f6e">ticketMachine</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_bounded_hash_table_element.html">PIZBoundedHashTableElement</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_bounded_hash_table.html#322480bd584e5dc0eaef353223eba12e">pool</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZBoundedHashTableElement *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_bounded_hash_table.html#322480bd584e5dc0eaef353223eba12e">pool</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a> **&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_bounded_hash_table.html#5ec7c802283dcf97811f73d9d2ec0e95">hashTable</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZGrowingArray **&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_bounded_hash_table.html#5ec7c802283dcf97811f73d9d2ec0e95">hashTable</a></td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-The bounded hashtable. 
-<p>
 <dl class="remark" compact><dt><b>Remarks:</b></dt><dd>Bounded hashtable with <code>long</code> keys. Implemented with an array of dynamic arrays, and a pre-allocated pool of elements. To obtain the hash value : index = key % size. </dd></dl>
 <hr><h2>Field Documentation</h2>
 <a class="anchor" name="04aaf449c5cda34a256ff302b7e8ecd5"></a><!-- doxytag: member="PIZBoundedHashTable::flags" ref="04aaf449c5cda34a256ff302b7e8ecd5" args="" -->
@@ -130,7 +125,7 @@ Ticket machine for pool management.
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_p_i_z_bounded_hash_table_element.html">PIZBoundedHashTableElement</a>* <a class="el" href="struct_p_i_z_bounded_hash_table.html#322480bd584e5dc0eaef353223eba12e">PIZBoundedHashTable::pool</a>          </td>
+          <td class="memname">PIZBoundedHashTableElement* <a class="el" href="struct_p_i_z_bounded_hash_table.html#322480bd584e5dc0eaef353223eba12e">PIZBoundedHashTable::pool</a>          </td>
         </tr>
       </table>
 </div>
@@ -145,7 +140,7 @@ Pool of elements.
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a>** <a class="el" href="struct_p_i_z_bounded_hash_table.html#5ec7c802283dcf97811f73d9d2ec0e95">PIZBoundedHashTable::hashTable</a>          </td>
+          <td class="memname">PIZGrowingArray** <a class="el" href="struct_p_i_z_bounded_hash_table.html#5ec7c802283dcf97811f73d9d2ec0e95">PIZBoundedHashTable::hashTable</a>          </td>
         </tr>
       </table>
 </div>
@@ -158,7 +153,7 @@ Pointer to the hashtable's array of dynamic arrays.
 <hr>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="piz_bounded_hash_table_8h.html">pizBoundedHashTable.h</a></ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 16:39:21 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 18:21:33 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

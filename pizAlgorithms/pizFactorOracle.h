@@ -84,8 +84,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Factor oracle element.  
+/** 
  * \remark  The arc from one node to next node (straight) is the first.
  */
  
@@ -97,7 +96,6 @@ typedef struct _PIZFactorOracleNode {
     } PIZFactorOracleNode;
     
 /**
- * \brief   The factor oracle.
  * \remark  Implemented with dynamic array of nodes ; For each node, arcs are stored in dynamic arrays too.
             Node's dynamic arrays are created on \a first query and keep in memory 
             until pizFactorOracleFree() is called.

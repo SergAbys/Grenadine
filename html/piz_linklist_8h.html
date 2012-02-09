@@ -25,13 +25,6 @@
 <h1>pizLinklist.h File Reference</h1><code>#include &quot;<a class="el" href="piz_types_8h.html">pizTypes.h</a>&quot;</code><br>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
-<tr><td colspan="2"><br><h2>Data Structures</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_linklist_element.html">PIZLinklistElement</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Linklist element.  <a href="struct_p_i_z_linklist_element.html#_details">More...</a><br></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The linklist.  <a href="struct_p_i_z_linklist.html#_details">More...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Defines</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#d67703d1d6fba25be32b6d14d2b54914">PIZ_LINKLIST_FLAG_NONE</a>&nbsp;&nbsp;&nbsp;(0L)</td></tr>
 
@@ -40,27 +33,27 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#c770375fb8dd3f86c1ceb0b73e51ff94">PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY</a>&nbsp;&nbsp;&nbsp;(1&lt;&lt;1)</td></tr>
 
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#98d06386951d39c628f179b3124f92f7">pizLinklistNew</a> (void)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZLinklist *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#98d06386951d39c628f179b3124f92f7">pizLinklistNew</a> (void)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#2a791a5a4f2985f626eddfd72bd8e59a">pizLinklistSetFlags</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x, long flags)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#2a791a5a4f2985f626eddfd72bd8e59a">pizLinklistSetFlags</a> (PIZLinklist *x, long flags)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#c1f51c4efd744eb74eba949f3044620b">pizLinklistFree</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#c1f51c4efd744eb74eba949f3044620b">pizLinklistFree</a> (PIZLinklist *x)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#60b7e5aaa6f7636ac69717ece296308f">pizLinklistClear</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#60b7e5aaa6f7636ac69717ece296308f">pizLinklistClear</a> (PIZLinklist *x)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#36d49a5f5e19bf7d8d2f38f545aae4ca">pizLinklistAppend</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x, void *ptr)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#36d49a5f5e19bf7d8d2f38f545aae4ca">pizLinklistAppend</a> (PIZLinklist *x, void *ptr)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#179ced97d657e361cf3922655c176cf5">pizLinklistInsert</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x, void *ptr)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#179ced97d657e361cf3922655c176cf5">pizLinklistInsert</a> (PIZLinklist *x, void *ptr)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#e95a431ac43f44e7c9bb94cce4ac8e71">pizLinklistPtrAtIndex</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x, long index, void **ptr)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#e95a431ac43f44e7c9bb94cce4ac8e71">pizLinklistPtrAtIndex</a> (PIZLinklist *x, long index, void **ptr)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#a6a2792ee2b0e6a3511f4a75d371b549">pizLinklistNextByPtr</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x, void *ptr, void **nextPtr)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#a6a2792ee2b0e6a3511f4a75d371b549">pizLinklistNextByPtr</a> (PIZLinklist *x, void *ptr, void **nextPtr)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#5e437b268e670b188830d03f188310de">pizLinklistRemoveByPtr</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x, void *ptr)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#5e437b268e670b188830d03f188310de">pizLinklistRemoveByPtr</a> (PIZLinklist *x, void *ptr)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#9847efbc9540168cc7739f1992d60f6d">pizLinklistSwapByIndexes</a> (<a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x, long m, long n)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#9847efbc9540168cc7739f1992d60f6d">pizLinklistSwapByIndexes</a> (PIZLinklist *x, long m, long n)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#03a39141ec1350aabc6af6df5ddbf975">pizLinklistCount</a> (const <a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *x)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_linklist_8h.html#03a39141ec1350aabc6af6df5ddbf975">pizLinklistCount</a> (const PIZLinklist *x)</td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
@@ -124,7 +117,7 @@ Free items with <code><a class="el" href="piz_growing_array_8h.html#4af53cc894d3
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a>* pizLinklistNew           </td>
+          <td class="memname">PIZLinklist* pizLinklistNew           </td>
           <td>(</td>
           <td class="paramtype">void&nbsp;</td>
           <td class="paramname">          </td>
@@ -149,7 +142,7 @@ In case of failure the pointer is NULL. <dl class="return" compact><dt><b>Return
         <tr>
           <td class="memname">void pizLinklistSetFlags           </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *&nbsp;</td>
+          <td class="paramtype">PIZLinklist *&nbsp;</td>
           <td class="paramname"> <em>x</em>, </td>
         </tr>
         <tr>
@@ -186,7 +179,7 @@ Set linklist's bit flags.
         <tr>
           <td class="memname">void pizLinklistFree           </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *&nbsp;</td>
+          <td class="paramtype">PIZLinklist *&nbsp;</td>
           <td class="paramname"> <em>x</em>          </td>
           <td>&nbsp;)&nbsp;</td>
           <td></td>
@@ -213,7 +206,7 @@ It is safe to pass NULL pointer. Item's memory is released according to flags. <
         <tr>
           <td class="memname">void pizLinklistClear           </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *&nbsp;</td>
+          <td class="paramtype">PIZLinklist *&nbsp;</td>
           <td class="paramname"> <em>x</em>          </td>
           <td>&nbsp;)&nbsp;</td>
           <td></td>
@@ -240,7 +233,7 @@ Item's memory is released according to flags. <dl compact><dt><b>Parameters:</b>
         <tr>
           <td class="memname"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a> pizLinklistAppend           </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *&nbsp;</td>
+          <td class="paramtype">PIZLinklist *&nbsp;</td>
           <td class="paramname"> <em>x</em>, </td>
         </tr>
         <tr>
@@ -278,7 +271,7 @@ The provided pointer can not be NULL. <dl compact><dt><b>Parameters:</b></dt><dd
         <tr>
           <td class="memname"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a> pizLinklistInsert           </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *&nbsp;</td>
+          <td class="paramtype">PIZLinklist *&nbsp;</td>
           <td class="paramname"> <em>x</em>, </td>
         </tr>
         <tr>
@@ -316,7 +309,7 @@ The provided pointer can not be NULL. <dl compact><dt><b>Parameters:</b></dt><dd
         <tr>
           <td class="memname"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a> pizLinklistPtrAtIndex           </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *&nbsp;</td>
+          <td class="paramtype">PIZLinklist *&nbsp;</td>
           <td class="paramname"> <em>x</em>, </td>
         </tr>
         <tr>
@@ -361,7 +354,7 @@ If there is no item at the index, pointer is set to NULL. <dl compact><dt><b>Par
         <tr>
           <td class="memname"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a> pizLinklistNextByPtr           </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *&nbsp;</td>
+          <td class="paramtype">PIZLinklist *&nbsp;</td>
           <td class="paramname"> <em>x</em>, </td>
         </tr>
         <tr>
@@ -419,7 +412,7 @@ If there is no item next, pointer is set to NULL. <dl compact><dt><b>Parameters:
         <tr>
           <td class="memname"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a> pizLinklistRemoveByPtr           </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *&nbsp;</td>
+          <td class="paramtype">PIZLinklist *&nbsp;</td>
           <td class="paramname"> <em>x</em>, </td>
         </tr>
         <tr>
@@ -457,7 +450,7 @@ Item's memory is released according to flags. <dl compact><dt><b>Parameters:</b>
         <tr>
           <td class="memname"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a> pizLinklistSwapByIndexes           </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *&nbsp;</td>
+          <td class="paramtype">PIZLinklist *&nbsp;</td>
           <td class="paramname"> <em>x</em>, </td>
         </tr>
         <tr>
@@ -502,7 +495,7 @@ Swap item's pointers in the linklist according to specified indexes.
         <tr>
           <td class="memname">long pizLinklistCount           </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="struct_p_i_z_linklist.html">PIZLinklist</a> *&nbsp;</td>
+          <td class="paramtype">const PIZLinklist *&nbsp;</td>
           <td class="paramname"> <em>x</em>          </td>
           <td>&nbsp;)&nbsp;</td>
           <td></td>
@@ -524,7 +517,7 @@ Get the number of items in the linklist.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 16:39:21 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 18:21:33 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

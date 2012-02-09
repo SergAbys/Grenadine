@@ -297,7 +297,7 @@ long pizMarkovModelCount (const PIZMarkovModel *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void pizMarkovModelBaumWelch (PIZMarkovModel *x, long argc, long *argv)
+PIZ_INLINE void pizMarkovModelBaumWelch (PIZMarkovModel *x, long argc, long *argv)
 {
     long    t;
     double  f = 0.;

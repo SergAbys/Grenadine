@@ -22,10 +22,7 @@
   </div>
 </div>
 <div class="contents">
-<h1>PIZMarkovModel Struct Reference</h1><!-- doxytag: class="PIZMarkovModel" -->The hidden markov model.  
-<a href="#_details">More...</a>
-<p>
-<code>#include &lt;pizMarkovModel.h&gt;</code>
+<h1>PIZMarkovModel Struct Reference</h1><!-- doxytag: class="PIZMarkovModel" --><code>#include &lt;pizMarkovModel.h&gt;</code>
 <p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
@@ -50,10 +47,16 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">double *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_markov_model.html#b9c1e76df40d730178865ab23baa57a4">tempTransition</a></td></tr>
 
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_markov_model.html#ab78b4d0dac4afe075bbe72580c70a51">alpha</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_markov_model.html#c297ac395e5a50d8259db9b18b4990ab">tempAlpha</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_markov_model.html#6657300bc3a83ac32fff55bab137e77b">beta</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align="right" valign="top">double *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_markov_model.html#3d9e1efba891e5ee574583d24945b204">coefficient</a></td></tr>
+
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-The hidden markov model. 
-<p>
 <dl class="remark" compact><dt><b>Remarks:</b></dt><dd>Implemented simply with arrays. </dd></dl>
 <hr><h2>Field Documentation</h2>
 <a class="anchor" name="6a943fed33a0216de099193efd059402"></a><!-- doxytag: member="PIZMarkovModel::count" ref="6a943fed33a0216de099193efd059402" args="" -->
@@ -206,10 +209,70 @@ Reestimated emission probabilities.
 Reestimated transition probabilities. 
 </div>
 </div><p>
+<a class="anchor" name="ab78b4d0dac4afe075bbe72580c70a51"></a><!-- doxytag: member="PIZMarkovModel::alpha" ref="ab78b4d0dac4afe075bbe72580c70a51" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double* <a class="el" href="struct_p_i_z_markov_model.html#ab78b4d0dac4afe075bbe72580c70a51">PIZMarkovModel::alpha</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Forward values. 
+</div>
+</div><p>
+<a class="anchor" name="c297ac395e5a50d8259db9b18b4990ab"></a><!-- doxytag: member="PIZMarkovModel::tempAlpha" ref="c297ac395e5a50d8259db9b18b4990ab" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double* <a class="el" href="struct_p_i_z_markov_model.html#c297ac395e5a50d8259db9b18b4990ab">PIZMarkovModel::tempAlpha</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Rescaled forward values. 
+</div>
+</div><p>
+<a class="anchor" name="6657300bc3a83ac32fff55bab137e77b"></a><!-- doxytag: member="PIZMarkovModel::beta" ref="6657300bc3a83ac32fff55bab137e77b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double* <a class="el" href="struct_p_i_z_markov_model.html#6657300bc3a83ac32fff55bab137e77b">PIZMarkovModel::beta</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Backward values. 
+</div>
+</div><p>
+<a class="anchor" name="3d9e1efba891e5ee574583d24945b204"></a><!-- doxytag: member="PIZMarkovModel::coefficient" ref="3d9e1efba891e5ee574583d24945b204" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double* <a class="el" href="struct_p_i_z_markov_model.html#3d9e1efba891e5ee574583d24945b204">PIZMarkovModel::coefficient</a>          </td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>
+Rescaling coefficient. 
+</div>
+</div><p>
 <hr>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="piz_markov_model_8h.html">pizMarkovModel.h</a></ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 16:39:21 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 18:21:33 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

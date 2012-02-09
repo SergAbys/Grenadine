@@ -31,15 +31,14 @@
 <tr><td colspan="2"><br><h2>Data Structures</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_array_pool.html">PIZArrayPool</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The pool of dynamic arrays.  <a href="struct_p_i_z_array_pool.html#_details">More...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_array_pool.html">PIZArrayPool</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_array_pool_8h.html#a576b979d1850c0e69cf46df661397a8">pizArrayPoolNew</a> (long argc, long *argv)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_array_pool_8h.html#d338bd0b649b13749812f1f68211a181">pizArrayPoolFree</a> (<a class="el" href="struct_p_i_z_array_pool.html">PIZArrayPool</a> *x)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_array_pool_8h.html#44fe790baf5cc2d9c93bf01d443f98d3">pizArrayPoolGetArray</a> (<a class="el" href="struct_p_i_z_array_pool.html">PIZArrayPool</a> *x)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZGrowingArray *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_array_pool_8h.html#44fe790baf5cc2d9c93bf01d443f98d3">pizArrayPoolGetArray</a> (<a class="el" href="struct_p_i_z_array_pool.html">PIZArrayPool</a> *x)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_array_pool_8h.html#8adbe68f3ab99f22d139d3fd87410fd8">pizArrayPoolReleaseArray</a> (<a class="el" href="struct_p_i_z_array_pool.html">PIZArrayPool</a> *x, <a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a> *array)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_array_pool_8h.html#8adbe68f3ab99f22d139d3fd87410fd8">pizArrayPoolReleaseArray</a> (<a class="el" href="struct_p_i_z_array_pool.html">PIZArrayPool</a> *x, PIZGrowingArray *array)</td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
@@ -83,7 +82,7 @@ The function accepts two arguments : the number of pre-allocated arrays (default
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>A pointer to the new pool of dynamic arrays. </dd></dl>
 <dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The following shows how to create a pool of dynamic arrays. <div class="fragment"><pre class="fragment"> <span class="keywordtype">long</span>            args[2] = {4, 32};
- <a class="code" href="struct_p_i_z_array_pool.html" title="The pool of dynamic arrays.">PIZArrayPool</a>    *pool = NULL;
+ <a class="code" href="struct_p_i_z_array_pool.html">PIZArrayPool</a>    *pool = NULL;
 
  pool = pizArrayPoolNew (2, args);  
  pool = pizArrayPoolNew (0, NULL);  <span class="comment">// default values.</span>
@@ -123,7 +122,7 @@ It is safe to pass NULL pointer. <dl compact><dt><b>Parameters:</b></dt><dd>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a>* pizArrayPoolGetArray           </td>
+          <td class="memname">PIZGrowingArray* pizArrayPoolGetArray           </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="struct_p_i_z_array_pool.html">PIZArrayPool</a> *&nbsp;</td>
           <td class="paramname"> <em>x</em>          </td>
@@ -159,7 +158,7 @@ In case of failure the pointer is NULL. <dl compact><dt><b>Parameters:</b></dt><
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a> *&nbsp;</td>
+          <td class="paramtype">PIZGrowingArray *&nbsp;</td>
           <td class="paramname"> <em>array</em></td><td>&nbsp;</td>
         </tr>
         <tr>
@@ -185,7 +184,7 @@ Release a dynamic array.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 16:39:21 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 18:21:33 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

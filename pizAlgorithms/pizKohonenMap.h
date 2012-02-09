@@ -54,9 +54,8 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief   The Kohonen map.
  * \details This is a \a ONE dimension self-organizing map.
- * \remark  Implemented simply as an array.
+ * \remark  Implemented simply with an array.
  */
  
 typedef struct _PIZKohonenMap {

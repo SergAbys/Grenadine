@@ -22,17 +22,14 @@
   </div>
 </div>
 <div class="contents">
-<h1>PIZGaloisLattice Struct Reference</h1><!-- doxytag: class="PIZGaloisLattice" -->The Galois lattice.  
-<a href="#_details">More...</a>
-<p>
-<code>#include &lt;pizGaloisLattice.h&gt;</code>
+<h1>PIZGaloisLattice Struct Reference</h1><!-- doxytag: class="PIZGaloisLattice" --><code>#include &lt;pizGaloisLattice.h&gt;</code>
 <p>
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Data Fields</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#f8766bc22508269c94aa752e51d05ebe">itemsetToBeAdded</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZItemset128&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#f8766bc22508269c94aa752e51d05ebe">itemsetToBeAdded</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#8a53adcfa5688f1e3618d4016c425792">itemsetIntersection</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZItemset128&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#8a53adcfa5688f1e3618d4016c425792">itemsetIntersection</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">long&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#9e6763a8977288a87321e347e6642ca3">count</a></td></tr>
 
@@ -52,26 +49,24 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">bool&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#9b6f702d44533c9ccc2cba678493afac">needToMakeMap</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a> **&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#b3128bb299fa67f1fcc63ae31adef00f">mapByCardinal</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZGrowingArray **&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#b3128bb299fa67f1fcc63ae31adef00f">mapByCardinal</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a> **&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#b23b4ad4a39c86ac26801741b79a869b">tempMapByCardinal</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZGrowingArray **&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#b23b4ad4a39c86ac26801741b79a869b">tempMapByCardinal</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_bounded_stack.html">PIZBoundedStack</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#8b675986b6e159e9048161603d3d5186">ticketMachine</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_galois_lattice_concept.html">PIZGaloisLatticeConcept</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#3aadf25dadac86517f787182fe8ce685">stock</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">PIZGaloisLatticeConcept *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_galois_lattice.html#3aadf25dadac86517f787182fe8ce685">stock</a></td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-The Galois lattice. 
-<p>
-When the number of concepts reach a threshold, concepts are randomly killed to keep the population under. <dl class="remark" compact><dt><b>Remarks:</b></dt><dd>Implemented as an array of dynamic arrays, one for each possible cardinal (the size of alphabet). Dynamic arrays contains indexes of pre-allocated concepts (pool size is 128). </dd></dl>
+When the number of concepts reach a threshold, concepts are randomly killed to keep the population under. <dl class="remark" compact><dt><b>Remarks:</b></dt><dd>Implemented with an array of dynamic arrays, one for each possible cardinal (the size of alphabet). Dynamic arrays contains indexes of pre-allocated concepts (pool size is 128). </dd></dl>
 <hr><h2>Field Documentation</h2>
 <a class="anchor" name="f8766bc22508269c94aa752e51d05ebe"></a><!-- doxytag: member="PIZGaloisLattice::itemsetToBeAdded" ref="f8766bc22508269c94aa752e51d05ebe" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> <a class="el" href="struct_p_i_z_galois_lattice.html#f8766bc22508269c94aa752e51d05ebe">PIZGaloisLattice::itemsetToBeAdded</a>          </td>
+          <td class="memname">PIZItemset128 <a class="el" href="struct_p_i_z_galois_lattice.html#f8766bc22508269c94aa752e51d05ebe">PIZGaloisLattice::itemsetToBeAdded</a>          </td>
         </tr>
       </table>
 </div>
@@ -86,7 +81,7 @@ Values to add (as bit field).
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_p_i_z_itemset128.html">PIZItemset128</a> <a class="el" href="struct_p_i_z_galois_lattice.html#8a53adcfa5688f1e3618d4016c425792">PIZGaloisLattice::itemsetIntersection</a>          </td>
+          <td class="memname">PIZItemset128 <a class="el" href="struct_p_i_z_galois_lattice.html#8a53adcfa5688f1e3618d4016c425792">PIZGaloisLattice::itemsetIntersection</a>          </td>
         </tr>
       </table>
 </div>
@@ -236,7 +231,7 @@ Flag (set after birth or death).
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a>** <a class="el" href="struct_p_i_z_galois_lattice.html#b3128bb299fa67f1fcc63ae31adef00f">PIZGaloisLattice::mapByCardinal</a>          </td>
+          <td class="memname">PIZGrowingArray** <a class="el" href="struct_p_i_z_galois_lattice.html#b3128bb299fa67f1fcc63ae31adef00f">PIZGaloisLattice::mapByCardinal</a>          </td>
         </tr>
       </table>
 </div>
@@ -251,7 +246,7 @@ Concepts sort by cardinal.
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a>** <a class="el" href="struct_p_i_z_galois_lattice.html#b23b4ad4a39c86ac26801741b79a869b">PIZGaloisLattice::tempMapByCardinal</a>          </td>
+          <td class="memname">PIZGrowingArray** <a class="el" href="struct_p_i_z_galois_lattice.html#b23b4ad4a39c86ac26801741b79a869b">PIZGaloisLattice::tempMapByCardinal</a>          </td>
         </tr>
       </table>
 </div>
@@ -281,7 +276,7 @@ Pool management.
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="struct_p_i_z_galois_lattice_concept.html">PIZGaloisLatticeConcept</a>* <a class="el" href="struct_p_i_z_galois_lattice.html#3aadf25dadac86517f787182fe8ce685">PIZGaloisLattice::stock</a>          </td>
+          <td class="memname">PIZGaloisLatticeConcept* <a class="el" href="struct_p_i_z_galois_lattice.html#3aadf25dadac86517f787182fe8ce685">PIZGaloisLattice::stock</a>          </td>
         </tr>
       </table>
 </div>
@@ -294,7 +289,7 @@ Pool of concepts.
 <hr>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="piz_galois_lattice_8h.html">pizGaloisLattice.h</a></ul>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 16:39:21 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 18:21:33 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

@@ -26,12 +26,8 @@
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
 <tr><td colspan="2"><br><h2>Data Structures</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_neural_gas_head.html">PIZNeuralGasHead</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Neural gas element.  <a href="struct_p_i_z_neural_gas_head.html#_details">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_neural_gas.html">PIZNeuralGas</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The neural gas.  <a href="struct_p_i_z_neural_gas.html#_details">More...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_neural_gas.html">PIZNeuralGas</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_neural_gas_8h.html#4d5e5116b2e292fec2ee54e173699d6e">pizNeuralGasNew</a> (long argc, long *argv)</td></tr>
 
@@ -69,7 +65,7 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_neural_gas_8h.html#302da7c053dec15a5a71d524a4f78bf2">pizNeuralGasKappa</a> (const <a class="el" href="struct_p_i_z_neural_gas.html">PIZNeuralGas</a> *x)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_neural_gas_8h.html#277ca7488c939d51121fc1e5e0d1c480">pizNeuralGasEncodeVectorToArray</a> (const <a class="el" href="struct_p_i_z_neural_gas.html">PIZNeuralGas</a> *x, long n, <a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a> *a)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_neural_gas_8h.html#277ca7488c939d51121fc1e5e0d1c480">pizNeuralGasEncodeVectorToArray</a> (const <a class="el" href="struct_p_i_z_neural_gas.html">PIZNeuralGas</a> *x, long n, PIZGrowingArray *a)</td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
@@ -118,8 +114,8 @@ The function accepts two arguments, the maximum size of the neural gas, and the 
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>A pointer to the new neural gas. </dd></dl>
 <dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The following shows how to create a neural gas. <div class="fragment"><pre class="fragment"> <span class="keywordtype">long</span> args[2] = {50, 8};
 
- <a class="code" href="struct_p_i_z_kohonen_map.html" title="The Kohonen map.">PIZKohonenMap</a> *map = pizKohonenMapNew (2, &amp;args);
- <a class="code" href="struct_p_i_z_kohonen_map.html" title="The Kohonen map.">PIZKohonenMap</a> *map = pizKohonenMapNew (0, NULL); <span class="comment">// default values</span>
+ <a class="code" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *map = pizKohonenMapNew (2, &amp;args);
+ <a class="code" href="struct_p_i_z_kohonen_map.html">PIZKohonenMap</a> *map = pizKohonenMapNew (0, NULL); <span class="comment">// default values</span>
 </pre></div> </dd></dl>
 
 </div>
@@ -706,7 +702,7 @@ Get the utility threshold of the neural gas.
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a> *&nbsp;</td>
+          <td class="paramtype">PIZGrowingArray *&nbsp;</td>
           <td class="paramname"> <em>a</em></td><td>&nbsp;</td>
         </tr>
         <tr>
@@ -733,7 +729,7 @@ Encode the vector of a node to a dynamic array.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 16:39:21 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 18:21:33 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

@@ -28,10 +28,8 @@
 <tr><td colspan="2"><br><h2>Data Structures</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_factor_oracle_node.html">PIZFactorOracleNode</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Factor oracle element.  <a href="struct_p_i_z_factor_oracle_node.html#_details">More...</a><br></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_factor_oracle.html">PIZFactorOracle</a></td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The factor oracle.  <a href="struct_p_i_z_factor_oracle.html#_details">More...</a><br></td></tr>
 <tr><td colspan="2"><br><h2>Defines</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_factor_oracle_8h.html#51b889687315376415ce983a40045e32">PIZ_FACTOR_ORACLE_REFER</a>&nbsp;&nbsp;&nbsp;0</td></tr>
 
@@ -62,7 +60,7 @@
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">double&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_factor_oracle_8h.html#4be6d9c3ad9a486a7682b72731e4c7f7">pizFactorOracleStraightRatio</a> (const <a class="el" href="struct_p_i_z_factor_oracle.html">PIZFactorOracle</a> *x)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_factor_oracle_8h.html#3b83839727e3553410c8b3c136f5a422">pizFactorOracleEncodeNodeToArray</a> (const <a class="el" href="struct_p_i_z_factor_oracle.html">PIZFactorOracle</a> *x, long node, <a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a> *a)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_factor_oracle_8h.html#3b83839727e3553410c8b3c136f5a422">pizFactorOracleEncodeNodeToArray</a> (const <a class="el" href="struct_p_i_z_factor_oracle.html">PIZFactorOracle</a> *x, long node, PIZGrowingArray *a)</td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
@@ -181,7 +179,7 @@ The function currently do not need arguments (provided for later improvements). 
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>A pointer to the new factor oracle. </dd></dl>
-<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The following shows how to create a factor oracle. <div class="fragment"><pre class="fragment"> <a class="code" href="struct_p_i_z_factor_oracle.html" title="The factor oracle.">PIZFactorOracle</a> *oracle = pizFactorOracleNew (0, NULL);
+<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The following shows how to create a factor oracle. <div class="fragment"><pre class="fragment"> <a class="code" href="struct_p_i_z_factor_oracle.html">PIZFactorOracle</a> *oracle = pizFactorOracleNew (0, NULL);
 </pre></div> </dd></dl>
 
 </div>
@@ -509,7 +507,7 @@ Get the straight ratio of the factor oracle.
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="struct_p_i_z_growing_array.html">PIZGrowingArray</a> *&nbsp;</td>
+          <td class="paramtype">PIZGrowingArray *&nbsp;</td>
           <td class="paramname"> <em>a</em></td><td>&nbsp;</td>
         </tr>
         <tr>
@@ -533,7 +531,7 @@ Encode a node to a dynamic array.
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>An error code. </dd></dl>
 <dl class="remark" compact><dt><b>Remarks:</b></dt><dd>An example : <div class="fragment"><pre class="fragment"> <span class="keywordtype">long</span>             err = <a class="code" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced9a1b011b02c4fe25b1614cab56a5b320">PIZ_GOOD</a>;
- <a class="code" href="struct_p_i_z_growing_array.html" title="The dynamic array.">PIZGrowingArray</a>  *a = pizGrowingArrayNew (16);
+ PIZGrowingArray  *a = pizGrowingArrayNew (16);
 
  err = <a class="code" href="piz_factor_oracle_8h.html#3b83839727e3553410c8b3c136f5a422" title="Encode a node to a dynamic array.">pizFactorOracleEncodeNodeToArray</a> (x-&gt;factorOracle, node, a);
 
@@ -560,7 +558,7 @@ Encode a node to a dynamic array.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 16:39:21 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Wed Feb 8 18:21:33 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

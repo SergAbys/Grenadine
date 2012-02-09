@@ -73,7 +73,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief  Linklist element.
+ * 
  */
  
 typedef struct _PIZLinklistElement {
@@ -83,7 +83,7 @@ typedef struct _PIZLinklistElement {
     } PIZLinklistElement;
 
 /**
- * \brief The linklist.
+ * 
  */
  
 typedef struct _PIZLinklist {

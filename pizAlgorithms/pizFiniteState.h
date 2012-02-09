@@ -59,7 +59,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief Finite state element.  
+ *  
  */
  
 typedef struct _PIZFiniteStateNode {
@@ -69,9 +69,8 @@ typedef struct _PIZFiniteStateNode {
     PIZItemset128   childs;                     /*!< Arcs (indexes as bit field). */
     } PIZFiniteStateNode;
 
-/**
- * \brief   The \em kinda finite state automaton.  
- * \remark  Implemented as an array of bounded queues, one per alphabet's value (alphabet is 0-127). 
+/** 
+ * \remark  Implemented with an array of bounded queues, one per alphabet's value (alphabet is 0-127). 
  *          Bounded queues contains indexes of pre-allocated nodes (pool size is 128).
  */
  

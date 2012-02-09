@@ -59,7 +59,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief   The pool of dynamic arrays.
  * \remark  Implemented with a linklist.
  * \warning It is currently a very simple approach, and should be improved ;
  *          If an array is not released, the pool will grow dramatically for each query.
@@ -68,7 +67,7 @@
 typedef struct _PIZArrayPool {
     pthread_mutex_t     lock;                       /*!< POSIX mutex. */
     long                retain;                     /*!< Number of arrays in use. */
-    long                initArraySize;              /*!< Memory size of new array. */
+    long                initArraySize;              /*!< Memory size of the new arrays. */
     PIZGrowingArray     *cache;                     /*!< Pointer to the last array delivered. */
     PIZLinklist         *pool;                      /*!< Pointer to the pool's linklist. */
     } PIZArrayPool;

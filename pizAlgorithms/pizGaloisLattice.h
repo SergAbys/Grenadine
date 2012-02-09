@@ -71,7 +71,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief Galois lattice element.  
+ *   
  */
  
 typedef struct _PIZGaloisLatticeConcept {
@@ -82,10 +82,9 @@ typedef struct _PIZGaloisLatticeConcept {
     } PIZGaloisLatticeConcept;
 
 /**
- * \brief   The Galois lattice. 
  * \details When the number of concepts reach a threshold, 
  *          concepts are randomly killed to keep the population under.
- * \remark  Implemented as an array of dynamic arrays, 
+ * \remark  Implemented with an array of dynamic arrays, 
  *          one for each possible cardinal (the size of alphabet). 
  *          Dynamic arrays contains indexes of pre-allocated concepts (pool size is 128).
  */
@@ -177,15 +176,8 @@ long pizGaloisLatticeCount (const PIZGaloisLattice *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZ_INLINE void   pizGaloisLatticeReconnect   (PIZGaloisLattice *x, long g, long n);
-PIZ_LOCAL PIZError          pizGaloisLatticeMakeMap     (PIZGaloisLattice *x);
-PIZ_LOCAL void              pizGaloisLatticeKillConcept (PIZGaloisLattice *x, long n);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 /**
- * \brief   Encode all concepts with a given size to a dynamic array.
+ * \brief   Encode concepts with a given size to a dynamic array.
  * \param   x A valid pointer.
  * \param   n The size of concepts.
  * \param   a A pointer to a dynamic array.
@@ -215,6 +207,13 @@ PIZ_LOCAL void              pizGaloisLatticeKillConcept (PIZGaloisLattice *x, lo
  * \endcode
  */
 PIZError pizGaloisLatticeEncodeConceptsToArray (const PIZGaloisLattice *x, long n, PIZGrowingArray *a);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZ_LOCAL PIZ_INLINE void   pizGaloisLatticeReconnect   (PIZGaloisLattice *x, long g, long n);
+PIZ_LOCAL PIZError          pizGaloisLatticeMakeMap     (PIZGaloisLattice *x);
+PIZ_LOCAL void              pizGaloisLatticeKillConcept (PIZGaloisLattice *x, long n);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
