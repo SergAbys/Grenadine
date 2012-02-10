@@ -2,9 +2,16 @@
  * \file        pizDataStructures.h
  * \author      Jean Sapristi
  * \date        31 janvier 2012
+ * \defgroup    zoulou Zoulou
+ * \defgroup    uniform Uniform
+ * \defgroup    romeo Romeo
+ * \defgroup    charlie Charlie
+ * \defgroup    yankee Yankee
+ * \defgroup    foxtrot Foxtrot
  * \defgroup    algorithms Algorithms
  * \defgroup    structures Custom Data Structures
  * \defgroup    mt Multi-Threaded
+ * \defgroup    sequence Sequence
  */
  
 /*

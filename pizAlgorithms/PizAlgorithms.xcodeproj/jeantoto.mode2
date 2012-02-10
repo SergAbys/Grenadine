@@ -277,7 +277,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>229 136 703 616 0 0 1280 778 </string>
+								<string>212 91 703 616 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -414,8 +414,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>9671C99D14E584FA00F430BE</string>
-				<string>9671C99E14E584FA00F430BE</string>
+				<string>9671C9CB14E58A3A00F430BE</string>
+				<string>9671C9CC14E58A3A00F430BE</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -448,11 +448,10 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/pizAlgorithms/PizAlgorithms.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>229 136 703 616 0 0 1280 778 </string>
+	<string>212 91 703 616 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>

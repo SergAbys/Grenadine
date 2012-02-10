@@ -2,12 +2,6 @@
  * \file        pizMaxMSP.h
  * \author      Jean Sapristi
  * \date        31 janvier 2012
- * \defgroup    zoulou Zoulou
- * \defgroup    uniform Uniform
- * \defgroup    romeo Romeo
- * \defgroup    charlie Charlie
- * \defgroup    yankee Yankee
- * \defgroup    foxtrot Foxtrot
  */
  
 /*

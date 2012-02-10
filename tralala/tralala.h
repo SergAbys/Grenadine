@@ -27,7 +27,6 @@
 #include "ext_dictionary.h"
 #include "ext_systhread.h"
 #include "ext_atomic.h"
-#include "commonsyms.h"
 
 #include "pizSequence.h"
 #include "pizInterface.h"
