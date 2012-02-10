@@ -52,7 +52,7 @@ PIZBoundedStack *pizBoundedStackNew (long size)
 {
     PIZBoundedStack *x = NULL;
     
-    if (size > 1 && (x = (PIZBoundedStack *)malloc (sizeof(PIZBoundedStack))))
+    if (size > 0 && (x = (PIZBoundedStack *)malloc (sizeof(PIZBoundedStack))))
         {
             if (x->values = (long *)malloc (size * sizeof(long)))
                 {
@@ -90,7 +90,8 @@ PIZError pizBoundedStackPush (PIZBoundedStack *x, long value)
 {   
     long err = PIZ_ERROR;
     
-    if (x->stack < x->bound) {
+    if (x->stack < x->bound) 
+        {
             err = PIZ_GOOD;
             
             x->values[x->stack] = value;
@@ -104,7 +105,8 @@ PIZError pizBoundedStackPop (PIZBoundedStack *x)
 {
     long err = PIZ_ERROR;
     
-    if (x->stack) {
+    if (x->stack) 
+        {
             err = PIZ_GOOD;
             
             x->poppedValue = x->values[x->stack - 1];

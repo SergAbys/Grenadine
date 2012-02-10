@@ -67,9 +67,17 @@ PIZ_START_C_LINKAGE
 
 /**
  * \brief   Create the dynamic array.
- * \param   size The size of memory allocated initially.
+ * \param   size The size of memory allocated initially to the array.
  * \details In case of failure the pointer is NULL.
  * \return  A pointer to the new dynamic array.
+ * \remark	The following shows how to create a dynamic array.  
+ * \code
+ * PIZGrowingArray *array = NULL;
+ *
+ * array = pizGrowingArrayNew (16);  
+ * array = pizGrowingArrayNew (0);  // default value is 4.
+ *
+ * \endcode 
  */
 PIZGrowingArray *pizGrowingArrayNew (long size);
 

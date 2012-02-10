@@ -52,7 +52,8 @@ PIZQueue *pizQueueNew (void)
 {
     PIZQueue *x = NULL;
         
-    if (x = (PIZQueue *)malloc (sizeof(PIZQueue))) {
+    if (x = (PIZQueue *)malloc (sizeof(PIZQueue))) 
+        {
             x->count        = 0;
             x->poppedValue  = -1;
             x->head         = NULL;
@@ -64,8 +65,7 @@ PIZQueue *pizQueueNew (void)
 
 void pizQueueFree (PIZQueue *x)
 {
-    if (x) 
-        {
+    if (x) {
             pizQueueClear (x);
             free (x);
         }

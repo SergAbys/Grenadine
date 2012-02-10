@@ -96,23 +96,20 @@ PIZ_START_C_LINKAGE
 
 /**
  * \brief   Create the hashtable.
- * \details The function accepts one argument : the size of the hashtable. 
- *          This size should be a prime number, default is 157.
+ * \details The size should be a prime number, default is 157.
  *          In case of failure the pointer is NULL.
- * \param   argc The number of arguments.
- * \param   argv A pointer to arguments.
- * \return  A pointer to the new hashtable.
- * \remark	The following shows how to create a hashtable.  
+ * \param   size The size of the hashtable.
+ * \return  A pointer to the new hashtable. 
+ * \remark	The following shows how to create an hashtable.  
  * \code
- * long            size = 67;
- * PIZHashTable    *myHashtab = NULL;
+ * PIZHashTable *hashtab = NULL;
  *
- * myHashtab = pizHashTableNew (1, &size);
- * myHashtab = pizHashTableNew (0, NULL);  // default value.
+ * hashtab = pizHashTableNew (53);  
+ * hashtab = pizHashTableNew (0);   // default value.
  *
- * \endcode
+ * \endcode 
  */
-PIZHashTable *pizHashTableNew (long argc, long *argv);
+PIZHashTable *pizHashTableNew (long size);
 
 /**
  * \brief   Set hashtable's bit flags.

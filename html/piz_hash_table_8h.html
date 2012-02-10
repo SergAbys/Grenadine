@@ -35,7 +35,7 @@
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#bb92e66ba74839d9876e07925ff4d37f">PIZ_HASHTABLE_FLAG_FREE_MEMORY</a>&nbsp;&nbsp;&nbsp;(1&lt;&lt;0)</td></tr>
 
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_hash_table.html">PIZHashTable</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#4882f9b45f3bdd0088962a495d06f4e5">pizHashTableNew</a> (long argc, long *argv)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="struct_p_i_z_hash_table.html">PIZHashTable</a> *&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#23fd361841001ab1300743e154db30e2">pizHashTableNew</a> (long size)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">void&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_hash_table_8h.html#66f6edfb0b860fa2115f6c50b944952a">pizHashTableSetFlags</a> (<a class="el" href="struct_p_i_z_hash_table.html">PIZHashTable</a> *x, long flags)</td></tr>
 
@@ -93,7 +93,7 @@ Free items with <code>free()</code>.
 </div>
 </div><p>
 <hr><h2>Function Documentation</h2>
-<a class="anchor" name="4882f9b45f3bdd0088962a495d06f4e5"></a><!-- doxytag: member="pizHashTable.h::pizHashTableNew" ref="4882f9b45f3bdd0088962a495d06f4e5" args="(long argc, long *argv)" -->
+<a class="anchor" name="23fd361841001ab1300743e154db30e2"></a><!-- doxytag: member="pizHashTable.h::pizHashTableNew" ref="23fd361841001ab1300743e154db30e2" args="(long size)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -101,18 +101,9 @@ Free items with <code>free()</code>.
           <td class="memname"><a class="el" href="struct_p_i_z_hash_table.html">PIZHashTable</a>* pizHashTableNew           </td>
           <td>(</td>
           <td class="paramtype">long&nbsp;</td>
-          <td class="paramname"> <em>argc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"> <em>size</em>          </td>
+          <td>&nbsp;)&nbsp;</td>
           <td></td>
-          <td class="paramtype">long *&nbsp;</td>
-          <td class="paramname"> <em>argv</em></td><td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td><td></td>
         </tr>
       </table>
 </div>
@@ -121,18 +112,16 @@ Free items with <code>free()</code>.
 <p>
 Create the hashtable. 
 <p>
-The function accepts one argument : the size of the hashtable. This size should be a prime number, default is 157. In case of failure the pointer is NULL. <dl compact><dt><b>Parameters:</b></dt><dd>
+The size should be a prime number, default is 157. In case of failure the pointer is NULL. <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>argc</em>&nbsp;</td><td>The number of arguments. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>argv</em>&nbsp;</td><td>A pointer to arguments. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>size</em>&nbsp;</td><td>The size of the hashtable. </td></tr>
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>A pointer to the new hashtable. </dd></dl>
-<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The following shows how to create a hashtable. <div class="fragment"><pre class="fragment"> <span class="keywordtype">long</span>            size = 67;
- <a class="code" href="struct_p_i_z_hash_table.html">PIZHashTable</a>    *myHashtab = NULL;
+<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The following shows how to create an hashtable. <div class="fragment"><pre class="fragment"> <a class="code" href="struct_p_i_z_hash_table.html">PIZHashTable</a> *hashtab = NULL;
 
- myHashtab = pizHashTableNew (1, &amp;size);
- myHashtab = pizHashTableNew (0, NULL);  <span class="comment">// default value.</span>
+ hashtab = pizHashTableNew (53);  
+ hashtab = pizHashTableNew (0);   <span class="comment">// default value.</span>
 </pre></div> </dd></dl>
 
 </div>
@@ -432,7 +421,7 @@ Get the number of items in the hashtable.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Fri Feb 10 08:58:55 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Fri Feb 10 16:37:31 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

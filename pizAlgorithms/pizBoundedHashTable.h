@@ -117,6 +117,7 @@ PIZBoundedHashTable *pizBoundedHashTableNew (long argc, long *argv);
  * \brief   Set bounded hashtable's bit flags.
  * \param   x A valid pointer.
  * \param   flags Bit flags.
+ * \warning Free methods are not implemented.
  */
 void pizBoundedHashTableSetFlags (PIZBoundedHashTable *x, long flags);
 

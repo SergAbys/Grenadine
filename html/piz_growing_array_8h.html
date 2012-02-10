@@ -82,10 +82,15 @@ Create the dynamic array.
 <p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign="top"></td><td valign="top"><em>size</em>&nbsp;</td><td>The size of memory allocated initially. In case of failure the pointer is NULL. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>size</em>&nbsp;</td><td>The size of memory allocated initially to the array. In case of failure the pointer is NULL. </td></tr>
   </table>
 </dl>
 <dl class="return" compact><dt><b>Returns:</b></dt><dd>A pointer to the new dynamic array. </dd></dl>
+<dl class="remark" compact><dt><b>Remarks:</b></dt><dd>The following shows how to create a dynamic array. <div class="fragment"><pre class="fragment"> PIZGrowingArray *array = NULL;
+
+ array = pizGrowingArrayNew (16);  
+ array = pizGrowingArrayNew (0);  <span class="comment">// default value is 4.</span>
+</pre></div> </dd></dl>
 
 </div>
 </div><p>
@@ -587,7 +592,7 @@ Append a <code>long</code> array.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Fri Feb 10 08:58:55 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Fri Feb 10 16:37:31 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>

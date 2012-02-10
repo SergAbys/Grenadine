@@ -48,7 +48,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define DEFAULT_PREALLOCATED_ARRAYS     2
+#define PIZ_DEFAULT_SIZE            0
+#define PIZ_DEFAULT_PREALLOCATED    2
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -65,18 +66,18 @@ PIZArrayPool *pizArrayPoolNew (long argc, long *argv)
     
     if (x = (PIZArrayPool *)malloc (sizeof(PIZArrayPool)))
         {   
-            long k;
+            long k = PIZ_DEFAULT_PREALLOCATED;
             
             x->retain           = 0;
-            x->initArraySize    = 0;
+            x->initArraySize    = PIZ_DEFAULT_SIZE;
             x->cache            = NULL;
             
-            if (argc) {
-                    k = MAX (argv[0], DEFAULT_PREALLOCATED_ARRAYS);
+            if (argc && argv[0] > 0) {
+                    k = argv[0];
                 }
                 
-            if (argc > 1) {
-                    x->initArraySize = MAX (argv[1], 0);
+            if (argc > 1 && argv[1] > 0) {
+                    x->initArraySize = argv[1];
                 }
             
             if (x->pool = pizLinklistNew ( ))

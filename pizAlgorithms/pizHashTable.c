@@ -53,7 +53,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZHashTable *pizHashTableNew (long argc, long *argv)
+PIZHashTable *pizHashTableNew (long size)
 {
     PIZHashTable *x = NULL;
         
@@ -63,12 +63,11 @@ PIZHashTable *pizHashTableNew (long argc, long *argv)
             x->count = 0;
             x->size  = PIZ_DEFAULT_SIZE;
             
-            if (argc && argv[0] > 0) {
-                    x->size = argv[0];
+            if (size > 0) {
+                    x->size = size;
                 }
             
-            if (!(x->hashTable = (PIZLinklist **)calloc (x->size, sizeof(PIZLinklist *))))
-                {
+            if (!(x->hashTable = (PIZLinklist **)calloc (x->size, sizeof(PIZLinklist *)))) {
                     free (x);
                     x = NULL;
                 }
