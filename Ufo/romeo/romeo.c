@@ -88,8 +88,7 @@ void *romeo_new (t_symbol *s, long argc, t_atom *argv)
         {
             long k = 0;
             
-            if (argc && atom_gettype (argv) == A_LONG)
-                {
+            if (argc && atom_gettype (argv) == A_LONG) {
                     k = atom_getlong (argv);
                 }
             
@@ -119,13 +118,11 @@ void romeo_free (t_romeo *x)
 { 
     pizGaloisLatticeFree (x->galoisLattice);
         
-    if (x->values)
-        {
+    if (x->values) {
             sysmem_freeptr (x->values);
         }
         
-    if (x->algorithmMutex)
-        {
+    if (x->algorithmMutex) {
             systhread_mutex_free (x->algorithmMutex);
         }
 }
@@ -178,15 +175,13 @@ void romeo_int (t_romeo *x, long n)
             systhread_mutex_lock (&x->algorithmMutex);
     
             if (pizGaloisLatticeCount (x->galoisLattice) &&
-                (!(err = pizGaloisLatticeProceed (x->galoisLattice, argc, x->values))))
-                {
+                (!(err = pizGaloisLatticeProceed (x->galoisLattice, argc, x->values)))) {
                     atom_setlong_array (argc, argv, argc, x->values);
                 }
             
             systhread_mutex_unlock (&x->algorithmMutex);
     
-            if (!err)
-                {
+            if (!err) {
                     outlet_list (x->leftOutlet, NULL, argc, argv);
                 }
                 
@@ -215,7 +210,7 @@ void romeo_dump (t_romeo *x, long n)
             PIZGrowingArray *values = pizGrowingArrayNew (4);
     
             systhread_mutex_lock (&x->algorithmMutex);
-            err = pizGaloisLatticeEncodeConceptsToArray (x->galoisLattice, n, values);
+            err = pizGaloisLatticeEncodeToArray (x->galoisLattice, n, values);
             systhread_mutex_unlock (&x->algorithmMutex);
 
             if (!err)

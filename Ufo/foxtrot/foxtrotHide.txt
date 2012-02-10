@@ -15,7 +15,7 @@ _pizGrowingArrayValueAtIndex
 _pizMarkovModelAdd
 _pizMarkovModelClear
 _pizMarkovModelCount
-_pizMarkovModelEncodeNodeToArray
+_pizMarkovModelEncodeToArray
 _pizMarkovModelFree
 _pizMarkovModelNew
 _pizMarkovModelProceed

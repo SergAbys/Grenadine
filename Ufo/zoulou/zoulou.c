@@ -147,15 +147,13 @@ void *zoulou_new (t_symbol *s, long argc, t_atom *argv)
 
 void zoulou_free (t_zoulou *x)
 {       
-    if (x->values)
-        {
+    if (x->values) {
             sysmem_freeptr (x->values);
         }
     
     pizFactorOracleFree (x->factorOracle);
         
-    if (x->algorithmMutex)
-        {
+    if (x->algorithmMutex) {
             systhread_mutex_free (x->algorithmMutex);
         }
 }
@@ -187,8 +185,7 @@ void zoulou_assist (t_zoulou *x, void *b, long m, long a, char *s)
 
 t_max_err zoulou_setStraightRatio (t_zoulou *x, t_object *attr, long argc, t_atom *argv)
 {
-    if (argc && argv)
-        {
+    if (argc && argv) {
             x->straightRatio = atom_getfloat (argv);
             pizFactorOracleSetStraightRatio (x->factorOracle, x->straightRatio);
         }
@@ -198,8 +195,7 @@ t_max_err zoulou_setStraightRatio (t_zoulou *x, t_object *attr, long argc, t_ato
 
 t_max_err zoulou_setBackwardThreshold (t_zoulou *x, t_object *attr, long argc, t_atom *argv)
 {
-    if (argc && argv)
-        {
+    if (argc && argv) {
             x->backwardThreshold = atom_getlong (argv);
             pizFactorOracleSetBackwardThreshold (x->factorOracle, x->backwardThreshold);
         }
@@ -233,15 +229,13 @@ void zoulou_int (t_zoulou *x, long n)
             systhread_mutex_lock (&x->algorithmMutex);
     
             if (pizFactorOracleCount (x->factorOracle) &&
-                (!(err = pizFactorOracleProceed (x->factorOracle, argc, x->values))))
-                {
+                (!(err = pizFactorOracleProceed (x->factorOracle, argc, x->values)))) {
                     atom_setlong_array (argc, argv, argc, x->values);
                 }
             
             systhread_mutex_unlock (&x->algorithmMutex);
     
-            if (!err)
-                {
+            if (!err) {
                     outlet_list (x->leftOutlet, NULL, argc, argv);
                 }
                 
@@ -264,7 +258,7 @@ void zoulou_dump (t_zoulou *x, long n)
     PIZGrowingArray *values = pizGrowingArrayNew (4);
 
     systhread_mutex_lock (&x->algorithmMutex);
-    err = pizFactorOracleEncodeNodeToArray (x->factorOracle, n, values);
+    err = pizFactorOracleEncodeToArray (x->factorOracle, n, values);
     systhread_mutex_unlock (&x->algorithmMutex);
     
     if (!err)

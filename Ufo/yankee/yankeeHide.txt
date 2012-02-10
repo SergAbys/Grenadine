@@ -24,7 +24,7 @@ _pizNeuralGasAlpha
 _pizNeuralGasBeta
 _pizNeuralGasClear
 _pizNeuralGasCount
-_pizNeuralGasEncodeVectorToArray
+_pizNeuralGasEncodeToArray
 _pizNeuralGasEpsilon1
 _pizNeuralGasEpsilon2
 _pizNeuralGasFree

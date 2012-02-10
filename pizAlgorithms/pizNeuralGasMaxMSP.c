@@ -116,7 +116,7 @@ double pizNeuralGasKappa (const PIZNeuralGas *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizNeuralGasEncodeVectorToArray (const PIZNeuralGas *x, long n, PIZGrowingArray *a)
+PIZError pizNeuralGasEncodeToArray (const PIZNeuralGas *x, long n, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     
@@ -129,14 +129,13 @@ PIZError pizNeuralGasEncodeVectorToArray (const PIZNeuralGas *x, long n, PIZGrow
         for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
             if (pizItemset128IsSetAtIndex (&x->map, i)) {
                 if (k == n) {
-                
                     long j;
                     
                     for (j = 0; j < x->vectorSize; j++) {
                         err |= pizGrowingArrayAppend 
                             (a, (long)(((*(x->vectorStock + (n * x->vectorSize) + j)) + 0.5)));
+                        }
                     }
-                }
                 
                 k ++;
             }

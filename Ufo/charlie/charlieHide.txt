@@ -25,7 +25,7 @@ _pizGrowingArrayValueAtIndex
 _pizKohonenMapAdd
 _pizKohonenMapClear
 _pizKohonenMapCount
-_pizKohonenMapEncodeVectorToArray
+_pizKohonenMapEncodeToArray
 _pizKohonenMapFree
 _pizKohonenMapNew
 _pizKohonenMapProceed

@@ -113,8 +113,7 @@ void *foxtrot_new (t_symbol *s, long argc, t_atom *argv)
                 {
                     k[0] = atom_getlong (argv);
                     
-                    if (argc == 2 && atom_gettype (argv + 1) == A_LONG)
-                        {
+                    if (argc == 2 && atom_gettype (argv + 1) == A_LONG) {
                             k[1] = atom_getlong (argv + 1);
                         }
                 }
@@ -149,13 +148,11 @@ void foxtrot_free (t_foxtrot *x)
 { 
     pizMarkovModelFree (x->markovModel);
         
-    if (x->values)
-        {
+    if (x->values) {
             sysmem_freeptr (x->values);
         }
         
-    if (x->algorithmMutex)
-        {
+    if (x->algorithmMutex) {
             systhread_mutex_free (x->algorithmMutex);
         }
 }
@@ -187,8 +184,7 @@ void foxtrot_assist (t_foxtrot *x, void *b, long m, long a, char *s)
 
 t_max_err foxtrot_setPersistence (t_foxtrot *x, t_object *attr, long argc, t_atom *argv)
 {
-    if (argc && argv)
-        {
+    if (argc && argv) {
             x->persistence = atom_getfloat (argv);
             pizMarkovModelSetPersistence (x->markovModel, x->persistence);
         }
@@ -221,16 +217,14 @@ void foxtrot_int (t_foxtrot *x, long n)
                 
             systhread_mutex_lock (&x->algorithmMutex);
     
-            if (pizMarkovModelCount (x->markovModel) &&
-                (!(err = pizMarkovModelProceed (x->markovModel, argc, x->values))))
-                {
+            if (pizMarkovModelCount (x->markovModel) && 
+                (!(err = pizMarkovModelProceed (x->markovModel, argc, x->values)))) {
                     atom_setlong_array (argc, argv, argc, x->values);
                 }
             
             systhread_mutex_unlock (&x->algorithmMutex);
     
-            if (!err)
-                {
+            if (!err) {
                     outlet_list (x->leftOutlet, NULL, argc, argv);
                 }
                 
@@ -257,7 +251,7 @@ void foxtrot_dump (t_foxtrot *x, long n)
     PIZGrowingArray *values = pizGrowingArrayNew (256);
     
     systhread_mutex_lock (&x->algorithmMutex);
-    err = pizMarkovModelEncodeNodeToArray (x->markovModel, n, values);
+    err = pizMarkovModelEncodeToArray (x->markovModel, n, values);
     systhread_mutex_unlock (&x->algorithmMutex);
     
     if (!err)

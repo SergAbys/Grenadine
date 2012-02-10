@@ -43,7 +43,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizGaloisLatticeEncodeConceptsToArray (const PIZGaloisLattice *x, long n, PIZGrowingArray *a)
+PIZError pizGaloisLatticeEncodeToArray (const PIZGaloisLattice *x, long n, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     

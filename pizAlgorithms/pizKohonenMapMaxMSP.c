@@ -78,7 +78,7 @@ double pizKohonenMapStep (const PIZKohonenMap *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizKohonenMapEncodeVectorToArray (const PIZKohonenMap *x, long n, PIZGrowingArray *a)
+PIZError pizKohonenMapEncodeToArray (const PIZKohonenMap *x, long n, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     

@@ -9,6 +9,7 @@
  * \author      Jean Sapristi
  * \date        31 janvier 2012
  * \ingroup     algorithms
+ * \ingroup     zoulou
  */
 
 /*

@@ -53,7 +53,7 @@ void pizMarkovModelSetPersistence (PIZMarkovModel *x, double f)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizMarkovModelEncodeNodeToArray (const PIZMarkovModel *x, long n, PIZGrowingArray *a)
+PIZError pizMarkovModelEncodeToArray (const PIZMarkovModel *x, long n, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     

@@ -148,8 +148,7 @@ void *yankee_new (t_symbol *s, long argc, t_atom *argv)
                 {
                     k[0] = atom_getlong (argv);
                     
-                    if (argc == 2 && atom_gettype (argv + 1) == A_LONG)
-                        {
+                    if (argc == 2 && atom_gettype (argv + 1) == A_LONG) {
                             k[1] = atom_getlong (argv + 1);
                         }
                 }
@@ -189,13 +188,11 @@ void yankee_free (t_yankee *x)
 { 
     pizNeuralGasFree (x->neuralGas);
         
-    if (x->values)
-        {
+    if (x->values) {
             sysmem_freeptr (x->values);
         }
         
-    if (x->algorithmMutex)
-        {
+    if (x->algorithmMutex) {
             systhread_mutex_free (x->algorithmMutex);
         }
 }
@@ -227,8 +224,7 @@ void yankee_assist (t_yankee *x, void *b, long m, long a, char *s)
 
 t_max_err yankee_setLambda (t_yankee *x, t_object *attr, long argc, t_atom *argv)
 {
-    if (argc && argv)
-        {
+    if (argc && argv) {
             x->lambda = atom_getlong (argv);
             pizNeuralGasSetLambda (x->neuralGas, x->lambda);
         }
@@ -238,8 +234,7 @@ t_max_err yankee_setLambda (t_yankee *x, t_object *attr, long argc, t_atom *argv
 
 t_max_err yankee_setEpsilon1 (t_yankee *x, t_object *attr, long argc, t_atom *argv)
 {
-    if (argc && argv)
-        {
+    if (argc && argv) {
             x->epsilon1 = atom_getfloat (argv);
             pizNeuralGasSetEpsilon1 (x->neuralGas, x->epsilon1);
         }
@@ -249,8 +244,7 @@ t_max_err yankee_setEpsilon1 (t_yankee *x, t_object *attr, long argc, t_atom *ar
 
 t_max_err yankee_setEpsilon2 (t_yankee *x, t_object *attr, long argc, t_atom *argv)
 {
-    if (argc && argv)
-        {
+    if (argc && argv) {
             x->epsilon2 = atom_getfloat (argv);
             pizNeuralGasSetEpsilon2 (x->neuralGas, x->epsilon2);
         }
@@ -260,8 +254,7 @@ t_max_err yankee_setEpsilon2 (t_yankee *x, t_object *attr, long argc, t_atom *ar
 
 t_max_err yankee_setAlpha (t_yankee *x, t_object *attr, long argc, t_atom *argv)
 {
-    if (argc && argv)
-        {
+    if (argc && argv) {
             x->alpha = atom_getfloat (argv);
             pizNeuralGasSetAlpha (x->neuralGas, x->alpha);
         }
@@ -271,8 +264,7 @@ t_max_err yankee_setAlpha (t_yankee *x, t_object *attr, long argc, t_atom *argv)
 
 t_max_err yankee_setBeta (t_yankee *x, t_object *attr, long argc, t_atom *argv)
 {
-    if (argc && argv)
-        {
+    if (argc && argv) {
             x->beta = atom_getfloat (argv);
             pizNeuralGasSetBeta (x->neuralGas, x->beta);
         }
@@ -282,8 +274,7 @@ t_max_err yankee_setBeta (t_yankee *x, t_object *attr, long argc, t_atom *argv)
 
 t_max_err yankee_setKappa (t_yankee *x, t_object *attr, long argc, t_atom *argv)
 {
-    if (argc && argv)
-        {
+    if (argc && argv) {
             x->kappa = atom_getlong (argv);
             pizNeuralGasSetKappa (x->neuralGas, (double)x->kappa);
         }
@@ -317,15 +308,13 @@ void yankee_int (t_yankee *x, long n)
             systhread_mutex_lock (&x->algorithmMutex);
     
             if (pizNeuralGasCount (x->neuralGas) &&
-                (!(err = pizNeuralGasProceed (x->neuralGas, argc, x->values))))
-                {
+                (!(err = pizNeuralGasProceed (x->neuralGas, argc, x->values)))) {
                     atom_setlong_array (argc, argv, argc, x->values);
                 }
             
             systhread_mutex_unlock (&x->algorithmMutex);
     
-            if (!err)
-                {
+            if (!err) {
                     outlet_list (x->leftOutlet, NULL, argc, argv);
                 }
                 
@@ -352,7 +341,7 @@ void yankee_dump (t_yankee *x, long n)
     PIZGrowingArray *values = pizGrowingArrayNew (4);
     
     systhread_mutex_lock (&x->algorithmMutex);
-    err = pizNeuralGasEncodeVectorToArray (x->neuralGas, n, values);
+    err = pizNeuralGasEncodeToArray (x->neuralGas, n, values);
     systhread_mutex_unlock (&x->algorithmMutex);
     
     if (!err)
@@ -364,7 +353,6 @@ void yankee_dump (t_yankee *x, long n)
                     long *ptr = pizGrowingArrayPtr (values);
 
                     atom_setlong_array (argc, argv, argc, ptr);
-                                    
                     outlet_list (x->rightOutlet, NULL, argc, argv);
                         
                     sysmem_freeptr (argv);

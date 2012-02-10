@@ -2,7 +2,7 @@ _pizFactorOracleAdd
 _pizFactorOracleBackwardThreshold
 _pizFactorOracleClear
 _pizFactorOracleCount
-_pizFactorOracleEncodeNodeToArray
+_pizFactorOracleEncodeToArray
 _pizFactorOracleFree
 _pizFactorOracleNew
 _pizFactorOracleProceed

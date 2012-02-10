@@ -123,8 +123,7 @@ void *charlie_new (t_symbol *s, long argc, t_atom *argv)
                 {
                     k[0] = atom_getlong (argv);
                     
-                    if (argc == 2 && atom_gettype (argv + 1) == A_LONG)
-                        {
+                    if (argc == 2 && atom_gettype (argv + 1) == A_LONG) {
                             k[1] = atom_getlong (argv + 1);
                         }
                 }
@@ -161,13 +160,11 @@ void charlie_free (t_charlie *x)
 { 
     pizKohonenMapFree (x->kohonenMap);
         
-    if (x->values)
-        {
+    if (x->values) {
             sysmem_freeptr (x->values);
         }
         
-    if (x->algorithmMutex)
-        {
+    if (x->algorithmMutex) {
             systhread_mutex_free (x->algorithmMutex);
         }
 }
@@ -199,8 +196,7 @@ void charlie_assist (t_charlie *x, void *b, long m, long a, char *s)
 
 t_max_err charlie_setRange (t_charlie *x, t_object *attr, long argc, t_atom *argv)
 {
-    if (argc && argv)
-        {
+    if (argc && argv) {
             x->range = atom_getlong (argv);
             pizKohonenMapSetRange (x->kohonenMap, x->range);
         }
@@ -210,8 +206,7 @@ t_max_err charlie_setRange (t_charlie *x, t_object *attr, long argc, t_atom *arg
 
 t_max_err charlie_setTraining (t_charlie *x, t_object *attr, long argc, t_atom *argv)
 {
-    if (argc && argv)
-        {
+    if (argc && argv) {
             x->training = atom_getlong (argv);
             pizKohonenMapSetTraining (x->kohonenMap, x->training);
         }
@@ -221,8 +216,7 @@ t_max_err charlie_setTraining (t_charlie *x, t_object *attr, long argc, t_atom *
 
 t_max_err charlie_setStep (t_charlie *x, t_object *attr, long argc, t_atom *argv)
 {
-    if (argc && argv)
-        {
+    if (argc && argv) {
             x->step = atom_getfloat (argv);
             pizKohonenMapSetStep (x->kohonenMap, x->step);
         }
@@ -256,15 +250,13 @@ void charlie_int (t_charlie *x, long n)
             systhread_mutex_lock (&x->algorithmMutex);
     
             if (pizKohonenMapCount (x->kohonenMap) &&
-                (!(err = pizKohonenMapProceed (x->kohonenMap, argc, x->values))))
-                {
+                (!(err = pizKohonenMapProceed (x->kohonenMap, argc, x->values)))) {
                     atom_setlong_array (argc, argv, argc, x->values);
                 }
             
             systhread_mutex_unlock (&x->algorithmMutex);
     
-            if (!err)
-                {
+            if (!err) {
                     outlet_list (x->leftOutlet, NULL, argc, argv);
                 }
                 
@@ -291,7 +283,7 @@ void charlie_dump (t_charlie *x, long n)
     PIZGrowingArray *values = pizGrowingArrayNew (4);
     
     systhread_mutex_lock (&x->algorithmMutex);
-    err = pizKohonenMapEncodeVectorToArray (x->kohonenMap, n, values);
+    err = pizKohonenMapEncodeToArray (x->kohonenMap, n, values);
     systhread_mutex_unlock (&x->algorithmMutex);
     
     if (!err)
@@ -303,7 +295,6 @@ void charlie_dump (t_charlie *x, long n)
                     long *ptr = pizGrowingArrayPtr (values);
 
                     atom_setlong_array (argc, argv, argc, ptr);
-                                    
                     outlet_list (x->rightOutlet, NULL, argc, argv);
                         
                     sysmem_freeptr (argv);

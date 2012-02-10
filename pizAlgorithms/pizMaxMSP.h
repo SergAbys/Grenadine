@@ -2,11 +2,12 @@
  * \file        pizMaxMSP.h
  * \author      Jean Sapristi
  * \date        31 janvier 2012
- * \defgroup    zoulou [Zoulou]
- * \defgroup    romeo [Romeo]
- * \defgroup    charlie [Charlie]
- * \defgroup    yankee [Yankee]
- * \defgroup    foxtrot [Foxtrot]
+ * \defgroup    zoulou Zoulou
+ * \defgroup    uniform Uniform
+ * \defgroup    romeo Romeo
+ * \defgroup    charlie Charlie
+ * \defgroup    yankee Yankee
+ * \defgroup    foxtrot Foxtrot
  */
  
 /*
@@ -67,25 +68,25 @@
 /**
  * \def     PIZ_FACTOR_ORACLE_REFER 
  * \ingroup zoulou
- * \brief   Index of referTo in \c pizFactorOracleEncodeNodeToArray().
+ * \brief   Index of referTo in \c pizFactorOracleEncodeToArray().
  */
 
 /**
  * \def     PIZ_FACTOR_ORACLE_LRS 
  * \ingroup zoulou
- * \brief   Index of lengthRepeatedSuffix in \c pizFactorOracleEncodeNodeToArray().
+ * \brief   Index of lengthRepeatedSuffix in \c pizFactorOracleEncodeToArray().
  */
 
 /**
  * \def     PIZ_FACTOR_ORACLE_ARCS
  * \ingroup zoulou
- * \brief   Index of number of arcs in \c pizFactorOracleEncodeNodeToArray().
+ * \brief   Index of number of arcs in \c pizFactorOracleEncodeToArray().
  */
 
 /**
  * \def     PIZ_FACTOR_ORACLE_DATA
  * \ingroup zoulou
- * \brief   Index of data in \c pizFactorOracleEncodeNodeToArray().
+ * \brief   Index of data in \c pizFactorOracleEncodeToArray().
  */
  
 #define PIZ_FACTOR_ORACLE_REFER     0
@@ -141,7 +142,7 @@ double pizFactorOracleStraightRatio (const PIZFactorOracle *x);
  * long             err = PIZ_GOOD;
  * PIZGrowingArray  *a = pizGrowingArrayNew (16);
  *
- * err = pizFactorOracleEncodeNodeToArray (x->factorOracle, node, a);
+ * err = pizFactorOracleEncodeToArray (x->factorOracle, node, a);
  *
  * if (!err)
  *      {
@@ -165,7 +166,7 @@ double pizFactorOracleStraightRatio (const PIZFactorOracle *x);
  * \endcode
  * \ingroup zoulou
  */
-PIZError pizFactorOracleEncodeNodeToArray (const PIZFactorOracle *x, long node, PIZGrowingArray *a);
+PIZError pizFactorOracleEncodeToArray (const PIZFactorOracle *x, long node, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -173,22 +174,22 @@ PIZError pizFactorOracleEncodeNodeToArray (const PIZFactorOracle *x, long node, 
 /**
  * \def     PIZ_GALOIS_LATTICE_CONCEPTS 
  * \ingroup romeo
- * \brief   Index of number of concepts in \c pizGaloisLatticeEncodeConceptsToArray().
+ * \brief   Index of number of concepts in \c pizGaloisLatticeEncodeToArray().
  */
 
 /**
  * \def     PIZ_GALOIS_LATTICE_DATA 
  * \ingroup romeo
- * \brief   Index of data in \c pizGaloisLatticeEncodeConceptsToArray().
+ * \brief   Index of data in \c pizGaloisLatticeEncodeToArray().
  */
  
 #define PIZ_GALOIS_LATTICE_CONCEPTS     0
 #define PIZ_GALOIS_LATTICE_DATA         1
 
 /**
- * \brief   Encode concepts with a given size to a dynamic array.
+ * \brief   Encode all the concepts with a given size to a dynamic array.
  * \param   x A valid pointer.
- * \param   n The size of concepts.
+ * \param   n The size of the concepts.
  * \param   a A pointer to a dynamic array.
  * \return  An error code.
  * \remark	An example :  
@@ -197,7 +198,7 @@ PIZError pizFactorOracleEncodeNodeToArray (const PIZFactorOracle *x, long node, 
  * long             n = 4;
  * PIZGrowingArray  *a = pizGrowingArrayNew (16);
  *
- * err = pizGaloisLatticeEncodeConceptsToArray (lattice, n, a);
+ * err = pizGaloisLatticeEncodeToArray (lattice, n, a);
  *
  * if (!err)
  *      {
@@ -216,7 +217,7 @@ PIZError pizFactorOracleEncodeNodeToArray (const PIZFactorOracle *x, long node, 
  * \endcode
  * \ingroup romeo
  */
-PIZError pizGaloisLatticeEncodeConceptsToArray (const PIZGaloisLattice *x, long n, PIZGrowingArray *a);
+PIZError pizGaloisLatticeEncodeToArray (const PIZGaloisLattice *x, long n, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -280,7 +281,7 @@ double pizKohonenMapStep (const PIZKohonenMap *x);
  * \return  An error code.
  * \ingroup charlie
  */
-PIZError pizKohonenMapEncodeVectorToArray (const PIZKohonenMap *x, long n, PIZGrowingArray *a);
+PIZError pizKohonenMapEncodeToArray (const PIZKohonenMap *x, long n, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -395,7 +396,7 @@ double pizNeuralGasKappa (const PIZNeuralGas *x);
  * \return  An error code.
  * \ingroup yankee
  */
-PIZError pizNeuralGasEncodeVectorToArray (const PIZNeuralGas *x, long n, PIZGrowingArray *a);
+PIZError pizNeuralGasEncodeToArray (const PIZNeuralGas *x, long n, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -403,25 +404,25 @@ PIZError pizNeuralGasEncodeVectorToArray (const PIZNeuralGas *x, long n, PIZGrow
 /**
  * \def     PIZ_MARKOV_MODEL_START 
  * \ingroup foxtrot
- * \brief   Index of node's start probability in \c pizMarkovModelEncodeNodeToArray().
+ * \brief   Index of node's start probability in \c pizMarkovModelEncodeToArray().
  */
 
 /**
  * \def     PIZ_MARKOV_MODEL_TRANSITIONS 
  * \ingroup foxtrot
- * \brief   Index of node's number of transitions in \c pizMarkovModelEncodeNodeToArray().
+ * \brief   Index of node's number of transitions in \c pizMarkovModelEncodeToArray().
  */
  
 /**
  * \def     PIZ_MARKOV_MODEL_EMISSIONS 
  * \ingroup foxtrot
- * \brief   Index of node's number of emmissions in \c pizMarkovModelEncodeNodeToArray().
+ * \brief   Index of node's number of emmissions in \c pizMarkovModelEncodeToArray().
  */
 
 /**
  * \def     PIZ_MARKOV_MODEL_DATA 
  * \ingroup foxtrot
- * \brief   Index of data in \c pizMarkovModelEncodeNodeToArray.
+ * \brief   Index of data in \c pizMarkovModelEncodeToArray.
  */
  
 #define PIZ_MARKOV_MODEL_START          0
@@ -451,7 +452,7 @@ void pizMarkovModelSetPersistence (PIZMarkovModel *x, double f);
  *  long            n = 4;
  *  PIZGrowingArray *a = pizGrowingArrayNew (256);
  *
- *  err = pizMarkovModelEncodeNodeToArray (hmm, n, a);
+ *  err = pizMarkovModelEncodeToArray (hmm, n, a);
  *
  *  if (!err)
  *      {
@@ -478,7 +479,7 @@ void pizMarkovModelSetPersistence (PIZMarkovModel *x, double f);
  * \endcode
  * \ingroup foxtrot
  */
-PIZError pizMarkovModelEncodeNodeToArray (const PIZMarkovModel *x, long n, PIZGrowingArray *a);
+PIZError pizMarkovModelEncodeToArray (const PIZMarkovModel *x, long n, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

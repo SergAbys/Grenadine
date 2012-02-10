@@ -70,7 +70,7 @@ double pizFactorOracleStraightRatio (const PIZFactorOracle *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizFactorOracleEncodeNodeToArray (const PIZFactorOracle *x, long node, PIZGrowingArray *a)
+PIZError pizFactorOracleEncodeToArray (const PIZFactorOracle *x, long node, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     

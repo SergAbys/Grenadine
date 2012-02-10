@@ -87,8 +87,7 @@ void *uniform_new (t_symbol *s, long argc, t_atom *argv)
         {
             long k = 0;
             
-            if (argc && atom_gettype (argv) == A_LONG)
-                {
+            if (argc && atom_gettype (argv) == A_LONG) {
                     k = atom_getlong (argv);
                 }
             
@@ -118,13 +117,11 @@ void uniform_free (t_uniform *x)
 { 
     pizFiniteStateFree (x->finiteState);
         
-    if (x->values)
-        {
+    if (x->values) {
             sysmem_freeptr (x->values);
         }
         
-    if (x->algorithmMutex)
-        {
+    if (x->algorithmMutex) {
             systhread_mutex_free (x->algorithmMutex);
         }
 }
@@ -177,15 +174,13 @@ void uniform_int (t_uniform *x, long n)
             systhread_mutex_lock (&x->algorithmMutex);
     
             if (pizFiniteStateCount (x->finiteState) &&
-                (!(err = pizFiniteStateProceed (x->finiteState, argc, x->values))))
-                {
+                (!(err = pizFiniteStateProceed (x->finiteState, argc, x->values)))) {
                     atom_setlong_array (argc, argv, argc, x->values);
                 }
             
             systhread_mutex_unlock (&x->algorithmMutex);
     
-            if (!err)
-                {
+            if (!err) {
                     outlet_list (x->leftOutlet, NULL, argc, argv);
                 }
                 

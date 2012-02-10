@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>Grenadine: [Romeo]</title>
+<title>Grenadine: Romeo</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -16,15 +16,18 @@
   </div>
 </div>
 <div class="contents">
-<h1>[Romeo]</h1><table border="0" cellpadding="0" cellspacing="0">
+<h1>Romeo</h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
+<tr><td colspan="2"><br><h2>Files</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">file &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_galois_lattice_8h.html">pizGaloisLattice.h</a></td></tr>
+
 <tr><td colspan="2"><br><h2>Defines</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__romeo.html#g5f625bbff4311b880a69e4e4da4e427b">PIZ_GALOIS_LATTICE_CONCEPTS</a>&nbsp;&nbsp;&nbsp;0</td></tr>
 
 <tr><td class="memItemLeft" nowrap align="right" valign="top">#define&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__romeo.html#gcfd5d1677bcf8be43bcc4cb2df051337">PIZ_GALOIS_LATTICE_DATA</a>&nbsp;&nbsp;&nbsp;1</td></tr>
 
 <tr><td colspan="2"><br><h2>Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__romeo.html#gac53d71a19421b54ac431dfeebec70b4">pizGaloisLatticeEncodeConceptsToArray</a> (const <a class="el" href="struct_p_i_z_galois_lattice.html">PIZGaloisLattice</a> *x, long n, PIZGrowingArray *a)</td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a>&nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__romeo.html#gb797bc18c6571bc711245b407d692024">pizGaloisLatticeEncodeToArray</a> (const <a class="el" href="struct_p_i_z_galois_lattice.html">PIZGaloisLattice</a> *x, long n, PIZGrowingArray *a)</td></tr>
 
 </table>
 <hr><h2>Define Documentation</h2>
@@ -40,7 +43,7 @@
 <div class="memdoc">
 
 <p>
-Index of number of concepts in <code><a class="el" href="group__romeo.html#gac53d71a19421b54ac431dfeebec70b4" title="Encode concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeConceptsToArray()</a></code>. 
+Index of number of concepts in <code><a class="el" href="group__romeo.html#gb797bc18c6571bc711245b407d692024" title="Encode all the concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeToArray()</a></code>. 
 <p>
 
 </div>
@@ -57,18 +60,18 @@ Index of number of concepts in <code><a class="el" href="group__romeo.html#gac53
 <div class="memdoc">
 
 <p>
-Index of data in <code><a class="el" href="group__romeo.html#gac53d71a19421b54ac431dfeebec70b4" title="Encode concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeConceptsToArray()</a></code>. 
+Index of data in <code><a class="el" href="group__romeo.html#gb797bc18c6571bc711245b407d692024" title="Encode all the concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeToArray()</a></code>. 
 <p>
 
 </div>
 </div><p>
 <hr><h2>Function Documentation</h2>
-<a class="anchor" name="gac53d71a19421b54ac431dfeebec70b4"></a><!-- doxytag: member="pizMaxMSP.h::pizGaloisLatticeEncodeConceptsToArray" ref="gac53d71a19421b54ac431dfeebec70b4" args="(const PIZGaloisLattice *x, long n, PIZGrowingArray *a)" -->
+<a class="anchor" name="gb797bc18c6571bc711245b407d692024"></a><!-- doxytag: member="pizMaxMSP.h::pizGaloisLatticeEncodeToArray" ref="gb797bc18c6571bc711245b407d692024" args="(const PIZGaloisLattice *x, long n, PIZGrowingArray *a)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a> pizGaloisLatticeEncodeConceptsToArray           </td>
+          <td class="memname"><a class="el" href="piz_types_8h.html#6f24d07324d2e9a0a266710a925cbced">PIZError</a> pizGaloisLatticeEncodeToArray           </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="struct_p_i_z_galois_lattice.html">PIZGaloisLattice</a> *&nbsp;</td>
           <td class="paramname"> <em>x</em>, </td>
@@ -95,12 +98,12 @@ Index of data in <code><a class="el" href="group__romeo.html#gac53d71a19421b54ac
 <div class="memdoc">
 
 <p>
-Encode concepts with a given size to a dynamic array. 
+Encode all the concepts with a given size to a dynamic array. 
 <p>
 <dl compact><dt><b>Parameters:</b></dt><dd>
   <table border="0" cellspacing="2" cellpadding="0">
     <tr><td valign="top"></td><td valign="top"><em>x</em>&nbsp;</td><td>A valid pointer. </td></tr>
-    <tr><td valign="top"></td><td valign="top"><em>n</em>&nbsp;</td><td>The size of concepts. </td></tr>
+    <tr><td valign="top"></td><td valign="top"><em>n</em>&nbsp;</td><td>The size of the concepts. </td></tr>
     <tr><td valign="top"></td><td valign="top"><em>a</em>&nbsp;</td><td>A pointer to a dynamic array. </td></tr>
   </table>
 </dl>
@@ -109,17 +112,17 @@ Encode concepts with a given size to a dynamic array.
  <span class="keywordtype">long</span>             n = 4;
  PIZGrowingArray  *a = pizGrowingArrayNew (16);
 
- err = <a class="code" href="group__romeo.html#gac53d71a19421b54ac431dfeebec70b4" title="Encode concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeConceptsToArray</a> (lattice, n, a);
+ err = <a class="code" href="group__romeo.html#gb797bc18c6571bc711245b407d692024" title="Encode all the concepts with a given size to a dynamic array.">pizGaloisLatticeEncodeToArray</a> (lattice, n, a);
 
  <span class="keywordflow">if</span> (!err)
       {
           <span class="keywordtype">long</span> i;
-          <span class="keywordtype">long</span> count = pizGrowingArrayValueAtIndex (a, <a class="code" href="group__romeo.html#g5f625bbff4311b880a69e4e4da4e427b" title="Index of number of concepts in pizGaloisLatticeEncodeConceptsToArray().">PIZ_GALOIS_LATTICE_CONCEPTS</a>);
+          <span class="keywordtype">long</span> count = pizGrowingArrayValueAtIndex (a, <a class="code" href="group__romeo.html#g5f625bbff4311b880a69e4e4da4e427b" title="Index of number of concepts in pizGaloisLatticeEncodeToArray().">PIZ_GALOIS_LATTICE_CONCEPTS</a>);
           <span class="keywordtype">long</span> *ptr  = pizGrowingArrayPtr (a);
           <span class="keywordtype">long</span> *values = NULL;
 
           <span class="keywordflow">for</span> (i = 0; i &lt; count; i++) {
-                  values = ptr + <a class="code" href="group__romeo.html#gcfd5d1677bcf8be43bcc4cb2df051337" title="Index of data in pizGaloisLatticeEncodeConceptsToArray().">PIZ_GALOIS_LATTICE_DATA</a> + (n * i);
+                  values = ptr + <a class="code" href="group__romeo.html#gcfd5d1677bcf8be43bcc4cb2df051337" title="Index of data in pizGaloisLatticeEncodeToArray().">PIZ_GALOIS_LATTICE_DATA</a> + (n * i);
               }
       }
 
@@ -129,7 +132,7 @@ Encode concepts with a given size to a dynamic array.
 </div>
 </div><p>
 </div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Thu Feb 9 18:00:33 2012 for Grenadine by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Fri Feb 10 07:57:31 2012 for Grenadine by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.7 </small></address>
 </body>
