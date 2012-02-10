@@ -2,8 +2,9 @@
  * \file    pizArrayPool.h
  * \author  Jean Sapristi
  * \date    15 janvier 2012
- * \remark  Multithreaded with single global mutex.
+ * \remark  Multi-Threaded with single global mutex.
  * \ingroup structures
+ * \ingroup mt
  */
  
 /*
@@ -115,10 +116,10 @@ PIZGrowingArray *pizArrayPoolGetArray (PIZArrayPool *x);
 /**
  * \brief   Release a dynamic array.
  * \param   x A valid pointer.
- * \param   array A pointer to the dynamic array.
+ * \param   a A pointer to the dynamic array.
  * \return  An error code.
  */
-PIZError pizArrayPoolReleaseArray (PIZArrayPool *x, PIZGrowingArray *array);
+PIZError pizArrayPoolReleaseArray (PIZArrayPool *x, PIZGrowingArray *a);
 
 PIZ_END_C_LINKAGE
 

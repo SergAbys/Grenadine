@@ -11,8 +11,8 @@
 		breakpointsGroup = 9699A8E613D9A57300D9A0AD /* XCBreakpointsBucket */;
 		codeSenseManager = 96CFCDA713D7F01D004431BB /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 350549315;
-			PBXWorkspaceStateSaveDate = 350549315;
+			PBXPerProjectTemplateStateSaveDate = 350556790;
+			PBXWorkspaceStateSaveDate = 350556790;
 		};
 		sourceControlManager = 96CFCDA613D7F01D004431BB /* Source Control */;
 		userBuildSettings = {
@@ -123,16 +123,16 @@
 	969BA88414AF6780006B9729 /* pizArrayPool.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1234, 4250}}";
-			sepNavSelRange = "{83, 0}";
+			sepNavSelRange = "{2693, 0}";
 			sepNavVisRect = "{{0, 0}, {1234, 645}}";
 			sepNavWindowFrame = "{{-1, 4}, {1279, 774}}";
 		};
 	};
 	969BA88514AF6780006B9729 /* pizArrayPool.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1234, 3175}}";
-			sepNavSelRange = "{3291, 0}";
-			sepNavVisRect = "{{0, 2530}, {1234, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1234, 3200}}";
+			sepNavSelRange = "{4986, 0}";
+			sepNavVisRect = "{{0, 1136}, {1234, 645}}";
 			sepNavWindowFrame = "{{-1, 2}, {1279, 774}}";
 		};
 	};
@@ -147,8 +147,8 @@
 	96A05BF814E3FBF80028A323 /* pizMaxMSP.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1237, 12150}}";
-			sepNavSelRange = "{6814, 0}";
-			sepNavVisRect = "{{0, 10590}, {1237, 645}}";
+			sepNavSelRange = "{117, 0}";
+			sepNavVisRect = "{{0, 0}, {1237, 645}}";
 			sepNavWindowFrame = "{{-4, 4}, {1282, 774}}";
 		};
 	};
@@ -262,8 +262,8 @@
 	};
 	96DD190E144AB01900F914AE /* pizDataStructures.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1234, 1575}}";
-			sepNavSelRange = "{101, 0}";
+			sepNavIntBoundsRect = "{{0, 0}, {1234, 1600}}";
+			sepNavSelRange = "{223, 0}";
 			sepNavVisRect = "{{0, 0}, {1234, 645}}";
 			sepNavWindowFrame = "{{4, 4}, {1279, 774}}";
 		};

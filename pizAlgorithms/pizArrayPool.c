@@ -150,13 +150,13 @@ PIZGrowingArray *pizArrayPoolGetArray (PIZArrayPool *x)
     return array;
 }
 
-PIZError pizArrayPoolReleaseArray (PIZArrayPool *x, PIZGrowingArray *array)
+PIZError pizArrayPoolReleaseArray (PIZArrayPool *x, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     
     PIZLOCK
     
-    if (array) {
+    if (a) {
             err = PIZ_GOOD;
             x->retain --;
         }

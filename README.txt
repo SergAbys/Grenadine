@@ -3,7 +3,7 @@ This is a project for generative music with agents.
 Layout of the Grenadine repository :
 
 * Ufo :
-  max/MSP wrappers for algorithms.
+  max/MSP externals.
 
 * html :
   Doygen's documentation for pizAlgorithms.
@@ -13,6 +13,6 @@ Layout of the Grenadine repository :
   structures, and everything for the Grenadine project.
 
 * Tralala :
-  max/MSP GUI sequencer.
+  max/MSP GUI external.
 
-All that is "work in progress" : I don't care about backward compatibility.
+All that is "work in progress" ...
