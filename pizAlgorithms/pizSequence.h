@@ -317,8 +317,8 @@ PIZError     pizSequenceProceedStep                (PIZSequence *x, PIZGrowingAr
 
 PIZ_LOCAL            PIZNote *pizSequenceAddNote            (PIZSequence *x, long *values, long mode);
 
-PIZ_LOCAL            void pizSequenceClearLocal             (PIZSequence *x);
 PIZ_LOCAL            void pizSequenceMakeMap                (PIZSequence *x);
+PIZ_LOCAL            void pizSequenceClearNotes             (PIZSequence *x);
 PIZ_LOCAL            long pizSequenceMovePitchToAmbitus     (PIZSequence *x, long pitch);
 
 PIZ_LOCAL PIZ_INLINE long pizSequenceSnapPositionToPattern  (PIZSequence *x, long toSnapped, long patternSize);

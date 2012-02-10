@@ -407,7 +407,7 @@ void pizSequenceClear (PIZSequence *x)
 {
     PIZLOCK
     
-    pizSequenceClearLocal (x);
+    pizSequenceClearNotes (x);
     
     PIZUNLOCK
 }
@@ -469,7 +469,7 @@ PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *ar
     PIZLOCK
     
     if (mode & PIZ_SEQUENCE_ADD_MODE_CLEAR) {
-            pizSequenceClearLocal (x);
+            pizSequenceClearNotes (x);
         }
         
     if (array)
@@ -1051,7 +1051,27 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long mode)
     return newNote;
 }   
 
-void pizSequenceClearLocal (PIZSequence *x)
+void pizSequenceMakeMap (PIZSequence *x)
+{
+    if (PIZNEEDTOMAKEMAP)
+        {
+            long i;
+                    
+            pizItemset1024Clear  (&x->mapFlags);
+            pizGrowingArrayClear (x->map);
+                                    
+            for (i = 0; i < PIZ_SEQUENCE_TIMELINE_SIZE; i++)
+                {
+                    if (x->timeline[i] && pizLinklistCount (x->timeline[i]))
+                        {
+                            pizItemset1024SetAtIndex (&x->mapFlags, i);
+                            pizGrowingArrayAppend    (x->map, i);
+                        }
+                }
+        }
+}
+
+void pizSequenceClearNotes (PIZSequence *x)
 {
     if (x->count)
         {
@@ -1095,26 +1115,6 @@ long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
     pitch -= offset;
     
     return (CLAMP (pitch, 0, PIZ_SEQUENCE_MIDI_NOTE));
-}
-
-void pizSequenceMakeMap (PIZSequence *x)
-{
-    if (PIZNEEDTOMAKEMAP)
-        {
-            long i;
-                    
-            pizItemset1024Clear  (&x->mapFlags);
-            pizGrowingArrayClear (x->map);
-                                    
-            for (i = 0; i < PIZ_SEQUENCE_TIMELINE_SIZE; i++)
-                {
-                    if (x->timeline[i] && pizLinklistCount (x->timeline[i]))
-                        {
-                            pizItemset1024SetAtIndex (&x->mapFlags, i);
-                            pizGrowingArrayAppend    (x->map, i);
-                        }
-                }
-        }
 }
 
 // -------------------------------------------------------------------------------------------------------------

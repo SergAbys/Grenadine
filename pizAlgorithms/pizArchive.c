@@ -108,7 +108,7 @@ PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, const PIZGrowingArray *
             
             err = PIZ_GOOD;
             
-            pizSequenceClearLocal (x);
+            pizSequenceClearNotes (x);
 
             if (t = pizGrowingArrayCount (a))
                 {
