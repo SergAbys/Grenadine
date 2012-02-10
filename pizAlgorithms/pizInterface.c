@@ -1,7 +1,7 @@
 /*
  * \file    pizInterface.c
  * \author  Jean Sapristi
- * \date    26 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -39,19 +39,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizInterface.h"
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-static long interface_start         = PIZ_DEFAULT_START;
-static long interface_end           = PIZ_DEFAULT_END;
-static long interface_down          = PIZ_DEFAULT_DOWN;
-static long interface_up            = PIZ_DEFAULT_UP;
-
-static long interface_originStart   = PIZ_DEFAULT_START;
-static long interface_originDown    = PIZ_DEFAULT_DOWN;
-static long interface_originWidth   = (PIZ_DEFAULT_END - PIZ_DEFAULT_START);
-static long interface_originHeight  = (PIZ_DEFAULT_UP - PIZ_DEFAULT_DOWN);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -157,14 +144,14 @@ void pizSequenceSetTempZoneByZone (PIZSequence *x)
 {
     PIZLOCK
     
-    interface_start         = x->start;
-    interface_end           = x->end;
-    interface_down          = x->down;
-    interface_up            = x->up;
-    interface_originStart   = x->start;
-    interface_originDown    = x->down;
-    interface_originWidth   = (x->end - x->start);
-    interface_originHeight  = (x->up - x->down);
+    x->tempStart         = x->start;
+    x->tempEnd           = x->end;
+    x->tempDown          = x->down;
+    x->tempUp            = x->up;
+    x->tempOriginStart   = x->start;
+    x->tempOriginDown    = x->down;
+    x->tempOriginWidth   = (x->end - x->start);
+    x->tempOriginHeight  = (x->up - x->down);
     
     PIZUNLOCK
 }
@@ -181,27 +168,27 @@ bool pizSequenceSetTempZoneWithCoordinates (PIZSequence *x, const PIZCoordinates
                                         0, PIZ_SEQUENCE_TIMELINE_SIZE); break;
         case PIZ_SEQUENCE_END   :   tempValue = CLAMP (pizSequenceSnapRound (x, coordinates->position), 
                                         0, PIZ_SEQUENCE_TIMELINE_SIZE); break;
-        case PIZ_SEQUENCE_DOWN  :   if (coordinates->pitch <= interface_up) {
+        case PIZ_SEQUENCE_DOWN  :   if (coordinates->pitch <= x->tempUp) {
                                         tempValue = CLAMP (coordinates->pitch, 0, PIZ_SEQUENCE_MIDI_NOTE);
                                     } break;
-        case PIZ_SEQUENCE_UP    :   if (coordinates->pitch >= interface_down) {
+        case PIZ_SEQUENCE_UP    :   if (coordinates->pitch >= x->tempDown) {
                                         tempValue = CLAMP (coordinates->pitch, 0, PIZ_SEQUENCE_MIDI_NOTE);
                                     } break;
         }
     
     if (tempValue != -1)
         {
-            if ((side == PIZ_SEQUENCE_START) && (interface_start != tempValue)) {
-                interface_start = tempValue;
+            if ((side == PIZ_SEQUENCE_START) && (x->tempStart != tempValue)) {
+                x->tempStart = tempValue;
                 haveChanged = true;
-            } else if ((side == PIZ_SEQUENCE_END) && (interface_end != tempValue)) {
-                interface_end = tempValue;
+            } else if ((side == PIZ_SEQUENCE_END) && (x->tempEnd != tempValue)) {
+                x->tempEnd = tempValue;
                 haveChanged = true;
-            } else if ((side == PIZ_SEQUENCE_DOWN) && (interface_down != tempValue)) {
-                interface_down = tempValue;
+            } else if ((side == PIZ_SEQUENCE_DOWN) && (x->tempDown != tempValue)) {
+                x->tempDown = tempValue;
                 haveChanged = true;
-            } else if ((side == PIZ_SEQUENCE_UP) && (interface_up != tempValue)) {
-                interface_up = tempValue;
+            } else if ((side == PIZ_SEQUENCE_UP) && (x->tempUp != tempValue)) {
+                x->tempUp = tempValue;
                 haveChanged = true;
             }
         }
@@ -218,17 +205,17 @@ bool pizSequenceMoveTempZoneWithDelta (PIZSequence *x, long pitch, long position
     
     PIZLOCK
     
-    tempStart   = CLAMP (pizSequenceSnapRound (x, interface_originStart + position), 
-                    0, (PIZ_SEQUENCE_TIMELINE_SIZE - interface_originWidth));
-    tempDown    = CLAMP (interface_originDown + pitch, 
-                    0, (PIZ_SEQUENCE_MIDI_NOTE - interface_originHeight));
+    tempStart   = CLAMP (pizSequenceSnapRound (x, x->tempOriginStart + position), 
+                    0, (PIZ_SEQUENCE_TIMELINE_SIZE - x->tempOriginWidth));
+    tempDown    = CLAMP (x->tempOriginDown + pitch, 
+                    0, (PIZ_SEQUENCE_MIDI_NOTE - x->tempOriginHeight));
     
-    if ((tempStart != interface_start) || (tempDown != interface_down))
+    if ((tempStart != x->tempStart) || (tempDown != x->tempDown))
         {
-            interface_start = tempStart;
-            interface_end   = tempStart + interface_originWidth;
-            interface_down  = tempDown;
-            interface_up    = tempDown + interface_originHeight;
+            x->tempStart = tempStart;
+            x->tempEnd   = tempStart + x->tempOriginWidth;
+            x->tempDown  = tempDown;
+            x->tempUp    = tempDown + x->tempOriginHeight;
             
             haveChanged = true;
         }
@@ -248,10 +235,10 @@ PIZError pizSequenceTempZoneToArray (PIZSequence *x, PIZGrowingArray *a)
         {
             err = PIZ_GOOD;
             
-            err |= pizGrowingArrayAppend (a, interface_start);
-            err |= pizGrowingArrayAppend (a, interface_end);
-            err |= pizGrowingArrayAppend (a, interface_down);
-            err |= pizGrowingArrayAppend (a, interface_up);
+            err |= pizGrowingArrayAppend (a, x->tempStart);
+            err |= pizGrowingArrayAppend (a, x->tempEnd);
+            err |= pizGrowingArrayAppend (a, x->tempDown);
+            err |= pizGrowingArrayAppend (a, x->tempUp);
         }
         
     PIZUNLOCK
@@ -269,24 +256,24 @@ PIZError pizSequenceSetZoneByTempZone (PIZSequence *x)
     
     PIZLOCK
     
-    if (!(interface_start == interface_end))
+    if (!(x->tempStart == x->tempEnd))
         {
-            if (interface_end < interface_start) {
-                long k          = interface_end;
-                interface_end   = interface_start;
-                interface_start = k;
+            if (x->tempEnd < x->tempStart) {
+                long k          = x->tempEnd;
+                x->tempEnd      = x->tempStart;
+                x->tempStart    = k;
                 }
             
-            if (interface_up < interface_down) {
-                long k          = interface_up;
-                interface_up    = interface_down;
-                interface_down  = k;
+            if (x->tempUp < x->tempDown) {
+                long k      = x->tempUp;
+                x->tempUp   = x->tempDown;
+                x->tempDown = k;
                 }
             
-            x->start = interface_start;
-            x->end   = interface_end;
-            x->down  = interface_down;
-            x->up    = interface_up;
+            x->start = x->tempStart;
+            x->end   = x->tempEnd;
+            x->down  = x->tempDown;
+            x->up    = x->tempUp;
             
             err = PIZ_GOOD;
         }
@@ -356,8 +343,8 @@ long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, const PIZCoordinates 
                 {
                     pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
                     
-                    if (((coordinates->position >= p) && (coordinates->position <= 
-                        (p + note->data[PIZ_DURATION]))) && (coordinates->pitch == note->data[PIZ_PITCH])) 
+                    if (((coordinates->position >= p) && (coordinates->position 
+                        <= (p + note->data[PIZ_DURATION]))) && (coordinates->pitch == note->data[PIZ_PITCH])) 
                         {
                             if (!note->isSelected)
                                 {
@@ -406,8 +393,8 @@ long pizSequenceInvertNoteWithCoordinates (PIZSequence *x, const PIZCoordinates 
                 {
                     pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
                     
-                    if (((coordinates->position >= p) && (coordinates->position <= 
-                        (p + note->data[PIZ_DURATION]))) && (coordinates->pitch == note->data[PIZ_PITCH]))
+                    if (((coordinates->position >= p) && (coordinates->position 
+                        <= (p + note->data[PIZ_DURATION]))) && (coordinates->pitch == note->data[PIZ_PITCH]))
                         {
                             if (note->isSelected) 
                                 {

@@ -244,6 +244,14 @@ typedef struct _PIZSequence {
     long                velocity;
     PIZSnapValue        grid;
     PIZSnapValue        noteValue;              //
+    long                tempStart;
+    long                tempEnd;
+    long                tempDown;
+    long                tempUp;
+    long                tempOriginStart;
+    long                tempOriginDown;
+    long                tempOriginWidth;
+    long                tempOriginHeight;
     } PIZSequence;
 
 // -------------------------------------------------------------------------------------------------------------

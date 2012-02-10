@@ -53,7 +53,8 @@ PIZLinklist *pizLinklistNew (void)
 {
     PIZLinklist *x = NULL;
         
-    if (x = (PIZLinklist *)malloc (sizeof(PIZLinklist))) {
+    if (x = (PIZLinklist *)malloc (sizeof(PIZLinklist))) 
+        {
             x->flags    = PIZ_LINKLIST_FLAG_FREE_MEMORY;
             x->count    = 0;
             x->head     = NULL;

@@ -112,19 +112,27 @@ PIZSequence *pizSequenceNew ( )
                     
                     pthread_mutex_init (&x->lock, NULL);
                     
-                    x->markedNote   = NULL;
+                    x->markedNote       = NULL;
                     
-                    x->start        = PIZ_DEFAULT_START;
-                    x->end          = PIZ_DEFAULT_END;
-                    x->down         = PIZ_DEFAULT_DOWN;
-                    x->up           = PIZ_DEFAULT_UP;
-                    x->count        = 0;
-                    x->index        = 0;
-                    x->chance       = PIZ_DEFAULT_CHANCE;
-                    x->channel      = PIZ_DEFAULT_CHANNEL;
-                    x->velocity     = 0;
-                    x->grid         = PIZ_SNAP_NONE;
-                    x->noteValue    = PIZ_SNAP_NONE;
+                    x->start            = PIZ_DEFAULT_START;
+                    x->end              = PIZ_DEFAULT_END;
+                    x->down             = PIZ_DEFAULT_DOWN;
+                    x->up               = PIZ_DEFAULT_UP;
+                    x->count            = 0;
+                    x->index            = 0;
+                    x->chance           = PIZ_DEFAULT_CHANCE;
+                    x->channel          = PIZ_DEFAULT_CHANNEL;
+                    x->velocity         = 0;
+                    x->grid             = PIZ_SNAP_NONE;
+                    x->noteValue        = PIZ_SNAP_NONE;
+                    x->tempStart        = PIZ_DEFAULT_START;
+                    x->tempEnd          = PIZ_DEFAULT_END;
+                    x->tempDown         = PIZ_DEFAULT_DOWN;
+                    x->tempUp           = PIZ_DEFAULT_UP;
+                    x->tempOriginStart  = PIZ_DEFAULT_START;
+                    x->tempOriginDown   = PIZ_DEFAULT_DOWN;
+                    x->tempOriginWidth  = (PIZ_DEFAULT_END - PIZ_DEFAULT_START);
+                    x->tempOriginHeight = (PIZ_DEFAULT_UP - PIZ_DEFAULT_DOWN);
                 }
             else
                 {
