@@ -952,6 +952,147 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *array)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+PIZError pizSequenceEncodeSlotToArray (PIZSequence *x, PIZGrowingArray *a)
+{
+    long err = PIZ_ERROR;
+    
+    PIZLOCK
+    
+    pizSequenceMakeMap (x);
+    
+    if (a)
+        {
+            long i;
+            
+            err  = PIZ_GOOD;
+            err |= pizGrowingArrayAppend (a, PIZ_SEQUENCE_VERSION);
+            err |= pizGrowingArrayAppend (a, x->grid);
+            err |= pizGrowingArrayAppend (a, x->noteValue);
+            err |= pizGrowingArrayAppend (a, x->start);
+            err |= pizGrowingArrayAppend (a, x->end);
+            err |= pizGrowingArrayAppend (a, x->down);
+            err |= pizGrowingArrayAppend (a, x->up);
+            err |= pizGrowingArrayAppend (a, x->count);
+            
+            for (i = 0; i < pizGrowingArrayCount (x->map); i++)
+                {   
+                    PIZNote *note       = NULL;
+                    PIZNote *nextNote   = NULL;
+                    
+                    long p = pizGrowingArrayValueAtIndex (x->map, i);
+                    
+                    pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+                    
+                    while (note)
+                        {
+                            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+                            
+                            err |= pizGrowingArrayAppend (a, note->originPosition);
+                            err |= pizGrowingArrayAppend (a, note->data[PIZ_PITCH]);
+                            err |= pizGrowingArrayAppend (a, note->data[PIZ_VELOCITY]);
+                            err |= pizGrowingArrayAppend (a, note->data[PIZ_DURATION]);
+                            err |= pizGrowingArrayAppend (a, note->data[PIZ_CHANNEL]);
+                            err |= pizGrowingArrayAppend (a, note->isSelected);
+                            err |= pizGrowingArrayAppend (a, (note == x->markedNote));
+                            
+                            note = nextNote;
+                        }
+                }
+        }
+    
+    PIZUNLOCK
+    
+    return err;
+}
+
+PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, const PIZGrowingArray *a)
+{
+    long err = PIZ_ERROR;
+    
+    PIZLOCK
+    
+    if (a)
+        {
+            long i, t;
+            
+            err = PIZ_GOOD;
+            
+            pizSequenceClearNotes (x);
+
+            if (t = pizGrowingArrayCount (a))
+                {
+                    long k, version, count, grid, noteValue;
+                    long *ptr = pizGrowingArrayPtr (a);
+                    
+                    version     = pizGrowingArrayValueAtIndex (a, 0);
+                    grid        = pizGrowingArrayValueAtIndex (a, 1);
+                    noteValue   = pizGrowingArrayValueAtIndex (a, 2);
+                    
+                    switch (grid) {
+                    case PIZ_WHOLE_NOTE_DOTTED          : x->grid = PIZ_WHOLE_NOTE_DOTTED;          break;
+                    case PIZ_WHOLE_NOTE                 : x->grid = PIZ_WHOLE_NOTE;                 break;
+                    case PIZ_WHOLE_NOTE_TRIPLET         : x->grid = PIZ_WHOLE_NOTE_TRIPLET;         break;
+                    case PIZ_HALF_NOTE_DOTTED           : x->grid = PIZ_HALF_NOTE_DOTTED;           break;
+                    case PIZ_HALF_NOTE                  : x->grid = PIZ_HALF_NOTE;                  break;
+                    case PIZ_HALF_NOTE_TRIPLET          : x->grid = PIZ_HALF_NOTE_TRIPLET;          break;
+                    case PIZ_QUARTER_NOTE_DOTTED        : x->grid = PIZ_QUARTER_NOTE_DOTTED;        break;
+                    case PIZ_QUARTER_NOTE               : x->grid = PIZ_QUARTER_NOTE;               break;
+                    case PIZ_QUARTER_NOTE_TRIPLET       : x->grid = PIZ_QUARTER_NOTE_TRIPLET;       break;
+                    case PIZ_EIGHTH_NOTE_DOTTED         : x->grid = PIZ_EIGHTH_NOTE_DOTTED;         break;
+                    case PIZ_EIGHTH_NOTE                : x->grid = PIZ_EIGHTH_NOTE;                break;
+                    case PIZ_EIGHTH_NOTE_TRIPLET        : x->grid = PIZ_EIGHTH_NOTE_TRIPLET;        break;
+                    case PIZ_SIXTEENTH_NOTE_DOTTED      : x->grid = PIZ_SIXTEENTH_NOTE_DOTTED;      break;
+                    case PIZ_SIXTEENTH_NOTE             : x->grid = PIZ_SIXTEENTH_NOTE;             break;
+                    case PIZ_SIXTEENTH_NOTE_TRIPLET     : x->grid = PIZ_SIXTEENTH_NOTE_TRIPLET;     break;
+                    case PIZ_THIRTY_SECOND_NOTE         : x->grid = PIZ_THIRTY_SECOND_NOTE;         break;
+                    case PIZ_THIRTY_SECOND_NOTE_TRIPLET : x->grid = PIZ_THIRTY_SECOND_NOTE_TRIPLET; break;
+                    case PIZ_SNAP_NONE                  : x->grid = PIZ_SNAP_NONE;                  break;
+                    }
+                    
+                    switch (noteValue) {
+                    case PIZ_WHOLE_NOTE_DOTTED          : x->noteValue = PIZ_WHOLE_NOTE_DOTTED;         break;
+                    case PIZ_WHOLE_NOTE                 : x->noteValue = PIZ_WHOLE_NOTE;                break;
+                    case PIZ_WHOLE_NOTE_TRIPLET         : x->noteValue = PIZ_WHOLE_NOTE_TRIPLET;        break;
+                    case PIZ_HALF_NOTE_DOTTED           : x->noteValue = PIZ_HALF_NOTE_DOTTED;          break;
+                    case PIZ_HALF_NOTE                  : x->noteValue = PIZ_HALF_NOTE;                 break;
+                    case PIZ_HALF_NOTE_TRIPLET          : x->noteValue = PIZ_HALF_NOTE_TRIPLET;         break;
+                    case PIZ_QUARTER_NOTE_DOTTED        : x->noteValue = PIZ_QUARTER_NOTE_DOTTED;       break;
+                    case PIZ_QUARTER_NOTE               : x->noteValue = PIZ_QUARTER_NOTE;              break;
+                    case PIZ_QUARTER_NOTE_TRIPLET       : x->noteValue = PIZ_QUARTER_NOTE_TRIPLET;      break;
+                    case PIZ_EIGHTH_NOTE_DOTTED         : x->noteValue = PIZ_EIGHTH_NOTE_DOTTED;        break;
+                    case PIZ_EIGHTH_NOTE                : x->noteValue = PIZ_EIGHTH_NOTE;               break;
+                    case PIZ_EIGHTH_NOTE_TRIPLET        : x->noteValue = PIZ_EIGHTH_NOTE_TRIPLET;       break;
+                    case PIZ_SIXTEENTH_NOTE_DOTTED      : x->noteValue = PIZ_SIXTEENTH_NOTE_DOTTED;     break;
+                    case PIZ_SIXTEENTH_NOTE             : x->noteValue = PIZ_SIXTEENTH_NOTE;            break;
+                    case PIZ_SIXTEENTH_NOTE_TRIPLET     : x->noteValue = PIZ_SIXTEENTH_NOTE_TRIPLET;    break;
+                    case PIZ_THIRTY_SECOND_NOTE         : x->noteValue = PIZ_THIRTY_SECOND_NOTE;        break;
+                    case PIZ_THIRTY_SECOND_NOTE_TRIPLET : x->noteValue = PIZ_THIRTY_SECOND_NOTE_TRIPLET;break;
+                    case PIZ_SNAP_NONE                  : x->noteValue = PIZ_SNAP_NONE;                 break;
+                    }
+    
+                    x->start    = pizGrowingArrayValueAtIndex (a, 3);
+                    x->end      = pizGrowingArrayValueAtIndex (a, 4);
+                    x->down     = pizGrowingArrayValueAtIndex (a, 5);
+                    x->up       = pizGrowingArrayValueAtIndex (a, 6);
+                    count       = pizGrowingArrayValueAtIndex (a, 7);
+                    
+                    k = 8;
+                    
+                    for (i = 0; i < count; i++)
+                        {
+                            if (!(pizSequenceAddNote (x, ptr + (i * PIZ_SEQUENCE_NOTE_SIZE) + k, 
+                                PIZ_SEQUENCE_ADD_MODE_UNSELECT))) {
+                                    err |= PIZ_ERROR;
+                                }
+                        }
+                }
+        }
+
+    PIZUNLOCK
+    
+    return err;
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -

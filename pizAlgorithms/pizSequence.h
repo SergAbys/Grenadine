@@ -315,6 +315,12 @@ PIZError     pizSequenceProceedStep                (PIZSequence *x, PIZGrowingAr
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+PIZError    pizSequenceEncodeSlotToArray        (PIZSequence *x, PIZGrowingArray *a);
+PIZError    pizSequenceDecodeSlotWithArray      (PIZSequence *x, const PIZGrowingArray *a);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 PIZ_LOCAL            PIZNote *pizSequenceAddNote            (PIZSequence *x, long *values, long mode);
 
 PIZ_LOCAL            void pizSequenceMakeMap                (PIZSequence *x);
