@@ -52,7 +52,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- *   
+ * \ingroup galoisLattice   
  */
  
 typedef struct _PIZGaloisLatticeConcept {
@@ -68,6 +68,7 @@ typedef struct _PIZGaloisLatticeConcept {
  * \remark  Implemented with an array of dynamic arrays, 
  *          one for each possible cardinal (the size of alphabet). 
  *          Dynamic arrays contains indexes of pre-allocated concepts (pool size is 128).
+ * \ingroup galoisLattice
  */
  
 typedef struct _PIZGaloisLattice {
@@ -112,6 +113,7 @@ PIZ_START_C_LINKAGE
  * PIZFiniteState *fsa = pizFiniteStateNew (0, NULL); // default value
  *
  * \endcode
+ * \ingroup galoisLattice
  */
 PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv);
 
@@ -119,6 +121,7 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv);
  * \brief   Free the lattice.
  * \details It is safe to pass NULL pointer. 
  * \param   x A Pointer.
+ * \ingroup galoisLattice
  */
 void pizGaloisLatticeFree (PIZGaloisLattice *x);
 
@@ -128,12 +131,14 @@ void pizGaloisLatticeFree (PIZGaloisLattice *x);
  * \param   argc The number of values.
  * \param   argv A pointer to the values.
  * \return  An error code.
+ * \ingroup galoisLattice
  */
 PIZError pizGaloisLatticeAdd (PIZGaloisLattice *x, long argc, long *argv);
 
 /**
  * \brief   Clear the lattice.
  * \param   x A valid pointer.
+ * \ingroup galoisLattice
  */
 void pizGaloisLatticeClear (PIZGaloisLattice *x);
 
@@ -144,6 +149,7 @@ void pizGaloisLatticeClear (PIZGaloisLattice *x);
  * \param   argc Number of values to proceed.
  * \param   argv Pointer to the array to fill.
  * \return  An error code.
+ * \ingroup galoisLattice
  */
 PIZError pizGaloisLatticeProceed (PIZGaloisLattice *x, long argc, long *argv);
 
@@ -151,6 +157,7 @@ PIZError pizGaloisLatticeProceed (PIZGaloisLattice *x, long argc, long *argv);
  * \brief   Get the number of concepts in the lattice.
  * \param   x A valid pointer.
  * \return  The number of concepts.
+ * \ingroup galoisLattice
  */
 long pizGaloisLatticeCount (const PIZGaloisLattice *x);
 

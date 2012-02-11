@@ -52,7 +52,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- *  
+ * \ingroup finiteState
  */
  
 typedef struct _PIZFiniteStateNode {
@@ -65,6 +65,7 @@ typedef struct _PIZFiniteStateNode {
 /** 
  * \remark  Implemented with an array of bounded queues, one per alphabet's value (alphabet is 0-127). 
  *          Bounded queues contains indexes of pre-allocated nodes (pool size is 128).
+ * \ingroup finiteState
  */
  
 typedef struct _PIZFiniteState {
@@ -103,6 +104,7 @@ PIZ_START_C_LINKAGE
  * PIZFiniteState *fsa = pizFiniteStateNew (0, NULL); // default value
  *
  * \endcode
+ * \ingroup finiteState
  */
 PIZFiniteState *pizFiniteStateNew (long argc, long *argv);
 
@@ -110,6 +112,7 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv);
  * \brief   Free the automaton.
  * \details It is safe to pass NULL pointer. 
  * \param   x A Pointer.
+ * \ingroup finiteState
  */
 void pizFiniteStateFree (PIZFiniteState *x);
 
@@ -120,12 +123,14 @@ void pizFiniteStateFree (PIZFiniteState *x);
  * \param   argv A pointer to the values.
  * \return  An error code.
  * \remark  The number of nodes can not be more than 128 at a given time, exceedings ones will be ignored.
+ * \ingroup finiteState
  */
 PIZError pizFiniteStateAdd (PIZFiniteState *x, long argc, long *argv);
 
 /**
  * \brief   Clear the automaton.
  * \param   x A valid pointer.
+ * \ingroup finiteState
  */
 void pizFiniteStateClear (PIZFiniteState *x);
 
@@ -137,6 +142,7 @@ void pizFiniteStateClear (PIZFiniteState *x);
  * \param   argc Number of step to proceed.
  * \param   argv Pointer to the array.
  * \return  An error code.
+ * \ingroup finiteState
  */
 PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv);
 
@@ -144,6 +150,7 @@ PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv);
  * \brief   Get the number of nodes in the automaton.
  * \param   x A valid pointer.
  * \return  The number of nodes.
+ * \ingroup finiteState
  */
 long pizFiniteStateCount (const PIZFiniteState *x);
 

@@ -67,6 +67,7 @@ typedef struct _PIZFactorOracleNode {
  * \remark  Implemented with dynamic array of nodes ; For each node, arcs are stored in dynamic arrays too.
             Node's dynamic arrays are created on the \a first query and keep in memory 
             until pizFactorOracleFree() is called.
+ * \ingroup factorOracle
  */
      
 typedef struct _PIZFactorOracle {
@@ -99,6 +100,7 @@ PIZ_START_C_LINKAGE
  * PIZFactorOracle *oracle = pizFactorOracleNew (0, NULL);
  *
  * \endcode
+ * \ingroup factorOracle
  */
 PIZFactorOracle *pizFactorOracleNew (long argc, long *argv);
 
@@ -106,6 +108,7 @@ PIZFactorOracle *pizFactorOracleNew (long argc, long *argv);
  * \brief   Free the factor oracle.
  * \details It is safe to pass NULL pointer. 
  * \param   x A Pointer.
+ * \ingroup factorOracle
  */
 void pizFactorOracleFree (PIZFactorOracle *x);
 
@@ -116,12 +119,14 @@ void pizFactorOracleFree (PIZFactorOracle *x);
  * \param   argv A pointer to the values.
  * \return  An error code.
  * \remark  The number of allocated nodes is doubled in case of exceeding.
+ * \ingroup factorOracle
  */
 PIZError pizFactorOracleAdd (PIZFactorOracle *x, long argc, long *argv);
 
 /**
  * \brief   Clear the factor oracle.
  * \param   x A valid pointer.
+ * \ingroup factorOracle
  */
 void pizFactorOracleClear (PIZFactorOracle *x);
 
@@ -135,6 +140,7 @@ void pizFactorOracleClear (PIZFactorOracle *x);
  * \param   argc Number of step to proceed.
  * \param   argv Pointer to the array.
  * \return  An error code.
+ * \ingroup factorOracle
  */
 PIZError pizFactorOracleProceed (PIZFactorOracle *x, long argc, long *argv);
 
@@ -142,6 +148,7 @@ PIZError pizFactorOracleProceed (PIZFactorOracle *x, long argc, long *argv);
  * \brief   Get the number of nodes in the factor oracle.
  * \param   x A valid pointer.
  * \return  The number of nodes.
+ * \ingroup factorOracle
  */
 long pizFactorOracleCount (const PIZFactorOracle *x);
 

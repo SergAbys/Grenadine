@@ -2,6 +2,7 @@
  * \file    pizQueue.h
  * \author  Jean Sapristi
  * \date    31 janvier 2012
+ * \ingroup queue
  */
 
 /*
@@ -50,7 +51,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * 
+ * \ingroup queue
  */
  
 typedef struct _PIZQueueElement {
@@ -61,6 +62,7 @@ typedef struct _PIZQueueElement {
 
 /**
  * \remark Implemented with a linklist.
+ * \ingroup queue
  */
  
 typedef struct _PIZQueue {
@@ -79,6 +81,7 @@ PIZ_START_C_LINKAGE
  * \brief   Create the queue.
  * \details In case of failure the pointer is NULL.
  * \return  A pointer to the new queue.
+ * \ingroup queue
  */
 PIZQueue *pizQueueNew (void); 
 
@@ -86,12 +89,14 @@ PIZQueue *pizQueueNew (void);
  * \brief   Free the queue.
  * \details It is safe to pass NULL pointer.
  * \param   x A Pointer.
+ * \ingroup queue
  */
 void pizQueueFree (PIZQueue *x);
 
 /**
  * \brief   Clear the queue.
  * \param   x A valid pointer.
+ * \ingroup queue
  */
 void pizQueueClear (PIZQueue *x);
 
@@ -100,6 +105,7 @@ void pizQueueClear (PIZQueue *x);
  * \param   x A valid pointer.
  * \param   value The value to append.
  * \return  An error code.
+ * \ingroup queue
  */
 PIZError pizQueueAppend (PIZQueue *x, long value);
 
@@ -109,6 +115,7 @@ PIZError pizQueueAppend (PIZQueue *x, long value);
  *          Return PIZ_ERROR if the queue is empty.
  * \param   x A valid pointer.
  * \return  An error code.
+ * \ingroup queue
  */
 PIZError pizQueuePop (PIZQueue *x);
 
@@ -118,6 +125,7 @@ PIZError pizQueuePop (PIZQueue *x);
  *          Return PIZ_ERROR if the queue is empty.
  * \param   x A valid pointer.
  * \return  An error code.
+ * \ingroup queue
  */
 PIZError pizQueuePopLastValue (PIZQueue *x);
 
@@ -125,6 +133,7 @@ PIZError pizQueuePopLastValue (PIZQueue *x);
  * \brief   Get the number of values in the queue.
  * \param   x A valid pointer.
  * \return  The number of values.
+ * \ingroup queue
  */
 long pizQueueCount (const PIZQueue *x);
 
@@ -133,6 +142,7 @@ long pizQueueCount (const PIZQueue *x);
  * \remark  This value is initialized with -1. 
  * \param   x A valid pointer.
  * \return  The value.
+ * \ingroup queue
  */
 long pizQueuePoppedValue (const PIZQueue *x);
 

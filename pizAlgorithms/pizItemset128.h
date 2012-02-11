@@ -2,6 +2,7 @@
  * \file    pizItemset128.h
  * \author  Jean Sapristi
  * \date    31 janvier 2012
+ * \ingroup itemset128
  */
  
 /*
@@ -57,6 +58,7 @@
 /**
  * \def     PIZ_ITEMSET128_SIZE 
  * \brief   Number of bits in the bit field.
+ * \ingroup itemset128
  */
  
 #define PIZ_ITEMSET128_SIZE 128
@@ -71,7 +73,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * 
+ * \ingroup itemset128 
  */
 typedef struct _PIZItemset128 {
     unsigned long items[4];                             /*!< 128 Bits field as 4 \c long */
@@ -87,6 +89,7 @@ PIZ_START_C_LINKAGE
  * \param   itemset A valid pointer.
  * \param   index The index (zero-based).
  * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
+ * \ingroup itemset128
  */
 void pizItemset128SetAtIndex (PIZItemset128 *itemset, long index);
 
@@ -95,12 +98,14 @@ void pizItemset128SetAtIndex (PIZItemset128 *itemset, long index);
  * \param   itemset A valid pointer.
  * \param   index The index (zero-based).
  * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
+ * \ingroup itemset128
  */
 void pizItemset128UnsetAtIndex (PIZItemset128 *itemset, long index);
 
 /**
  * \brief   Set/let all bits to 0.
  * \param   itemset A valid pointer.
+ * \ingroup itemset128
  */
 void pizItemset128Clear (PIZItemset128 *itemset);
 
@@ -108,6 +113,7 @@ void pizItemset128Clear (PIZItemset128 *itemset);
  * \brief   Get the number of set bits.
  * \param   itemset A valid pointer.
  * \return  The number of set bits.
+ * \ingroup itemset128
  */
 long pizItemset128Count (const PIZItemset128 *itemset);
 
@@ -117,6 +123,7 @@ long pizItemset128Count (const PIZItemset128 *itemset);
  * \param   index The index (zero-based).
  * \return  True if set, otherwise false.
  * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
+ * \ingroup itemset128
  */
 bool pizItemset128IsSetAtIndex  (const PIZItemset128 *itemset, long index);
 
@@ -126,6 +133,7 @@ bool pizItemset128IsSetAtIndex  (const PIZItemset128 *itemset, long index);
  * \param   a A valid pointer.
  * \param   b A valid pointer.
  * \param   r A valid pointer.
+ * \ingroup itemset128
  */
 void pizItemset128Union (const PIZItemset128 *a, const PIZItemset128 *b, PIZItemset128 *r);
 
@@ -135,6 +143,7 @@ void pizItemset128Union (const PIZItemset128 *a, const PIZItemset128 *b, PIZItem
  * \param   a A valid pointer.
  * \param   b A valid pointer.
  * \param   r A valid pointer.
+ * \ingroup itemset128
  */
 void pizItemset128Intersection (const PIZItemset128 *a, const PIZItemset128 *b, PIZItemset128 *r);
 
@@ -143,6 +152,7 @@ void pizItemset128Intersection (const PIZItemset128 *a, const PIZItemset128 *b, 
  * \param   a A valid pointer.
  * \param   b A valid pointer.
  * \return  True if included, otherwise false.
+ * \ingroup itemset128
  */
 bool pizItemset128IsIncluded (const PIZItemset128 *a, const PIZItemset128 *b);
 
@@ -151,6 +161,7 @@ bool pizItemset128IsIncluded (const PIZItemset128 *a, const PIZItemset128 *b);
  * \param   a A valid pointer.
  * \param   b A valid pointer.
  * \return  True if equal, otherwise false.
+ * \ingroup itemset128
  */
 bool pizItemset128IsEqual (const PIZItemset128 *a, const PIZItemset128 *b);
 

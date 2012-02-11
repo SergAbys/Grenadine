@@ -2,6 +2,7 @@
  * \file    pizHashTable.h
  * \author  Jean Sapristi
  * \date    23 janvier 2012
+ * \ingroup hashTable
  */
  
 /*
@@ -53,11 +54,13 @@
 /**
  * \def     PIZ_HASHTABLE_FLAG_NONE 
  * \brief   (DEFAULT) Don't free items.
+ * \ingroup hashTable
  */
  
 /**
  * \def     PIZ_HASHTABLE_FLAG_FREE_MEMORY 
  * \brief   Free items with \c free().
+ * \ingroup hashTable
  */
  
 #define PIZ_HASHTABLE_FLAG_NONE         (0L)
@@ -67,7 +70,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * 
+ * \ingroup hashTable 
  */
  
 typedef struct _PIZHashTableElement {
@@ -79,6 +82,7 @@ typedef struct _PIZHashTableElement {
  * \remark  Simple hashtable with \c long keys. 
  *          Implemented with an array of linklists.
  *          To obtain the hash value : index =  key % size.
+ * \ingroup hashTable
  */
  
 typedef struct _PIZHashTable {
@@ -107,6 +111,7 @@ PIZ_START_C_LINKAGE
  * hashtab = pizHashTableNew (0);   // default value.
  *
  * \endcode 
+ * \ingroup hashTable
  */
 PIZHashTable *pizHashTableNew (long size);
 
@@ -114,6 +119,7 @@ PIZHashTable *pizHashTableNew (long size);
  * \brief   Set hashtable's bit flags.
  * \param   x A valid pointer.
  * \param   flags Bit flags.
+ * \ingroup hashTable
  */
 void pizHashTableSetFlags (PIZHashTable *x, long flags);
 
@@ -122,6 +128,7 @@ void pizHashTableSetFlags (PIZHashTable *x, long flags);
  * \details It is safe to pass NULL pointer. 
  *          Item's memory is released according to flags.
  * \param   x A Pointer.
+ * \ingroup hashTable
  */
 void pizHashTableFree (PIZHashTable *x);
 
@@ -129,6 +136,7 @@ void pizHashTableFree (PIZHashTable *x);
  * \brief   Clear the hashtable.
  * \details Item's memory is released according to flags.
  * \param   x A valid pointer.
+ * \ingroup hashTable
  */
 void pizHashTableClear (PIZHashTable *x);
 
@@ -141,6 +149,7 @@ void pizHashTableClear (PIZHashTable *x);
  * \param   ptr A pointer to the item.
  * \return  An error code.
  * \remark  It is safe to add items with equal keys.
+ * \ingroup hashTable
  */
 PIZError pizHashTableAdd (PIZHashTable *x, long key, void *ptr);
 
@@ -151,6 +160,7 @@ PIZError pizHashTableAdd (PIZHashTable *x, long key, void *ptr);
  * \param   key The key.
  * \param   ptr A pointer to the item.
  * \return  An error code.
+ * \ingroup hashTable
  */
 PIZError pizHashTableRemoveByKeyAndPtr (PIZHashTable *x, long key, void *ptr);
 
@@ -161,6 +171,7 @@ PIZError pizHashTableRemoveByKeyAndPtr (PIZHashTable *x, long key, void *ptr);
  * \param   ptr The adress of a pointer to set.
  * \return  An error code.
  * \remark  In case of equal keys, older item is returned.
+ * \ingroup hashTable
  */
 PIZError pizHashTablePtrByKey (const PIZHashTable *x, long key, void **ptr);
 
@@ -169,6 +180,7 @@ PIZError pizHashTablePtrByKey (const PIZHashTable *x, long key, void **ptr);
  * \param   x A valid pointer.
  * \param   key The key.
  * \return  True if found the key, otherwise false.
+ * \ingroup hashTable
  */
 bool pizHashTableContainsKey (const PIZHashTable *x, long key);
 
@@ -176,6 +188,7 @@ bool pizHashTableContainsKey (const PIZHashTable *x, long key);
  * \brief   Get the number of items in the hashtable.
  * \param   x A valid pointer.
  * \return  The number of items in the hashtable.
+ * \ingroup hashTable
  */
 long pizHashTableCount (const PIZHashTable *x);
 

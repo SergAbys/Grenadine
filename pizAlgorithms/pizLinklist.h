@@ -2,6 +2,7 @@
  * \file    pizLinklist.h
  * \author  Jean Sapristi
  * \date    15 janvier 2012
+ * \ingroup linklist
  */
 
 /*
@@ -52,16 +53,19 @@
 /**
  * \def     PIZ_LINKLIST_FLAG_NONE 
  * \brief   Don't free items.
+ * \ingroup linklist
  */
  
 /**
  * \def     PIZ_LINKLIST_FLAG_FREE_MEMORY 
  * \brief   (DEFAULT) Free items with \c free().
+ * \ingroup linklist
  */
  
 /**
  * \def     PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY 
  * \brief   Free items with \c pizGrowingArrayFree().
+ * \ingroup linklist
  */
  
 #define PIZ_LINKLIST_FLAG_NONE                  (0L)
@@ -72,7 +76,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * 
+ * \ingroup linklist
  */
  
 typedef struct _PIZLinklistElement {
@@ -82,7 +86,7 @@ typedef struct _PIZLinklistElement {
     } PIZLinklistElement;
 
 /**
- * 
+ * \ingroup linklist 
  */
  
 typedef struct _PIZLinklist {
@@ -102,6 +106,7 @@ PIZ_START_C_LINKAGE
  * \brief   Create the linklist.
  * \details In case of failure the pointer is NULL.
  * \return  A pointer to the new linklist.
+ * \ingroup linklist
  */
 PIZLinklist *pizLinklistNew (void);
 
@@ -109,6 +114,7 @@ PIZLinklist *pizLinklistNew (void);
  * \brief   Set linklist's bit flags.
  * \param   x A valid pointer.
  * \param   flags Bit flags.
+ * \ingroup linklist
  */
 void pizLinklistSetFlags (PIZLinklist *x, long flags);
 
@@ -117,6 +123,7 @@ void pizLinklistSetFlags (PIZLinklist *x, long flags);
  * \details It is safe to pass NULL pointer. 
  *          Item's memory is released according to flags.
  * \param   x A Pointer.
+ * \ingroup linklist
  */
 void pizLinklistFree (PIZLinklist *x);
 
@@ -124,6 +131,7 @@ void pizLinklistFree (PIZLinklist *x);
  * \brief   Clear the linklist.
  * \details Item's memory is released according to flags.
  * \param   x A valid pointer.
+ * \ingroup linklist
  */
 void pizLinklistClear (PIZLinklist *x);
 
@@ -133,6 +141,7 @@ void pizLinklistClear (PIZLinklist *x);
  * \param   x A valid pointer.
  * \param   ptr A pointer to the item.
  * \return  An error code.
+ * \ingroup linklist
  */
 PIZError pizLinklistAppend (PIZLinklist *x, void *ptr);
 
@@ -142,6 +151,7 @@ PIZError pizLinklistAppend (PIZLinklist *x, void *ptr);
  * \param   x A valid pointer.
  * \param   ptr A pointer to the item.
  * \return  An error code.
+ * \ingroup linklist
  */
 PIZError pizLinklistInsert (PIZLinklist *x, void *ptr);
 
@@ -152,6 +162,7 @@ PIZError pizLinklistInsert (PIZLinklist *x, void *ptr);
  * \param   index The index (zero-based).
  * \param   ptr The adress of the pointer to set.
  * \return  An error code.
+ * \ingroup linklist
  */
 PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr);
 
@@ -178,6 +189,7 @@ PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr);
  * }
  *
  * \endcode
+ * \ingroup linklist
  */
 PIZError pizLinklistNextByPtr (PIZLinklist *x, void *ptr, void **nextPtr);
 
@@ -187,6 +199,7 @@ PIZError pizLinklistNextByPtr (PIZLinklist *x, void *ptr, void **nextPtr);
  * \param   x A valid pointer.
  * \param   ptr The item's pointer provided.
  * \return  An error code.
+ * \ingroup linklist
  */
 PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr);
 
@@ -196,6 +209,7 @@ PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr);
  * \param   m Item's index (zero-based).
  * \param   n Item's index (zero-based).
  * \return  An error code.
+ * \ingroup linklist
  */
 PIZError pizLinklistSwapByIndexes (PIZLinklist *x, long m, long n);
 
@@ -203,6 +217,7 @@ PIZError pizLinklistSwapByIndexes (PIZLinklist *x, long m, long n);
  * \brief   Get the number of items in the linklist.
  * \param   x A valid pointer.
  * \return  The number of items.
+ * \ingroup linklist
  */
 long pizLinklistCount (const PIZLinklist *x);
 

@@ -2,6 +2,7 @@
  * \file    pizGrowingArray.h
  * \author  Jean Sapristi
  * \date    26 janvier 2012
+ * \ingroup growingArray
  */
  
 /*
@@ -50,7 +51,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * 
+ * \ingroup growingArray
  */
  
 typedef struct _PIZGrowingArray {
@@ -77,6 +78,7 @@ PIZ_START_C_LINKAGE
  * array = pizGrowingArrayNew (0);  // default value is 4.
  *
  * \endcode 
+ * \ingroup growingArray
  */
 PIZGrowingArray *pizGrowingArrayNew (long size);
 
@@ -84,12 +86,14 @@ PIZGrowingArray *pizGrowingArrayNew (long size);
  * \brief   Free the dynamic array.
  * \details It is safe to pass NULL pointer.
  * \param   x A Pointer.
+ * \ingroup growingArray
  */
 void pizGrowingArrayFree (PIZGrowingArray *x);
 
 /**
  * \brief   Clear the dynamic array.
  * \param   x A valid pointer.
+ * \ingroup growingArray
  */
 void pizGrowingArrayClear (PIZGrowingArray *x);
 
@@ -99,6 +103,7 @@ void pizGrowingArrayClear (PIZGrowingArray *x);
  * \param   value The value to append.
  * \return  An error code.
  * \remark  The memory is doubled in case of exceeding.
+ * \ingroup growingArray
  */
 PIZError pizGrowingArrayAppend (PIZGrowingArray *x, long value);
 
@@ -108,6 +113,7 @@ PIZError pizGrowingArrayAppend (PIZGrowingArray *x, long value);
  * \param   index The index (zero-based).
  * \param   value The value.
  * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
+ * \ingroup growingArray
  */
 void pizGrowingArraySetValueAtIndex (PIZGrowingArray *x, long index, long value);
 
@@ -115,6 +121,7 @@ void pizGrowingArraySetValueAtIndex (PIZGrowingArray *x, long index, long value)
  * \brief   Get the number of values in the array.
  * \param   x A valid pointer.
  * \return  The number of values.
+ * \ingroup growingArray
  */
 long pizGrowingArrayCount (const PIZGrowingArray *x);
 
@@ -124,6 +131,7 @@ long pizGrowingArrayCount (const PIZGrowingArray *x);
  * \param   index The index (zero-based).
  * \return  The value.
  * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
+ * \ingroup growingArray
  */
 long pizGrowingArrayValueAtIndex (const PIZGrowingArray *x, long index);
 
@@ -132,6 +140,7 @@ long pizGrowingArrayValueAtIndex (const PIZGrowingArray *x, long index);
  * \param   x A valid pointer.
  * \return  The pointer.
  * \warning This function is provided for efficiency but it should be used carefully.
+ * \ingroup growingArray
  */
 long *pizGrowingArrayPtr (const PIZGrowingArray *x); 
 
@@ -139,12 +148,14 @@ long *pizGrowingArrayPtr (const PIZGrowingArray *x);
  * \brief   Remove the value at a specified index.
  * \param   x A valid pointer.
  * \param   index The index.
+ * \ingroup growingArray
  */
 void pizGrowingArrayRemoveIndex (PIZGrowingArray *x, long index);
 
 /**
  * \brief   Remove the last value.
  * \param   x A valid pointer.
+ * \ingroup growingArray
  */
 PIZError pizGrowingArrayRemoveLastValue (PIZGrowingArray *x);
 
@@ -153,6 +164,7 @@ PIZError pizGrowingArrayRemoveLastValue (PIZGrowingArray *x);
  * \param   x A valid pointer.
  * \param   value The value to find.
  * \return  The index if found, otherwise -1.
+ * \ingroup growingArray
  */
 long pizGrowingArrayFirstIndexOfValue (const PIZGrowingArray *x, long value);
 
@@ -161,6 +173,7 @@ long pizGrowingArrayFirstIndexOfValue (const PIZGrowingArray *x, long value);
  * \param   x A valid pointer.
  * \param   value The value to find.
  * \return  True if found, otherwise false.
+ * \ingroup growingArray
  */
 bool pizGrowingArrayContainsValue (const PIZGrowingArray *x, long value);
 
@@ -170,6 +183,7 @@ bool pizGrowingArrayContainsValue (const PIZGrowingArray *x, long value);
  * \param   toCopy A valid pointer to the dynamic array to be copied.
  * \return  An error code.
  * \remark  The new memory size reallocated is the memory size of the copied array in case of exceeding.
+ * \ingroup growingArray
  */
 PIZError pizGrowingArrayCopy (PIZGrowingArray *x, const PIZGrowingArray *toCopy);
 
@@ -179,6 +193,7 @@ PIZError pizGrowingArrayCopy (PIZGrowingArray *x, const PIZGrowingArray *toCopy)
  * \param   toAppend A valid pointer to the dynamic array to be appended.
  * \return  An error code.
  * \remark  The new memory size reallocated is the sum of both memory sizes in case of exceeding.
+ * \ingroup growingArray
  */
 PIZError pizGrowingArrayAppendArray (PIZGrowingArray *x, const PIZGrowingArray *toAppend);
 
@@ -188,6 +203,7 @@ PIZError pizGrowingArrayAppendArray (PIZGrowingArray *x, const PIZGrowingArray *
  * \param   argc The number of values to append.
  * \param   argv The pointer to the values to append.
  * \remark  The new memory size is set according to a geometric progression of ratio 2.
+ * \ingroup growingArray
  */
 PIZError pizGrowingArrayAppendPtr (PIZGrowingArray *x, long argc, long *argv);
 

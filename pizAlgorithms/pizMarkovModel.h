@@ -53,6 +53,7 @@
 
 /**
  * \remark Implemented simply with arrays.
+ * \ingroup markovModel
  */
  
 typedef struct _PIZMarkovModel {
@@ -98,6 +99,7 @@ PIZ_START_C_LINKAGE
  * PIZMarkovModel *hmm = pizMarkovModelNew (0, NULL); // default values
  *
  * \endcode
+ * \ingroup markovModel
  */
 PIZMarkovModel *pizMarkovModelNew (long argc, long *argv);
 
@@ -105,6 +107,7 @@ PIZMarkovModel *pizMarkovModelNew (long argc, long *argv);
  * \brief   Free the HMM.
  * \details It is safe to pass NULL pointer. 
  * \param   x A Pointer.
+ * \ingroup markovModel
  */
 void pizMarkovModelFree (PIZMarkovModel *x);
 
@@ -116,12 +119,14 @@ void pizMarkovModelFree (PIZMarkovModel *x);
  * \return  An error code.
  * \remark  The HMM use kind of Baum-Welch algorithm to learn data.
  *          Values provided are clipped [0, 127].
+ * \ingroup markovModel
  */
 PIZError pizMarkovModelAdd (PIZMarkovModel *x, long argc, long *argv);
 
 /**
  * \brief   Clear the HMM.
  * \param   x A valid pointer.
+ * \ingroup markovModel
  */
 void pizMarkovModelClear (PIZMarkovModel *x);
 
@@ -131,6 +136,7 @@ void pizMarkovModelClear (PIZMarkovModel *x);
  * \param   argc Number of values to proceed.
  * \param   argv Pointer to the array to fill.
  * \return  An error code.
+ * \ingroup markovModel
  */
 PIZError pizMarkovModelProceed (const PIZMarkovModel *x, long argc, long *argv);
 
@@ -138,6 +144,7 @@ PIZError pizMarkovModelProceed (const PIZMarkovModel *x, long argc, long *argv);
  * \brief   Get the number of learnings currently performed.
  * \param   x A valid pointer.
  * \return  The number of learnings.
+ * \ingroup markovModel
  */
 long pizMarkovModelCount (const PIZMarkovModel *x);
 

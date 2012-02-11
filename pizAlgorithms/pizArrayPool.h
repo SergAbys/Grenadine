@@ -2,7 +2,7 @@
  * \file    pizArrayPool.h
  * \author  Jean Sapristi
  * \date    15 janvier 2012
- * \remark  Multi-Threaded with single global mutex.
+ * \ingroup arrayPool
  */
  
 /*
@@ -61,6 +61,7 @@
  * \remark  Implemented with a linklist.
  * \warning It is currently a very simple approach, and should be improved ;
  *          If an array is not released, the pool will grow dramatically for each query.
+ * \ingroup arrayPool
  */
  
 typedef struct _PIZArrayPool {
@@ -93,6 +94,7 @@ PIZ_START_C_LINKAGE
  * pool = pizArrayPoolNew (0, NULL);  // default values.
  *
  * \endcode
+ * \ingroup arrayPool
  */
 PIZArrayPool *pizArrayPoolNew (long argc, long *argv);
 
@@ -100,6 +102,7 @@ PIZArrayPool *pizArrayPoolNew (long argc, long *argv);
  * \brief   Free the pool of dynamic arrays.
  * \details It is safe to pass NULL pointer. 
  * \param   x A Pointer.
+ * \ingroup arrayPool
  */
 void pizArrayPoolFree (PIZArrayPool *x);
 
@@ -108,6 +111,7 @@ void pizArrayPoolFree (PIZArrayPool *x);
  * \details In case of failure the pointer is NULL.
  * \param   x A valid pointer.
  * \return  A pointer to the dynamic array.
+ * \ingroup arrayPool
  */
 PIZGrowingArray *pizArrayPoolGetArray (PIZArrayPool *x);
 
@@ -116,6 +120,7 @@ PIZGrowingArray *pizArrayPoolGetArray (PIZArrayPool *x);
  * \param   x A valid pointer.
  * \param   a A pointer to the dynamic array.
  * \return  An error code.
+ * \ingroup arrayPool
  */
 PIZError pizArrayPoolReleaseArray (PIZArrayPool *x, PIZGrowingArray *a);
 

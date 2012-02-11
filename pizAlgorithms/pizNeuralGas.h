@@ -52,7 +52,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- *   
+ * \ingroup neuralGas  
  */
  
 typedef struct _PIZNeuralGasHead {
@@ -69,6 +69,7 @@ typedef struct _PIZNeuralGasHead {
  *          Implemented with two synchronized pools  
  *          (one of pre-allocated heads, one of pre-allocated vectors), 
  *          and a map to mark slots used. 
+ * \ingroup neuralGas
  */
  
 typedef struct _PIZNeuralGas {
@@ -113,6 +114,7 @@ PIZ_START_C_LINKAGE
  * PIZKohonenMap *map = pizKohonenMapNew (0, NULL); // default values
  *
  * \endcode
+ * \ingroup neuralGas
  */
 PIZNeuralGas *pizNeuralGasNew (long argc, long *argv);
 
@@ -120,6 +122,7 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv);
  * \brief   Free the neural gas.
  * \details It is safe to pass NULL pointer. 
  * \param   x A Pointer.
+ * \ingroup neuralGas
  */
 void pizNeuralGasFree (PIZNeuralGas *x);
 
@@ -131,12 +134,14 @@ void pizNeuralGasFree (PIZNeuralGas *x);
  * \return  An error code.
  * \remark  The birth and death of nodes occurs according to lambda value (1 time out of lambda).
  *          Values provided are clipped [0, 127].
+ * \ingroup neuralGas
  */
 PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv);
 
 /**
  * \brief   Clear the neural gas.
  * \param   x A valid pointer.
+ * \ingroup neuralGas
  */
 void pizNeuralGasClear (PIZNeuralGas *x);
 
@@ -147,6 +152,7 @@ void pizNeuralGasClear (PIZNeuralGas *x);
  * \param   argc Number of values to proceed.
  * \param   argv Pointer to the array to fill.
  * \return  An error code.
+ * \ingroup neuralGas
  */
 PIZError pizNeuralGasProceed (const PIZNeuralGas *x, long argc, long *argv);
 
@@ -154,6 +160,7 @@ PIZError pizNeuralGasProceed (const PIZNeuralGas *x, long argc, long *argv);
  * \brief   Get the number of learnings currently performed.
  * \param   x A valid pointer.
  * \return  The number of learnings.
+ * \ingroup neuralGas
  */
 long pizNeuralGasCount (const PIZNeuralGas *x);
 

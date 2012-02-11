@@ -2,6 +2,7 @@
  * \file    pizTypes.h
  * \author  Jean Sapristi
  * \date    31 janvier 2012
+ * \ingroup types
  */
  
 /*
@@ -46,6 +47,7 @@
 
 /**
  * \brief Error codes.
+ * \ingroup types
  */
  
 typedef enum {
@@ -59,6 +61,7 @@ typedef enum {
 
 /**
  * \brief Compute the maximum of \a x and \a y.
+ * \ingroup types
  */
  
 #ifndef MAX
@@ -67,6 +70,7 @@ typedef enum {
 
 /**
  * \brief Compute the minimum of \a x and \a y.
+ * \ingroup types
  */
  
 #ifndef MIN
@@ -75,6 +79,7 @@ typedef enum {
 
 /**
  * \brief Compute absolute value of \a x.
+ * \ingroup types
  */
  
 #ifndef ABS
@@ -83,6 +88,7 @@ typedef enum {
 
 /**
  * \brief Keep \a x between \a a and \a b.
+ * \ingroup types
  */
  
 #ifndef CLAMP
@@ -93,18 +99,21 @@ typedef enum {
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \def   true 
- * \brief Boolean value.
+ * \def     true 
+ * \brief   Boolean value.
+ * \ingroup types
  */
  
 /**
- * \def   false 
- * \brief Boolean value.
+ * \def     false 
+ * \brief   Boolean value.
+ * \ingroup types
  */
  
 /**
- * \def   bool 
- * \brief Boolean type.
+ * \def     bool 
+ * \brief   Boolean type.
+ * \ingroup types
  */
  
 #ifndef __cplusplus
@@ -120,7 +129,8 @@ typedef enum {
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief Hide the function in the exported symbol table.
+ * \brief   Hide the function in the exported symbol table.
+ * \ingroup types
  */
  
 #ifndef WIN_VERSION
@@ -133,8 +143,9 @@ typedef enum {
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \def   PIZ_INLINE
- * \brief Inline the function.
+ * \def     PIZ_INLINE
+ * \brief   Inline the function.
+ * \ingroup types
  */
  
 #ifndef WIN_VERSION
@@ -149,7 +160,8 @@ typedef enum {
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief For C++ linker.
+ * \brief   For C++ linker.
+ * \ingroup types
  */
  
 #ifdef __cplusplus
@@ -160,7 +172,8 @@ typedef enum {
 #endif 
 
 /**
- * \brief For C++ linker.
+ * \brief   For C++ linker.
+ * \ingroup types
  */
  
 #ifdef __cplusplus

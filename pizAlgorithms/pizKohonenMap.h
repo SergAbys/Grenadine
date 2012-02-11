@@ -54,6 +54,7 @@
 /**
  * \details This is a \a ONE dimension self-organizing map.
  * \remark  Implemented simply with an array.
+ * \ingroup kohonenMap
  */
  
 typedef struct _PIZKohonenMap {
@@ -91,6 +92,7 @@ PIZ_START_C_LINKAGE
  * PIZKohonenMap *map = pizKohonenMapNew (0, NULL); // default values
  *
  * \endcode
+ * \ingroup kohonenMap
  */
 PIZKohonenMap *pizKohonenMapNew (long argc, long *argv);
 
@@ -98,6 +100,7 @@ PIZKohonenMap *pizKohonenMapNew (long argc, long *argv);
  * \brief   Free the Kohonen map.
  * \details It is safe to pass NULL pointer. 
  * \param   x A Pointer.
+ * \ingroup kohonenMap
  */
 void pizKohonenMapFree (PIZKohonenMap *x);
 
@@ -109,12 +112,14 @@ void pizKohonenMapFree (PIZKohonenMap *x);
  * \return  An error code.
  * \remark  Values provided are clipped [0, 127].
  *          The Kohonen map continue to learn even when the number of learnings planned is reached.
+ * \ingroup kohonenMap
  */
 PIZError pizKohonenMapAdd (PIZKohonenMap *x, long argc, long *argv);
 
 /**
  * \brief   Clear the Kohonen map.
  * \param   x A valid pointer.
+ * \ingroup kohonenMap
  */
 void pizKohonenMapClear (PIZKohonenMap *x);
 
@@ -125,6 +130,7 @@ void pizKohonenMapClear (PIZKohonenMap *x);
  * \param   argc Number of values to proceed.
  * \param   argv Pointer to the array to fill.
  * \return  An error code.
+ * \ingroup kohonenMap
  */
 PIZError pizKohonenMapProceed (const PIZKohonenMap *x, long argc, long *argv);
 
@@ -132,6 +138,7 @@ PIZError pizKohonenMapProceed (const PIZKohonenMap *x, long argc, long *argv);
  * \brief   Get the number of learnings currently performed.
  * \param   x A valid pointer.
  * \return  The number of learnings.
+ * \ingroup kohonenMap
  */
 long pizKohonenMapCount (const PIZKohonenMap *x);
 

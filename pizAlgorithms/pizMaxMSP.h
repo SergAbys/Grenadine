@@ -40,22 +40,22 @@
 
 /**
  * \defgroup zoulou Zoulou
- * \ref factorOracle extensions for maxMSP's external.
+ * \ref factorOracle extension for maxMSP's external.
  * \ingroup  max
  * \defgroup uniform Uniform
- * \ref finiteState extensions for maxMSP's external.
+ * \ref finiteState extension for maxMSP's external.
  * \ingroup  max
  * \defgroup romeo Romeo
- * \ref galoisLattice extensions for maxMSP's external. 
+ * \ref galoisLattice extension for maxMSP's external. 
  * \ingroup  max
  * \defgroup charlie Charlie
- * \ref kohonenMap extensions for maxMSP's external.
+ * \ref kohonenMap extension for maxMSP's external.
  * \ingroup  max
  * \defgroup yankee Yankee
- * \ref neuralGas extensions for maxMSP's external.
+ * \ref neuralGas extension for maxMSP's external.
  * \ingroup  max
  * \defgroup foxtrot Foxtrot
- * \ref markovModel extensions for maxMSP's external.
+ * \ref markovModel extension for maxMSP's external.
  * \ingroup  max
  */
 /**
