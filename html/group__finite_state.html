@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<title>Grenadine: Factor Oracle</title>
+<title>Grenadine: Finite State</title>
 <link href="doxygen.css" rel="stylesheet" type="text/css">
 <link href="tabs.css" rel="stylesheet" type="text/css">
 </head><body>
@@ -16,26 +16,21 @@
   </div>
 </div>
 <div class="contents">
-<h1>Factor Oracle<br>
+<h1>Finite State<br>
 <small>
 [<a class="el" href="group__algorithms.html">Algorithms</a>]</small>
 </h1><table border="0" cellpadding="0" cellspacing="0">
 <tr><td></td></tr>
-<tr><td colspan="2"><br><h2>Data Structures</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">struct &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_p_i_z_factor_oracle_node.html">PIZFactorOracleNode</a></td></tr>
-
 <tr><td colspan="2"><br><h2>Files</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align="right" valign="top">file &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_factor_oracle_8h.html">pizFactorOracle.h</a></td></tr>
+<tr><td class="memItemLeft" nowrap align="right" valign="top">file &nbsp;</td><td class="memItemRight" valign="bottom"><a class="el" href="piz_finite_state_8h.html">pizFiniteState.h</a></td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-Thanks : Matthieu Raffinot, Maxime Crochemore, Cyril Allauzen, Arnaud Lefebvre et Thierry Lecroq. <br>
- <ul>
-<li><a href="http://www-igm.univ-mlv.fr/~lecroq/articles/awoca2000.pdf">http://www-igm.univ-mlv.fr/~lecroq/articles/awoca2000.pdf</a> <br>
- </li>
-<li><a href="http://www.lsi.upc.edu/~marias/teaching/bom.pdf">http://www.lsi.upc.edu/~marias/teaching/bom.pdf</a> <br>
- </li>
-<li><a href="http://en.wikipedia.org/wiki/Factor_oracle">http://en.wikipedia.org/wiki/Factor_oracle</a> </li>
+A finite state automaton is : <ul>
+<li>One value per node. </li>
+<li>Last value for each new sequence is a terminal state. </li>
+<li>Randomly, oldest first, nodes with same value are crossing-over, lonely node for a given value are killed, until the population is collapsed under the defined threshold. </li>
+<li>Terminal states increase the probability of playback head's jump. </li>
 </ul>
 </div>
 <hr size="1"><address style="text-align: right;"><small>Generated on Sat Feb 11 10:48:05 2012 for Grenadine by&nbsp;

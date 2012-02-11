@@ -1,12 +1,9 @@
 /**
  * \file    pizKohonenMap.h
- * \details Thanks : Jean-philippe Rennard. \n 
- * \li      http://en.wikipedia.org/wiki/Self-organizing_map \n
- * 
  * \author  Jean Sapristi
  * \date    31 janvier 2012
- * \ingroup algorithms
  * \ingroup charlie
+ * \ingroup kohonenMap
  */
  
 /*

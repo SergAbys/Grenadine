@@ -3,8 +3,6 @@
  * \author  Jean Sapristi
  * \date    15 janvier 2012
  * \remark  Multi-Threaded with single global mutex.
- * \ingroup structures
- * \ingroup mt
  */
  
 /*

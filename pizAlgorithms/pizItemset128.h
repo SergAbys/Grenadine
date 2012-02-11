@@ -2,7 +2,6 @@
  * \file    pizItemset128.h
  * \author  Jean Sapristi
  * \date    31 janvier 2012
- * \ingroup structures
  */
  
 /*

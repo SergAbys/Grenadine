@@ -1,13 +1,9 @@
 /**
  * \file    pizMarkovModel.h
- * \details Thanks : T.Brouard, M. Slimane, J.-P. Asselin de Beauville, G. Venturini. \n
- * \li      http://archive.numdam.org/ARCHIVE/RSA/RSA_1998__46_2/RSA_1998__46_2_83_0/RSA_1998__46_2_83_0.pdf \n
- * \li      http://en.wikipedia.org/wiki/Hidden_Markov_model 
- *
  * \author  Jean Sapristi
  * \date    31 janvier 2012
- * \ingroup algorithms
  * \ingroup foxtrot
+ * \ingroup markovModel
  */
 
 /*

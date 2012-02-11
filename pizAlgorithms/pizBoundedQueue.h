@@ -2,7 +2,6 @@
  * \file    pizBoundedQueue.h
  * \author  Jean Sapristi
  * \date    26 janvier 2012
- * \ingroup structures
  */
  
 /*

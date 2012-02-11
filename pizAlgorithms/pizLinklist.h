@@ -2,7 +2,6 @@
  * \file    pizLinklist.h
  * \author  Jean Sapristi
  * \date    15 janvier 2012
- * \ingroup structures
  */
 
 /*

@@ -1,12 +1,9 @@
 /**
  * \file    pizNeuralGas.h
- * \details Thanks : Jim Holmström. \n
- * \li      http://www.booru.net/download/MasterThesisProj.pdf \n
- *
  * \author  Jean Sapristi
  * \date    31 janvier 2012
- * \ingroup algorithms
  * \ingroup yankee
+ * \ingroup neuralGas
  */
  
 /*

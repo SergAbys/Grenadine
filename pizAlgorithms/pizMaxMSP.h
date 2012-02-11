@@ -1,9 +1,9 @@
 /**
- * \file        pizMaxMSP.h
- * \author      Jean Sapristi
- * \date        31 janvier 2012
+ * \file    pizMaxMSP.h
+ * \author  Jean Sapristi
+ * \date    31 janvier 2012
  */
- 
+
 /*
  *  Copyright (c) 2011, Jean Sapristi & Tom Javel, 
  *  "nicolas.danet@free.fr".
@@ -33,6 +33,72 @@
  *  
  *  The fact that you are presently reading this means that you have had
  *  knowledge of the CeCILL-C license and that you accept its terms.
+ */
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+/**
+ * \defgroup zoulou Zoulou
+ * \ref factorOracle extensions for maxMSP's external.
+ * \ingroup  max
+ * \defgroup uniform Uniform
+ * \ref finiteState extensions for maxMSP's external.
+ * \ingroup  max
+ * \defgroup romeo Romeo
+ * \ref galoisLattice extensions for maxMSP's external. 
+ * \ingroup  max
+ * \defgroup charlie Charlie
+ * \ref kohonenMap extensions for maxMSP's external.
+ * \ingroup  max
+ * \defgroup yankee Yankee
+ * \ref neuralGas extensions for maxMSP's external.
+ * \ingroup  max
+ * \defgroup foxtrot Foxtrot
+ * \ref markovModel extensions for maxMSP's external.
+ * \ingroup  max
+ */
+/**
+ * \defgroup    factorOracle Factor Oracle
+ * \details     Thanks : Matthieu Raffinot, Maxime Crochemore, 
+ *              Cyril Allauzen, Arnaud Lefebvre et Thierry Lecroq. \n
+ * \li          http://www-igm.univ-mlv.fr/~lecroq/articles/awoca2000.pdf \n
+ * \li          http://www.lsi.upc.edu/~marias/teaching/bom.pdf \n
+ * \li          http://en.wikipedia.org/wiki/Factor_oracle
+ *
+ * \ingroup     algorithms
+ * \defgroup    finiteState Finite State
+ * \details     A finite state automaton is :
+ * \li          One value per node.
+ * \li          Last value for each new sequence is a terminal state.
+ * \li          Randomly, oldest first, nodes with same value are crossing-over, 
+ *              lonely node for a given value are killed, 
+ *              until the population is collapsed under the defined threshold.
+ * \li          Terminal states increase the probability of playback head's jump.
+ *
+ * \ingroup     algorithms
+ * \defgroup    galoisLattice Galois Lattice
+ * \details     Thanks : Robert Godin, Rokia Missaoui, Hassan Alaoui. \n
+ * \li          http://www.labunix.uqam.ca/~godin_r/compint95.pdf \n
+ * \li          http://en.wikipedia.org/wiki/Formal_concept_analysis
+ *
+ * \ingroup     algorithms
+ * \defgroup    kohonenMap Kohonen Map
+ * \details     Thanks : Jean-philippe Rennard. \n 
+ * \li          http://en.wikipedia.org/wiki/Self-organizing_map \n
+ * 
+ * \ingroup     algorithms
+ * \defgroup    neuralGas Neural Gas
+ * \details     Thanks : Jim Holmström. \n
+ * \li          http://www.booru.net/download/MasterThesisProj.pdf \n
+ *
+ * \ingroup     algorithms
+ * \defgroup    markovModel Markov Model
+ * \details     Thanks : T.Brouard, M. Slimane, J.-P. Asselin de Beauville, G. Venturini. \n
+ * \li      http://archive.numdam.org/ARCHIVE/RSA/RSA_1998__46_2/RSA_1998__46_2_83_0/RSA_1998__46_2_83_0.pdf \n
+ * \li      http://en.wikipedia.org/wiki/Hidden_Markov_model 
+ *
+ * \ingroup     algorithms
  */
 
 // -------------------------------------------------------------------------------------------------------------

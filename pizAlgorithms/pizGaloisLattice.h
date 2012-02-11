@@ -1,13 +1,9 @@
 /**
  * \file    pizGaloisLattice.h
- * \details Thanks : Robert Godin, Rokia Missaoui, Hassan Alaoui. \n
- * \li      http://www.labunix.uqam.ca/~godin_r/compint95.pdf \n
- * \li      http://en.wikipedia.org/wiki/Formal_concept_analysis
- *
  * \author  Jean Sapristi
  * \date    31 janvier 2012
- * \ingroup algorithms
  * \ingroup romeo
+ * \ingroup galoisLattice
  */
 
 /*

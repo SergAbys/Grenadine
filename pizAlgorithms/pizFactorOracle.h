@@ -1,15 +1,9 @@
 /**
  * \file        pizFactorOracle.h
- * \details     Thanks : Matthieu Raffinot, Maxime Crochemore, 
- *              Cyril Allauzen, Arnaud Lefebvre et Thierry Lecroq. \n
- * \li          http://www-igm.univ-mlv.fr/~lecroq/articles/awoca2000.pdf \n
- * \li          http://www.lsi.upc.edu/~marias/teaching/bom.pdf \n
- * \li          http://en.wikipedia.org/wiki/Factor_oracle
- *
  * \author      Jean Sapristi
  * \date        31 janvier 2012
- * \ingroup     algorithms
  * \ingroup     zoulou
+ * \ingroup     factorOracle
  */
 
 /*
@@ -59,6 +53,7 @@
 
 /** 
  * \remark  The arc from one node to next node (straight) is the first.
+ * \ingroup factorOracle
  */
  
 typedef struct _PIZFactorOracleNode {

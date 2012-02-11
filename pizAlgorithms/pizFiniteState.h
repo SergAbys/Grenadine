@@ -1,17 +1,9 @@
 /**
  * \file    pizFiniteState.h
- * \details A \em kinda finite state automaton is :
- * \li      One value per node.
- * \li      Last value for each new sequence is a terminal state.
- * \li      Randomly, oldest first, nodes with same value are crossing-over, 
- *          lonely node for a given value are killed, 
- *          until the population is collapsed under the defined threshold.
- * \li      Terminal states increase the probability of playback head's jump.
- *
  * \author  Jean Sapristi
  * \date    31 janvier 2012
- * \ingroup algorithms
  * \ingroup uniform
+ * \ingroup finiteState
  */
 
 /*

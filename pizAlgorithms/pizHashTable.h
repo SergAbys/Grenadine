@@ -2,7 +2,6 @@
  * \file    pizHashTable.h
  * \author  Jean Sapristi
  * \date    23 janvier 2012
- * \ingroup structures
  */
  
 /*
