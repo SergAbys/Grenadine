@@ -65,7 +65,7 @@ long pizSequenceMarkedNoteValue (PIZSequence *x, PIZSelector selector)
         {
             if (selector == PIZ_CHANNEL)
                 {
-                    if (x->markedNote->data[PIZ_CHANNEL] == PIZ_SEQUENCE_NOTE_CHANNEL_NONE)
+                    if (x->markedNote->data[PIZ_CHANNEL] == PIZ_CHANNEL_NONE)
                         {
                             k = x->channel;
                         }

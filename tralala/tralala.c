@@ -1176,9 +1176,9 @@ t_max_err tralala_setScaleKey (t_tralala *x, t_object *attr, long argc, t_atom *
                         {   
                             x->scaleKey = temp;
                             
-                            if (x->type != PIZ_TYPE_CUSTOM)
+                            if (x->type != PIZ_SCALE_CUSTOM)
                                 {
-                                    pizSequenceSetScale (x->live, x->key, x->type);
+                                    pizSequenceSetScale (x->live, x->key, x->type, NULL);
                                 }
                             else
                                 {
@@ -1192,7 +1192,7 @@ t_max_err tralala_setScaleKey (t_tralala *x, t_object *attr, long argc, t_atom *
                                                     pizGrowingArrayAppend (tempArray, x->scaleCustom[i]);
                                                 }
                                                 
-                                            pizSequenceSetCustomScaleWithArray (x->live, x->key, tempArray);
+                                            pizSequenceSetScale (x->live, x->key, x->type, tempArray);
                                             
                                             ARRAY_RELEASE (tempArray);
                                         }
@@ -1224,9 +1224,9 @@ t_max_err tralala_setScaleType (t_tralala *x, t_object *attr, long argc, t_atom 
                     if (temp != x->scaleType)
                         {
                             if (temp == tll_sym_none) {
-                                x->type = PIZ_TYPE_NONE;
+                                x->type = PIZ_SCALE_NONE;
                             } else if (temp == tll_sym_custom) {
-                                x->type = PIZ_TYPE_CUSTOM;
+                                x->type = PIZ_SCALE_CUSTOM;
                             } else if (temp == tll_sym_ionian) {
                                 x->type = PIZ_IONIAN;
                             } else if (temp == tll_sym_dorian) {
@@ -1283,9 +1283,9 @@ t_max_err tralala_setScaleType (t_tralala *x, t_object *attr, long argc, t_atom 
                                 {   
                                     x->scaleType = temp;
                                     
-                                    if (x->type != PIZ_TYPE_CUSTOM) 
+                                    if (x->type != PIZ_SCALE_CUSTOM) 
                                         {
-                                            pizSequenceSetScale (x->live, x->key, x->type);
+                                            pizSequenceSetScale (x->live, x->key, x->type, NULL);
                                         } 
                                     else 
                                         {
@@ -1299,8 +1299,7 @@ t_max_err tralala_setScaleType (t_tralala *x, t_object *attr, long argc, t_atom 
                                                         pizGrowingArrayAppend (tempArray, x->scaleCustom[i]);
                                                     }
                                                     
-                                                    pizSequenceSetCustomScaleWithArray (x->live, x->key, 
-                                                        tempArray);
+                                                    pizSequenceSetScale (x->live, x->key, x->type, tempArray);
                                                     
                                                     ARRAY_RELEASE (tempArray);
                                                 }
@@ -1325,7 +1324,7 @@ t_max_err tralala_setScaleCustom (t_tralala *x, t_object *attr, long argc, t_ato
         {   
             atom_getlong_array (argc, argv, PIZ_SEQUENCE_SCALE_SIZE, x->scaleCustom);
             
-            if (x->type == PIZ_TYPE_CUSTOM)
+            if (x->type == PIZ_SCALE_CUSTOM)
                 {
                     ARRAY_GET (tempArray);
                             
@@ -1337,7 +1336,7 @@ t_max_err tralala_setScaleCustom (t_tralala *x, t_object *attr, long argc, t_ato
                                     pizGrowingArrayAppend (tempArray, x->scaleCustom[i]);
                                 }
                                 
-                            pizSequenceSetCustomScaleWithArray (x->live, x->key, tempArray);
+                            pizSequenceSetScale (x->live, x->key, x->type, tempArray);
                             
                             ARRAY_RELEASE (tempArray);
                         }
@@ -1443,7 +1442,7 @@ t_max_err tralala_setPatternCustom (t_tralala *x, t_object *attr, long argc, t_a
                             pizGrowingArrayAppend (tempArray, x->patternCustom[i]);
                         }
                         
-                    pizSequenceSetCustomPatternWithArray (x->live, tempArray);
+                    pizSequenceSetPattern (x->live, tempArray);
                     
                     if (x->patternCell != tll_sym_none)
                         {
@@ -5376,7 +5375,7 @@ bool tralala_hitNotesByRunIndex (t_tralala *x)
                             err |= pizGrowingArrayAppend (x->playedNotes, pitch);
                             err |= pizGrowingArrayAppend (x->playedNotes, PIZ_SEQUENCE_MIDI_VELOCITY);
                             err |= pizGrowingArrayAppend (x->playedNotes, duration);
-                            err |= pizGrowingArrayAppend (x->playedNotes, PIZ_SEQUENCE_NOTE_CHANNEL_NONE);
+                            err |= pizGrowingArrayAppend (x->playedNotes, false);
                             err |= pizGrowingArrayAppend (x->playedNotes, false);
                             err |= pizGrowingArrayAppend (x->playedNotes, false);
                             

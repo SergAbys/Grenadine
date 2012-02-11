@@ -113,8 +113,7 @@ _pizSequenceSelectNoteWithCoordinates
 _pizSequenceSelectNotesWithLasso
 _pizSequenceSet
 _pizSequenceSetChance
-_pizSequenceSetCustomPatternWithArray
-_pizSequenceSetCustomScaleWithArray
+_pizSequenceSetPattern
 _pizSequenceSetGrid
 _pizSequenceSetChannel
 _pizSequenceSetNoteValue

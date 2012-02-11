@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    26 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -68,8 +68,6 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_NOTE_CHANNEL_NONE              0
-#define PIZ_SEQUENCE_NOTE_DEFAULT_VELOCITY          90
 #define PIZ_SEQUENCE_SCALE_SIZE                     12
 
 // -------------------------------------------------------------------------------------------------------------
@@ -119,6 +117,9 @@
 #define PIZ_DEFAULT_UP                              71
 #define PIZ_DEFAULT_CHANCE                          100
 #define PIZ_DEFAULT_CHANNEL                         1
+#define PIZ_DEFAULT_VELOCITY                        90
+
+#define PIZ_CHANNEL_NONE                            0
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -153,9 +154,9 @@ typedef enum _PIZSnapValue {
     } PIZSnapValue;
 
 typedef enum _PIZScaleType {
-    PIZ_TYPE_NONE = 0,
-    PIZ_TYPE_CUSTOM,
-    PIZ_IONIAN,
+    PIZ_SCALE_CUSTOM                = -2,
+    PIZ_SCALE_NONE                  = -1,
+    PIZ_IONIAN                      =  0,
     PIZ_DORIAN,
     PIZ_PHRYGIAN,
     PIZ_LYDIAN,
@@ -276,9 +277,8 @@ void         pizSequenceSetVelocity                (PIZSequence *x, long value);
 void         pizSequenceSetGrid                    (PIZSequence *x, PIZSnapValue snapValue);
 void         pizSequenceSetNoteValue               (PIZSequence *x, PIZSnapValue noteValue);
 
-PIZError     pizSequenceSetScale                   (PIZSequence *x, PIZScaleKey key, PIZScaleType type);
-PIZError     pizSequenceSetCustomScaleWithArray    (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a);
-PIZError     pizSequenceSetCustomPatternWithArray  (PIZSequence *x, const PIZGrowingArray *a);
+PIZError     pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type, const PIZGrowingArray *a);
+PIZError     pizSequenceSetPattern  (PIZSequence *x, const PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

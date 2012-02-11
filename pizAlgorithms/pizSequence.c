@@ -49,31 +49,31 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static long sequence_ionian[ ]                  = {0,-1, 0, 1, 0, 0, 1, 0,-1, 0, 1, 0};
-static long sequence_dorian[ ]                  = {0,-1, 0, 0,-1, 0, 1, 0,-1, 0, 0,-1};
-static long sequence_phrygian[ ]                = {0, 0,-1, 0,-1, 0, 1, 0, 0,-1, 0,-1};
-static long sequence_lydian[ ]                  = {0,-1, 0, 1, 0, 1, 0, 0,-1, 0, 1, 0};
-static long sequence_mixolydian[ ]              = {0,-1, 0, 1, 0, 0, 1, 0,-1, 0, 0,-1};
-static long sequence_aeolian[ ]                 = {0,-1, 0, 0,-1, 0, 1, 0, 0,-1, 0,-1};
-static long sequence_locrian[ ]                 = {0, 0,-1, 0,-1, 0, 0,-1, 0,-1, 0,-1};
-static long sequence_natural[ ]                 = {0,-1, 0, 0,-1, 0, 1, 0, 0,-1, 0,-1};
-static long sequence_harmonic[ ]                = {0,-1, 0, 0,-1, 0, 1, 0, 0,-1, 1, 0};
-static long sequence_melodic[ ]                 = {0,-1, 0, 0,-1, 0, 1, 0,-1, 0, 1, 0};
-static long sequence_wholeTone[ ]               = {0,-1, 0,-1, 0,-1, 0, 1, 0,-1, 0, 1};
-static long sequence_pentatonicMajor[ ]         = {0,-1, 0,-1, 0,-1, 1, 0,-1, 0,-1, 1};
-static long sequence_pentatonicMinor[ ]         = {0,-1, 1, 0, 1, 0,-1, 0,-1, 1, 0,-1};
-static long sequence_octatonicHalfWhole[ ]      = {0, 0,-1, 0, 0, 1, 0, 0, 1, 0, 0,-1};
-static long sequence_octatonicWholeHalf[ ]      = {0,-1, 0, 0, 1, 0, 0,-1, 0, 0, 1, 0};
-static long sequence_seventhMajor[ ]            = {0,-1,-2, 1, 0,-1, 1, 0,-1,-2, 1, 0};
-static long sequence_seventhDominant[ ]         = {0,-1,-2, 1, 0,-1, 1, 0,-1, 1, 0,-1};
-static long sequence_seventhMinor[ ]            = {0,-1, 1, 0,-1,-2, 1, 0,-1, 1, 0,-1};
-static long sequence_seventhMajorSixth[ ]       = {0,-1,-2, 1, 0,-1, 1, 0, 1, 0,-1,-2};
-static long sequence_seventhMinorSixth[ ]       = {0,-1, 1, 0,-1,-2, 1, 0, 1, 0,-1,-2};
-static long sequence_seventhHalfDiminished[ ]   = {0,-1, 1, 0,-1, 1, 0,-1,-2, 1, 0,-1};
-static long sequence_seventhDiminished[ ]       = {0,-1, 1, 0,-1, 1, 0,-1, 1, 0,-1,-2};
-static long sequence_seventhSuspended[ ]        = {0,-1,-2, 2, 1, 0, 1, 0,-1, 1, 0,-1};
-static long sequence_seventhSharpFive[ ]        = {0,-1,-2, 1, 0,-1, 2, 1, 0,-1, 0,-1};
-static long sequence_seventhFlatFive[ ]         = {0,-1,-2, 1, 0, 1, 0,-1,-2, 1, 0,-1};
+static long sequence_modes[ ]   =  {0,-1, 0, 1, 0, 0, 1, 0,-1, 0, 1, 0,         // ionian
+                                    0,-1, 0, 0,-1, 0, 1, 0,-1, 0, 0,-1,         // dorian
+                                    0, 0,-1, 0,-1, 0, 1, 0, 0,-1, 0,-1,         // phrygian
+                                    0,-1, 0, 1, 0, 1, 0, 0,-1, 0, 1, 0,         // lydian
+                                    0,-1, 0, 1, 0, 0, 1, 0,-1, 0, 0,-1,         // mixolydian
+                                    0,-1, 0, 0,-1, 0, 1, 0, 0,-1, 0,-1,         // aeolian
+                                    0, 0,-1, 0,-1, 0, 0,-1, 0,-1, 0,-1,         // locrian
+                                    0,-1, 0, 0,-1, 0, 1, 0, 0,-1, 0,-1,         // natural
+                                    0,-1, 0, 0,-1, 0, 1, 0, 0,-1, 1, 0,         // harmonic
+                                    0,-1, 0, 0,-1, 0, 1, 0,-1, 0, 1, 0,         // melodic
+                                    0,-1, 0,-1, 0,-1, 0, 1, 0,-1, 0, 1,         // whole tone
+                                    0,-1, 0,-1, 0,-1, 1, 0,-1, 0,-1, 1,         // pentatonic major
+                                    0,-1, 1, 0, 1, 0,-1, 0,-1, 1, 0,-1,         // pentatonic minor
+                                    0, 0,-1, 0, 0, 1, 0, 0, 1, 0, 0,-1,         // octatonic half whole
+                                    0,-1, 0, 0, 1, 0, 0,-1, 0, 0, 1, 0,         // octatonic whole half
+                                    0,-1,-2, 1, 0,-1, 1, 0,-1,-2, 1, 0,         // seventh major
+                                    0,-1,-2, 1, 0,-1, 1, 0,-1, 1, 0,-1,         // seventh dominant
+                                    0,-1, 1, 0,-1,-2, 1, 0,-1, 1, 0,-1,         // seventh minor
+                                    0,-1,-2, 1, 0,-1, 1, 0, 1, 0,-1,-2,         // seventh major sixth
+                                    0,-1, 1, 0,-1,-2, 1, 0, 1, 0,-1,-2,         // seventh minor sixth
+                                    0,-1, 1, 0,-1, 1, 0,-1,-2, 1, 0,-1,         // seventh half diminished
+                                    0,-1, 1, 0,-1, 1, 0,-1, 1, 0,-1,-2,         // seventh diminished
+                                    0,-1,-2, 2, 1, 0, 1, 0,-1, 1, 0,-1,         // seventh suspended
+                                    0,-1,-2, 1, 0,-1, 2, 1, 0,-1, 0,-1,         // seventh sharp five
+                                    0,-1,-2, 1, 0, 1, 0,-1,-2, 1, 0,-1};        // seventh flat five
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -301,89 +301,39 @@ void pizSequenceSetNoteValue (PIZSequence *x, PIZSnapValue noteValue)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type)
+PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type, const PIZGrowingArray *a)
 {
-    long err = PIZ_ERROR;
+    long err = PIZ_GOOD;
     long *ptr = NULL;
 
     PIZLOCK
     
-    switch (type) {
-        case PIZ_TYPE_NONE                  : pizGrowingArrayClear (x->scale); 
-                                              break;
-        case PIZ_TYPE_CUSTOM                : break;
-        case PIZ_IONIAN                     : ptr = sequence_ionian;                break;
-        case PIZ_DORIAN                     : ptr = sequence_dorian;                break;
-        case PIZ_PHRYGIAN                   : ptr = sequence_phrygian;              break;
-        case PIZ_LYDIAN                     : ptr = sequence_lydian;                break;
-        case PIZ_MIXOLYDIAN                 : ptr = sequence_mixolydian;            break;
-        case PIZ_AEOLIAN                    : ptr = sequence_aeolian;               break;
-        case PIZ_LOCRIAN                    : ptr = sequence_locrian;               break;
-        case PIZ_NATURAL                    : ptr = sequence_natural;               break;
-        case PIZ_HARMONIC                   : ptr = sequence_harmonic;              break;
-        case PIZ_MELODIC                    : ptr = sequence_melodic;               break;
-        case PIZ_WHOLE_TONE                 : ptr = sequence_wholeTone;             break;
-        case PIZ_PENTATONIC_MAJOR           : ptr = sequence_pentatonicMajor;       break;
-        case PIZ_PENTATONIC_MINOR           : ptr = sequence_pentatonicMinor;       break;
-        case PIZ_OCTATONIC_HALF_WHOLE       : ptr = sequence_octatonicHalfWhole;    break;
-        case PIZ_OCTATONIC_WHOLE_HALF       : ptr = sequence_octatonicWholeHalf;    break;  
-        case PIZ_SEVENTH_MAJOR              : ptr = sequence_seventhMajor;          break;
-        case PIZ_SEVENTH_DOMINANT           : ptr = sequence_seventhDominant;       break;
-        case PIZ_SEVENTH_MINOR              : ptr = sequence_seventhMinor;          break;
-        case PIZ_SEVENTH_MAJOR_SIXTH        : ptr = sequence_seventhMajorSixth;     break;
-        case PIZ_SEVENTH_MINOR_SIXTH        : ptr = sequence_seventhMinorSixth;     break;
-        case PIZ_SEVENTH_HALF_DIMINISHED    : ptr = sequence_seventhHalfDiminished; break;
-        case PIZ_SEVENTH_DIMINISHED         : ptr = sequence_seventhDiminished;     break;
-        case PIZ_SEVENTH_SUSPENDED          : ptr = sequence_seventhSuspended;      break;
-        case PIZ_SEVENTH_SHARP_FIVE         : ptr = sequence_seventhSharpFive;      break;
-        case PIZ_SEVENTH_FLAT_FIVE          : ptr = sequence_seventhFlatFive;       break;
+    pizGrowingArrayClear (x->scale);
+    
+    if (type == PIZ_SCALE_CUSTOM) {
+        if (a && (pizGrowingArrayCount (a) == PIZ_SEQUENCE_SCALE_SIZE)) { 
+            ptr = pizGrowingArrayPtr (a);
+        } else {
+            err = PIZ_ERROR;
         }
-        
-    if (ptr)
-        {
-            long i;
-            
-            err = PIZ_GOOD;
-
-            pizGrowingArrayClear (x->scale);
-
-            for (i = 0; i < PIZ_SEQUENCE_SCALE_SIZE; i++) {
-                    pizGrowingArrayAppend (x->scale, 
-                        *(ptr + ((PIZ_SEQUENCE_SCALE_SIZE - key + i) % PIZ_SEQUENCE_SCALE_SIZE)));
-                }
+    } else if (type != PIZ_SCALE_NONE) {
+        ptr = sequence_modes + (type * PIZ_SEQUENCE_SCALE_SIZE); 
+    }
+    
+    if (ptr) {
+        long i;
+        for (i = 0; i < PIZ_SEQUENCE_SCALE_SIZE; i++) {
+                pizGrowingArrayAppend (x->scale, *(ptr + ((PIZ_SEQUENCE_SCALE_SIZE - key + i) 
+                    % PIZ_SEQUENCE_SCALE_SIZE)));
+            }
         }
     
     PIZUNLOCK
     
     return err;
 }   
-                                                    
-PIZError pizSequenceSetCustomScaleWithArray (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *array)
-{
-    long err = PIZ_ERROR;
-    
-    PIZLOCK
-    
-    if (array && (pizGrowingArrayCount (array) == PIZ_SEQUENCE_SCALE_SIZE))
-        {
-            long i;
-            
-            err = PIZ_GOOD;
 
-            pizGrowingArrayClear (x->scale);
-
-            for (i = 0; i < PIZ_SEQUENCE_SCALE_SIZE; i++) {
-                    pizGrowingArrayAppend (x->scale, pizGrowingArrayValueAtIndex (array, 
-                        ((PIZ_SEQUENCE_SCALE_SIZE - key + i) % PIZ_SEQUENCE_SCALE_SIZE)));
-                }
-        }
-    
-    PIZUNLOCK
-    
-    return err;
-}
-
-PIZError pizSequenceSetCustomPatternWithArray (PIZSequence *x, const PIZGrowingArray *array)
+PIZError pizSequenceSetPattern (PIZSequence *x, const PIZGrowingArray *array)
 {
     long err = PIZ_ERROR;
      
@@ -503,8 +453,8 @@ PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates
         
     values[PIZ_SEQUENCE_POSITION]       = coordinates->position;
     values[PIZ_SEQUENCE_PITCH]          = coordinates->pitch;
-    values[PIZ_SEQUENCE_VELOCITY]       = PIZ_SEQUENCE_NOTE_DEFAULT_VELOCITY;
-    values[PIZ_SEQUENCE_CHANNEL]        = PIZ_SEQUENCE_NOTE_CHANNEL_NONE;
+    values[PIZ_SEQUENCE_VELOCITY]       = PIZ_DEFAULT_VELOCITY;
+    values[PIZ_SEQUENCE_CHANNEL]        = PIZ_CHANNEL_NONE;
     values[PIZ_SEQUENCE_IS_SELECTED]    = true;
     values[PIZ_SEQUENCE_IS_MARKED]      = true;
 
@@ -924,7 +874,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *array)
                                             velocity += x->velocity;
                                         } 
                                     
-                                    if (noteChannel == PIZ_SEQUENCE_NOTE_CHANNEL_NONE) {
+                                    if (noteChannel == PIZ_CHANNEL_NONE) {
                                             noteChannel = x->channel;
                                         }
                                         
