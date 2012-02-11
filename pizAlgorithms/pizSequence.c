@@ -88,12 +88,12 @@ PIZSequence *pizSequenceNew ( )
             long argv[2]    = {0, PIZ_SEQUENCE_MAXIMUM_NOTES};
             
             x->map          = pizGrowingArrayNew (4);
-            x->scale        = pizGrowingArrayNew (PIZ_SEQUENCE_SCALE_SIZE);
+            x->scale        = pizGrowingArrayNew (PIZ_SCALE_SIZE);
             x->pattern      = pizGrowingArrayNew (4);
-            x->values1      = (long *)malloc (sizeof(long) * PIZ_SEQUENCE_POOL_SIZE);
-            x->values2      = (long *)malloc (sizeof(long) * PIZ_SEQUENCE_POOL_SIZE);
-            x->notes1       = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_POOL_SIZE);
-            x->notes2       = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_POOL_SIZE);
+            x->values1      = (long *)malloc (sizeof(long) * PIZ_POOL_SIZE);
+            x->values2      = (long *)malloc (sizeof(long) * PIZ_POOL_SIZE);
+            x->notes1       = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_POOL_SIZE);
+            x->notes2       = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_POOL_SIZE);
             x->hashTable    = pizBoundedHashTableNew (2, argv);
             
             if (x->map && 
@@ -273,7 +273,7 @@ void pizSequenceSetChance (PIZSequence *x, long value)
 void pizSequenceSetChannel (PIZSequence *x, long channel)
 {
     PIZLOCK
-    x->channel = CLAMP (channel, 1, PIZ_SEQUENCE_MIDI_CHANNEL);
+    x->channel = CLAMP (channel, 1, PIZ_MIDI_CHANNEL);
     PIZUNLOCK
 }
 
@@ -311,20 +311,20 @@ PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type
     pizGrowingArrayClear (x->scale);
     
     if (type == PIZ_SCALE_CUSTOM) {
-        if (a && (pizGrowingArrayCount (a) == PIZ_SEQUENCE_SCALE_SIZE)) { 
+        if (a && (pizGrowingArrayCount (a) == PIZ_SCALE_SIZE)) { 
             ptr = pizGrowingArrayPtr (a);
         } else {
             err = PIZ_ERROR;
         }
     } else if (type != PIZ_SCALE_NONE) {
-        ptr = sequence_modes + (type * PIZ_SEQUENCE_SCALE_SIZE); 
+        ptr = sequence_modes + (type * PIZ_SCALE_SIZE); 
     }
     
     if (ptr) {
         long i;
-        for (i = 0; i < PIZ_SEQUENCE_SCALE_SIZE; i++) {
-                pizGrowingArrayAppend (x->scale, *(ptr + ((PIZ_SEQUENCE_SCALE_SIZE - key + i) 
-                    % PIZ_SEQUENCE_SCALE_SIZE)));
+        for (i = 0; i < PIZ_SCALE_SIZE; i++) {
+                pizGrowingArrayAppend (x->scale, *(ptr + ((PIZ_SCALE_SIZE - key + i) 
+                    % PIZ_SCALE_SIZE)));
             }
         }
     
@@ -381,8 +381,8 @@ PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *arr
             
             tempStart   = CLAMP (tempStart, 0, PIZ_SEQUENCE_TIMELINE_SIZE);
             tempEnd     = CLAMP (tempEnd,   0, PIZ_SEQUENCE_TIMELINE_SIZE);
-            tempDown    = CLAMP (tempDown,  0, PIZ_SEQUENCE_MIDI_NOTE);
-            tempUp      = CLAMP (tempUp,    0, PIZ_SEQUENCE_MIDI_NOTE);
+            tempDown    = CLAMP (tempDown,  0, PIZ_MIDI_PITCH);
+            tempUp      = CLAMP (tempUp,    0, PIZ_MIDI_PITCH);
     
             if (!(tempStart == tempEnd))
                 {
@@ -418,7 +418,7 @@ PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *ar
     
     PIZLOCK
     
-    if (mode & PIZ_SEQUENCE_ADD_MODE_CLEAR) {
+    if (mode & PIZ_SEQUENCE_ADD_FLAG_CLEAR) {
             pizSequenceClearNotes (x);
         }
         
@@ -533,7 +533,7 @@ PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *a, PIZGrowing
                     if (note->isSelected && b)
                         {
                             err |= pizGrowingArrayAppend (b, note->position);
-                            err |= pizGrowingArrayAppend (b, CLAMP (pitch, 0, PIZ_SEQUENCE_MIDI_NOTE));
+                            err |= pizGrowingArrayAppend (b, CLAMP (pitch, 0, PIZ_MIDI_PITCH));
                             err |= pizGrowingArrayAppend (b, note->data[PIZ_VELOCITY]);
                             err |= pizGrowingArrayAppend (b, note->data[PIZ_DURATION]);
                             err |= pizGrowingArrayAppend (b, note->data[PIZ_CHANNEL]);
@@ -543,7 +543,7 @@ PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *a, PIZGrowing
                     else if (a)
                         {
                             err |= pizGrowingArrayAppend (a, note->position);
-                            err |= pizGrowingArrayAppend (a, CLAMP (pitch, 0, PIZ_SEQUENCE_MIDI_NOTE));
+                            err |= pizGrowingArrayAppend (a, CLAMP (pitch, 0, PIZ_MIDI_PITCH));
                             err |= pizGrowingArrayAppend (a, note->data[PIZ_VELOCITY]);
                             err |= pizGrowingArrayAppend (a, note->data[PIZ_DURATION]);
                             err |= pizGrowingArrayAppend (a, note->data[PIZ_CHANNEL]);
@@ -573,9 +573,9 @@ bool pizSequenceClean (PIZSequence *x, long value)
     PIZLOCK
         
     scale = pizGrowingArrayCount (x->scale);
-    v = CLAMP (value, 0, PIZ_SEQUENCE_MIDI_NOTE);
+    v = CLAMP (value, 0, PIZ_MIDI_PITCH);
     
-    for (i = 0; i < (PIZ_SEQUENCE_MIDI_NOTE + 1); i++) {
+    for (i = 0; i < (PIZ_MIDI_PITCH + 1); i++) {
             x->values2[i] = 0;
         }
     
@@ -604,8 +604,8 @@ bool pizSequenceClean (PIZSequence *x, long value)
                     start   = pitch - v;
                     end     = start + (2 * v);
                     
-                    m = CLAMP (start, 0, PIZ_SEQUENCE_MIDI_NOTE);
-                    n = CLAMP (end, 0, PIZ_SEQUENCE_MIDI_NOTE);
+                    m = CLAMP (start, 0, PIZ_MIDI_PITCH);
+                    n = CLAMP (end, 0, PIZ_MIDI_PITCH);
                     
                     for (j = m; j <= n; j++) {
                         if (x->values2[j] == (p + 1)) {
@@ -694,7 +694,7 @@ bool pizSequenceApplyPattern (PIZSequence *x)
                             values[PIZ_SEQUENCE_IS_MARKED]      = false;
                             values[PIZ_SEQUENCE_NOTE_SIZE]      = note->originPosition;
                             
-                            if (newNote = pizSequenceAddNote (x, values, PIZ_SEQUENCE_ADD_MODE_ORIGIN))
+                            if (newNote = pizSequenceAddNote (x, values, PIZ_SEQUENCE_ADD_FLAG_ORIGIN))
                                 {
                                     haveChanged = true;
                             
@@ -767,17 +767,17 @@ void pizSequenceTransposeOctave (PIZSequence *x, bool down)
     long i, step;
     
     if (down) {
-            step = -PIZ_SEQUENCE_SCALE_SIZE;
+            step = -PIZ_SCALE_SIZE;
         }
     else
         {
-            step = PIZ_SEQUENCE_SCALE_SIZE;
+            step = PIZ_SCALE_SIZE;
         }
         
     PIZLOCK
         
-    x->down = CLAMP (x->down + step, 0, PIZ_SEQUENCE_MIDI_NOTE);
-    x->up   = CLAMP (x->up + step, 0, PIZ_SEQUENCE_MIDI_NOTE);
+    x->down = CLAMP (x->down + step, 0, PIZ_MIDI_PITCH);
+    x->up   = CLAMP (x->up + step, 0, PIZ_MIDI_PITCH);
     
     for (i = 0; i < pizGrowingArrayCount (x->map); i++)
         {   
@@ -792,7 +792,7 @@ void pizSequenceTransposeOctave (PIZSequence *x, bool down)
                 {
                     pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
 
-                    note->data[PIZ_PITCH] = CLAMP (note->data[PIZ_PITCH] + step, 0, PIZ_SEQUENCE_MIDI_NOTE);
+                    note->data[PIZ_PITCH] = CLAMP (note->data[PIZ_PITCH] + step, 0, PIZ_MIDI_PITCH);
                     
                     note = nextNote;
                 }
@@ -879,9 +879,9 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *array)
                                         }
                                         
                                     err |= pizGrowingArrayAppend 
-                                            (array, CLAMP (pitch, 0, PIZ_SEQUENCE_MIDI_NOTE));
+                                            (array, CLAMP (pitch, 0, PIZ_MIDI_PITCH));
                                     err |= pizGrowingArrayAppend 
-                                            (array, CLAMP (velocity, 0, PIZ_SEQUENCE_MIDI_VELOCITY));
+                                            (array, CLAMP (velocity, 0, PIZ_MIDI_VELOCITY));
                                     err |= pizGrowingArrayAppend (array, note->data[PIZ_DURATION]);
                                     err |= pizGrowingArrayAppend (array, noteChannel);
                                 }
@@ -1031,7 +1031,7 @@ PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, const PIZGrowingArray *
                     for (i = 0; i < count; i++)
                         {
                             if (!(pizSequenceAddNote (x, ptr + (i * PIZ_SEQUENCE_NOTE_SIZE) + k, 
-                                PIZ_SEQUENCE_ADD_MODE_UNSELECT))) {
+                                PIZ_SEQUENCE_ADD_FLAG_UNSELECT))) {
                                     err |= PIZ_ERROR;
                                 }
                         }
@@ -1052,18 +1052,18 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long mode)
     PIZNote *newNote    = NULL;
     long    err         = PIZ_GOOD;
     long    position    = values[PIZ_SEQUENCE_POSITION];
-    long    pitch       = CLAMP (values[PIZ_SEQUENCE_PITCH],    0, PIZ_SEQUENCE_MIDI_NOTE);
-    long    velocity    = CLAMP (values[PIZ_SEQUENCE_VELOCITY], 0, PIZ_SEQUENCE_MIDI_VELOCITY);
+    long    pitch       = CLAMP (values[PIZ_SEQUENCE_PITCH],    0, PIZ_MIDI_PITCH);
+    long    velocity    = CLAMP (values[PIZ_SEQUENCE_VELOCITY], 0, PIZ_MIDI_VELOCITY);
     long    duration    = CLAMP (values[PIZ_SEQUENCE_DURATION], 1, PIZ_SEQUENCE_MAXIMUM_DURATION); 
-    long    channel     = CLAMP (values[PIZ_SEQUENCE_CHANNEL],  0, PIZ_SEQUENCE_MIDI_CHANNEL); 
+    long    channel     = CLAMP (values[PIZ_SEQUENCE_CHANNEL],  0, PIZ_MIDI_CHANNEL); 
     long    isSelected  = values[PIZ_SEQUENCE_IS_SELECTED];
     long    isMarked    = values[PIZ_SEQUENCE_IS_MARKED];
     
-    if (mode & PIZ_SEQUENCE_ADD_MODE_SNAP) {
+    if (mode & PIZ_SEQUENCE_ADD_FLAG_SNAP) {
             position = MAX (((long)(position / (double)x->grid)) * x->grid, 0);
         }
     
-    if (mode & PIZ_SEQUENCE_ADD_MODE_PATTERN) {
+    if (mode & PIZ_SEQUENCE_ADD_FLAG_PATTERN) {
             long patternSize = pizGrowingArrayCount (x->pattern);  
             if (patternSize) {
                     long temp = pizSequenceSnapPositionToPattern (x, position, patternSize);
@@ -1071,11 +1071,11 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long mode)
                 }
         } 
     
-    if (mode & PIZ_SEQUENCE_ADD_MODE_AMBITUS) {
+    if (mode & PIZ_SEQUENCE_ADD_FLAG_AMBITUS) {
             pitch = pizSequenceMovePitchToAmbitus (x, pitch);
         }
         
-    if (mode & PIZ_SEQUENCE_ADD_MODE_UNSELECT) {
+    if (mode & PIZ_SEQUENCE_ADD_FLAG_UNSELECT) {
             isSelected = false;
             isMarked = false;
         }
@@ -1084,7 +1084,7 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long mode)
     err |= (position > (PIZ_SEQUENCE_TIMELINE_SIZE - MAX (duration, 1)));
     err |= (x->count >= PIZ_SEQUENCE_MAXIMUM_NOTES);
     
-    if (mode & PIZ_SEQUENCE_ADD_MODE_CLIP) 
+    if (mode & PIZ_SEQUENCE_ADD_FLAG_CLIP) 
         {
             err |= (position < x->start);
             err |= (position >= x->end);
@@ -1102,7 +1102,7 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long mode)
             newNote->isSelected         = isSelected;
             newNote->position           = position;
         
-            if (mode & PIZ_SEQUENCE_ADD_MODE_ORIGIN) 
+            if (mode & PIZ_SEQUENCE_ADD_FLAG_ORIGIN) 
                 {
                     newNote->originPosition = values[PIZ_SEQUENCE_NOTE_SIZE];
                 } 
@@ -1194,18 +1194,18 @@ long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
     pitch += offset;
             
     if (pitch < x->down) {
-        while ((pitch < x->down) && (pitch < PIZ_SEQUENCE_MIDI_NOTE)) {
-        pitch += PIZ_SEQUENCE_SCALE_SIZE;
+        while ((pitch < x->down) && (pitch < PIZ_MIDI_PITCH)) {
+        pitch += PIZ_SCALE_SIZE;
         }
     } else if (pitch > x->up) {
         while ((pitch > x->up) && (pitch > 0)) {
-        pitch -= PIZ_SEQUENCE_SCALE_SIZE;
+        pitch -= PIZ_SCALE_SIZE;
         }
     }
             
     pitch -= offset;
     
-    return (CLAMP (pitch, 0, PIZ_SEQUENCE_MIDI_NOTE));
+    return (CLAMP (pitch, 0, PIZ_MIDI_PITCH));
 }
 
 // -------------------------------------------------------------------------------------------------------------

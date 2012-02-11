@@ -54,75 +54,58 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_TIMELINE_SIZE                  576  
-//                                                  576 < 1024
+#define PIZ_SEQUENCE_TIMELINE_SIZE      576   // 576 < 1024
+#define PIZ_SEQUENCE_MAXIMUM_NOTES      128   // PIZ_POOL_SIZE
+#define PIZ_SEQUENCE_MAXIMUM_DURATION   96
 
-#define PIZ_SEQUENCE_MAXIMUM_NOTES                  128
-#define PIZ_SEQUENCE_MAXIMUM_DURATION               96
-#define PIZ_SEQUENCE_MIDI_CHANNEL                   16
-#define PIZ_SEQUENCE_MIDI_NOTE                      127
-#define PIZ_SEQUENCE_MIDI_VELOCITY                  127
-//                                          MAX    -----
-#define PIZ_SEQUENCE_POOL_SIZE                      128
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZ_SEQUENCE_SCALE_SIZE                     12
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZ_SEQUENCE_VERSION                        1
+#define PIZ_SEQUENCE_VERSION            1
     
-#define PIZ_SEQUENCE_POSITION                       0
-#define PIZ_SEQUENCE_PITCH                          1
-#define PIZ_SEQUENCE_VELOCITY                       2
-#define PIZ_SEQUENCE_DURATION                       3
-#define PIZ_SEQUENCE_CHANNEL                        4
-#define PIZ_SEQUENCE_IS_SELECTED                    5
-#define PIZ_SEQUENCE_IS_MARKED                      6
-#define PIZ_SEQUENCE_NOTE_SIZE                      7
+#define PIZ_SEQUENCE_POSITION           0
+#define PIZ_SEQUENCE_PITCH              1
+#define PIZ_SEQUENCE_VELOCITY           2
+#define PIZ_SEQUENCE_DURATION           3
+#define PIZ_SEQUENCE_CHANNEL            4
+#define PIZ_SEQUENCE_IS_SELECTED        5
+#define PIZ_SEQUENCE_IS_MARKED          6
+#define PIZ_SEQUENCE_NOTE_SIZE          7
 
-#define PIZ_SEQUENCE_START                          0
-#define PIZ_SEQUENCE_END                            1
-#define PIZ_SEQUENCE_DOWN                           2
-#define PIZ_SEQUENCE_UP                             3
-#define PIZ_SEQUENCE_ZONE_SIZE                      4
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZ_SEQUENCE_NOTE_FLAG_NONE                 (0L)
-#define PIZ_SEQUENCE_NOTE_FLAG_LASSO                (1<<0)
+#define PIZ_SEQUENCE_START              0
+#define PIZ_SEQUENCE_END                1
+#define PIZ_SEQUENCE_DOWN               2
+#define PIZ_SEQUENCE_UP                 3
+#define PIZ_SEQUENCE_ZONE_SIZE          4
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_ADD_MODE_NONE                  (0L)
-#define PIZ_SEQUENCE_ADD_MODE_SNAP                  (1<<0)
-#define PIZ_SEQUENCE_ADD_MODE_PATTERN               (1<<1)
-#define PIZ_SEQUENCE_ADD_MODE_AMBITUS               (1<<2)
-#define PIZ_SEQUENCE_ADD_MODE_CLIP                  (1<<3)
-#define PIZ_SEQUENCE_ADD_MODE_ORIGIN                (1<<4)
-#define PIZ_SEQUENCE_ADD_MODE_UNSELECT              (1<<5)
-#define PIZ_SEQUENCE_ADD_MODE_CLEAR                 (1<<6)
+#define PIZ_SEQUENCE_NOTE_FLAG_NONE     (0L)
+#define PIZ_SEQUENCE_NOTE_FLAG_LASSO    (1<<0)
+
+#define PIZ_SEQUENCE_ADD_FLAG_NONE      (0L)
+#define PIZ_SEQUENCE_ADD_FLAG_SNAP      (1<<0)
+#define PIZ_SEQUENCE_ADD_FLAG_PATTERN   (1<<1)
+#define PIZ_SEQUENCE_ADD_FLAG_AMBITUS   (1<<2)
+#define PIZ_SEQUENCE_ADD_FLAG_CLIP      (1<<3)
+#define PIZ_SEQUENCE_ADD_FLAG_ORIGIN    (1<<4)
+#define PIZ_SEQUENCE_ADD_FLAG_UNSELECT  (1<<5)
+#define PIZ_SEQUENCE_ADD_FLAG_CLEAR     (1<<6)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_DEFAULT_START                           0
-#define PIZ_DEFAULT_END                             96
-#define PIZ_DEFAULT_DOWN                            60
-#define PIZ_DEFAULT_UP                              71
-#define PIZ_DEFAULT_CHANCE                          100
-#define PIZ_DEFAULT_CHANNEL                         1
-#define PIZ_DEFAULT_VELOCITY                        90
-
-#define PIZ_CHANNEL_NONE                            0
+#define PIZ_DEFAULT_START       0
+#define PIZ_DEFAULT_END         96
+#define PIZ_DEFAULT_DOWN        60
+#define PIZ_DEFAULT_UP          71
+#define PIZ_DEFAULT_CHANCE      100
+#define PIZ_DEFAULT_CHANNEL     1
+#define PIZ_DEFAULT_VELOCITY    90
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+#define PIZ_CHANNEL_NONE    0
+#define PIZ_POOL_SIZE       128
 
 #define PIZLOCK             pthread_mutex_lock (&x->lock);
 #define PIZUNLOCK           pthread_mutex_unlock (&x->lock);
@@ -258,68 +241,66 @@ typedef struct _PIZSequence {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZSequence  *pizSequenceNew                       (void);
-void         pizSequenceFree                       (PIZSequence *x);
+PIZSequence *pizSequenceNew (void);
+void pizSequenceFree (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-long         pizSequenceCount                      (PIZSequence *x);
-long         pizSequenceIndex                      (PIZSequence *x);
-long         pizSequenceChannel                    (PIZSequence *x);
-long         pizSequenceVelocity                   (PIZSequence *x);
-PIZSnapValue pizSequenceGrid                       (PIZSequence *x);
-PIZSnapValue pizSequenceNoteValue                  (PIZSequence *x);
+long pizSequenceCount (PIZSequence *x);
+long pizSequenceIndex (PIZSequence *x);
+long pizSequenceChannel (PIZSequence *x);
+long pizSequenceVelocity (PIZSequence *x);
+PIZSnapValue pizSequenceGrid (PIZSequence *x);
+PIZSnapValue pizSequenceNoteValue (PIZSequence *x);
 
-void         pizSequenceSetChance                  (PIZSequence *x, long value);
-void         pizSequenceSetChannel                 (PIZSequence *x, long channel);
-void         pizSequenceSetVelocity                (PIZSequence *x, long value);
-void         pizSequenceSetGrid                    (PIZSequence *x, PIZSnapValue snapValue);
-void         pizSequenceSetNoteValue               (PIZSequence *x, PIZSnapValue noteValue);
+void pizSequenceSetChance (PIZSequence *x, long value);
+void pizSequenceSetChannel (PIZSequence *x, long channel);
+void pizSequenceSetVelocity (PIZSequence *x, long value);
+void pizSequenceSetGrid (PIZSequence *x, PIZSnapValue snapValue);
+void pizSequenceSetNoteValue (PIZSequence *x, PIZSnapValue noteValue);
 
-PIZError     pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type, const PIZGrowingArray *a);
-PIZError     pizSequenceSetPattern  (PIZSequence *x, const PIZGrowingArray *a);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void         pizSequenceClear                      (PIZSequence *x);
-
-PIZError     pizSequenceSetZoneWithArray           (PIZSequence *x, const PIZGrowingArray *a);
-
-PIZError     pizSequenceAddNotesWithArray          (PIZSequence *x, const PIZGrowingArray *a, long mode);
-PIZError     pizSequenceAddNoteWithCoordinates     (PIZSequence *x, const PIZCoordinates *c,  long mode);
-
-PIZError     pizSequenceZoneToArray                (PIZSequence *x, PIZGrowingArray *a);
-PIZError     pizSequenceNotesToArray               (PIZSequence *x, 
-                                                   PIZGrowingArray *unselectedNotes,
-                                                   PIZGrowingArray *selectedNotes);
+PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type, const PIZGrowingArray *a);
+PIZError pizSequenceSetPattern (PIZSequence *x, const PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-bool         pizSequenceClean                      (PIZSequence *x, long value);
-bool         pizSequenceApplyPattern               (PIZSequence *x);
-bool         pizSequenceApplyAmbitus               (PIZSequence *x);
-void         pizSequenceTransposeOctave            (PIZSequence *x, bool down);
+void pizSequenceClear (PIZSequence *x);
+
+PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *a);
+
+PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *a, long modeFlags);
+PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c,  long modeFlags);
+
+PIZError pizSequenceZoneToArray (PIZSequence *x, PIZGrowingArray *a);
+PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *unselected, PIZGrowingArray *selected);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-bool         pizSequenceIsAtEnd                    (PIZSequence *x);
-void         pizSequenceGoToStart                  (PIZSequence *x);
-PIZError     pizSequenceProceedStep                (PIZSequence *x, PIZGrowingArray *a);
+bool pizSequenceClean (PIZSequence *x, long value);
+bool pizSequenceApplyPattern (PIZSequence *x);
+bool pizSequenceApplyAmbitus (PIZSequence *x);
+void pizSequenceTransposeOctave (PIZSequence *x, bool down);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError    pizSequenceEncodeSlotToArray        (PIZSequence *x, PIZGrowingArray *a);
-PIZError    pizSequenceDecodeSlotWithArray      (PIZSequence *x, const PIZGrowingArray *a);
+bool pizSequenceIsAtEnd (PIZSequence *x);
+void pizSequenceGoToStart (PIZSequence *x);
+PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL            PIZNote *pizSequenceAddNote            (PIZSequence *x, long *values, long mode);
+PIZError pizSequenceEncodeSlotToArray (PIZSequence *x, PIZGrowingArray *a);
+PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, const PIZGrowingArray *a);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZ_LOCAL            PIZNote *pizSequenceAddNote            (PIZSequence *x, long *values, long modeFlags);
 
 PIZ_LOCAL            void pizSequenceMakeMap                (PIZSequence *x);
 PIZ_LOCAL            void pizSequenceClearNotes             (PIZSequence *x);

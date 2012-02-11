@@ -46,15 +46,30 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief Error codes.
+ * \brief   Error codes.
  * \ingroup types
  */
  
 typedef enum {
     PIZ_GOOD    =  0,                       /*!< No error. */
     PIZ_ERROR   =  1,                       /*!< Generic error. */
-    PIZ_MEMORY  =  2,                       /*!< Memory allocation error. */
+    PIZ_MEMORY  =  2                        /*!< Memory allocation error. */
     }PIZError;
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+/**
+ * \brief   Magic numbers.
+ * \ingroup types
+ */
+ 
+typedef enum {
+    PIZ_SCALE_SIZE      = 12,               /*!< Chromatic scale size. */
+    PIZ_MIDI_CHANNEL    = 16,               /*!< Maximum midi channel. */
+    PIZ_MIDI_VELOCITY   = 127,              /*!< Maximum midi velocity. */
+    PIZ_MIDI_PITCH      = 127               /*!< Maximum midi pitch. */
+    }PIZMagic;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
