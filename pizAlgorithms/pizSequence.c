@@ -409,6 +409,7 @@ PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *a)
 
 PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *a, long modeFlags)
 {
+    bool haveChanged = false;
     long err = PIZ_ERROR;
     
     PIZLOCK
@@ -428,10 +429,16 @@ PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *a,
         
         for (i = (count - 1); i >= 0; i--) {
             if (!(pizSequenceAddNote (x, ptr + (i * PIZ_SEQUENCE_NOTE_SIZE), modeFlags))) {
-                    err |= PIZ_ERROR;
-                }
+                err |= PIZ_ERROR;
+            } else {
+                haveChanged = true;
             }
         }
+        
+        if (haveChanged) {
+            pizSequenceCleanMap (x);
+        }
+    }
     
     PIZUNLOCK
     
@@ -459,8 +466,10 @@ PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates
     }
     
     if (!(pizSequenceAddNote (x, values, modeFlags))) {
-            err |= PIZ_ERROR;
-        }
+        err |= PIZ_ERROR;
+    } else {
+        pizSequenceCleanMap (x);
+    }
                     
     PIZUNLOCK
     
@@ -497,8 +506,6 @@ PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *a, PIZGrowing
     long err = PIZ_GOOD;
     
     PIZLOCK
-    
-    pizSequenceCleanMap (x);
     
     scale = pizGrowingArrayCount (x->scale);
     
@@ -612,9 +619,6 @@ bool pizSequenceClean (PIZSequence *x, long value)
     }
     
     if (index) {
-        PIZMAPDIRTY
-        haveChanged = true;
-        
         for (i = 0; i < index; i++) {
             if (x->notes1[i] == x->markedNote) {
                     x->markedNote = NULL;
@@ -624,6 +628,8 @@ bool pizSequenceClean (PIZSequence *x, long value)
                     x->count --;
                 }
         }
+        
+        haveChanged = true;
     }
     
     PIZUNLOCK
@@ -673,8 +679,6 @@ bool pizSequenceApplyPattern (PIZSequence *x)
                 values[PIZ_SEQUENCE_NOTE_SIZE]      = note->originPosition;
                 
                 if (newNote = pizSequenceAddNote (x, values, PIZ_SEQUENCE_ADD_FLAG_ORIGIN)) {
-                    haveChanged = true;
-            
                     if (note == x->markedNote) {
                             x->markedNote = NULL;
                         }
@@ -682,6 +686,8 @@ bool pizSequenceApplyPattern (PIZSequence *x)
                     if (!(pizLinklistRemoveByPtr (x->timeline[p], (void *)note))) {
                             x->count --;
                         }
+                    
+                    haveChanged = true;
                 }
             }
                 
@@ -690,7 +696,6 @@ bool pizSequenceApplyPattern (PIZSequence *x)
     }
     
     if (haveChanged) {
-        PIZMAPDIRTY
         pizSequenceCleanMap (x);
     }
     
@@ -935,7 +940,6 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long modeFlags)
         
         if (!err && !(pizItemset1024IsSetAtIndex (&x->mapFlags, newNote->position))) {
             if (!(err |= pizGrowingArrayAppend (x->map, newNote->position))) {
-                    PIZMAPDIRTY
                     pizItemset1024SetAtIndex (&x->mapFlags, newNote->position);
                 }
         }
@@ -957,17 +961,15 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long modeFlags)
 
 void pizSequenceCleanMap (PIZSequence *x)
 {
-    if (PIZISMAPDIRTY) {
-        long i;
-                
-        pizItemset1024Clear  (&x->mapFlags);
-        pizGrowingArrayClear (x->map);
-                                
-        for (i = 0; i < PIZ_SEQUENCE_TIMELINE_SIZE; i++) {
-            if (x->timeline[i] && pizLinklistCount (x->timeline[i])) {
-                pizItemset1024SetAtIndex (&x->mapFlags, i);
-                pizGrowingArrayAppend    (x->map, i);
-            }
+    long i;
+            
+    pizItemset1024Clear  (&x->mapFlags);
+    pizGrowingArrayClear (x->map);
+                            
+    for (i = 0; i < PIZ_SEQUENCE_TIMELINE_SIZE; i++) {
+        if (x->timeline[i] && pizLinklistCount (x->timeline[i])) {
+            pizItemset1024SetAtIndex (&x->mapFlags, i);
+            pizGrowingArrayAppend    (x->map, i);
         }
     }
 }

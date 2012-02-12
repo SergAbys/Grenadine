@@ -90,8 +90,6 @@ bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm flag, void *algor
     
     PIZLOCK
     
-    pizSequenceCleanMap (x);
-    
     k = pizSequencePickUpNotes (x);
     
     if ((flag == PIZ_FACTOR_ORACLE) && pizFactorOracleCount ((PIZFactorOracle *)algorithm)) {
@@ -382,7 +380,6 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
         }
 
         if (haveChanged) {
-            PIZMAPDIRTY
             pizSequenceCleanMap (x);
         }
     }
@@ -551,7 +548,6 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
         }
         
         if (haveChanged) {
-            PIZMAPDIRTY
             pizSequenceCleanMap (x);
         }
     }
@@ -573,8 +569,6 @@ bool pizSequenceRotate (PIZSequence *x, PIZSelector selector, long shift)
     PIZLOCK
     
     haveChanged = (x->count > 1);
-    
-    pizSequenceCleanMap (x);
     
     k = pizSequencePickUpNotes (x);
     
@@ -633,8 +627,6 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, long down)
     PIZLOCK
     
     haveChanged = (x->count > 1);
-    
-    pizSequenceCleanMap (x);
     
     k = pizSequencePickUpNotes (x);
     scale = pizGrowingArrayCount (x->scale);
@@ -877,7 +869,6 @@ bool pizSequenceKillNotes (PIZSequence *x)
     }
     
     if (haveChanged) {
-        PIZMAPDIRTY
         pizSequenceCleanMap (x);
     }
     

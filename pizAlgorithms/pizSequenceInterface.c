@@ -521,7 +521,6 @@ PIZError pizSequenceRemoveSelectedNotes (PIZSequence *x)
         }
     }
     
-    PIZMAPDIRTY
     pizSequenceCleanMap (x);
     
     PIZUNLOCK

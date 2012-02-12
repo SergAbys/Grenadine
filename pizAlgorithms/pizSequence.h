@@ -109,8 +109,6 @@
 
 #define PIZLOCK             pthread_mutex_lock (&x->lock);
 #define PIZUNLOCK           pthread_mutex_unlock (&x->lock);
-#define PIZMAPDIRTY         (pizItemset1024SetAtIndex (&x->mapFlags, 576));
-#define PIZISMAPDIRTY       (pizItemset1024IsSetAtIndex (&x->mapFlags, 576))
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -49,8 +49,6 @@ PIZError pizSequenceEncodeSlotToArray (PIZSequence *x, PIZGrowingArray *a)
     
     PIZLOCK
     
-    pizSequenceCleanMap (x);
-    
     if (a) {
         long i;
         
@@ -186,8 +184,6 @@ PIZError pizSequenceEncodeUndoToArray (PIZSequence *x, PIZGrowingArray *a)
     long err = PIZ_ERROR;
     
     PIZLOCK
-    
-    pizSequenceCleanMap (x);
     
     if (a) {
         long i;
