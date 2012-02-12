@@ -2,10 +2,6 @@
  * \file        pizDataStructures.h
  * \author      Jean Sapristi
  * \date        31 janvier 2012
- * \defgroup    max Max/MSP
- * \defgroup    algorithms Algorithms
- * \defgroup    structures Custom Structures
- * \defgroup    mt Multi-Threaded
  */
 
 /*
@@ -37,34 +33,6 @@
  *  
  *  The fact that you are presently reading this means that you have had
  *  knowledge of the CeCILL-C license and that you accept its terms.
- */
-
-/**
- * \defgroup types Types
- * \ingroup structures
- * \defgroup queue Queue
- * \ingroup structures
- * \defgroup linklist Linklist
- * \ingroup structures
- * \defgroup hashtable Hash Table
- * \ingroup structures
- * \defgroup dictionary Dictionary
- * \ingroup structures
- * \defgroup itemset128 Itemset 128
- * \ingroup structures
- * \defgroup itemset1024 Itemset 1024
- * \ingroup structures
- * \defgroup growingArray Growing Array
- * \ingroup structures
- * \defgroup arrayPool Growing Array Pool
- * \ingroup structures
- * \ingroup mt
- * \defgroup boundedQueue Bounded Queue
- * \ingroup structures
- * \defgroup boundedStack Bounded Stack
- * \ingroup structures
- * \defgroup boundedHashTable Bounded Hash Table
- * \ingroup structures
  */
  
 // -------------------------------------------------------------------------------------------------------------

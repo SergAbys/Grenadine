@@ -29,8 +29,8 @@
 #include "ext_atomic.h"
 
 #include "pizSequence.h"
-#include "pizInterface.h"
-#include "pizTransform.h"
+#include "pizSequenceInterface.h"
+#include "pizSequenceTransform.h"
 #include "tralalaSymbols.h"
 
 // -------------------------------------------------------------------------------------------------------------

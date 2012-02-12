@@ -54,7 +54,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_TIMELINE_SIZE      576   // 576 < 1024
+#define PIZ_SEQUENCE_TIMELINE_SIZE      576   
 #define PIZ_SEQUENCE_MAXIMUM_NOTES      128   // PIZ_POOL_SIZE
 #define PIZ_SEQUENCE_MAXIMUM_DURATION   96
 
@@ -109,8 +109,8 @@
 
 #define PIZLOCK             pthread_mutex_lock (&x->lock);
 #define PIZUNLOCK           pthread_mutex_unlock (&x->lock);
-#define PIZMAPFLAG          (pizItemset1024SetAtIndex (&x->mapFlags, 1024));
-#define PIZNEEDTOMAKEMAP    (pizItemset1024IsSetAtIndex (&x->mapFlags, 1024))
+#define PIZMAPDIRTY         (pizItemset1024SetAtIndex (&x->mapFlags, 576));
+#define PIZISMAPDIRTY       (pizItemset1024IsSetAtIndex (&x->mapFlags, 576))
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -302,7 +302,7 @@ PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, const PIZGrowingArray *
 
 PIZ_LOCAL            PIZNote *pizSequenceAddNote            (PIZSequence *x, long *values, long modeFlags);
 
-PIZ_LOCAL            void pizSequenceMakeMap                (PIZSequence *x);
+PIZ_LOCAL            void pizSequenceCleanMap               (PIZSequence *x);
 PIZ_LOCAL            void pizSequenceClearNotes             (PIZSequence *x);
 PIZ_LOCAL            long pizSequenceMovePitchToAmbitus     (PIZSequence *x, long pitch);
 

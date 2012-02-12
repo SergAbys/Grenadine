@@ -498,7 +498,7 @@ PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *a, PIZGrowing
     
     PIZLOCK
     
-    pizSequenceMakeMap (x);
+    pizSequenceCleanMap (x);
     
     scale = pizGrowingArrayCount (x->scale);
     
@@ -612,8 +612,7 @@ bool pizSequenceClean (PIZSequence *x, long value)
     }
     
     if (index) {
-    
-        PIZMAPFLAG
+        PIZMAPDIRTY
         haveChanged = true;
         
         for (i = 0; i < index; i++) {
@@ -691,8 +690,8 @@ bool pizSequenceApplyPattern (PIZSequence *x)
     }
     
     if (haveChanged) {
-        PIZMAPFLAG
-        pizSequenceMakeMap (x);
+        PIZMAPDIRTY
+        pizSequenceCleanMap (x);
     }
     
     PIZUNLOCK
@@ -875,7 +874,7 @@ PIZError pizSequenceEncodeSlotToArray (PIZSequence *x, PIZGrowingArray *a)
     
     PIZLOCK
     
-    pizSequenceMakeMap (x);
+    pizSequenceCleanMap (x);
     
     if (a) {
         long i;
@@ -1075,7 +1074,7 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long modeFlags)
         
         if (!err && !(pizItemset1024IsSetAtIndex (&x->mapFlags, newNote->position))) {
             if (!(err |= pizGrowingArrayAppend (x->map, newNote->position))) {
-                    PIZMAPFLAG
+                    PIZMAPDIRTY
                     pizItemset1024SetAtIndex (&x->mapFlags, newNote->position);
                 }
         }
@@ -1095,9 +1094,9 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long modeFlags)
     return newNote;
 }   
 
-void pizSequenceMakeMap (PIZSequence *x)
+void pizSequenceCleanMap (PIZSequence *x)
 {
-    if (PIZNEEDTOMAKEMAP) {
+    if (PIZISMAPDIRTY) {
         long i;
                 
         pizItemset1024Clear  (&x->mapFlags);
@@ -1142,11 +1141,11 @@ long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
             
     if (pitch < x->down) {
         while ((pitch < x->down) && (pitch < PIZ_MIDI_PITCH)) {
-        pitch += PIZ_SCALE_SIZE;
+            pitch += PIZ_SCALE_SIZE;
         }
     } else if (pitch > x->up) {
         while ((pitch > x->up) && (pitch > 0)) {
-        pitch -= PIZ_SCALE_SIZE;
+            pitch -= PIZ_SCALE_SIZE;
         }
     }
             
