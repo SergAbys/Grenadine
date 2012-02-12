@@ -84,50 +84,43 @@ static double   piz_distribution11[ ] = {0.54, 0.59, 0.63, 0.68, 0.72, 0.77, 0.8
 
 bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm flag, void *algorithm)
 {
+    long k;
     long err = PIZ_ERROR;
     bool haveChanged = false;
     
     PIZLOCK
     
+    pizSequenceCleanMap (x);
+    
+    k = pizSequencePickUpNotes (x);
+    
     if ((flag == PIZ_FACTOR_ORACLE) && pizFactorOracleCount ((PIZFactorOracle *)algorithm)) {
-            err = pizFactorOracleProceed ((PIZFactorOracle *)algorithm, x->count, x->values1);
+            err = pizFactorOracleProceed ((PIZFactorOracle *)algorithm, k, x->values1);
         }
     else if ((flag == PIZ_GALOIS_LATTICE) && pizGaloisLatticeCount ((PIZGaloisLattice *)algorithm)) {
-            err = pizGaloisLatticeProceed ((PIZGaloisLattice *)algorithm, x->count, x->values1);
+            err = pizGaloisLatticeProceed ((PIZGaloisLattice *)algorithm, k, x->values1);
         }
     else if ((flag == PIZ_FINITE_STATE) && pizFiniteStateCount ((PIZFiniteState *)algorithm)) {
-            err = pizFiniteStateProceed ((PIZFiniteState *)algorithm, x->count, x->values1);
+            err = pizFiniteStateProceed ((PIZFiniteState *)algorithm, k, x->values1);
         }
     
     if (!err) {
-        long i, k = 0;  
+        long i, h;  
         
-        for (i = 0; i < x->count; i++) {
+        for (i = 0; i < k; i++) {
                 x->values1[i] = pizSequenceMovePitchToAmbitus (x, x->values1[i]);
             }
-            
-        for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
-            PIZNote *note       = NULL;
-            PIZNote *nextNote   = NULL;
-            
-            long p = pizGrowingArrayValueAtIndex (x->map, i);
-            
-            pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-            
-            while (note) {
-                long h = 100 * (rand ( ) / (RAND_MAX + 1.0));
-                
-                pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-                
-                if (h < x->chance)  {   
-                    note->data[PIZ_PITCH] = x->values1[k];
-                    k ++;
-                    haveChanged = true;
-                }
-                
-                note = nextNote;
+        
+        for (i = 0; i < k; i++) {        
+            h = 100 * (rand ( ) / (RAND_MAX + 1.0));
+            if (h >= x->chance) {
+                x->values1[i] = x->notes1[i]->data[PIZ_PITCH];
+            } else {
+                haveChanged = true;
             }
         }
+        
+        pizSequenceFillValues (x, PIZ_PITCH, k, 0);
     }
     
     PIZUNLOCK
