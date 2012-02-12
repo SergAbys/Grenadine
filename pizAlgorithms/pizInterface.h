@@ -1,7 +1,7 @@
 /**
  * \file    pizInterface.h
  * \author  Jean Sapristi
- * \date    26 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
@@ -74,7 +74,7 @@ long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, const PIZCoordinates 
 long pizSequenceInvertNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c);
 
 void pizSequenceInitLasso (PIZSequence *x);
-long pizSequenceSelectNotesWithLasso (PIZSequence *x, const PIZCoordinates *a, const PIZCoordinates *b, bool r);
+long pizSequenceSelectNotesWithLasso (PIZSequence *x, const PIZCoordinates *m, const PIZCoordinates *n, bool r);
 
 PIZError pizSequenceRemoveSelectedNotes (PIZSequence *x);
 

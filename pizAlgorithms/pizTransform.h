@@ -1,7 +1,7 @@
 /**
  * \file    pizTransform.h
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    31 janvier 2012
  */
  
 /*
