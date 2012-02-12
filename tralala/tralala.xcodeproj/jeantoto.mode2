@@ -420,8 +420,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96A1016414E7F8B500D3ECB6</string>
-				<string>96A1016514E7F8B500D3ECB6</string>
+				<string>96D962D714E812F400A74E17</string>
+				<string>96D962D814E812F400A74E17</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -454,6 +454,7 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/Tralala/tralala.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -610,14 +611,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>tralala.c</string>
+								<string></string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -637,7 +636,7 @@
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 191}, {1280, 11}}</string>
+								<string>{{0, 153}, {1280, 49}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>
@@ -675,7 +674,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96A1015514E7F7BA00D3ECB6</string>
+				<string>96D962D914E812F400A74E17</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

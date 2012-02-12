@@ -137,7 +137,7 @@ CLASS_ATTR_LONG            (c, "channel",          0, t_tralala, channel);
 CLASS_ATTR_DEFAULT         (c, "channel",          0, DEFAULT_CHANNEL);
 CLASS_ATTR_LABEL           (c, "channel",          0, "Channel");
 CLASS_ATTR_CATEGORY        (c, "channel",          0, "Midi");
-CLASS_ATTR_FILTER_CLIP     (c, "channel",          1, PIZ_MIDI_CHANNEL);
+CLASS_ATTR_FILTER_CLIP     (c, "channel",          1, PIZ_MAGIC_CHANNEL);
 CLASS_ATTR_ACCESSORS       (c, "channel",          NULL, tralala_setChannel);
 
 CLASS_STICKY_ATTR          (c, "category",      0, "Value");
@@ -164,7 +164,7 @@ CLASS_ATTR_DEFAULT         (c, "scaletype",     0, DEFAULT_SCALE_TYPE);
 CLASS_ATTR_ACCESSORS       (c, "scaletype",     NULL, tralala_setScaleType);
 CLASS_ATTR_LABEL           (c, "scaletype",     0, "Scale Type");
 
-CLASS_ATTR_LONG_ARRAY      (c, "scalecustom",   0, t_tralala, scaleCustom, PIZ_SCALE_SIZE);
+CLASS_ATTR_LONG_ARRAY      (c, "scalecustom",   0, t_tralala, scaleCustom, PIZ_MAGIC_SCALE);
 CLASS_ATTR_DEFAULT         (c, "scalecustom",   0, DEFAULT_SCALE_CUSTOM);
 CLASS_ATTR_ACCESSORS       (c, "scalecustom",   NULL, tralala_setScaleCustom);
 CLASS_ATTR_LABEL           (c, "scalecustom",   0, "Scale Custom");
@@ -920,15 +920,13 @@ void tralala_dataToDictionary (t_tralala *x, t_dictionary *d)
                             dictionary_appendsym    (d, tll_sym_patternCell, x->patternCell);
                             dictionary_appendlong   (d, tll_sym_velocity, x->velocity);
                             
-                            if ((atom_alloc_array (PIZ_SCALE_SIZE, &argc1, &argv1, &alloc1)) 
-                                == MAX_ERR_NONE) {
-                                atom_setlong_array (argc1, argv1, PIZ_SCALE_SIZE, x->scaleCustom);
+                            if ((atom_alloc_array (PIZ_MAGIC_SCALE, &argc1, &argv1, &alloc1)) == MAX_ERR_NONE) {
+                                atom_setlong_array (argc1, argv1, PIZ_MAGIC_SCALE, x->scaleCustom);
                                 dictionary_appendatoms (d, tll_sym_scaleCustom, argc1, argv1);
                                 sysmem_freeptr (argv1);
                             }
                             
-                            if ((atom_alloc_array (x->patternSize, &argc2, &argv2, &alloc2)) 
-                                == MAX_ERR_NONE) {
+                            if ((atom_alloc_array (x->patternSize, &argc2, &argv2, &alloc2)) == MAX_ERR_NONE) {
                                 atom_setlong_array (argc2, argv2, x->patternSize, x->patternCustom);
                                 dictionary_appendatoms (d, tll_sym_patternCustom, argc2, argv2);
                                 sysmem_freeptr (argv2);
@@ -1188,7 +1186,7 @@ t_max_err tralala_setScaleKey (t_tralala *x, t_object *attr, long argc, t_atom *
                                         {
                                             long i;
                                             
-                                            for (i = 0; i < PIZ_SCALE_SIZE; i++) {
+                                            for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
                                                     pizGrowingArrayAppend (tempArray, x->scaleCustom[i]);
                                                 }
                                                 
@@ -1295,7 +1293,7 @@ t_max_err tralala_setScaleType (t_tralala *x, t_object *attr, long argc, t_atom 
                                                 {
                                                     long i;
                                                     
-                                                    for (i = 0; i < PIZ_SCALE_SIZE; i++) {
+                                                    for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
                                                         pizGrowingArrayAppend (tempArray, x->scaleCustom[i]);
                                                     }
                                                     
@@ -1320,9 +1318,9 @@ t_max_err tralala_setScaleType (t_tralala *x, t_object *attr, long argc, t_atom 
 
 t_max_err tralala_setScaleCustom (t_tralala *x, t_object *attr, long argc, t_atom *argv)
 {
-    if ((argc == PIZ_SCALE_SIZE) && argv)
+    if ((argc == PIZ_MAGIC_SCALE) && argv)
         {   
-            atom_getlong_array (argc, argv, PIZ_SCALE_SIZE, x->scaleCustom);
+            atom_getlong_array (argc, argv, PIZ_MAGIC_SCALE, x->scaleCustom);
             
             if (x->type == PIZ_SCALE_CUSTOM)
                 {
@@ -1332,7 +1330,7 @@ t_max_err tralala_setScaleCustom (t_tralala *x, t_object *attr, long argc, t_ato
                         {
                             long i;
                             
-                            for (i = 0; i < PIZ_SCALE_SIZE; i++) {
+                            for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
                                     pizGrowingArrayAppend (tempArray, x->scaleCustom[i]);
                                 }
                                 
@@ -1746,7 +1744,7 @@ void tralala_setLiveByUser (t_tralala *x)
 
 void tralala_int (t_tralala *x, long n)
 {
-    if (n >= 0 && n <= PIZ_MIDI_PITCH)
+    if (n >= 0 && n <= PIZ_MAGIC_PITCH)
         {
             systhread_mutex_lock (&x->learnMutex);
             pizBoundedQueueAppend (x->learnQueue, n);
@@ -1760,7 +1758,7 @@ void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         {
             long n = atom_getlong (argv);
             
-            if (n >= 0 && n <= PIZ_MIDI_PITCH)
+            if (n >= 0 && n <= PIZ_MAGIC_PITCH)
                 {
                     systhread_mutex_lock (&x->learnMutex);
                     pizBoundedQueueAppend (x->learnQueue, n);
@@ -3169,9 +3167,9 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                     c1.position = (long)((x->windowOffsetX + pt.x) / (STEP_PIXELS_SIZE * f));
                     c2.position = (long)((x->windowOffsetX + pt.x) / (STEP_PIXELS_SIZE * f));
                     
-                    c1.pitch = PIZ_MIDI_PITCH - MAX (((long)((x->windowOffsetY + pt.y - 
+                    c1.pitch = PIZ_MAGIC_PITCH - MAX (((long)((x->windowOffsetY + pt.y - 
                                 (SEMITONE_PIXELS_SIZE / 2. * f)) / (SEMITONE_PIXELS_SIZE * f))), 0);
-                    c2.pitch = PIZ_MIDI_PITCH - MAX (((long)((x->windowOffsetY + pt.y + 
+                    c2.pitch = PIZ_MAGIC_PITCH - MAX (((long)((x->windowOffsetY + pt.y + 
                                 (SEMITONE_PIXELS_SIZE / 2. * f)) / (SEMITONE_PIXELS_SIZE * f))), 0);
                                 
                     switch (x->hitTest) {
@@ -3529,7 +3527,7 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
                                 }
                                     
                                 if (pizGrowingArrayValueAtIndex (tll_clipboard, PIZ_SEQUENCE_PITCH)
-                                    < (PIZ_MIDI_PITCH / 2)) {
+                                    < (PIZ_MAGIC_PITCH / 2)) {
                                     offsetPitch = 1;
                                 } else {
                                     offsetPitch = -1;
@@ -4654,7 +4652,7 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
         }
         
     g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_gridLayer, PIZ_SEQUENCE_TIMELINE_SIZE 
-        * STEP_PIXELS_SIZE * f, (PIZ_MIDI_PITCH + 1) * SEMITONE_PIXELS_SIZE * f);
+        * STEP_PIXELS_SIZE * f, (PIZ_MAGIC_PITCH + 1) * SEMITONE_PIXELS_SIZE * f);
 
     if (g) 
         {
@@ -4699,14 +4697,14 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
             imageHeight = jgraphics_image_surface_get_height (background);
             
             gridWidth   = PIZ_SEQUENCE_TIMELINE_SIZE * STEP_PIXELS_SIZE * f;
-            gridHeight  = (PIZ_MIDI_PITCH + 1) * SEMITONE_PIXELS_SIZE * f;
+            gridHeight  = (PIZ_MAGIC_PITCH + 1) * SEMITONE_PIXELS_SIZE * f;
             
             srcRect.x       = 0.;
             srcRect.y       = 0.;
             srcRect.width   = imageWidth;
             srcRect.height  = imageHeight;
             
-            for (i = 0; i < ((PIZ_MIDI_PITCH + 1) / JSURFACE_MOSAIC_PITCH_SIZE); i ++)
+            for (i = 0; i < ((PIZ_MAGIC_PITCH + 1) / JSURFACE_MOSAIC_PITCH_SIZE); i ++)
                 {
                     long j;
                     
@@ -4744,7 +4742,7 @@ void tralala_paintNotes (t_tralala *x, t_object *patcherview)
         }
     
     g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_notesLayer, PIZ_SEQUENCE_TIMELINE_SIZE 
-        * STEP_PIXELS_SIZE * f, (PIZ_MIDI_PITCH + 1) * SEMITONE_PIXELS_SIZE * f);
+        * STEP_PIXELS_SIZE * f, (PIZ_MAGIC_PITCH + 1) * SEMITONE_PIXELS_SIZE * f);
     
     if (g) 
         {
@@ -4868,7 +4866,7 @@ void tralala_paintPlayedNotes (t_tralala *x, t_object *patcherview)
         }
     
     g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_playedNotesLayer, PIZ_SEQUENCE_TIMELINE_SIZE 
-        * STEP_PIXELS_SIZE * f, (PIZ_MIDI_PITCH + 1) * SEMITONE_PIXELS_SIZE * f);
+        * STEP_PIXELS_SIZE * f, (PIZ_MAGIC_PITCH + 1) * SEMITONE_PIXELS_SIZE * f);
     
     if (g) 
         {
@@ -4939,7 +4937,7 @@ void tralala_paintNoteCandycane (t_tralala *x, t_jgraphics *g, long position, lo
         case 11 : jrgba_to_atoms (&x->bNoteColor, temp);        break;
         } 
 
-    alpha = (double)(velocity + VELOCITY_PAINT_OFFSET) / (double)PIZ_MIDI_VELOCITY;
+    alpha = (double)(velocity + VELOCITY_PAINT_OFFSET) / (double)PIZ_MAGIC_VELOCITY;
     
     if (alpha > 0.005)
         {
@@ -4969,7 +4967,7 @@ void tralala_paintNoteWithColor (t_tralala *x, t_jgraphics *g, long position, lo
     
     tralala_setRectWithCoordinatesAndDuration (x, &noteRect, &coordinates, duration);
     
-    alpha = (double)velocity / (double)PIZ_MIDI_VELOCITY;
+    alpha = (double)velocity / (double)PIZ_MAGIC_VELOCITY;
     
     jrgba_to_atoms  (color, temp);
     atom_setfloat   (temp + 3, CLAMP (alpha, 0.25, 1.));
@@ -4991,7 +4989,7 @@ void tralala_paintZone (t_tralala *x, t_object *patcherview)
         }
     
     g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_zoneLayer, PIZ_SEQUENCE_TIMELINE_SIZE 
-        * STEP_PIXELS_SIZE * f, (PIZ_MIDI_PITCH + 1) * SEMITONE_PIXELS_SIZE * f);
+        * STEP_PIXELS_SIZE * f, (PIZ_MAGIC_PITCH + 1) * SEMITONE_PIXELS_SIZE * f);
     
     if (g) 
         {
@@ -5089,7 +5087,7 @@ bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitc
                                             CLAMP (position, 0, PIZ_SEQUENCE_TIMELINE_SIZE - duration));
             pizGrowingArraySetValueAtIndex (x->selectedNotes, 
                                             (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH,
-                                            CLAMP (pitch, 0, PIZ_MIDI_PITCH));
+                                            CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
             
             if ((previousPosition != position) || (previousPitch != pitch)) {
                     moved = true;
@@ -5175,7 +5173,7 @@ void tralala_changeSelectedNotesVelocity (t_tralala *x, bool decrement)
                         }
                     else
                         {
-                            temp = PIZ_MIDI_VELOCITY - (pizGrowingArrayValueAtIndex (x->selectedNotes,
+                            temp = PIZ_MAGIC_VELOCITY - (pizGrowingArrayValueAtIndex (x->selectedNotes,
                                 (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY) + step);
                         }
                     
@@ -5218,7 +5216,7 @@ void tralala_setSelectedNotesVelocity (t_tralala *x, long velocity)
     
     for (i = 0; i < count; i++) {
         pizGrowingArraySetValueAtIndex (x->selectedNotes, (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY,
-            CLAMP (velocity, 0, PIZ_MIDI_VELOCITY));
+            CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY));
     }
     
     systhread_mutex_unlock (&x->arrayMutex);
@@ -5235,7 +5233,7 @@ void tralala_setSelectedNotesChannel (t_tralala *x, long channel)
     
     for (i = 0; i < count; i++) {
         pizGrowingArraySetValueAtIndex (x->selectedNotes, (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_CHANNEL,
-            CLAMP (channel, 0, PIZ_MIDI_CHANNEL));
+            CLAMP (channel, 0, PIZ_MAGIC_CHANNEL));
     }
     
     systhread_mutex_unlock (&x->arrayMutex);
@@ -5373,7 +5371,7 @@ bool tralala_hitNotesByRunIndex (t_tralala *x)
                         {
                             err |= pizGrowingArrayAppend (x->playedNotes, position);
                             err |= pizGrowingArrayAppend (x->playedNotes, pitch);
-                            err |= pizGrowingArrayAppend (x->playedNotes, PIZ_MIDI_VELOCITY);
+                            err |= pizGrowingArrayAppend (x->playedNotes, PIZ_MAGIC_VELOCITY);
                             err |= pizGrowingArrayAppend (x->playedNotes, duration);
                             err |= pizGrowingArrayAppend (x->playedNotes, false);
                             err |= pizGrowingArrayAppend (x->playedNotes, false);
@@ -5427,10 +5425,10 @@ bool tralala_setCoordinatesWithPoint (t_tralala *x, PIZCoordinates *coordinates,
         }
     
     coordinates->position   = (long)((x->windowOffsetX + pt.x) / (STEP_PIXELS_SIZE * f));
-    coordinates->pitch      = PIZ_MIDI_PITCH - MAX (((long)((x->windowOffsetY + pt.y) / 
+    coordinates->pitch      = PIZ_MAGIC_PITCH - MAX (((long)((x->windowOffsetY + pt.y) / 
                                 (SEMITONE_PIXELS_SIZE * f))), 0);
     
-    if ((coordinates->pitch < 0) || (coordinates->pitch > PIZ_MIDI_PITCH) || 
+    if ((coordinates->pitch < 0) || (coordinates->pitch > PIZ_MAGIC_PITCH) || 
         (coordinates->position < 0) || (coordinates->position > (PIZ_SEQUENCE_TIMELINE_SIZE - 1)))
         {
             inside = false;
@@ -5464,8 +5462,8 @@ void tralala_setRectWithZoneValues (t_tralala *x, t_rect *zoneRect, long start, 
     
     x1 = start * STEP_PIXELS_SIZE  * f;
     x2 = end * STEP_PIXELS_SIZE  * f;
-    y1 = (PIZ_MIDI_PITCH - up) * SEMITONE_PIXELS_SIZE * f;
-    y2 = ((PIZ_MIDI_PITCH + 1) - down) * SEMITONE_PIXELS_SIZE * f;
+    y1 = (PIZ_MAGIC_PITCH - up) * SEMITONE_PIXELS_SIZE * f;
+    y2 = ((PIZ_MAGIC_PITCH + 1) - down) * SEMITONE_PIXELS_SIZE * f;
     
     zoneRect->x         = x1;
     zoneRect->y         = y1;
@@ -5486,7 +5484,7 @@ void tralala_setRectWithCoordinatesAndDuration (t_tralala *x, t_rect *noteRect, 
     
     x1 = (c->position * STEP_PIXELS_SIZE  * f);
     x2 = x1 + (d * STEP_PIXELS_SIZE * f);
-    y1 = ((PIZ_MIDI_PITCH - c->pitch) * SEMITONE_PIXELS_SIZE * f);
+    y1 = ((PIZ_MAGIC_PITCH - c->pitch) * SEMITONE_PIXELS_SIZE * f);
     y2 = y1 + (SEMITONE_PIXELS_SIZE * f);
     
     noteRect->x         = x1;

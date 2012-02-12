@@ -362,7 +362,7 @@ typedef struct _tralala {
     t_symbol            *popupFontName;
     double              popupFontSize;
     long                popupFontFace;
-    long                scaleCustom     [PIZ_SCALE_SIZE];               //
+    long                scaleCustom     [PIZ_MAGIC_SCALE];              //
     long                patternCustom   [PATTERN_MAXIMUM_SIZE]; 
     long                patternSize;
     PIZSnapValue        cell;

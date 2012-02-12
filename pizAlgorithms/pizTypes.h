@@ -65,10 +65,10 @@ typedef enum {
  */
  
 typedef enum {
-    PIZ_SCALE_SIZE      = 12,               /*!< Chromatic scale size. */
-    PIZ_MIDI_CHANNEL    = 16,               /*!< Maximum midi channel. */
-    PIZ_MIDI_VELOCITY   = 127,              /*!< Maximum midi velocity. */
-    PIZ_MIDI_PITCH      = 127               /*!< Maximum midi pitch. */
+    PIZ_MAGIC_SCALE      = 12,               /*!< Chromatic scale size. */
+    PIZ_MAGIC_CHANNEL    = 16,               /*!< Maximum midi channel. */
+    PIZ_MAGIC_VELOCITY   = 127,              /*!< Maximum midi velocity. */
+    PIZ_MAGIC_PITCH      = 127               /*!< Maximum midi pitch. */
     }PIZMagic;
 
 // -------------------------------------------------------------------------------------------------------------

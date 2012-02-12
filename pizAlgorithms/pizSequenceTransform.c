@@ -161,7 +161,7 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                     offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_PITCH] % scale);
                 }
                 
-                key = ((long)(note->position / (double)x->grid) * (PIZ_MIDI_PITCH + 1)) 
+                key = ((long)(note->position / (double)x->grid) * (PIZ_MAGIC_PITCH + 1)) 
                     + (note->data[PIZ_PITCH] + offset);
                 
                 pizBoundedHashTableAdd (x->hashTable, key, (void *)note);
@@ -198,7 +198,7 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                 
                 pitch = note->data[PIZ_PITCH] + offset;
                 
-                hCenter = (((long)(note->position / (double)x->grid)) * (PIZ_MIDI_PITCH + 1)) 
+                hCenter = (((long)(note->position / (double)x->grid)) * (PIZ_MAGIC_PITCH + 1)) 
                     + (note->data[PIZ_PITCH] + offset);
                 
                 err |= (note->position < x->start);
@@ -237,13 +237,13 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                 }
 
                 if (previous != here) {
-                    hPat[1] = (previous * (PIZ_MIDI_PITCH + 1)) + pitch;
+                    hPat[1] = (previous * (PIZ_MAGIC_PITCH + 1)) + pitch;
                     
                     if (scale) {
-                        for (j = 1; j < PIZ_SCALE_SIZE; j++) {
+                        for (j = 1; j < PIZ_MAGIC_SCALE; j++) {
                             long n;
                             long t = pitch - j;
-                            long b = CLAMP (t, 0, PIZ_MIDI_PITCH);
+                            long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
                             
                             n = pizGrowingArrayValueAtIndex (x->scale, b % scale);
                             
@@ -253,10 +253,10 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                                 }
                         }
                         
-                        for (j = 1; j < PIZ_SCALE_SIZE; j++) {
+                        for (j = 1; j < PIZ_MAGIC_SCALE; j++) {
                             long n;
                             long t = pitch + j;
-                            long b = CLAMP (t, 0, PIZ_MIDI_PITCH);
+                            long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
                             
                             n = pizGrowingArrayValueAtIndex (x->scale, b % scale);
                             
@@ -272,13 +272,13 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                 }
                 
                 if (next != here) {
-                    hPat[4] = (next * (PIZ_MIDI_PITCH + 1)) + pitch;
+                    hPat[4] = (next * (PIZ_MAGIC_PITCH + 1)) + pitch;
                     
                     if (scale) {
-                        for (j = 1; j < PIZ_SCALE_SIZE; j++) {
+                        for (j = 1; j < PIZ_MAGIC_SCALE; j++) {
                             long n;
                             long t = pitch - j;
-                            long b = CLAMP (t, 0, PIZ_MIDI_PITCH);
+                            long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
                             
                             n = pizGrowingArrayValueAtIndex (x->scale, b % scale);
                             
@@ -288,10 +288,10 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                                 }
                         }
                         
-                        for (j = 1; j < PIZ_SCALE_SIZE; j++) {
+                        for (j = 1; j < PIZ_MAGIC_SCALE; j++) {
                             long n;
                             long t = pitch + j;
-                            long b = CLAMP (t, 0, PIZ_MIDI_PITCH);
+                            long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
                             
                             n = pizGrowingArrayValueAtIndex (x->scale, b % scale);
                             
@@ -339,8 +339,8 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                             PIZNote *newNote = NULL;
                             
                             values[PIZ_SEQUENCE_POSITION] = 
-                                ((long)(hPat[j] / (double)(PIZ_MIDI_PITCH + 1))) * x->grid;
-                            values[PIZ_SEQUENCE_PITCH]          = hPat[j] % (PIZ_MIDI_PITCH + 1);
+                                ((long)(hPat[j] / (double)(PIZ_MAGIC_PITCH + 1))) * x->grid;
+                            values[PIZ_SEQUENCE_PITCH]          = hPat[j] % (PIZ_MAGIC_PITCH + 1);
                             values[PIZ_SEQUENCE_VELOCITY]       = noteToCopy->data[PIZ_VELOCITY];
                             values[PIZ_SEQUENCE_DURATION]       = noteToCopy->data[PIZ_DURATION];
                             values[PIZ_SEQUENCE_CHANNEL]        = noteToCopy->data[PIZ_CHANNEL];
@@ -441,7 +441,7 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
                         offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_PITCH] % scale);
                     }
         
-                    key = ((long)(note->position / (double)x->grid) * (PIZ_MIDI_PITCH + 1))
+                    key = ((long)(note->position / (double)x->grid) * (PIZ_MAGIC_PITCH + 1))
                         + note->data[PIZ_PITCH] + offset;
                     
                     pizBoundedHashTableAdd (x->hashTable, key, (void *)note);
@@ -505,7 +505,7 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
                     offset = pizGrowingArrayValueAtIndex (x->scale, note1->data[PIZ_PITCH] % scale);
                 }
                             
-                newKey = (newPosition * (PIZ_MIDI_PITCH + 1)) + note1->data[PIZ_PITCH] + offset;
+                newKey = (newPosition * (PIZ_MAGIC_PITCH + 1)) + note1->data[PIZ_PITCH] + offset;
                 
                 if (!pizBoundedHashTableContainsKey (x->hashTable, newKey)) {
                     long values[PIZ_SEQUENCE_NOTE_SIZE];
@@ -643,7 +643,7 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, long down)
                 pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
             }
                 
-            x->values1[CLAMP (pitch, 0, PIZ_MIDI_PITCH)] ++; 
+            x->values1[CLAMP (pitch, 0, PIZ_MAGIC_PITCH)] ++; 
         }
     } else {
         for (i = 0; i < k; i++) { 
@@ -663,8 +663,8 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, long down)
                 pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
             }
                 
-            x->notes2[x->values1[CLAMP (pitch, 0, PIZ_MIDI_PITCH)] - 1] = x->notes1[i];
-            x->values1[CLAMP (pitch, 0, PIZ_MIDI_PITCH)] --;
+            x->notes2[x->values1[CLAMP (pitch, 0, PIZ_MAGIC_PITCH)] - 1] = x->notes1[i];
+            x->values1[CLAMP (pitch, 0, PIZ_MAGIC_PITCH)] --;
         }
     } else {
         for (i = (k - 1); i >= 0; i--) {    
@@ -712,15 +712,15 @@ bool pizSequenceChange (PIZSequence *x, PIZSelector selector, long value)
             if (h < x->chance) {
                 switch (selector) {
                     case PIZ_PITCH    : note->data[PIZ_PITCH] = CLAMP (note->data[PIZ_PITCH] + value, 
-                                        0, PIZ_MIDI_PITCH); break;
+                                        0, PIZ_MAGIC_PITCH); break;
                     case PIZ_VELOCITY : note->data[PIZ_VELOCITY] = CLAMP (note->data[PIZ_VELOCITY] + value, 
-                                        0, PIZ_MIDI_VELOCITY); break;
+                                        0, PIZ_MAGIC_VELOCITY); break;
                     case PIZ_DURATION : max1 = PIZ_SEQUENCE_TIMELINE_SIZE - note->position;
                                         max2 = MIN (max1, PIZ_SEQUENCE_MAXIMUM_DURATION);
                                         note->data[PIZ_DURATION] = CLAMP (note->data[PIZ_DURATION] + value, 
                                         1, max2); break;
                     case PIZ_CHANNEL  : note->data[PIZ_CHANNEL] = CLAMP (note->data[PIZ_CHANNEL] + value, 
-                                        0, PIZ_MIDI_CHANNEL); break;
+                                        0, PIZ_MAGIC_CHANNEL); break;
                 }
                 
                 haveChanged = true;
@@ -758,12 +758,12 @@ bool pizSequenceSet (PIZSequence *x, PIZSelector selector, long value)
             
             if (h < x->chance) {
                 switch (selector) {
-                    case PIZ_PITCH    : note->data[PIZ_PITCH] = CLAMP (value, 0, PIZ_MIDI_PITCH); break;
-                    case PIZ_VELOCITY : note->data[PIZ_VELOCITY] = CLAMP (value, 0, PIZ_MIDI_VELOCITY); break;
+                    case PIZ_PITCH    : note->data[PIZ_PITCH] = CLAMP (value, 0, PIZ_MAGIC_PITCH); break;
+                    case PIZ_VELOCITY : note->data[PIZ_VELOCITY] = CLAMP (value, 0, PIZ_MAGIC_VELOCITY); break;
                     case PIZ_DURATION : max1 = PIZ_SEQUENCE_TIMELINE_SIZE - note->position;
                                         max2 = MIN (max1, PIZ_SEQUENCE_MAXIMUM_DURATION);
                                         note->data[PIZ_DURATION] = CLAMP (value, 1, max2); break;
-                    case PIZ_CHANNEL  : note->data[PIZ_CHANNEL] = CLAMP (value, 0, PIZ_MIDI_CHANNEL); break;
+                    case PIZ_CHANNEL  : note->data[PIZ_CHANNEL] = CLAMP (value, 0, PIZ_MAGIC_CHANNEL); break;
                 }
                 
                 haveChanged = true;
@@ -812,15 +812,15 @@ bool pizSequenceRandom (PIZSequence *x, PIZSelector selector, long minValue, lon
                 
                 switch (selector) {
                     case PIZ_PITCH    : note->data[PIZ_PITCH] = CLAMP (note->data[PIZ_PITCH] + value, 
-                                        0, PIZ_MIDI_PITCH); break;
+                                        0, PIZ_MAGIC_PITCH); break;
                     case PIZ_VELOCITY : note->data[PIZ_VELOCITY] = CLAMP (note->data[PIZ_VELOCITY] + value, 
-                                        0, PIZ_MIDI_VELOCITY); break;
+                                        0, PIZ_MAGIC_VELOCITY); break;
                     case PIZ_DURATION : max1 = PIZ_SEQUENCE_TIMELINE_SIZE - note->position;
                                         max2 = MIN (max1, PIZ_SEQUENCE_MAXIMUM_DURATION);
                                         note->data[PIZ_DURATION] = CLAMP (note->data[PIZ_DURATION] + value, 
                                         1, max2); break;
                     case PIZ_CHANNEL  : note->data[PIZ_CHANNEL] = CLAMP (note->data[PIZ_CHANNEL] + value, 
-                                        0, PIZ_MIDI_CHANNEL); break;
+                                        0, PIZ_MAGIC_CHANNEL); break;
                 }
                 
                 haveChanged = true;
@@ -888,26 +888,26 @@ bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a
                     
         if (count > 1) {
             long i;
-            long t[PIZ_SCALE_SIZE] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-            long s[PIZ_SCALE_SIZE];
+            long t[PIZ_MAGIC_SCALE] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            long s[PIZ_MAGIC_SCALE];
             long m, n, o, temp;
             long scale = pizGrowingArrayCount (x->scale);
             
             temp = pizGrowingArrayValueAtIndex (a, 0);
-            m = CLAMP (temp, 0, PIZ_SCALE_SIZE - 1);
+            m = CLAMP (temp, 0, PIZ_MAGIC_SCALE - 1);
             o = m;
             
             for (i = 1; i < count; i++) {
                 temp = pizGrowingArrayValueAtIndex (a, i);
-                n = CLAMP (temp, 0, PIZ_SCALE_SIZE - 1);
+                n = CLAMP (temp, 0, PIZ_MAGIC_SCALE - 1);
                 t[m] = n - m;
                 m = n;
             }
             
             t[m] = o - m;
             
-            for (i = 0; i < PIZ_SCALE_SIZE; i++) {
-                s[i] = t[(PIZ_SCALE_SIZE - key + i) % PIZ_SCALE_SIZE];
+            for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
+                s[i] = t[(PIZ_MAGIC_SCALE - key + i) % PIZ_MAGIC_SCALE];
             }
                 
             for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
@@ -935,13 +935,13 @@ bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a
                         
                         pitch += offset;
                         
-                        tempPitch = CLAMP (pitch, 0, PIZ_MIDI_PITCH);
+                        tempPitch = CLAMP (pitch, 0, PIZ_MAGIC_PITCH);
                         pitch = tempPitch;
                         
-                        pitch += s[pitch % PIZ_SCALE_SIZE];
+                        pitch += s[pitch % PIZ_MAGIC_SCALE];
                 
                         if (pitch != (note->data[PIZ_PITCH] + offset)) {
-                            note->data[PIZ_PITCH] = CLAMP (pitch, 0, PIZ_MIDI_PITCH);
+                            note->data[PIZ_PITCH] = CLAMP (pitch, 0, PIZ_MAGIC_PITCH);
                             haveChanged = true;
                         }
                     }

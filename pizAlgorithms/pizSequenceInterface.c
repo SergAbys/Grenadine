@@ -107,11 +107,11 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
             
             switch (selector) {
             case PIZ_PITCH    : x->markedNote->data[PIZ_PITCH] = CLAMP (x->markedNote->data[PIZ_PITCH], 
-                                0, PIZ_MIDI_PITCH); break;
+                                0, PIZ_MAGIC_PITCH); break;
             case PIZ_VELOCITY : x->markedNote->data[PIZ_VELOCITY] = CLAMP (x->markedNote->data[PIZ_VELOCITY], 
-                                0, PIZ_MIDI_VELOCITY); break;
+                                0, PIZ_MAGIC_VELOCITY); break;
             case PIZ_CHANNEL  : x->markedNote->data[PIZ_CHANNEL] = CLAMP (x->markedNote->data[PIZ_CHANNEL], 
-                                0, PIZ_MIDI_CHANNEL); break;
+                                0, PIZ_MAGIC_CHANNEL); break;
             }
         }
     }
@@ -152,10 +152,10 @@ bool pizSequenceSetTempZoneWithCoordinates (PIZSequence *x, const PIZCoordinates
         case PIZ_SEQUENCE_END   :   tempValue = CLAMP (pizSequenceSnapRound (x, coordinates->position), 
                                     0, PIZ_SEQUENCE_TIMELINE_SIZE); break;
         case PIZ_SEQUENCE_DOWN  :   if (coordinates->pitch <= x->tempUp) {
-                                        tempValue = CLAMP (coordinates->pitch, 0, PIZ_MIDI_PITCH);
+                                        tempValue = CLAMP (coordinates->pitch, 0, PIZ_MAGIC_PITCH);
                                     } break;
         case PIZ_SEQUENCE_UP    :   if (coordinates->pitch >= x->tempDown) {
-                                        tempValue = CLAMP (coordinates->pitch, 0, PIZ_MIDI_PITCH);
+                                        tempValue = CLAMP (coordinates->pitch, 0, PIZ_MAGIC_PITCH);
                                     } break;
     }
     
@@ -189,7 +189,7 @@ bool pizSequenceMoveTempZoneWithDelta (PIZSequence *x, long pitch, long position
     
     tempStart = CLAMP (pizSequenceSnapRound (x, x->tempOriginStart + position), 0, 
                     (PIZ_SEQUENCE_TIMELINE_SIZE - x->tempOriginWidth));
-    tempDown  = CLAMP (x->tempOriginDown + pitch, 0, (PIZ_MIDI_PITCH - x->tempOriginHeight));
+    tempDown  = CLAMP (x->tempOriginDown + pitch, 0, (PIZ_MAGIC_PITCH - x->tempOriginHeight));
     
     if ((tempStart != x->tempStart) || (tempDown != x->tempDown)) {
         x->tempStart = tempStart;
