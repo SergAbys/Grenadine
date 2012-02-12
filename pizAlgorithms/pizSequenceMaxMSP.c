@@ -43,6 +43,27 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#define PIZ_SLOT_VERSION        0
+#define PIZ_SLOT_GRID           1
+#define PIZ_SLOT_NOTE_VALUE     2
+#define PIZ_SLOT_START          3
+#define PIZ_SLOT_END            4
+#define PIZ_SLOT_DOWN           5
+#define PIZ_SLOT_UP             6
+#define PIZ_SLOT_COUNT          7
+#define PIZ_SLOT_DATA           8
+
+#define PIZ_UNDO_VERSION        0
+#define PIZ_UNDO_START          1
+#define PIZ_UNDO_END            2
+#define PIZ_UNDO_DOWN           3
+#define PIZ_UNDO_UP             4
+#define PIZ_UNDO_COUNT          5
+#define PIZ_UNDO_DATA           6
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 PIZError pizSequenceEncodeSlotToArray (PIZSequence *x, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
@@ -108,9 +129,9 @@ PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, const PIZGrowingArray *
             long modeFlags = PIZ_SEQUENCE_ADD_FLAG_UNSELECT;
             long *ptr = pizGrowingArrayPtr (a);
             
-            version     = pizGrowingArrayValueAtIndex (a, 0);
-            grid        = pizGrowingArrayValueAtIndex (a, 1);
-            noteValue   = pizGrowingArrayValueAtIndex (a, 2);
+            version     = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_VERSION);
+            grid        = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_GRID);
+            noteValue   = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_NOTE_VALUE);
             
             switch (grid) {
                 case PIZ_WHOLE_NOTE_DOTTED          : x->grid = PIZ_WHOLE_NOTE_DOTTED;          break;
@@ -154,17 +175,17 @@ PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, const PIZGrowingArray *
                 case PIZ_SNAP_NONE                  : x->noteValue = PIZ_SNAP_NONE;                 break;
             }
 
-            x->start    = pizGrowingArrayValueAtIndex (a, 3);
-            x->end      = pizGrowingArrayValueAtIndex (a, 4);
-            x->down     = pizGrowingArrayValueAtIndex (a, 5);
-            x->up       = pizGrowingArrayValueAtIndex (a, 6);
-            count       = pizGrowingArrayValueAtIndex (a, 7);
+            x->start    = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_START);
+            x->end      = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_END);
+            x->down     = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_DOWN);
+            x->up       = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_UP);
+            count       = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_COUNT);
             
-            k = 8;
+            k = PIZ_SLOT_DATA;
             
             for (i = 0; i < count; i++) {
                 if (!(pizSequenceAddNote (x, ptr + (i * PIZ_SEQUENCE_NOTE_SIZE) + k, modeFlags))) {
-                        err |= PIZ_ERROR;
+                    err |= PIZ_ERROR;
                 }
             }
         }
@@ -239,22 +260,22 @@ PIZError pizSequenceDecodeUndoWithArray (PIZSequence *x, const PIZGrowingArray *
 
         if (t = pizGrowingArrayCount (a)) {
             long k, version, count;
+            long modeFlags = PIZ_SEQUENCE_ADD_FLAG_UNSELECT;
             long *ptr = pizGrowingArrayPtr (a);
             
-            version     = pizGrowingArrayValueAtIndex (a, 0);
-            x->start    = pizGrowingArrayValueAtIndex (a, 1);
-            x->end      = pizGrowingArrayValueAtIndex (a, 2);
-            x->down     = pizGrowingArrayValueAtIndex (a, 3);
-            x->up       = pizGrowingArrayValueAtIndex (a, 4);
-            count       = pizGrowingArrayValueAtIndex (a, 5);
+            version     = pizGrowingArrayValueAtIndex (a, PIZ_UNDO_VERSION);
+            x->start    = pizGrowingArrayValueAtIndex (a, PIZ_UNDO_START);
+            x->end      = pizGrowingArrayValueAtIndex (a, PIZ_UNDO_END);
+            x->down     = pizGrowingArrayValueAtIndex (a, PIZ_UNDO_DOWN);
+            x->up       = pizGrowingArrayValueAtIndex (a, PIZ_UNDO_UP);
+            count       = pizGrowingArrayValueAtIndex (a, PIZ_UNDO_COUNT);
             
-            k = 6;
+            k = PIZ_UNDO_DATA;
             
             for (i = 0; i < count; i++) {
-                if (!(pizSequenceAddNote (x, ptr + (i * PIZ_SEQUENCE_NOTE_SIZE) + k, 
-                    PIZ_SEQUENCE_ADD_FLAG_UNSELECT))) {
-                        err |= PIZ_ERROR;
-                    }
+                if (!(pizSequenceAddNote (x, ptr + (i * PIZ_SEQUENCE_NOTE_SIZE) + k, modeFlags))) {
+                    err |= PIZ_ERROR;
+                }
             }
         }
     }
@@ -279,14 +300,14 @@ bool pizSequenceUndoIsEqualToUndo (const PIZGrowingArray *a, const PIZGrowingArr
         long *ptrB = pizGrowingArrayPtr (b);
         bool d = false;
     
-        d |= (*(ptrA + 1) != *(ptrB + 1));
-        d |= (*(ptrA + 2) != *(ptrB + 2));
-        d |= (*(ptrA + 3) != *(ptrB + 3));
-        d |= (*(ptrA + 4) != *(ptrB + 4));
+        d |= (*(ptrA + PIZ_UNDO_START) != *(ptrB + PIZ_UNDO_START));
+        d |= (*(ptrA + PIZ_UNDO_END) != *(ptrB + PIZ_UNDO_END));
+        d |= (*(ptrA + PIZ_UNDO_DOWN) != *(ptrB + PIZ_UNDO_DOWN));
+        d |= (*(ptrA + PIZ_UNDO_UP) != *(ptrB + PIZ_UNDO_UP));
         
-        n = *(ptrA + 5);
+        n = *(ptrA + PIZ_UNDO_COUNT);
         
-        k = 6;
+        k = PIZ_UNDO_DATA;
         
         for (i = 0; i < n; i++) {
             d |= (*(ptrA + k + PIZ_SEQUENCE_POSITION)   != *(ptrB + k + PIZ_SEQUENCE_POSITION));
