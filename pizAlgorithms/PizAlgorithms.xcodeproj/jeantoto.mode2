@@ -211,7 +211,7 @@
 			<array>
 				<dict>
 					<key>Proportion</key>
-					<string>639pt</string>
+					<string>740pt</string>
 					<key>Tabs</key>
 					<array>
 						<dict>
@@ -231,7 +231,7 @@
 								<dict>
 									<key>PBXSmartGroupTreeModuleColumnWidthsKey</key>
 									<array>
-										<real>516</real>
+										<real>617</real>
 										<real>20</real>
 										<real>43</real>
 										<real>43</real>
@@ -250,19 +250,17 @@
 									<array>
 										<string>08FB7794FE84155DC02AAC07</string>
 										<string>08FB7795FE84155DC02AAC07</string>
-										<string>96AF1B7E148CFBF7001358AB</string>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>7</integer>
 											<integer>5</integer>
 											<integer>1</integer>
 											<integer>0</integer>
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 0}, {622, 367}}</string>
+									<string>{{0, 0}, {723, 467}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -272,11 +270,11 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{10, 27}, {639, 385}}</string>
+								<string>{{10, 27}, {740, 485}}</string>
 								<key>GroupTreeTableConfiguration</key>
 								<array>
 									<string>MainColumn</string>
-									<real>516</real>
+									<real>617</real>
 									<string>FileBuiltColumn</string>
 									<real>20</real>
 									<string>ErrorsColumn</string>
@@ -285,7 +283,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>378 185 639 453 0 0 1280 778 </string>
+								<string>269 123 740 553 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -422,8 +420,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96A1009A14E7F0B900D3ECB6</string>
-				<string>96A1009B14E7F0B900D3ECB6</string>
+				<string>96A100CD14E7F58A00D3ECB6</string>
+				<string>96A100CE14E7F58A00D3ECB6</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -456,10 +454,11 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/pizAlgorithms/PizAlgorithms.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>378 185 639 453 0 0 1280 778 </string>
+	<string>269 123 740 553 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -673,7 +672,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96A1008414E7EF4A00D3ECB6</string>
+				<string>96A100CF14E7F58A00D3ECB6</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

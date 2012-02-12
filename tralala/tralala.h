@@ -31,6 +31,7 @@
 #include "pizSequence.h"
 #include "pizSequenceInterface.h"
 #include "pizSequenceTransform.h"
+#include "pizSequenceMaxMSP.h"
 #include "tralalaSymbols.h"
 
 // -------------------------------------------------------------------------------------------------------------

@@ -294,12 +294,6 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizSequenceEncodeSlotToArray (PIZSequence *x, PIZGrowingArray *a);
-PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, const PIZGrowingArray *a);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 PIZ_LOCAL            PIZNote *pizSequenceAddNote            (PIZSequence *x, long *values, long modeFlags);
 
 PIZ_LOCAL            void pizSequenceCleanMap               (PIZSequence *x);
@@ -310,4 +304,4 @@ PIZ_LOCAL PIZ_INLINE long pizSequenceSnapPositionToPattern  (PIZSequence *x, lon
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif
+#endif // PIZ_SEQUENCE_H
