@@ -103,17 +103,17 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
     
             if (!(x->flags & FLAG_ORIGIN_IS_SET))
                 {
-                    x->origin.x     = pt.x;
-                    x->origin.y     = pt.y;
-                    x->previous.x   = pt.x;
-                    x->previous.y   = pt.y;
+                    x->originPoint.x     = pt.x;
+                    x->originPoint.y     = pt.y;
+                    x->previousPoint.x   = pt.x;
+                    x->previousPoint.y   = pt.y;
                     
                     x->mouseVelocityValue = 0;
                     
-                    tralala_setCoordinatesWithPoint (x, &x->originCoordinates, x->previous);
+                    tralala_setCoordinatesWithPoint (x, &x->originCoordinates, x->previousPoint);
                     
                     systhread_mutex_lock        (&x->arraysMutex);
-                    err |= pizGrowingArrayCopy  (x->originNotes, x->selectedNotes);
+                    err |= pizGrowingArrayCopy  (x->origin, x->selected);
                     systhread_mutex_unlock      (&x->arraysMutex);
                     
                     if (SHIFT) {
@@ -135,9 +135,9 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                 
             if (VIEWTEXT && tralala_hasSelectedText (x, &selectedText))
                 {
-                    long k = (long)(ABS (pt.y - x->previous.y));
+                    long k = (long)(ABS (pt.y - x->previousPoint.y));
                     
-                    if ((pt.y - x->previous.y) < -0.5) {
+                    if ((pt.y - x->previousPoint.y) < -0.5) {
                         switch (selectedText) {
                         case TEXT_ORDER_VELOCITY : pizSequenceChangeMarkedNoteValue (x->user, PIZ_VELOCITY, k);
                                                    break;
@@ -148,7 +148,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                         case TEXT_ORDER_PITCH    : pizSequenceChangeMarkedNoteValue (x->user, PIZ_PITCH, 1);
                                                    break;
                         }
-                    } else if ((pt.y - x->previous.y) > 0.5) {
+                    } else if ((pt.y - x->previousPoint.y) > 0.5) {
                         switch (selectedText) {
                         case TEXT_ORDER_VELOCITY : pizSequenceChangeMarkedNoteValue (x->user, PIZ_VELOCITY, -k);
                                                    break;
@@ -183,14 +183,14 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                                 {
                                     x->textMode = MODE_TEXT_MOUSE_VELOCITY;
                                     
-                                    if ((pt.y - x->previous.y) < -0.5)
+                                    if ((pt.y - x->previousPoint.y) < -0.5)
                                         {
                                             tralala_changeSelectedNotesVelocity (x, UP);
                                             
                                             x->flags |= FLAG_HAVE_CHANGED;
                                             DIRTYLAYER_SET (DIRTY_NOTES);
                                         }
-                                    else if ((pt.y - x->previous.y) > 0.5)
+                                    else if ((pt.y - x->previousPoint.y) > 0.5)
                                         {
                                             tralala_changeSelectedNotesVelocity (x, DOWN);
                                             
@@ -285,8 +285,8 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                 }
             else if (CAPS)
                 {
-                    x->windowOffsetX -= pt.x - x->previous.x;
-                    x->windowOffsetY -= pt.y - x->previous.y;
+                    x->windowOffsetX -= pt.x - x->previousPoint.x;
+                    x->windowOffsetY -= pt.y - x->previousPoint.y;
                     
                     tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_DRAGGINGHAND);
                     
@@ -312,8 +312,8 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                     tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_ARROW);
                 }
             
-            x->previous.x = pt.x;
-            x->previous.y = pt.y;
+            x->previousPoint.x = pt.x;
+            x->previousPoint.y = pt.y;
         } 
     
     if (!USER)
@@ -351,7 +351,7 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
                 {
                     systhread_mutex_lock            (&x->arraysMutex);
                     pizSequenceRemoveSelectedNotes  (x->user);
-                    pizSequenceAddNotesWithArray    (x->user, x->selectedNotes, PIZ_SEQUENCE_ADD_FLAG_NONE);
+                    pizSequenceAddNotesWithArray    (x->user, x->selected, PIZ_SEQUENCE_ADD_FLAG_NONE);
                     systhread_mutex_unlock          (&x->arraysMutex);
                     
                     x->textMode     = MODE_TEXT_NOTE;
@@ -997,11 +997,11 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 
                 systhread_mutex_lock (&x->arraysMutex);
                 
-                count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
+                count = pizGrowingArrayCount (x->selected) / PIZ_SEQUENCE_NOTE_SIZE;
                 
                 if (count == 1) {
-                        velocity = pizGrowingArrayValueAtIndex (x->selectedNotes, PIZ_SEQUENCE_VELOCITY);
-                        channel = pizGrowingArrayValueAtIndex (x->selectedNotes, PIZ_SEQUENCE_CHANNEL);
+                        velocity = pizGrowingArrayValueAtIndex (x->selected, PIZ_SEQUENCE_VELOCITY);
+                        channel = pizGrowingArrayValueAtIndex (x->selected, PIZ_SEQUENCE_CHANNEL);
                         
                         velocity = CLAMP ((long)((velocity + 4) / 8) * 8, 0, 127);
                     }
@@ -1159,7 +1159,7 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
         {
             systhread_mutex_lock            (&x->arraysMutex);
             pizSequenceRemoveSelectedNotes  (x->user);
-            pizSequenceAddNotesWithArray    (x->user, x->selectedNotes, PIZ_SEQUENCE_ADD_FLAG_NONE);
+            pizSequenceAddNotesWithArray    (x->user, x->selected, PIZ_SEQUENCE_ADD_FLAG_NONE);
             systhread_mutex_unlock          (&x->arraysMutex);
                 
             x->flags &= ~FLAG_HAVE_CHANGED;

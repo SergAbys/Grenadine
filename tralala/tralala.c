@@ -522,15 +522,15 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                     x->factorOracle             = pizFactorOracleNew    (0, NULL);
                     x->galoisLattice            = pizGaloisLatticeNew   (0, NULL);
                     x->finiteState              = pizFiniteStateNew     (0, NULL);
-                    x->unselectedNotes          = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-                    x->selectedNotes            = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-                    x->playedNotes              = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+                    x->unselected               = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+                    x->selected                 = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+                    x->played                   = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
                     x->zone                     = pizGrowingArrayNew    (PIZ_SEQUENCE_ZONE_SIZE);
-                    x->unselectedNotesCopy      = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-                    x->selectedNotesCopy        = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-                    x->playedNotesCopy          = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+                    x->unselectedCopy           = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+                    x->selectedCopy             = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+                    x->playedCopy               = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
                     x->zoneCopy                 = pizGrowingArrayNew    (PIZ_SEQUENCE_ZONE_SIZE);
-                    x->originNotes              = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+                    x->origin                   = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
                     x->result                   = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
                     x->valuesToBeLearned        = pizGrowingArrayNew    (SIZE_LEARN_ARRAY);
                     x->learnQueue               = pizBoundedQueueNew    (SIZE_LEARN_QUEUE);
@@ -543,15 +543,15 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                         x->factorOracle &&
                         x->galoisLattice &&
                         x->finiteState &&
-                        x->unselectedNotes && 
-                        x->selectedNotes && 
-                        x->playedNotes &&
+                        x->unselected && 
+                        x->selected && 
+                        x->played &&
                         x->zone && 
-                        x->unselectedNotesCopy && 
-                        x->selectedNotesCopy && 
-                        x->playedNotesCopy &&
+                        x->unselectedCopy && 
+                        x->selectedCopy && 
+                        x->playedCopy &&
                         x->zoneCopy && 
-                        x->originNotes &&
+                        x->origin &&
                         x->result &&
                         x->valuesToBeLearned &&
                         x->learnQueue &&
@@ -679,15 +679,15 @@ void tralala_free (t_tralala *x)
         }
     
     pizGrowingArrayFree (x->zone);
-    pizGrowingArrayFree (x->playedNotes);
-    pizGrowingArrayFree (x->selectedNotes);
-    pizGrowingArrayFree (x->unselectedNotes);
+    pizGrowingArrayFree (x->played);
+    pizGrowingArrayFree (x->selected);
+    pizGrowingArrayFree (x->unselected);
     pizGrowingArrayFree (x->zoneCopy);
-    pizGrowingArrayFree (x->playedNotesCopy);
-    pizGrowingArrayFree (x->selectedNotesCopy);
-    pizGrowingArrayFree (x->unselectedNotesCopy);
+    pizGrowingArrayFree (x->playedCopy);
+    pizGrowingArrayFree (x->selectedCopy);
+    pizGrowingArrayFree (x->unselectedCopy);
     pizGrowingArrayFree (x->result);
-    pizGrowingArrayFree (x->originNotes);
+    pizGrowingArrayFree (x->origin);
     pizGrowingArrayFree (x->valuesToBeLearned);
     
     pizLinklistFree         (x->slots);    

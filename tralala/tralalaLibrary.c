@@ -36,19 +36,19 @@ bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitc
         
     systhread_mutex_lock (&x->arraysMutex);
 
-    count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
+    count = pizGrowingArrayCount (x->selected) / PIZ_SEQUENCE_NOTE_SIZE;
     
     for (i = 0; i < count; i++)
         {
-            long previousPosition   = pizGrowingArrayValueAtIndex (x->selectedNotes, 
+            long previousPosition   = pizGrowingArrayValueAtIndex (x->selected, 
                                         (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
-            long previousPitch      = pizGrowingArrayValueAtIndex (x->selectedNotes,
+            long previousPitch      = pizGrowingArrayValueAtIndex (x->selected,
                                         (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
-            long position           = pizGrowingArrayValueAtIndex (x->originNotes, 
+            long position           = pizGrowingArrayValueAtIndex (x->origin, 
                                         (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
-            long pitch              = pizGrowingArrayValueAtIndex (x->originNotes, 
+            long pitch              = pizGrowingArrayValueAtIndex (x->origin, 
                                         (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
-            long duration           = pizGrowingArrayValueAtIndex (x->originNotes, 
+            long duration           = pizGrowingArrayValueAtIndex (x->origin, 
                                         (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
             
             pitch       += deltaPitch;
@@ -56,10 +56,10 @@ bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitc
             
             position = MAX ((long)((position / (double)grid) + 0.5) * grid, 0);
             
-            pizGrowingArraySetValueAtIndex (x->selectedNotes, 
+            pizGrowingArraySetValueAtIndex (x->selected, 
                                             (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION,
                                             CLAMP (position, 0, PIZ_SEQUENCE_TIMELINE_SIZE - duration));
-            pizGrowingArraySetValueAtIndex (x->selectedNotes, 
+            pizGrowingArraySetValueAtIndex (x->selected, 
                                             (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH,
                                             CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
             
@@ -82,15 +82,15 @@ bool tralala_changeSelectedNotesDuration (t_tralala *x, long deltaPosition)
                 
     systhread_mutex_lock (&x->arraysMutex);
 
-    count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
+    count = pizGrowingArrayCount (x->selected) / PIZ_SEQUENCE_NOTE_SIZE;
     
     for (i = 0; i < count; i++)
         {
-            long previousDuration   = pizGrowingArrayValueAtIndex (x->selectedNotes, 
+            long previousDuration   = pizGrowingArrayValueAtIndex (x->selected, 
                                         (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
-            long duration           = pizGrowingArrayValueAtIndex (x->originNotes, 
+            long duration           = pizGrowingArrayValueAtIndex (x->origin, 
                                         (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
-            long position           = pizGrowingArrayValueAtIndex (x->originNotes, 
+            long position           = pizGrowingArrayValueAtIndex (x->origin, 
                                         (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
             long maximum            = MIN (PIZ_SEQUENCE_MAXIMUM_DURATION, 
                                         (PIZ_SEQUENCE_TIMELINE_SIZE - position));
@@ -98,7 +98,7 @@ bool tralala_changeSelectedNotesDuration (t_tralala *x, long deltaPosition)
             duration += deltaPosition;
             duration = MAX ((long)((duration / (double)grid) + 0.5) * grid, 0);
             
-            pizGrowingArraySetValueAtIndex (x->selectedNotes, 
+            pizGrowingArraySetValueAtIndex (x->selected, 
                                             (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION,
                                             CLAMP (duration, grid, maximum));
             
@@ -115,7 +115,7 @@ bool tralala_changeSelectedNotesDuration (t_tralala *x, long deltaPosition)
 void tralala_duplicateSelectedNotes (t_tralala *x)
 {
     systhread_mutex_lock        (&x->arraysMutex);
-    pizGrowingArrayAppendArray  (x->unselectedNotes, x->selectedNotes);
+    pizGrowingArrayAppendArray  (x->unselected, x->selected);
     systhread_mutex_unlock      (&x->arraysMutex);
             
     pizSequenceUnselectAllNotes (x->user);
@@ -129,12 +129,12 @@ void tralala_changeSelectedNotesVelocity (t_tralala *x, bool decrement)
     
     systhread_mutex_lock (&x->arraysMutex);
     
-    if (count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE)
+    if (count = pizGrowingArrayCount (x->selected) / PIZ_SEQUENCE_NOTE_SIZE)
         {
             long i, step;
             long temp, k = 0;
-            long originVelocity = pizGrowingArrayValueAtIndex (x->originNotes, PIZ_SEQUENCE_VELOCITY);
-            long velocity       = pizGrowingArrayValueAtIndex (x->selectedNotes, PIZ_SEQUENCE_VELOCITY);
+            long originVelocity = pizGrowingArrayValueAtIndex (x->origin, PIZ_SEQUENCE_VELOCITY);
+            long velocity       = pizGrowingArrayValueAtIndex (x->selected, PIZ_SEQUENCE_VELOCITY);
             
             step = (long)((ABS (velocity - originVelocity)) / 5) + 1;
             
@@ -142,12 +142,12 @@ void tralala_changeSelectedNotesVelocity (t_tralala *x, bool decrement)
                 {
                     if (decrement) 
                         {
-                            temp =  pizGrowingArrayValueAtIndex (x->selectedNotes, 
+                            temp =  pizGrowingArrayValueAtIndex (x->selected, 
                                 (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY) - step;
                         }
                     else
                         {
-                            temp = PIZ_MAGIC_VELOCITY - (pizGrowingArrayValueAtIndex (x->selectedNotes,
+                            temp = PIZ_MAGIC_VELOCITY - (pizGrowingArrayValueAtIndex (x->selected,
                                 (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY) + step);
                         }
                     
@@ -166,9 +166,9 @@ void tralala_changeSelectedNotesVelocity (t_tralala *x, bool decrement)
                         
                     for (i = 0; i < count; i++)
                         { 
-                            temp = pizGrowingArrayValueAtIndex (x->selectedNotes, 
+                            temp = pizGrowingArrayValueAtIndex (x->selected, 
                                     (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY) + step;
-                            pizGrowingArraySetValueAtIndex (x->selectedNotes,  
+                            pizGrowingArraySetValueAtIndex (x->selected,  
                                 (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY, temp);
                         }
                     
@@ -186,10 +186,10 @@ void tralala_setSelectedNotesVelocity (t_tralala *x, long velocity)
     
     systhread_mutex_lock (&x->arraysMutex);
 
-    count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
+    count = pizGrowingArrayCount (x->selected) / PIZ_SEQUENCE_NOTE_SIZE;
     
     for (i = 0; i < count; i++) {
-        pizGrowingArraySetValueAtIndex (x->selectedNotes, (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY,
+        pizGrowingArraySetValueAtIndex (x->selected, (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY,
             CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY));
     }
     
@@ -203,10 +203,10 @@ void tralala_setSelectedNotesChannel (t_tralala *x, long channel)
     
     systhread_mutex_lock (&x->arraysMutex);
 
-    count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
+    count = pizGrowingArrayCount (x->selected) / PIZ_SEQUENCE_NOTE_SIZE;
     
     for (i = 0; i < count; i++) {
-        pizGrowingArraySetValueAtIndex (x->selectedNotes, (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_CHANNEL,
+        pizGrowingArraySetValueAtIndex (x->selected, (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_CHANNEL,
             CLAMP (channel, 0, PIZ_MAGIC_CHANNEL));
     }
     
@@ -307,7 +307,7 @@ bool tralala_hitNotesByRunIndex (t_tralala *x)
 {
     bool needToDraw = false;
 
-    pizGrowingArrayClear (x->playedNotes);
+    pizGrowingArrayClear (x->played);
 
     if (x->runIndex == -1)
         {
@@ -324,17 +324,17 @@ bool tralala_hitNotesByRunIndex (t_tralala *x)
             down    = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_DOWN);
             up      = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_UP);
             
-            count = pizGrowingArrayCount (x->unselectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
+            count = pizGrowingArrayCount (x->unselected) / PIZ_SEQUENCE_NOTE_SIZE;
             
             for (i = 0; i < count; i++)
                 {
-                    long position   = pizGrowingArrayValueAtIndex (x->unselectedNotes, 
+                    long position   = pizGrowingArrayValueAtIndex (x->unselected, 
                                         (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
-                    long pitch      = pizGrowingArrayValueAtIndex (x->unselectedNotes, 
+                    long pitch      = pizGrowingArrayValueAtIndex (x->unselected, 
                                         (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
-                    long duration   = pizGrowingArrayValueAtIndex (x->unselectedNotes, 
+                    long duration   = pizGrowingArrayValueAtIndex (x->unselected, 
                                         (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
-                    long isMarked   = pizGrowingArrayValueAtIndex (x->unselectedNotes, 
+                    long isMarked   = pizGrowingArrayValueAtIndex (x->unselected, 
                                         (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_IS_MARKED);
                                         
                     if ((position >= start) && 
@@ -343,16 +343,16 @@ bool tralala_hitNotesByRunIndex (t_tralala *x)
                         (x->runIndex >= position) && 
                         (x->runIndex < (position + duration)))
                         {
-                            err |= pizGrowingArrayAppend (x->playedNotes, position);
-                            err |= pizGrowingArrayAppend (x->playedNotes, pitch);
-                            err |= pizGrowingArrayAppend (x->playedNotes, PIZ_MAGIC_VELOCITY);
-                            err |= pizGrowingArrayAppend (x->playedNotes, duration);
-                            err |= pizGrowingArrayAppend (x->playedNotes, false);
-                            err |= pizGrowingArrayAppend (x->playedNotes, false);
-                            err |= pizGrowingArrayAppend (x->playedNotes, false);
+                            err |= pizGrowingArrayAppend (x->played, position);
+                            err |= pizGrowingArrayAppend (x->played, pitch);
+                            err |= pizGrowingArrayAppend (x->played, PIZ_MAGIC_VELOCITY);
+                            err |= pizGrowingArrayAppend (x->played, duration);
+                            err |= pizGrowingArrayAppend (x->played, false);
+                            err |= pizGrowingArrayAppend (x->played, false);
+                            err |= pizGrowingArrayAppend (x->played, false);
                             
                             if (!isMarked) {
-                                    pizGrowingArraySetValueAtIndex (x->unselectedNotes, 
+                                    pizGrowingArraySetValueAtIndex (x->unselected, 
                                     (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_IS_MARKED, true);
                                     
                                     needToDraw = true;
@@ -360,7 +360,7 @@ bool tralala_hitNotesByRunIndex (t_tralala *x)
                         }
                     else if (isMarked)
                         {
-                            pizGrowingArraySetValueAtIndex (x->unselectedNotes, 
+                            pizGrowingArraySetValueAtIndex (x->unselected, 
                                     (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_IS_MARKED, false);
                                     
                             needToDraw = true;
