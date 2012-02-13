@@ -49,7 +49,6 @@
 #define LEARN_CLOCK_INTERVAL                37.
 #define FOCUS_CLOCK_INTERVAL                53.
 #define NOTIFY_CLOCK_INTERVAL               487.
-
 #define CLOCK_RANDOMIZE                     10.
 
 #define MOUSEWHEEL_FACTOR                   100.
@@ -65,10 +64,9 @@
 
 #define LEARN_QUEUE_SIZE                    256
 #define STRING_MAXIMUM_SIZE                 75
-#define PATTERN_MAXIMUM_SIZE                26
+#define PATTERN_MAXIMUM_SIZE                28
 #define NOVEMBER_MAXIMUM_ITERATE            10
 #define JULIET_MAXIMUM_ITERATE              10
-
 #define LEARN_THRESHOLD_MINIMUM             4
 #define LEARN_THRESHOLD_RANGE               4
 #define LEARN_THRESHOLD_MAXIMUM             8
@@ -269,8 +267,6 @@
 #define PASTE           (keycode == 118)
 #define TERNARY         (keycode == 116)
 #define DOTTED          (keycode == 100)
-#define UNDO            (!(modifiers & eShiftKey) && (keycode == 122))
-#define REDO            ((modifiers & eShiftKey) && (keycode == 122)) 
 #define SELECT          0
 #define INVERT          1
 #define UP              0
@@ -283,7 +279,6 @@
 #define DIRTYCHANNEL    if (x->saveChannelWithPatcher) {                                    \
                                 jpatcher_set_dirty (jbox_get_patcher ((t_object *)x), 1);   \
                             }   
-#define DIRTYUNDO       tralala_addUndo (x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -332,9 +327,9 @@ typedef struct _tralala {
     long                learnCycle;
     long                learnThreshold;
     t_uint32_atomic     dirtyLayer;
+    t_int32_atomic      popupLock;    
+    t_int32_atomic      paintLock;
     PIZLinklist         *slots;
-    PIZLinklist         *undo;
-    PIZLinklist         *redo;
     PIZGrowingArray     *valuesToBeLearned;
     PIZBoundedQueue     *learnQueue;
     PIZFactorOracle     *factorOracle;      
@@ -367,9 +362,7 @@ typedef struct _tralala {
     long                patternSize;
     PIZSnapValue        cell;
     PIZScaleKey         key;
-    PIZScaleType        type;
-    t_int32_atomic      popupLock;
-    t_int32_atomic      paintLock;                                      //
+    PIZScaleType        type;                                           //
     long                mousePitchValue;
     long                mouseVelocityValue;
     long                zoomMode;
@@ -397,7 +390,7 @@ typedef struct _tralala {
     t_pt                origin;
     t_pt                previous;                                       //
     t_pt                point;
-    double              textPosition    [TEXT_CELL_COUNT];              ////
+    double              textPosition    [TEXT_CELL_COUNT];              
     double              textWidth       [TEXT_CELL_COUNT];
     bool                textIsSelected  [TEXT_CELL_COUNT];
     t_jtextlayout       *textLayers     [TEXT_CELL_COUNT];
@@ -526,11 +519,6 @@ PIZ_LOCAL void  tralala_slotPrevious            (t_tralala *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-PIZ_LOCAL void  tralala_undo                    (t_tralala *x);
-PIZ_LOCAL void  tralala_redo                    (t_tralala *x);
-PIZ_LOCAL void  tralala_addUndo                 (t_tralala *x);
-PIZ_LOCAL void  tralala_clearUndo               (t_tralala *x);
 
 void            tralala_mousedown               (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
 void            tralala_mousedrag               (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);

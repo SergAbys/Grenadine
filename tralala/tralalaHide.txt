@@ -83,10 +83,8 @@ _pizSequenceClean
 _pizSequenceClear
 _pizSequenceCount
 _pizSequenceCycle
-_pizSequenceDecodeSlotWithArray
-_pizSequenceEncodeSlotToArray
-_pizSequenceDecodeUndoWithArray
-_pizSequenceEncodeUndoToArray
+_pizSequenceDecodeWithArray
+_pizSequenceEncodeToArray
 _pizSequenceFree
 _pizSequenceGenerator
 _pizSequenceGoToStart
@@ -127,7 +125,6 @@ _pizSequenceSnapFloorPosition
 _pizSequenceSort
 _pizSequenceTempZoneToArray
 _pizSequenceTransposeOctave
-_pizSequenceUndoIsEqualToUndo
 _pizSequenceUnselectAllNotes
 _pizSequenceVelocity
 _pizSequenceZoneToArray

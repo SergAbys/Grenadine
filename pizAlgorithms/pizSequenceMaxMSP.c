@@ -53,18 +53,10 @@
 #define PIZ_SLOT_COUNT          7
 #define PIZ_SLOT_DATA           8
 
-#define PIZ_UNDO_VERSION        0
-#define PIZ_UNDO_START          1
-#define PIZ_UNDO_END            2
-#define PIZ_UNDO_DOWN           3
-#define PIZ_UNDO_UP             4
-#define PIZ_UNDO_COUNT          5
-#define PIZ_UNDO_DATA           6
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizSequenceEncodeSlotToArray (PIZSequence *x, PIZGrowingArray *a)
+PIZError pizSequenceEncodeToArray (PIZSequence *x, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     
@@ -112,7 +104,7 @@ PIZError pizSequenceEncodeSlotToArray (PIZSequence *x, PIZGrowingArray *a)
     return err;
 }
 
-PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, const PIZGrowingArray *a)
+PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
     
@@ -155,24 +147,24 @@ PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, const PIZGrowingArray *
             }
             
             switch (noteValue) {
-                case PIZ_WHOLE_NOTE_DOTTED          : x->noteValue = PIZ_WHOLE_NOTE_DOTTED;         break;
-                case PIZ_WHOLE_NOTE                 : x->noteValue = PIZ_WHOLE_NOTE;                break;
-                case PIZ_WHOLE_NOTE_TRIPLET         : x->noteValue = PIZ_WHOLE_NOTE_TRIPLET;        break;
-                case PIZ_HALF_NOTE_DOTTED           : x->noteValue = PIZ_HALF_NOTE_DOTTED;          break;
-                case PIZ_HALF_NOTE                  : x->noteValue = PIZ_HALF_NOTE;                 break;
-                case PIZ_HALF_NOTE_TRIPLET          : x->noteValue = PIZ_HALF_NOTE_TRIPLET;         break;
-                case PIZ_QUARTER_NOTE_DOTTED        : x->noteValue = PIZ_QUARTER_NOTE_DOTTED;       break;
-                case PIZ_QUARTER_NOTE               : x->noteValue = PIZ_QUARTER_NOTE;              break;
-                case PIZ_QUARTER_NOTE_TRIPLET       : x->noteValue = PIZ_QUARTER_NOTE_TRIPLET;      break;
-                case PIZ_EIGHTH_NOTE_DOTTED         : x->noteValue = PIZ_EIGHTH_NOTE_DOTTED;        break;
-                case PIZ_EIGHTH_NOTE                : x->noteValue = PIZ_EIGHTH_NOTE;               break;
-                case PIZ_EIGHTH_NOTE_TRIPLET        : x->noteValue = PIZ_EIGHTH_NOTE_TRIPLET;       break;
-                case PIZ_SIXTEENTH_NOTE_DOTTED      : x->noteValue = PIZ_SIXTEENTH_NOTE_DOTTED;     break;
-                case PIZ_SIXTEENTH_NOTE             : x->noteValue = PIZ_SIXTEENTH_NOTE;            break;
-                case PIZ_SIXTEENTH_NOTE_TRIPLET     : x->noteValue = PIZ_SIXTEENTH_NOTE_TRIPLET;    break;
-                case PIZ_THIRTY_SECOND_NOTE         : x->noteValue = PIZ_THIRTY_SECOND_NOTE;        break;
-                case PIZ_THIRTY_SECOND_NOTE_TRIPLET : x->noteValue = PIZ_THIRTY_SECOND_NOTE_TRIPLET;break;
-                case PIZ_SNAP_NONE                  : x->noteValue = PIZ_SNAP_NONE;                 break;
+                case PIZ_WHOLE_NOTE_DOTTED          : x->noteValue = PIZ_WHOLE_NOTE_DOTTED;             break;
+                case PIZ_WHOLE_NOTE                 : x->noteValue = PIZ_WHOLE_NOTE;                    break;
+                case PIZ_WHOLE_NOTE_TRIPLET         : x->noteValue = PIZ_WHOLE_NOTE_TRIPLET;            break;
+                case PIZ_HALF_NOTE_DOTTED           : x->noteValue = PIZ_HALF_NOTE_DOTTED;              break;
+                case PIZ_HALF_NOTE                  : x->noteValue = PIZ_HALF_NOTE;                     break;
+                case PIZ_HALF_NOTE_TRIPLET          : x->noteValue = PIZ_HALF_NOTE_TRIPLET;             break;
+                case PIZ_QUARTER_NOTE_DOTTED        : x->noteValue = PIZ_QUARTER_NOTE_DOTTED;           break;
+                case PIZ_QUARTER_NOTE               : x->noteValue = PIZ_QUARTER_NOTE;                  break;
+                case PIZ_QUARTER_NOTE_TRIPLET       : x->noteValue = PIZ_QUARTER_NOTE_TRIPLET;          break;
+                case PIZ_EIGHTH_NOTE_DOTTED         : x->noteValue = PIZ_EIGHTH_NOTE_DOTTED;            break;
+                case PIZ_EIGHTH_NOTE                : x->noteValue = PIZ_EIGHTH_NOTE;                   break;
+                case PIZ_EIGHTH_NOTE_TRIPLET        : x->noteValue = PIZ_EIGHTH_NOTE_TRIPLET;           break;
+                case PIZ_SIXTEENTH_NOTE_DOTTED      : x->noteValue = PIZ_SIXTEENTH_NOTE_DOTTED;         break;
+                case PIZ_SIXTEENTH_NOTE             : x->noteValue = PIZ_SIXTEENTH_NOTE;                break;
+                case PIZ_SIXTEENTH_NOTE_TRIPLET     : x->noteValue = PIZ_SIXTEENTH_NOTE_TRIPLET;        break;
+                case PIZ_THIRTY_SECOND_NOTE         : x->noteValue = PIZ_THIRTY_SECOND_NOTE;            break;
+                case PIZ_THIRTY_SECOND_NOTE_TRIPLET : x->noteValue = PIZ_THIRTY_SECOND_NOTE_TRIPLET;    break;
+                case PIZ_SNAP_NONE                  : x->noteValue = PIZ_SNAP_NONE;                     break;
             }
 
             x->start    = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_START);
@@ -194,139 +186,6 @@ PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, const PIZGrowingArray *
     PIZUNLOCK
     
     return err;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-PIZError pizSequenceEncodeUndoToArray (PIZSequence *x, PIZGrowingArray *a)
-{
-    long err = PIZ_ERROR;
-    
-    PIZLOCK
-    
-    if (a) {
-        long i;
-        
-        err  = PIZ_GOOD;
-        err |= pizGrowingArrayAppend (a, PIZ_SEQUENCE_VERSION);
-        err |= pizGrowingArrayAppend (a, x->start);
-        err |= pizGrowingArrayAppend (a, x->end);
-        err |= pizGrowingArrayAppend (a, x->down);
-        err |= pizGrowingArrayAppend (a, x->up);
-        err |= pizGrowingArrayAppend (a, x->count);
-        
-        for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
-            PIZNote *note       = NULL;
-            PIZNote *nextNote   = NULL;
-            
-            long p = pizGrowingArrayValueAtIndex (x->map, i);
-            
-            pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-            
-            while (note) {
-                pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-                
-                err |= pizGrowingArrayAppend (a, note->originPosition);
-                err |= pizGrowingArrayAppend (a, note->data[PIZ_PITCH]);
-                err |= pizGrowingArrayAppend (a, note->data[PIZ_VELOCITY]);
-                err |= pizGrowingArrayAppend (a, note->data[PIZ_DURATION]);
-                err |= pizGrowingArrayAppend (a, note->data[PIZ_CHANNEL]);
-                err |= pizGrowingArrayAppend (a, note->isSelected);
-                err |= pizGrowingArrayAppend (a, (note == x->markedNote));
-                
-                note = nextNote;
-            }
-        }
-    }
-    
-    PIZUNLOCK
-    
-    return err;
-}
-
-PIZError pizSequenceDecodeUndoWithArray (PIZSequence *x, const PIZGrowingArray *a)
-{
-    long err = PIZ_ERROR;
-    
-    PIZLOCK
-    
-    if (a) {
-        long i, t;
-        
-        err = PIZ_GOOD;
-        pizSequenceClearNotes (x);
-
-        if (t = pizGrowingArrayCount (a)) {
-            long k, version, count;
-            long modeFlags = PIZ_SEQUENCE_ADD_FLAG_UNSELECT;
-            long *ptr = pizGrowingArrayPtr (a);
-            
-            version     = pizGrowingArrayValueAtIndex (a, PIZ_UNDO_VERSION);
-            x->start    = pizGrowingArrayValueAtIndex (a, PIZ_UNDO_START);
-            x->end      = pizGrowingArrayValueAtIndex (a, PIZ_UNDO_END);
-            x->down     = pizGrowingArrayValueAtIndex (a, PIZ_UNDO_DOWN);
-            x->up       = pizGrowingArrayValueAtIndex (a, PIZ_UNDO_UP);
-            count       = pizGrowingArrayValueAtIndex (a, PIZ_UNDO_COUNT);
-            
-            k = PIZ_UNDO_DATA;
-            
-            for (i = 0; i < count; i++) {
-                if (!(pizSequenceAddNote (x, ptr + (i * PIZ_SEQUENCE_NOTE_SIZE) + k, modeFlags))) {
-                    err |= PIZ_ERROR;
-                }
-            }
-        }
-    }
-
-    PIZUNLOCK
-    
-    return err;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-bool pizSequenceUndoIsEqualToUndo (const PIZGrowingArray *a, const PIZGrowingArray *b)
-{
-    bool isEqual = false;
-    long count = pizGrowingArrayCount (a);
-            
-    if (count == pizGrowingArrayCount (b)) {
-        long i, n, k;
-        long *ptrA = pizGrowingArrayPtr (a);
-        long *ptrB = pizGrowingArrayPtr (b);
-        bool d = false;
-    
-        d |= (*(ptrA + PIZ_UNDO_START) != *(ptrB + PIZ_UNDO_START));
-        d |= (*(ptrA + PIZ_UNDO_END) != *(ptrB + PIZ_UNDO_END));
-        d |= (*(ptrA + PIZ_UNDO_DOWN) != *(ptrB + PIZ_UNDO_DOWN));
-        d |= (*(ptrA + PIZ_UNDO_UP) != *(ptrB + PIZ_UNDO_UP));
-        
-        n = *(ptrA + PIZ_UNDO_COUNT);
-        
-        k = PIZ_UNDO_DATA;
-        
-        for (i = 0; i < n; i++) {
-            d |= (*(ptrA + k + PIZ_SEQUENCE_POSITION)   != *(ptrB + k + PIZ_SEQUENCE_POSITION));
-            d |= (*(ptrA + k + PIZ_SEQUENCE_PITCH)      != *(ptrB + k + PIZ_SEQUENCE_PITCH));
-            d |= (*(ptrA + k + PIZ_SEQUENCE_VELOCITY)   != *(ptrB + k + PIZ_SEQUENCE_VELOCITY));
-            d |= (*(ptrA + k + PIZ_SEQUENCE_DURATION)   != *(ptrB + k + PIZ_SEQUENCE_DURATION));
-            d |= (*(ptrA + k + PIZ_SEQUENCE_CHANNEL)    != *(ptrB + k + PIZ_SEQUENCE_CHANNEL));
-            
-            k += PIZ_SEQUENCE_NOTE_SIZE;
-            
-            if (d) {
-                    break;
-                }
-        }
-        
-        isEqual = !d;
-    }
-        
-    return isEqual;
 }
 
 // -------------------------------------------------------------------------------------------------------------

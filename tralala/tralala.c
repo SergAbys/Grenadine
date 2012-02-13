@@ -468,14 +468,15 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
     t_dictionary        *d = NULL;
     long                boxflags;
 
-    /*post ("%ld", calcoffset (t_tralala, channel));
+    /*
+    post ("%ld", calcoffset (t_tralala, channel));
     post ("%ld", calcoffset (t_tralala, arrayMutex));
     post ("%ld", calcoffset (t_tralala, popupFontName));
     post ("%ld", calcoffset (t_tralala, patternCustom));
     post ("%ld", calcoffset (t_tralala, mousePitchValue));
     post ("%ld", calcoffset (t_tralala, playedNotesCopy));
-    post ("%ld", calcoffset (t_tralala, previous));
-    post ("%ld", calcoffset (t_tralala, textLayers));*/
+    post ("%ld", calcoffset (t_tralala, previous)); 
+    */
 
     if (d = object_dictionaryarg (argc, argv))
         {
@@ -544,8 +545,6 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                     x->valuesToBeLearned        = pizGrowingArrayNew    (LEARN_THRESHOLD_MAXIMUM);
                     x->learnQueue               = pizBoundedQueueNew    (LEARN_QUEUE_SIZE);
                     x->slots                    = pizLinklistNew        ( );
-                    x->undo                     = pizLinklistNew        ( );
-                    x->redo                     = pizLinklistNew        ( );
             
                     if (x->user && 
                         x->live && 
@@ -566,9 +565,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                         x->result &&
                         x->valuesToBeLearned &&
                         x->learnQueue &&
-                        x->slots &&
-                        x->undo &&
-                        x->redo)
+                        x->slots)
                         {
                             attr_dictionary_process (x, d);
 
@@ -584,8 +581,6 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                             pizSequenceSetGrid (x->user, PIZ_EIGHTH_NOTE);
                             
                             pizLinklistSetFlags (x->slots,  PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY);
-                            pizLinklistSetFlags (x->undo,   PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY);
-                            pizLinklistSetFlags (x->redo,   PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY);
                             
                             if (dictionary_hasentry (d, tll_sym_tralala) && (x->saveSlotsWithPatcher || 
                                 x->saveChannelWithPatcher || x->saveValuesWithPatcher))
@@ -705,10 +700,7 @@ void tralala_free (t_tralala *x)
     pizGrowingArrayFree (x->result);
     pizGrowingArrayFree (x->valuesToBeLearned);
     
-    pizLinklistFree         (x->slots);
-    pizLinklistFree         (x->undo);
-    pizLinklistFree         (x->redo);
-    
+    pizLinklistFree         (x->slots);    
     pizBoundedQueueFree     (x->learnQueue);
     pizFactorOracleFree     (x->factorOracle);
     pizGaloisLatticeFree    (x->galoisLattice);
@@ -769,7 +761,7 @@ t_max_err tralala_setvalueof (t_tralala *x, long argc, t_atom *argv)
                         }
                     
                     if (!err) {
-                            pizSequenceDecodeSlotWithArray (x->user, tempArray);
+                            pizSequenceDecodeWithArray (x->user, tempArray);
                             
                             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE);
                             
@@ -791,7 +783,7 @@ t_max_err tralala_getvalueof (t_tralala *x, long *argc, t_atom **argv)
             
             if (tempArray)
                 {
-                    if (!pizSequenceEncodeSlotToArray (x->user, tempArray))
+                    if (!pizSequenceEncodeToArray (x->user, tempArray))
                         {
                             long size = pizGrowingArrayCount (tempArray);
                             
@@ -1964,7 +1956,6 @@ void tralala_handleMessages (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
                             if (USER) {
                                     DIRTYSLOTS 
                                     DIRTYPATTR
-                                    DIRTYUNDO
                                 }
                         }   
                 }
@@ -2648,14 +2639,12 @@ void tralala_slotRecall (t_tralala *x, long n)
             if (x->slotIndex != n)
                 {
                     tralala_slotStore (x);
-                    tralala_clearUndo (x);
                 }
             
             x->slotIndex = n;
             
-            pizSequenceDecodeSlotWithArray (x->user, slot);
+            pizSequenceDecodeWithArray (x->user, slot);
             
-            DIRTYUNDO
             DIRTYPATTR
             
             DIRTYLAYER_SET (DIRTY_GRID);
@@ -2671,7 +2660,7 @@ void tralala_slotStore (t_tralala *x)
     if (!pizLinklistPtrAtIndex (x->slots, x->slotIndex, (void **)&slot))
         {
             pizGrowingArrayClear (slot);
-            pizSequenceEncodeSlotToArray (x->user, slot);
+            pizSequenceEncodeToArray (x->user, slot);
         }
 }
 
@@ -2692,7 +2681,6 @@ void tralala_slotRemove (t_tralala *x, long n)
             if (!pizLinklistCount (x->slots))
                 {
                     tralala_slotNew (x);
-                    tralala_clearUndo (x);
                 }
             else
                 {
@@ -2708,7 +2696,6 @@ void tralala_slotRemove (t_tralala *x, long n)
                                 }
                             
                             tralala_slotRecall (x, x->slotIndex);
-                            tralala_clearUndo (x);
                         }   
                 }
         }
@@ -2730,7 +2717,6 @@ void tralala_slotSwap (t_tralala *x, long m, long n)
             if (x->slotIndex == m)
                 {
                     tralala_slotRecall (x, x->slotIndex);
-                    tralala_clearUndo (x);
                 }
             else if (x->slotIndex == n)
                 {
@@ -2786,158 +2772,6 @@ void tralala_slotPrevious (t_tralala *x)
 #pragma mark HI
 #pragma mark -
 
-void tralala_undo (t_tralala *x)
-{
-    long count;
-    
-    systhread_mutex_lock (&x->methodMutex);
-    
-    count = pizLinklistCount (x->undo);
-    
-    if (count > 1)
-        {
-            PIZGrowingArray *now = NULL;
-            PIZGrowingArray *previous = NULL;
-            PIZGrowingArray *next = NULL;
-            PIZError        err = PIZ_ERROR;
-    
-            if (!pizLinklistPtrAtIndex (x->undo, 0, (void **)&now))
-                {
-                    if (next = pizGrowingArrayNew (INIT_GROWING_ARRAY_SIZE))
-                        {
-                            err = PIZ_GOOD;
-                            err |= pizGrowingArrayCopy (next, now);
-                            
-                            if (!err) {
-                                    err |= pizLinklistInsert (x->redo, next);
-                                }
-                                
-                            if (err) 
-                                {
-                                    pizGrowingArrayFree (next);
-                                }
-                            else 
-                                {
-                                    err |= pizLinklistRemoveByPtr (x->undo, now);
-                                }
-                        }
-                }
-                
-            if (!err && !pizLinklistPtrAtIndex (x->undo, 0, (void **)&previous))
-                {
-                    err |= pizSequenceDecodeUndoWithArray (x->user, previous);
-                }
-            
-            if (!err) {
-                    DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE);
-                    
-                    DIRTYPATTR
-                    DIRTYSLOTS
-                }
-        }
-    
-    systhread_mutex_unlock (&x->methodMutex);
-}
-
-void tralala_redo (t_tralala *x)
-{
-    long count;
-    
-    systhread_mutex_lock (&x->methodMutex);
-    
-    count = pizLinklistCount (x->redo);
-    
-    if (count)
-        {
-            PIZGrowingArray *next = NULL;
-            PIZGrowingArray *now = NULL;
-            PIZError        err = PIZ_ERROR;
-    
-            if (!pizLinklistPtrAtIndex (x->redo, 0, (void **)&next))
-                {
-                    if (now = pizGrowingArrayNew (INIT_GROWING_ARRAY_SIZE)) 
-                        {
-                            err = PIZ_GOOD;
-                            err |= pizGrowingArrayCopy (now, next);
-                            
-                            if (!err) {
-                                    err |= pizLinklistInsert (x->undo, now);
-                                }
-                            
-                            if (err) 
-                                {
-                                    pizGrowingArrayFree (now);
-                                }
-                            else
-                                {
-                                    pizSequenceDecodeUndoWithArray (x->user, next);
-                                    pizLinklistRemoveByPtr (x->redo, next);
-                                    
-                                    DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE);
-                            
-                                    DIRTYPATTR
-                                    DIRTYSLOTS
-                                }
-                        }
-                }
-        }
-    
-    systhread_mutex_unlock (&x->methodMutex);
-}
-
-void tralala_addUndo (t_tralala *x)
-{
-    PIZGrowingArray *newUndo = NULL;
-    
-    systhread_mutex_lock (&x->methodMutex);
-    
-    if (newUndo = pizGrowingArrayNew (INIT_GROWING_ARRAY_SIZE)) 
-        {
-            bool addUndo = true;
-                            
-            if (!pizSequenceEncodeUndoToArray (x->user, newUndo)) 
-                {   
-                    if (pizLinklistCount (x->undo)) 
-                        {
-                            PIZGrowingArray *lastUndo = NULL;
-                            
-                            if (!pizLinklistPtrAtIndex (x->undo, 0, (void **)&lastUndo)) 
-                                {
-                                    if (pizSequenceUndoIsEqualToUndo (newUndo, lastUndo)) {
-                                            addUndo = false;
-                                        } 
-                                }
-                        }
-                        
-                    if (addUndo)
-                        {
-                            pizLinklistInsert   (x->undo, newUndo);
-                            pizLinklistClear    (x->redo);
-                        }
-                    else
-                        {
-                            pizGrowingArrayFree (newUndo);
-                        }
-                }
-        }
-    
-    systhread_mutex_unlock (&x->methodMutex);
-}
-
-void tralala_clearUndo (t_tralala *x)
-{
-    systhread_mutex_lock (&x->methodMutex);
-    
-    pizLinklistClear (x->undo);
-    pizLinklistClear (x->redo);
-    
-    systhread_mutex_unlock (&x->methodMutex);
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers)
 {   
     tralala_setCoordinatesWithPoint (x, &x->coordinates, pt);
@@ -2949,7 +2783,6 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                     
                     DIRTYSLOTS
                     DIRTYPATTR
-                    DIRTYUNDO
                 } 
         }
     else if (USER && VIEWTEXT && !RIGHT && !CAPS && 
@@ -3244,7 +3077,6 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
                     
                     DIRTYSLOTS 
                     DIRTYPATTR
-                    DIRTYUNDO
                 }
 
             if (x->flags & FLAG_ZONE_IS_SELECTED)
@@ -3255,7 +3087,6 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
                     
                     DIRTYSLOTS 
                     DIRTYPATTR
-                    DIRTYUNDO
                 }
             
             if (x->flags & (FLAG_HAVE_CHANGED | FLAG_HAVE_MOVED | FLAG_HAVE_BEEN_DUPLICATED))
@@ -3271,7 +3102,6 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
                     
                     DIRTYSLOTS 
                     DIRTYPATTR
-                    DIRTYUNDO
                 }
             
             if (x->flags & FLAG_IS_LASSO)
@@ -3443,7 +3273,6 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
         
         DIRTYSLOTS 
         DIRTYPATTR
-        DIRTYUNDO
         DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE);
         
     } else if (keycode == JKEY_DOWNARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
@@ -3452,7 +3281,6 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
         
         DIRTYSLOTS 
         DIRTYPATTR
-        DIRTYUNDO
         DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE);
         
     } else if (keycode == JKEY_ENTER) {
@@ -3482,7 +3310,6 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
         DIRTYSLOTS 
         DIRTYPATTR
-        DIRTYUNDO
         
     } else if (USER && CMD && !(x->flags & (FLAG_HAVE_MOVED | FLAG_HAVE_CHANGED | FLAG_HAVE_BEEN_DUPLICATED))) {
         if (ALL) 
@@ -3555,19 +3382,10 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
                             }
                     }
             }
-        else if (UNDO)
-            {
-                tralala_undo (x);
-            }
-        else if (REDO)
-            {
-                tralala_redo (x);
-            }
         
         if (ALL || COPY || CUT || PASTE) {
                 DIRTYSLOTS
                 DIRTYPATTR
-                DIRTYUNDO
             }
             
     } else if (keycode >= 49 && keycode <= 55) {
@@ -4089,8 +3907,6 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
             x->flags &= ~FLAG_HAVE_CHANGED;
                 
             DIRTYLAYER_SET (DIRTY_NOTES);
-            
-            DIRTYUNDO
         }
     
     if (returnedPopupValue >= 10 && returnedPopupValue <= 27) {

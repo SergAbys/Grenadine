@@ -49,13 +49,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizSequenceEncodeSlotToArray (PIZSequence *x, PIZGrowingArray *a);
-PIZError pizSequenceDecodeSlotWithArray (PIZSequence *x, const PIZGrowingArray *a);
-
-PIZError pizSequenceEncodeUndoToArray (PIZSequence *x, PIZGrowingArray *a);
-PIZError pizSequenceDecodeUndoWithArray (PIZSequence *x, const PIZGrowingArray *a);
-
-bool pizSequenceUndoIsEqualToUndo (const PIZGrowingArray *a, const PIZGrowingArray *b);
+PIZError pizSequenceEncodeToArray (PIZSequence *x, PIZGrowingArray *a);
+PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
