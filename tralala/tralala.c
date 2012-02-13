@@ -109,7 +109,7 @@ CLASS_ATTR_DEFAULT         (c, "patching_rect",    0, DEFAULT_PATCHING_RECT);
 CLASS_ATTR_DEFAULT         (c, "fontname",         0, DEFAULT_FONTNAME);
 CLASS_ATTR_DEFAULT         (c, "fontsize",         0, DEFAULT_FONTSIZE);
 CLASS_ATTR_DEFAULT         (c, "fontface",         0, DEFAULT_FONTFACE);
-CLASS_ATTR_MIN             (c, "patching_size",    0, PATCHING_SIZE_MINIMUM);
+CLASS_ATTR_MIN             (c, "patching_size",    0, SIZE_PATCH_MIN);
 
 CLASS_ATTR_LONG            (c, "embedslots",       0, t_tralala, saveSlotsWithPatcher);
 CLASS_ATTR_STYLE_LABEL     (c, "embedslots",       0, "onoff", "Save Slots With Patcher");
@@ -145,7 +145,7 @@ CLASS_STICKY_ATTR          (c, "category",      0, "Value");
 CLASS_ATTR_LONG            (c, "tempo",         0, t_tralala, tempo);
 CLASS_ATTR_DEFAULT         (c, "tempo",         0, DEFAULT_TEMPO);
 CLASS_ATTR_LABEL           (c, "tempo",         0, "Tempo");
-CLASS_ATTR_FILTER_CLIP     (c, "tempo",         TEMPO_MINIMUM, TEMPO_MAXIMUM);
+CLASS_ATTR_FILTER_CLIP     (c, "tempo",         TIME_TEMPO_MIN, TIME_TEMPO_MAX);
 
 CLASS_ATTR_LONG            (c, "velocity",      0, t_tralala, velocity);
 CLASS_ATTR_DEFAULT         (c, "velocity",      0, "0");
@@ -159,7 +159,7 @@ CLASS_ATTR_ACCESSORS       (c, "scalekey",      NULL, tralala_setScaleKey);
 CLASS_ATTR_LABEL           (c, "scalekey",      0, "Scale Key");
 
 CLASS_ATTR_SYM             (c, "scaletype",     0, t_tralala, scaleType);
-CLASS_ATTR_ENUM            (c, "scaletype",     0, SCALE_TYPE_LIST);
+CLASS_ATTR_ENUM            (c, "scaletype",     0, LIST_SCALE_TYPE);
 CLASS_ATTR_DEFAULT         (c, "scaletype",     0, DEFAULT_SCALE_TYPE);
 CLASS_ATTR_ACCESSORS       (c, "scaletype",     NULL, tralala_setScaleType);
 CLASS_ATTR_LABEL           (c, "scaletype",     0, "Scale Type");
@@ -170,12 +170,12 @@ CLASS_ATTR_ACCESSORS       (c, "scalecustom",   NULL, tralala_setScaleCustom);
 CLASS_ATTR_LABEL           (c, "scalecustom",   0, "Scale Custom");
 
 CLASS_ATTR_SYM             (c, "patterncell",   0, t_tralala, patternCell);
-CLASS_ATTR_ENUM            (c, "patterncell",   0, PATTERN_CELL_LIST);
+CLASS_ATTR_ENUM            (c, "patterncell",   0, LIST_PATTERN_CELL);
 CLASS_ATTR_DEFAULT         (c, "patterncell",   0, DEFAULT_PATTERN_CELL);
 CLASS_ATTR_ACCESSORS       (c, "patterncell",   NULL, tralala_setPatternCell);
 CLASS_ATTR_LABEL           (c, "patterncell",   0, "Pattern Cell");
 
-CLASS_ATTR_LONG_VARSIZE    (c, "patterncustom", 0, t_tralala, patternCustom, patternSize, PATTERN_MAXIMUM_SIZE);
+CLASS_ATTR_LONG_VARSIZE    (c, "patterncustom", 0, t_tralala, patternCustom, patternSize, SIZE_PATTERN_MAX);
 CLASS_ATTR_DEFAULT         (c, "patterncustom", 0, DEFAULT_PATTERN_CUSTOM);
 CLASS_ATTR_LABEL           (c, "patterncustom", 0, "Pattern Custom");
 CLASS_ATTR_ACCESSORS       (c, "patterncustom", NULL, tralala_setPatternCustom);
@@ -215,13 +215,13 @@ CLASS_ATTR_DEFAULT          (c, "windowoffsety",    0, DEFAULT_WINDOW_OFFSET_Y);
 CLASS_ATTR_LABEL            (c, "windowoffsety",    0, "Window Y Offset");
 
 CLASS_ATTR_LONG             (c, "sequencemode",     0, t_tralala, sequenceMode);
-CLASS_ATTR_DEFAULT          (c, "sequencemode",     0, DEFAULT_SEQUENCE_MODE);
+CLASS_ATTR_DEFAULT          (c, "sequencemode",     0, DEFAULT_MODE_SEQUENCE);
 CLASS_ATTR_ENUMINDEX        (c, "sequencemode",     0, "user live listen");
 CLASS_ATTR_LABEL            (c, "sequencemode",     0, "Sequence Mode");
 CLASS_ATTR_ACCESSORS        (c, "sequencemode",     NULL, tralala_setSequenceMode);
 
 CLASS_ATTR_LONG             (c, "zoommode",         0, t_tralala, zoomMode);
-CLASS_ATTR_DEFAULT          (c, "zoommode",         0, DEFAULT_ZOOM_MODE);
+CLASS_ATTR_DEFAULT          (c, "zoommode",         0, DEFAULT_MODE_ZOOM);
 CLASS_ATTR_LABEL            (c, "zoommode",         0, "Zoom Mode");
 CLASS_ATTR_FILTER_CLIP      (c, "zoommode",         0, 2);
 
@@ -367,11 +367,11 @@ CLASS_ATTR_DEFAULTNAME_SAVE (c, "popupfontname",        0, DEFAULT_POPUP_FONTNAM
 CLASS_ATTR_STYLE_LABEL      (c, "popupfontname",        0, "font", "Popup Font Name");
 CLASS_ATTR_DOUBLE           (c, "popupfontsize",        0, t_tralala, popupFontSize);
 CLASS_ATTR_DEFAULTNAME_SAVE (c, "popupfontsize",        0, DEFAULT_POPUP_FONTSIZE);
-CLASS_ATTR_ENUM             (c, "popupfontsize",        0, FONTSIZE_LIST);
+CLASS_ATTR_ENUM             (c, "popupfontsize",        0, LIST_FONTSIZE);
 CLASS_ATTR_LABEL            (c, "popupfontsize",        0, "Popup Font Size");
 CLASS_ATTR_LONG             (c, "popupfontface",        0, t_tralala, popupFontFace);
 CLASS_ATTR_DEFAULTNAME_SAVE (c, "popupfontface",        0, DEFAULT_POPUP_FONTFACE);
-CLASS_ATTR_ENUMINDEX        (c, "popupfontface",        0, FONTSTYLE_LIST);
+CLASS_ATTR_ENUMINDEX        (c, "popupfontface",        0, LIST_FONTSTYLE);
 CLASS_ATTR_LABEL            (c, "popupfontface",        0, "Popup Font Style");
 
 CLASS_STICKY_ATTR_CLEAR     (c, "category");
@@ -468,22 +468,12 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
     t_dictionary        *d = NULL;
     long                boxflags;
 
-    /*
-    post ("%ld", calcoffset (t_tralala, channel));
-    post ("%ld", calcoffset (t_tralala, arrayMutex));
-    post ("%ld", calcoffset (t_tralala, popupFontName));
-    post ("%ld", calcoffset (t_tralala, patternCustom));
-    post ("%ld", calcoffset (t_tralala, mousePitchValue));
-    post ("%ld", calcoffset (t_tralala, playedNotesCopy));
-    post ("%ld", calcoffset (t_tralala, previous)); 
-    */
-
     if (d = object_dictionaryarg (argc, argv))
         {
             if (x = (t_tralala *)object_alloc (tll_class))
                 {
                     long i;
-                    long initArrayPool[2] = {2, INIT_GROWING_ARRAY_SIZE};
+                    long initArrayPool[2] = {2, SIZE_GROWING_ARRAY};
                     
                     boxflags = 0 
                         | JBOX_DRAWFIRSTIN 
@@ -513,10 +503,10 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                     x->inhibitStartClock    = clock_new (x, (method)tralala_inhibitStartTask);
                     x->inhibitBangClock     = clock_new (x, (method)tralala_inhibitBangTask);
                     
-                    systhread_mutex_new (&x->methodMutex,       SYSTHREAD_MUTEX_NORMAL);
-                    systhread_mutex_new (&x->algorithmMutex,    SYSTHREAD_MUTEX_NORMAL);
+                    systhread_mutex_new (&x->methodsMutex,      SYSTHREAD_MUTEX_NORMAL);
+                    systhread_mutex_new (&x->algorithmsMutex,    SYSTHREAD_MUTEX_NORMAL);
                     systhread_mutex_new (&x->learnMutex,        SYSTHREAD_MUTEX_NORMAL);
-                    systhread_mutex_new (&x->arrayMutex,        SYSTHREAD_MUTEX_NORMAL);
+                    systhread_mutex_new (&x->arraysMutex,       SYSTHREAD_MUTEX_NORMAL);
                     
                     for (i = 0; i < TEXT_CELL_COUNT; i++) {
                             x->textLayers[i]     = jtextlayout_create ( );
@@ -532,18 +522,18 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                     x->factorOracle             = pizFactorOracleNew    (0, NULL);
                     x->galoisLattice            = pizGaloisLatticeNew   (0, NULL);
                     x->finiteState              = pizFiniteStateNew     (0, NULL);
-                    x->unselectedNotes          = pizGrowingArrayNew    (INIT_GROWING_ARRAY_SIZE);
-                    x->selectedNotes            = pizGrowingArrayNew    (INIT_GROWING_ARRAY_SIZE);
-                    x->playedNotes              = pizGrowingArrayNew    (INIT_GROWING_ARRAY_SIZE);
+                    x->unselectedNotes          = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+                    x->selectedNotes            = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+                    x->playedNotes              = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
                     x->zone                     = pizGrowingArrayNew    (PIZ_SEQUENCE_ZONE_SIZE);
-                    x->unselectedNotesCopy      = pizGrowingArrayNew    (INIT_GROWING_ARRAY_SIZE);
-                    x->selectedNotesCopy        = pizGrowingArrayNew    (INIT_GROWING_ARRAY_SIZE);
-                    x->playedNotesCopy          = pizGrowingArrayNew    (INIT_GROWING_ARRAY_SIZE);
+                    x->unselectedNotesCopy      = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+                    x->selectedNotesCopy        = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+                    x->playedNotesCopy          = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
                     x->zoneCopy                 = pizGrowingArrayNew    (PIZ_SEQUENCE_ZONE_SIZE);
-                    x->originNotes              = pizGrowingArrayNew    (INIT_GROWING_ARRAY_SIZE);
-                    x->result                   = pizGrowingArrayNew    (INIT_GROWING_ARRAY_SIZE);
-                    x->valuesToBeLearned        = pizGrowingArrayNew    (LEARN_THRESHOLD_MAXIMUM);
-                    x->learnQueue               = pizBoundedQueueNew    (LEARN_QUEUE_SIZE);
+                    x->originNotes              = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+                    x->result                   = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+                    x->valuesToBeLearned        = pizGrowingArrayNew    (SIZE_LEARN_ARRAY);
+                    x->learnQueue               = pizBoundedQueueNew    (SIZE_LEARN_QUEUE);
                     x->slots                    = pizLinklistNew        ( );
             
                     if (x->user && 
@@ -570,11 +560,11 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                             attr_dictionary_process (x, d);
 
                             x->flags                = FLAG_NONE;
-                            x->textMode             = TEXT_MODE_NOTE;
+                            x->textMode             = MODE_TEXT_NOTE;
                             x->hitTest              = HIT_NOTHING;
                             x->cursorType           = JMOUSE_CURSOR_ARROW;
                             x->learnCycle           = PIZ_ALGORITHM_NONE;
-                            x->learnThreshold       = LEARN_THRESHOLD_MINIMUM;
+                            x->learnThreshold       = SIZE_LEARN_MIN;
                             x->cell                 = PIZ_SNAP_NONE;
                             x->dirtyLayer           = (DIRTY_ZONE | DIRTY_NOTES | DIRTY_GRID | DIRTY_CHANGE);
                             
@@ -598,7 +588,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                                 {
                                     PIZGrowingArray *firstSlot = NULL;
 
-                                    if (firstSlot = pizGrowingArrayNew (INIT_GROWING_ARRAY_SIZE)) {
+                                    if (firstSlot = pizGrowingArrayNew (SIZE_GROWING_ARRAY)) {
                                             pizLinklistAppend (x->slots, firstSlot);
                                         }
                                 }
@@ -607,7 +597,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                             
                             srand ((unsigned int)time(NULL));
                             
-                            clock_fdelay (x->learnClock, LEARN_CLOCK_INTERVAL + CLOCK_RANDOMIZE 
+                            clock_fdelay (x->learnClock, CLOCK_LEARN_INTERVAL + CLOCK_RANDOMIZE 
                                 * (rand ( ) / (RAND_MAX + 1.0)));
                         }
                     else
@@ -665,20 +655,20 @@ void tralala_free (t_tralala *x)
             object_free (x->notifyClock);
         }
     
-    if (x->algorithmMutex) {
-            systhread_mutex_free (x->methodMutex);
-        }
-        
-    if (x->algorithmMutex) {
-            systhread_mutex_free (x->algorithmMutex);
-        }
-        
-    if (x->arrayMutex) {
-            systhread_mutex_free (x->arrayMutex);
-        }
-    
     if (x->learnMutex) {
             systhread_mutex_free (x->learnMutex);
+        }
+    
+    if (x->arraysMutex) {
+            systhread_mutex_free (x->arraysMutex);
+        }
+        
+    if (x->methodsMutex) {
+            systhread_mutex_free (x->methodsMutex);
+        }
+        
+    if (x->algorithmsMutex) {
+            systhread_mutex_free (x->algorithmsMutex);
         }
     
     for (i = 0; i < TEXT_CELL_COUNT; i++)
@@ -688,16 +678,16 @@ void tralala_free (t_tralala *x)
                 }
         }
     
-    pizGrowingArrayFree (x->unselectedNotes);
-    pizGrowingArrayFree (x->selectedNotes);
-    pizGrowingArrayFree (x->playedNotes);
     pizGrowingArrayFree (x->zone);
-    pizGrowingArrayFree (x->unselectedNotesCopy);
-    pizGrowingArrayFree (x->selectedNotesCopy);
-    pizGrowingArrayFree (x->playedNotesCopy);
+    pizGrowingArrayFree (x->playedNotes);
+    pizGrowingArrayFree (x->selectedNotes);
+    pizGrowingArrayFree (x->unselectedNotes);
     pizGrowingArrayFree (x->zoneCopy);
-    pizGrowingArrayFree (x->originNotes);
+    pizGrowingArrayFree (x->playedNotesCopy);
+    pizGrowingArrayFree (x->selectedNotesCopy);
+    pizGrowingArrayFree (x->unselectedNotesCopy);
     pizGrowingArrayFree (x->result);
+    pizGrowingArrayFree (x->originNotes);
     pizGrowingArrayFree (x->valuesToBeLearned);
     
     pizLinklistFree         (x->slots);    
@@ -872,13 +862,13 @@ void tralala_dataToDictionary (t_tralala *x, t_dictionary *d)
                                     if (storage = (t_atom *)sysmem_newptrclear (sizeof(t_atom) * count))
                                         {
                                             long *ptr = NULL;
-                                            char key[STRING_MAXIMUM_SIZE];
+                                            char key[SIZE_STRING_MAX];
                                             
                                             ptr = pizGrowingArrayPtr (slot);
                                             atom_setlong_array (count, storage, count, ptr);
                                             
-                                            snprintf (key, STRING_MAXIMUM_SIZE, "slot %ld", index);
-                                            key[STRING_MAXIMUM_SIZE - 1] = 0;
+                                            snprintf (key, SIZE_STRING_MAX, "slot %ld", index);
+                                            key[SIZE_STRING_MAX - 1] = 0;
                                             
                                             dictionary_appendatoms (d, gensym (key), count, storage);
                                             
@@ -961,10 +951,10 @@ void tralala_dataWithDictionary (t_tralala *x, t_dictionary *d)
                                 {
                                     long    argc = 0;
                                     t_atom  *argv = NULL;
-                                    char    key[STRING_MAXIMUM_SIZE];
+                                    char    key[SIZE_STRING_MAX];
                     
-                                    snprintf (key, STRING_MAXIMUM_SIZE, "slot %ld", i);
-                                    key[STRING_MAXIMUM_SIZE - 1] = 0;
+                                    snprintf (key, SIZE_STRING_MAX, "slot %ld", i);
+                                    key[SIZE_STRING_MAX - 1] = 0;
                                     
                                     dictionary_getatoms (d, gensym (key), &argc, &argv);
                                     
@@ -973,7 +963,7 @@ void tralala_dataWithDictionary (t_tralala *x, t_dictionary *d)
                                             long j;
                                             PIZGrowingArray *slot = NULL;
                                             
-                                            if (slot = pizGrowingArrayNew (INIT_GROWING_ARRAY_SIZE))  
+                                            if (slot = pizGrowingArrayNew (SIZE_GROWING_ARRAY))  
                                                 {
                                                     for (j = 0; j < argc; j++) {
                                                         pizGrowingArrayAppend (slot, atom_getlong (argv + j));
@@ -1065,7 +1055,7 @@ t_max_err tralala_setSequenceMode (t_tralala *x, t_object *attr, long argc, t_at
                     
             tralala_willChange (x);
                     
-            x->sequenceMode = CLAMP (k, SEQUENCE_MODE_USER, SEQUENCE_MODE_LISTEN);
+            x->sequenceMode = CLAMP (k, MODE_SEQUENCE_USER, MODE_SEQUENCE_LISTEN);
 
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE | DIRTY_GRID);
         }
@@ -1420,7 +1410,7 @@ t_max_err tralala_setPatternCustom (t_tralala *x, t_object *attr, long argc, t_a
         {   
             ARRAY_GET (tempArray);
 
-            x->patternSize = MIN (argc, PATTERN_MAXIMUM_SIZE);
+            x->patternSize = MIN (argc, SIZE_PATTERN_MAX);
             
             atom_getlong_array (argc, argv, x->patternSize, x->patternCustom);
                             
@@ -1456,7 +1446,7 @@ t_max_err tralala_setPatternCustom (t_tralala *x, t_object *attr, long argc, t_a
 
 void tralala_play (t_tralala *x)
 {   
-    systhread_mutex_lock (&x->methodMutex);
+    systhread_mutex_lock (&x->methodsMutex);
     
     x->flags &= ~FLAG_INHIBIT_START;
     
@@ -1484,12 +1474,12 @@ void tralala_play (t_tralala *x)
             clock_fdelay (x->runClock, 0.);
         }
     
-    systhread_mutex_unlock (&x->methodMutex);
+    systhread_mutex_unlock (&x->methodsMutex);
 }
 
 void tralala_stop (t_tralala *x)
 {   
-    systhread_mutex_lock (&x->methodMutex);
+    systhread_mutex_lock (&x->methodsMutex);
     
     clock_unset (x->runClock);
     
@@ -1497,19 +1487,19 @@ void tralala_stop (t_tralala *x)
     x->runIndex = -1;
     
     if (pizSequenceIsAtEnd (x->live)) {
-            clock_fdelay (x->goToStartClock, DEFER_CLOCK_INTERVAL);
+            clock_fdelay (x->goToStartClock, CLOCK_DEFER_INTERVAL);
         }
     
     x->flags |= FLAG_INHIBIT_START;
     
-    clock_fdelay (x->inhibitStartClock, DEFER_CLOCK_INTERVAL);
+    clock_fdelay (x->inhibitStartClock, CLOCK_DEFER_INTERVAL);
     
-    systhread_mutex_unlock (&x->methodMutex);
+    systhread_mutex_unlock (&x->methodsMutex);
 }
 
 void tralala_loop (t_tralala *x)
 {   
-    systhread_mutex_lock (&x->methodMutex);
+    systhread_mutex_lock (&x->methodsMutex);
     
     if (!(x->flags & FLAG_IS_RUNNING))
         {
@@ -1528,21 +1518,21 @@ void tralala_loop (t_tralala *x)
             x->flags |= FLAG_IS_LOOPED;
         }
     
-    systhread_mutex_unlock (&x->methodMutex);
+    systhread_mutex_unlock (&x->methodsMutex);
 }
 
 void tralala_unloop (t_tralala *x)
 {   
-    systhread_mutex_lock (&x->methodMutex);
+    systhread_mutex_lock (&x->methodsMutex);
     
     x->flags &= ~FLAG_IS_LOOPED;
     
-    systhread_mutex_unlock (&x->methodMutex);
+    systhread_mutex_unlock (&x->methodsMutex);
 }
 
 void tralala_pause (t_tralala *x)
 {   
-    systhread_mutex_lock (&x->methodMutex);
+    systhread_mutex_lock (&x->methodsMutex);
     
     if ((x->flags & FLAG_IS_RUNNING) && !(x->flags & FLAG_IS_PAUSED))
         {
@@ -1559,7 +1549,7 @@ void tralala_pause (t_tralala *x)
             clock_fdelay (x->runClock, 0.);
         }
     
-    systhread_mutex_unlock (&x->methodMutex);
+    systhread_mutex_unlock (&x->methodsMutex);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -1589,7 +1579,7 @@ void tralala_runTask (t_tralala *x)
                 {
                     for (i = 0; i < count; i++) {
                         long duration = (pizGrowingArrayValueAtIndex (x->result, (i * 4) + 2)) 
-                                        * (STEPS_PER_MINUTE / (double)x->tempo);
+                                        * (TIME_STEPS_PER_MINUTE / (double)x->tempo);
                             
                         atom_setlong (x->playedNote,     pizGrowingArrayValueAtIndex (x->result, i * 4));
                         atom_setlong (x->playedNote + 1, pizGrowingArrayValueAtIndex (x->result, (i * 4) + 1));
@@ -1603,7 +1593,7 @@ void tralala_runTask (t_tralala *x)
             pizGrowingArrayClear (x->result);
 
             if (x->flags & FLAG_IS_RUNNING) {
-                    clock_fdelay (x->runClock, STEPS_PER_MINUTE / (double)x->tempo);
+                    clock_fdelay (x->runClock, TIME_STEPS_PER_MINUTE / (double)x->tempo);
                 }
         }
     else
@@ -1613,8 +1603,8 @@ void tralala_runTask (t_tralala *x)
             x->flags &= ~FLAG_IS_RUNNING;
             x->flags |= FLAG_INHIBIT_BANG;
             
-            clock_fdelay (x->goToStartClock, DEFER_CLOCK_INTERVAL);
-            clock_fdelay (x->inhibitBangClock, DEFER_CLOCK_INTERVAL);
+            clock_fdelay (x->goToStartClock, CLOCK_DEFER_INTERVAL);
+            clock_fdelay (x->inhibitBangClock, CLOCK_DEFER_INTERVAL);
             
             outlet_bang (x->middleRightOutlet);
         }
@@ -1761,7 +1751,7 @@ void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_mute (t_tralala *x, long n)
 {   
-    systhread_mutex_lock (&x->methodMutex);
+    systhread_mutex_lock (&x->methodsMutex);
     
     if (n) 
         {
@@ -1772,18 +1762,18 @@ void tralala_mute (t_tralala *x, long n)
             x->flags &= ~FLAG_IS_MUTED;
         }
     
-    systhread_mutex_unlock (&x->methodMutex);
+    systhread_mutex_unlock (&x->methodsMutex);
 }
 
 void tralala_forget (t_tralala *x)
 {
-    systhread_mutex_lock (&x->algorithmMutex);
+    systhread_mutex_lock (&x->algorithmsMutex);
     
     pizFactorOracleClear (x->factorOracle);
     pizGaloisLatticeClear (x->galoisLattice);
     pizFiniteStateClear (x->finiteState);
     
-    systhread_mutex_unlock (&x->algorithmMutex);
+    systhread_mutex_unlock (&x->algorithmsMutex);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -1816,8 +1806,8 @@ void tralala_learnTask (t_tralala *x)
                         }
                     
                     x->learnCycle = PIZ_FACTOR_ORACLE;
-                    x->learnThreshold = LEARN_THRESHOLD_MINIMUM 
-                        + ((LEARN_THRESHOLD_RANGE + 1) * (rand ( ) / (RAND_MAX + 1.0)));
+                    x->learnThreshold = SIZE_LEARN_MIN 
+                        + ((SIZE_LEARN_RANGE + 1) * (rand ( ) / (RAND_MAX + 1.0)));
                 }
                 
             systhread_mutex_unlock (&x->learnMutex);
@@ -1828,22 +1818,22 @@ void tralala_learnTask (t_tralala *x)
             long *values = pizGrowingArrayPtr (x->valuesToBeLearned);
             
             switch (x->learnCycle) {
-                case PIZ_FACTOR_ORACLE  :   systhread_mutex_lock (&x->algorithmMutex);
+                case PIZ_FACTOR_ORACLE  :   systhread_mutex_lock (&x->algorithmsMutex);
                                             pizFactorOracleAdd (x->factorOracle, k, values);
-                                            systhread_mutex_unlock (&x->algorithmMutex);
+                                            systhread_mutex_unlock (&x->algorithmsMutex);
                                             x->learnCycle = PIZ_GALOIS_LATTICE; break;
-                case PIZ_GALOIS_LATTICE :   systhread_mutex_lock (&x->algorithmMutex);
+                case PIZ_GALOIS_LATTICE :   systhread_mutex_lock (&x->algorithmsMutex);
                                             pizGaloisLatticeAdd (x->galoisLattice, k, values);
-                                            systhread_mutex_unlock (&x->algorithmMutex);
+                                            systhread_mutex_unlock (&x->algorithmsMutex);
                                             x->learnCycle = PIZ_FINITE_STATE; break;
-                case PIZ_FINITE_STATE   :   systhread_mutex_lock (&x->algorithmMutex);
+                case PIZ_FINITE_STATE   :   systhread_mutex_lock (&x->algorithmsMutex);
                                             pizFiniteStateAdd (x->finiteState, k, values);
-                                            systhread_mutex_unlock (&x->algorithmMutex);
+                                            systhread_mutex_unlock (&x->algorithmsMutex);
                                             x->learnCycle = PIZ_ALGORITHM_NONE; break;
                 }
         }
     
-    clock_fdelay (x->learnClock, LEARN_CLOCK_INTERVAL);
+    clock_fdelay (x->learnClock, CLOCK_LEARN_INTERVAL);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -2011,13 +2001,13 @@ bool tralala_sequenceNote (t_tralala *x, PIZSequence *sequence, long argc, t_ato
                             if (!(err |= (atom_gettype (argv + i) != A_LONG))){
                                 switch (i) {
                                     case 0 : pizGrowingArrayAppend (tempArray, 
-                                                (long)(atom_getlong (argv + i) / TICKS_FOR_ONE_STEP)); break;
+                                                (long)(atom_getlong (argv + i) / TIME_TICKS_PER_STEP)); break;
                                     case 1 : pizGrowingArrayAppend (tempArray, atom_getlong (argv + i));
                                                 break;
                                     case 2 : pizGrowingArrayAppend (tempArray, atom_getlong (argv + i));
                                                 break;
                                     case 3 : pizGrowingArrayAppend (tempArray, 
-                                                (long)(atom_getlong (argv + i) / TICKS_FOR_ONE_STEP)); break;
+                                                (long)(atom_getlong (argv + i) / TIME_TICKS_PER_STEP)); break;
                                     case 4 : pizGrowingArrayAppend (tempArray, atom_getlong (argv + i));
                                                 break;          
                                     }
@@ -2072,9 +2062,9 @@ bool tralala_sequenceZone (t_tralala *x, PIZSequence *sequence, long argc, t_ato
                             if (!(err |= (atom_gettype (argv + i) != A_LONG))){
                                 switch (i) {
                                     case 0 : pizGrowingArrayAppend (tempArray, (long)(atom_getlong (argv + i) 
-                                                / TICKS_FOR_ONE_STEP)); break; 
+                                                / TIME_TICKS_PER_STEP)); break; 
                                     case 1 : pizGrowingArrayAppend (tempArray, (long)(atom_getlong (argv + i) 
-                                                / TICKS_FOR_ONE_STEP)); break;
+                                                / TIME_TICKS_PER_STEP)); break;
                                     case 2 : pizGrowingArrayAppend (tempArray, atom_getlong (argv + i)); break;
                                     case 3 : pizGrowingArrayAppend (tempArray, atom_getlong (argv + i)); break;
                                     }
@@ -2139,14 +2129,14 @@ bool tralala_sequenceDump (t_tralala *x, PIZSequence *sequence, long argc, t_ato
                                 {
                                     long position = (pizGrowingArrayValueAtIndex (tempArray, 
                                                     (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION))
-                                                    * TICKS_FOR_ONE_STEP;
+                                                    * TIME_TICKS_PER_STEP;
                                     long pitch    = pizGrowingArrayValueAtIndex (tempArray, 
                                                     (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
                                     long velocity = pizGrowingArrayValueAtIndex (tempArray, 
                                                     (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY);
                                     long duration = (pizGrowingArrayValueAtIndex (tempArray, 
                                                     (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION))
-                                                    * TICKS_FOR_ONE_STEP;
+                                                    * TIME_TICKS_PER_STEP;
                                     long channel  = pizGrowingArrayValueAtIndex (tempArray, 
                                                     (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_CHANNEL);
                                         
@@ -2184,9 +2174,9 @@ bool tralala_sequenceDump (t_tralala *x, PIZSequence *sequence, long argc, t_ato
                     if (!err)
                         {
                             start   = pizGrowingArrayValueAtIndex (tempArray, PIZ_SEQUENCE_START) 
-                                        * TICKS_FOR_ONE_STEP;
+                                        * TIME_TICKS_PER_STEP;
                             end     = pizGrowingArrayValueAtIndex (tempArray, PIZ_SEQUENCE_END) 
-                                        * TICKS_FOR_ONE_STEP;
+                                        * TIME_TICKS_PER_STEP;
                             down    = pizGrowingArrayValueAtIndex (tempArray, PIZ_SEQUENCE_DOWN);
                             up      = pizGrowingArrayValueAtIndex (tempArray, PIZ_SEQUENCE_UP);
 
@@ -2325,7 +2315,7 @@ bool tralala_sequenceChange (t_tralala *x, PIZSequence *sequence, long argc, t_a
                     draw = pizSequenceChange (sequence, PIZ_VELOCITY, value);
                 }
             else if (atom_getsym (argv) == tll_sym_duration) {
-                    draw = pizSequenceChange (sequence, PIZ_DURATION, (long)(value / TICKS_FOR_ONE_STEP));
+                    draw = pizSequenceChange (sequence, PIZ_DURATION, (long)(value / TIME_TICKS_PER_STEP));
                 }
             else if (atom_getsym (argv) == tll_sym_channel) {
                     draw = pizSequenceChange (sequence, PIZ_CHANNEL, value);
@@ -2347,8 +2337,8 @@ bool tralala_sequenceChange (t_tralala *x, PIZSequence *sequence, long argc, t_a
                 }
             else if (atom_getsym (argv) == tll_sym_duration) {
                     draw = pizSequenceRandom (sequence, PIZ_DURATION, 
-                                                (long)(minValue / TICKS_FOR_ONE_STEP),
-                                                (long)(maxValue / TICKS_FOR_ONE_STEP));
+                                                (long)(minValue / TIME_TICKS_PER_STEP),
+                                                (long)(maxValue / TIME_TICKS_PER_STEP));
                 }
             else if (atom_getsym (argv) == tll_sym_channel) {
                     draw = pizSequenceRandom (sequence, PIZ_CHANNEL, minValue, maxValue);
@@ -2373,7 +2363,7 @@ bool tralala_sequenceSet (t_tralala *x, PIZSequence *sequence, long argc, t_atom
                     draw = pizSequenceSet (sequence, PIZ_VELOCITY, value);
                 }
             else if (atom_getsym (argv) == tll_sym_duration) {
-                    draw = pizSequenceSet (sequence, PIZ_DURATION, (long)(value / TICKS_FOR_ONE_STEP));
+                    draw = pizSequenceSet (sequence, PIZ_DURATION, (long)(value / TIME_TICKS_PER_STEP));
                 }
             else if (atom_getsym (argv) == tll_sym_channel) {
                     draw = pizSequenceSet (sequence, PIZ_CHANNEL, value);
@@ -2390,7 +2380,7 @@ bool tralala_sequenceNovember (t_tralala *x, PIZSequence *sequence, long argc, t
     
     if (argc && (atom_gettype (argv) == A_LONG))
         {
-            iterate = CLAMP (atom_getlong (argv), 1, NOVEMBER_MAXIMUM_ITERATE);
+            iterate = CLAMP (atom_getlong (argv), 1, SIZE_NOVEMBER_MAX);
         }
         
     draw = pizSequenceCellularAutomata (sequence, iterate);
@@ -2412,7 +2402,7 @@ bool tralala_sequenceJuliet (t_tralala *x, PIZSequence *sequence, long argc, t_a
                 {
                     if (atom_gettype (argv + i) == A_LONG)
                         {
-                            iterate = CLAMP (atom_getlong (argv + i), 1, JULIET_MAXIMUM_ITERATE);
+                            iterate = CLAMP (atom_getlong (argv + i), 1, SIZE_JULIET_MAX);
                         }
                     else if (atom_gettype (argv + i) == A_SYM)
                         {
@@ -2473,11 +2463,11 @@ bool tralala_sequenceZoulou (t_tralala *x, PIZSequence *sequence)
 {
     bool draw = false;
     
-    systhread_mutex_lock (&x->algorithmMutex);
+    systhread_mutex_lock (&x->algorithmsMutex);
 
     draw = pizSequenceProceedAlgorithm (sequence, PIZ_FACTOR_ORACLE, (void *)x->factorOracle);
     
-    systhread_mutex_unlock (&x->algorithmMutex);
+    systhread_mutex_unlock (&x->algorithmsMutex);
     
     return draw; 
 }
@@ -2486,11 +2476,11 @@ bool tralala_sequenceRomeo (t_tralala *x, PIZSequence *sequence)
 {
     bool draw = false;
     
-    systhread_mutex_lock (&x->algorithmMutex);
+    systhread_mutex_lock (&x->algorithmsMutex);
     
     draw = pizSequenceProceedAlgorithm (sequence, PIZ_GALOIS_LATTICE, (void *)x->galoisLattice);
     
-    systhread_mutex_unlock (&x->algorithmMutex);
+    systhread_mutex_unlock (&x->algorithmsMutex);
     
     return draw;
 }
@@ -2499,11 +2489,11 @@ bool tralala_sequenceUniform (t_tralala *x, PIZSequence *sequence)
 {
     bool draw = false;
     
-    systhread_mutex_lock (&x->algorithmMutex);
+    systhread_mutex_lock (&x->algorithmsMutex);
     
     draw = pizSequenceProceedAlgorithm (sequence, PIZ_FINITE_STATE, (void *)x->finiteState);
     
-    systhread_mutex_unlock (&x->algorithmMutex);
+    systhread_mutex_unlock (&x->algorithmsMutex);
 
     return draw;
 }   
@@ -2593,7 +2583,7 @@ void tralala_slotNew (t_tralala *x)
 {
     PIZGrowingArray *newSlot = NULL;
     
-    if (newSlot = pizGrowingArrayNew (INIT_GROWING_ARRAY_SIZE))
+    if (newSlot = pizGrowingArrayNew (SIZE_GROWING_ARRAY))
         {
             pizLinklistAppend (x->slots, newSlot);
             
@@ -2607,7 +2597,7 @@ void tralala_slotNewCopy (t_tralala *x)
 {
     PIZGrowingArray *newSlot = NULL;
     
-    if (newSlot = pizGrowingArrayNew (INIT_GROWING_ARRAY_SIZE))
+    if (newSlot = pizGrowingArrayNew (SIZE_GROWING_ARRAY))
         {
             PIZGrowingArray *slot = NULL;
             PIZError        err = PIZ_GOOD;
@@ -2816,14 +2806,14 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
                         
             if (RIGHT) {
-                    tralala_popupRightClickMenu (x, pt, MENU_NOTE);
+                    tralala_popupRightClickMenu (x, pt, MODE_MENU_NOTE);
                 }
         }
     else if (RIGHT)
         {
             tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_ARROW);
 
-            tralala_popupRightClickMenu (x, pt, MENU_SEQUENCE);
+            tralala_popupRightClickMenu (x, pt, MODE_MENU_SEQUENCE);
         }
     else if (USER)
         {
@@ -2854,9 +2844,9 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                     
                     tralala_setCoordinatesWithPoint (x, &x->originCoordinates, x->previous);
                     
-                    systhread_mutex_lock        (&x->arrayMutex);
+                    systhread_mutex_lock        (&x->arraysMutex);
                     err |= pizGrowingArrayCopy  (x->originNotes, x->selectedNotes);
-                    systhread_mutex_unlock      (&x->arrayMutex);
+                    systhread_mutex_unlock      (&x->arraysMutex);
                     
                     if (SHIFT) {
                         x->flags |= FLAG_ORIGIN_HAD_SHIFT_KEY;
@@ -2923,7 +2913,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                         {
                             if (ALT)
                                 {
-                                    x->textMode = TEXT_MODE_MOUSE_VELOCITY;
+                                    x->textMode = MODE_TEXT_MOUSE_VELOCITY;
                                     
                                     if ((pt.y - x->previous.y) < -0.5)
                                         {
@@ -2958,15 +2948,15 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                             
                             if (CMD)
                                 {
-                                    x->textMode         = TEXT_MODE_MOUSE_PITCH;
+                                    x->textMode         = MODE_TEXT_MOUSE_PITCH;
                                     x->mousePitchValue  = x->coordinates.pitch;
                                     x->dirtyLayer       |= DIRTY_REFRESH;
                                 }
                             else
                                 {
-                                    if (x->textMode != TEXT_MODE_NOTE)
+                                    if (x->textMode != MODE_TEXT_NOTE)
                                         {
-                                            x->textMode = TEXT_MODE_NOTE;
+                                            x->textMode = MODE_TEXT_NOTE;
                                             DIRTYLAYER_SET (DIRTY_REFRESH);
                                         }
                                 }
@@ -2992,18 +2982,18 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                     bool            draw = false;
                                         
                     switch (x->zoomMode) {
-                        case ZOOM_MODE_A    : f = 0.5;  break;
-                        case ZOOM_MODE_B    : f = 1.;   break;
-                        case ZOOM_MODE_C    : f = 2.;   break;
+                        case MODE_ZOOM_A    : f = 0.5;  break;
+                        case MODE_ZOOM_B    : f = 1.;   break;
+                        case MODE_ZOOM_C    : f = 2.;   break;
                         }
     
-                    c1.position = (long)((x->windowOffsetX + pt.x) / (STEP_PIXELS_SIZE * f));
-                    c2.position = (long)((x->windowOffsetX + pt.x) / (STEP_PIXELS_SIZE * f));
+                    c1.position = (long)((x->windowOffsetX + pt.x) / (GUI_PIXELS_PER_STEP * f));
+                    c2.position = (long)((x->windowOffsetX + pt.x) / (GUI_PIXELS_PER_STEP * f));
                     
                     c1.pitch = PIZ_MAGIC_PITCH - MAX (((long)((x->windowOffsetY + pt.y - 
-                                (SEMITONE_PIXELS_SIZE / 2. * f)) / (SEMITONE_PIXELS_SIZE * f))), 0);
+                                (GUI_PIXELS_PER_SEMITONE / 2. * f)) / (GUI_PIXELS_PER_SEMITONE * f))), 0);
                     c2.pitch = PIZ_MAGIC_PITCH - MAX (((long)((x->windowOffsetY + pt.y + 
-                                (SEMITONE_PIXELS_SIZE / 2. * f)) / (SEMITONE_PIXELS_SIZE * f))), 0);
+                                (GUI_PIXELS_PER_SEMITONE / 2. * f)) / (GUI_PIXELS_PER_SEMITONE * f))), 0);
                                 
                     switch (x->hitTest) {
                     case HIT_START: draw = pizSequenceSetTempZoneWithCoordinates 
@@ -3091,12 +3081,12 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
             
             if (x->flags & (FLAG_HAVE_CHANGED | FLAG_HAVE_MOVED | FLAG_HAVE_BEEN_DUPLICATED))
                 {
-                    systhread_mutex_lock            (&x->arrayMutex);
+                    systhread_mutex_lock            (&x->arraysMutex);
                     pizSequenceRemoveSelectedNotes  (x->user);
                     pizSequenceAddNotesWithArray    (x->user, x->selectedNotes, PIZ_SEQUENCE_ADD_FLAG_NONE);
-                    systhread_mutex_unlock          (&x->arrayMutex);
+                    systhread_mutex_unlock          (&x->arraysMutex);
                     
-                    x->textMode     = TEXT_MODE_NOTE;
+                    x->textMode     = MODE_TEXT_NOTE;
                     x->flags        &= ~(FLAG_HAVE_MOVED | FLAG_HAVE_CHANGED | FLAG_HAVE_BEEN_DUPLICATED);
                     x->dirtyLayer   |= (DIRTY_NOTES | DIRTY_CHANGE);
                     
@@ -3124,7 +3114,7 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
     if (!CMD && (x->hitTest != HIT_ZONE) && tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_ARROW))
         {
             if (!CAPS) {
-                x->textMode = TEXT_MODE_NOTE;
+                x->textMode = MODE_TEXT_NOTE;
                 DIRTYLAYER_SET (DIRTY_REFRESH);
             }
         }
@@ -3141,8 +3131,8 @@ void tralala_mouseleave (t_tralala *x, t_object *patcherview, t_pt pt, long modi
 {
     tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_ARROW);
     
-    if (x->textMode != TEXT_MODE_NOTE) {
-            x->textMode = TEXT_MODE_NOTE;
+    if (x->textMode != MODE_TEXT_NOTE) {
+            x->textMode = MODE_TEXT_NOTE;
             DIRTYLAYER_SET (DIRTY_REFRESH);
         }
 }
@@ -3164,7 +3154,7 @@ void tralala_mousemove (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                             tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_ARROW);
                         }
                     
-                    x->textMode = TEXT_MODE_MOUSE_PITCH;
+                    x->textMode = MODE_TEXT_MOUSE_PITCH;
                     x->mousePitchValue = x->coordinates.pitch;
                     DIRTYLAYER_SET (DIRTY_REFRESH);
                 }
@@ -3185,9 +3175,9 @@ void tralala_mousemove (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                             tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_ARROW);
                         }
                     
-                    if (x->textMode != TEXT_MODE_ZONE)
+                    if (x->textMode != MODE_TEXT_ZONE)
                         {
-                            x->textMode = TEXT_MODE_ZONE;
+                            x->textMode = MODE_TEXT_ZONE;
                             DIRTYLAYER_SET (DIRTY_REFRESH);
                         }
                 }
@@ -3195,9 +3185,9 @@ void tralala_mousemove (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                 {
                     tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_ARROW);
                             
-                    if (x->textMode != TEXT_MODE_NOTE) 
+                    if (x->textMode != MODE_TEXT_NOTE) 
                         {
-                            x->textMode = TEXT_MODE_NOTE;
+                            x->textMode = MODE_TEXT_NOTE;
                             DIRTYLAYER_SET (DIRTY_REFRESH);
                         }
                 }
@@ -3216,15 +3206,15 @@ void tralala_mousewheel (t_tralala *x, t_object *view, t_pt pt, long modifiers, 
             if (y_inc > 0.)
                 {
                     switch (x->zoomMode) {
-                        case ZOOM_MODE_A :  x->zoomMode = ZOOM_MODE_B; k = 1; break;
-                        case ZOOM_MODE_B :  x->zoomMode = ZOOM_MODE_C; k = 1; break;
+                        case MODE_ZOOM_A :  x->zoomMode = MODE_ZOOM_B; k = 1; break;
+                        case MODE_ZOOM_B :  x->zoomMode = MODE_ZOOM_C; k = 1; break;
                         }
                 }
             else
                 {
                     switch (x->zoomMode) {
-                        case ZOOM_MODE_C :  x->zoomMode = ZOOM_MODE_B; k = 2; break;
-                        case ZOOM_MODE_B :  x->zoomMode = ZOOM_MODE_A; k = 2; break;
+                        case MODE_ZOOM_C :  x->zoomMode = MODE_ZOOM_B; k = 2; break;
+                        case MODE_ZOOM_B :  x->zoomMode = MODE_ZOOM_A; k = 2; break;
                         }
                 }
             
@@ -3243,8 +3233,8 @@ void tralala_mousewheel (t_tralala *x, t_object *view, t_pt pt, long modifiers, 
         }
     else
         {
-            x->windowOffsetX -= x_inc * MOUSEWHEEL_FACTOR;
-            x->windowOffsetY -= y_inc * MOUSEWHEEL_FACTOR;
+            x->windowOffsetX -= x_inc * GUI_MOUSEWHEEL_FACTOR;
+            x->windowOffsetY -= y_inc * GUI_MOUSEWHEEL_FACTOR;
             
             DIRTYLAYER_SET (DIRTY_REFRESH);
         }
@@ -3259,11 +3249,11 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
     if (SHARP || (keycode == JKEY_SPACEBAR)) {
     
         switch (x->sequenceMode) {
-            case SEQUENCE_MODE_USER   : object_attr_setlong (x, tll_sym_sequenceMode, SEQUENCE_MODE_LIVE);
+            case MODE_SEQUENCE_USER   : object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_LIVE);
                                         break;
-            case SEQUENCE_MODE_LIVE   : object_attr_setlong (x, tll_sym_sequenceMode, SEQUENCE_MODE_USER);
+            case MODE_SEQUENCE_LIVE   : object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_USER);
                                         break;
-            case SEQUENCE_MODE_LISTEN : object_attr_setlong (x, tll_sym_sequenceMode, SEQUENCE_MODE_USER);
+            case MODE_SEQUENCE_LISTEN : object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_USER);
                                         break;
             }
         
@@ -3637,7 +3627,7 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
         jpopupmenu_additem      (snapPopup, 10, "None", 
                                 NULL, (snap == PIZ_SNAP_NONE), 0, NULL);
                                                     
-        if (menuMode == MENU_SEQUENCE) {
+        if (menuMode == MODE_MENU_SEQUENCE) {
                 jpopupmenu_additem      (sequenceChannelPopup, 501, "1", NULL, (channel == 1), 0, NULL);
                 jpopupmenu_additem      (sequenceChannelPopup, 502, "2", NULL, (channel == 2), 0, NULL);
                 jpopupmenu_additem      (sequenceChannelPopup, 503, "3", NULL, (channel == 3), 0, NULL);
@@ -3712,9 +3702,9 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
                         jpopupmenu_addseperator (slotsPopup);
                         
                         for (i = 0; i < pizLinklistCount (x->slots); i++) {
-                            char text[STRING_MAXIMUM_SIZE];
-                            snprintf (text, STRING_MAXIMUM_SIZE, "Slot %ld", i);
-                            text[STRING_MAXIMUM_SIZE - 1] = 0;
+                            char text[SIZE_STRING_MAX];
+                            snprintf (text, SIZE_STRING_MAX, "Slot %ld", i);
+                            text[SIZE_STRING_MAX - 1] = 0;
                             jpopupmenu_additem (slotsPopup, 5000 + i, text, NULL, (i == x->slotIndex), 0, NULL);
                         }
                         
@@ -3731,13 +3721,13 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
                 jpopupmenu_addseperator (popup);
                 jpopupmenu_addsubmenu   (popup, "Channel    ", sequenceChannelPopup, 0);
             } 
-        else if (menuMode == MENU_NOTE) 
+        else if (menuMode == MODE_MENU_NOTE) 
             {
                 long count;
                 long velocity = -1;
                 long channel = -1;
 
-                systhread_mutex_lock (&x->arrayMutex);
+                systhread_mutex_lock (&x->arraysMutex);
                 
                 count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
                 
@@ -3748,7 +3738,7 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
                         velocity = CLAMP ((long)((velocity + 4) / 8) * 8, 0, 127);
                     }
 
-                systhread_mutex_unlock (&x->arrayMutex);
+                systhread_mutex_unlock (&x->arraysMutex);
                 
                 jpopupmenu_additem (velocityPopup, 50, "0",     NULL, (velocity == 0), 0, NULL);
                 jpopupmenu_additem (velocityPopup, 51, "8",     NULL, (velocity == 8), 0, NULL);
@@ -3841,9 +3831,9 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
         case 64     :   tralala_setSelectedNotesVelocity (x, 112);  x->flags |= FLAG_HAVE_CHANGED; break;
         case 65     :   tralala_setSelectedNotesVelocity (x, 120);  x->flags |= FLAG_HAVE_CHANGED; break;
         case 66     :   tralala_setSelectedNotesVelocity (x, 127);  x->flags |= FLAG_HAVE_CHANGED; break;
-        case 100    :   object_attr_setlong (x, tll_sym_sequenceMode, SEQUENCE_MODE_USER);      break;
-        case 101    :   object_attr_setlong (x, tll_sym_sequenceMode, SEQUENCE_MODE_LIVE);      break;
-        case 102    :   object_attr_setlong (x, tll_sym_sequenceMode, SEQUENCE_MODE_LISTEN);    break;
+        case 100    :   object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_USER);      break;
+        case 101    :   object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_LIVE);      break;
+        case 102    :   object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_LISTEN);    break;
         case 200    :   tralala_setSelectedNotesChannel (x, 0);  x->flags |= FLAG_HAVE_CHANGED; break;
         case 201    :   tralala_setSelectedNotesChannel (x, 1);  x->flags |= FLAG_HAVE_CHANGED; break;
         case 202    :   tralala_setSelectedNotesChannel (x, 2);  x->flags |= FLAG_HAVE_CHANGED; break;
@@ -3899,10 +3889,10 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
 
     if (x->flags & FLAG_HAVE_CHANGED)
         {
-            systhread_mutex_lock            (&x->arrayMutex);
+            systhread_mutex_lock            (&x->arraysMutex);
             pizSequenceRemoveSelectedNotes  (x->user);
             pizSequenceAddNotesWithArray    (x->user, x->selectedNotes, PIZ_SEQUENCE_ADD_FLAG_NONE);
-            systhread_mutex_unlock          (&x->arrayMutex);
+            systhread_mutex_unlock          (&x->arraysMutex);
                 
             x->flags &= ~FLAG_HAVE_CHANGED;
                 
@@ -3950,7 +3940,7 @@ void tralala_paintTask (t_tralala *x)
     
     DIRTYLAYER_UNSET (~(DIRTY_GRID | DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE | DIRTY_REFRESH | DIRTY_PLAYED));
     
-    systhread_mutex_lock (&x->arrayMutex);
+    systhread_mutex_lock (&x->arraysMutex);
     
     if (LIVE && !(dirty & DIRTY_CHANGE) && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1))) 
         {
@@ -3962,23 +3952,23 @@ void tralala_paintTask (t_tralala *x)
     if (dirty)
         {   
             if (dirty & DIRTY_LOCATE_LEFT) {
-                    x->windowOffsetX    -= AUTOSCROLL_STEP;
-                    x->origin.x         += AUTOSCROLL_STEP; 
+                    x->windowOffsetX    -= GUI_AUTOSCROLL_STEP;
+                    x->origin.x         += GUI_AUTOSCROLL_STEP; 
                 }
             
             if (dirty & DIRTY_LOCATE_RIGHT) {
-                    x->windowOffsetX    += AUTOSCROLL_STEP;
-                    x->origin.x         -= AUTOSCROLL_STEP;
+                    x->windowOffsetX    += GUI_AUTOSCROLL_STEP;
+                    x->origin.x         -= GUI_AUTOSCROLL_STEP;
                 }
             
             if (dirty & DIRTY_LOCATE_DOWN) {
-                    x->windowOffsetY    += AUTOSCROLL_STEP;
-                    x->origin.y         -= AUTOSCROLL_STEP;
+                    x->windowOffsetY    += GUI_AUTOSCROLL_STEP;
+                    x->origin.y         -= GUI_AUTOSCROLL_STEP;
                 }
             
             if (dirty & DIRTY_LOCATE_UP) {
-                    x->windowOffsetY    -= AUTOSCROLL_STEP;
-                    x->origin.y         += AUTOSCROLL_STEP;
+                    x->windowOffsetY    -= GUI_AUTOSCROLL_STEP;
+                    x->origin.y         += GUI_AUTOSCROLL_STEP;
                 }
                 
             if (dirty & DIRTY_GRID) {   
@@ -3992,9 +3982,9 @@ void tralala_paintTask (t_tralala *x)
                             PIZSequence *sequence = NULL;
                         
                             switch (x->sequenceMode) {
-                                    case SEQUENCE_MODE_USER     : sequence = x->user;   break;
-                                    case SEQUENCE_MODE_LIVE     : sequence = x->live;   break;
-                                    case SEQUENCE_MODE_LISTEN   : err = PIZ_ERROR;      break;
+                                    case MODE_SEQUENCE_USER     : sequence = x->user;   break;
+                                    case MODE_SEQUENCE_LIVE     : sequence = x->live;   break;
+                                    case MODE_SEQUENCE_LISTEN   : err = PIZ_ERROR;      break;
                                 }
                         
                             if (sequence)
@@ -4055,11 +4045,11 @@ void tralala_paintTask (t_tralala *x)
                 }
         }
     
-    systhread_mutex_unlock  (&x->arrayMutex);
+    systhread_mutex_unlock  (&x->arraysMutex);
            
     } ATOMIC_DECREMENT (&x->paintLock);
     
-    clock_fdelay (x->paintClock, PAINT_CLOCK_INTERVAL + CLOCK_RANDOMIZE * (rand ( ) / (RAND_MAX + 1.0)));
+    clock_fdelay (x->paintClock, CLOCK_PAINT_INTERVAL + CLOCK_RANDOMIZE * (rand ( ) / (RAND_MAX + 1.0)));
 }
 
 void tralala_focusTask (t_tralala *x)
@@ -4081,7 +4071,7 @@ void tralala_notifyTask (t_tralala *x)
 void tralala_paint (t_tralala *x, t_object *patcherview)
 {   
     if (!(x->flags & FLAG_INIT_PAINT_CLOCK)) {
-        clock_fdelay (x->paintClock, PAINT_CLOCK_INTERVAL + CLOCK_RANDOMIZE * (rand ( ) / (RAND_MAX + 1.0)));
+        clock_fdelay (x->paintClock, CLOCK_PAINT_INTERVAL + CLOCK_RANDOMIZE * (rand ( ) / (RAND_MAX + 1.0)));
         x->flags |= FLAG_INIT_PAINT_CLOCK;
     }
     
@@ -4137,7 +4127,7 @@ void tralala_getdrawparams (t_tralala *x, t_object *patcherview, t_jboxdrawparam
 
 void tralala_focusgained (t_tralala *x, t_object *patcherview)
 {
-    clock_fdelay (x->focusClock, FOCUS_CLOCK_INTERVAL);
+    clock_fdelay (x->focusClock, CLOCK_FOCUS_INTERVAL);
 }
 
 void tralala_focuslost (t_tralala *x, t_object *patcherview)
@@ -4169,9 +4159,9 @@ void tralala_focuslost (t_tralala *x, t_object *patcherview)
             x->hitTest  = HIT_NOTHING;
         }
     
-    if (x->textMode != TEXT_MODE_NOTE)
+    if (x->textMode != MODE_TEXT_NOTE)
         {
-            x->textMode = TEXT_MODE_NOTE;
+            x->textMode = MODE_TEXT_NOTE;
             DIRTYLAYER_SET (DIRTY_REFRESH);
         }
 
@@ -4198,7 +4188,7 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
 {
     long                            i;
     bool                            draw = false;
-    double                          k = TEXT_CELL_SPACE;
+    double                          k = GUI_TEXT_SPACE;
     t_jgraphics                     *g = NULL;
     t_jfont                         *font = NULL;
     t_symbol                        *fontName = NULL;
@@ -4206,12 +4196,12 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
     long                            fontSlant, fontWeight, numlines;
     double                          fontSize, textHeight;
     t_atom                          color[4];
-    char                            textCell[STRING_MAXIMUM_SIZE];
+    char                            textCell[SIZE_STRING_MAX];
     t_jrgba                         backgroundTextColor;
     t_jgraphics_textlayout_flags    flags = (t_jgraphics_textlayout_flags)
                                     (JGRAPHICS_TEXTLAYOUT_NOWRAP | JGRAPHICS_TEXTLAYOUT_USEELLIPSIS); 
     
-    snprintf (textCell, STRING_MAXIMUM_SIZE, "Error");
+    snprintf (textCell, SIZE_STRING_MAX, "Error");
     
     g = (t_jgraphics *)patcherview_get_jgraphics (patcherview);
     jbox_get_rect_for_view ((t_object *)x, patcherview, &rect); 
@@ -4224,10 +4214,10 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
     font = jfont_create (fontName->s_name, fontSlant, fontWeight, fontSize); 
 
     jrgba_to_atoms  (&x->backgroundColor, color);
-    atom_setfloat   (color + 3, TEXT_BACKGROUND_ALPHA);
+    atom_setfloat   (color + 3, GUI_TEXT_BACKGROUND_ALPHA);
     atoms_to_jrgba  (4, color, &backgroundTextColor);
     
-    if (x->textMode == TEXT_MODE_NOTE && USER)
+    if (x->textMode == MODE_TEXT_NOTE && USER)
         {
             if (pizSequenceHasMarkedNote (x->user))
                 {
@@ -4238,30 +4228,30 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
                     textValues[TEXT_ORDER_CHANNEL]  = pizSequenceMarkedNoteValue (x->user, PIZ_CHANNEL);
                     textValues[TEXT_ORDER_PITCH]    = pizSequenceMarkedNoteValue (x->user, PIZ_PITCH);
                     
-                    x->textPosition[0] = TEXT_CELL_SPACE;
+                    x->textPosition[0] = GUI_TEXT_SPACE;
                     
                     for (i = 0; i < TEXT_CELL_COUNT; i++)
                         {
                             switch (i)  {
                             case TEXT_ORDER_PITCH       : tralala_setStringWithLong (textCell, textValues[i],
-                                                            FORMAT_MODE_NOTENAME); break;
+                                                            MODE_FORMAT_NOTENAME); break;
                             case TEXT_ORDER_DURATION    : tralala_setStringWithLong (textCell, textValues[i], 
-                                                            FORMAT_MODE_TICKS); break;
+                                                            MODE_FORMAT_TICKS); break;
                             default                     : tralala_setStringWithLong (textCell, textValues[i], 
-                                                            FORMAT_MODE_LONG); break;
+                                                            MODE_FORMAT_LONG); break;
                             }
                             
                             jtextlayout_set (x->textLayers[i], textCell, font, x->textPosition[i], 
-                                (rect.height - (fontSize + TEXT_CELL_SPACE)), (rect.width - k), fontSize, 
+                                (rect.height - (fontSize + GUI_TEXT_SPACE)), (rect.width - k), fontSize, 
                                 (t_jgraphics_text_justification) (JGRAPHICS_TEXT_JUSTIFICATION_LEFT), flags);
                             
                             jtextlayout_measure (x->textLayers[i], 0, -1, 1, &x->textWidth[i], 
                                 &textHeight, &numlines);
                             
-                            k += (x->textWidth[i] + TEXT_CELL_SPACE);
+                            k += (x->textWidth[i] + GUI_TEXT_SPACE);
                             
                             if (i < (TEXT_CELL_COUNT - 1)) {
-                            x->textPosition[i + 1] = x->textPosition[i] + (x->textWidth[i] + TEXT_CELL_SPACE);
+                            x->textPosition[i + 1] = x->textPosition[i] + (x->textWidth[i] + GUI_TEXT_SPACE);
                             }
                             
                             if (x->flags & FLAG_FOCUS)
@@ -4283,7 +4273,7 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
                     
                     jgraphics_set_source_jrgba (g, &backgroundTextColor);
 
-                    jgraphics_rectangle_fill_fast (g, 0., (rect.height - (fontSize + TEXT_CELL_SPACE)), 
+                    jgraphics_rectangle_fill_fast (g, 0., (rect.height - (fontSize + GUI_TEXT_SPACE)), 
                         k, textHeight);
                 
                     for (i = 0; i < TEXT_CELL_COUNT; i++) {
@@ -4292,23 +4282,23 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
                 }
             else
                 {
-                    char         temp[STRING_MAXIMUM_SIZE];
+                    char         temp[SIZE_STRING_MAX];
                     PIZSnapValue grid = pizSequenceGrid (x->user);
                     PIZSnapValue value = pizSequenceNoteValue (x->user);
                     
-                    snprintf (textCell, STRING_MAXIMUM_SIZE, "Slot %ld", x->slotIndex);
-                    textCell[STRING_MAXIMUM_SIZE - 1] = 0;
+                    snprintf (textCell, SIZE_STRING_MAX, "Slot %ld", x->slotIndex);
+                    textCell[SIZE_STRING_MAX - 1] = 0;
                     
-                    tralala_setStringWithLong (temp, grid, FORMAT_MODE_GRID);
+                    tralala_setStringWithLong (temp, grid, MODE_FORMAT_GRID);
                     
-                    snprintf (textCell, STRING_MAXIMUM_SIZE, "%s / %s", textCell, temp);
-                    textCell[STRING_MAXIMUM_SIZE - 1] = 0;
+                    snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, temp);
+                    textCell[SIZE_STRING_MAX - 1] = 0;
                     
                     if (value != PIZ_SNAP_NONE) {
-                            tralala_setStringWithLong (temp, value, FORMAT_MODE_GRID);
+                            tralala_setStringWithLong (temp, value, MODE_FORMAT_GRID);
                     
-                            snprintf (textCell, STRING_MAXIMUM_SIZE, "%s / %s", textCell, temp);
-                            textCell[STRING_MAXIMUM_SIZE - 1] = 0;
+                            snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, temp);
+                            textCell[SIZE_STRING_MAX - 1] = 0;
                         }
                     
                     draw = true;
@@ -4316,35 +4306,35 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
         }
     else 
         {
-            if (x->textMode == TEXT_MODE_MOUSE_PITCH)
+            if (x->textMode == MODE_TEXT_MOUSE_PITCH)
                 {
-                    tralala_setStringWithLong (textCell, x->mousePitchValue, FORMAT_MODE_NOTENAME);
+                    tralala_setStringWithLong (textCell, x->mousePitchValue, MODE_FORMAT_NOTENAME);
                     
                     draw = true;
                 }
-            else if (x->textMode == TEXT_MODE_MOUSE_VELOCITY)
+            else if (x->textMode == MODE_TEXT_MOUSE_VELOCITY)
                 {
-                    char textVelocity [STRING_MAXIMUM_SIZE];
+                    char textVelocity [SIZE_STRING_MAX];
                     
-                    tralala_setStringWithLong (textVelocity, x->mouseVelocityValue, FORMAT_MODE_LONG);
+                    tralala_setStringWithLong (textVelocity, x->mouseVelocityValue, MODE_FORMAT_LONG);
                     
                     if (x->mouseVelocityValue >= 0) 
                         {
-                            snprintf (textCell, STRING_MAXIMUM_SIZE, "Velocity : +%s", textVelocity);
+                            snprintf (textCell, SIZE_STRING_MAX, "Velocity : +%s", textVelocity);
                         } 
                     else 
                         {
-                            snprintf (textCell, STRING_MAXIMUM_SIZE, "Velocity : %s", textVelocity);
+                            snprintf (textCell, SIZE_STRING_MAX, "Velocity : %s", textVelocity);
                         }
                     
-                    textCell[STRING_MAXIMUM_SIZE - 1] = 0;
+                    textCell[SIZE_STRING_MAX - 1] = 0;
                     
                     draw = true;
                 }
-            else if (x->textMode == TEXT_MODE_ZONE && pizGrowingArrayCount (x->zoneCopy))
+            else if (x->textMode == MODE_TEXT_ZONE && pizGrowingArrayCount (x->zoneCopy))
                 {
-                    char         textDown[STRING_MAXIMUM_SIZE];
-                    char         textUp [STRING_MAXIMUM_SIZE];
+                    char         textDown[SIZE_STRING_MAX];
+                    char         textUp [SIZE_STRING_MAX];
                     long         s      = -1;
                     long         start  = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_SEQUENCE_START);
                     long         end    = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_SEQUENCE_END);
@@ -4352,8 +4342,8 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
                     long         up     = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_SEQUENCE_UP);
                     PIZSnapValue grid   = pizSequenceGrid (x->user);
                             
-                    tralala_setStringWithLong (textDown, down, FORMAT_MODE_NOTENAME);
-                    tralala_setStringWithLong (textUp, up, FORMAT_MODE_NOTENAME);
+                    tralala_setStringWithLong (textDown, down, MODE_FORMAT_NOTENAME);
+                    tralala_setStringWithLong (textUp, up, MODE_FORMAT_NOTENAME);
                     
                     if (grid == PIZ_QUARTER_NOTE || grid == PIZ_EIGHTH_NOTE || grid == PIZ_SIXTEENTH_NOTE) 
                         {
@@ -4380,48 +4370,48 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
                     if (s != -1) 
                         {
                             if (grid == PIZ_QUARTER_NOTE) {
-                                snprintf (textCell, STRING_MAXIMUM_SIZE, "%s %s : %ld/4", textDown, textUp, s);
+                                snprintf (textCell, SIZE_STRING_MAX, "%s %s : %ld/4", textDown, textUp, s);
                             } else if (grid == PIZ_EIGHTH_NOTE) {
-                                snprintf (textCell, STRING_MAXIMUM_SIZE, "%s %s : %ld/8", textDown, textUp, s);
+                                snprintf (textCell, SIZE_STRING_MAX, "%s %s : %ld/8", textDown, textUp, s);
                             } else if (grid == PIZ_SIXTEENTH_NOTE) {
-                                snprintf (textCell, STRING_MAXIMUM_SIZE, "%s %s : %ld/16", textDown, textUp, s);
+                                snprintf (textCell, SIZE_STRING_MAX, "%s %s : %ld/16", textDown, textUp, s);
                             }
                         } 
                     else 
                         {
-                            snprintf (textCell, STRING_MAXIMUM_SIZE, "%s %s", textDown, textUp);
+                            snprintf (textCell, SIZE_STRING_MAX, "%s %s", textDown, textUp);
                         }
                     
-                    textCell[STRING_MAXIMUM_SIZE - 1] = 0;
+                    textCell[SIZE_STRING_MAX - 1] = 0;
                     
                     draw = true;
                 }
             else if (LIVE)
                 {
-                    snprintf (textCell, STRING_MAXIMUM_SIZE, "%s", x->scaleKey->s_name);
-                    textCell[STRING_MAXIMUM_SIZE - 1] = 0;
+                    snprintf (textCell, SIZE_STRING_MAX, "%s", x->scaleKey->s_name);
+                    textCell[SIZE_STRING_MAX - 1] = 0;
                     
                     if (x->scaleType != tll_sym_none) {
-                        snprintf (textCell, STRING_MAXIMUM_SIZE, "%s / %s", textCell, x->scaleType->s_name);
-                        textCell[STRING_MAXIMUM_SIZE - 1] = 0;
+                        snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, x->scaleType->s_name);
+                        textCell[SIZE_STRING_MAX - 1] = 0;
                     }
                     
                     if (x->patternCell != tll_sym_none) {
-                        snprintf (textCell, STRING_MAXIMUM_SIZE, "%s / %s", textCell, x->patternCell->s_name);
-                        textCell[STRING_MAXIMUM_SIZE - 1] = 0;
+                        snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, x->patternCell->s_name);
+                        textCell[SIZE_STRING_MAX - 1] = 0;
                     }
                                 
                     if (x->patternSize) {
-                        snprintf (textCell, STRING_MAXIMUM_SIZE, "%s / pattern", textCell);
-                        textCell[STRING_MAXIMUM_SIZE - 1] = 0;
+                        snprintf (textCell, SIZE_STRING_MAX, "%s / pattern", textCell);
+                        textCell[SIZE_STRING_MAX - 1] = 0;
                     }
                     
                     if (x->velocity > 0) {
-                        snprintf (textCell, STRING_MAXIMUM_SIZE, "%s / +%ld", textCell, x->velocity);
-                        textCell[STRING_MAXIMUM_SIZE - 1] = 0;
+                        snprintf (textCell, SIZE_STRING_MAX, "%s / +%ld", textCell, x->velocity);
+                        textCell[SIZE_STRING_MAX - 1] = 0;
                     } else if (x->velocity < 0) {
-                        snprintf (textCell, STRING_MAXIMUM_SIZE, "%s / %ld", textCell, x->velocity);
-                        textCell[STRING_MAXIMUM_SIZE - 1] = 0;
+                        snprintf (textCell, SIZE_STRING_MAX, "%s / %ld", textCell, x->velocity);
+                        textCell[SIZE_STRING_MAX - 1] = 0;
                     }
                             
                     draw = true;
@@ -4430,13 +4420,13 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
     
     if (draw) {
         jtextlayout_set (x->textLayers[0], textCell, font, k, 
-            (rect.height - (fontSize + TEXT_CELL_SPACE)), (rect.width - k), fontSize, 
+            (rect.height - (fontSize + GUI_TEXT_SPACE)), (rect.width - k), fontSize, 
             (t_jgraphics_text_justification) (JGRAPHICS_TEXT_JUSTIFICATION_LEFT), flags);
         
         jtextlayout_measure (x->textLayers[0], 0, -1, 1, &x->textWidth[0], &textHeight, &numlines);
         
-        x->textPosition[0] = TEXT_CELL_SPACE;
-        k += x->textWidth[0] + TEXT_CELL_SPACE;
+        x->textPosition[0] = GUI_TEXT_SPACE;
+        k += x->textWidth[0] + GUI_TEXT_SPACE;
         
         if (x->flags & FLAG_FOCUS)
             {
@@ -4448,7 +4438,7 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
             }
         
         jgraphics_set_source_jrgba      (g, &backgroundTextColor);
-        jgraphics_rectangle_fill_fast   (g, 0., (rect.height - (fontSize + TEXT_CELL_SPACE)), k, textHeight);
+        jgraphics_rectangle_fill_fast   (g, 0., (rect.height - (fontSize + GUI_TEXT_SPACE)), k, textHeight);
 
         jtextlayout_draw (x->textLayers[0], g);
     }
@@ -4462,13 +4452,13 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
     t_jgraphics *g = NULL;
     
     switch (x->zoomMode) {
-        case ZOOM_MODE_A    : f = 0.5;  break;
-        case ZOOM_MODE_B    : f = 1.;   break;
-        case ZOOM_MODE_C    : f = 2.;   break;
+        case MODE_ZOOM_A    : f = 0.5;  break;
+        case MODE_ZOOM_B    : f = 1.;   break;
+        case MODE_ZOOM_C    : f = 2.;   break;
         }
         
     g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_gridLayer, PIZ_SEQUENCE_TIMELINE_SIZE 
-        * STEP_PIXELS_SIZE * f, (PIZ_MAGIC_PITCH + 1) * SEMITONE_PIXELS_SIZE * f);
+        * GUI_PIXELS_PER_STEP * f, (PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE * f);
 
     if (g) 
         {
@@ -4512,19 +4502,19 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
             imageWidth  = jgraphics_image_surface_get_width (background);
             imageHeight = jgraphics_image_surface_get_height (background);
             
-            gridWidth   = PIZ_SEQUENCE_TIMELINE_SIZE * STEP_PIXELS_SIZE * f;
-            gridHeight  = (PIZ_MAGIC_PITCH + 1) * SEMITONE_PIXELS_SIZE * f;
+            gridWidth   = PIZ_SEQUENCE_TIMELINE_SIZE * GUI_PIXELS_PER_STEP * f;
+            gridHeight  = (PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE * f;
             
             srcRect.x       = 0.;
             srcRect.y       = 0.;
             srcRect.width   = imageWidth;
             srcRect.height  = imageHeight;
             
-            for (i = 0; i < ((PIZ_MAGIC_PITCH + 1) / JSURFACE_MOSAIC_PITCH_SIZE); i ++)
+            for (i = 0; i < ((PIZ_MAGIC_PITCH + 1) / GUI_JSURFACE_SEMITONES); i ++)
                 {
                     long j;
                     
-                    for (j = 0; j < (PIZ_SEQUENCE_TIMELINE_SIZE / JSURFACE_MOSAIC_STEP_SIZE); j++)
+                    for (j = 0; j < (PIZ_SEQUENCE_TIMELINE_SIZE / GUI_JSURFACE_STEPS); j++)
                         {
                             destRect.x      = j * imageWidth;
                             destRect.y      = i * imageHeight;
@@ -4552,13 +4542,13 @@ void tralala_paintNotes (t_tralala *x, t_object *patcherview)
     t_jgraphics *g = NULL;
     
     switch (x->zoomMode) {
-        case ZOOM_MODE_A    : f = 0.5;  break;
-        case ZOOM_MODE_B    : f = 1.;   break;
-        case ZOOM_MODE_C    : f = 2.;   break;
+        case MODE_ZOOM_A    : f = 0.5;  break;
+        case MODE_ZOOM_B    : f = 1.;   break;
+        case MODE_ZOOM_C    : f = 2.;   break;
         }
     
     g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_notesLayer, PIZ_SEQUENCE_TIMELINE_SIZE 
-        * STEP_PIXELS_SIZE * f, (PIZ_MAGIC_PITCH + 1) * SEMITONE_PIXELS_SIZE * f);
+        * GUI_PIXELS_PER_STEP * f, (PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE * f);
     
     if (g) 
         {
@@ -4572,26 +4562,26 @@ void tralala_paintNotes (t_tralala *x, t_object *patcherview)
             if (!(x->flags & FLAG_FOCUS))
                 {
                     switch (x->sequenceMode) {
-                        case SEQUENCE_MODE_USER   : jrgba_copy (&color3, &x->unfocusedUserSelectedNoteColor);
+                        case MODE_SEQUENCE_USER   : jrgba_copy (&color3, &x->unfocusedUserSelectedNoteColor);
                                                     jrgba_copy (&color2, &x->unfocusedUserSelectedNoteColor);
                                                     jrgba_copy (&color1, &x->unfocusedUserNoteColor);
                                                     break;
-                        case SEQUENCE_MODE_LIVE   : jrgba_copy (&color1, &x->unfocusedLiveNoteColor);
+                        case MODE_SEQUENCE_LIVE   : jrgba_copy (&color1, &x->unfocusedLiveNoteColor);
                                                     break;
-                        case SEQUENCE_MODE_LISTEN : jrgba_copy (&color1, &x->unfocusedListenNoteColor);
+                        case MODE_SEQUENCE_LISTEN : jrgba_copy (&color1, &x->unfocusedListenNoteColor);
                                                     break;
                         }
                 }
             else 
                 {
                     switch (x->sequenceMode) {
-                        case SEQUENCE_MODE_USER   : jrgba_copy (&color3, &x->focusedUserMarkedNoteColor);
+                        case MODE_SEQUENCE_USER   : jrgba_copy (&color3, &x->focusedUserMarkedNoteColor);
                                                     jrgba_copy (&color2, &x->focusedUserSelectedNoteColor);
                                                     break;
-                        case SEQUENCE_MODE_LIVE   : jrgba_copy (&color2, &x->focusedLivePlayedNoteColor);
+                        case MODE_SEQUENCE_LIVE   : jrgba_copy (&color2, &x->focusedLivePlayedNoteColor);
                                                     jrgba_copy (&color1, &x->focusedLiveNoteColor);
                                                     break;
-                        case SEQUENCE_MODE_LISTEN : jrgba_copy (&color1, &x->focusedListenNoteColor);
+                        case MODE_SEQUENCE_LISTEN : jrgba_copy (&color1, &x->focusedListenNoteColor);
                                                     break;
                         }
                 }
@@ -4676,13 +4666,13 @@ void tralala_paintPlayedNotes (t_tralala *x, t_object *patcherview)
     t_jgraphics *g = NULL;
     
     switch (x->zoomMode) {
-        case ZOOM_MODE_A    : f = 0.5;  break;
-        case ZOOM_MODE_B    : f = 1.;   break;
-        case ZOOM_MODE_C    : f = 2.;   break;
+        case MODE_ZOOM_A    : f = 0.5;  break;
+        case MODE_ZOOM_B    : f = 1.;   break;
+        case MODE_ZOOM_C    : f = 2.;   break;
         }
     
     g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_playedNotesLayer, PIZ_SEQUENCE_TIMELINE_SIZE 
-        * STEP_PIXELS_SIZE * f, (PIZ_MAGIC_PITCH + 1) * SEMITONE_PIXELS_SIZE * f);
+        * GUI_PIXELS_PER_STEP * f, (PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE * f);
     
     if (g) 
         {
@@ -4753,7 +4743,7 @@ void tralala_paintNoteCandycane (t_tralala *x, t_jgraphics *g, long position, lo
         case 11 : jrgba_to_atoms (&x->bNoteColor, temp);        break;
         } 
 
-    alpha = (double)(velocity + VELOCITY_PAINT_OFFSET) / (double)PIZ_MAGIC_VELOCITY;
+    alpha = (double)(velocity + GUI_VELOCITY_OFFSET) / (double)PIZ_MAGIC_VELOCITY;
     
     if (alpha > 0.005)
         {
@@ -4799,13 +4789,13 @@ void tralala_paintZone (t_tralala *x, t_object *patcherview)
     t_jgraphics *g = NULL;
 
     switch (x->zoomMode) {
-        case ZOOM_MODE_A    : f = 0.5;  break;
-        case ZOOM_MODE_B    : f = 1.;   break;
-        case ZOOM_MODE_C    : f = 2.;   break;
+        case MODE_ZOOM_A    : f = 0.5;  break;
+        case MODE_ZOOM_B    : f = 1.;   break;
+        case MODE_ZOOM_C    : f = 2.;   break;
         }
     
     g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_zoneLayer, PIZ_SEQUENCE_TIMELINE_SIZE 
-        * STEP_PIXELS_SIZE * f, (PIZ_MAGIC_PITCH + 1) * SEMITONE_PIXELS_SIZE * f);
+        * GUI_PIXELS_PER_STEP * f, (PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE * f);
     
     if (g) 
         {
@@ -4876,7 +4866,7 @@ bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitc
     bool moved = false;
     long grid = pizSequenceGrid (x->user);
         
-    systhread_mutex_lock (&x->arrayMutex);
+    systhread_mutex_lock (&x->arraysMutex);
 
     count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
     
@@ -4910,7 +4900,7 @@ bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitc
                 }
         }
     
-    systhread_mutex_unlock (&x->arrayMutex);
+    systhread_mutex_unlock (&x->arraysMutex);
     
     return moved;
 }
@@ -4922,7 +4912,7 @@ bool tralala_changeSelectedNotesDuration (t_tralala *x, long deltaPosition)
     bool changed = false;
     long grid = pizSequenceGrid (x->user);
                 
-    systhread_mutex_lock (&x->arrayMutex);
+    systhread_mutex_lock (&x->arraysMutex);
 
     count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
     
@@ -4949,16 +4939,16 @@ bool tralala_changeSelectedNotesDuration (t_tralala *x, long deltaPosition)
                 }
         }
     
-    systhread_mutex_unlock (&x->arrayMutex);
+    systhread_mutex_unlock (&x->arraysMutex);
     
     return changed;
 }
 
 void tralala_duplicateSelectedNotes (t_tralala *x)
 {
-    systhread_mutex_lock        (&x->arrayMutex);
+    systhread_mutex_lock        (&x->arraysMutex);
     pizGrowingArrayAppendArray  (x->unselectedNotes, x->selectedNotes);
-    systhread_mutex_unlock      (&x->arrayMutex);
+    systhread_mutex_unlock      (&x->arraysMutex);
             
     pizSequenceUnselectAllNotes (x->user);
             
@@ -4969,7 +4959,7 @@ void tralala_changeSelectedNotesVelocity (t_tralala *x, bool decrement)
 {
     long count;
     
-    systhread_mutex_lock (&x->arrayMutex);
+    systhread_mutex_lock (&x->arraysMutex);
     
     if (count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE)
         {
@@ -5018,7 +5008,7 @@ void tralala_changeSelectedNotesVelocity (t_tralala *x, bool decrement)
                 }
         }
     
-    systhread_mutex_unlock (&x->arrayMutex);
+    systhread_mutex_unlock (&x->arraysMutex);
 }
 
 void tralala_setSelectedNotesVelocity (t_tralala *x, long velocity)
@@ -5026,7 +5016,7 @@ void tralala_setSelectedNotesVelocity (t_tralala *x, long velocity)
     long i;
     long count;
     
-    systhread_mutex_lock (&x->arrayMutex);
+    systhread_mutex_lock (&x->arraysMutex);
 
     count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
     
@@ -5035,7 +5025,7 @@ void tralala_setSelectedNotesVelocity (t_tralala *x, long velocity)
             CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY));
     }
     
-    systhread_mutex_unlock (&x->arrayMutex);
+    systhread_mutex_unlock (&x->arraysMutex);
 }
 
 void tralala_setSelectedNotesChannel (t_tralala *x, long channel)
@@ -5043,7 +5033,7 @@ void tralala_setSelectedNotesChannel (t_tralala *x, long channel)
     long i;
     long count;
     
-    systhread_mutex_lock (&x->arrayMutex);
+    systhread_mutex_lock (&x->arraysMutex);
 
     count = pizGrowingArrayCount (x->selectedNotes) / PIZ_SEQUENCE_NOTE_SIZE;
     
@@ -5052,7 +5042,7 @@ void tralala_setSelectedNotesChannel (t_tralala *x, long channel)
             CLAMP (channel, 0, PIZ_MAGIC_CHANNEL));
     }
     
-    systhread_mutex_unlock (&x->arrayMutex);
+    systhread_mutex_unlock (&x->arraysMutex);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -5066,29 +5056,29 @@ long tralala_hitZoneWithPoint (t_tralala *x, t_pt pt)
     long    start, end, down, up;
     long    hitTest = HIT_NOTHING;
 
-    systhread_mutex_lock (&x->arrayMutex);
+    systhread_mutex_lock (&x->arraysMutex);
 
     start   = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_START);
     end     = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_END);
     down    = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_DOWN);
     up      = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_UP);
 
-    systhread_mutex_unlock  (&x->arrayMutex);
+    systhread_mutex_unlock  (&x->arraysMutex);
                         
     tralala_setRectWithZoneValues (x, &zoneRect, start, end, down, up);
     
     zoneRect.x -= x->windowOffsetX;
     zoneRect.y -= x->windowOffsetY;
     
-    a = ((ABS (pt.x - zoneRect.x)) < HIT_ZONE_RANGE);
-    b = ((ABS (pt.x - (zoneRect.x + zoneRect.width))) < HIT_ZONE_RANGE);
-    c = ((pt.x > (zoneRect.x + (HIT_ZONE_RANGE / 2.))) 
-            && (pt.x < (zoneRect.x + zoneRect.width - (HIT_ZONE_RANGE / 2.))));
+    a = ((ABS (pt.x - zoneRect.x)) < GUI_HIT_ZONE_RANGE);
+    b = ((ABS (pt.x - (zoneRect.x + zoneRect.width))) < GUI_HIT_ZONE_RANGE);
+    c = ((pt.x > (zoneRect.x + (GUI_HIT_ZONE_RANGE / 2.))) 
+            && (pt.x < (zoneRect.x + zoneRect.width - (GUI_HIT_ZONE_RANGE / 2.))));
     
-    d = ((ABS (pt.y - (zoneRect.y + zoneRect.height))) < HIT_ZONE_RANGE);
-    e = ((ABS (pt.y - zoneRect.y)) < HIT_ZONE_RANGE);
-    f = ((pt.y > (zoneRect.y + (HIT_ZONE_RANGE / 2.))) 
-            && (pt.y < (zoneRect.y + zoneRect.height - (HIT_ZONE_RANGE / 2.))));
+    d = ((ABS (pt.y - (zoneRect.y + zoneRect.height))) < GUI_HIT_ZONE_RANGE);
+    e = ((ABS (pt.y - zoneRect.y)) < GUI_HIT_ZONE_RANGE);
+    f = ((pt.y > (zoneRect.y + (GUI_HIT_ZONE_RANGE / 2.))) 
+            && (pt.y < (zoneRect.y + zoneRect.height - (GUI_HIT_ZONE_RANGE / 2.))));
                         
     if (a && f) {
             hitTest |= HIT_START;
@@ -5120,13 +5110,13 @@ long tralala_hitTextWithPoint (t_tralala *x, t_object *patcherview, t_pt pt)
     fontSize = jbox_get_fontsize ((t_object *)x);
     jtextlayout_measure (x->textLayers[0], 0, -1, 1, &textWidth, &textHeight, &numlines);
 
-    h1 = rect.height - (TEXT_CELL_SPACE + fontSize);
+    h1 = rect.height - (GUI_TEXT_SPACE + fontSize);
     h2 = h1 + textHeight;
     
     if ((pt.y > h1) && (pt.y < h2)) {
         if (pizSequenceHasMarkedNote (x->user)) {
             if ((pt.x > 0) && (pt.x < (x->textPosition[TEXT_CELL_COUNT - 1] 
-                + x->textWidth[TEXT_CELL_COUNT - 1] + TEXT_CELL_SPACE))) {
+                + x->textWidth[TEXT_CELL_COUNT - 1] + GUI_TEXT_SPACE))) {
                     isHit = HIT_LOCK;
                 }
         
@@ -5235,14 +5225,14 @@ bool tralala_setCoordinatesWithPoint (t_tralala *x, PIZCoordinates *coordinates,
     bool    inside = true;
     
     switch (x->zoomMode) {
-        case ZOOM_MODE_A    : f = 0.5;  break;
-        case ZOOM_MODE_B    : f = 1.;   break;
-        case ZOOM_MODE_C    : f = 2.;   break;
+        case MODE_ZOOM_A    : f = 0.5;  break;
+        case MODE_ZOOM_B    : f = 1.;   break;
+        case MODE_ZOOM_C    : f = 2.;   break;
         }
     
-    coordinates->position   = (long)((x->windowOffsetX + pt.x) / (STEP_PIXELS_SIZE * f));
+    coordinates->position   = (long)((x->windowOffsetX + pt.x) / (GUI_PIXELS_PER_STEP * f));
     coordinates->pitch      = PIZ_MAGIC_PITCH - MAX (((long)((x->windowOffsetY + pt.y) / 
-                                (SEMITONE_PIXELS_SIZE * f))), 0);
+                                (GUI_PIXELS_PER_SEMITONE * f))), 0);
     
     if ((coordinates->pitch < 0) || (coordinates->pitch > PIZ_MAGIC_PITCH) || 
         (coordinates->position < 0) || (coordinates->position > (PIZ_SEQUENCE_TIMELINE_SIZE - 1)))
@@ -5259,9 +5249,9 @@ void tralala_setRectWithZoneValues (t_tralala *x, t_rect *zoneRect, long start, 
     double  f = 1.;
 
     switch (x->zoomMode) {
-        case ZOOM_MODE_A    : f = 0.5;  break;
-        case ZOOM_MODE_B    : f = 1.;   break;
-        case ZOOM_MODE_C    : f = 2.;   break;
+        case MODE_ZOOM_A    : f = 0.5;  break;
+        case MODE_ZOOM_B    : f = 1.;   break;
+        case MODE_ZOOM_C    : f = 2.;   break;
         }
     
     if (end < start) {
@@ -5276,10 +5266,10 @@ void tralala_setRectWithZoneValues (t_tralala *x, t_rect *zoneRect, long start, 
         down    = k;
         }
     
-    x1 = start * STEP_PIXELS_SIZE  * f;
-    x2 = end * STEP_PIXELS_SIZE  * f;
-    y1 = (PIZ_MAGIC_PITCH - up) * SEMITONE_PIXELS_SIZE * f;
-    y2 = ((PIZ_MAGIC_PITCH + 1) - down) * SEMITONE_PIXELS_SIZE * f;
+    x1 = start * GUI_PIXELS_PER_STEP  * f;
+    x2 = end * GUI_PIXELS_PER_STEP  * f;
+    y1 = (PIZ_MAGIC_PITCH - up) * GUI_PIXELS_PER_SEMITONE * f;
+    y2 = ((PIZ_MAGIC_PITCH + 1) - down) * GUI_PIXELS_PER_SEMITONE * f;
     
     zoneRect->x         = x1;
     zoneRect->y         = y1;
@@ -5293,15 +5283,15 @@ void tralala_setRectWithCoordinatesAndDuration (t_tralala *x, t_rect *noteRect, 
     double  f = 1.;
 
     switch (x->zoomMode) {
-        case ZOOM_MODE_A    : f = 0.5;  break;
-        case ZOOM_MODE_B    : f = 1.;   break;
-        case ZOOM_MODE_C    : f = 2.;   break;
+        case MODE_ZOOM_A    : f = 0.5;  break;
+        case MODE_ZOOM_B    : f = 1.;   break;
+        case MODE_ZOOM_C    : f = 2.;   break;
         }
     
-    x1 = (c->position * STEP_PIXELS_SIZE  * f);
-    x2 = x1 + (d * STEP_PIXELS_SIZE * f);
-    y1 = ((PIZ_MAGIC_PITCH - c->pitch) * SEMITONE_PIXELS_SIZE * f);
-    y2 = y1 + (SEMITONE_PIXELS_SIZE * f);
+    x1 = (c->position * GUI_PIXELS_PER_STEP  * f);
+    x2 = x1 + (d * GUI_PIXELS_PER_STEP * f);
+    y1 = ((PIZ_MAGIC_PITCH - c->pitch) * GUI_PIXELS_PER_SEMITONE * f);
+    y2 = y1 + (GUI_PIXELS_PER_SEMITONE * f);
     
     noteRect->x         = x1;
     noteRect->y         = y1;
@@ -5315,11 +5305,11 @@ void tralala_setRectWithCoordinatesAndDuration (t_tralala *x, t_rect *noteRect, 
 
 void tralala_setStringWithLong (char *string, long longToBeFormatted, long formatMode)
 {
-    if (formatMode == FORMAT_MODE_LONG)
+    if (formatMode == MODE_FORMAT_LONG)
         {
-            snprintf (string, STRING_MAXIMUM_SIZE, "%ld", longToBeFormatted);
+            snprintf (string, SIZE_STRING_MAX, "%ld", longToBeFormatted);
         }
-    else if (formatMode == FORMAT_MODE_NOTENAME)
+    else if (formatMode == MODE_FORMAT_NOTENAME)
         {
             long m, n;
             
@@ -5327,66 +5317,66 @@ void tralala_setStringWithLong (char *string, long longToBeFormatted, long forma
             n = (long)(longToBeFormatted / 12.) - 2;
                         
             switch (m) {
-                case 0  : snprintf (string, STRING_MAXIMUM_SIZE, "%s%ld", "C", n);  break;
-                case 1  : snprintf (string, STRING_MAXIMUM_SIZE, "%s%ld", "C#", n); break;
-                case 2  : snprintf (string, STRING_MAXIMUM_SIZE, "%s%ld", "D", n);  break;
-                case 3  : snprintf (string, STRING_MAXIMUM_SIZE, "%s%ld", "D#", n); break;
-                case 4  : snprintf (string, STRING_MAXIMUM_SIZE, "%s%ld", "E", n);  break;
-                case 5  : snprintf (string, STRING_MAXIMUM_SIZE, "%s%ld", "F", n);  break;
-                case 6  : snprintf (string, STRING_MAXIMUM_SIZE, "%s%ld", "F#", n); break;
-                case 7  : snprintf (string, STRING_MAXIMUM_SIZE, "%s%ld", "G", n);  break;
-                case 8  : snprintf (string, STRING_MAXIMUM_SIZE, "%s%ld", "G#", n); break;
-                case 9  : snprintf (string, STRING_MAXIMUM_SIZE, "%s%ld", "A", n);  break;
-                case 10 : snprintf (string, STRING_MAXIMUM_SIZE, "%s%ld", "A#", n); break;
-                case 11 : snprintf (string, STRING_MAXIMUM_SIZE, "%s%ld", "B", n);  break;
+                case 0  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "C", n);  break;
+                case 1  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "C#", n); break;
+                case 2  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "D", n);  break;
+                case 3  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "D#", n); break;
+                case 4  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "E", n);  break;
+                case 5  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "F", n);  break;
+                case 6  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "F#", n); break;
+                case 7  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "G", n);  break;
+                case 8  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "G#", n); break;
+                case 9  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "A", n);  break;
+                case 10 : snprintf (string, SIZE_STRING_MAX, "%s%ld", "A#", n); break;
+                case 11 : snprintf (string, SIZE_STRING_MAX, "%s%ld", "B", n);  break;
                 }
         }
-    else if (formatMode == FORMAT_MODE_TICKS)
+    else if (formatMode == MODE_FORMAT_TICKS)
         {
-            snprintf (string, STRING_MAXIMUM_SIZE, "%ld", longToBeFormatted * TICKS_FOR_ONE_STEP);
+            snprintf (string, SIZE_STRING_MAX, "%ld", longToBeFormatted * TIME_TICKS_PER_STEP);
         }
-    else if (formatMode == FORMAT_MODE_GRID) {
+    else if (formatMode == MODE_FORMAT_GRID) {
         switch (longToBeFormatted) {
         case PIZ_WHOLE_NOTE_DOTTED          :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_wholeDotted->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_wholeDotted->s_name); break;
         case PIZ_WHOLE_NOTE                 :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_whole->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_whole->s_name); break;
         case PIZ_WHOLE_NOTE_TRIPLET         :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_wholeTriplet->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_wholeTriplet->s_name); break;
         case PIZ_HALF_NOTE_DOTTED           :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_halfDotted->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_halfDotted->s_name); break;
         case PIZ_HALF_NOTE                  :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_half->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_half->s_name); break;
         case PIZ_HALF_NOTE_TRIPLET          :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_halfTriplet->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_halfTriplet->s_name); break;
         case PIZ_QUARTER_NOTE_DOTTED        :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_quarterDotted->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_quarterDotted->s_name); break;
         case PIZ_QUARTER_NOTE               :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_quarter->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_quarter->s_name); break;
         case PIZ_QUARTER_NOTE_TRIPLET       :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_quarterTriplet->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_quarterTriplet->s_name); break;
         case PIZ_EIGHTH_NOTE_DOTTED         :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_eighthDotted->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_eighthDotted->s_name); break;
         case PIZ_EIGHTH_NOTE                    :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_eighth->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_eighth->s_name); break;
         case PIZ_EIGHTH_NOTE_TRIPLET            :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_eighthTriplet->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_eighthTriplet->s_name); break;
         case PIZ_SIXTEENTH_NOTE_DOTTED      :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_sixteenthDotted->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_sixteenthDotted->s_name); break;
         case PIZ_SIXTEENTH_NOTE             :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_sixteenth->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_sixteenth->s_name); break;
         case PIZ_SIXTEENTH_NOTE_TRIPLET     :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_sixteenthTriplet->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_sixteenthTriplet->s_name); break;
         case PIZ_THIRTY_SECOND_NOTE         :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_thirtySecond->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_thirtySecond->s_name); break;
         case PIZ_THIRTY_SECOND_NOTE_TRIPLET :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_thirtySecondTriplet->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_thirtySecondTriplet->s_name); break;
         case PIZ_SNAP_NONE                  :
-            snprintf (string, STRING_MAXIMUM_SIZE, "%s", tll_sym_none->s_name); break;
+            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_none->s_name); break;
         }
     }
     
-    string[STRING_MAXIMUM_SIZE - 1] = 0;
+    string[SIZE_STRING_MAX - 1] = 0;
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -5426,7 +5416,7 @@ void tralala_willChange (t_tralala *x)
     if (USER)
         {
             x->hitTest  = HIT_NOTHING;
-            x->textMode = TEXT_MODE_NOTE;
+            x->textMode = MODE_TEXT_NOTE;
             x->flags    &= ~(FLAG_HAVE_CHANGED 
                             | FLAG_HAVE_MOVED 
                             | FLAG_HAVE_BEEN_DUPLICATED
@@ -5453,22 +5443,22 @@ void tralala_testAutoscroll (t_tralala *x, t_object *patcherview, t_pt pt)
 
     jbox_get_rect_for_view ((t_object *)x, patcherview, &rect); 
     
-    if (pt.x < AUTOSCROLL_RANGE) {
+    if (pt.x < GUI_AUTOSCROLL_RANGE) {
             DIRTYLAYER_SET (DIRTY_LOCATE_LEFT);
             stop = false;
         }
         
-    if ((rect.width - pt.x) < AUTOSCROLL_RANGE) {
+    if ((rect.width - pt.x) < GUI_AUTOSCROLL_RANGE) {
             DIRTYLAYER_SET (DIRTY_LOCATE_RIGHT);
             stop = false;
         }
         
-    if ((rect.height - pt.y) < AUTOSCROLL_RANGE) {
+    if ((rect.height - pt.y) < GUI_AUTOSCROLL_RANGE) {
             DIRTYLAYER_SET (DIRTY_LOCATE_DOWN);
             stop = false;
         }
         
-    if (pt.y < AUTOSCROLL_RANGE) {
+    if (pt.y < GUI_AUTOSCROLL_RANGE) {
             DIRTYLAYER_SET (DIRTY_LOCATE_UP);
             stop = false;
         }

@@ -36,46 +36,47 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
-#define STEPS_PER_MINUTE                    2500.
-#define TICKS_FOR_ONE_STEP                  20
-#define STEP_PIXELS_SIZE                    2.
-#define SEMITONE_PIXELS_SIZE                24.
-#define JSURFACE_MOSAIC_PITCH_SIZE          16
-#define JSURFACE_MOSAIC_STEP_SIZE           288
+#define TIME_STEPS_PER_MINUTE               2500.
+#define TIME_TICKS_PER_STEP                 20
+#define TIME_TEMPO_MIN                      20
+#define TIME_TEMPO_MAX                      300
 
-#define DEFER_CLOCK_INTERVAL                0.
-#define PAINT_CLOCK_INTERVAL                31.
-#define LEARN_CLOCK_INTERVAL                37.
-#define FOCUS_CLOCK_INTERVAL                53.
-#define NOTIFY_CLOCK_INTERVAL               487.
 #define CLOCK_RANDOMIZE                     10.
+#define CLOCK_PAINT_INTERVAL                31.
+#define CLOCK_LEARN_INTERVAL                37.
+#define CLOCK_DEFER_INTERVAL                0.
+#define CLOCK_FOCUS_INTERVAL                53.
+#define CLOCK_NOTIFY_INTERVAL               487.
 
-#define MOUSEWHEEL_FACTOR                   100.
-#define AUTOSCROLL_RANGE                    20.
-#define AUTOSCROLL_STEP                     10.
-#define HIT_ZONE_RANGE                      4.
-#define VELOCITY_PAINT_OFFSET               20.
+#define GUI_PIXELS_PER_STEP                 2.
+#define GUI_PIXELS_PER_SEMITONE             24.
+#define GUI_JSURFACE_SEMITONES              16
+#define GUI_JSURFACE_STEPS                  288
+#define GUI_MOUSEWHEEL_FACTOR               100.
+#define GUI_AUTOSCROLL_RANGE                20.
+#define GUI_AUTOSCROLL_STEP                 10.
+#define GUI_HIT_ZONE_RANGE                  4.
+#define GUI_VELOCITY_OFFSET                 20.
+#define GUI_TEXT_SPACE                      7.
+#define GUI_TEXT_BACKGROUND_ALPHA           0.60
 
-#define TEMPO_MINIMUM                       20
-#define TEMPO_MAXIMUM                       300
+#define SIZE_GROWING_ARRAY                  56
+#define SIZE_LEARN_QUEUE                    256
+#define SIZE_LEARN_MIN                      4
+#define SIZE_LEARN_RANGE                    4
+#define SIZE_LEARN_ARRAY                    8
+#define SIZE_STRING_MAX                     75
+#define SIZE_PATTERN_MAX                    28
+#define SIZE_NOVEMBER_MAX                   10
+#define SIZE_JULIET_MAX                     10
 
-#define INIT_GROWING_ARRAY_SIZE             28
+#define SIZE_PATCH_MIN                      "100. 100."
 
-#define LEARN_QUEUE_SIZE                    256
-#define STRING_MAXIMUM_SIZE                 75
-#define PATTERN_MAXIMUM_SIZE                28
-#define NOVEMBER_MAXIMUM_ITERATE            10
-#define JULIET_MAXIMUM_ITERATE              10
-#define LEARN_THRESHOLD_MINIMUM             4
-#define LEARN_THRESHOLD_RANGE               4
-#define LEARN_THRESHOLD_MAXIMUM             8
-
-#define PATCHING_SIZE_MINIMUM               "100. 100."
-
-#define FONTSIZE_LIST                       "8 9 10 11 12 13 14 16 18 20 24 30 36 48 64 72"
-#define FONTSTYLE_LIST                      "regular bold italic \"bold italic\""
-#define SCALE_TYPE_LIST                     "none custom ionian dorian phrygian lydian mixolydian       \
+#define LIST_FONTSIZE                       "8 9 10 11 12 13 14 16 18 20 24 30 36 48 64 72"
+#define LIST_FONTSTYLE                      "regular bold italic \"bold italic\""
+#define LIST_SCALE_TYPE                     "none custom ionian dorian phrygian lydian mixolydian       \
                                             aeolian locrian natural harmonic melodic \"whole tone\"     \
                                             \"pentatonic major\" \"pentatonic minor\"                   \
                                             \"octatonic half/whole\" \"octatonic whole/half\"           \
@@ -86,7 +87,7 @@
                                             \"7th dominant sharp five\"                                 \
                                             \"7th dominant flat five\""                             
 
-#define PATTERN_CELL_LIST                   "none whole half quarter eighth sixteenth thirty-second     \
+#define LIST_PATTERN_CELL                   "none whole half quarter eighth sixteenth thirty-second     \
                                             \"whole triplet\" \"half triplet\"                          \
                                             \"quarter triplet\" \"eighth triplet\"                      \
                                             \"sixteenth triplet\" \"thirty-second triplet\"             \
@@ -94,43 +95,32 @@
                                             \"quarter dotted\" \"eighth dotted\"                        \
                                             \"sixteenth dotted\""
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define TEXT_CELL_COUNT                     4
-#define TEXT_CELL_SPACE                     7.
-#define TEXT_BACKGROUND_ALPHA               0.60
 #define TEXT_ORDER_VELOCITY                 0
 #define TEXT_ORDER_DURATION                 1
 #define TEXT_ORDER_CHANNEL                  2
 #define TEXT_ORDER_PITCH                    3
+#define TEXT_CELL_COUNT                     4
+
+#define MODE_TEXT_NOTE                      0
+#define MODE_TEXT_ZONE                      1
+#define MODE_TEXT_MOUSE_PITCH               2
+#define MODE_TEXT_MOUSE_VELOCITY            3
+#define MODE_SEQUENCE_USER                  0
+#define MODE_SEQUENCE_LIVE                  1
+#define MODE_SEQUENCE_LISTEN                2
+#define MODE_ZOOM_A                         0
+#define MODE_ZOOM_B                         1
+#define MODE_ZOOM_C                         2
+#define MODE_FORMAT_LONG                    0
+#define MODE_FORMAT_NOTENAME                1
+#define MODE_FORMAT_TICKS                   2
+#define MODE_FORMAT_GRID                    3
+#define MODE_MENU_SEQUENCE                  0
+#define MODE_MENU_NOTE                      1
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-#define TEXT_MODE_NOTE                      0
-#define TEXT_MODE_ZONE                      1
-#define TEXT_MODE_MOUSE_PITCH               2
-#define TEXT_MODE_MOUSE_VELOCITY            3
-
-#define SEQUENCE_MODE_USER                  0
-#define SEQUENCE_MODE_LIVE                  1
-#define SEQUENCE_MODE_LISTEN                2
-
-#define ZOOM_MODE_A                         0
-#define ZOOM_MODE_B                         1
-#define ZOOM_MODE_C                         2
-
-#define FORMAT_MODE_LONG                    0
-#define FORMAT_MODE_NOTENAME                1
-#define FORMAT_MODE_TICKS                   2
-#define FORMAT_MODE_GRID                    3
-
-#define MENU_SEQUENCE                       0
-#define MENU_NOTE                           1
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 #define HIT_NOTHING                         (0L)
 #define HIT_NOTE                            (1<<0)
@@ -141,9 +131,6 @@
 #define HIT_ZONE                            (1<<5)
 #define HIT_TEXT                            (1<<6)
 #define HIT_LOCK                            (1<<7)
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 
 #define DIRTY_NONE                          (0L)
 #define DIRTY_REFRESH                       (1<<0)
@@ -176,6 +163,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 #define DEFAULT_WINDOW_OFFSET_X                         "-37."
 #define DEFAULT_WINDOW_OFFSET_Y                         "658."
@@ -188,8 +176,8 @@
 #define DEFAULT_POPUP_FONTFACE                          "0"
 #define DEFAULT_PATCHING_RECT                           "0. 0. 250. 250."
 
-#define DEFAULT_SEQUENCE_MODE                           "0"
-#define DEFAULT_ZOOM_MODE                               "0"
+#define DEFAULT_MODE_SEQUENCE                           "0"
+#define DEFAULT_MODE_ZOOM                               "0"
 #define DEFAULT_VIEW_TEXT                               "1"
 
 #define DEFAULT_TEMPO                                   "120"
@@ -249,6 +237,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 #define VIEWTEXT        (x->viewText == 1)
 #define USER            (x->sequenceMode == 0)
@@ -272,22 +261,20 @@
 #define UP              0
 #define DOWN            1
 
+#define DIRTYPATTR      clock_fdelay (x->notifyClock, CLOCK_NOTIFY_INTERVAL); 
 #define DIRTYSLOTS      if (x->saveSlotsWithPatcher) {                                      \
                                 jpatcher_set_dirty (jbox_get_patcher ((t_object *)x), 1);   \
                             }   
-#define DIRTYPATTR      clock_fdelay (x->notifyClock, NOTIFY_CLOCK_INTERVAL); 
 #define DIRTYCHANNEL    if (x->saveChannelWithPatcher) {                                    \
                                 jpatcher_set_dirty (jbox_get_patcher ((t_object *)x), 1);   \
                             }   
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 #define ARRAY_GET(name)         PIZGrowingArray *(name) = pizArrayPoolGetArray (x->arrayPool)
 #define ARRAY_RELEASE(name)     pizArrayPoolReleaseArray (x->arrayPool, (name))
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 
 #ifdef MAC_VERSION
 
@@ -307,7 +294,8 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-    
+#pragma mark -
+
 typedef struct _tralala {
     t_jbox              box;
     t_atom              playedNote[4];
@@ -320,30 +308,30 @@ typedef struct _tralala {
     long                flags;
     long                runIndex;
     long                tempo;
-    long                chance; 
-    long                velocity;                                       //
-    long                channel; 
-    long                slotIndex;  
+    long                chance;
+    long                velocity;
+    long                channel;
+    long                slotIndex;
     long                learnCycle;
     long                learnThreshold;
     t_uint32_atomic     dirtyLayer;
-    t_int32_atomic      popupLock;    
+    t_int32_atomic      popupLock;
     t_int32_atomic      paintLock;
     PIZLinklist         *slots;
     PIZGrowingArray     *valuesToBeLearned;
     PIZBoundedQueue     *learnQueue;
-    PIZFactorOracle     *factorOracle;      
+    PIZFactorOracle     *factorOracle;
     PIZGaloisLattice    *galoisLattice;
-    PIZFiniteState      *finiteState; 
-    t_systhread_mutex   methodMutex;    
-    t_systhread_mutex   algorithmMutex;
-    t_systhread_mutex   learnMutex;                                     //
-    t_systhread_mutex   arrayMutex;
+    PIZFiniteState      *finiteState;
+    t_systhread_mutex   learnMutex;
+    t_systhread_mutex   arraysMutex;
+    t_systhread_mutex   methodsMutex;
+    t_systhread_mutex   algorithmsMutex;
+    void                *runClock;
     void                *paintClock;
     void                *learnClock;
     void                *focusClock;
     void                *notifyClock;
-    void                *runClock;
     void                *goToStartClock;
     void                *inhibitStartClock;
     void                *inhibitBangClock;
@@ -353,16 +341,16 @@ typedef struct _tralala {
     void                *rightOutlet;
     t_symbol            *patternCell;
     t_symbol            *scaleKey;
-    t_symbol            *scaleType;                                     //
+    t_symbol            *scaleType;
     t_symbol            *popupFontName;
     double              popupFontSize;
     long                popupFontFace;
-    long                scaleCustom     [PIZ_MAGIC_SCALE];              //
-    long                patternCustom   [PATTERN_MAXIMUM_SIZE]; 
+    long                scaleCustom     [PIZ_MAGIC_SCALE];
+    long                patternCustom   [SIZE_PATTERN_MAX];
     long                patternSize;
     PIZSnapValue        cell;
     PIZScaleKey         key;
-    PIZScaleType        type;                                           //
+    PIZScaleType        type;
     long                mousePitchValue;
     long                mouseVelocityValue;
     long                zoomMode;
@@ -372,25 +360,25 @@ typedef struct _tralala {
     long                hitTest;
     long                saveSlotsWithPatcher;
     long                saveChannelWithPatcher;
-    long                saveValuesWithPatcher;  
-    PIZGrowingArray     *unselectedNotes;
-    PIZGrowingArray     *selectedNotes;
+    long                saveValuesWithPatcher;
+    PIZGrowingArray     *zone; 
     PIZGrowingArray     *playedNotes;
-    PIZGrowingArray     *zone;
-    PIZGrowingArray     *unselectedNotesCopy;
-    PIZGrowingArray     *selectedNotesCopy;                             //
-    PIZGrowingArray     *playedNotesCopy;
+    PIZGrowingArray     *selectedNotes;
+    PIZGrowingArray     *unselectedNotes;
     PIZGrowingArray     *zoneCopy;
-    PIZGrowingArray     *originNotes;
+    PIZGrowingArray     *playedNotesCopy;
+    PIZGrowingArray     *selectedNotesCopy;
+    PIZGrowingArray     *unselectedNotesCopy;
+    PIZCoordinates      coordinates;
     PIZCoordinates      originCoordinates;
-    PIZCoordinates      coordinates;    
+    PIZGrowingArray     *originNotes;    
     double              windowOffsetX;
     double              windowOffsetY;
     t_jmouse_cursortype cursorType;
     t_pt                origin;
-    t_pt                previous;                                       //
+    t_pt                previous;
     t_pt                point;
-    double              textPosition    [TEXT_CELL_COUNT];              
+    double              textPosition    [TEXT_CELL_COUNT];
     double              textWidth       [TEXT_CELL_COUNT];
     bool                textIsSelected  [TEXT_CELL_COUNT];
     t_jtextlayout       *textLayers     [TEXT_CELL_COUNT];
@@ -436,6 +424,7 @@ typedef struct _tralala {
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void            *tralala_new                    (t_symbol *s, long argc, t_atom *argv);
 void            tralala_free                    (t_tralala *x);

@@ -95,8 +95,12 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 350807008;
-			PBXWorkspaceStateSaveDate = 350807008;
+			PBXPerProjectTemplateStateSaveDate = 350808249;
+			PBXWorkspaceStateSaveDate = 350808249;
+		};
+		perUserProjectItems = {
+			96D8975C14E8EA2200B6EB6C /* PBXTextBookmark */ = 96D8975C14E8EA2200B6EB6C /* PBXTextBookmark */;
+			96D8975D14E8EA2200B6EB6C /* PBXTextBookmark */ = 96D8975D14E8EA2200B6EB6C /* PBXTextBookmark */;
 		};
 		sourceControlManager = 965F6CC112FF252E00F96EF1 /* Source Control */;
 		userBuildSettings = {
@@ -121,7 +125,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1234, 7250}}";
 			sepNavSelRange = "{1239, 0}";
-			sepNavVisRect = "{{0, 857}, {1234, 645}}";
+			sepNavVisRect = "{{0, 732}, {1234, 645}}";
 			sepNavWindowFrame = "{{2, 3}, {1279, 774}}";
 		};
 	};
@@ -135,17 +139,17 @@
 	};
 	9676982513B7784800FE77F4 /* tralala.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 137175}}";
-			sepNavSelRange = "{31834, 0}";
-			sepNavVisRect = "{{0, 11600}, {1233, 643}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1233, 136925}}";
+			sepNavSelRange = "{41252, 0}";
+			sepNavVisRect = "{{0, 16420}, {1233, 643}}";
 			sepNavWindowFrame = "{{0, 6}, {1278, 772}}";
 		};
 	};
 	96CB9E2913C1A24600C00CC4 /* tralala.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1237, 15575}}";
-			sepNavSelRange = "{18930, 0}";
-			sepNavVisRect = "{{0, 3}, {1237, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1237, 15300}}";
+			sepNavSelRange = "{15858, 0}";
+			sepNavVisRect = "{{0, 1315}, {1237, 645}}";
 			sepNavWindowFrame = "{{-2, 4}, {1282, 774}}";
 		};
 	};
@@ -156,6 +160,24 @@
 			sepNavVisRect = "{{0, 582}, {1233, 643}}";
 			sepNavWindowFrame = "{{15, 1}, {1278, 772}}";
 		};
+	};
+	96D8975C14E8EA2200B6EB6C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "error: 'TIME_TICKS_PER_STEP' undeclared (first use in this function)";
+		fRef = 9676982513B7784800FE77F4 /* tralala.c */;
+		rLen = 1;
+		rLoc = 2003;
+		rType = 1;
+	};
+	96D8975D14E8EA2200B6EB6C /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 9676982513B7784800FE77F4 /* tralala.c */;
+		name = "(long)(atom_getlong (argv + i) / TIME_TICKS_PER_STEP)); break;";
+		rLen = 111;
+		rLoc = 94453;
+		rType = 0;
+		vrLen = 1207;
+		vrLoc = 94579;
 	};
 	96D8DAAE142CE346007F5BAD /* tralalaHide.txt */ = {
 		uiCtxt = {
