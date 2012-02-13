@@ -54,6 +54,10 @@
 		96D1301914B993970013AA74 /* tralala.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 96D1301814B993970013AA74 /* tralala.xcconfig */; };
 		96D7B2DE14ADC9AC00E090CA /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96D7B2DD14ADC9AC00E090CA /* libPizAlgorithms.a */; };
 		96D8DAAF142CE346007F5BAD /* tralalaHide.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96D8DAAE142CE346007F5BAD /* tralalaHide.txt */; };
+		96EFB30714E9089C000857F4 /* tralalaLibrary.c in Sources */ = {isa = PBXBuildFile; fileRef = 96EFB30614E9089C000857F4 /* tralalaLibrary.c */; };
+		96EFB31814E90ACB000857F4 /* tralalaPaint.c in Sources */ = {isa = PBXBuildFile; fileRef = 96EFB31714E90ACB000857F4 /* tralalaPaint.c */; };
+		96EFB33314E915F7000857F4 /* tralalaHI.c in Sources */ = {isa = PBXBuildFile; fileRef = 96EFB33214E915F7000857F4 /* tralalaHI.c */; };
+		96EFB34314E91771000857F4 /* tralalaMessages.c in Sources */ = {isa = PBXBuildFile; fileRef = 96EFB34214E91771000857F4 /* tralalaMessages.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -107,6 +111,10 @@
 		96D1301814B993970013AA74 /* tralala.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; name = tralala.xcconfig; path = ../tralala.xcconfig; sourceTree = SOURCE_ROOT; };
 		96D7B2DD14ADC9AC00E090CA /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../pizAlgorithms/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
 		96D8DAAE142CE346007F5BAD /* tralalaHide.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = tralalaHide.txt; sourceTree = "<group>"; };
+		96EFB30614E9089C000857F4 /* tralalaLibrary.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tralalaLibrary.c; sourceTree = "<group>"; };
+		96EFB31714E90ACB000857F4 /* tralalaPaint.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tralalaPaint.c; sourceTree = "<group>"; };
+		96EFB33214E915F7000857F4 /* tralalaHI.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tralalaHI.c; sourceTree = "<group>"; };
+		96EFB34214E91771000857F4 /* tralalaMessages.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tralalaMessages.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +166,10 @@
 				96CB9E2913C1A24600C00CC4 /* tralala.h */,
 				9675499913F3A758005CDE9E /* tralalaSymbols.h */,
 				9676982513B7784800FE77F4 /* tralala.c */,
+				96EFB34214E91771000857F4 /* tralalaMessages.c */,
+				96EFB33214E915F7000857F4 /* tralalaHI.c */,
+				96EFB31714E90ACB000857F4 /* tralalaPaint.c */,
+				96EFB30614E9089C000857F4 /* tralalaLibrary.c */,
 				9675499A13F3A758005CDE9E /* tralalaSymbols.c */,
 			);
 			name = Source;
@@ -315,6 +327,10 @@
 			files = (
 				9676982713B7784800FE77F4 /* tralala.c in Sources */,
 				9675499B13F3A758005CDE9E /* tralalaSymbols.c in Sources */,
+				96EFB30714E9089C000857F4 /* tralalaLibrary.c in Sources */,
+				96EFB31814E90ACB000857F4 /* tralalaPaint.c in Sources */,
+				96EFB33314E915F7000857F4 /* tralalaHI.c in Sources */,
+				96EFB34314E91771000857F4 /* tralalaMessages.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

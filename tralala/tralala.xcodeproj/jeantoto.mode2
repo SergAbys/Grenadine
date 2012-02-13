@@ -255,8 +255,8 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>5</integer>
-											<integer>2</integer>
+											<integer>13</integer>
+											<integer>11</integer>
 											<integer>0</integer>
 										</array>
 									</array>
@@ -284,7 +284,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>232 133 648 552 0 0 1280 778 </string>
+								<string>273 178 648 552 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -421,8 +421,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D8974414E8E85400B6EB6C</string>
-				<string>96D8974514E8E85400B6EB6C</string>
+				<string>96EFB35D14E91982000857F4</string>
+				<string>96EFB35E14E91982000857F4</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -455,11 +455,13 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D54069F1CE1000CFCEE</string>
+		<string>96EFB36514E91982000857F4</string>
 		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/Tralala/tralala.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>232 133 648 552 0 0 1280 778 </string>
+	<string>273 178 648 552 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -617,7 +619,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string></string>
+								<string>tralalaMessages.c</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -634,10 +636,12 @@
 							<string>470pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 127}, {1280, 75}}</string>
+								<string>{{0, 188}, {1280, 14}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>
@@ -675,7 +679,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D8974614E8E85400B6EB6C</string>
+				<string>96EFB33A14E916C8000857F4</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -717,8 +721,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {332, 189}}</string>
-											<string>{{332, 0}, {385, 189}}</string>
+											<string>{{0, 0}, {331, 199}}</string>
+											<string>{{331, 0}, {386, 199}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -733,8 +737,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {717, 189}}</string>
-											<string>{{0, 189}, {717, 207}}</string>
+											<string>{{0, 0}, {717, 199}}</string>
+											<string>{{0, 199}, {717, 197}}</string>
 										</array>
 									</dict>
 								</dict>
@@ -781,14 +785,14 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D54069F1CE1000CFCEE</string>
-				<string>96AD811E14B72BC9005E9EE7</string>
+				<string>96EFB35F14E91982000857F4</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>96AD811F14B72BC9005E9EE7</string>
-				<string>96AD812014B72BC9005E9EE7</string>
-				<string>96AD812114B72BC9005E9EE7</string>
-				<string>96AD812214B72BC9005E9EE7</string>
-				<string>96AD812314B72BC9005E9EE7</string>
-				<string>96AD812414B72BC9005E9EE7</string>
+				<string>96EFB36014E91982000857F4</string>
+				<string>96EFB36114E91982000857F4</string>
+				<string>96EFB36214E91982000857F4</string>
+				<string>96EFB36314E91982000857F4</string>
+				<string>96EFB36414E91982000857F4</string>
+				<string>96EFB36514E91982000857F4</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debug</string>
