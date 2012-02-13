@@ -23,9 +23,6 @@ extern tralalaSymbolsTableB tll_symbolsB;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-#pragma mark LIBRARY
-#pragma mark -
 
 bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitch)
 {
@@ -38,35 +35,32 @@ bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitc
 
     count = pizGrowingArrayCount (x->selected) / PIZ_SEQUENCE_NOTE_SIZE;
     
-    for (i = 0; i < count; i++)
-        {
-            long previousPosition   = pizGrowingArrayValueAtIndex (x->selected, 
-                                        (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
-            long previousPitch      = pizGrowingArrayValueAtIndex (x->selected,
-                                        (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
-            long position           = pizGrowingArrayValueAtIndex (x->origin, 
-                                        (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
-            long pitch              = pizGrowingArrayValueAtIndex (x->origin, 
-                                        (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
-            long duration           = pizGrowingArrayValueAtIndex (x->origin, 
-                                        (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
-            
-            pitch       += deltaPitch;
-            position    += deltaPosition;
-            
-            position = MAX ((long)((position / (double)grid) + 0.5) * grid, 0);
-            
-            pizGrowingArraySetValueAtIndex (x->selected, 
-                                            (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION,
-                                            CLAMP (position, 0, PIZ_SEQUENCE_TIMELINE_SIZE - duration));
-            pizGrowingArraySetValueAtIndex (x->selected, 
-                                            (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH,
-                                            CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
-            
-            if ((previousPosition != position) || (previousPitch != pitch)) {
-                    moved = true;
-                }
+    for (i = 0; i < count; i++) {
+        long previousPosition   = pizGrowingArrayValueAtIndex (x->selected, 
+                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
+        long previousPitch      = pizGrowingArrayValueAtIndex (x->selected,
+                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
+        long position           = pizGrowingArrayValueAtIndex (x->origin, 
+                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
+        long pitch              = pizGrowingArrayValueAtIndex (x->origin, 
+                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
+        long duration           = pizGrowingArrayValueAtIndex (x->origin, 
+                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
+        
+        pitch       += deltaPitch;
+        position    += deltaPosition;
+        
+        position = MAX ((long)((position / (double)grid) + 0.5) * grid, 0);
+        
+        pizGrowingArraySetValueAtIndex (x->selected, (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION,
+                                        CLAMP (position, 0, PIZ_SEQUENCE_TIMELINE_SIZE - duration));
+        pizGrowingArraySetValueAtIndex (x->selected, (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH,
+                                        CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
+        
+        if ((previousPosition != position) || (previousPitch != pitch)) {
+            moved = true;
         }
+    }
     
     systhread_mutex_unlock (&x->arraysMutex);
     
@@ -84,28 +78,26 @@ bool tralala_changeSelectedNotesDuration (t_tralala *x, long deltaPosition)
 
     count = pizGrowingArrayCount (x->selected) / PIZ_SEQUENCE_NOTE_SIZE;
     
-    for (i = 0; i < count; i++)
-        {
-            long previousDuration   = pizGrowingArrayValueAtIndex (x->selected, 
-                                        (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
-            long duration           = pizGrowingArrayValueAtIndex (x->origin, 
-                                        (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
-            long position           = pizGrowingArrayValueAtIndex (x->origin, 
-                                        (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
-            long maximum            = MIN (PIZ_SEQUENCE_MAXIMUM_DURATION, 
-                                        (PIZ_SEQUENCE_TIMELINE_SIZE - position));
-                                        
-            duration += deltaPosition;
-            duration = MAX ((long)((duration / (double)grid) + 0.5) * grid, 0);
-            
-            pizGrowingArraySetValueAtIndex (x->selected, 
-                                            (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION,
-                                            CLAMP (duration, grid, maximum));
-            
-            if (duration != previousDuration) {
-                    changed = true;
-                }
+    for (i = 0; i < count; i++) {
+        long previousDuration   = pizGrowingArrayValueAtIndex (x->selected, 
+                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
+        long duration           = pizGrowingArrayValueAtIndex (x->origin, 
+                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
+        long position           = pizGrowingArrayValueAtIndex (x->origin, 
+                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
+        long maximum            = MIN (PIZ_SEQUENCE_MAXIMUM_DURATION, 
+                                    (PIZ_SEQUENCE_TIMELINE_SIZE - position));
+                                    
+        duration += deltaPosition;
+        duration = MAX ((long)((duration / (double)grid) + 0.5) * grid, 0);
+        
+        pizGrowingArraySetValueAtIndex (x->selected, (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION,
+                                        CLAMP (duration, grid, maximum));
+        
+        if (duration != previousDuration) {
+            changed = true;
         }
+    }
     
     systhread_mutex_unlock (&x->arraysMutex);
     
@@ -129,52 +121,45 @@ void tralala_changeSelectedNotesVelocity (t_tralala *x, bool decrement)
     
     systhread_mutex_lock (&x->arraysMutex);
     
-    if (count = pizGrowingArrayCount (x->selected) / PIZ_SEQUENCE_NOTE_SIZE)
-        {
-            long i, step;
-            long temp, k = 0;
-            long originVelocity = pizGrowingArrayValueAtIndex (x->origin, PIZ_SEQUENCE_VELOCITY);
-            long velocity       = pizGrowingArrayValueAtIndex (x->selected, PIZ_SEQUENCE_VELOCITY);
+    if (count = pizGrowingArrayCount (x->selected) / PIZ_SEQUENCE_NOTE_SIZE) {
+        long i, step;
+        long temp, k = 0;
+        long originVelocity = pizGrowingArrayValueAtIndex (x->origin, PIZ_SEQUENCE_VELOCITY);
+        long velocity       = pizGrowingArrayValueAtIndex (x->selected, PIZ_SEQUENCE_VELOCITY);
+        
+        step = (long)((ABS (velocity - originVelocity)) / 5) + 1;
+        
+        for (i = 0; i < count; i++) {
+            if (decrement) {
+                temp =  pizGrowingArrayValueAtIndex (x->selected, (PIZ_SEQUENCE_NOTE_SIZE * i) 
+                    + PIZ_SEQUENCE_VELOCITY) - step;
+            } else {
+                temp = PIZ_MAGIC_VELOCITY - (pizGrowingArrayValueAtIndex (x->selected, (PIZ_SEQUENCE_NOTE_SIZE 
+                    * i) + PIZ_SEQUENCE_VELOCITY) + step);
+            }
             
-            step = (long)((ABS (velocity - originVelocity)) / 5) + 1;
-            
-            for (i = 0; i < count; i++) 
-                {
-                    if (decrement) 
-                        {
-                            temp =  pizGrowingArrayValueAtIndex (x->selected, 
-                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY) - step;
-                        }
-                    else
-                        {
-                            temp = PIZ_MAGIC_VELOCITY - (pizGrowingArrayValueAtIndex (x->selected,
-                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY) + step);
-                        }
-                    
-                    if (temp < k) {
-                            k = temp;
-                        }
-                }
-            
-            step += k;
-            
-            if (step > 0)
-                {
-                    if (decrement) {
-                            step = -step;
-                        }
-                        
-                    for (i = 0; i < count; i++)
-                        { 
-                            temp = pizGrowingArrayValueAtIndex (x->selected, 
-                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY) + step;
-                            pizGrowingArraySetValueAtIndex (x->selected,  
-                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY, temp);
-                        }
-                    
-                    x->mouseVelocityValue = velocity + step - originVelocity;
-                }
+            if (temp < k) {
+                   k = temp;
+            }
         }
+        
+        step += k;
+        
+        if (step > 0) {
+            if (decrement) {
+                    step = -step;
+                }
+                
+            for (i = 0; i < count; i++) { 
+                temp = pizGrowingArrayValueAtIndex (x->selected, 
+                        (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY) + step;
+                pizGrowingArraySetValueAtIndex (x->selected,  
+                        (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY, temp);
+            }
+            
+            x->mouseVelocityValue = velocity + step - originVelocity;
+        }
+    }
     
     systhread_mutex_unlock (&x->arraysMutex);
 }
@@ -290,10 +275,10 @@ long tralala_hitTextWithPoint (t_tralala *x, t_object *patcherview, t_pt pt)
         
             for (i = 0; i < TEXT_CELL_COUNT; i++) {
                 if ((pt.x > x->textPosition[i]) && (pt.x < (x->textPosition[i] + x->textWidth[i]))) {
-                        tralala_unselectAllText (x);
-                        x->textIsSelected[i] = true;
-                        isHit = HIT_TEXT;
-                    }
+                    tralala_unselectAllText (x);
+                    x->textIsSelected[i] = true;
+                    isHit = HIT_TEXT;
+                }
             }
         } else if ((pt.x > x->textPosition[0]) && (pt.x < (x->textPosition[0] + x->textWidth[0]))) {
             isHit = HIT_LOCK;
@@ -309,64 +294,57 @@ bool tralala_hitNotesByRunIndex (t_tralala *x)
 
     pizGrowingArrayClear (x->played);
 
-    if (x->runIndex == -1)
-        {
+    if (x->runIndex == -1) {
             x->runIndex = 0;
             needToDraw  = true;
-        }
-    else 
-        {
-            long i, count, start, end, down, up;
-            long err = PIZ_GOOD;
-            
-            start   = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_START);
-            end     = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_END);
-            down    = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_DOWN);
-            up      = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_UP);
-            
-            count = pizGrowingArrayCount (x->unselected) / PIZ_SEQUENCE_NOTE_SIZE;
-            
-            for (i = 0; i < count; i++)
-                {
-                    long position   = pizGrowingArrayValueAtIndex (x->unselected, 
-                                        (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
-                    long pitch      = pizGrowingArrayValueAtIndex (x->unselected, 
-                                        (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
-                    long duration   = pizGrowingArrayValueAtIndex (x->unselected, 
-                                        (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
-                    long isMarked   = pizGrowingArrayValueAtIndex (x->unselected, 
-                                        (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_IS_MARKED);
-                                        
-                    if ((position >= start) && 
-                        (pitch >= down) &&
-                        (pitch <= up) &&
-                        (x->runIndex >= position) && 
-                        (x->runIndex < (position + duration)))
-                        {
-                            err |= pizGrowingArrayAppend (x->played, position);
-                            err |= pizGrowingArrayAppend (x->played, pitch);
-                            err |= pizGrowingArrayAppend (x->played, PIZ_MAGIC_VELOCITY);
-                            err |= pizGrowingArrayAppend (x->played, duration);
-                            err |= pizGrowingArrayAppend (x->played, false);
-                            err |= pizGrowingArrayAppend (x->played, false);
-                            err |= pizGrowingArrayAppend (x->played, false);
+    } else {
+        long i, count, start, end, down, up;
+        long err = PIZ_GOOD;
+        
+        start   = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_START);
+        end     = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_END);
+        down    = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_DOWN);
+        up      = pizGrowingArrayValueAtIndex (x->zone, PIZ_SEQUENCE_UP);
+        
+        count = pizGrowingArrayCount (x->unselected) / PIZ_SEQUENCE_NOTE_SIZE;
+        
+        for (i = 0; i < count; i++) {
+            long position   = pizGrowingArrayValueAtIndex (x->unselected, 
+                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
+            long pitch      = pizGrowingArrayValueAtIndex (x->unselected, 
+                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
+            long duration   = pizGrowingArrayValueAtIndex (x->unselected, 
+                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
+            long isMarked   = pizGrowingArrayValueAtIndex (x->unselected, 
+                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_IS_MARKED);
+                                
+            if ((position >= start) && 
+                (pitch >= down) &&
+                (pitch <= up) &&
+                (x->runIndex >= position) && 
+                (x->runIndex < (position + duration))) {
+                    err |= pizGrowingArrayAppend (x->played, position);
+                    err |= pizGrowingArrayAppend (x->played, pitch);
+                    err |= pizGrowingArrayAppend (x->played, PIZ_MAGIC_VELOCITY);
+                    err |= pizGrowingArrayAppend (x->played, duration);
+                    err |= pizGrowingArrayAppend (x->played, false);
+                    err |= pizGrowingArrayAppend (x->played, false);
+                    err |= pizGrowingArrayAppend (x->played, false);
+                    
+                    if (!isMarked) {
+                            pizGrowingArraySetValueAtIndex (x->unselected, (PIZ_SEQUENCE_NOTE_SIZE * i) 
+                                + PIZ_SEQUENCE_IS_MARKED, true);
                             
-                            if (!isMarked) {
-                                    pizGrowingArraySetValueAtIndex (x->unselected, 
-                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_IS_MARKED, true);
-                                    
-                                    needToDraw = true;
-                                }
-                        }
-                    else if (isMarked)
-                        {
-                            pizGrowingArraySetValueAtIndex (x->unselected, 
-                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_IS_MARKED, false);
-                                    
                             needToDraw = true;
                         }
-                }
+            } else if (isMarked){
+                pizGrowingArraySetValueAtIndex (x->unselected, (PIZ_SEQUENCE_NOTE_SIZE * i) 
+                    + PIZ_SEQUENCE_IS_MARKED, false);
+                            
+                needToDraw = true;
+            }
         }
+    }
         
     return needToDraw;
 }
@@ -375,14 +353,13 @@ bool tralala_setCursorType (t_tralala *x, t_object *patcherview, t_jmouse_cursor
 {
     bool cursorSet = false;
     
-    if (type != x->cursorType)
-        {
-            x->cursorType = type;
+    if (type != x->cursorType) {
+        x->cursorType = type;
             
-            jmouse_setcursor (patcherview, (t_object *)x, type);
+        jmouse_setcursor (patcherview, (t_object *)x, type);
             
-            cursorSet = true;
-        }
+        cursorSet = true;
+    }
     
     return cursorSet;
 }
@@ -396,15 +373,14 @@ bool tralala_setCoordinatesWithPoint (t_tralala *x, PIZCoordinates *coordinates,
         case MODE_ZOOM_A    : f = 0.5;  break;
         case MODE_ZOOM_B    : f = 1.;   break;
         case MODE_ZOOM_C    : f = 2.;   break;
-        }
+    }
     
     coordinates->position   = (long)((x->windowOffsetX + pt.x) / (GUI_PIXELS_PER_STEP * f));
     coordinates->pitch      = PIZ_MAGIC_PITCH - MAX (((long)((x->windowOffsetY + pt.y) / 
                                 (GUI_PIXELS_PER_SEMITONE * f))), 0);
     
     if ((coordinates->pitch < 0) || (coordinates->pitch > PIZ_MAGIC_PITCH) || 
-        (coordinates->position < 0) || (coordinates->position > (PIZ_SEQUENCE_TIMELINE_SIZE - 1)))
-        {
+        (coordinates->position < 0) || (coordinates->position > (PIZ_SEQUENCE_TIMELINE_SIZE - 1))) {
             inside = false;
         }
         
@@ -420,7 +396,7 @@ void tralala_setRectWithZoneValues (t_tralala *x, t_rect *zoneRect, long start, 
         case MODE_ZOOM_A    : f = 0.5;  break;
         case MODE_ZOOM_B    : f = 1.;   break;
         case MODE_ZOOM_C    : f = 2.;   break;
-        }
+    }
     
     if (end < start) {
         long k  = start;
@@ -473,37 +449,31 @@ void tralala_setRectWithCoordinatesAndDuration (t_tralala *x, t_rect *noteRect, 
 
 void tralala_setStringWithLong (char *string, long longToBeFormatted, long formatMode)
 {
-    if (formatMode == MODE_FORMAT_LONG)
-        {
-            snprintf (string, SIZE_STRING_MAX, "%ld", longToBeFormatted);
-        }
-    else if (formatMode == MODE_FORMAT_NOTENAME)
-        {
-            long m, n;
-            
-            m = longToBeFormatted % 12;
-            n = (long)(longToBeFormatted / 12.) - 2;
-                        
-            switch (m) {
-                case 0  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "C", n);  break;
-                case 1  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "C#", n); break;
-                case 2  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "D", n);  break;
-                case 3  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "D#", n); break;
-                case 4  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "E", n);  break;
-                case 5  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "F", n);  break;
-                case 6  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "F#", n); break;
-                case 7  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "G", n);  break;
-                case 8  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "G#", n); break;
-                case 9  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "A", n);  break;
-                case 10 : snprintf (string, SIZE_STRING_MAX, "%s%ld", "A#", n); break;
-                case 11 : snprintf (string, SIZE_STRING_MAX, "%s%ld", "B", n);  break;
-                }
-        }
-    else if (formatMode == MODE_FORMAT_TICKS)
-        {
-            snprintf (string, SIZE_STRING_MAX, "%ld", longToBeFormatted * TIME_TICKS_PER_STEP);
-        }
-    else if (formatMode == MODE_FORMAT_GRID) {
+    if (formatMode == MODE_FORMAT_LONG) {
+        snprintf (string, SIZE_STRING_MAX, "%ld", longToBeFormatted);
+    } else if (formatMode == MODE_FORMAT_NOTENAME) {
+        long m, n;
+        
+        m = longToBeFormatted % 12;
+        n = (long)(longToBeFormatted / 12.) - 2;
+                    
+        switch (m) {
+            case 0  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "C", n);  break;
+            case 1  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "C#", n); break;
+            case 2  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "D", n);  break;
+            case 3  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "D#", n); break;
+            case 4  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "E", n);  break;
+            case 5  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "F", n);  break;
+            case 6  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "F#", n); break;
+            case 7  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "G", n);  break;
+            case 8  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "G#", n); break;
+            case 9  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "A", n);  break;
+            case 10 : snprintf (string, SIZE_STRING_MAX, "%s%ld", "A#", n); break;
+            case 11 : snprintf (string, SIZE_STRING_MAX, "%s%ld", "B", n);  break;
+            }
+    } else if (formatMode == MODE_FORMAT_TICKS) {
+        snprintf (string, SIZE_STRING_MAX, "%ld", longToBeFormatted * TIME_TICKS_PER_STEP);
+    } else if (formatMode == MODE_FORMAT_GRID) {
         switch (longToBeFormatted) {
         case PIZ_WHOLE_NOTE_DOTTED          :
             snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_wholeDotted->s_name); break;
@@ -581,23 +551,22 @@ bool tralala_hasSelectedText (t_tralala *x, long *selectedText)
 
 void tralala_willChange (t_tralala *x)
 {
-    if (USER)
-        {
-            x->hitTest  = HIT_NOTHING;
-            x->textMode = MODE_TEXT_NOTE;
-            x->flags    &= ~(FLAG_HAVE_CHANGED 
-                            | FLAG_HAVE_MOVED 
-                            | FLAG_HAVE_BEEN_DUPLICATED
-                            | FLAG_ZONE_IS_SELECTED
-                            | FLAG_ORIGIN_IS_SET
-                            | FLAG_IS_LASSO);
-            
-            x->mouseVelocityValue = 0;
-            
-            tralala_unselectAllText (x);
-            pizSequenceInitLasso (x->user);
-            tralala_stopAutoscroll (x);
-        }
+    if (USER) {
+        x->hitTest  = HIT_NOTHING;
+        x->textMode = MODE_TEXT_NOTE;
+        x->flags    &= ~(FLAG_HAVE_CHANGED 
+                        | FLAG_HAVE_MOVED 
+                        | FLAG_HAVE_BEEN_DUPLICATED
+                        | FLAG_ZONE_IS_SELECTED
+                        | FLAG_ORIGIN_IS_SET
+                        | FLAG_IS_LASSO);
+        
+        x->mouseVelocityValue = 0;
+        
+        tralala_unselectAllText (x);
+        pizSequenceInitLasso (x->user);
+        tralala_stopAutoscroll (x);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------

@@ -55,6 +55,8 @@
  * \ingroup     structures
  * \defgroup    hashtable Hash Table
  * \ingroup     structures
+ * \defgroup    dictionary Dictionary
+ * \ingroup     strucutres
  * \defgroup    itemset128 Itemset 128
  * \ingroup     structures
  * \defgroup    itemset1024 Itemset 1024
