@@ -82,6 +82,84 @@ static double   piz_distribution11[ ] = {0.54, 0.59, 0.63, 0.68, 0.72, 0.77, 0.8
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+bool pizSequenceClean (PIZSequence *x, long value)
+{
+    long i, scale, v;
+    long index = 0;
+    bool haveChanged = false;
+
+    PIZLOCK
+        
+    scale = pizGrowingArrayCount (x->scale);
+    v = CLAMP (value, 0, PIZ_MAGIC_PITCH);
+    
+    for (i = 0; i < (PIZ_MAGIC_PITCH + 1); i++) {
+            x->values2[i] = 0;
+        }
+    
+    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
+        PIZNote *note       = NULL;
+        PIZNote *nextNote   = NULL;
+        
+        long p = pizGrowingArrayValueAtIndex (x->map, i);
+        
+        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+        
+        while (note) {
+            long j, start, end, m, n, pitch;
+            bool death = false;
+            
+            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+            
+            pitch = note->data[PIZ_PITCH];
+                    
+            if (scale) {
+                    pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
+                }
+            
+            start   = pitch - v;
+            end     = start + (2 * v);
+            
+            m = CLAMP (start, 0, PIZ_MAGIC_PITCH);
+            n = CLAMP (end, 0, PIZ_MAGIC_PITCH);
+            
+            for (j = m; j <= n; j++) {
+                if (x->values2[j] == (p + 1)) {
+                        death = true;
+                    }
+                }
+            
+            if (death) {
+                x->notes1[index] = note;
+                x->values1[index] = p;
+                index ++;
+            } else {
+                x->values2[pitch] = (p + 1);
+            }
+            
+            note = nextNote;
+        }
+    }
+    
+    if (index) {
+        for (i = 0; i < index; i++) {
+            if (x->notes1[i] == x->markedNote) {
+                    x->markedNote = NULL;
+                }
+                        
+            if (!pizLinklistRemoveByPtr (x->timeline[x->values1[i]], (void *)x->notes1[i])) {
+                    x->count --;
+                }
+        }
+        
+        haveChanged = true;
+    }
+    
+    PIZUNLOCK
+    
+    return haveChanged;
+}
+
 bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm flag, void *algorithm)
 {
     long k;

@@ -58,31 +58,31 @@
 /** 
  * \def     PIZ_SEQUENCE_VERSION_MAJOR 
  * \brief   Current version.
- * \ingroup foundations
+ * \ingroup sequenceTypes
  */
  
 /** 
  * \def     PIZ_SEQUENCE_VERSION_MINOR
  * \brief   Current version.
- * \ingroup foundations
+ * \ingroup sequenceTypes
  */
  
 /** 
  * \def     PIZ_SEQUENCE_TIMELINE_SIZE
  * \brief   Number of steps in the sequence.
- * \ingroup foundations
+ * \ingroup sequenceTypes
  */
  
 /**
  * \def     PIZ_SEQUENCE_MAXIMUM_NOTES 
  * \brief   Maximum number of notes in the sequence.
- * \ingroup foundations
+ * \ingroup sequenceTypes
  */
 
 /**
  * \def     PIZ_SEQUENCE_MAXIMUM_DURATION
  * \brief   Maximum duration for a note.
- * \ingroup foundations
+ * \ingroup sequenceTypes
  */
 
 #define PIZ_SEQUENCE_VERSION_MAJOR      1
@@ -121,7 +121,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \ingroup foundations
+ * \ingroup sequenceTypes
  */
 
 typedef enum _PIZNoteValue {
@@ -146,7 +146,7 @@ typedef enum _PIZNoteValue {
     } PIZNoteValue;
 
 /**
- * \ingroup foundations
+ * \ingroup sequenceTypes
  */
  
 typedef enum _PIZScaleType {
@@ -180,7 +180,7 @@ typedef enum _PIZScaleType {
     } PIZScaleType;
 
 /**
- * \ingroup foundations
+ * \ingroup sequenceTypes
  */
  
 typedef enum _PIZScaleKey {
@@ -199,7 +199,7 @@ typedef enum _PIZScaleKey {
     } PIZScaleKey;
 
 /**
- * \ingroup foundations
+ * \ingroup sequenceTypes
  */
  
 typedef struct  _PIZCoordinates {
@@ -208,7 +208,7 @@ typedef struct  _PIZCoordinates {
     } PIZCoordinates;
 
 /**
- * \ingroup foundations
+ * \ingroup sequenceTypes
  */
  
 typedef enum _PIZSelector {
@@ -219,7 +219,7 @@ typedef enum _PIZSelector {
     } PIZSelector;
 
 /**
- * \ingroup foundations
+ * \ingroup sequenceTypes
  */
  
 typedef enum _PIZDataIndex {
@@ -240,7 +240,7 @@ typedef enum _PIZDataIndex {
     } PIZDataIndex;
 
 /**
- * \ingroup foundations
+ * \ingroup sequenceTypes
  */
  
 typedef enum _PIZAddFlag {
@@ -258,7 +258,7 @@ typedef enum _PIZAddFlag {
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \ingroup foundations
+ * \ingroup sequenceTypes
  */
  
 typedef struct _PIZNote {
@@ -271,7 +271,7 @@ typedef struct _PIZNote {
     } PIZNote;
 
 /**
- * \ingroup foundations
+ * \ingroup sequenceTypes
  */
  
 typedef struct _PIZSequence {
@@ -284,7 +284,7 @@ typedef struct _PIZSequence {
     PIZBoundedHashTable *hashTable;                 /*!< Private for temporary storage. */
     PIZLinklist         **timeline;                 /*!< Sequence as a timeline. */
     PIZGrowingArray     *scale;                     /*!< Mode/scale. */
-    PIZGrowingArray     *pattern;                   /*!< Rythmic offsets. */
+    PIZGrowingArray     *pattern;                   /*!< Rythmic pattern. */
     PIZNote             *markedNote;                /*!< Pointer to one note in the sequence. */
     PIZGrowingArray     *map;                       /*!< List of timeline's occuped index. */
     long                start;                      /*!< Playback head's start (included). */
@@ -314,7 +314,7 @@ typedef struct _PIZSequence {
 /**
  * \brief   Create the sequence.
  * \return  A pointer to the new sequence.  
- * \ingroup foundations
+ * \ingroup sequenceClass
  */
 PIZSequence *pizSequenceNew (void);
 
@@ -322,7 +322,7 @@ PIZSequence *pizSequenceNew (void);
  * \brief   Free the sequence.
  * \details It is safe to pass NULL pointer. 
  * \param   x A Pointer.
- * \ingroup foundations
+ * \ingroup sequenceClass
  */
 void pizSequenceFree (PIZSequence *x);
 
@@ -333,7 +333,7 @@ void pizSequenceFree (PIZSequence *x);
  * \brief   Get the number of notes in the sequence.
  * \param   x A valid pointer.
  * \return  The number of notes.
- * \ingroup foundations
+ * \ingroup sequenceClass
  */
 long pizSequenceCount (PIZSequence *x);
 
@@ -342,7 +342,7 @@ long pizSequenceCount (PIZSequence *x);
  * \remark  Default is 0.
  * \param   x A valid pointer.
  * \return  The velocity.
- * \ingroup foundations
+ * \ingroup sequenceClass
  */
 long pizSequenceVelocity (PIZSequence *x);
 
@@ -351,7 +351,7 @@ long pizSequenceVelocity (PIZSequence *x);
  * \remark  Default is 1.
  * \param   x A valid pointer.
  * \return  The MIDI channel.
- * \ingroup foundations
+ * \ingroup sequenceClass
  */
 long pizSequenceChannel (PIZSequence *x);
 
@@ -359,7 +359,7 @@ long pizSequenceChannel (PIZSequence *x);
  * \brief   Get the grid value of the sequence.
  * \param   x A valid pointer.
  * \return  The grid value.
- * \ingroup foundations
+ * \ingroup sequenceClass
  */
 PIZNoteValue pizSequenceGrid (PIZSequence *x);
 
@@ -367,7 +367,7 @@ PIZNoteValue pizSequenceGrid (PIZSequence *x);
  * \brief   Get the default note duration.
  * \param   x A valid pointer.
  * \return  The default duration.
- * \ingroup foundations
+ * \ingroup sequenceClass
  */
 PIZNoteValue pizSequenceNoteValue (PIZSequence *x);
 
@@ -376,7 +376,7 @@ PIZNoteValue pizSequenceNoteValue (PIZSequence *x);
  * \remark  Default is 100.
  * \param   x A valid pointer.
  * \param   value The value [0, 100].
- * \ingroup foundations
+ * \ingroup sequenceClass
  */
 void pizSequenceSetChance (PIZSequence *x, long value);
 
@@ -384,7 +384,7 @@ void pizSequenceSetChance (PIZSequence *x, long value);
  * \brief   Set the global velocity of the sequence.
  * \param   x A valid pointer.
  * \param   value The velocity.
- * \ingroup foundations
+ * \ingroup sequenceClass
  */
 void pizSequenceSetVelocity (PIZSequence *x, long value);
 
@@ -392,7 +392,7 @@ void pizSequenceSetVelocity (PIZSequence *x, long value);
  * \brief   Set the MIDI channel of the sequence.
  * \param   x A valid pointer.
  * \param   value The MIDI channel.
- * \ingroup foundations
+ * \ingroup sequenceClass
  */
 void pizSequenceSetChannel (PIZSequence *x, long channel);
 
@@ -400,7 +400,7 @@ void pizSequenceSetChannel (PIZSequence *x, long channel);
  * \brief   Set the grid of the sequence.
  * \param   x A valid pointer.
  * \param   value The grid value.
- * \ingroup foundations
+ * \ingroup sequenceClass
  */
 void pizSequenceSetGrid (PIZSequence *x, PIZNoteValue snapValue);
 
@@ -408,7 +408,7 @@ void pizSequenceSetGrid (PIZSequence *x, PIZNoteValue snapValue);
  * \brief   Set the default note duration.
  * \param   x A valid pointer.
  * \param   value The default note.
- * \ingroup foundations
+ * \ingroup sequenceClass
  */
 void pizSequenceSetNoteValue (PIZSequence *x, PIZNoteValue noteValue);
 
@@ -418,47 +418,74 @@ void pizSequenceSetNoteValue (PIZSequence *x, PIZNoteValue noteValue);
  * \param   key The scale key.
  * \param   type The scale type.
  * \param   a The scale if the type provided is custom, otherwise should be NULL.
- * \ingroup foundations
+ * \remark	An example :  
+ * \code
+ *  if (type != PIZ_SCALE_CUSTOM) {
+ *      pizSequenceSetScale (sequence, PIZ_KEY_C, PIZ_DORIAN, NULL);
+ *  } else {
+ *      pizSequenceSetScale (sequence, PIZ_KEY_C, PIZ_SCALE_CUSTOM, growingArrayPtr);
+ *  }
+ * \endcode 
+ * \warning Currenlty, custom scales must be 12 values long.
+ * \ingroup sequenceClass
  */
 PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type, const PIZGrowingArray *a);
 
 /**
- * \brief   Set rythmic offsets to the sequence.
+ * \brief   Set rythmic pattern of the sequence.
  * \param   x A valid pointer.
  * \param   a The rythmic motif.
- * \ingroup foundations
+ * \ingroup sequenceClass
  */
 PIZError pizSequenceSetPattern (PIZSequence *x, const PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief   Clear the sequence.
+ * \param   x A valid pointer.
+ * \ingroup sequenceBases
+ */
 void pizSequenceClear (PIZSequence *x);
 
-PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *a);
-
+/**
+ * \brief   Add notes with a dynamic array.
+ * \param   x A valid pointer.
+ * \param   a A pointer to the array.
+ * \param   flags The flags (as ORed PIZAddFlags).
+ * \return  An error code.
+ * \ingroup sequenceBases
+ */
 PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *a, long flags);
-PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c,  long flags);
 
-PIZError pizSequenceZoneToArray (PIZSequence *x, PIZGrowingArray *a);
+/**
+ * \brief   Get notes splitted in two dynamic arrays according to note's selected state.
+ * \param   x A valid pointer.
+ * \param   unselected A pointer to the dynamic array to fill with unselected notes.
+ * \param   selected A pointer to the dynamic array to fill with selected notes
+ * \return  An error code.
+ * \details Notes are appended. The pointer can be NULL.
+ * \remark  Examples :
+ * \code
+ * err |= pizSequenceNotesToArray (sequence, ptrA, ptrB); 
+ * err |= pizSequenceNotesToArray (sequence, ptrA, NULL); 
+ * err |= pizSequenceNotesToArray (sequence, ptrA, ptrA);
+ * \endcode 
+ * \ingroup sequenceBases
+ */
 PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *unselected, PIZGrowingArray *selected);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-bool pizSequenceClean (PIZSequence *x, long value);
 bool pizSequenceApplyPattern (PIZSequence *x);
 bool pizSequenceApplyAmbitus (PIZSequence *x);
-void pizSequenceTransposeOctave (PIZSequence *x, bool down);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
+PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *a);
+PIZError pizSequenceZoneToArray (PIZSequence *x, PIZGrowingArray *a);
 
 /**
  * \brief   Get the index of the playback head.
  * \param   x A valid pointer.
  * \return  The index.
- * \ingroup foundations
  */
 long pizSequenceIndex (PIZSequence *x);
 

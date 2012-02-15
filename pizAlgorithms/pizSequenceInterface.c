@@ -528,6 +528,72 @@ PIZError pizSequenceRemoveSelectedNotes (PIZSequence *x)
     return err; 
 }
 
+PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates, long flags)
+{
+    long err = PIZ_GOOD;
+    long values[PIZ_DATA_NOTE_SIZE];
+    
+    PIZLOCK
+        
+    values[PIZ_DATA_POSITION]       = coordinates->position;
+    values[PIZ_DATA_PITCH]          = coordinates->pitch;
+    values[PIZ_DATA_VELOCITY]       = PIZ_DEFAULT_VELOCITY;
+    values[PIZ_DATA_CHANNEL]        = PIZ_CHANNEL_NONE;
+    values[PIZ_DATA_IS_SELECTED]    = true;
+    values[PIZ_DATA_IS_MARKED]      = true;
+
+    if (x->noteValue != PIZ_NOTE_NONE) {
+        values[PIZ_DATA_DURATION] = x->noteValue;
+    } else {
+        values[PIZ_DATA_DURATION] = x->grid;
+    }
+    
+    if (!(pizSequenceAddNote (x, values, flags))) {
+        err |= PIZ_ERROR;
+    } else {
+        pizSequenceCleanMap (x);
+    }
+                    
+    PIZUNLOCK
+    
+    return err;
+}
+
+void pizSequenceTransposeOctave (PIZSequence *x, bool down)
+{
+    long i, step;
+    
+    if (down) {
+        step = -PIZ_MAGIC_SCALE;
+    } else {
+        step = PIZ_MAGIC_SCALE;
+    }
+        
+    PIZLOCK
+        
+    x->down = CLAMP (x->down + step, 0, PIZ_MAGIC_PITCH);
+    x->up   = CLAMP (x->up + step, 0, PIZ_MAGIC_PITCH);
+    
+    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
+        PIZNote *note       = NULL;
+        PIZNote *nextNote   = NULL;
+        
+        long p = pizGrowingArrayValueAtIndex (x->map, i);
+        
+        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+        
+        while (note) {
+            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+
+            note->data[PIZ_PITCH] = CLAMP (note->data[PIZ_PITCH] + step, 0, PIZ_MAGIC_PITCH);
+            
+            note = nextNote;
+        }
+    }
+    
+    PIZUNLOCK
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -

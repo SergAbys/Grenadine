@@ -77,6 +77,8 @@ void pizSequenceInitLasso (PIZSequence *x);
 long pizSequenceSelectNotesWithLasso (PIZSequence *x, const PIZCoordinates *m, const PIZCoordinates *n, bool r);
 
 PIZError pizSequenceRemoveSelectedNotes (PIZSequence *x);
+PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c,  long flags);
+void pizSequenceTransposeOctave (PIZSequence *x, bool down);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

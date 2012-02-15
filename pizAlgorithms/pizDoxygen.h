@@ -141,11 +141,11 @@
  */
  
 /**
- * \defgroup    foundations Foundations
+ * \defgroup    sequenceTypes Types
  * \ingroup     sequence
- * \defgroup    transformations Transformations
+ * \defgroup    sequenceClass Class Life
  * \ingroup     sequence
- * \defgroup    interface User Interface
+ * \defgroup    sequenceBases Bases
  * \ingroup     sequence
  */
  

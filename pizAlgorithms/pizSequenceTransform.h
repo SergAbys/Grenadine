@@ -62,6 +62,7 @@ typedef enum _PIZAlgorithm {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+bool pizSequenceClean (PIZSequence *x, long value);
 bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm flag, void *algorithm);
 bool pizSequenceCellularAutomata (PIZSequence *x, long iterate);
 bool pizSequenceGenerator (PIZSequence *x, long iterate, long division);
