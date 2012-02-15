@@ -138,9 +138,9 @@
 			isa = PBXGroup;
 			children = (
 				96CFEAF114E7CFBC00E035C2 /* pizDoxygen.h */,
+				96CFEAF014E7CF7000E035C2 /* MaxMSP */,
 				96AF1B80148CFC39001358AB /* Structures */,
 				96AF1B7F148CFC19001358AB /* Algorithms */,
-				96CFEAF014E7CF7000E035C2 /* MaxMSP */,
 				96AF1B7E148CFBF7001358AB /* Sequence */,
 			);
 			name = Source;

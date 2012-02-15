@@ -364,8 +364,8 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
             }
         } else {
             char         temp[SIZE_STRING_MAX];
-            PIZSnapValue grid = pizSequenceGrid (x->user);
-            PIZSnapValue value = pizSequenceNoteValue (x->user);
+            PIZNoteValue grid = pizSequenceGrid (x->user);
+            PIZNoteValue value = pizSequenceNoteValue (x->user);
             
             snprintf (textCell, SIZE_STRING_MAX, "Slot %ld", x->slotIndex);
             textCell[SIZE_STRING_MAX - 1] = 0;
@@ -375,7 +375,7 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
             snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, temp);
             textCell[SIZE_STRING_MAX - 1] = 0;
             
-            if (value != PIZ_SNAP_NONE) {
+            if (value != PIZ_NOTE_NONE) {
                 tralala_setStringWithLong (temp, value, MODE_FORMAT_GRID);
             
                 snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, temp);
@@ -407,11 +407,11 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
             char         textDown[SIZE_STRING_MAX];
             char         textUp [SIZE_STRING_MAX];
             long         s      = -1;
-            long         start  = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_SEQUENCE_START);
-            long         end    = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_SEQUENCE_END);
-            long         down   = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_SEQUENCE_DOWN);
-            long         up     = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_SEQUENCE_UP);
-            PIZSnapValue grid   = pizSequenceGrid (x->user);
+            long         start  = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_START);
+            long         end    = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_END);
+            long         down   = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_DOWN);
+            long         up     = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_UP);
+            PIZNoteValue grid   = pizSequenceGrid (x->user);
                     
             tralala_setStringWithLong (textDown, down, MODE_FORMAT_NOTENAME);
             tralala_setStringWithLong (textUp, up, MODE_FORMAT_NOTENAME);
@@ -526,13 +526,13 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
         t_jrgba         gridColor;
         t_jsurface      *background = NULL;
         long            z = x->zoomMode;
-        PIZSnapValue    grid = PIZ_SNAP_NONE;
+        PIZNoteValue    grid = PIZ_NOTE_NONE;
         
         if (LIVE) {
             grid = x->cell;
         } 
         
-        if (grid == PIZ_SNAP_NONE) {
+        if (grid == PIZ_NOTE_NONE) {
             grid = pizSequenceGrid (x->user);
         }
         
@@ -554,7 +554,7 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
             case PIZ_SIXTEENTH_NOTE_TRIPLET     :   background = tll_sixteenthTriplet       [z]; break;
             case PIZ_THIRTY_SECOND_NOTE         :   background = tll_thirtySecond           [z]; break;
             case PIZ_THIRTY_SECOND_NOTE_TRIPLET :   background = tll_sixteenthTriplet       [z]; break;
-            case PIZ_SNAP_NONE                  :   background = tll_eighth                 [z]; break;
+            case PIZ_NOTE_NONE                  :   background = tll_eighth                 [z]; break;
         }
             
         imageWidth  = jgraphics_image_surface_get_width (background);
@@ -632,49 +632,49 @@ void tralala_paintNotes (t_tralala *x, t_object *patcherview)
             }
         }
 
-        notesCount = pizGrowingArrayCount (x->unselectedCopy) / PIZ_SEQUENCE_NOTE_SIZE;
+        notesCount = pizGrowingArrayCount (x->unselectedCopy) / PIZ_DATA_NOTE_SIZE;
         
         if ((x->flags & FLAG_FOCUS) && USER) {
             for (i = 0; i < notesCount; i++) {
                 long position   = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
+                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_POSITION);
                 long pitch      = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
+                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_PITCH);
                 long velocity   = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY);
+                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_VELOCITY);
                 long duration   = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
+                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_DURATION);
                 
                 tralala_paintNoteCandycane (x, g, position, pitch, velocity, duration);
             }
         } else {
             for (i = 0; i < notesCount; i++) {
                 long position   = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
+                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_POSITION);
                 long pitch      = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
+                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_PITCH);
                 long velocity   = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY);
+                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_VELOCITY);
                 long duration   = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
+                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_DURATION);
                                             
                 tralala_paintNoteWithColor (x, g, position, pitch, velocity, duration, &color1);
             }
         }
         
-        notesCount = pizGrowingArrayCount (x->selectedCopy) / PIZ_SEQUENCE_NOTE_SIZE;
+        notesCount = pizGrowingArrayCount (x->selectedCopy) / PIZ_DATA_NOTE_SIZE;
         
         for (i = 0; i < notesCount; i++) {
             long position   = pizGrowingArrayValueAtIndex (x->selectedCopy, 
-                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
+                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_POSITION);
             long pitch      = pizGrowingArrayValueAtIndex (x->selectedCopy, 
-                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
+                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_PITCH);
             long velocity   = pizGrowingArrayValueAtIndex (x->selectedCopy, 
-                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY);
+                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_VELOCITY);
             long duration   = pizGrowingArrayValueAtIndex (x->selectedCopy, 
-                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
+                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_DURATION);
             long isMarked   = pizGrowingArrayValueAtIndex (x->selectedCopy, 
-                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_IS_MARKED);
+                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_IS_MARKED);
             
             if (!isMarked) {
                 tralala_paintNoteWithColor (x, g, position, pitch, velocity, duration, &color2);
@@ -721,17 +721,17 @@ void tralala_paintPlayedNotes (t_tralala *x, t_object *patcherview)
             jrgba_copy (&color, &x->unfocusedLivePlayedNoteColor);
         }
 
-        notesCount = pizGrowingArrayCount (x->playedCopy) / PIZ_SEQUENCE_NOTE_SIZE;
+        notesCount = pizGrowingArrayCount (x->playedCopy) / PIZ_DATA_NOTE_SIZE;
         
         for (i = 0; i < notesCount; i++) {
             long position   = pizGrowingArrayValueAtIndex (x->playedCopy, 
-                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_POSITION);
+                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_POSITION);
             long pitch      = pizGrowingArrayValueAtIndex (x->playedCopy, 
-                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_PITCH);
+                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_PITCH);
             long velocity   = pizGrowingArrayValueAtIndex (x->playedCopy, 
-                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_VELOCITY);
+                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_VELOCITY);
             long duration   = pizGrowingArrayValueAtIndex (x->playedCopy, 
-                                (PIZ_SEQUENCE_NOTE_SIZE * i) + PIZ_SEQUENCE_DURATION);
+                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_DURATION);
             
             tralala_paintNoteWithColor (x, g, position, pitch, velocity, duration, &color);
         }
@@ -828,10 +828,10 @@ void tralala_paintZone (t_tralala *x, t_object *patcherview)
     if (g) {
         if (pizGrowingArrayCount (x->zoneCopy)) {
             t_rect  zoneRect;
-            long    start   = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_SEQUENCE_START);
-            long    end     = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_SEQUENCE_END);
-            long    down    = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_SEQUENCE_DOWN);
-            long    up      = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_SEQUENCE_UP);
+            long    start   = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_START);
+            long    end     = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_END);
+            long    down    = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_DOWN);
+            long    up      = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_UP);
             
             tralala_setRectWithZoneValues (x, &zoneRect, start, end, down, up);
                         

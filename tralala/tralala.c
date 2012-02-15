@@ -520,11 +520,11 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
             x->unselected               = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->selected                 = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->played                   = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->zone                     = pizGrowingArrayNew    (PIZ_SEQUENCE_ZONE_SIZE);
+            x->zone                     = pizGrowingArrayNew    (PIZ_DATA_ZONE_SIZE);
             x->unselectedCopy           = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->selectedCopy             = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->playedCopy               = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->zoneCopy                 = pizGrowingArrayNew    (PIZ_SEQUENCE_ZONE_SIZE);
+            x->zoneCopy                 = pizGrowingArrayNew    (PIZ_DATA_ZONE_SIZE);
             x->origin                   = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->result                   = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->valuesToBeLearned        = pizGrowingArrayNew    (SIZE_LEARN_ARRAY);
@@ -560,7 +560,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                 x->cursorType       = JMOUSE_CURSOR_ARROW;
                 x->learnCycle       = PIZ_ALGORITHM_NONE;
                 x->learnThreshold   = SIZE_LEARN_MIN;
-                x->cell             = PIZ_SNAP_NONE;
+                x->cell             = PIZ_NOTE_NONE;
                 x->dirtyLayer       = (DIRTY_ZONE | DIRTY_NOTES | DIRTY_GRID | DIRTY_CHANGE);
                 
                 pizSequenceSetGrid (x->user, PIZ_EIGHTH_NOTE);
@@ -799,7 +799,7 @@ void tralala_dataToDictionary (t_tralala *x, t_dictionary *d)
 {
     if (d) {
         if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
-            dictionary_appendlong   (d, tll_sym_version, PIZ_SEQUENCE_VERSION);
+            dictionary_appendlong   (d, tll_sym_version, PIZ_SEQUENCE_VERSION_MAJOR);
             dictionary_appendlong   (d, tll_sym_sequenceMode, x->sequenceMode);
             dictionary_appendlong   (d, tll_sym_zoomMode, x->zoomMode);
             dictionary_appendfloat  (d, tll_sym_windowOffsetX, x->windowOffsetX);
@@ -1264,7 +1264,7 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
     
             if (temp != x->patternCell) {
                 if (temp == tll_sym_none) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_SNAP_NONE);
+                    pizSequenceSetGrid (x->live, x->cell = PIZ_NOTE_NONE);
                 } else if (temp == tll_sym_whole) {
                     pizSequenceSetGrid (x->live, x->cell = PIZ_WHOLE_NOTE);
                 } else if (temp == tll_sym_half) {

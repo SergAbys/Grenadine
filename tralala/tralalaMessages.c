@@ -41,18 +41,18 @@ void tralala_copy (t_tralala *x)
     if (!err) {
         long i;
         long chance = object_attr_getlong (x, tll_sym_chance);
-        long count = pizGrowingArrayCount (tempArrayA) / PIZ_SEQUENCE_NOTE_SIZE;
+        long count = pizGrowingArrayCount (tempArrayA) / PIZ_DATA_NOTE_SIZE;
         long *ptr = pizGrowingArrayPtr (tempArrayA);
         
         pizGrowingArrayClear (tempArrayB);
 
         for (i = (count - 1); i >= 0; i--) {
             if (100 * (rand ( ) / (RAND_MAX + 1.0)) < chance) {
-            pizGrowingArrayAppendPtr (tempArrayB, PIZ_SEQUENCE_NOTE_SIZE, ptr + (PIZ_SEQUENCE_NOTE_SIZE * i));
+            pizGrowingArrayAppendPtr (tempArrayB, PIZ_DATA_NOTE_SIZE, ptr + (PIZ_DATA_NOTE_SIZE * i));
             }
         }
         
-        pizSequenceAddNotesWithArray (x->live, tempArrayB, PIZ_SEQUENCE_ADD_FLAG_PATTERN);
+        pizSequenceAddNotesWithArray (x->live, tempArrayB, PIZ_ADD_FLAG_PATTERN);
     }
     
     ARRAY_RELEASE (tempArrayA);
@@ -87,7 +87,7 @@ void tralala_setLiveByUser (t_tralala *x)
     }
     
     if (!err) {
-        long addFlags = PIZ_SEQUENCE_ADD_FLAG_PATTERN | PIZ_SEQUENCE_ADD_FLAG_CLEAR;
+        long addFlags = PIZ_ADD_FLAG_PATTERN | PIZ_ADD_FLAG_CLEAR;
         
         pizSequenceAddNotesWithArray (x->live, tempArrayA, addFlags);
         pizSequenceSetZoneWithArray  (x->live, tempArrayB);
@@ -372,7 +372,7 @@ bool tralala_sequenceNote (t_tralala *x, PIZSequence *sequence, long argc, t_ato
         }
         
         if (!err) {
-            long mode = PIZ_SEQUENCE_ADD_FLAG_SNAP;
+            long mode = PIZ_ADD_FLAG_SNAP;
             
             if (sequence == x->user) {
                 pizGrowingArrayAppend (tempArray, true);
@@ -383,9 +383,9 @@ bool tralala_sequenceNote (t_tralala *x, PIZSequence *sequence, long argc, t_ato
             }
             
             if (sequence == x->live) {
-                mode = PIZ_SEQUENCE_ADD_FLAG_PATTERN;
+                mode = PIZ_ADD_FLAG_PATTERN;
             } else if (sequence == x->listen) {
-                mode = PIZ_SEQUENCE_ADD_FLAG_AMBITUS;
+                mode = PIZ_ADD_FLAG_AMBITUS;
             }
             
             draw = !(pizSequenceAddNotesWithArray (sequence, tempArray, mode));
@@ -401,7 +401,7 @@ bool tralala_sequenceZone (t_tralala *x, PIZSequence *sequence, long argc, t_ato
 {
     bool draw = false;
     
-    if (argc == PIZ_SEQUENCE_ZONE_SIZE) {
+    if (argc == PIZ_DATA_ZONE_SIZE) {
         long i; 
         long err = PIZ_ERROR;
         
@@ -410,7 +410,7 @@ bool tralala_sequenceZone (t_tralala *x, PIZSequence *sequence, long argc, t_ato
         if (tempArray) {
             err = PIZ_GOOD;
             
-            for (i = 0; i < PIZ_SEQUENCE_ZONE_SIZE; i++) {
+            for (i = 0; i < PIZ_DATA_ZONE_SIZE; i++) {
                 if (!(err |= (atom_gettype (argv + i) != A_LONG))){
                     switch (i) {
                             case 0 : pizGrowingArrayAppend (tempArray, (long)(atom_getlong (argv + i) 
@@ -462,21 +462,21 @@ bool tralala_sequenceDump (t_tralala *x, PIZSequence *sequence, long argc, t_ato
             }
             
             if (!err) {
-                count = pizGrowingArrayCount (tempArray) / PIZ_SEQUENCE_NOTE_SIZE;
+                count = pizGrowingArrayCount (tempArray) / PIZ_DATA_NOTE_SIZE;
                 
                 outlet_anything  (x->rightOutlet, tll_sym_start, 0, NULL);
                 
                 for (i = 0; i < count; i++) {
-                    long position = (pizGrowingArrayValueAtIndex (tempArray, (PIZ_SEQUENCE_NOTE_SIZE * i) 
-                                    + PIZ_SEQUENCE_POSITION)) * TIME_TICKS_PER_STEP;
-                    long pitch    = pizGrowingArrayValueAtIndex (tempArray, (PIZ_SEQUENCE_NOTE_SIZE * i) 
-                                    + PIZ_SEQUENCE_PITCH);
-                    long velocity = pizGrowingArrayValueAtIndex (tempArray, (PIZ_SEQUENCE_NOTE_SIZE * i) 
-                                    + PIZ_SEQUENCE_VELOCITY);
-                    long duration = (pizGrowingArrayValueAtIndex (tempArray, (PIZ_SEQUENCE_NOTE_SIZE * i) 
-                                    + PIZ_SEQUENCE_DURATION)) * TIME_TICKS_PER_STEP;
-                    long channel  = pizGrowingArrayValueAtIndex (tempArray, (PIZ_SEQUENCE_NOTE_SIZE * i) 
-                                    + PIZ_SEQUENCE_CHANNEL);
+                    long position = (pizGrowingArrayValueAtIndex (tempArray, (PIZ_DATA_NOTE_SIZE * i) 
+                                    + PIZ_DATA_POSITION)) * TIME_TICKS_PER_STEP;
+                    long pitch    = pizGrowingArrayValueAtIndex (tempArray, (PIZ_DATA_NOTE_SIZE * i) 
+                                    + PIZ_DATA_PITCH);
+                    long velocity = pizGrowingArrayValueAtIndex (tempArray, (PIZ_DATA_NOTE_SIZE * i) 
+                                    + PIZ_DATA_VELOCITY);
+                    long duration = (pizGrowingArrayValueAtIndex (tempArray, (PIZ_DATA_NOTE_SIZE * i) 
+                                    + PIZ_DATA_DURATION)) * TIME_TICKS_PER_STEP;
+                    long channel  = pizGrowingArrayValueAtIndex (tempArray, (PIZ_DATA_NOTE_SIZE * i) 
+                                    + PIZ_DATA_CHANNEL);
                         
                     atom_setlong (x->dumpedNote + 0, position);
                     atom_setlong (x->dumpedNote + 1, pitch);
@@ -505,10 +505,10 @@ bool tralala_sequenceDump (t_tralala *x, PIZSequence *sequence, long argc, t_ato
             }
             
             if (!err) {
-                start   = pizGrowingArrayValueAtIndex (tempArray, PIZ_SEQUENCE_START) * TIME_TICKS_PER_STEP;
-                end     = pizGrowingArrayValueAtIndex (tempArray, PIZ_SEQUENCE_END) * TIME_TICKS_PER_STEP;
-                down    = pizGrowingArrayValueAtIndex (tempArray, PIZ_SEQUENCE_DOWN);
-                up      = pizGrowingArrayValueAtIndex (tempArray, PIZ_SEQUENCE_UP);
+                start   = pizGrowingArrayValueAtIndex (tempArray, PIZ_DATA_START) * TIME_TICKS_PER_STEP;
+                end     = pizGrowingArrayValueAtIndex (tempArray, PIZ_DATA_END) * TIME_TICKS_PER_STEP;
+                down    = pizGrowingArrayValueAtIndex (tempArray, PIZ_DATA_DOWN);
+                up      = pizGrowingArrayValueAtIndex (tempArray, PIZ_DATA_UP);
 
                 atom_setlong (zone + 0, start);
                 atom_setlong (zone + 1, end);

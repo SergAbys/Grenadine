@@ -348,7 +348,7 @@ typedef struct _tralala {
     long                scaleCustom     [PIZ_MAGIC_SCALE];
     long                patternCustom   [SIZE_PATTERN_MAX];
     long                patternSize;
-    PIZSnapValue        cell;
+    PIZNoteValue        cell;
     PIZScaleKey         key;
     PIZScaleType        type;
     long                mousePitchValue;

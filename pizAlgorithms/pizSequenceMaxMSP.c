@@ -66,7 +66,7 @@ PIZError pizSequenceEncodeToArray (PIZSequence *x, PIZGrowingArray *a)
         long i;
         
         err  = PIZ_GOOD;
-        err |= pizGrowingArrayAppend (a, PIZ_SEQUENCE_VERSION);
+        err |= pizGrowingArrayAppend (a, PIZ_SEQUENCE_VERSION_MAJOR);
         err |= pizGrowingArrayAppend (a, x->grid);
         err |= pizGrowingArrayAppend (a, x->noteValue);
         err |= pizGrowingArrayAppend (a, x->start);
@@ -86,7 +86,7 @@ PIZError pizSequenceEncodeToArray (PIZSequence *x, PIZGrowingArray *a)
             while (note) {
                 pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
                 
-                err |= pizGrowingArrayAppend (a, note->originPosition);
+                err |= pizGrowingArrayAppend (a, note->origin);
                 err |= pizGrowingArrayAppend (a, note->data[PIZ_PITCH]);
                 err |= pizGrowingArrayAppend (a, note->data[PIZ_VELOCITY]);
                 err |= pizGrowingArrayAppend (a, note->data[PIZ_DURATION]);
@@ -118,7 +118,7 @@ PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a)
 
         if (t = pizGrowingArrayCount (a)) {
             long k, version, count, grid, noteValue;
-            long modeFlags = PIZ_SEQUENCE_ADD_FLAG_UNSELECT;
+            long modeFlags = PIZ_ADD_FLAG_UNSELECT;
             long *ptr = pizGrowingArrayPtr (a);
             
             version     = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_VERSION);
@@ -143,7 +143,7 @@ PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a)
                 case PIZ_SIXTEENTH_NOTE_TRIPLET     : x->grid = PIZ_SIXTEENTH_NOTE_TRIPLET;     break;
                 case PIZ_THIRTY_SECOND_NOTE         : x->grid = PIZ_THIRTY_SECOND_NOTE;         break;
                 case PIZ_THIRTY_SECOND_NOTE_TRIPLET : x->grid = PIZ_THIRTY_SECOND_NOTE_TRIPLET; break;
-                case PIZ_SNAP_NONE                  : x->grid = PIZ_SNAP_NONE;                  break;
+                case PIZ_NOTE_NONE                  : x->grid = PIZ_NOTE_NONE;                  break;
             }
             
             switch (noteValue) {
@@ -164,7 +164,7 @@ PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a)
                 case PIZ_SIXTEENTH_NOTE_TRIPLET     : x->noteValue = PIZ_SIXTEENTH_NOTE_TRIPLET;        break;
                 case PIZ_THIRTY_SECOND_NOTE         : x->noteValue = PIZ_THIRTY_SECOND_NOTE;            break;
                 case PIZ_THIRTY_SECOND_NOTE_TRIPLET : x->noteValue = PIZ_THIRTY_SECOND_NOTE_TRIPLET;    break;
-                case PIZ_SNAP_NONE                  : x->noteValue = PIZ_SNAP_NONE;                     break;
+                case PIZ_NOTE_NONE                  : x->noteValue = PIZ_NOTE_NONE;                     break;
             }
 
             x->start    = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_START);
@@ -176,7 +176,7 @@ PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a)
             k = PIZ_SLOT_DATA;
             
             for (i = 0; i < count; i++) {
-                if (!(pizSequenceAddNote (x, ptr + (i * PIZ_SEQUENCE_NOTE_SIZE) + k, modeFlags))) {
+                if (!(pizSequenceAddNote (x, ptr + (i * PIZ_DATA_NOTE_SIZE) + k, modeFlags))) {
                     err |= PIZ_ERROR;
                 }
             }

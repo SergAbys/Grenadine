@@ -132,7 +132,7 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                                                 
     PIZLOCK
     
-    if (x->grid != PIZ_SNAP_NONE) {
+    if (x->grid != PIZ_NOTE_NONE) {
         long i, start, end, mapCount, scale;
         long k = 0;
         long loop = 0;
@@ -335,28 +335,29 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                         }
                         
                         if (neighbors == 1) {
-                            long    values[PIZ_SEQUENCE_NOTE_SIZE];
-                            PIZNote *newNote = NULL;
-                            
-                            values[PIZ_SEQUENCE_POSITION] = 
-                                ((long)(hPat[j] / (double)(PIZ_MAGIC_PITCH + 1))) * x->grid;
-                            values[PIZ_SEQUENCE_PITCH]          = hPat[j] % (PIZ_MAGIC_PITCH + 1);
-                            values[PIZ_SEQUENCE_VELOCITY]       = noteToCopy->data[PIZ_VELOCITY];
-                            values[PIZ_SEQUENCE_DURATION]       = noteToCopy->data[PIZ_DURATION];
-                            values[PIZ_SEQUENCE_CHANNEL]        = noteToCopy->data[PIZ_CHANNEL];
-                            values[PIZ_SEQUENCE_IS_SELECTED]    = false;
-                            values[PIZ_SEQUENCE_IS_MARKED]      = false;
-                            
-                            newNote = pizSequenceAddNote (x, values, PIZ_SEQUENCE_ADD_FLAG_CLIP);
-                            
-                            if (newNote) {
-                                pizBoundedHashTableAdd (x->hashTable, hPat[j], (void *)newNote);
-                                haveChanged = true;
-                                k ++;
-                            }
-                            
-                            break;
+                        
+                        long    values[PIZ_DATA_NOTE_SIZE];
+                        PIZNote *newNote = NULL;
+                        
+                        values[PIZ_DATA_POSITION] = ((long)(hPat[j] / (double)(PIZ_MAGIC_PITCH + 1))) * x->grid;
+                        values[PIZ_DATA_PITCH] = hPat[j] % (PIZ_MAGIC_PITCH + 1);
+                        values[PIZ_DATA_VELOCITY] = noteToCopy->data[PIZ_VELOCITY];
+                        values[PIZ_DATA_DURATION] = noteToCopy->data[PIZ_DURATION];
+                        values[PIZ_DATA_CHANNEL] = noteToCopy->data[PIZ_CHANNEL];
+                        values[PIZ_DATA_IS_SELECTED] = false;
+                        values[PIZ_DATA_IS_MARKED] = false;
+                        
+                        newNote = pizSequenceAddNote (x, values, PIZ_ADD_FLAG_CLIP);
+                        
+                        if (newNote) {
+                            pizBoundedHashTableAdd (x->hashTable, hPat[j], (void *)newNote);
+                            haveChanged = true;
+                            k ++;
                         }
+                        
+                        break;
+                        }
+                    
                     }
                 }
                     
@@ -395,7 +396,7 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
 
     PIZLOCK
     
-    if (x->grid != PIZ_SNAP_NONE) {
+    if (x->grid != PIZ_NOTE_NONE) {
         long i, start, end, size;
         long b = 0;
         
@@ -508,19 +509,19 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
                 newKey = (newPosition * (PIZ_MAGIC_PITCH + 1)) + note1->data[PIZ_PITCH] + offset;
                 
                 if (!pizBoundedHashTableContainsKey (x->hashTable, newKey)) {
-                    long values[PIZ_SEQUENCE_NOTE_SIZE];
+                    long values[PIZ_DATA_NOTE_SIZE];
                     
                     newPosition *= x->grid;
                     
-                    values[PIZ_SEQUENCE_POSITION]       = newPosition;
-                    values[PIZ_SEQUENCE_PITCH]          = note1->data[PIZ_PITCH] + offset;
-                    values[PIZ_SEQUENCE_VELOCITY]       = note1->data[PIZ_VELOCITY];
-                    values[PIZ_SEQUENCE_DURATION]       = note1->data[PIZ_DURATION];
-                    values[PIZ_SEQUENCE_CHANNEL]        = note1->data[PIZ_CHANNEL];
-                    values[PIZ_SEQUENCE_IS_SELECTED]    = false;
-                    values[PIZ_SEQUENCE_IS_MARKED]      = false;
+                    values[PIZ_DATA_POSITION]       = newPosition;
+                    values[PIZ_DATA_PITCH]          = note1->data[PIZ_PITCH] + offset;
+                    values[PIZ_DATA_VELOCITY]       = note1->data[PIZ_VELOCITY];
+                    values[PIZ_DATA_DURATION]       = note1->data[PIZ_DURATION];
+                    values[PIZ_DATA_CHANNEL]        = note1->data[PIZ_CHANNEL];
+                    values[PIZ_DATA_IS_SELECTED]    = false;
+                    values[PIZ_DATA_IS_MARKED]      = false;
 
-                    note2 = pizSequenceAddNote (x, values, PIZ_SEQUENCE_ADD_FLAG_CLIP);
+                    note2 = pizSequenceAddNote (x, values, PIZ_ADD_FLAG_CLIP);
                     
                     if (note2) {
                         pizBoundedHashTableAdd (x->hashTable, newKey, (void *)note2);

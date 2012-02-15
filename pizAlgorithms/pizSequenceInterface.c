@@ -147,29 +147,29 @@ bool pizSequenceSetTempZoneWithCoordinates (PIZSequence *x, const PIZCoordinates
     PIZLOCK
     
     switch (side) {
-        case PIZ_SEQUENCE_START :   tempValue = CLAMP (pizSequenceSnapRound (x, coordinates->position), 
+        case PIZ_DATA_START :   tempValue = CLAMP (pizSequenceSnapRound (x, coordinates->position), 
                                     0, PIZ_SEQUENCE_TIMELINE_SIZE); break;
-        case PIZ_SEQUENCE_END   :   tempValue = CLAMP (pizSequenceSnapRound (x, coordinates->position), 
+        case PIZ_DATA_END   :   tempValue = CLAMP (pizSequenceSnapRound (x, coordinates->position), 
                                     0, PIZ_SEQUENCE_TIMELINE_SIZE); break;
-        case PIZ_SEQUENCE_DOWN  :   if (coordinates->pitch <= x->tempUp) {
+        case PIZ_DATA_DOWN  :   if (coordinates->pitch <= x->tempUp) {
                                         tempValue = CLAMP (coordinates->pitch, 0, PIZ_MAGIC_PITCH);
                                     } break;
-        case PIZ_SEQUENCE_UP    :   if (coordinates->pitch >= x->tempDown) {
+        case PIZ_DATA_UP    :   if (coordinates->pitch >= x->tempDown) {
                                         tempValue = CLAMP (coordinates->pitch, 0, PIZ_MAGIC_PITCH);
                                     } break;
     }
     
     if (tempValue != -1) {
-        if ((side == PIZ_SEQUENCE_START) && (x->tempStart != tempValue)) {
+        if ((side == PIZ_DATA_START) && (x->tempStart != tempValue)) {
             x->tempStart = tempValue;
             haveChanged = true;
-        } else if ((side == PIZ_SEQUENCE_END) && (x->tempEnd != tempValue)) {
+        } else if ((side == PIZ_DATA_END) && (x->tempEnd != tempValue)) {
             x->tempEnd = tempValue;
             haveChanged = true;
-        } else if ((side == PIZ_SEQUENCE_DOWN) && (x->tempDown != tempValue)) {
+        } else if ((side == PIZ_DATA_DOWN) && (x->tempDown != tempValue)) {
             x->tempDown = tempValue;
             haveChanged = true;
-        } else if ((side == PIZ_SEQUENCE_UP) && (x->tempUp != tempValue)) {
+        } else if ((side == PIZ_DATA_UP) && (x->tempUp != tempValue)) {
             x->tempUp = tempValue;
             haveChanged = true;
         }
@@ -415,7 +415,7 @@ void pizSequenceInitLasso (PIZSequence *x)
         while (note) {
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
-            note->flags &= ~PIZ_SEQUENCE_NOTE_FLAG_LASSO;
+            note->flags &= ~PIZ_NOTE_FLAG_LASSO;
             
             note = nextNote;
         }
@@ -450,9 +450,9 @@ long pizSequenceSelectNotesWithLasso (PIZSequence *x, const PIZCoordinates *m, c
             if ((note->data[PIZ_PITCH] >= b && note->data[PIZ_PITCH] <= v) && ((p >= a && p <= u) || 
                 (((p + note->data[PIZ_DURATION]) >= a) && ((p + note->data[PIZ_DURATION]) <= u)))) {
                 if (r) {
-                    if (!(note->flags & PIZ_SEQUENCE_NOTE_FLAG_LASSO)) {
+                    if (!(note->flags & PIZ_NOTE_FLAG_LASSO)) {
                         note->isSelected = !note->isSelected;
-                        note->flags |= PIZ_SEQUENCE_NOTE_FLAG_LASSO;
+                        note->flags |= PIZ_NOTE_FLAG_LASSO;
                         k = 1;
                             
                         if (note == x->markedNote) {
@@ -465,9 +465,9 @@ long pizSequenceSelectNotesWithLasso (PIZSequence *x, const PIZCoordinates *m, c
                 }
             } else {
                 if (r) {
-                    if (note->flags & PIZ_SEQUENCE_NOTE_FLAG_LASSO) {
+                    if (note->flags & PIZ_NOTE_FLAG_LASSO) {
                         note->isSelected = !note->isSelected;
-                        note->flags &= ~PIZ_SEQUENCE_NOTE_FLAG_LASSO;
+                        note->flags &= ~PIZ_NOTE_FLAG_LASSO;
                         k = 1;
                     }
                 } else if (note->isSelected)  {

@@ -43,7 +43,7 @@
  * \defgroup    max Max/MSP
  * \defgroup    algorithms Algorithms
  * \defgroup    structures Custom Structures
- * \defgroup    mt Multi-Threaded
+ * \defgroup    sequence Sequence
  */
  
 /**
@@ -56,7 +56,7 @@
  * \defgroup    hashtable Hash Table
  * \ingroup     structures
  * \defgroup    dictionary Dictionary
- * \ingroup     strucutres
+ * \ingroup     structures
  * \defgroup    itemset128 Itemset 128
  * \ingroup     structures
  * \defgroup    itemset1024 Itemset 1024
@@ -65,7 +65,6 @@
  * \ingroup     structures
  * \defgroup    arrayPool Growing Array Pool
  * \ingroup     structures
- * \ingroup     mt
  * \defgroup    boundedQueue Bounded Queue
  * \ingroup     structures
  * \defgroup    boundedStack Bounded Stack
@@ -93,8 +92,11 @@
  * \defgroup    foxtrot Foxtrot
  * \ref         markovModel extension for maxMSP's external.
  * \ingroup     max
+ * \defgroup    tralala Tralala
+ * \ref         sequence extension for maxMSP's external.
+ * \ingroup     max
  */
- 
+
 /**
  * \defgroup    factorOracle Factor Oracle
  * \details     Thanks : Matthieu Raffinot, Maxime Crochemore, 
@@ -136,6 +138,15 @@
  * \li      http://en.wikipedia.org/wiki/Hidden_Markov_model 
  *
  * \ingroup     algorithms
+ */
+ 
+/**
+ * \defgroup    foundations Foundations
+ * \ingroup     sequence
+ * \defgroup    transformations Transformations
+ * \ingroup     sequence
+ * \defgroup    interface User Interface
+ * \ingroup     sequence
  */
  
 // -------------------------------------------------------------------------------------------------------------
