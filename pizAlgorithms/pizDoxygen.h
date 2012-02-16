@@ -53,7 +53,7 @@
  * \ingroup     structures
  * \defgroup    linklist Linklist
  * \ingroup     structures
- * \defgroup    hashtable Hash Table
+ * \defgroup    hashTable Hash Table
  * \ingroup     structures
  * \defgroup    dictionary Dictionary
  * \ingroup     structures
@@ -143,9 +143,9 @@
 /**
  * \defgroup    sequenceTypes Types
  * \ingroup     sequence
- * \defgroup    sequenceClass Class Life
+ * \defgroup    sequenceClass Life and Attributes
  * \ingroup     sequence
- * \defgroup    sequenceBases Bases
+ * \defgroup    sequenceBases Foundations
  * \ingroup     sequence
  */
  

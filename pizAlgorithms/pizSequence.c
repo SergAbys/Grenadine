@@ -350,44 +350,6 @@ void pizSequenceClear (PIZSequence *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *a, long flags)
-{
-    bool haveChanged = false;
-    long err = PIZ_ERROR;
-    
-    PIZLOCK
-    
-    if (flags & PIZ_ADD_FLAG_CLEAR) {
-            pizSequenceClearNotes (x);
-        }
-        
-    if (a) {
-        long i, count;
-        long *ptr = NULL;
-        
-        err = PIZ_GOOD;
-        
-        count   = pizGrowingArrayCount (a) / PIZ_DATA_NOTE_SIZE;
-        ptr     = pizGrowingArrayPtr (a);
-        
-        for (i = (count - 1); i >= 0; i--) {
-            if (!(pizSequenceAddNote (x, ptr + (i * PIZ_DATA_NOTE_SIZE), flags))) {
-                err |= PIZ_ERROR;
-            } else {
-                haveChanged = true;
-            }
-        }
-        
-        if (haveChanged) {
-            pizSequenceCleanMap (x);
-        }
-    }
-    
-    PIZUNLOCK
-    
-    return err;
-}
-
 PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *a, PIZGrowingArray *b)
 {
     long i, scale;
@@ -443,9 +405,67 @@ PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *a, PIZGrowing
     return err;
 }
 
+PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *a, long flags)
+{
+    bool haveChanged = false;
+    long err = PIZ_ERROR;
+    
+    PIZLOCK
+    
+    if (flags & PIZ_ADD_FLAG_CLEAR) {
+            pizSequenceClearNotes (x);
+        }
+        
+    if (a) {
+        long i, count;
+        long *ptr = NULL;
+        
+        err = PIZ_GOOD;
+        
+        count   = pizGrowingArrayCount (a) / PIZ_DATA_NOTE_SIZE;
+        ptr     = pizGrowingArrayPtr (a);
+        
+        for (i = (count - 1); i >= 0; i--) {
+            if (!(pizSequenceAddNote (x, ptr + (i * PIZ_DATA_NOTE_SIZE), flags))) {
+                err |= PIZ_ERROR;
+            } else {
+                haveChanged = true;
+            }
+        }
+        
+        if (haveChanged) {
+            pizSequenceCleanMap (x);
+        }
+    }
+    
+    PIZUNLOCK
+    
+    return err;
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+
+PIZError pizSequenceZoneToArray (PIZSequence *x, PIZGrowingArray *a)
+{
+    long err = PIZ_ERROR;
+
+    PIZLOCK
+    
+    if (a) {
+            err = PIZ_GOOD;
+            
+            err |= pizGrowingArrayAppend (a, x->start);
+            err |= pizGrowingArrayAppend (a, x->end);
+            err |= pizGrowingArrayAppend (a, x->down);
+            err |= pizGrowingArrayAppend (a, x->up);
+        }
+    
+    PIZUNLOCK
+    
+    return err;
+}
 
 PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *a)
 {
@@ -493,26 +513,6 @@ PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *a)
     return err;
 }
 
-PIZError pizSequenceZoneToArray (PIZSequence *x, PIZGrowingArray *a)
-{
-    long err = PIZ_ERROR;
-
-    PIZLOCK
-    
-    if (a) {
-            err = PIZ_GOOD;
-            
-            err |= pizGrowingArrayAppend (a, x->start);
-            err |= pizGrowingArrayAppend (a, x->end);
-            err |= pizGrowingArrayAppend (a, x->down);
-            err |= pizGrowingArrayAppend (a, x->up);
-        }
-    
-    PIZUNLOCK
-    
-    return err;
-}
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -546,8 +546,7 @@ bool pizSequenceApplyPattern (PIZSequence *x)
             }
 
             if (note->position != newPosition) {   
-                PIZNote *newNote = NULL;
-                long    values[PIZ_DATA_NOTE_SIZE + 1];
+                long values[PIZ_DATA_NOTE_SIZE + 1];
                 
                 values[PIZ_DATA_POSITION]       = newPosition;
                 values[PIZ_DATA_PITCH]          = note->data[PIZ_PITCH];
@@ -556,9 +555,9 @@ bool pizSequenceApplyPattern (PIZSequence *x)
                 values[PIZ_DATA_CHANNEL]        = note->data[PIZ_CHANNEL];
                 values[PIZ_DATA_IS_SELECTED]    = note->isSelected;
                 values[PIZ_DATA_IS_MARKED]      = false;
-                values[PIZ_DATA_NOTE_SIZE]      = note->origin;
+                values[PIZ_DATA_ORIGIN]         = note->origin;
                 
-                if (newNote = pizSequenceAddNote (x, values, PIZ_ADD_FLAG_ORIGIN)) {
+                if (pizSequenceAddNote (x, values, PIZ_ADD_FLAG_ORIGIN)) {
                     if (note == x->markedNote) {
                             x->markedNote = NULL;
                         }
@@ -671,11 +670,11 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a)
             x->index = x->start;
         }
         
-    if (x->index < x->end) {
+    if (a && (x->index < x->end)) {
     
         err = PIZ_GOOD;
                     
-        if (a && (x->timeline[x->index]) && (pizLinklistCount (x->timeline[x->index]))) {
+        if ((x->timeline[x->index]) && (pizLinklistCount (x->timeline[x->index]))) {
             long    scale;
             PIZNote *note       = NULL;
             PIZNote *nextNote   = NULL;
@@ -742,25 +741,24 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
     long    isMarked    = values[PIZ_DATA_IS_MARKED];
     
     if (flags & PIZ_ADD_FLAG_SNAP) {
-            position = MAX (((long)(position / (double)x->grid)) * x->grid, 0);
-        }
+        position = MAX (((long)(position / (double)x->grid)) * x->grid, 0);
+    }
     
     if (flags & PIZ_ADD_FLAG_PATTERN) {
-            long patternSize = pizGrowingArrayCount (x->pattern);  
-            if (patternSize) {
-                    long temp = pizSequenceSnapPositionToPattern (x, position, patternSize);
-                    position = CLAMP (temp, 0, (PIZ_SEQUENCE_TIMELINE_SIZE - duration));
-                }
-        } 
+        long patternSize = pizGrowingArrayCount (x->pattern);  
+        if (patternSize) {
+            position = pizSequenceSnapPositionToPattern (x, position, patternSize);
+        }
+    } 
     
     if (flags & PIZ_ADD_FLAG_AMBITUS) {
-            pitch = pizSequenceMovePitchToAmbitus (x, pitch);
-        }
+        pitch = pizSequenceMovePitchToAmbitus (x, pitch);
+    }
         
     if (flags & PIZ_ADD_FLAG_UNSELECT) {
-            isSelected = false;
-            isMarked = false;
-        }
+        isSelected = false;
+        isMarked = false;
+    }
                 
     err |= (position < 0);
     err |= (position > (PIZ_SEQUENCE_TIMELINE_SIZE - MAX (duration, 1)));
@@ -790,20 +788,20 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
         
         if (!x->timeline[newNote->position]) {
             if (!(x->timeline[newNote->position] = pizLinklistNew ( ))) {
-                    err |= PIZ_MEMORY;
-                }
+                err |= PIZ_MEMORY;
+            }
         }
         
         if (!err && !(pizItemset1024IsSetAtIndex (&x->mapFlags, newNote->position))) {
             if (!(err |= pizGrowingArrayAppend (x->map, newNote->position))) {
-                    pizItemset1024SetAtIndex (&x->mapFlags, newNote->position);
-                }
+                pizItemset1024SetAtIndex (&x->mapFlags, newNote->position);
+            }
         }
                     
         if (!err && !(pizLinklistInsert (x->timeline[newNote->position], (void *)newNote))) {
             if (isMarked) {
-                    x->markedNote = newNote;
-                }
+                x->markedNote = newNote;
+            }
                         
             x->count ++;
         } else {

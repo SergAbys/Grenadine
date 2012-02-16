@@ -112,7 +112,7 @@ PIZError pizGrowingArrayAppend (PIZGrowingArray *x, long value);
  * \param   x A valid pointer.
  * \param   index The index (zero-based).
  * \param   value The value.
- * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
+ * \warning For efficiency the index is NOT checked ; so crash may occured with invalid indexing.
  * \ingroup growingArray
  */
 void pizGrowingArraySetValueAtIndex (PIZGrowingArray *x, long index, long value);
@@ -130,7 +130,7 @@ long pizGrowingArrayCount (const PIZGrowingArray *x);
  * \param   x A valid pointer.
  * \param   index The index (zero-based).
  * \return  The value.
- * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
+ * \warning For efficiency the index is NOT checked ; so crash may occured with invalid indexing.
  * \ingroup growingArray
  */
 long pizGrowingArrayValueAtIndex (const PIZGrowingArray *x, long index);
