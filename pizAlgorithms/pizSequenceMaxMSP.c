@@ -86,7 +86,7 @@ PIZError pizSequenceEncodeToArray (PIZSequence *x, PIZGrowingArray *a)
             while (note) {
                 pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
                 
-                err |= pizGrowingArrayAppend (a, note->origin);
+                err |= pizGrowingArrayAppend (a, note->position);
                 err |= pizGrowingArrayAppend (a, note->data[PIZ_PITCH]);
                 err |= pizGrowingArrayAppend (a, note->data[PIZ_VELOCITY]);
                 err |= pizGrowingArrayAppend (a, note->data[PIZ_DURATION]);

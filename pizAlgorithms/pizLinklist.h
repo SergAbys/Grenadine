@@ -91,7 +91,7 @@ typedef struct _PIZLinklistElement {
  
 typedef struct _PIZLinklist {
     long                flags;                      /*!< Bit Flags. */
-    long                count;                      /*!< Number of elements in the linklist. */
+    long                count;                      /*!< Number of elements in the linked list. */
     PIZLinklistElement  *head;                      /*!< Pointer to head element. */
     PIZLinklistElement  *tail;                      /*!< Pointer to tail element. */
     PIZLinklistElement  *cache;                     /*!< Pointer to cached element. */
@@ -103,15 +103,15 @@ typedef struct _PIZLinklist {
 PIZ_START_C_LINKAGE
 
 /**
- * \brief   Create the linklist.
+ * \brief   Create the linked list.
  * \details In case of failure the pointer is NULL.
- * \return  A pointer to the new linklist.
+ * \return  A pointer to the new linked list.
  * \ingroup linklist
  */
 PIZLinklist *pizLinklistNew (void);
 
 /**
- * \brief   Set linklist's bit flags.
+ * \brief   Set linked list's bit flags.
  * \param   x A valid pointer.
  * \param   flags Bit flags.
  * \ingroup linklist
@@ -119,7 +119,7 @@ PIZLinklist *pizLinklistNew (void);
 void pizLinklistSetFlags (PIZLinklist *x, long flags);
 
 /**
- * \brief   Free the linklist.
+ * \brief   Free the linked list.
  * \details It is safe to pass NULL pointer. 
  *          Item's memory is released according to flags.
  * \param   x A Pointer.
@@ -128,7 +128,7 @@ void pizLinklistSetFlags (PIZLinklist *x, long flags);
 void pizLinklistFree (PIZLinklist *x);
 
 /**
- * \brief   Clear the linklist.
+ * \brief   Clear the linked list.
  * \details Item's memory is released according to flags.
  * \param   x A valid pointer.
  * \ingroup linklist
@@ -136,7 +136,7 @@ void pizLinklistFree (PIZLinklist *x);
 void pizLinklistClear (PIZLinklist *x);
 
 /**
- * \brief   Append an item's pointer to the linklist.
+ * \brief   Append an item's pointer to the linked list.
  * \details The provided pointer can not be NULL.
  * \param   x A valid pointer.
  * \param   ptr A pointer to the item.
@@ -146,7 +146,7 @@ void pizLinklistClear (PIZLinklist *x);
 PIZError pizLinklistAppend (PIZLinklist *x, void *ptr);
 
 /**
- * \brief   Insert an item's pointer in front of the linklist.
+ * \brief   Insert an item's pointer in front of the linked list.
  * \details The provided pointer can not be NULL.
  * \param   x A valid pointer.
  * \param   ptr A pointer to the item.
@@ -173,7 +173,7 @@ PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr);
  * \param   ptr The item's pointer provided.
  * \param   nextPtr The adress of the pointer to set.
  * \return  An error code.
- * \remark	The following shows how to traverse a linklist using cache optimization.  
+ * \remark	The following shows how to traverse a linked list using cache optimization.  
  * \code
  * PIZNote *note       = NULL;
  * PIZNote *nextNote   = NULL;
@@ -194,7 +194,7 @@ PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr);
 PIZError pizLinklistNextByPtr (PIZLinklist *x, void *ptr, void **nextPtr);
 
 /**
- * \brief   Given an item's pointer, remove this item from the linklist.
+ * \brief   Given an item's pointer, remove this item from the linked list.
  * \details Item's memory is released according to flags.
  * \param   x A valid pointer.
  * \param   ptr The item's pointer provided.
@@ -204,7 +204,16 @@ PIZError pizLinklistNextByPtr (PIZLinklist *x, void *ptr, void **nextPtr);
 PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr);
 
 /**
- * \brief   Swap item's pointers in the linklist according to specified indexes.
+ * \brief   Like pizLinklistRemoveByPtr() but do NOT free item's memory.
+ * \param   x A valid pointer.
+ * \param   ptr The item's pointer provided.
+ * \return  An error code.
+ * \ingroup linklist
+ */
+PIZError pizLinklistChuckByPtr (PIZLinklist *x, void *ptr);
+
+/**
+ * \brief   Swap item's pointers in the linked list according to specified indexes.
  * \param   x A valid pointer.
  * \param   m Item's index (zero-based).
  * \param   n Item's index (zero-based).
@@ -214,7 +223,7 @@ PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr);
 PIZError pizLinklistSwapByIndexes (PIZLinklist *x, long m, long n);
 
 /**
- * \brief   Get the number of items in the linklist.
+ * \brief   Get the number of items in the linked list.
  * \param   x A valid pointer.
  * \return  The number of items.
  * \ingroup linklist

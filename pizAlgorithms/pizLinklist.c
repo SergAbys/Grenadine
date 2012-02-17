@@ -346,6 +346,71 @@ PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr)
     return err;
 }
 
+PIZError pizLinklistChuckByPtr (PIZLinklist *x, void *ptr)
+{
+    long                err = PIZ_ERROR;
+    PIZLinklistElement  *elementToBeChucked = NULL;
+    
+    if (x->cache && x->cache->previous && (x->cache->previous->ptr == ptr))
+        {
+            elementToBeChucked = x->cache->previous;
+        }
+    else if (x->cache && (x->cache->ptr == ptr))
+        {
+            elementToBeChucked = x->cache;
+            x->cache = NULL;
+        }
+    else
+        {
+            PIZLinklistElement *theElement = x->head;
+    
+            while (theElement)
+                {
+                    PIZLinklistElement *tempElement = NULL;
+                    
+                    if (theElement->ptr == ptr)
+                        {
+                            elementToBeChucked = theElement;    
+                            break;                      
+                        }
+                    
+                    tempElement = theElement;
+                    theElement  = tempElement->next;
+                }
+        }
+        
+    if (elementToBeChucked)
+        {
+            if (x->count == 1)
+                {
+                    x->head = NULL;
+                    x->tail = NULL;
+                }
+            else if (elementToBeChucked == x->tail)
+                {
+                    x->tail = elementToBeChucked->previous;
+                    elementToBeChucked->previous->next = NULL;
+
+                }
+            else if (elementToBeChucked == x->head)
+                {
+                    x->head = elementToBeChucked->next;
+                    elementToBeChucked->next->previous = NULL;
+                }
+            else
+                {
+                    elementToBeChucked->next->previous = elementToBeChucked->previous;
+                    elementToBeChucked->previous->next = elementToBeChucked->next;
+                }
+            
+            x->count --;
+            
+            err = PIZ_GOOD;
+        }
+            
+    return err;
+}
+
 PIZError pizLinklistSwapByIndexes (PIZLinklist *x, long m, long n)
 {
     long a, b;

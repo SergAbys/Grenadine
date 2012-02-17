@@ -51,7 +51,7 @@
  * \ingroup     structures
  * \defgroup    queue Queue
  * \ingroup     structures
- * \defgroup    linklist Linklist
+ * \defgroup    linklist Linked List
  * \ingroup     structures
  * \defgroup    hashTable Hash Table
  * \ingroup     structures

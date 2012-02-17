@@ -61,6 +61,7 @@ _pizGrowingArrayRemoveLastValue
 _pizGrowingArraySetValueAtIndex
 _pizGrowingArrayValueAtIndex
 _pizLinklistAppend
+_pizLinklistChuckByPtr
 _pizLinklistClear
 _pizLinklistCount
 _pizLinklistFree

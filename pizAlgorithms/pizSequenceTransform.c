@@ -94,7 +94,7 @@ bool pizSequenceClean (PIZSequence *x, long value)
     v = CLAMP (value, 0, PIZ_MAGIC_PITCH);
     
     for (i = 0; i < (PIZ_MAGIC_PITCH + 1); i++) {
-            x->values2[i] = 0;
+            x->values1[i] = 0;
         }
     
     for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
@@ -124,17 +124,16 @@ bool pizSequenceClean (PIZSequence *x, long value)
             n = CLAMP (end, 0, PIZ_MAGIC_PITCH);
             
             for (j = m; j <= n; j++) {
-                if (x->values2[j] == (p + 1)) {
+                if (x->values1[j] == (p + 1)) {
                         death = true;
                     }
                 }
             
             if (death) {
                 x->notes1[index] = note;
-                x->values1[index] = p;
                 index ++;
             } else {
-                x->values2[pitch] = (p + 1);
+                x->values1[pitch] = (p + 1);
             }
             
             note = nextNote;
@@ -143,13 +142,7 @@ bool pizSequenceClean (PIZSequence *x, long value)
     
     if (index) {
         for (i = 0; i < index; i++) {
-            if (x->notes1[i] == x->markedNote) {
-                    x->markedNote = NULL;
-                }
-                        
-            if (!pizLinklistRemoveByPtr (x->timeline[x->values1[i]], (void *)x->notes1[i])) {
-                    x->count --;
-                }
+            pizSequenceRemoveNote (x, x->notes1[i]);
         }
         
         haveChanged = true;
@@ -440,16 +433,9 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                 }
                     
                 if (death) {
-                    if (note == x->markedNote) {
-                        x->markedNote = NULL;
-                    }
-                
                     pizBoundedHashTableRemoveByKeyAndPtr (x->hashTable, hCenter, (void *)note);
-                    
-                    if (!pizLinklistRemoveByPtr (x->timeline[p], (void *)note)) {
-                        x->count --;
-                        haveChanged = true;
-                    }
+                    pizSequenceRemoveNote (x, note);
+                    haveChanged = true;
                 }
             } else {
                 break;
@@ -608,18 +594,10 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
                     }
                 } else if (!(pizBoundedHashTablePtrByKey (x->hashTable, newKey, (void **)&note2)) && 
                     (note2 != note1)) {
-                    
-                    if (note2 == x->markedNote) {
-                        x->markedNote = NULL;
-                    }
-                    
                     pizBoundedHashTableRemoveByKeyAndPtr (x->hashTable, newKey, (void *)note2);
-                    
-                    if (!pizLinklistRemoveByPtr (x->timeline[note2->position], (void *)note2)) {
-                        x->count --;
-                        haveChanged = true;
-                        k ++;
-                    }
+                    pizSequenceRemoveNote (x, note2);
+                    haveChanged = true;
+                    k ++;
                 }
 
                 loop ++;
@@ -710,7 +688,7 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, long down)
     k = pizSequencePickUpNotes (x);
     scale = pizGrowingArrayCount (x->scale);
     
-    for (i = 0; i < PIZ_POOL_SIZE; i++) {
+    for (i = 0; i < PIZ_TEMP_SIZE; i++) {
         x->values1[i] = 0;
     }
     
@@ -730,7 +708,7 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, long down)
         }   
     }
         
-    for (i = 1; i < PIZ_POOL_SIZE; i++) {
+    for (i = 1; i < PIZ_TEMP_SIZE; i++) {
         x->values1[i] += x->values1[i - 1];
     }
                 
@@ -933,14 +911,8 @@ bool pizSequenceKillNotes (PIZSequence *x)
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
             if (100 * (rand ( ) / (RAND_MAX + 1.0)) < x->chance) {
-                if (note == x->markedNote) {
-                    x->markedNote = NULL;
-                }
-                    
-                if (!pizLinklistRemoveByPtr (x->timeline[p], (void *)note)) {
-                    x->count --;
-                    haveChanged = true;
-                }
+                pizSequenceRemoveNote (x, note);
+                haveChanged = true;
             }
                 
             note = nextNote;

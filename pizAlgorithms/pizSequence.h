@@ -95,9 +95,9 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-// PIZ_POOL_SIZE = MAX (PIZ_SEQUENCE_MAXIMUM_NOTES, PIZ_SEQUENCE_MAXIMUM_DURATION)
+// PIZ_TEMP_SIZE = MAX (PIZ_SEQUENCE_MAXIMUM_NOTES, PIZ_SEQUENCE_MAXIMUM_DURATION)
 
-#define PIZ_POOL_SIZE                   128
+#define PIZ_TEMP_SIZE                   128
 #define PIZ_CHANNEL_NONE                0
 
 #define PIZ_NOTE_FLAG_NONE              (0L)
@@ -219,25 +219,23 @@ typedef enum _PIZSelector {
     } PIZSelector;
 
 /**
- * \details Indexes/offsets used in array getters/setters.
  * \ingroup sequenceTypes
  */
  
 typedef enum _PIZDataIndex {
-    PIZ_DATA_POSITION       = 0,                    /*!< Offset of \a position. */
-    PIZ_DATA_PITCH,                                 /*!< Offset of \a pitch. */
-    PIZ_DATA_VELOCITY,                              /*!< Offset of \a velocity. */
-    PIZ_DATA_DURATION,                              /*!< Offset of \a pitch. */
-    PIZ_DATA_CHANNEL,                               /*!< Offset of \a channel. */
-    PIZ_DATA_IS_SELECTED,                           /*!< Offset of boolean \a isSelected. */
-    PIZ_DATA_IS_MARKED,                             /*!< Offset of boolean \a isMarked. */
-    PIZ_DATA_NOTE_SIZE      = 7,                    /*!< Offset for a note. */
-    PIZ_DATA_ORIGIN         = 7,                    /*!< Private. */
-    PIZ_DATA_START          = 0,                    /*!< Offset of \a start. */
-    PIZ_DATA_END,                                   /*!< Offset of \a end. */
-    PIZ_DATA_DOWN,                                  /*!< Offset of \a down. */
-    PIZ_DATA_UP,                                    /*!< Offset of \a up. */
-    PIZ_DATA_ZONE_SIZE                              /*!< Size for the zone. */
+    PIZ_DATA_POSITION       = 0,
+    PIZ_DATA_PITCH,
+    PIZ_DATA_VELOCITY,
+    PIZ_DATA_DURATION,
+    PIZ_DATA_CHANNEL,
+    PIZ_DATA_IS_SELECTED,
+    PIZ_DATA_IS_MARKED,
+    PIZ_DATA_NOTE_SIZE      = 7,
+    PIZ_DATA_START          = 0,
+    PIZ_DATA_END,
+    PIZ_DATA_DOWN,
+    PIZ_DATA_UP,
+    PIZ_DATA_ZONE_SIZE
     } PIZDataIndex;
 
 /**
@@ -252,7 +250,6 @@ typedef enum _PIZAddFlag {
     PIZ_ADD_FLAG_CLIP       = 8,                    /*!< Restrict notes to zone. */
     PIZ_ADD_FLAG_UNSELECT   = 16,                   /*!< Force notes unselected/unmarked. */
     PIZ_ADD_FLAG_CLEAR      = 32,                   /*!< Clear sequence before. */
-    PIZ_ADD_FLAG_ORIGIN     = 64,                   /*!< Private. */
     } PIZAddFlag;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -266,17 +263,12 @@ typedef struct _PIZNote {
     long    flags;                                  /*!< Various flags. */
     long    data[4];                                /*!< MIDI values. */
     long    isSelected;                             /*!< True if the note is selected. */
-    long    position;                               /*!< Current position of the note. */
-    long    origin;                                 /*!< Birth position of the note. */
+    long    position;                               /*!< Position of the note. */
     long    tag;                                    /*!< Label (unique) of the note. */
     } PIZNote;
 
 /**
  * \ingroup sequenceTypes
- * \remark  Implemented as an array (size is number of steps) of linklist of notes. 
- *          To speed up transformations on all notes in the sequence, 
- *          index of linklists in use are stored in a map ; so after added/removed notes the map need to
- *          be rebuilded with pizSequenceCleanMap() call. 
  */
  
 typedef struct _PIZSequence {
@@ -578,22 +570,30 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a);
 
 /**
  * \brief   Add a note to the sequence.
- * \details Array must be \ref PIZ_DATA_NOTE_SIZE long ; 
- *          one more value must be provided with \ref PIZ_ADD_FLAG_ORIGIN. 
+ * \details Array must be \ref PIZ_DATA_NOTE_SIZE long. 
  * \param   x A valid pointer.
  * \param   values A pointer to note values.
  * \param   flags The flags (as ORed \ref PIZAddFlag).
  * \return  A pointer to the new note, NULL in case of error.
- * \remark  For efficiency array size is NOT checked ; so crash may occured with invalid indexing.
+ * \remark  For efficiency array size is NOT checked ; so crash may occured with invalid size.
  * \ingroup private
  */
 PIZ_LOCAL PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags);
 
 /**
- * \brief   Restore the map after notes have been created or deleted.
+ * \brief   Remove a note from the sequence. 
  * \param   x A valid pointer.
- * \remark  For efficiency a list of linklist in use is store in an array ; 
- *          this function MUST be called to rebuild the list.
+ * \param   note A pointer to the note.
+ * \return  An error code.
+ * \ingroup private
+ */
+PIZ_LOCAL void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note);
+
+/**
+ * \brief   Restore the map after notes have been created, deleted, moved.
+ * \param   x A valid pointer.
+ * \remark  For efficiency a list of linked lists currently used is stored in an array ; 
+ *          this function MUST be called to rebuild the list after modifications on note positions.
  * \ingroup private
  */
 PIZ_LOCAL void pizSequenceMakeMap (PIZSequence *x);

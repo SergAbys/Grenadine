@@ -508,13 +508,7 @@ PIZError pizSequenceRemoveSelectedNotes (PIZSequence *x)
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
             if (note->isSelected) {
-                if (note == x->markedNote) {
-                    x->markedNote = NULL;
-                }
-                        
-                if (!(err |= pizLinklistRemoveByPtr (x->timeline[p], (void *)note))) {
-                    x->count --;
-                }
+                pizSequenceRemoveNote (x, note);
             }
                 
             note = nextNote;
