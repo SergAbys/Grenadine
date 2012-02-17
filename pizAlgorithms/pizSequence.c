@@ -108,9 +108,7 @@ PIZSequence *pizSequenceNew ( )
             (x->timeline = (PIZLinklist **)calloc (PIZ_SEQUENCE_TIMELINE_SIZE, sizeof(PIZLinklist **)))) {
             
                 srand ((unsigned int)time(NULL));
-                
-                pizItemset1024Clear (&x->mapFlags);
-                
+                                
                 pthread_mutex_init (&x->lock, NULL);
                 
                 x->markedNote       = NULL;
@@ -434,7 +432,7 @@ PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *a,
         }
         
         if (haveChanged) {
-            pizSequenceCleanMap (x);
+            pizSequenceMakeMap (x);
         }
     }
     
@@ -575,7 +573,7 @@ bool pizSequenceApplyPattern (PIZSequence *x)
     }
     
     if (haveChanged) {
-        pizSequenceCleanMap (x);
+        pizSequenceMakeMap (x);
     }
     
     PIZUNLOCK
@@ -791,18 +789,11 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
                 err |= PIZ_MEMORY;
             }
         }
-        
-        if (!err && !(pizItemset1024IsSetAtIndex (&x->mapFlags, newNote->position))) {
-            if (!(err |= pizGrowingArrayAppend (x->map, newNote->position))) {
-                pizItemset1024SetAtIndex (&x->mapFlags, newNote->position);
-            }
-        }
                     
         if (!err && !(pizLinklistInsert (x->timeline[newNote->position], (void *)newNote))) {
             if (isMarked) {
                 x->markedNote = newNote;
             }
-                        
             x->count ++;
         } else {
             free (newNote);
@@ -813,19 +804,20 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
     return newNote;
 }   
 
-void pizSequenceCleanMap (PIZSequence *x)
+PIZError pizSequenceMakeMap (PIZSequence *x)
 {
     long i;
+    long err = PIZ_GOOD;
             
-    pizItemset1024Clear  (&x->mapFlags);
     pizGrowingArrayClear (x->map);
                             
     for (i = 0; i < PIZ_SEQUENCE_TIMELINE_SIZE; i++) {
         if (x->timeline[i] && pizLinklistCount (x->timeline[i])) {
-            pizItemset1024SetAtIndex (&x->mapFlags, i);
-            pizGrowingArrayAppend    (x->map, i);
+            err |= pizGrowingArrayAppend (x->map, i);
         }
     }
+    
+    return err;
 }
 
 void pizSequenceClearNotes (PIZSequence *x)
@@ -834,11 +826,10 @@ void pizSequenceClearNotes (PIZSequence *x)
         long i;
         
         for (i = 0; i < pizGrowingArrayCount (x->map); i++) {
-                long p = pizGrowingArrayValueAtIndex (x->map, i);
-                pizLinklistClear (x->timeline[p]);
-            }
+            long p = pizGrowingArrayValueAtIndex (x->map, i);
+            pizLinklistClear (x->timeline[p]);
+        }
         
-        pizItemset1024Clear  (&x->mapFlags);
         pizGrowingArrayClear (x->map);
         
         x->count = 0;

@@ -459,7 +459,7 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
         }
 
         if (haveChanged) {
-            pizSequenceCleanMap (x);
+            pizSequenceMakeMap (x);
         }
     }
         
@@ -627,7 +627,7 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
         }
         
         if (haveChanged) {
-            pizSequenceCleanMap (x);
+            pizSequenceMakeMap (x);
         }
     }
                     
@@ -948,7 +948,7 @@ bool pizSequenceKillNotes (PIZSequence *x)
     }
     
     if (haveChanged) {
-        pizSequenceCleanMap (x);
+        pizSequenceMakeMap (x);
     }
     
     PIZUNLOCK

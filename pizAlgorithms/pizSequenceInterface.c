@@ -521,7 +521,7 @@ PIZError pizSequenceRemoveSelectedNotes (PIZSequence *x)
         }
     }
     
-    pizSequenceCleanMap (x);
+    pizSequenceMakeMap (x);
     
     PIZUNLOCK
     
@@ -551,7 +551,7 @@ PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates
     if (!(pizSequenceAddNote (x, values, flags))) {
         err |= PIZ_ERROR;
     } else {
-        pizSequenceCleanMap (x);
+        pizSequenceMakeMap (x);
     }
                     
     PIZUNLOCK

@@ -275,10 +275,13 @@ typedef struct _PIZNote {
 
 /**
  * \ingroup sequenceTypes
+ * \remark  Implemented as an array (size is number of steps) of linklist of notes. 
+ *          To speed up transformations on all notes in the sequence, 
+ *          index of linklists in use are stored in a map ; so after added/removed notes the map need to
+ *          be rebuilded with pizSequenceCleanMap() call. 
  */
  
 typedef struct _PIZSequence {
-    PIZItemset1024      mapFlags;                   /*!< In use map as bit field. */
     pthread_mutex_t     lock;                       /*!< POSIX mutex. */
     long                *values1;                   /*!< Private for temporary storage. */
     long                *values2;                   /*!< Private for temporary storage. */
@@ -289,11 +292,11 @@ typedef struct _PIZSequence {
     PIZGrowingArray     *scale;                     /*!< Mode/scale. */
     PIZGrowingArray     *pattern;                   /*!< Rythmic pattern. */
     PIZNote             *markedNote;                /*!< Pointer to one note in the sequence. */
-    PIZGrowingArray     *map;                       /*!< List of timeline's busy index. */
-    long                start;                      /*!< Playback head's start (included). */
-    long                end;                        /*!< Playback head's end (not included). */
-    long                down;                       /*!< Playback head's low ambitus (included). */
-    long                up;                         /*!< Playback head's low ambitus (included). */
+    PIZGrowingArray     *map;                       /*!< List of timeline's in use indexes. */
+    long                start;                      /*!< Zone's start (included). */
+    long                end;                        /*!< Zone's end (not included). */
+    long                down;                       /*!< Zone's low ambitus (included). */
+    long                up;                         /*!< Zone's high ambitus (included). */
     long                count;                      /*!< Number of notes. */
     long                index;                      /*!< Current playback head's index. */
     long                chance;                     /*!< Chance value [0, 100]. */
@@ -591,18 +594,17 @@ PIZ_LOCAL PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
 
 /**
  * \warning This function is private.
- * \brief   Restore the map after a note have been created or deleted.
- * \remark  For efficiency a list of busy linklist in the sequence is store in an array ; 
- *          By calling this function you guarantee that this list is ordered
+ * \brief   Restore the map after notes have been created or deleted.
+ * \remark  For efficiency a list of linklist in use is store in an array ; 
+ *          this function MUST be called to rebuild the list.
  * \param   x A valid pointer.
- * \param   values A pointer to note values.
- * \param   flags The flags (as ORed PIZAddFlags).
- * \return  A pointer to the new note, NULL in case of error.
+ * \return  An error code.
  * \ingroup sequenceBases
  */
-PIZ_LOCAL            void pizSequenceCleanMap               (PIZSequence *x);
-PIZ_LOCAL            void pizSequenceClearNotes             (PIZSequence *x);
-PIZ_LOCAL            long pizSequenceMovePitchToAmbitus     (PIZSequence *x, long pitch);
+PIZ_LOCAL PIZError pizSequenceMakeMap (PIZSequence *x);
+
+PIZ_LOCAL void pizSequenceClearNotes (PIZSequence *x);
+PIZ_LOCAL long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch);
 
 PIZ_LOCAL PIZ_INLINE long pizSequenceSnapPositionToPattern  (PIZSequence *x, long toSnapped, long patternSize);
 

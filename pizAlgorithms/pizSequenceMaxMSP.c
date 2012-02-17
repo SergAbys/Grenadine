@@ -180,6 +180,10 @@ PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a)
                     err |= PIZ_ERROR;
                 }
             }
+            
+            if (count) {
+                pizSequenceMakeMap (x);
+            }
         }
     }
 
