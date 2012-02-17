@@ -201,8 +201,8 @@ PIZ_EXTERN void pizItemset128Clear (PIZItemset128 *itemset)
     long i;
     
     for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_WORDS; i++) {
-            itemset->items[i] = 0;
-        }
+        itemset->items[i] = 0;
+    }
 }
 
 PIZ_EXTERN long pizItemset128Count (const PIZItemset128 *itemset)
@@ -210,15 +210,14 @@ PIZ_EXTERN long pizItemset128Count (const PIZItemset128 *itemset)
     long i;
     long k = 0;
     
-    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_WORDS; i++)
-        {
-            unsigned long n = itemset->items[i];
+    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_WORDS; i++) {
+        unsigned long n = itemset->items[i];
             
-            while (n != 0) {
-                    k  += (n & 1);
-                    n >>= 1;
-                }
+        while (n != 0) {
+            k  += (n & 1);
+            n >>= 1;
         }
+    }
     
     return k;
 }
@@ -245,8 +244,8 @@ PIZ_EXTERN void pizItemset128Union (const PIZItemset128 *a, const PIZItemset128 
     long i;
     
     for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_WORDS; i++) {
-            r->items[i] = a->items[i] | b->items[i];
-        }
+        r->items[i] = a->items[i] | b->items[i];
+    }
 }
 
 PIZ_EXTERN void pizItemset128Intersection (const PIZItemset128 *a, const PIZItemset128 *b, PIZItemset128 *r) 
@@ -254,8 +253,8 @@ PIZ_EXTERN void pizItemset128Intersection (const PIZItemset128 *a, const PIZItem
     long i;
     
     for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_WORDS; i++) {
-            r->items[i] = a->items[i] & b->items[i];
-        }
+        r->items[i] = a->items[i] & b->items[i];
+    }
 }
 
 PIZ_EXTERN bool pizItemset128IsIncluded (const PIZItemset128 *a, const PIZItemset128 *b)
@@ -263,13 +262,12 @@ PIZ_EXTERN bool pizItemset128IsIncluded (const PIZItemset128 *a, const PIZItemse
     long i;
     bool k = true;
             
-    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_WORDS; i++)
-        {
-            if (b->items[i] != (b->items[i] | a->items[i])) {
-                    k = false;
-                    break;
-                }
+    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_WORDS; i++) {
+        if (b->items[i] != (b->items[i] | a->items[i])) {
+            k = false;
+            break;
         }
+    }
         
     return k;
 }
@@ -279,13 +277,12 @@ PIZ_EXTERN bool pizItemset128IsEqual (const PIZItemset128 *a, const PIZItemset12
     long i;
     long k = true;
             
-    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_WORDS; i++)
-        {
-            if (a->items[i] != b->items[i]) {
-                    k = false;
-                    break;
-                }
+    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_WORDS; i++) {
+        if (a->items[i] != b->items[i]) {
+            k = false;
+            break;
         }
+    }
         
     return k;
 }

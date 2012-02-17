@@ -51,16 +51,15 @@
 
 void pizGrowingArrayRemoveIndex (PIZGrowingArray *array, long index)
 {
-    if (index >= 0 && index < array->index)
-        {
-            long i;
-            
-            for (i = index; i < (array->index - 1); i++) {
-                    array->values[i] = array->values[i + 1];
-                }
-            
-            array->index --;
+    if (index >= 0 && index < array->index) {
+        long i;
+        
+        for (i = index; i < (array->index - 1); i++) {
+            array->values[i] = array->values[i + 1];
         }
+        
+        array->index --;
+    }
 }
 
 PIZError pizGrowingArrayRemoveLastValue (PIZGrowingArray *x)
@@ -68,9 +67,9 @@ PIZError pizGrowingArrayRemoveLastValue (PIZGrowingArray *x)
     long err = PIZ_ERROR;
     
     if (x->index) {
-            x->index --;
-            err = PIZ_GOOD;
-        }
+        x->index --;
+        err = PIZ_GOOD;
+    }
         
     return err;
 }
@@ -80,13 +79,12 @@ long pizGrowingArrayFirstIndexOfValue (const PIZGrowingArray *x, long value)
     long i;
     long k = -1;
     
-    for (i = 0; i < x->index; i++)
-        {
-            if (x->values[i] == value) {
-                    k = i;
-                    break;
-                }
+    for (i = 0; i < x->index; i++) {
+        if (x->values[i] == value) {
+            k = i;
+            break;
         }
+    }
     
     return k;
 }
@@ -96,13 +94,12 @@ bool pizGrowingArrayContainsValue (const PIZGrowingArray *x, long value)
     long i;
     long k = false;
     
-    for (i = 0; i < x->index; i++)
-        {
-            if (x->values[i] == value) {
-                    k = true;
-                    break;
-                }
+    for (i = 0; i < x->index; i++) {
+        if (x->values[i] == value) {
+            k = true;
+            break;
         }
+    }
         
     return k;
 }
@@ -111,31 +108,26 @@ PIZError pizGrowingArrayCopy (PIZGrowingArray *x, const PIZGrowingArray *toCopy)
 {
     PIZError err = PIZ_GOOD;
     
-    if (toCopy->index > x->size)
-        {
-            long *newValues = NULL;
-            
-            if (newValues = (long *)realloc (x->values, toCopy->size * sizeof(long)))
-                {
-                    x->size = toCopy->size;
-                    x->values = newValues;
-                }
-            else
-                {
-                    err = PIZ_MEMORY;
-                }
+    if (toCopy->index > x->size) {
+        long *newValues = NULL;
+        
+        if (newValues = (long *)realloc (x->values, toCopy->size * sizeof(long))) {
+            x->size = toCopy->size;
+            x->values = newValues;
+        } else {
+            err = PIZ_MEMORY;
         }
+    }
     
-    if (!err) 
-        {
-            long i;
-            
-            for (i = 0; i < toCopy->index; i++) {
-                    x->values[i] = toCopy->values[i];
-                }
-                
-            x->index = toCopy->index;
+    if (!err)  {
+        long i;
+        
+        for (i = 0; i < toCopy->index; i++) {
+            x->values[i] = toCopy->values[i];
         }
+            
+        x->index = toCopy->index;
+    }
     
     return err;
 }
@@ -144,32 +136,27 @@ PIZError pizGrowingArrayAppendArray (PIZGrowingArray *x, const PIZGrowingArray *
 {
     PIZError err = PIZ_GOOD;
     
-    if ((toAppend->index + x->index) > x->size)
-        {
-            long *newValues = NULL;
-            long newSize = toAppend->size + x->size;
+    if ((toAppend->index + x->index) > x->size) {
+        long *newValues = NULL;
+        long newSize = toAppend->size + x->size;
 
-            if (newValues = (long *)realloc (x->values, newSize * sizeof(long)))
-                {
-                    x->size = newSize;
-                    x->values = newValues;
-                }
-            else
-                {
-                    err = PIZ_MEMORY;
-                }
+        if (newValues = (long *)realloc (x->values, newSize * sizeof(long))) {
+            x->size = newSize;
+            x->values = newValues;
+        } else {
+            err = PIZ_MEMORY;
         }
+    }
     
-    if (!err) 
-        {
-            long i;
-        
-            for (i = 0; i < toAppend->index; i++) {
-                    x->values[x->index + i] = toAppend->values[i];
-                }
-            
-            x->index += toAppend->index;
+    if (!err)  {
+        long i;
+    
+        for (i = 0; i < toAppend->index; i++) {
+            x->values[x->index + i] = toAppend->values[i];
         }
+        
+        x->index += toAppend->index;
+    }
     
     return err;
 }
@@ -178,36 +165,31 @@ PIZError pizGrowingArrayAppendPtr (PIZGrowingArray *x, long argc, long *argv)
 {
     PIZError err = PIZ_GOOD;
     
-    if ((argc + x->index) > x->size)
-        {
-            long *newValues = NULL;
-            long newSize = x->size * 2;
-            
-            while (newSize < (argc + x->index)) {
-                    newSize = newSize * 2;
-                }
+    if ((argc + x->index) > x->size) {
+        long *newValues = NULL;
+        long newSize = x->size * 2;
+        
+        while (newSize < (argc + x->index)) {
+            newSize = newSize * 2;
+        }
 
-            if (newValues = (long *)realloc (x->values, newSize * sizeof(long)))
-                {
-                    x->size = newSize;
-                    x->values = newValues;
-                }
-            else
-                {
-                    err = PIZ_MEMORY;
-                }
+        if (newValues = (long *)realloc (x->values, newSize * sizeof(long))) {
+            x->size = newSize;
+            x->values = newValues;
+        } else {
+            err = PIZ_MEMORY;
         }
+    }
     
-    if (!err) 
-        {
-            long i;
-            
-            for (i = 0; i < argc; i++) {
-                    x->values[x->index + i] = argv[i];
-                }
-                
-            x->index += argc;
+    if (!err) {
+        long i;
+        
+        for (i = 0; i < argc; i++) {
+            x->values[x->index + i] = argv[i];
         }
+            
+        x->index += argc;
+    }
     
     return err;
 }

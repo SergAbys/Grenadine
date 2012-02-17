@@ -57,24 +57,20 @@ PIZGrowingArray *pizGrowingArrayNew (long size)
 {
     PIZGrowingArray *x = NULL;
 
-    if (x = (PIZGrowingArray *)malloc (sizeof(PIZGrowingArray)))
-        {       
-            x->size = PIZ_DEFAULT_SIZE;
-            
-            if (size > 0) {
-                    x->size = size;
-                }
-            
-            if (x->values = (long *)malloc (x->size * sizeof(long)))
-                {
-                    x->index = 0;
-                }
-            else
-                {
-                    free (x);
-                    x = NULL;
-                }
+    if (x = (PIZGrowingArray *)malloc (sizeof(PIZGrowingArray))) {       
+        x->size = PIZ_DEFAULT_SIZE;
+        
+        if (size > 0) {
+            x->size = size;
         }
+        
+        if (x->values = (long *)malloc (x->size * sizeof(long))) {
+            x->index = 0;
+        } else {
+            free (x);
+            x = NULL;
+        }
+    }
     
     return x;
 }
@@ -82,11 +78,11 @@ PIZGrowingArray *pizGrowingArrayNew (long size)
 void pizGrowingArrayFree (PIZGrowingArray *x)
 {
     if (x) {
-            free (x->values);
-            x->values = NULL;
+        free (x->values);
+        x->values = NULL;
             
-            free (x);
-        }
+        free (x);
+    }
 }
 
 void pizGrowingArrayClear (PIZGrowingArray *x)
@@ -98,25 +94,21 @@ PIZError pizGrowingArrayAppend (PIZGrowingArray *x, long value)
 {   
     long err = PIZ_GOOD;
         
-    if (x->index == x->size)
-        {   
-            long *newValues = NULL;
-            
-            if (newValues = (long *)realloc (x->values, (x->size * 2) * sizeof(long)))
-                {
-                    x->size *= 2;
-                    x->values = newValues;
-                }
-            else
-                {
-                    err = PIZ_MEMORY;
-                }
+    if (x->index == x->size) {   
+        long *newValues = NULL;
+        
+        if (newValues = (long *)realloc (x->values, (x->size * 2) * sizeof(long))) {
+            x->size *= 2;
+            x->values = newValues;
+        } else {
+            err = PIZ_MEMORY;
         }
+    }
     
     if (err == PIZ_GOOD) {
-            x->values[x->index] = value;
-            x->index ++;
-        }
+        x->values[x->index] = value;
+        x->index ++;
+    }
         
     return err;
 }

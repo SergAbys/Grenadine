@@ -64,60 +64,54 @@ PIZArrayPool *pizArrayPoolNew (long argc, long *argv)
 {
     PIZArrayPool *x = NULL;
     
-    if (x = (PIZArrayPool *)malloc (sizeof(PIZArrayPool)))
-        {   
-            long k = PIZ_DEFAULT_PREALLOCATED;
-            
-            x->retain           = 0;
-            x->initArraySize    = PIZ_DEFAULT_SIZE;
-            x->cache            = NULL;
-            
-            if (argc && argv[0] > 0) {
-                    k = argv[0];
-                }
-                
-            if (argc > 1 && argv[1] > 0) {
-                    x->initArraySize = argv[1];
-                }
-            
-            if (x->pool = pizLinklistNew ( ))
-                {
-                    long i;
-                    
-                    pizLinklistSetFlags (x->pool, PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY);
-                    
-                    for (i = 0; i < k; i++)
-                        {
-                            PIZGrowingArray *array = NULL;
-                            
-                            if (array = pizGrowingArrayNew (x->initArraySize)) {
-                                    pizLinklistAppend (x->pool, array);
-                                }
-                        }
-                    
-                    pthread_mutex_init (&x->lock, NULL);
-                }
-            else
-                {
-                    free (x);
-                    x = NULL;
-                }
+    if (x = (PIZArrayPool *)malloc (sizeof(PIZArrayPool))) {   
+        long k = PIZ_DEFAULT_PREALLOCATED;
+        
+        x->retain           = 0;
+        x->initArraySize    = PIZ_DEFAULT_SIZE;
+        x->cache            = NULL;
+        
+        if (argc && argv[0] > 0) {
+            k = argv[0];
         }
+            
+        if (argc > 1 && argv[1] > 0) {
+            x->initArraySize = argv[1];
+        }
+        
+        if (x->pool = pizLinklistNew ( )) {
+            long i;
+            
+            pizLinklistSetFlags (x->pool, PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY);
+            
+            for (i = 0; i < k; i++) {
+                PIZGrowingArray *array = NULL;
+                
+                if (array = pizGrowingArrayNew (x->initArraySize)) {
+                    pizLinklistAppend (x->pool, array);
+                }
+            }
+            
+            pthread_mutex_init (&x->lock, NULL);
+        } else {
+            free (x);
+            x = NULL;
+        }
+    }
     
     return x;
 }
 
 void pizArrayPoolFree (PIZArrayPool *x)
 {
-    if (x) 
-        {
-            PIZLOCK
-            pizLinklistFree (x->pool);
-            PIZUNLOCK
-            
-            pthread_mutex_destroy (&x->lock);
-            free (x);
-        }
+    if (x) {
+        PIZLOCK
+        pizLinklistFree (x->pool);
+        PIZUNLOCK
+        
+        pthread_mutex_destroy (&x->lock);
+        free (x);
+    }
 }
 
 PIZGrowingArray *pizArrayPoolGetArray (PIZArrayPool *x)
@@ -127,24 +121,21 @@ PIZGrowingArray *pizArrayPoolGetArray (PIZArrayPool *x)
     
     PIZLOCK
     
-    if (!x->retain) 
-        {
-            err = pizLinklistPtrAtIndex (x->pool, 0, (void **)&array);
-        }
-    else 
-        {
-            err = pizLinklistNextByPtr (x->pool, (void *)x->cache, (void **)&array);
-        }
+    if (!x->retain)  {
+        err = pizLinklistPtrAtIndex (x->pool, 0, (void **)&array);
+    } else  {
+        err = pizLinklistNextByPtr (x->pool, (void *)x->cache, (void **)&array);
+    }
     
     if (err && (array = pizGrowingArrayNew (x->initArraySize))) {
-            err = pizLinklistAppend (x->pool, array);
-        }
+        err = pizLinklistAppend (x->pool, array);
+    }
     
     if (!err) {
-            pizGrowingArrayClear (array);
-            x->retain ++;
-            x->cache = array;
-        }
+        pizGrowingArrayClear (array);
+        x->retain ++;
+        x->cache = array;
+    }
     
     PIZUNLOCK
         
@@ -158,9 +149,9 @@ PIZError pizArrayPoolReleaseArray (PIZArrayPool *x, PIZGrowingArray *a)
     PIZLOCK
     
     if (a) {
-            err = PIZ_GOOD;
-            x->retain --;
-        }
+        err = PIZ_GOOD;
+        x->retain --;
+    }
     
     PIZUNLOCK
     

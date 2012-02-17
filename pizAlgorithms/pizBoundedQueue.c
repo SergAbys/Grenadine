@@ -52,22 +52,18 @@ PIZBoundedQueue *pizBoundedQueueNew (long size)
 {
     PIZBoundedQueue *x = NULL;
     
-    if (size > 0 && (x = (PIZBoundedQueue *)malloc (sizeof(PIZBoundedQueue))))
-        {
-            if (x->values = (long *)malloc ((size + 1) * sizeof(long)))
-                {
-                    x->count        = 0;
-                    x->bound        = size;
-                    x->head         = 0;
-                    x->tail         = 0;
-                    x->poppedValue  = -1;
-                }
-            else
-                {
-                    free (x);
-                    x = NULL;
-                }
+    if (size > 0 && (x = (PIZBoundedQueue *)malloc (sizeof(PIZBoundedQueue)))) {
+        if (x->values = (long *)malloc ((size + 1) * sizeof(long))) {
+            x->count        = 0;
+            x->bound        = size;
+            x->head         = 0;
+            x->tail         = 0;
+            x->poppedValue  = -1;
+        } else {
+            free (x);
+            x = NULL;
         }
+    }
     
     return x;
 }
@@ -75,11 +71,11 @@ PIZBoundedQueue *pizBoundedQueueNew (long size)
 void pizBoundedQueueFree (PIZBoundedQueue *x)
 {
     if (x) {
-            free (x->values);
-            x->values = NULL;
+        free (x->values);
+        x->values = NULL;
             
-            free (x);
-        }
+        free (x);
+    }
 }
 
 void pizBoundedQueueClear (PIZBoundedQueue *x)
@@ -94,20 +90,19 @@ PIZError pizBoundedQueueAppend (PIZBoundedQueue *x, long value)
 {   
     long err = PIZ_ERROR;
     
-    if (((x->tail + 1) != x->head) && !((x->tail == x->bound) && (x->head == 0)))
-        {
-            err = PIZ_GOOD;
-            
-            x->count ++;
-            
-            x->values[x->tail] = value;
-            
-            if (x->tail == x->bound) {
-                x->tail = 0;
-            } else {
-                x->tail ++;
-            }
+    if (((x->tail + 1) != x->head) && !((x->tail == x->bound) && (x->head == 0))) {
+        err = PIZ_GOOD;
+        
+        x->count ++;
+        
+        x->values[x->tail] = value;
+        
+        if (x->tail == x->bound) {
+            x->tail = 0;
+        } else {
+            x->tail ++;
         }
+    }
     
     return err;
 }
@@ -116,20 +111,19 @@ PIZError pizBoundedQueuePop (PIZBoundedQueue *x)
 {
     long err = PIZ_ERROR;
     
-    if (x->head != x->tail)
-        {
-            err = PIZ_GOOD;
-            
-            x->count --;
-            
-            x->poppedValue = x->values[x->head];
-            
-            if (x->head == x->bound) {
-                x->head = 0;
-            } else {
-                x->head ++;
-            }
+    if (x->head != x->tail) {
+        err = PIZ_GOOD;
+        
+        x->count --;
+        
+        x->poppedValue = x->values[x->head];
+        
+        if (x->head == x->bound) {
+            x->head = 0;
+        } else {
+            x->head ++;
         }
+    }
     
     return err;
 }
@@ -138,20 +132,19 @@ PIZError pizBoundedQueuePopLastValue (PIZBoundedQueue *x)
 {
     long err = PIZ_ERROR;
     
-    if (x->tail != x->head)
-        {
-            err = PIZ_GOOD;
-            
-            if (x->tail == 0) {
-                x->tail = x->bound;
-            } else {
-                x->tail --;
-            }
-            
-            x->count --;
-                    
-            x->poppedValue = x->values[x->tail];
+    if (x->tail != x->head) {
+        err = PIZ_GOOD;
+        
+        if (x->tail == 0) {
+            x->tail = x->bound;
+        } else {
+            x->tail --;
         }
+        
+        x->count --;
+                
+        x->poppedValue = x->values[x->tail];
+    }
     
     return err;
 }

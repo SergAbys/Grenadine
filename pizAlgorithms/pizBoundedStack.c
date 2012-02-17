@@ -52,20 +52,16 @@ PIZBoundedStack *pizBoundedStackNew (long size)
 {
     PIZBoundedStack *x = NULL;
     
-    if (size > 0 && (x = (PIZBoundedStack *)malloc (sizeof(PIZBoundedStack))))
-        {
-            if (x->values = (long *)malloc (size * sizeof(long)))
-                {
-                    x->bound        = size;
-                    x->stack        = 0;
-                    x->poppedValue  = -1;
-                }
-            else
-                {
-                    free (x);
-                    x = NULL;
-                }
+    if (size > 0 && (x = (PIZBoundedStack *)malloc (sizeof(PIZBoundedStack)))) {
+        if (x->values = (long *)malloc (size * sizeof(long))) {
+            x->bound        = size;
+            x->stack        = 0;
+            x->poppedValue  = -1;
+        } else {
+            free (x);
+            x = NULL;
         }
+    }
     
     return x;
 }
@@ -73,11 +69,11 @@ PIZBoundedStack *pizBoundedStackNew (long size)
 void pizBoundedStackFree (PIZBoundedStack *x)
 {
     if (x) {
-            free (x->values);
-            x->values = NULL;
+        free (x->values);
+        x->values = NULL;
             
-            free (x);
-        }
+        free (x);
+    }
 }
 
 void pizBoundedStackClear (PIZBoundedStack *x)
@@ -90,13 +86,12 @@ PIZError pizBoundedStackPush (PIZBoundedStack *x, long value)
 {   
     long err = PIZ_ERROR;
     
-    if (x->stack < x->bound) 
-        {
-            err = PIZ_GOOD;
-            
-            x->values[x->stack] = value;
-            x->stack ++;
-        }
+    if (x->stack < x->bound)  {
+        err = PIZ_GOOD;
+        
+        x->values[x->stack] = value;
+        x->stack ++;
+    }
     
     return err;
 }
@@ -105,14 +100,13 @@ PIZError pizBoundedStackPop (PIZBoundedStack *x)
 {
     long err = PIZ_ERROR;
     
-    if (x->stack) 
-        {
-            err = PIZ_GOOD;
-            
-            x->poppedValue = x->values[x->stack - 1];
-            
-            x->stack --;
-        }
+    if (x->stack) {
+        err = PIZ_GOOD;
+        
+        x->poppedValue = x->values[x->stack - 1];
+        
+        x->stack --;
+    }
     
     return err;
 }

@@ -52,13 +52,12 @@ PIZQueue *pizQueueNew (void)
 {
     PIZQueue *x = NULL;
         
-    if (x = (PIZQueue *)malloc (sizeof(PIZQueue))) 
-        {
-            x->count        = 0;
-            x->poppedValue  = -1;
-            x->head         = NULL;
-            x->tail         = NULL;
-        }
+    if (x = (PIZQueue *)malloc (sizeof(PIZQueue))) {
+        x->count        = 0;
+        x->poppedValue  = -1;
+        x->head         = NULL;
+        x->tail         = NULL;
+    }
     
     return x;
 }
@@ -66,25 +65,24 @@ PIZQueue *pizQueueNew (void)
 void pizQueueFree (PIZQueue *x)
 {
     if (x) {
-            pizQueueClear (x);
-            free (x);
-        }
+        pizQueueClear (x);
+        free (x);
+    }
 }
 
 void pizQueueClear (PIZQueue *x)
 {
     PIZQueueElement *theElement = x->head;
     
-    while (theElement)
-        {
-            PIZQueueElement *elementToBeRemoved = NULL;
+    while (theElement) {
+        PIZQueueElement *elementToBeRemoved = NULL;
 
-            elementToBeRemoved  = theElement;
-            theElement          = elementToBeRemoved->next;
+        elementToBeRemoved  = theElement;
+        theElement          = elementToBeRemoved->next;
 
-            free (elementToBeRemoved);
-            elementToBeRemoved = NULL;
-        }
+        free (elementToBeRemoved);
+        elementToBeRemoved = NULL;
+    }
         
     x->count        = 0;
     x->poppedValue  = -1;
@@ -97,33 +95,31 @@ PIZError pizQueueAppend (PIZQueue *x, long value)
     long            err = PIZ_MEMORY;
     PIZQueueElement *newElement = NULL;
     
-    if (newElement = (PIZQueueElement *)malloc (sizeof(PIZQueueElement)))
-        {
-            err = PIZ_GOOD;
+    if (newElement = (PIZQueueElement *)malloc (sizeof(PIZQueueElement))) {
+        err = PIZ_GOOD;
+        
+        if (x->count) {
+            newElement->value    = value;
+            newElement->previous = x->tail;
+            newElement->next     = NULL;
             
-            if (x->count)
-                {
-                    newElement->value       = value;
-                    newElement->previous    = x->tail;
-                    newElement->next        = NULL;
-                    
-                    x->count ++;
-                    
-                    x->tail->next           = newElement;
-                    x->tail                 = newElement;
-                }
-            else
-                {
-                    newElement->value       = value;
-                    newElement->previous    = NULL;
-                    newElement->next        = NULL;
-                    
-                    x->count ++;
-                    
-                    x->head                 = newElement;
-                    x->tail                 = newElement;
-                }
+            x->count ++;
+            
+            x->tail->next   = newElement;
+            x->tail         = newElement;
+            
+        } else {
+        
+            newElement->value    = value;
+            newElement->previous = NULL;
+            newElement->next     = NULL;
+            
+            x->count ++;
+            
+            x->head = newElement;
+            x->tail = newElement;
         }
+    }
     
     return err;
 }
@@ -133,35 +129,34 @@ PIZError pizQueuePop (PIZQueue *x)
     long            err = PIZ_ERROR;
     PIZQueueElement *theElement = NULL;
     
-    if (x->count == 1)
-        {
-            theElement      =  x->head;
-            x->poppedValue  = theElement->value;
-            
-            free (theElement);
-            theElement = NULL;
-            
-            x->count    = 0;
-            x->head     = NULL;
-            x->tail     = NULL;
-            
-            err = PIZ_GOOD;
-        }
-    else if (x->count > 1)
-        {
-            theElement                  = x->head;
-            theElement->next->previous  = NULL;
-            
-            x->count --;
-            
-            x->poppedValue              = theElement->value;
-            x->head                     = theElement->next;
-            
-            free (theElement);
-            theElement = NULL;
-            
-            err = PIZ_GOOD;
-        }
+    if (x->count == 1) {
+        theElement      =  x->head;
+        x->poppedValue  = theElement->value;
+        
+        free (theElement);
+        theElement = NULL;
+        
+        x->count = 0;
+        x->head  = NULL;
+        x->tail  = NULL;
+        
+        err = PIZ_GOOD;
+        
+    } else if (x->count > 1) {
+    
+        theElement                  = x->head;
+        theElement->next->previous  = NULL;
+        
+        x->count --;
+        
+        x->poppedValue  = theElement->value;
+        x->head         = theElement->next;
+        
+        free (theElement);
+        theElement = NULL;
+        
+        err = PIZ_GOOD;
+    }
     
     return err;
 }
@@ -171,35 +166,34 @@ PIZError pizQueuePopLastValue (PIZQueue *x)
     long            err = PIZ_ERROR;
     PIZQueueElement *theElement = NULL;
     
-    if (x->count == 1)
-        {
-            theElement      = x->tail;
-            x->poppedValue  = theElement->value;
-            
-            free (theElement);
-            theElement = NULL;
-            
-            x->count    = 0;
-            x->head     = NULL;
-            x->tail     = NULL;
-            
-            err = PIZ_GOOD;
-        }
-    else if (x->count > 1)
-        {
-            theElement                  = x->tail;
-            theElement->previous->next  = NULL;
-            
-            x->count --;
-            
-            x->poppedValue              = theElement->value;
-            x->tail                     = theElement->previous;
-            
-            free (theElement);
-            theElement = NULL;
-            
-            err = PIZ_GOOD;
-        }
+    if (x->count == 1) {
+        theElement      = x->tail;
+        x->poppedValue  = theElement->value;
+        
+        free (theElement);
+        theElement = NULL;
+        
+        x->count = 0;
+        x->head  = NULL;
+        x->tail  = NULL;
+        
+        err = PIZ_GOOD;
+        
+    } else if (x->count > 1) {
+    
+        theElement                  = x->tail;
+        theElement->previous->next  = NULL;
+        
+        x->count --;
+        
+        x->poppedValue  = theElement->value;
+        x->tail         = theElement->previous;
+        
+        free (theElement);
+        theElement = NULL;
+        
+        err = PIZ_GOOD;
+    }
     
     return err;
 }

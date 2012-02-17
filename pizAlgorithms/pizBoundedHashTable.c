@@ -58,40 +58,36 @@ PIZBoundedHashTable *pizBoundedHashTableNew (long argc, long *argv)
 {
     PIZBoundedHashTable *x = NULL;
         
-    if (x = (PIZBoundedHashTable *)malloc (sizeof(PIZBoundedHashTable)))
-        {
-            x->flags    = PIZ_BOUNDED_HASHTABLE_FLAG_NONE;
-            x->count    = 0;
-            x->hashSize = PIZ_DEFAULT_HASH_SIZE;
-            x->poolSize = PIZ_DEFAULT_POOL_SIZE;
-            
-            if (argc && argv[0] > 0) {
-                    x->hashSize = argv[0];
-                }
-            
-            if ((argc > 1) && argv[1] > 0) {
-                    x->poolSize = argv[1];
-                }
-            
-            x->ticketMachine = pizBoundedStackNew (x->poolSize);
-            
-            x->pool = (PIZBoundedHashTableElement *)malloc (x->poolSize * sizeof(PIZBoundedHashTableElement));
-            x->hashTable = (PIZGrowingArray **)calloc (x->hashSize, sizeof(PIZGrowingArray *));
-            
-            if (x->ticketMachine && x->pool && x->hashTable)
-                {
-                    long j;
-                            
-                    for (j = (x->poolSize - 1); j >= 0; j--) {
-                            pizBoundedStackPush (x->ticketMachine, j);
-                        }
-                }
-            else
-                {
-                    pizBoundedHashTableFree (x);
-                    x = NULL;
-                }
+    if (x = (PIZBoundedHashTable *)malloc (sizeof(PIZBoundedHashTable))) {
+        x->flags    = PIZ_BOUNDED_HASHTABLE_FLAG_NONE;
+        x->count    = 0;
+        x->hashSize = PIZ_DEFAULT_HASH_SIZE;
+        x->poolSize = PIZ_DEFAULT_POOL_SIZE;
+        
+        if (argc && argv[0] > 0) {
+            x->hashSize = argv[0];
         }
+        
+        if ((argc > 1) && argv[1] > 0) {
+            x->poolSize = argv[1];
+        }
+        
+        x->ticketMachine = pizBoundedStackNew (x->poolSize);
+        
+        x->pool = (PIZBoundedHashTableElement *)malloc (x->poolSize * sizeof(PIZBoundedHashTableElement));
+        x->hashTable = (PIZGrowingArray **)calloc (x->hashSize, sizeof(PIZGrowingArray *));
+        
+        if (x->ticketMachine && x->pool && x->hashTable) {
+            long j;
+                    
+            for (j = (x->poolSize - 1); j >= 0; j--) {
+                pizBoundedStackPush (x->ticketMachine, j);
+            }
+        } else {
+            pizBoundedHashTableFree (x);
+            x = NULL;
+        }
+    }
     
     return x;
 }
@@ -103,30 +99,27 @@ void pizBoundedHashTableSetFlags (PIZBoundedHashTable *x, long flags)
 
 void pizBoundedHashTableFree (PIZBoundedHashTable *x)
 {
-    if (x)
-        {
-            pizBoundedStackFree (x->ticketMachine);
-            
-            if (x->pool)
-                {
-                    free (x->pool);
-                    x->pool = NULL;
-                }
-                
-            if (x->hashTable)
-                {
-                    long i;
-            
-                    for (i = 0; i < x->hashSize; i++) {
-                            pizGrowingArrayFree (x->hashTable[i]);
-                        }
-            
-                    free (x->hashTable);
-                    x->hashTable = NULL;
-                }
-            
-            free (x);
+    if (x) {
+        pizBoundedStackFree (x->ticketMachine);
+        
+        if (x->pool) {
+            free (x->pool);
+            x->pool = NULL;
         }
+            
+        if (x->hashTable) {
+            long i;
+    
+            for (i = 0; i < x->hashSize; i++) {
+                pizGrowingArrayFree (x->hashTable[i]);
+            }
+    
+            free (x->hashTable);
+            x->hashTable = NULL;
+        }
+        
+        free (x);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -138,18 +131,15 @@ void pizBoundedHashTableClear (PIZBoundedHashTable *x)
     
     pizBoundedStackClear (x->ticketMachine);
     
-    for (i = (x->poolSize - 1); i >= 0; i--) 
-        {
-            pizBoundedStackPush (x->ticketMachine, i);
-        }
+    for (i = (x->poolSize - 1); i >= 0; i--) {
+        pizBoundedStackPush (x->ticketMachine, i);
+    }
     
-    for (i = 0; i < x->hashSize; i++)
-        {
-            if (x->hashTable[i])
-                {
-                    pizGrowingArrayClear (x->hashTable[i]);
-                }
+    for (i = 0; i < x->hashSize; i++) {
+        if (x->hashTable[i]) {
+            pizGrowingArrayClear (x->hashTable[i]);
         }
+    }
     
     x->count = 0;
 }
@@ -158,41 +148,33 @@ PIZError pizBoundedHashTableAdd (PIZBoundedHashTable *x, long key, void *ptr)
 {
     long err = PIZ_ERROR;
     
-    if (ptr && (key >= 0))
-        {
-            long p = key % x->hashSize;
-                        
-            if (!x->hashTable[p]) {
-                    x->hashTable[p] = pizGrowingArrayNew (0);
-                }
-            
-            if (x->hashTable[p]) 
-                {
-                    if (!pizBoundedStackPop (x->ticketMachine))
-                        {
-                            long index = pizBoundedStackPoppedValue (x->ticketMachine);
-
-                            err = PIZ_GOOD;
-                            err |= pizGrowingArrayAppend (x->hashTable[p], index);
-                            
-                            if (!err) 
-                                {                           
-                                    x->pool[index].key = key;
-                                    x->pool[index].ptr = ptr;
-                                    
-                                    x->count ++;
-                                }
-                            else
-                                {
-                                    pizBoundedStackPush (x->ticketMachine, index);
-                                }
-                        }
-                }
-            else
-                {
-                    err |= PIZ_MEMORY;
-                }
+    if (ptr && (key >= 0)) {
+        long p = key % x->hashSize;
+                    
+        if (!x->hashTable[p]) {
+            x->hashTable[p] = pizGrowingArrayNew (0);
         }
+        
+        if (x->hashTable[p]) {
+            if (!pizBoundedStackPop (x->ticketMachine)) {
+                long index = pizBoundedStackPoppedValue (x->ticketMachine);
+
+                err = PIZ_GOOD;
+                err |= pizGrowingArrayAppend (x->hashTable[p], index);
+            
+                if (!err) {                           
+                    x->pool[index].key = key;
+                    x->pool[index].ptr = ptr;
+                        
+                    x->count ++;
+                } else {
+                    pizBoundedStackPush (x->ticketMachine, index);
+                }
+            }
+        } else {
+            err |= PIZ_MEMORY;
+        }
+    }
     
     return err;
 }
@@ -201,33 +183,28 @@ PIZError pizBoundedHashTableRemoveByKeyAndPtr (PIZBoundedHashTable *x, long key,
 {
     long err = PIZ_ERROR;
     
-    if (ptr && (key >= 0))
-        {
-            long p = key % x->hashSize;
+    if (ptr && (key >= 0)) {
+        long p = key % x->hashSize;
+        
+        if (x->hashTable[p]) {   
+            long count, i, index;
             
-            if (x->hashTable[p]) 
-                {   
-                    long count, i, index;
+            if (count = pizGrowingArrayCount (x->hashTable[p])) {
+                for (i = 0; i < count; i++) {
+                    index = pizGrowingArrayValueAtIndex (x->hashTable[p], i);
                     
-                    if (count = pizGrowingArrayCount (x->hashTable[p]))
-                        {
-                            for (i = 0; i < count; i++)
-                                {
-                                    index = pizGrowingArrayValueAtIndex (x->hashTable[p], i);
-                                    
-                                    if ((x->pool[index].key == key) && (x->pool[index].ptr == ptr)) 
-                                        {
-                                            err = PIZ_GOOD;
-                                            
-                                            pizGrowingArrayRemoveIndex (x->hashTable[p], i);
-                                            pizBoundedStackPush (x->ticketMachine, index);
-                                                
-                                            break;
-                                        }
-                                }
-                        }
+                    if ((x->pool[index].key == key) && (x->pool[index].ptr == ptr)) {
+                        err = PIZ_GOOD;
+                        
+                        pizGrowingArrayRemoveIndex (x->hashTable[p], i);
+                        pizBoundedStackPush (x->ticketMachine, index);
+                            
+                        break;
+                    }
                 }
+            }
         }
+    }
     
     return err;
 }
@@ -241,34 +218,29 @@ PIZError pizBoundedHashTablePtrByKey (const PIZBoundedHashTable *x, long key, vo
 {
     long err = PIZ_ERROR;
     
-    if (*ptr)
-        {
-            (*ptr) = NULL;
-        }
+    if (*ptr) {
+        (*ptr) = NULL;
+    }
     
-    if (key >= 0)
-        {
-            long p = key % x->hashSize;
+    if (key >= 0) {
+        long p = key % x->hashSize;
+        
+        if (x->hashTable[p]) {   
+            long count, i, index;
             
-            if (x->hashTable[p])
-                {   
-                    long count, i, index;
+            if (count = pizGrowingArrayCount (x->hashTable[p])) {
+                for (i = 0; i < count; i++) {
+                    index = pizGrowingArrayValueAtIndex (x->hashTable[p], i);
                     
-                    if (count = pizGrowingArrayCount (x->hashTable[p]))
-                        {
-                            for (i = 0; i < count; i++)
-                                {
-                                    index = pizGrowingArrayValueAtIndex (x->hashTable[p], i);
-                                    
-                                    if (x->pool[index].key == key) {
-                                            (*ptr) = x->pool[index].ptr;
-                                            err = PIZ_GOOD;
-                                            break;
-                                        }
-                                }
-                        }
+                    if (x->pool[index].key == key) {
+                        (*ptr) = x->pool[index].ptr;
+                        err = PIZ_GOOD;
+                        break;
+                    }
                 }
+            }
         }
+    }
 
     return err;
 }
@@ -277,28 +249,24 @@ bool pizBoundedHashTableContainsKey (const PIZBoundedHashTable *x, long key)
 {
     bool k = false;
     
-    if (key >= 0)
-        {
-            long p = key % x->hashSize;
+    if (key >= 0) {
+        long p = key % x->hashSize;
+        
+        if (x->hashTable[p]) {
+            long count, i, index;
             
-            if (x->hashTable[p])
-                {
-                    long count, i, index;
+            if (count = pizGrowingArrayCount (x->hashTable[p])) {
+                for (i = 0; i < count; i++) {
+                    index = pizGrowingArrayValueAtIndex (x->hashTable[p], i);
                     
-                    if (count = pizGrowingArrayCount (x->hashTable[p]))
-                        {
-                            for (i = 0; i < count; i++)
-                                {
-                                    index = pizGrowingArrayValueAtIndex (x->hashTable[p], i);
-                                    
-                                    if (x->pool[index].key == key) {
-                                            k = true;
-                                            break;
-                                        }
-                                }
-                        }
+                    if (x->pool[index].key == key) {
+                        k = true;
+                        break;
+                    }
                 }
+            }
         }
+    }
     
     return k;
 }
