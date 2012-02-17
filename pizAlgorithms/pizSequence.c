@@ -339,7 +339,7 @@ void pizSequenceClear (PIZSequence *x)
 {
     PIZLOCK
     
-    pizSequenceClearNotes (x);
+    pizSequenceRemoveAllNotes (x);
     
     PIZUNLOCK
 }
@@ -411,7 +411,7 @@ PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *a,
     PIZLOCK
     
     if (flags & PIZ_ADD_FLAG_CLEAR) {
-            pizSequenceClearNotes (x);
+            pizSequenceRemoveAllNotes (x);
         }
         
     if (a) {
@@ -826,7 +826,7 @@ void pizSequenceMakeMap (PIZSequence *x)
     }
 }
 
-void pizSequenceClearNotes (PIZSequence *x)
+void pizSequenceRemoveAllNotes (PIZSequence *x)
 {
     if (x->count) {
         long i;

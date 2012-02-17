@@ -590,20 +590,20 @@ PIZ_LOCAL PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
 PIZ_LOCAL void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note);
 
 /**
- * \brief   Restore the map after notes have been created, deleted, moved.
+ * \brief   Clear the sequence.
+ * \param   x A valid pointer.
+ * \ingroup private
+ */
+PIZ_LOCAL void pizSequenceRemoveAllNotes (PIZSequence *x);
+
+/**
+ * \brief   Restore the map after notes have been created, deleted or moved.
  * \param   x A valid pointer.
  * \remark  For efficiency a list of linked lists currently used is stored in an array ; 
  *          this function MUST be called to rebuild the list after modifications on note positions.
  * \ingroup private
  */
 PIZ_LOCAL void pizSequenceMakeMap (PIZSequence *x);
-
-/**
- * \brief   Clear the sequence.
- * \param   x A valid pointer.
- * \ingroup private
- */
-PIZ_LOCAL void pizSequenceClearNotes (PIZSequence *x);
 
 /**
  * \brief   Transpose a pitch to fit zone's ambitus.
