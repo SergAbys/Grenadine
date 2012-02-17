@@ -233,7 +233,6 @@ typedef enum _PIZDataIndex {
     PIZ_DATA_IS_MARKED,                             /*!< Offset of boolean \a isMarked. */
     PIZ_DATA_NOTE_SIZE      = 7,                    /*!< Offset for a note. */
     PIZ_DATA_ORIGIN         = 7,                    /*!< Private. */
-    PIZ_DATA_TAG,                                   /*!< Private. */
     PIZ_DATA_START          = 0,                    /*!< Offset of \a start. */
     PIZ_DATA_END,                                   /*!< Offset of \a end. */
     PIZ_DATA_DOWN,                                  /*!< Offset of \a down. */
@@ -254,7 +253,6 @@ typedef enum _PIZAddFlag {
     PIZ_ADD_FLAG_UNSELECT   = 16,                   /*!< Force notes unselected/unmarked. */
     PIZ_ADD_FLAG_CLEAR      = 32,                   /*!< Clear sequence before. */
     PIZ_ADD_FLAG_ORIGIN     = 64,                   /*!< Private. */
-    PIZ_ADD_FLAG_TAG        = 128                   /*!< Private. */
     } PIZAddFlag;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -344,20 +342,20 @@ void pizSequenceFree (PIZSequence *x);
 long pizSequenceCount (PIZSequence *x);
 
 /**
- * \brief   Get the global velocity of the sequence. 
- * \remark  Default is 0.
- * \param   x A valid pointer.
- * \return  The velocity.
- * \ingroup sequenceClass
+ * \brief       Get the global velocity of the sequence. 
+ * \details     Default is 0.
+ * \param       x A valid pointer.
+ * \return      The velocity.
+ * \ingroup     sequenceClass
  */
 long pizSequenceVelocity (PIZSequence *x);
 
 /**
- * \brief   Get the MIDI channel of the sequence.
- * \remark  Default is 1.
- * \param   x A valid pointer.
- * \return  The MIDI channel.
- * \ingroup sequenceClass
+ * \brief       Get the MIDI channel of the sequence.
+ * \details     Default is 1.
+ * \param       x A valid pointer.
+ * \return      The MIDI channel.
+ * \ingroup     sequenceClass
  */
 long pizSequenceChannel (PIZSequence *x);
 
@@ -378,11 +376,11 @@ PIZNoteValue pizSequenceGrid (PIZSequence *x);
 PIZNoteValue pizSequenceNoteValue (PIZSequence *x);
 
 /**
- * \brief   Set the \a chance value of the sequence.
- * \remark  Default is 100.
- * \param   x A valid pointer.
- * \param   value The value [0, 100].
- * \ingroup sequenceClass
+ * \brief       Set the \a chance value of the sequence.
+ * \details     Default is 100.
+ * \param       x A valid pointer.
+ * \param       value The value [0, 100].
+ * \ingroup     sequenceClass
  */
 void pizSequenceSetChance (PIZSequence *x, long value);
 
@@ -477,9 +475,9 @@ PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *unselected, P
  * \brief   Add notes with a dynamic array.
  * \param   x A valid pointer.
  * \param   a A pointer to the array.
- * \param   flags The flags (as ORed PIZAddFlags).
+ * \param   flags The flags (as ORed \ref PIZAddFlag).
  * \return  An error code.
- * \remark  A naive example :
+ * \remark  An example :
  * \code
  * long noteC[PIZ_DATA_NOTE_SIZE];
  * long noteG[PIZ_DATA_NOTE_SIZE] = {24, 67, 90, 24, 1, 0, 0}; 
@@ -579,33 +577,51 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a);
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \warning This function is private.
  * \brief   Add a note to the sequence.
- * \remark  Array must be PIZ_DATA_NOTE_SIZE long ; 
- *          one more value must be provided with PIZ_ADD_FLAG_ORIGIN, and one more with PIZ_ADD_FLAG_TAG. 
- *          For efficiency array size is NOT checked ; so crash may occured with invalid indexing.
+ * \details Array must be \ref PIZ_DATA_NOTE_SIZE long ; 
+ *          one more value must be provided with \ref PIZ_ADD_FLAG_ORIGIN. 
  * \param   x A valid pointer.
  * \param   values A pointer to note values.
- * \param   flags The flags (as ORed PIZAddFlags).
+ * \param   flags The flags (as ORed \ref PIZAddFlag).
  * \return  A pointer to the new note, NULL in case of error.
- * \ingroup sequenceBases
+ * \remark  For efficiency array size is NOT checked ; so crash may occured with invalid indexing.
+ * \ingroup private
  */
 PIZ_LOCAL PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags);
 
 /**
- * \warning This function is private.
  * \brief   Restore the map after notes have been created or deleted.
+ * \param   x A valid pointer.
  * \remark  For efficiency a list of linklist in use is store in an array ; 
  *          this function MUST be called to rebuild the list.
- * \param   x A valid pointer.
- * \return  An error code.
- * \ingroup sequenceBases
+ * \ingroup private
  */
-PIZ_LOCAL PIZError pizSequenceMakeMap (PIZSequence *x);
+PIZ_LOCAL void pizSequenceMakeMap (PIZSequence *x);
 
+/**
+ * \brief   Clear the sequence.
+ * \param   x A valid pointer.
+ * \ingroup private
+ */
 PIZ_LOCAL void pizSequenceClearNotes (PIZSequence *x);
+
+/**
+ * \brief   Transpose a pitch to fit zone's ambitus.
+ * \param   x A valid pointer.
+ * \param   pitch The pitch to move.
+ * \return  The pitch.
+ * \ingroup private
+ */
 PIZ_LOCAL long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch);
 
+/**
+ * \brief   Given a position return new position snapped to sequence's pattern.
+ * \param   x A valid pointer.
+ * \param   pitch The position to be snapped.
+ * \param   patternSize The size of the sequence's pattern.
+ * \return  The new position.
+ * \ingroup private
+ */
 PIZ_LOCAL PIZ_INLINE long pizSequenceSnapPositionToPattern  (PIZSequence *x, long toSnapped, long patternSize);
 
 // -------------------------------------------------------------------------------------------------------------

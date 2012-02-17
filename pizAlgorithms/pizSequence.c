@@ -88,7 +88,7 @@ PIZSequence *pizSequenceNew ( )
     
         long argv[2]    = {0, PIZ_SEQUENCE_MAXIMUM_NOTES};
         
-        x->map          = pizGrowingArrayNew (0);
+        x->map          = pizGrowingArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
         x->scale        = pizGrowingArrayNew (PIZ_MAGIC_SCALE);
         x->pattern      = pizGrowingArrayNew (0);
         x->values1      = (long *)malloc (sizeof(long) * PIZ_POOL_SIZE);
@@ -804,20 +804,17 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
     return newNote;
 }   
 
-PIZError pizSequenceMakeMap (PIZSequence *x)
+void pizSequenceMakeMap (PIZSequence *x)
 {
     long i;
-    long err = PIZ_GOOD;
             
     pizGrowingArrayClear (x->map);
                             
     for (i = 0; i < PIZ_SEQUENCE_TIMELINE_SIZE; i++) {
         if (x->timeline[i] && pizLinklistCount (x->timeline[i])) {
-            err |= pizGrowingArrayAppend (x->map, i);
+            pizGrowingArrayAppend (x->map, i);
         }
     }
-    
-    return err;
 }
 
 void pizSequenceClearNotes (PIZSequence *x)
@@ -842,8 +839,8 @@ long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
     long scale, offset = 0;
     
     if (scale = pizGrowingArrayCount (x->scale)) {
-            offset = pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
-        }
+        offset = pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
+    }
 
     pitch += offset;
             

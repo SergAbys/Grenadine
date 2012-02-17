@@ -147,6 +147,8 @@
  * \ingroup     sequence
  * \defgroup    sequenceBases Foundations
  * \ingroup     sequence
+ * \defgroup    private Private
+ * \ingroup     sequence
  */
  
 // -------------------------------------------------------------------------------------------------------------
