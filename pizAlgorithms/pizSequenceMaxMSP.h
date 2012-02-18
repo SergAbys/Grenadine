@@ -49,6 +49,22 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief   Transpose notes according to ambitus.
+ * \param   x A valid pointer.
+ * \return  True if changed otherwise false.
+ * \ingroup tralala
+ */
+bool pizSequenceApplyAmbitus (PIZSequence *x);
+
+/**
+ * \brief   Snap notes according to pattern.
+ * \param   x A valid pointer.
+ * \return  True if changed otherwise false.
+ * \ingroup tralala
+ */
+bool pizSequenceApplyPattern (PIZSequence *x);
+
 PIZError pizSequenceEncodeToArray (PIZSequence *x, PIZGrowingArray *a);
 PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a);
 

@@ -515,114 +515,6 @@ PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *a)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-bool pizSequenceApplyPattern (PIZSequence *x)
-{
-    // long patternSize, i;
-    bool haveChanged = false;/*
-    
-    PIZLOCK
-    
-    patternSize = pizGrowingArrayCount (x->pattern);
-    
-    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
-        PIZNote *note       = NULL;
-        PIZNote *nextNote   = NULL;
-        
-        long p = pizGrowingArrayValueAtIndex (x->map, i);
-        
-        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-        
-        while (note) {
-            long newPosition;
-            
-            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-            
-            newPosition = note->origin;
-            
-            if (patternSize) {
-                newPosition = pizSequenceSnapPositionToPattern (x, note->origin, patternSize);
-            }
-
-            if (note->position != newPosition) {   
-                long values[PIZ_DATA_NOTE_SIZE + 1];
-                
-                values[PIZ_DATA_POSITION]       = newPosition;
-                values[PIZ_DATA_PITCH]          = note->data[PIZ_PITCH];
-                values[PIZ_DATA_VELOCITY]       = note->data[PIZ_VELOCITY];
-                values[PIZ_DATA_DURATION]       = note->data[PIZ_DURATION];
-                values[PIZ_DATA_CHANNEL]        = note->data[PIZ_CHANNEL];
-                values[PIZ_DATA_IS_SELECTED]    = note->isSelected;
-                values[PIZ_DATA_IS_MARKED]      = false;
-                values[PIZ_DATA_ORIGIN]         = note->origin;
-                
-                if (pizSequenceAddNote (x, values, PIZ_ADD_FLAG_ORIGIN)) {
-                    if (note == x->markedNote) {
-                            x->markedNote = NULL;
-                        }
-                        
-                    if (!(pizLinklistRemoveByPtr (x->timeline[p], (void *)note))) {
-                            x->count --;
-                        }
-                    
-                    haveChanged = true;
-                }
-            }
-                
-            note = nextNote;
-        }
-    }
-    
-    if (haveChanged) {
-        pizSequenceMakeMap (x);
-    }
-    
-    PIZUNLOCK*/
-    
-    return haveChanged; 
-}
-
-bool pizSequenceApplyAmbitus (PIZSequence *x)
-{
-    long i, scale;
-    bool haveChanged = false;
-
-    PIZLOCK
-    
-    scale = pizGrowingArrayCount (x->scale);
-
-    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
-        PIZNote *note       = NULL;
-        PIZNote *nextNote   = NULL;
-        
-        long p = pizGrowingArrayValueAtIndex (x->map, i);
-        
-        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-            
-        while (note) {
-            long tempPitch;
-            
-            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-            
-            tempPitch = pizSequenceMovePitchToAmbitus (x, note->data[PIZ_PITCH]);
-            
-            if (note->data[PIZ_PITCH] != tempPitch) {
-                    haveChanged = true;
-                    note->data[PIZ_PITCH] = tempPitch;
-                }
-                
-            note = nextNote;
-        }
-    }
-    
-    PIZUNLOCK
-    
-    return haveChanged;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 long pizSequenceIndex (PIZSequence *x)
 {
     long k;
@@ -800,16 +692,51 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
 
 void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note) 
 {
-    if (note) {
-        long p = note->position;
+    long p = note->position;
     
-        if (note == x->markedNote) {
-            x->markedNote = NULL;
-        }
+    if (note == x->markedNote) {
+        x->markedNote = NULL;
+    }
                     
-        if (!pizLinklistRemoveByPtr (x->timeline[p], (void *)note)) {
-            x->count --;
+    if (!pizLinklistRemoveByPtr (x->timeline[p], (void *)note)) {
+        x->count --;
+    }
+}
+
+void pizSequenceRemoveAllNotes (PIZSequence *x)
+{
+    if (x->count) {
+        long i, p;
+        
+        for (i = 0; i < pizGrowingArrayCount (x->map); i++) {
+            p = pizGrowingArrayValueAtIndex (x->map, i);
+            pizLinklistClear (x->timeline[p]);
         }
+        
+        pizGrowingArrayClear (x->map);
+        
+        x->count = 0;
+        x->markedNote = NULL;
+    }
+}
+
+void pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
+{
+    long err = PIZ_GOOD; 
+    long position = note->position;
+    
+    if (!x->timeline[newPosition]) {
+        if (!(x->timeline[newPosition] = pizLinklistNew ( ))) {
+            err |= PIZ_MEMORY;
+        }
+    }
+    
+    if (!err) {
+        if (!pizLinklistChuckByPtr (x->timeline[position], (void *)note)) {            
+            if (!pizLinklistInsert (x->timeline[newPosition], (void *)note)) {
+                note->position = newPosition;
+            }
+        } 
     }
 }
 
@@ -826,22 +753,9 @@ void pizSequenceMakeMap (PIZSequence *x)
     }
 }
 
-void pizSequenceRemoveAllNotes (PIZSequence *x)
-{
-    if (x->count) {
-        long i;
-        
-        for (i = 0; i < pizGrowingArrayCount (x->map); i++) {
-            long p = pizGrowingArrayValueAtIndex (x->map, i);
-            pizLinklistClear (x->timeline[p]);
-        }
-        
-        pizGrowingArrayClear (x->map);
-        
-        x->count = 0;
-        x->markedNote = NULL;
-    }
-}
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
 {
@@ -873,11 +787,13 @@ long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
 
 PIZ_INLINE long pizSequenceSnapPositionToPattern (PIZSequence *x, long toSnapped, long patternSize)
 {
-    long j = MAX ((long)(toSnapped / (double)x->grid), 0);
-    long k = j % patternSize;
+    if (x->grid != PIZ_NOTE_NONE) {
+        long j = MAX ((long)(toSnapped / (double)x->grid), 0);
+        long k = j % patternSize;
     
-    toSnapped = j * x->grid;
-    toSnapped += pizGrowingArrayValueAtIndex (x->pattern, k) * x->grid;
+        toSnapped = j * x->grid;
+        toSnapped += pizGrowingArrayValueAtIndex (x->pattern, k) * x->grid;
+    }
 
     return toSnapped;
 }

@@ -1304,10 +1304,6 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
                 if (!err) {
                     x->patternCell = temp;
                     
-                    if (pizSequenceApplyPattern (x->live) && LIVE) {
-                        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
-                    }
-                    
                     DIRTYLAYER_SET (DIRTY_GRID);
                 }
             }
@@ -1336,12 +1332,6 @@ t_max_err tralala_setPatternCustom (t_tralala *x, t_object *attr, long argc, t_a
             }
                 
             pizSequenceSetPattern (x->live, tempArray);
-            
-            if (x->patternCell != tll_sym_none) {
-                if (pizSequenceApplyPattern (x->live) && LIVE) {
-                    DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
-                }
-            }
             
             ARRAY_RELEASE (tempArray);
         }

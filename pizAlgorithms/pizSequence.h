@@ -87,19 +87,17 @@
 
 #define PIZ_SEQUENCE_VERSION_MAJOR      1
 #define PIZ_SEQUENCE_VERSION_MINOR      0
-
 #define PIZ_SEQUENCE_TIMELINE_SIZE      576   
+
 #define PIZ_SEQUENCE_MAXIMUM_NOTES      128   
 #define PIZ_SEQUENCE_MAXIMUM_DURATION   96
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-// PIZ_TEMP_SIZE = MAX (PIZ_SEQUENCE_MAXIMUM_NOTES, PIZ_SEQUENCE_MAXIMUM_DURATION)
-
+//                                     ----- MAX 
 #define PIZ_TEMP_SIZE                   128
-#define PIZ_CHANNEL_NONE                0
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define PIZ_CHANNEL_NONE                0
 #define PIZ_NOTE_FLAG_NONE              (0L)
 #define PIZ_NOTE_FLAG_LASSO             (1<<0)
 
@@ -428,9 +426,9 @@ void pizSequenceSetNoteValue (PIZSequence *x, PIZNoteValue noteValue);
 PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type, const PIZGrowingArray *a);
 
 /**
- * \brief   Set rythmic pattern of the sequence.
+ * \brief   Set pattern of the sequence.
  * \param   x A valid pointer.
- * \param   a The rythmic motif.
+ * \param   a The motif.
  * \ingroup sequenceClass
  */
 PIZError pizSequenceSetPattern (PIZSequence *x, const PIZGrowingArray *a);
@@ -516,22 +514,6 @@ PIZError pizSequenceZoneToArray (PIZSequence *x, PIZGrowingArray *a);
 PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *a);
 
 /**
- * \brief   Snap notes according to rythmic pattern.
- * \param   x A valid pointer.
- * \return  True if changed otherwise false.
- * \ingroup sequenceBases
- */
-bool pizSequenceApplyPattern (PIZSequence *x);
-
-/**
- * \brief   Transpose notes to ambitus.
- * \param   x A valid pointer.
- * \return  True if changed otherwise false.
- * \ingroup sequenceBases
- */
-bool pizSequenceApplyAmbitus (PIZSequence *x);
-
-/**
  * \brief   Get the current playback head's index.
  * \param   x A valid pointer.
  * \return  The index.
@@ -570,38 +552,48 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a);
 
 /**
  * \brief   Add a note to the sequence.
- * \details Array must be \ref PIZ_DATA_NOTE_SIZE long. 
+ * \details Array must be PIZ_DATA_NOTE_SIZE long. 
  * \param   x A valid pointer.
  * \param   values A pointer to note values.
  * \param   flags The flags (as ORed \ref PIZAddFlag).
  * \return  A pointer to the new note, NULL in case of error.
- * \remark  For efficiency array size is NOT checked ; so crash may occured with invalid size.
- * \ingroup private
+ * \warning For efficiency array size is NOT checked ; so crash may occured with invalid size.
+ * \ingroup sequencePrivate
  */
 PIZ_LOCAL PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags);
 
 /**
  * \brief   Remove a note from the sequence. 
  * \param   x A valid pointer.
- * \param   note A pointer to the note.
+ * \param   note A valid pointer.
  * \return  An error code.
- * \ingroup private
+ * \ingroup sequencePrivate
  */
 PIZ_LOCAL void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note);
 
 /**
  * \brief   Clear the sequence.
  * \param   x A valid pointer.
- * \ingroup private
+ * \ingroup sequencePrivate
  */
 PIZ_LOCAL void pizSequenceRemoveAllNotes (PIZSequence *x);
+
+/**
+ * \brief   Move a note in the sequence.
+ * \param   x A valid pointer.
+ * \param   note A valid pointer.
+ * \param   newPosition The new position;
+ * \warning For efficiency new position is NOT checked ; so crash may occured with invalid position.
+ * \ingroup sequencePrivate
+ */
+PIZ_LOCAL void pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition);
 
 /**
  * \brief   Restore the map after notes have been created, deleted or moved.
  * \param   x A valid pointer.
  * \remark  For efficiency a list of linked lists currently used is stored in an array ; 
  *          this function MUST be called to rebuild the list after modifications on note positions.
- * \ingroup private
+ * \ingroup sequencePrivate
  */
 PIZ_LOCAL void pizSequenceMakeMap (PIZSequence *x);
 
@@ -610,7 +602,7 @@ PIZ_LOCAL void pizSequenceMakeMap (PIZSequence *x);
  * \param   x A valid pointer.
  * \param   pitch The pitch to move.
  * \return  The pitch.
- * \ingroup private
+ * \ingroup sequencePrivate
  */
 PIZ_LOCAL long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch);
 
@@ -620,7 +612,7 @@ PIZ_LOCAL long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch);
  * \param   pitch The position to be snapped.
  * \param   patternSize The size of the sequence's pattern.
  * \return  The new position.
- * \ingroup private
+ * \ingroup sequencePrivate
  */
 PIZ_LOCAL PIZ_INLINE long pizSequenceSnapPositionToPattern  (PIZSequence *x, long toSnapped, long patternSize);
 

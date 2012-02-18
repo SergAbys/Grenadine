@@ -74,6 +74,7 @@
 		9699D9DF1413A0F900F86BD8 /* pizMarkovModel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pizMarkovModel.c; sourceTree = "<group>"; };
 		969BA88414AF6780006B9729 /* pizArrayPool.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizArrayPool.c; sourceTree = "<group>"; };
 		969BA88514AF6780006B9729 /* pizArrayPool.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizArrayPool.h; sourceTree = "<group>"; };
+		969C044714EFB66200FD2D11 /* pizAlgorithms.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; path = pizAlgorithms.xcconfig; sourceTree = "<group>"; };
 		969CFAAD14CC581900D52846 /* pizKohonenMapMaxMSP.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizKohonenMapMaxMSP.c; sourceTree = "<group>"; };
 		96A05BF814E3FBF80028A323 /* pizAlgorithmsMaxMSP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pizAlgorithmsMaxMSP.h; sourceTree = "<group>"; };
 		96A100A614E7F16A00D3ECB6 /* pizSequenceMaxMSP.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizSequenceMaxMSP.c; sourceTree = "<group>"; };
@@ -127,6 +128,7 @@
 		08FB7794FE84155DC02AAC07 /* PizAlgorithms */ = {
 			isa = PBXGroup;
 			children = (
+				969C044714EFB66200FD2D11 /* pizAlgorithms.xcconfig */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				C6A0FF2B0290797F04C91782 /* Documentation */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
@@ -346,33 +348,34 @@
 /* Begin XCBuildConfiguration section */
 		1DEB91EC08733DB70010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 969C044714EFB66200FD2D11 /* pizAlgorithms.xcconfig */;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					"$(HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-					"$(HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
-				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"/Developer/Headers/FlatCarbon\"";
 				HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"/users/jeantoto/maxsdk-5.1.7/c74support/max-includes\"";
 				INSTALL_PATH = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = PizAlgorithms;
-				USER_HEADER_SEARCH_PATHS = "/users/jeantoto/maxsdk-5.1.7/*tralala/pizdatastructures";
+				USER_HEADER_SEARCH_PATHS = "$(inherited)";
 				ZERO_LINK = YES;
 			};
 			name = Debug;
 		};
 		1DEB91ED08733DB70010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 969C044714EFB66200FD2D11 /* pizAlgorithms.xcconfig */;
 			buildSettings = {
 				ARCHS = (
 					ppc,
 					i386,
 				);
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = "";
@@ -386,9 +389,9 @@
 				HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"/Developer/Headers/FlatCarbon\"";
 				HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"/users/jeantoto/maxsdk-5.1.7/c74support/max-includes\"";
 				INSTALL_PATH = /usr/local/lib;
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = PizAlgorithms;
-				USER_HEADER_SEARCH_PATHS = "";
+				USER_HEADER_SEARCH_PATHS = "$(inherited)";
 			};
 			name = Release;
 		};
