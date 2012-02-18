@@ -2,6 +2,7 @@
  * \file    pizSequenceTransform.h
  * \author  Jean Sapristi
  * \date    31 janvier 2012
+ * \ingroup sequenceTransform
  */
  
 /*
@@ -52,6 +53,9 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \ingroup sequenceTransform
+ */
 typedef enum _PIZAlgorithm {
     PIZ_ALGORITHM_NONE  = 0,
     PIZ_FACTOR_ORACLE   = 1,
@@ -62,20 +66,20 @@ typedef enum _PIZAlgorithm {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+/**
+ * \brief   Create the sequence.
+ * \return  A pointer to the new sequence.  
+ * \ingroup sequenceClass
+ */
+ 
 bool pizSequenceClean (PIZSequence *x, long value);
 bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm flag, void *algorithm);
 bool pizSequenceCellularAutomata (PIZSequence *x, long iterate);
 bool pizSequenceGenerator (PIZSequence *x, long iterate, long division);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 bool pizSequenceRotate (PIZSequence *x, PIZSelector selector, long shift);
 bool pizSequenceScramble (PIZSequence *x, PIZSelector selector);
 bool pizSequenceSort (PIZSequence *x, PIZSelector selector, long down);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 
 bool pizSequenceChange (PIZSequence *x, PIZSelector selector, long value);
 bool pizSequenceSet (PIZSequence *x, PIZSelector selector, long value);
@@ -83,11 +87,8 @@ bool pizSequenceRandom (PIZSequence *x, PIZSelector selector, long minValue, lon
 bool pizSequenceKillNotes (PIZSequence *x);
 bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_LOCAL long pizSequencePickUpNotes   (PIZSequence *x);
-PIZ_LOCAL void pizSequenceFillValues    (PIZSequence *x, PIZSelector selector, long k, bool reverse);
+PIZ_LOCAL long pizSequencePickUpNotes (PIZSequence *x);
+PIZ_LOCAL void pizSequenceFillValues (PIZSequence *x, PIZSelector selector, long k, bool reverse);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

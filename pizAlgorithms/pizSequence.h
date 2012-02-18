@@ -2,7 +2,10 @@
  * \file    pizSequence.h
  * \author  Jean Sapristi
  * \date    31 janvier 2012
- * \ingroup foundation
+ * \ingroup sequenceTypes
+ * \ingroup sequenceClass
+ * \ingroup sequenceBases
+ * \ingroup sequencePrivate
  */
  
 /*
@@ -552,7 +555,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a);
 
 /**
  * \brief   Add a note to the sequence.
- * \details Array must be PIZ_DATA_NOTE_SIZE long. 
+ * \details Array must be \ref PIZ_DATA_NOTE_SIZE long. 
  * \param   x A valid pointer.
  * \param   values A pointer to note values.
  * \param   flags The flags (as ORed \ref PIZAddFlag).
@@ -598,7 +601,7 @@ PIZ_LOCAL void pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosit
 PIZ_LOCAL void pizSequenceMakeMap (PIZSequence *x);
 
 /**
- * \brief   Transpose a pitch to fit zone's ambitus.
+ * \brief   Transpose the pitch to fit the zone's ambitus.
  * \param   x A valid pointer.
  * \param   pitch The pitch to move.
  * \return  The pitch.
@@ -607,14 +610,14 @@ PIZ_LOCAL void pizSequenceMakeMap (PIZSequence *x);
 PIZ_LOCAL long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch);
 
 /**
- * \brief   Given a position return new position snapped to sequence's pattern.
+ * \brief   Given a position return the new position snapped to the sequence's pattern.
  * \param   x A valid pointer.
  * \param   pitch The position to be snapped.
  * \param   patternSize The size of the sequence's pattern.
  * \return  The new position.
  * \ingroup sequencePrivate
  */
-PIZ_LOCAL PIZ_INLINE long pizSequenceSnapPositionToPattern  (PIZSequence *x, long toSnapped, long patternSize);
+PIZ_LOCAL long pizSequenceSnapPositionToPattern  (PIZSequence *x, long toSnapped, long patternSize);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -306,9 +306,9 @@ PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type
     if (ptr) {
         long i;
         for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
-                pizGrowingArrayAppend (x->scale, *(ptr + ((PIZ_MAGIC_SCALE - key + i) % PIZ_MAGIC_SCALE)));
-            }
+            pizGrowingArrayAppend (x->scale, *(ptr + ((PIZ_MAGIC_SCALE - key + i) % PIZ_MAGIC_SCALE)));
         }
+    }
     
     PIZUNLOCK
     
@@ -322,9 +322,9 @@ PIZError pizSequenceSetPattern (PIZSequence *x, const PIZGrowingArray *a)
     PIZLOCK
     
     if (a) {
-            err = PIZ_GOOD;
-            err |= pizGrowingArrayCopy (x->pattern, a);
-        }
+        err = PIZ_GOOD;
+        err |= pizGrowingArrayCopy (x->pattern, a);
+    }
     
     PIZUNLOCK
     
@@ -373,8 +373,8 @@ PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *a, PIZGrowing
             pitch = note->data[PIZ_PITCH];
             
             if (scale) {
-                    pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
-                }
+                pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
+            }
                         
             if (note->isSelected && b) {
                 err |= pizGrowingArrayAppend (b, note->position);
@@ -411,8 +411,8 @@ PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *a,
     PIZLOCK
     
     if (flags & PIZ_ADD_FLAG_CLEAR) {
-            pizSequenceRemoveAllNotes (x);
-        }
+        pizSequenceRemoveAllNotes (x);
+    }
         
     if (a) {
         long i, count;
@@ -452,13 +452,13 @@ PIZError pizSequenceZoneToArray (PIZSequence *x, PIZGrowingArray *a)
     PIZLOCK
     
     if (a) {
-            err = PIZ_GOOD;
-            
-            err |= pizGrowingArrayAppend (a, x->start);
-            err |= pizGrowingArrayAppend (a, x->end);
-            err |= pizGrowingArrayAppend (a, x->down);
-            err |= pizGrowingArrayAppend (a, x->up);
-        }
+        err = PIZ_GOOD;
+        
+        err |= pizGrowingArrayAppend (a, x->start);
+        err |= pizGrowingArrayAppend (a, x->end);
+        err |= pizGrowingArrayAppend (a, x->down);
+        err |= pizGrowingArrayAppend (a, x->up);
+    }
     
     PIZUNLOCK
     
@@ -471,40 +471,38 @@ PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *a)
     
     PIZLOCK
     
-    if (a && (pizGrowingArrayCount (a) == PIZ_DATA_ZONE_SIZE))
-        {
-            long tempStart  = pizGrowingArrayValueAtIndex (a, PIZ_DATA_START);
-            long tempEnd    = pizGrowingArrayValueAtIndex (a, PIZ_DATA_END);
-            long tempDown   = pizGrowingArrayValueAtIndex (a, PIZ_DATA_DOWN);
-            long tempUp     = pizGrowingArrayValueAtIndex (a, PIZ_DATA_UP);
+    if (a && (pizGrowingArrayCount (a) == PIZ_DATA_ZONE_SIZE)) {
+        long tempStart  = pizGrowingArrayValueAtIndex (a, PIZ_DATA_START);
+        long tempEnd    = pizGrowingArrayValueAtIndex (a, PIZ_DATA_END);
+        long tempDown   = pizGrowingArrayValueAtIndex (a, PIZ_DATA_DOWN);
+        long tempUp     = pizGrowingArrayValueAtIndex (a, PIZ_DATA_UP);
+        
+        tempStart   = CLAMP (tempStart, 0, PIZ_SEQUENCE_TIMELINE_SIZE);
+        tempEnd     = CLAMP (tempEnd,   0, PIZ_SEQUENCE_TIMELINE_SIZE);
+        tempDown    = CLAMP (tempDown,  0, PIZ_MAGIC_PITCH);
+        tempUp      = CLAMP (tempUp,    0, PIZ_MAGIC_PITCH);
+
+        if (tempStart != tempEnd) {
+            if (tempEnd < tempStart) {
+                long k      = tempEnd;
+                tempEnd     = tempStart;
+                tempStart   = k;
+            }
             
-            tempStart   = CLAMP (tempStart, 0, PIZ_SEQUENCE_TIMELINE_SIZE);
-            tempEnd     = CLAMP (tempEnd,   0, PIZ_SEQUENCE_TIMELINE_SIZE);
-            tempDown    = CLAMP (tempDown,  0, PIZ_MAGIC_PITCH);
-            tempUp      = CLAMP (tempUp,    0, PIZ_MAGIC_PITCH);
-    
-            if (tempStart != tempEnd) 
-                {
-                    if (tempEnd < tempStart) {
-                            long k      = tempEnd;
-                            tempEnd     = tempStart;
-                            tempStart   = k;
-                        }
-                    
-                    if (tempUp < tempDown) {
-                            long k      = tempUp;
-                            tempUp      = tempDown;
-                            tempDown    = k;
-                        }
-                    
-                    x->start = tempStart;
-                    x->end   = tempEnd;
-                    x->down  = tempDown;
-                    x->up    = tempUp;
-                    
-                    err = PIZ_GOOD;
-                } 
-        }
+            if (tempUp < tempDown) {
+                long k      = tempUp;
+                tempUp      = tempDown;
+                tempDown    = k;
+            }
+            
+            x->start = tempStart;
+            x->end   = tempEnd;
+            x->down  = tempDown;
+            x->up    = tempUp;
+            
+            err = PIZ_GOOD;
+        } 
+    }
     
     PIZUNLOCK
     
@@ -533,8 +531,8 @@ bool pizSequenceIsAtEnd (PIZSequence *x)
     PIZLOCK
     
     if (x->index >= x->end) {
-            k = true;
-        }
+        k = true;
+    }
     
     PIZUNLOCK
     
@@ -782,10 +780,7 @@ long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
     return (CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_INLINE long pizSequenceSnapPositionToPattern (PIZSequence *x, long toSnapped, long patternSize)
+long pizSequenceSnapPositionToPattern (PIZSequence *x, long toSnapped, long patternSize)
 {
     if (x->grid != PIZ_NOTE_NONE) {
         long j = MAX ((long)(toSnapped / (double)x->grid), 0);

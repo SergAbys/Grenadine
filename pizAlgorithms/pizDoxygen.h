@@ -141,14 +141,16 @@
  */
  
 /**
- * \defgroup    sequenceTypes Types
- * \ingroup     sequence
- * \defgroup    sequenceClass Life and Attributes
- * \ingroup     sequence
- * \defgroup    sequenceBases Foundations
- * \ingroup     sequence
- * \defgroup    sequencePrivate Private
- * \ingroup     sequence
+ * \defgroup sequenceTypes Types
+ * \ingroup  sequence
+ * \defgroup sequenceClass Attributes
+ * \ingroup  sequence
+ * \defgroup sequenceBases Bases
+ * \ingroup  sequence
+ * \defgroup sequenceTransform Transformations
+ * \ingroup  sequence
+ * \defgroup sequencePrivate Private
+ * \ingroup  sequence
  */
  
 // -------------------------------------------------------------------------------------------------------------
