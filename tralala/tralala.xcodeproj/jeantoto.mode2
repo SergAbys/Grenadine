@@ -256,8 +256,8 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>7</integer>
-											<integer>2</integer>
+											<integer>13</integer>
+											<integer>11</integer>
 											<integer>0</integer>
 										</array>
 									</array>
@@ -422,8 +422,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D6741014F108A8008FF21C</string>
-				<string>96D6741114F108A8008FF21C</string>
+				<string>96D9CB7914F1473D00FBAF2A</string>
+				<string>96D9CB7A14F1473D00FBAF2A</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -457,6 +457,8 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>1C530D52069F1CE1000CFCEE</string>
+		<string>1C530D54069F1CE1000CFCEE</string>
+		<string>96D9CB8914F149E900FBAF2A</string>
 		<string>/Users/jeantoto/Dev/Grenadine/Tralala/tralala.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -676,7 +678,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D6741214F108A8008FF21C</string>
+				<string>96D9CB8214F149E900FBAF2A</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -718,8 +720,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {331, 199}}</string>
-											<string>{{331, 0}, {386, 199}}</string>
+											<string>{{0, 0}, {329, 204}}</string>
+											<string>{{329, 0}, {388, 204}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -734,8 +736,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {717, 199}}</string>
-											<string>{{0, 199}, {717, 197}}</string>
+											<string>{{0, 0}, {717, 204}}</string>
+											<string>{{0, 204}, {717, 192}}</string>
 										</array>
 									</dict>
 								</dict>
@@ -782,14 +784,14 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D54069F1CE1000CFCEE</string>
-				<string>96EFB35F14E91982000857F4</string>
+				<string>96D9CB8314F149E900FBAF2A</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>96EFB36014E91982000857F4</string>
-				<string>96EFB36114E91982000857F4</string>
-				<string>96EFB36214E91982000857F4</string>
-				<string>96EFB36314E91982000857F4</string>
-				<string>96EFB36414E91982000857F4</string>
-				<string>96EFB36514E91982000857F4</string>
+				<string>96D9CB8414F149E900FBAF2A</string>
+				<string>96D9CB8514F149E900FBAF2A</string>
+				<string>96D9CB8614F149E900FBAF2A</string>
+				<string>96D9CB8714F149E900FBAF2A</string>
+				<string>96D9CB8814F149E900FBAF2A</string>
+				<string>96D9CB8914F149E900FBAF2A</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debug</string>

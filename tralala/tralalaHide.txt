@@ -74,6 +74,7 @@ _pizLinklistSetFlags
 _pizLinklistSwapByIndexes
 _pizSequenceAddNoteWithCoordinates
 _pizSequenceAddNotesWithArray
+_pizSequenceCell
 _pizSequenceCellularAutomata
 _pizSequenceChange
 _pizSequenceChangeMarkedNoteValue
@@ -110,6 +111,7 @@ _pizSequenceSelectAllNotes
 _pizSequenceSelectNoteWithCoordinates
 _pizSequenceSelectNotesWithLasso
 _pizSequenceSet
+_pizSequenceSetCell
 _pizSequenceSetChance
 _pizSequenceSetPattern
 _pizSequenceSetGrid

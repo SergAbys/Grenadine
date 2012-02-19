@@ -121,6 +121,7 @@ PIZSequence *pizSequenceNew ( )
                 x->chance           = PIZ_DEFAULT_CHANCE;
                 x->channel          = PIZ_DEFAULT_CHANNEL;
                 x->velocity         = 0;
+                x->cell             = PIZ_NOTE_NONE;
                 x->grid             = PIZ_NOTE_NONE;
                 x->noteValue        = PIZ_NOTE_NONE;
                 x->tempStart        = PIZ_DEFAULT_START;
@@ -221,6 +222,17 @@ long pizSequenceChannel (PIZSequence *x)
     return k;
 }
 
+PIZNoteValue pizSequenceCell (PIZSequence *x)
+{
+    long k;
+    
+    PIZLOCK
+    k = x->cell;
+    PIZUNLOCK
+    
+    return k;
+}
+
 PIZNoteValue pizSequenceGrid (PIZSequence *x)
 {
     long k;
@@ -264,6 +276,13 @@ void pizSequenceSetChannel (PIZSequence *x, long channel)
 {
     PIZLOCK
     x->channel = CLAMP (channel, 1, PIZ_MAGIC_CHANNEL);
+    PIZUNLOCK
+}
+
+void pizSequenceSetCell (PIZSequence *x, PIZNoteValue snapValue)
+{
+    PIZLOCK
+    x->cell = snapValue;
     PIZUNLOCK
 }
 
@@ -782,12 +801,12 @@ long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
 
 long pizSequenceSnapPositionToPattern (PIZSequence *x, long toSnapped, long patternSize)
 {
-    if (x->grid != PIZ_NOTE_NONE) {
-        long j = MAX ((long)(toSnapped / (double)x->grid), 0);
+    if (x->cell != PIZ_NOTE_NONE) {
+        long j = MAX ((long)(toSnapped / (double)x->cell), 0);
         long k = j % patternSize;
     
-        toSnapped = j * x->grid;
-        toSnapped += pizGrowingArrayValueAtIndex (x->pattern, k) * x->grid;
+        toSnapped = j * x->cell;
+        toSnapped += pizGrowingArrayValueAtIndex (x->pattern, k) * x->cell;
     }
 
     return toSnapped;

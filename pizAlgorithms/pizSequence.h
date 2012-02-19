@@ -285,7 +285,8 @@ typedef struct _PIZSequence {
     long                chance;                     /*!< Chance value [0, 100]. */
     long                channel;                    /*!< Global MIDI channel. */
     long                velocity;                   /*!< Global MIDI velocity. */
-    PIZNoteValue        grid;                       /*!< Grid of the sequence. */
+    PIZNoteValue        cell;                       /*!< Cell for generators. */
+    PIZNoteValue        grid;                       /*!< Magnetic grid of the sequence. */
     PIZNoteValue        noteValue;                  /*!< Default note value. */
     long                tempStart;                  /*!< Temporary zone storage. */
     long                tempEnd;                    /*!< Temporary zone storage. */
@@ -345,6 +346,14 @@ long pizSequenceVelocity (PIZSequence *x);
 long pizSequenceChannel (PIZSequence *x);
 
 /**
+ * \brief   Get the cell value (\ref sequenceTransform).
+ * \param   x A valid pointer.
+ * \return  The cell value.
+ * \ingroup sequenceClass
+ */
+PIZNoteValue pizSequenceCell (PIZSequence *x);
+
+/**
  * \brief   Get the grid value of the sequence.
  * \param   x A valid pointer.
  * \return  The grid value.
@@ -384,6 +393,14 @@ void pizSequenceSetVelocity (PIZSequence *x, long value);
  * \ingroup sequenceClass
  */
 void pizSequenceSetChannel (PIZSequence *x, long channel);
+
+/**
+ * \brief   Set the cell for generators (\ref sequenceTransform).
+ * \param   x A valid pointer.
+ * \param   value The cell value.
+ * \ingroup sequenceClass
+ */
+void pizSequenceSetCell (PIZSequence *x, PIZNoteValue snapValue);
 
 /**
  * \brief   Set the grid of the sequence.

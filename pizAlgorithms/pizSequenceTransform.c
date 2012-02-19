@@ -205,7 +205,7 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                                                 
     PIZLOCK
     
-    if (x->grid != PIZ_NOTE_NONE) {
+    if (x->cell != PIZ_NOTE_NONE) {
     
     long i, start, end, mapCount, scale;
     long k = 0;
@@ -213,8 +213,8 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
     
     pizBoundedHashTableClear (x->hashTable);
 
-    start       = PIZ_CEIL (x->start, x->grid);
-    end         = PIZ_CEIL (x->end, x->grid);
+    start       = PIZ_CEIL (x->start, x->cell);
+    end         = PIZ_CEIL (x->end, x->cell);
     mapCount    = pizGrowingArrayCount (x->map);
     scale       = pizGrowingArrayCount (x->scale);
     
@@ -235,7 +235,7 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                 offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_PITCH] % scale);
             }
             
-            key = ((long)(note->position / (double)x->grid) * (PIZ_MAGIC_PITCH + 1));
+            key = ((long)(note->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1));
             key += note->data[PIZ_PITCH] + offset;
             
             pizBoundedHashTableAdd (x->hashTable, key, (void *)note);
@@ -273,7 +273,7 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
             
             pitch = note->data[PIZ_PITCH] + offset;
             
-            hCenter = ((long)(note->position / (double)x->grid)) * (PIZ_MAGIC_PITCH + 1);
+            hCenter = ((long)(note->position / (double)x->cell)) * (PIZ_MAGIC_PITCH + 1);
             hCenter += note->data[PIZ_PITCH] + offset;
             
             err |= (note->position < x->start);
@@ -294,7 +294,7 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                 }
             }
                 
-            here     = (long)(note->position / (double)x->grid);
+            here     = (long)(note->position / (double)x->cell);
             previous = here - 1;
             next     = here + 1;
             
@@ -413,7 +413,7 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                     long    values[PIZ_DATA_NOTE_SIZE];
                     PIZNote *newNote = NULL;
                     
-                    values[PIZ_DATA_POSITION]    = ((long)(hPat[j] / (double)(PIZ_MAGIC_PITCH + 1))) * x->grid;
+                    values[PIZ_DATA_POSITION]    = ((long)(hPat[j] / (double)(PIZ_MAGIC_PITCH + 1))) * x->cell;
                     values[PIZ_DATA_PITCH]       = hPat[j] % (PIZ_MAGIC_PITCH + 1);
                     values[PIZ_DATA_VELOCITY]    = noteToCopy->data[PIZ_VELOCITY];
                     values[PIZ_DATA_DURATION]    = noteToCopy->data[PIZ_DURATION];
@@ -464,13 +464,13 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
 
     PIZLOCK
     
-    if (x->grid != PIZ_NOTE_NONE) {
+    if (x->cell != PIZ_NOTE_NONE) {
     
     long i, start, end, size;
     long b = 0;
     
-    start   = PIZ_CEIL (x->start, x->grid);
-    end     = PIZ_CEIL (x->end, x->grid); 
+    start   = PIZ_CEIL (x->start, x->cell);
+    end     = PIZ_CEIL (x->end, x->cell); 
     
     if (size = (end - start)) {
         for (i = 0; i < PIZ_DIVISIONS_SIZE; i++) {
@@ -510,7 +510,7 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
                     offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_PITCH] % scale);
                 }
                 
-                key = (long)(note->position / (double)x->grid) * (PIZ_MAGIC_PITCH + 1);
+                key = (long)(note->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1);
                 key += note->data[PIZ_PITCH] + offset;
                 
                 pizBoundedHashTableAdd (x->hashTable, key, (void *)note);
@@ -560,7 +560,7 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
             
             step += j;
             
-            newPosition = ((long)(note1->position / (double)x->grid)) + step;
+            newPosition = ((long)(note1->position / (double)x->cell)) + step;
             
             if (newPosition >= end) {
                 newPosition = (newPosition - end) + start;
@@ -579,7 +579,7 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
             if (!pizBoundedHashTableContainsKey (x->hashTable, newKey)) {
                 long values[PIZ_DATA_NOTE_SIZE];
                 
-                values[PIZ_DATA_POSITION]       = newPosition * x->grid;
+                values[PIZ_DATA_POSITION]       = newPosition * x->cell;
                 values[PIZ_DATA_PITCH]          = note1->data[PIZ_PITCH] + offset;
                 values[PIZ_DATA_VELOCITY]       = note1->data[PIZ_VELOCITY];
                 values[PIZ_DATA_DURATION]       = note1->data[PIZ_DURATION];

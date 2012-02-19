@@ -564,6 +564,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                 x->dirtyLayer       = (DIRTY_ZONE | DIRTY_NOTES | DIRTY_GRID | DIRTY_CHANGE);
                 
                 pizSequenceSetGrid (x->user, PIZ_EIGHTH_NOTE);
+                pizSequenceSetCell (x->user, PIZ_EIGHTH_NOTE);
                 pizLinklistSetFlags (x->slots, PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY);
                 
                 if (dictionary_hasentry (d, tll_sym_tralala) && 
@@ -1255,7 +1256,7 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
         long        size = 0;
         char        *tempString = NULL;
         t_symbol    *temp = NULL;
-        bool        err = false;            
+        PIZError    err = PIZ_GOOD;            
 
         atom_gettext (argc, argv, &size, &tempString, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
         
@@ -1264,44 +1265,47 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
     
             if (temp != x->patternCell) {
                 if (temp == tll_sym_none) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_NOTE_NONE);
+                    x->cell = PIZ_NOTE_NONE;
                 } else if (temp == tll_sym_whole) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_WHOLE_NOTE);
+                    x->cell = PIZ_WHOLE_NOTE;
                 } else if (temp == tll_sym_half) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_HALF_NOTE);
+                    x->cell = PIZ_HALF_NOTE;
                 } else if (temp == tll_sym_quarter) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_QUARTER_NOTE);
+                    x->cell = PIZ_QUARTER_NOTE;
                 } else if (temp == tll_sym_eighth) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_EIGHTH_NOTE);
+                    x->cell = PIZ_EIGHTH_NOTE;
                 } else if (temp == tll_sym_sixteenth) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_SIXTEENTH_NOTE);
+                    x->cell = PIZ_SIXTEENTH_NOTE;
                 } else if (temp == tll_sym_thirtySecond) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_THIRTY_SECOND_NOTE);
+                    x->cell = PIZ_THIRTY_SECOND_NOTE;
                 } else if (temp == tll_sym_wholeTriplet) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_WHOLE_NOTE_TRIPLET);
+                    x->cell = PIZ_WHOLE_NOTE_TRIPLET;
                 } else if (temp == tll_sym_halfTriplet) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_HALF_NOTE_TRIPLET);
+                    x->cell = PIZ_HALF_NOTE_TRIPLET;
                 } else if (temp == tll_sym_quarterTriplet) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_QUARTER_NOTE_TRIPLET);
+                    x->cell = PIZ_QUARTER_NOTE_TRIPLET;
                 } else if (temp == tll_sym_eighthTriplet) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_EIGHTH_NOTE_TRIPLET);
+                    x->cell = PIZ_EIGHTH_NOTE_TRIPLET;
                 } else if (temp == tll_sym_sixteenthTriplet) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_SIXTEENTH_NOTE_TRIPLET);
+                    x->cell = PIZ_SIXTEENTH_NOTE_TRIPLET;
                 } else if (temp == tll_sym_thirtySecondTriplet) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_THIRTY_SECOND_NOTE_TRIPLET);
+                    x->cell = PIZ_THIRTY_SECOND_NOTE_TRIPLET;
                 } else if (temp == tll_sym_wholeDotted) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_WHOLE_NOTE_DOTTED);
+                     x->cell = PIZ_WHOLE_NOTE_DOTTED;
                 } else if (temp == tll_sym_halfDotted) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_HALF_NOTE_DOTTED);
+                    x->cell = PIZ_HALF_NOTE_DOTTED;
                 } else if (temp == tll_sym_quarterDotted) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_QUARTER_NOTE_DOTTED);
+                    x->cell = PIZ_QUARTER_NOTE_DOTTED;
                 } else if (temp == tll_sym_eighthDotted) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_EIGHTH_NOTE_DOTTED);
+                    x->cell = PIZ_EIGHTH_NOTE_DOTTED;
                 } else if (temp == tll_sym_sixteenthDotted) {
-                    pizSequenceSetGrid (x->live, x->cell = PIZ_SIXTEENTH_NOTE_DOTTED);
-                } else { err = true; }
-                
+                    x->cell = PIZ_SIXTEENTH_NOTE_DOTTED;
+                } else { err = PIZ_ERROR; }
+                    
                 if (!err) {
+                    pizSequenceSetGrid (x->live, x->cell);
+                    pizSequenceSetCell (x->live, x->cell);
+                    
                     x->patternCell = temp;
                     
                     DIRTYLAYER_SET (DIRTY_GRID);
