@@ -50,12 +50,12 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_H_SIZE                    6
-#define PIZ_NEIGHBORHOOD_BIRTH_SIZE   12
-#define PIZ_NEIGHBORHOOD_DEATH_SIZE   16
-#define PIZ_DIVISIONS_SIZE            6
-#define PIZ_MAXIMUM_OFFSET            6
-#define PIZ_BREAK_LOOP                20
+#define PIZ_H_SIZE                      6
+#define PIZ_NEIGHBORS_BIRTH_SIZE        12
+#define PIZ_NEIGHBORS_DEATH_SIZE        16
+#define PIZ_DIVISIONS_SIZE              6
+#define PIZ_MAXIMUM_OFFSET              6
+#define PIZ_BREAK_LOOP                  20
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -94,8 +94,8 @@ bool pizSequenceClean (PIZSequence *x, long value)
     v = CLAMP (value, 0, PIZ_MAGIC_PITCH);
     
     for (i = 0; i < (PIZ_MAGIC_PITCH + 1); i++) {
-            x->values1[i] = 0;
-        }
+        x->values1[i] = 0;
+    }
     
     for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
         PIZNote *note       = NULL;
@@ -114,8 +114,8 @@ bool pizSequenceClean (PIZSequence *x, long value)
             pitch = note->data[PIZ_PITCH];
                     
             if (scale) {
-                    pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
-                }
+                pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
+            }
             
             start   = pitch - v;
             end     = start + (2 * v);
@@ -125,9 +125,9 @@ bool pizSequenceClean (PIZSequence *x, long value)
             
             for (j = m; j <= n; j++) {
                 if (x->values1[j] == (p + 1)) {
-                        death = true;
-                    }
+                    death = true;
                 }
+            }
             
             if (death) {
                 x->notes1[index] = note;
@@ -153,7 +153,11 @@ bool pizSequenceClean (PIZSequence *x, long value)
     return haveChanged;
 }
 
-bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm flag, void *algorithm)
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm select, void *algorithm)
 {
     long k;
     long err = PIZ_ERROR;
@@ -163,22 +167,20 @@ bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm flag, void *algor
     
     k = pizSequencePickUpNotes (x);
     
-    if ((flag == PIZ_FACTOR_ORACLE) && pizFactorOracleCount ((PIZFactorOracle *)algorithm)) {
-            err = pizFactorOracleProceed ((PIZFactorOracle *)algorithm, k, x->values1);
-        }
-    else if ((flag == PIZ_GALOIS_LATTICE) && pizGaloisLatticeCount ((PIZGaloisLattice *)algorithm)) {
-            err = pizGaloisLatticeProceed ((PIZGaloisLattice *)algorithm, k, x->values1);
-        }
-    else if ((flag == PIZ_FINITE_STATE) && pizFiniteStateCount ((PIZFiniteState *)algorithm)) {
-            err = pizFiniteStateProceed ((PIZFiniteState *)algorithm, k, x->values1);
-        }
+    if ((select == PIZ_FACTOR_ORACLE) && pizFactorOracleCount ((PIZFactorOracle *)algorithm)) {
+        err = pizFactorOracleProceed ((PIZFactorOracle *)algorithm, k, x->values1);
+    } else if ((select == PIZ_GALOIS_LATTICE) && pizGaloisLatticeCount ((PIZGaloisLattice *)algorithm)) {
+        err = pizGaloisLatticeProceed ((PIZGaloisLattice *)algorithm, k, x->values1);
+    } else if ((select == PIZ_FINITE_STATE) && pizFiniteStateCount ((PIZFiniteState *)algorithm)) {
+        err = pizFiniteStateProceed ((PIZFiniteState *)algorithm, k, x->values1);
+    }
     
     if (!err) {
         long i, h;  
         
         for (i = 0; i < k; i++) {
-                x->values1[i] = pizSequenceMovePitchToAmbitus (x, x->values1[i]);
-            }
+            x->values1[i] = pizSequenceMovePitchToAmbitus (x, x->values1[i]);
+        }
         
         for (i = 0; i < k; i++) {        
             h = 100 * (rand ( ) / (RAND_MAX + 1.0));
@@ -204,249 +206,251 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
     PIZLOCK
     
     if (x->grid != PIZ_NOTE_NONE) {
-        long i, start, end, mapCount, scale;
-        long k = 0;
-        long loop = 0;
-        
-        pizBoundedHashTableClear (x->hashTable);
-
-        start       = PIZ_CEIL (x->start, x->grid);
-        end         = PIZ_CEIL (x->end, x->grid);
-        mapCount    = pizGrowingArrayCount (x->map);
-        scale       = pizGrowingArrayCount (x->scale);
-        
-        for (i = 0; i < mapCount; i++) {   
-            PIZNote *note       = NULL;
-            PIZNote *nextNote   = NULL;
-            
-            long p = pizGrowingArrayValueAtIndex (x->map, i);
-            
-            pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-            
-            while (note) {
-                long key, offset = 0;
-                
-                pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-                
-                if (scale) {
-                    offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_PITCH] % scale);
-                }
-                
-                key = ((long)(note->position / (double)x->grid) * (PIZ_MAGIC_PITCH + 1)) 
-                    + (note->data[PIZ_PITCH] + offset);
-                
-                pizBoundedHashTableAdd (x->hashTable, key, (void *)note);
-                
-                note = nextNote;
-            }
-        }
     
-        while (k < iterate && loop < PIZ_BREAK_LOOP) {
-            if (x->count && (mapCount = pizGrowingArrayCount (x->map))) {
-                long    j, here, previous, next, pitch, hCenter;
-                long    q = -1;
-                long    p = -1;
-                long    hPat [PIZ_H_SIZE] = {-1, -1, -1, -1, -1, -1};
-                long    offset = 0;
-                long    neighbors = 0;
-                long    err = PIZ_GOOD;
-                long    patternSize = pizGrowingArrayCount (x->pattern);
-                bool    death = false;
-                PIZNote *note = NULL;
+    long i, start, end, mapCount, scale;
+    long k = 0;
+    long loop = 0;
+    
+    pizBoundedHashTableClear (x->hashTable);
+
+    start       = PIZ_CEIL (x->start, x->grid);
+    end         = PIZ_CEIL (x->end, x->grid);
+    mapCount    = pizGrowingArrayCount (x->map);
+    scale       = pizGrowingArrayCount (x->scale);
+    
+    for (i = 0; i < mapCount; i++) {   
+        PIZNote *note       = NULL;
+        PIZNote *nextNote   = NULL;
         
-                while (q == -1) {
-                    p = pizGrowingArrayValueAtIndex (x->map, (mapCount * (rand ( ) / (RAND_MAX + 1.0))));
-                    if (pizLinklistCount (x->timeline[p])) {
-                        q = pizLinklistCount (x->timeline[p]) * (rand ( ) / (RAND_MAX + 1.0));
-                    } 
-                }                           
-
-                pizLinklistPtrAtIndex (x->timeline[p], q, (void **)&note);
-                
-                if (scale) {
-                    offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_PITCH] % scale);
-                }
-                
-                pitch = note->data[PIZ_PITCH] + offset;
-                
-                hCenter = (((long)(note->position / (double)x->grid)) * (PIZ_MAGIC_PITCH + 1)) 
-                    + (note->data[PIZ_PITCH] + offset);
-                
-                err |= (note->position < x->start);
-                err |= (note->position >= x->end);
-                err |= (pitch < x->down);
-                err |= (pitch > x->up);
-                
-                if (!err) {
-                    for (j = 0; j < PIZ_NEIGHBORHOOD_DEATH_SIZE; j++) {
-                        long key = hCenter + piz_neighbors[j];
-                        if (pizBoundedHashTableContainsKey (x->hashTable, key)) {
-                                neighbors ++;
-                            }
-                    }
-                    
-                    if (neighbors > 1) {
-                        death = true;
-                    }
-                }
-                    
-                here        = (long)(note->position / (double)x->grid);
-                previous    = here - 1;
-                next        = here + 1;
-                
-                if (next >= end) {
-                    next = start;
-                }
-                
-                if (previous < start) {
-                    previous = (end - 1);
-                }
-                
-                if (patternSize) {  
-                    previous += pizGrowingArrayValueAtIndex (x->pattern, previous % patternSize);
-                    next     += pizGrowingArrayValueAtIndex (x->pattern, next % patternSize);
-                }
-
-                if (previous != here) {
-                    hPat[1] = (previous * (PIZ_MAGIC_PITCH + 1)) + pitch;
-                    
-                    if (scale) {
-                        for (j = 1; j < PIZ_MAGIC_SCALE; j++) {
-                            long n;
-                            long t = pitch - j;
-                            long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
-                            
-                            n = pizGrowingArrayValueAtIndex (x->scale, b % scale);
-                            
-                            if ((b + n) != pitch) {
-                                    hPat[0] = hPat[1] - j + n;
-                                    break;
-                                }
-                        }
-                        
-                        for (j = 1; j < PIZ_MAGIC_SCALE; j++) {
-                            long n;
-                            long t = pitch + j;
-                            long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
-                            
-                            n = pizGrowingArrayValueAtIndex (x->scale, b % scale);
-                            
-                            if ((b + n) != pitch) {
-                                    hPat[2] = hPat[1] + j + n;
-                                    break;
-                                }
-                        }
-                    } else {
-                        hPat[0] = hPat[1] - 1;
-                        hPat[2] = hPat[1] + 1;
-                    }
-                }
-                
-                if (next != here) {
-                    hPat[4] = (next * (PIZ_MAGIC_PITCH + 1)) + pitch;
-                    
-                    if (scale) {
-                        for (j = 1; j < PIZ_MAGIC_SCALE; j++) {
-                            long n;
-                            long t = pitch - j;
-                            long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
-                            
-                            n = pizGrowingArrayValueAtIndex (x->scale, b % scale);
-                            
-                            if ((b + n) != pitch) {
-                                    hPat[3] = hPat[4] - j + n;
-                                    break;
-                                }
-                        }
-                        
-                        for (j = 1; j < PIZ_MAGIC_SCALE; j++) {
-                            long n;
-                            long t = pitch + j;
-                            long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
-                            
-                            n = pizGrowingArrayValueAtIndex (x->scale, b % scale);
-                            
-                            if ((b + n) != pitch) {
-                                    hPat[5] = hPat[4] + j + n;
-                                    break;
-                                }
-                        }
-                    } else {
-                        hPat[3] = hPat[4] - 1;
-                        hPat[5] = hPat[4] + 1;
-                    }
-                }
-                    
-                for (j = 5; j > 0; j--)  {
-                    long h          = (j + 1) * (rand ( ) / (RAND_MAX + 1.0));
-                    long tempHPat   = hPat[h];
-                    hPat[h]         = hPat[j];
-                    hPat[j]         = tempHPat;
-                }
-                
-                for (j = 0; j < PIZ_H_SIZE; j++) {
-                    if ((hPat[j] >= 0) && 
-                    !pizBoundedHashTableContainsKey (x->hashTable, hPat[j] - 2) &&
-                    !pizBoundedHashTableContainsKey (x->hashTable, hPat[j] - 1) &&
-                    !pizBoundedHashTableContainsKey (x->hashTable, hPat[j])     &&
-                    !pizBoundedHashTableContainsKey (x->hashTable, hPat[j] + 1) &&
-                    !pizBoundedHashTableContainsKey (x->hashTable, hPat[j] + 2)) {
-                        long    t;
-                        PIZNote *ptr = NULL;
-                        PIZNote *noteToCopy = NULL;
-                        
-                        neighbors = 0;
-                
-                        for (t = 0; t < PIZ_NEIGHBORHOOD_BIRTH_SIZE; t++)  {
-                            long key = hPat[j] + piz_neighbors[t];
-                            if (!pizBoundedHashTablePtrByKey (x->hashTable, key, (void **)&ptr)) {
-                                neighbors ++;
-                                noteToCopy = ptr;
-                            }
-                        }
-                        
-                        if (neighbors == 1) {
-                        
-                        long    values[PIZ_DATA_NOTE_SIZE];
-                        PIZNote *newNote = NULL;
-                        
-                        values[PIZ_DATA_POSITION] = ((long)(hPat[j] / (double)(PIZ_MAGIC_PITCH + 1))) * x->grid;
-                        values[PIZ_DATA_PITCH] = hPat[j] % (PIZ_MAGIC_PITCH + 1);
-                        values[PIZ_DATA_VELOCITY] = noteToCopy->data[PIZ_VELOCITY];
-                        values[PIZ_DATA_DURATION] = noteToCopy->data[PIZ_DURATION];
-                        values[PIZ_DATA_CHANNEL] = noteToCopy->data[PIZ_CHANNEL];
-                        values[PIZ_DATA_IS_SELECTED] = false;
-                        values[PIZ_DATA_IS_MARKED] = false;
-                        
-                        newNote = pizSequenceAddNote (x, values, PIZ_ADD_FLAG_CLIP);
-                        
-                        if (newNote) {
-                            pizBoundedHashTableAdd (x->hashTable, hPat[j], (void *)newNote);
-                            haveChanged = true;
-                            k ++;
-                        }
-                        
-                        break;
-                        }
-                    
-                    }
-                }
-                    
-                if (death) {
-                    pizBoundedHashTableRemoveByKeyAndPtr (x->hashTable, hCenter, (void *)note);
-                    pizSequenceRemoveNote (x, note);
-                    haveChanged = true;
-                }
-            } else {
-                break;
+        long p = pizGrowingArrayValueAtIndex (x->map, i);
+        
+        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+        
+        while (note) {
+            long key, offset = 0;
+            
+            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+            
+            if (scale) {
+                offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_PITCH] % scale);
             }
             
-            loop ++;
+            key = ((long)(note->position / (double)x->grid) * (PIZ_MAGIC_PITCH + 1));
+            key += note->data[PIZ_PITCH] + offset;
+            
+            pizBoundedHashTableAdd (x->hashTable, key, (void *)note);
+            
+            note = nextNote;
         }
+    }
 
-        if (haveChanged) {
-            pizSequenceMakeMap (x);
+    while (k < iterate && loop < PIZ_BREAK_LOOP) {
+    
+        if (x->count && (mapCount = pizGrowingArrayCount (x->map))) {
+            long    j, here, previous, next, pitch, hCenter;
+            long    q = -1;
+            long    p = -1;
+            long    hPat [PIZ_H_SIZE] = {-1, -1, -1, -1, -1, -1};
+            long    offset = 0;
+            long    neighbors = 0;
+            long    err = PIZ_GOOD;
+            long    patternSize = pizGrowingArrayCount (x->pattern);
+            bool    death = false;
+            PIZNote *note = NULL;
+    
+            while (q == -1) {
+                p = pizGrowingArrayValueAtIndex (x->map, (long)(mapCount * (rand ( ) / (RAND_MAX + 1.0))));
+                if (pizLinklistCount (x->timeline[p])) {
+                    q = (long)(pizLinklistCount (x->timeline[p]) * (rand ( ) / (RAND_MAX + 1.0)));
+                } 
+            }                           
+
+            pizLinklistPtrAtIndex (x->timeline[p], q, (void **)&note);
+            
+            if (scale) {
+                offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_PITCH] % scale);
+            }
+            
+            pitch = note->data[PIZ_PITCH] + offset;
+            
+            hCenter = ((long)(note->position / (double)x->grid)) * (PIZ_MAGIC_PITCH + 1);
+            hCenter += note->data[PIZ_PITCH] + offset;
+            
+            err |= (note->position < x->start);
+            err |= (note->position >= x->end);
+            err |= (pitch < x->down);
+            err |= (pitch > x->up);
+            
+            if (!err) {
+                for (j = 0; j < PIZ_NEIGHBORS_DEATH_SIZE; j++) {
+                    long key = hCenter + piz_neighbors[j];
+                    if (pizBoundedHashTableContainsKey (x->hashTable, key)) {
+                        neighbors ++;
+                    }
+                }
+                
+                if (neighbors > 1) {
+                    death = true;
+                }
+            }
+                
+            here     = (long)(note->position / (double)x->grid);
+            previous = here - 1;
+            next     = here + 1;
+            
+            if (next >= end) {
+                next = start;
+            }
+            
+            if (previous < start) {
+                previous = (end - 1);
+            }
+            
+            if (patternSize) {  
+                previous += pizGrowingArrayValueAtIndex (x->pattern, previous % patternSize);
+                next     += pizGrowingArrayValueAtIndex (x->pattern, next % patternSize);
+            }
+
+            if (previous != here) {
+                hPat[1] = (previous * (PIZ_MAGIC_PITCH + 1)) + pitch;
+                
+                if (scale) {
+                    for (j = 1; j < PIZ_MAGIC_SCALE; j++) {
+                        long n;
+                        long t = pitch - j;
+                        long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
+                        
+                        n = pizGrowingArrayValueAtIndex (x->scale, b % scale);
+                        
+                        if ((b + n) != pitch) {
+                            hPat[0] = hPat[1] - j + n;
+                            break;
+                        }
+                    }
+                    
+                    for (j = 1; j < PIZ_MAGIC_SCALE; j++) {
+                        long n;
+                        long t = pitch + j;
+                        long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
+                        
+                        n = pizGrowingArrayValueAtIndex (x->scale, b % scale);
+                        
+                        if ((b + n) != pitch) {
+                            hPat[2] = hPat[1] + j + n;
+                            break;
+                        }
+                    }
+                } else {
+                    hPat[0] = hPat[1] - 1;
+                    hPat[2] = hPat[1] + 1;
+                }
+            }
+            
+            if (next != here) {
+                hPat[4] = (next * (PIZ_MAGIC_PITCH + 1)) + pitch;
+                
+                if (scale) {
+                    for (j = 1; j < PIZ_MAGIC_SCALE; j++) {
+                        long n;
+                        long t = pitch - j;
+                        long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
+                        
+                        n = pizGrowingArrayValueAtIndex (x->scale, b % scale);
+                        
+                        if ((b + n) != pitch) {
+                            hPat[3] = hPat[4] - j + n;
+                            break;
+                        }
+                    }
+                    
+                    for (j = 1; j < PIZ_MAGIC_SCALE; j++) {
+                        long n;
+                        long t = pitch + j;
+                        long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
+                        
+                        n = pizGrowingArrayValueAtIndex (x->scale, b % scale);
+                        
+                        if ((b + n) != pitch) {
+                            hPat[5] = hPat[4] + j + n;
+                            break;
+                        }
+                    }
+                } else {
+                    hPat[3] = hPat[4] - 1;
+                    hPat[5] = hPat[4] + 1;
+                }
+            }
+                
+            for (j = 5; j > 0; j--)  {
+                long h          = (j + 1) * (rand ( ) / (RAND_MAX + 1.0));
+                long tempHPat   = hPat[h];
+                hPat[h]         = hPat[j];
+                hPat[j]         = tempHPat;
+            }
+            
+            for (j = 0; j < PIZ_H_SIZE; j++) {
+                if ((hPat[j] >= 0) &&   !pizBoundedHashTableContainsKey (x->hashTable, hPat[j] - 2) &&
+                                        !pizBoundedHashTableContainsKey (x->hashTable, hPat[j] - 1) &&
+                                        !pizBoundedHashTableContainsKey (x->hashTable, hPat[j])     &&
+                                        !pizBoundedHashTableContainsKey (x->hashTable, hPat[j] + 1) &&
+                                        !pizBoundedHashTableContainsKey (x->hashTable, hPat[j] + 2)) {
+                    long    t;
+                    PIZNote *ptr = NULL;
+                    PIZNote *noteToCopy = NULL;
+                    
+                    neighbors = 0;
+            
+                    for (t = 0; t < PIZ_NEIGHBORS_BIRTH_SIZE; t++)  {
+                        long key = hPat[j] + piz_neighbors[t];
+                        if (!pizBoundedHashTablePtrByKey (x->hashTable, key, (void **)&ptr)) {
+                            neighbors ++;
+                            noteToCopy = ptr;
+                        }
+                    }
+                    
+                    if (neighbors == 1) {
+                    
+                    long    values[PIZ_DATA_NOTE_SIZE];
+                    PIZNote *newNote = NULL;
+                    
+                    values[PIZ_DATA_POSITION]    = ((long)(hPat[j] / (double)(PIZ_MAGIC_PITCH + 1))) * x->grid;
+                    values[PIZ_DATA_PITCH]       = hPat[j] % (PIZ_MAGIC_PITCH + 1);
+                    values[PIZ_DATA_VELOCITY]    = noteToCopy->data[PIZ_VELOCITY];
+                    values[PIZ_DATA_DURATION]    = noteToCopy->data[PIZ_DURATION];
+                    values[PIZ_DATA_CHANNEL]     = noteToCopy->data[PIZ_CHANNEL];
+                    values[PIZ_DATA_IS_SELECTED] = false;
+                    values[PIZ_DATA_IS_MARKED]   = false;
+                    
+                    newNote = pizSequenceAddNote (x, values, PIZ_ADD_FLAG_CLIP);
+                    
+                    if (newNote) {
+                        pizBoundedHashTableAdd (x->hashTable, hPat[j], (void *)newNote);
+                        haveChanged = true;
+                        k ++;
+                    }
+                    
+                    break;
+                    //
+                    }
+                }
+            }
+                
+            if (death) {
+                pizBoundedHashTableRemoveByKeyAndPtr (x->hashTable, hCenter, (void *)note);
+                pizSequenceRemoveNote (x, note);
+                haveChanged = true;
+            }
+        } else {
+            break;
         }
+        
+        loop ++;
+    }
+
+    if (haveChanged) {
+        pizSequenceMakeMap (x);
+    }
+    //
     }
         
     PIZUNLOCK
@@ -461,152 +465,152 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
     PIZLOCK
     
     if (x->grid != PIZ_NOTE_NONE) {
-        long i, start, end, size;
-        long b = 0;
-        
-        start   = PIZ_CEIL (x->start, x->grid);
-        end     = PIZ_CEIL (x->end, x->grid); 
-        
-        if (size = (end - start)) {
+    
+    long i, start, end, size;
+    long b = 0;
+    
+    start   = PIZ_CEIL (x->start, x->grid);
+    end     = PIZ_CEIL (x->end, x->grid); 
+    
+    if (size = (end - start)) {
         for (i = 0; i < PIZ_DIVISIONS_SIZE; i++) {
             if (!(size % piz_divisions[i])) {
                 b = piz_divisions[i];
-                
                 if (b == division) {
-                        break;
-                    }
+                    break;
                 }
             }
         }
-        
-        if (b) {
-            long k = 0;
-            long loop = 0;
-            long a = size / b;
-            long mapCount = pizGrowingArrayCount (x->map);
-            long scale = pizGrowingArrayCount (x->scale);
-                                
-            pizBoundedHashTableClear (x->hashTable);
+    }
     
-            for (i = 0; i < mapCount; i++) {   
-                PIZNote *note       = NULL;
-                PIZNote *nextNote   = NULL;
+    if (b) {
+        long k = 0;
+        long loop = 0;
+        long a = size / b;
+        long mapCount = pizGrowingArrayCount (x->map);
+        long scale = pizGrowingArrayCount (x->scale);
+                            
+        pizBoundedHashTableClear (x->hashTable);
+
+        for (i = 0; i < mapCount; i++) {   
+            PIZNote *note       = NULL;
+            PIZNote *nextNote   = NULL;
+            
+            long p = pizGrowingArrayValueAtIndex (x->map, i);
+            
+            pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+            
+            while (note) {
+                long key;
+                long offset = 0;
                 
-                long p = pizGrowingArrayValueAtIndex (x->map, i);
+                pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
                 
-                pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+                if (scale) {
+                    offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_PITCH] % scale);
+                }
                 
-                while (note) {
-                    long key;
-                    long offset = 0;
-                    
-                    pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-                    
-                    if (scale) {
-                        offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_PITCH] % scale);
-                    }
+                key = (long)(note->position / (double)x->grid) * (PIZ_MAGIC_PITCH + 1);
+                key += note->data[PIZ_PITCH] + offset;
+                
+                pizBoundedHashTableAdd (x->hashTable, key, (void *)note);
+                
+                note = nextNote;
+            }
+        }
         
-                    key = ((long)(note->position / (double)x->grid) * (PIZ_MAGIC_PITCH + 1))
-                        + note->data[PIZ_PITCH] + offset;
-                    
-                    pizBoundedHashTableAdd (x->hashTable, key, (void *)note);
-                    
-                    note = nextNote;
+        while (x->count && k < iterate && loop < PIZ_BREAK_LOOP) {
+            long    j, patternSize, step, newKey, newPosition;
+            long    q = -1;
+            long    p = -1;
+            long    offset = 0;
+            double  h = rand ( ) / (RAND_MAX + 1.0);
+            double  *distribution = NULL;
+            PIZNote *note1 = NULL;
+            PIZNote *note2 = NULL;
+            
+            mapCount = pizGrowingArrayCount (x->map);
+    
+            while (q == -1) {
+                p = pizGrowingArrayValueAtIndex (x->map, (long)(mapCount * (rand ( ) / (RAND_MAX + 1.0))));
+                if (pizLinklistCount (x->timeline[p])) {
+                    q = (long)(pizLinklistCount (x->timeline[p]) * (rand ( ) / (RAND_MAX + 1.0)));
+                } 
+            }                           
+
+            pizLinklistPtrAtIndex (x->timeline[p], q, (void **)&note1);     
+            
+            step = MIN (a, PIZ_MAXIMUM_OFFSET) * (rand ( ) / (RAND_MAX + 1.0));
+            step *= b;
+            
+            switch (b) {
+                case 2  :   distribution = piz_distribution2;   break;
+                case 3  :   distribution = piz_distribution3;   break;
+                case 4  :   distribution = piz_distribution4;   break;
+                case 5  :   distribution = piz_distribution5;   break;
+                case 7  :   distribution = piz_distribution7;   break;
+                case 11 :   distribution = piz_distribution11;  break;
+            }
+            
+            for (j = 0; j < (b - 1); j++) {
+                if (h < distribution[j]) {
+                    break;
                 }
             }
             
-            while (x->count && k < iterate && loop < PIZ_BREAK_LOOP) {
-                long    j, patternSize, step, newKey, newPosition;
-                long    q = -1;
-                long    p = -1;
-                long    offset = 0;
-                double  h = rand ( ) / (RAND_MAX + 1.0);
-                double  *distribution = NULL;
-                PIZNote *note1 = NULL;
-                PIZNote *note2 = NULL;
+            step += j;
+            
+            newPosition = ((long)(note1->position / (double)x->grid)) + step;
+            
+            if (newPosition >= end) {
+                newPosition = (newPosition - end) + start;
+            }
+            
+            if (patternSize = pizGrowingArrayCount (x->pattern)) {
+                newPosition += pizGrowingArrayValueAtIndex (x->pattern, newPosition % patternSize);
+            }
+            
+            if (scale) {
+                offset = pizGrowingArrayValueAtIndex (x->scale, note1->data[PIZ_PITCH] % scale);
+            }
+                        
+            newKey = (newPosition * (PIZ_MAGIC_PITCH + 1)) + note1->data[PIZ_PITCH] + offset;
+            
+            if (!pizBoundedHashTableContainsKey (x->hashTable, newKey)) {
+                long values[PIZ_DATA_NOTE_SIZE];
                 
-                mapCount = pizGrowingArrayCount (x->map);
-        
-                while (q == -1) {
-                    p = pizGrowingArrayValueAtIndex (x->map, (mapCount * (rand ( ) / (RAND_MAX + 1.0))));
-                    if (pizLinklistCount (x->timeline[p])) {
-                        q = pizLinklistCount (x->timeline[p]) * (rand ( ) / (RAND_MAX + 1.0));
-                    } 
-                }                           
+                values[PIZ_DATA_POSITION]       = newPosition * x->grid;
+                values[PIZ_DATA_PITCH]          = note1->data[PIZ_PITCH] + offset;
+                values[PIZ_DATA_VELOCITY]       = note1->data[PIZ_VELOCITY];
+                values[PIZ_DATA_DURATION]       = note1->data[PIZ_DURATION];
+                values[PIZ_DATA_CHANNEL]        = note1->data[PIZ_CHANNEL];
+                values[PIZ_DATA_IS_SELECTED]    = false;
+                values[PIZ_DATA_IS_MARKED]      = false;
 
-                pizLinklistPtrAtIndex (x->timeline[p], q, (void **)&note1);     
+                note2 = pizSequenceAddNote (x, values, PIZ_ADD_FLAG_CLIP);
                 
-                step = MIN (a, PIZ_MAXIMUM_OFFSET) * (rand ( ) / (RAND_MAX + 1.0));
-                step *= b;
-                
-                switch (b) {
-                    case 2  :   distribution = piz_distribution2;     break;
-                    case 3  :   distribution = piz_distribution3;     break;
-                    case 4  :   distribution = piz_distribution4;     break;
-                    case 5  :   distribution = piz_distribution5;     break;
-                    case 7  :   distribution = piz_distribution7;     break;
-                    case 11 :   distribution = piz_distribution11;    break;
+                if (note2) {
+                    pizBoundedHashTableAdd (x->hashTable, newKey, (void *)note2);
+                    haveChanged = true;
+                    k ++;
                 }
-                
-                for (j = 0; j < (b - 1); j++) {
-                    if (h < distribution[j]) {
-                        break;
-                    }
-                }
-                
-                step += j;
-                
-                newPosition = ((long)(note1->position / (double)x->grid)) + step;
-                
-                if (newPosition >= end) {
-                    newPosition = (newPosition - end) + start;
-                }
-                
-                if (patternSize = pizGrowingArrayCount (x->pattern)) {
-                    newPosition += pizGrowingArrayValueAtIndex (x->pattern, newPosition % patternSize);
-                }
-                
-                if (scale) {
-                    offset = pizGrowingArrayValueAtIndex (x->scale, note1->data[PIZ_PITCH] % scale);
-                }
-                            
-                newKey = (newPosition * (PIZ_MAGIC_PITCH + 1)) + note1->data[PIZ_PITCH] + offset;
-                
-                if (!pizBoundedHashTableContainsKey (x->hashTable, newKey)) {
-                    long values[PIZ_DATA_NOTE_SIZE];
-                    
-                    newPosition *= x->grid;
-                    
-                    values[PIZ_DATA_POSITION]       = newPosition;
-                    values[PIZ_DATA_PITCH]          = note1->data[PIZ_PITCH] + offset;
-                    values[PIZ_DATA_VELOCITY]       = note1->data[PIZ_VELOCITY];
-                    values[PIZ_DATA_DURATION]       = note1->data[PIZ_DURATION];
-                    values[PIZ_DATA_CHANNEL]        = note1->data[PIZ_CHANNEL];
-                    values[PIZ_DATA_IS_SELECTED]    = false;
-                    values[PIZ_DATA_IS_MARKED]      = false;
-
-                    note2 = pizSequenceAddNote (x, values, PIZ_ADD_FLAG_CLIP);
-                    
-                    if (note2) {
-                        pizBoundedHashTableAdd (x->hashTable, newKey, (void *)note2);
-                        haveChanged = true;
-                        k ++;
-                    }
-                } else if (!(pizBoundedHashTablePtrByKey (x->hashTable, newKey, (void **)&note2)) && 
-                    (note2 != note1)) {
+            } else if (!(pizBoundedHashTablePtrByKey (x->hashTable, newKey, (void **)&note2))) {
+                if (note2 != note1) {
                     pizBoundedHashTableRemoveByKeyAndPtr (x->hashTable, newKey, (void *)note2);
                     pizSequenceRemoveNote (x, note2);
                     haveChanged = true;
                     k ++;
                 }
-
-                loop ++;
             }
+
+            loop ++;
         }
-        
-        if (haveChanged) {
-            pizSequenceMakeMap (x);
-        }
+    }
+    
+    if (haveChanged) {
+        pizSequenceMakeMap (x);
+    }
+    //
     }
                     
     PIZUNLOCK
@@ -630,12 +634,12 @@ bool pizSequenceRotate (PIZSequence *x, PIZSelector selector, long shift)
     k = pizSequencePickUpNotes (x);
     
     if (k && shift < 0) {
-            shift = k - ((-shift) % k);
-        }
+        shift = k - ((-shift) % k);
+    }
 
     for (i = 0; i < k; i++) {
-            x->values1[i] = x->notes1[(i + shift) % k]->data[selector];
-        }
+        x->values1[i] = x->notes1[(i + shift) % k]->data[selector];
+    }
                 
     pizSequenceFillValues (x, selector, k, 0);
     
@@ -656,17 +660,17 @@ bool pizSequenceScramble (PIZSequence *x, PIZSelector selector)
     k = pizSequencePickUpNotes (x);
     
     for (i = 0; i < k; i++) {
-            x->values1[i] = x->notes1[i]->data[selector];
-        }
+        x->values1[i] = x->notes1[i]->data[selector];
+    }
         
     for (i = (k - 1); i > 0; i--) {
-            long    h = (i + 1) * (rand ( ) / (RAND_MAX + 1.0));
-            PIZNote *temp = NULL;
+        long    h = (i + 1) * (rand ( ) / (RAND_MAX + 1.0));
+        PIZNote *temp = NULL;
             
-            temp = x->notes1[h];
-            x->notes1[h] = x->notes1[i];
-            x->notes1[i] = temp;
-        }
+        temp = x->notes1[h];
+        x->notes1[h] = x->notes1[i];
+        x->notes1[i] = temp;
+    }
             
     pizSequenceFillValues (x, selector, k, 0);
     
@@ -675,7 +679,7 @@ bool pizSequenceScramble (PIZSequence *x, PIZSelector selector)
     return haveChanged;
 }
 
-bool pizSequenceSort (PIZSequence *x, PIZSelector selector, long down)
+bool pizSequenceSort (PIZSequence *x, PIZSelector selector, bool down)
 {
     long i, scale;
     long k = 0;
@@ -752,39 +756,41 @@ bool pizSequenceChange (PIZSequence *x, PIZSelector selector, long value)
     
     PIZLOCK
         
-    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
-        PIZNote *note       = NULL;
-        PIZNote *nextNote   = NULL;
+    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {  
+     
+    PIZNote *note       = NULL;
+    PIZNote *nextNote   = NULL;
+    
+    long p = pizGrowingArrayValueAtIndex (x->map, i);
+    
+    pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+    
+    while (note) {
+        long max1, max2;
+        long h = 100 * (rand ( ) / (RAND_MAX + 1.0));
         
-        long p = pizGrowingArrayValueAtIndex (x->map, i);
+        pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
         
-        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-        
-        while (note) {
-            long max1, max2;
-            long h = 100 * (rand ( ) / (RAND_MAX + 1.0));
-            
-            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-            
-            if (h < x->chance) {
-                switch (selector) {
-                    case PIZ_PITCH    : note->data[PIZ_PITCH] = CLAMP (note->data[PIZ_PITCH] + value, 
-                                        0, PIZ_MAGIC_PITCH); break;
-                    case PIZ_VELOCITY : note->data[PIZ_VELOCITY] = CLAMP (note->data[PIZ_VELOCITY] + value, 
-                                        0, PIZ_MAGIC_VELOCITY); break;
-                    case PIZ_DURATION : max1 = PIZ_SEQUENCE_TIMELINE_SIZE - note->position;
-                                        max2 = MIN (max1, PIZ_SEQUENCE_MAXIMUM_DURATION);
-                                        note->data[PIZ_DURATION] = CLAMP (note->data[PIZ_DURATION] + value, 
-                                        1, max2); break;
-                    case PIZ_CHANNEL  : note->data[PIZ_CHANNEL] = CLAMP (note->data[PIZ_CHANNEL] + value, 
-                                        0, PIZ_MAGIC_CHANNEL); break;
-                }
-                
-                haveChanged = true;
+        if (h < x->chance) {
+            switch (selector) {
+            case PIZ_PITCH    : note->data[PIZ_PITCH] = CLAMP (note->data[PIZ_PITCH] + value, 
+                                0, PIZ_MAGIC_PITCH); break;
+            case PIZ_VELOCITY : note->data[PIZ_VELOCITY] = CLAMP (note->data[PIZ_VELOCITY] + value, 
+                                0, PIZ_MAGIC_VELOCITY); break;
+            case PIZ_DURATION : max1 = PIZ_SEQUENCE_TIMELINE_SIZE - note->position;
+                                max2 = MIN (max1, PIZ_SEQUENCE_MAXIMUM_DURATION);
+                                note->data[PIZ_DURATION] = CLAMP (note->data[PIZ_DURATION] + value, 1, max2);
+                                break;
+            case PIZ_CHANNEL  : note->data[PIZ_CHANNEL] = CLAMP (note->data[PIZ_CHANNEL] + value, 
+                                0, PIZ_MAGIC_CHANNEL); break;
             }
             
-            note = nextNote;
+            haveChanged = true;
         }
+        
+        note = nextNote;
+    }
+    //
     }
     
     PIZUNLOCK
@@ -850,41 +856,43 @@ bool pizSequenceRandom (PIZSequence *x, PIZSelector selector, long minValue, lon
     
     range = (maxValue - minValue) + 1;
         
-    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
-        PIZNote *note       = NULL;
-        PIZNote *nextNote   = NULL;
+    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {
+       
+    PIZNote *note       = NULL;
+    PIZNote *nextNote   = NULL;
+    
+    long p = pizGrowingArrayValueAtIndex (x->map, i);
+    
+    pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+    
+    while (note) {
+        long max;
+        long h = 100 * (rand ( ) / (RAND_MAX + 1.0));
         
-        long p = pizGrowingArrayValueAtIndex (x->map, i);
+        pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
         
-        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-        
-        while (note) {
-            long max1, max2;
-            long h = 100 * (rand ( ) / (RAND_MAX + 1.0));
+        if (h < x->chance) {
+            long value = minValue + (long)(range * (rand ( ) / (RAND_MAX + 1.0)));
             
-            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-            
-            if (h < x->chance) {
-                long value = minValue + (long)(range * (rand ( ) / (RAND_MAX + 1.0)));
-                
-                switch (selector) {
-                    case PIZ_PITCH    : note->data[PIZ_PITCH] = CLAMP (note->data[PIZ_PITCH] + value, 
-                                        0, PIZ_MAGIC_PITCH); break;
-                    case PIZ_VELOCITY : note->data[PIZ_VELOCITY] = CLAMP (note->data[PIZ_VELOCITY] + value, 
-                                        0, PIZ_MAGIC_VELOCITY); break;
-                    case PIZ_DURATION : max1 = PIZ_SEQUENCE_TIMELINE_SIZE - note->position;
-                                        max2 = MIN (max1, PIZ_SEQUENCE_MAXIMUM_DURATION);
-                                        note->data[PIZ_DURATION] = CLAMP (note->data[PIZ_DURATION] + value, 
-                                        1, max2); break;
-                    case PIZ_CHANNEL  : note->data[PIZ_CHANNEL] = CLAMP (note->data[PIZ_CHANNEL] + value, 
-                                        0, PIZ_MAGIC_CHANNEL); break;
-                }
-                
-                haveChanged = true;
+            switch (selector) {
+            case PIZ_PITCH    : note->data[PIZ_PITCH] = CLAMP (note->data[PIZ_PITCH] + value, 
+                                0, PIZ_MAGIC_PITCH); break;
+            case PIZ_VELOCITY : note->data[PIZ_VELOCITY] = CLAMP (note->data[PIZ_VELOCITY] + value, 
+                                0, PIZ_MAGIC_VELOCITY); break;
+            case PIZ_DURATION : max = PIZ_SEQUENCE_TIMELINE_SIZE - note->position;
+                                max = MIN (max, PIZ_SEQUENCE_MAXIMUM_DURATION);
+                                note->data[PIZ_DURATION] = CLAMP (note->data[PIZ_DURATION] + value, 1, max); 
+                                break;
+            case PIZ_CHANNEL  : note->data[PIZ_CHANNEL] = CLAMP (note->data[PIZ_CHANNEL] + value, 
+                                0, PIZ_MAGIC_CHANNEL); break;
             }
             
-            note = nextNote;
+            haveChanged = true;
         }
+        
+        note = nextNote;
+    }
+    //
     }
     
     PIZUNLOCK
@@ -1044,13 +1052,13 @@ void pizSequenceFillValues (PIZSequence *x, PIZSelector selector, long k, bool r
     if (selector == PIZ_DURATION) {
         if (!reverse) {
             for (i = 0; i < k; i++) {
-                x->notes1[i]->data[PIZ_DURATION] = MIN (x->values1[i], PIZ_SEQUENCE_TIMELINE_SIZE 
-                    - x->notes1[i]->position);
+                x->notes1[i]->data[PIZ_DURATION] = MIN (x->values1[i], 
+                    PIZ_SEQUENCE_TIMELINE_SIZE - x->notes1[i]->position);
             }
         } else {
             for (i = 0; i < k; i++) {
-                x->notes1[i]->data[PIZ_DURATION] = MIN (x->values1[(k - 1) - i], PIZ_SEQUENCE_TIMELINE_SIZE 
-                    - x->notes1[i]->position);
+                x->notes1[i]->data[PIZ_DURATION] = MIN (x->values1[(k - 1) - i], 
+                    PIZ_SEQUENCE_TIMELINE_SIZE - x->notes1[i]->position);
             }
         }
     } else {

@@ -126,24 +126,24 @@
  */
 
 typedef enum _PIZNoteValue {
-    PIZ_WHOLE_NOTE_DOTTED           = 144,
-    PIZ_WHOLE_NOTE                  = 96,
-    PIZ_WHOLE_NOTE_TRIPLET          = 64,
-    PIZ_HALF_NOTE_DOTTED            = 72,
-    PIZ_HALF_NOTE                   = 48,
-    PIZ_HALF_NOTE_TRIPLET           = 32,
-    PIZ_QUARTER_NOTE_DOTTED         = 36,
-    PIZ_QUARTER_NOTE                = 24,
-    PIZ_QUARTER_NOTE_TRIPLET        = 16,
-    PIZ_EIGHTH_NOTE_DOTTED          = 18,
-    PIZ_EIGHTH_NOTE                 = 12,
-    PIZ_EIGHTH_NOTE_TRIPLET         = 8,
-    PIZ_SIXTEENTH_NOTE_DOTTED       = 9,
-    PIZ_SIXTEENTH_NOTE              = 6,
-    PIZ_SIXTEENTH_NOTE_TRIPLET      = 4,
-    PIZ_THIRTY_SECOND_NOTE          = 3,
-    PIZ_THIRTY_SECOND_NOTE_TRIPLET  = 2,
-    PIZ_NOTE_NONE                   = 1
+    PIZ_WHOLE_NOTE_DOTTED           = 144,  /*!<  */
+    PIZ_WHOLE_NOTE                  = 96,   /*!<  */
+    PIZ_WHOLE_NOTE_TRIPLET          = 64,   /*!<  */
+    PIZ_HALF_NOTE_DOTTED            = 72,   /*!<  */
+    PIZ_HALF_NOTE                   = 48,   /*!<  */
+    PIZ_HALF_NOTE_TRIPLET           = 32,   /*!<  */
+    PIZ_QUARTER_NOTE_DOTTED         = 36,   /*!<  */
+    PIZ_QUARTER_NOTE                = 24,   /*!<  */
+    PIZ_QUARTER_NOTE_TRIPLET        = 16,   /*!<  */
+    PIZ_EIGHTH_NOTE_DOTTED          = 18,   /*!<  */
+    PIZ_EIGHTH_NOTE                 = 12,   /*!<  */
+    PIZ_EIGHTH_NOTE_TRIPLET         = 8,    /*!<  */
+    PIZ_SIXTEENTH_NOTE_DOTTED       = 9,    /*!<  */
+    PIZ_SIXTEENTH_NOTE              = 6,    /*!<  */
+    PIZ_SIXTEENTH_NOTE_TRIPLET      = 4,    /*!<  */
+    PIZ_THIRTY_SECOND_NOTE          = 3,    /*!<  */
+    PIZ_THIRTY_SECOND_NOTE_TRIPLET  = 2,    /*!<  */
+    PIZ_NOTE_NONE                   = 1     /*!<  */
     } PIZNoteValue;
 
 /**
@@ -151,33 +151,33 @@ typedef enum _PIZNoteValue {
  */
  
 typedef enum _PIZScaleType {
-    PIZ_SCALE_CUSTOM                = -2,
-    PIZ_SCALE_NONE                  = -1,
-    PIZ_IONIAN                      =  0,
-    PIZ_DORIAN,
-    PIZ_PHRYGIAN,
-    PIZ_LYDIAN,
-    PIZ_MIXOLYDIAN,
-    PIZ_AEOLIAN,
-    PIZ_LOCRIAN,
-    PIZ_NATURAL,
-    PIZ_HARMONIC,
-    PIZ_MELODIC,
-    PIZ_WHOLE_TONE,
-    PIZ_PENTATONIC_MAJOR,
-    PIZ_PENTATONIC_MINOR,
-    PIZ_OCTATONIC_HALF_WHOLE,
-    PIZ_OCTATONIC_WHOLE_HALF,
-    PIZ_SEVENTH_MAJOR,
-    PIZ_SEVENTH_DOMINANT,
-    PIZ_SEVENTH_MINOR,
-    PIZ_SEVENTH_MAJOR_SIXTH,
-    PIZ_SEVENTH_MINOR_SIXTH,
-    PIZ_SEVENTH_HALF_DIMINISHED,
-    PIZ_SEVENTH_DIMINISHED,
-    PIZ_SEVENTH_SUSPENDED,
-    PIZ_SEVENTH_SHARP_FIVE,
-    PIZ_SEVENTH_FLAT_FIVE
+    PIZ_SCALE_CUSTOM                = -2,   /*!<  */
+    PIZ_SCALE_NONE                  = -1,   /*!<  */
+    PIZ_IONIAN                      =  0,   /*!<  */
+    PIZ_DORIAN,                             /*!<  */
+    PIZ_PHRYGIAN,                           /*!<  */
+    PIZ_LYDIAN,                             /*!<  */
+    PIZ_MIXOLYDIAN,                         /*!<  */
+    PIZ_AEOLIAN,                            /*!<  */
+    PIZ_LOCRIAN,                            /*!<  */
+    PIZ_NATURAL,                            /*!<  */
+    PIZ_HARMONIC,                           /*!<  */
+    PIZ_MELODIC,                            /*!<  */
+    PIZ_WHOLE_TONE,                         /*!<  */
+    PIZ_PENTATONIC_MAJOR,                   /*!<  */
+    PIZ_PENTATONIC_MINOR,                   /*!<  */
+    PIZ_OCTATONIC_HALF_WHOLE,               /*!<  */
+    PIZ_OCTATONIC_WHOLE_HALF,               /*!<  */
+    PIZ_SEVENTH_MAJOR,                      /*!<  */
+    PIZ_SEVENTH_DOMINANT,                   /*!<  */
+    PIZ_SEVENTH_MINOR,                      /*!<  */
+    PIZ_SEVENTH_MAJOR_SIXTH,                /*!<  */
+    PIZ_SEVENTH_MINOR_SIXTH,                /*!<  */
+    PIZ_SEVENTH_HALF_DIMINISHED,            /*!<  */
+    PIZ_SEVENTH_DIMINISHED,                 /*!<  */
+    PIZ_SEVENTH_SUSPENDED,                  /*!<  */
+    PIZ_SEVENTH_SHARP_FIVE,                 /*!<  */
+    PIZ_SEVENTH_FLAT_FIVE                   /*!<  */
     } PIZScaleType;
 
 /**
@@ -185,18 +185,18 @@ typedef enum _PIZScaleType {
  */
  
 typedef enum _PIZScaleKey {
-    PIZ_KEY_C = 0,
-    PIZ_KEY_C_SHARP,
-    PIZ_KEY_D,
-    PIZ_KEY_D_SHARP,
-    PIZ_KEY_E,
-    PIZ_KEY_F,
-    PIZ_KEY_F_SHARP,
-    PIZ_KEY_G,
-    PIZ_KEY_G_SHARP,
-    PIZ_KEY_A,
-    PIZ_KEY_A_SHARP,
-    PIZ_KEY_B
+    PIZ_KEY_C = 0,                          /*!<  */
+    PIZ_KEY_C_SHARP,                        /*!<  */
+    PIZ_KEY_D,                              /*!<  */
+    PIZ_KEY_D_SHARP,                        /*!<  */
+    PIZ_KEY_E,                              /*!<  */
+    PIZ_KEY_F,                              /*!<  */
+    PIZ_KEY_F_SHARP,                        /*!<  */
+    PIZ_KEY_G,                              /*!<  */
+    PIZ_KEY_G_SHARP,                        /*!<  */
+    PIZ_KEY_A,                              /*!<  */
+    PIZ_KEY_A_SHARP,                        /*!<  */
+    PIZ_KEY_B                               /*!<  */
     } PIZScaleKey;
 
 /**
@@ -204,19 +204,20 @@ typedef enum _PIZScaleKey {
  */
  
 typedef struct  _PIZCoordinates {
-    long    position;
+    long    position;                       
     long    pitch;
     } PIZCoordinates;
 
 /**
  * \ingroup sequenceTypes
+ * \ingroup sequenceTransform
  */
  
 typedef enum _PIZSelector {
-    PIZ_PITCH       = 0,
-    PIZ_VELOCITY    = 1,
-    PIZ_DURATION    = 2, 
-    PIZ_CHANNEL     = 3
+    PIZ_PITCH       = 0,                    /*!<  */
+    PIZ_VELOCITY    = 1,                    /*!<  */
+    PIZ_DURATION    = 2,                    /*!<  */
+    PIZ_CHANNEL     = 3                     /*!<  */
     } PIZSelector;
 
 /**
@@ -224,19 +225,19 @@ typedef enum _PIZSelector {
  */
  
 typedef enum _PIZDataIndex {
-    PIZ_DATA_POSITION       = 0,
-    PIZ_DATA_PITCH,
-    PIZ_DATA_VELOCITY,
-    PIZ_DATA_DURATION,
-    PIZ_DATA_CHANNEL,
-    PIZ_DATA_IS_SELECTED,
-    PIZ_DATA_IS_MARKED,
-    PIZ_DATA_NOTE_SIZE      = 7,
-    PIZ_DATA_START          = 0,
-    PIZ_DATA_END,
-    PIZ_DATA_DOWN,
-    PIZ_DATA_UP,
-    PIZ_DATA_ZONE_SIZE
+    PIZ_DATA_POSITION       = 0,            /*!<  */
+    PIZ_DATA_PITCH,                         /*!<  */
+    PIZ_DATA_VELOCITY,                      /*!<  */
+    PIZ_DATA_DURATION,                      /*!<  */
+    PIZ_DATA_CHANNEL,                       /*!<  */
+    PIZ_DATA_IS_SELECTED,                   /*!<  */
+    PIZ_DATA_IS_MARKED,                     /*!<  */
+    PIZ_DATA_NOTE_SIZE      = 7,            /*!<  */
+    PIZ_DATA_START          = 0,            /*!<  */
+    PIZ_DATA_END,                           /*!<  */
+    PIZ_DATA_DOWN,                          /*!<  */
+    PIZ_DATA_UP,                            /*!<  */
+    PIZ_DATA_ZONE_SIZE                      /*!<  */
     } PIZDataIndex;
 
 /**

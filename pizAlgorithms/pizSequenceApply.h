@@ -2,6 +2,7 @@
  * \file    pizSequenceMaxMSP.h
  * \author  Jean Sapristi
  * \date    31 janvier 2012
+ * \ingroup sequenceTransform
  */
  
 /*
@@ -38,8 +39,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_SEQUENCE_MAXMSP_H
-#define PIZ_SEQUENCE_MAXMSP_H
+#ifndef PIZ_SEQUENCE_APPLY_H
+#define PIZ_SEQUENCE_APPLY_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -49,9 +50,24 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizSequenceEncodeToArray (PIZSequence *x, PIZGrowingArray *a);
-PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a);
+/**
+ * \brief   Transpose notes according to ambitus.
+ * \param   x A valid pointer.
+ * \return  True if changed otherwise false.
+ * \ingroup tralala
+ * \ingroup sequenceTransform
+ */
+bool pizSequenceApplyAmbitus (PIZSequence *x);
+
+/**
+ * \brief   Snap notes according to pattern.
+ * \param   x A valid pointer.
+ * \return  True if changed otherwise false.
+ * \ingroup tralala
+ * \ingroup sequenceTransform
+ */
+bool pizSequenceApplyPattern (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_MAXMSP_H
+#endif // PIZ_SEQUENCE_APPLY_H
