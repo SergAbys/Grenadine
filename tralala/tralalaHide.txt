@@ -74,8 +74,6 @@ _pizLinklistSetFlags
 _pizLinklistSwapByIndexes
 _pizSequenceAddNoteWithCoordinates
 _pizSequenceAddNotesWithArray
-_pizSequenceApplyAmbitus
-_pizSequenceApplyPattern
 _pizSequenceCellularAutomata
 _pizSequenceChange
 _pizSequenceChangeMarkedNoteValue
@@ -93,6 +91,7 @@ _pizSequenceGrid
 _pizSequenceHasMarkedNote
 _pizSequenceIndex
 _pizSequenceInitLasso
+_pizSequenceInitTempZone
 _pizSequenceInvertNoteWithCoordinates
 _pizSequenceIsAtEnd
 _pizSequenceKillNotes
@@ -117,7 +116,6 @@ _pizSequenceSetGrid
 _pizSequenceSetChannel
 _pizSequenceSetNoteValue
 _pizSequenceSetScale
-_pizSequenceSetTempZoneByZone
 _pizSequenceSetTempZoneWithCoordinates
 _pizSequenceSetVelocity
 _pizSequenceSetZoneByTempZone

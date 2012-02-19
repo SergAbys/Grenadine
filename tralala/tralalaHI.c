@@ -45,7 +45,7 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
     } else if (USER && !CTRL && !RIGHT && CAPS && (x->hitTest = tralala_hitZoneWithPoint (x, pt))) {
         x->flags |= FLAG_ZONE_IS_SELECTED;
             
-        pizSequenceSetTempZoneByZone (x->user);
+        pizSequenceInitTempZone (x->user);
 
         DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_CHANGE);
     } else if (USER && SHIFT && !RIGHT && !CAPS) {

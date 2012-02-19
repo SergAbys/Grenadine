@@ -83,17 +83,18 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
     PIZLOCK
     
     if (x->markedNote)  {
+        long temp;
+        
         if (selector == PIZ_DURATION) {
             long err = PIZ_GOOD;
-            long temp = x->markedNote->data[PIZ_DURATION];
+            
+            temp = x->markedNote->data[PIZ_DURATION];
             
             if (value > 0) {
                 temp += x->grid;
             } else {
                 temp -= x->grid;
             }
-                
-            temp = pizSequenceSnapRound (x, temp);
             
             err |= ((x->markedNote->position + temp) > PIZ_SEQUENCE_TIMELINE_SIZE);
             err |= (temp > PIZ_SEQUENCE_MAXIMUM_DURATION);
@@ -103,16 +104,16 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
                 x->markedNote->data[PIZ_DURATION] = temp;
             }
         } else {
-            x->markedNote->data[selector] += value;
+            temp = x->markedNote->data[selector];
+            temp += value;
             
             switch (selector) {
-            case PIZ_PITCH    : x->markedNote->data[PIZ_PITCH] = CLAMP (x->markedNote->data[PIZ_PITCH], 
-                                0, PIZ_MAGIC_PITCH); break;
-            case PIZ_VELOCITY : x->markedNote->data[PIZ_VELOCITY] = CLAMP (x->markedNote->data[PIZ_VELOCITY], 
-                                0, PIZ_MAGIC_VELOCITY); break;
-            case PIZ_CHANNEL  : x->markedNote->data[PIZ_CHANNEL] = CLAMP (x->markedNote->data[PIZ_CHANNEL], 
-                                0, PIZ_MAGIC_CHANNEL); break;
+                case PIZ_PITCH    : temp = CLAMP (temp, 0, PIZ_MAGIC_PITCH);    break;
+                case PIZ_VELOCITY : temp = CLAMP (temp, 0, PIZ_MAGIC_VELOCITY); break;
+                case PIZ_CHANNEL  : temp = CLAMP (temp, 0, PIZ_MAGIC_CHANNEL);  break;
             }
+            
+            x->markedNote->data[selector] = temp;
         }
     }
         
@@ -123,7 +124,7 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizSequenceSetTempZoneByZone (PIZSequence *x)
+void pizSequenceInitTempZone (PIZSequence *x)
 {
     PIZLOCK
     
@@ -133,8 +134,8 @@ void pizSequenceSetTempZoneByZone (PIZSequence *x)
     x->tempUp            = x->up;
     x->tempOriginStart   = x->start;
     x->tempOriginDown    = x->down;
-    x->tempOriginWidth   = (x->end - x->start);
-    x->tempOriginHeight  = (x->up - x->down);
+    x->tempOriginWidth   = x->end - x->start;
+    x->tempOriginHeight  = x->up  - x->down;
     
     PIZUNLOCK
 }

@@ -92,10 +92,6 @@ void tralala_setLiveByUser (t_tralala *x)
         pizSequenceAddNotesWithArray (x->live, tempArrayA, addFlags);
         pizSequenceSetZoneWithArray  (x->live, tempArrayB);
         pizSequenceSetZoneWithArray  (x->listen, tempArrayB);
-            
-        if (pizSequenceApplyAmbitus (x->listen) && LISTEN) {
-            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
-        }
     }
     
     ARRAY_RELEASE (tempArrayA);
@@ -426,16 +422,11 @@ bool tralala_sequenceZone (t_tralala *x, PIZSequence *sequence, long argc, t_ato
         
         if (!err) {
             if (sequence == x->user) {
-                    pizSequenceSetZoneWithArray (sequence, tempArray);
-                    draw = true;
+                pizSequenceSetZoneWithArray (sequence, tempArray);
+                draw = true;
             } else if (sequence == x->live) {
                 pizSequenceSetZoneWithArray (sequence, tempArray);
                 pizSequenceSetZoneWithArray (x->listen, tempArray);
-                
-                if (pizSequenceApplyAmbitus (x->listen) && LISTEN) {
-                        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
-                    }
-                
                 draw = true;
             }
         }

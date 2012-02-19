@@ -201,15 +201,6 @@ typedef enum _PIZScaleKey {
 
 /**
  * \ingroup sequenceTypes
- */
- 
-typedef struct  _PIZCoordinates {
-    long    position;                       
-    long    pitch;
-    } PIZCoordinates;
-
-/**
- * \ingroup sequenceTypes
  * \ingroup sequenceTransform
  */
  

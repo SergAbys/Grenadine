@@ -51,7 +51,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief   Transpose notes according to ambitus.
+ * \brief   Transpose all notes according to ambitus.
  * \param   x A valid pointer.
  * \return  True if changed otherwise false.
  * \ingroup tralala
@@ -60,7 +60,7 @@
 bool pizSequenceApplyAmbitus (PIZSequence *x);
 
 /**
- * \brief   Snap notes according to pattern.
+ * \brief   Snap all notes according to pattern.
  * \param   x A valid pointer.
  * \return  True if changed otherwise false.
  * \ingroup tralala

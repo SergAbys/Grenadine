@@ -149,6 +149,8 @@
  * \ingroup  sequence
  * \defgroup sequenceTransform Transformations
  * \ingroup  sequence
+ * \defgroup sequenceInterface GUI
+ * \ingroup  sequence
  * \defgroup sequencePrivate Private
  * \ingroup  sequence
  */
