@@ -6,7 +6,7 @@ Layout of the Grenadine repository :
   max/MSP externals.
 
 * Tralala :
-  max/MSP prototype.
+  max/MSP messy prototype.
 
 * pizAlgorithms : 
   static library in C with, machine-learning, data 

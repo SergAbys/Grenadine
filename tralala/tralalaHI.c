@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 13/02/12.
+ *  Last modified : 20/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -64,7 +64,6 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
         }
     } else if (RIGHT) {
         tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_ARROW);
-
         tralala_popupRightClickMenu (x, pt, MODE_MENU_SEQUENCE);
     } else if (USER) {
         pizSequenceUnselectAllNotes (x->user);
@@ -426,7 +425,6 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
         switch (x->sequenceMode) {
         case MODE_SEQUENCE_USER   : object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_LIVE); break;
         case MODE_SEQUENCE_LIVE   : object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_USER); break;
-        case MODE_SEQUENCE_LISTEN : object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_USER); break;
         }
     } else if (keycode == JKEY_UPARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
         pizSequenceTranspose (x->user, PIZ_MAGIC_SCALE);
@@ -785,7 +783,6 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
         
             jpopupmenu_additem      (popup, 100,    "User",     NULL, USER, 0, NULL);
             jpopupmenu_additem      (popup, 101,    "Live",     NULL, LIVE, 0, NULL);
-            jpopupmenu_additem      (popup, 102,    "Listen",   NULL, LISTEN, 0, NULL);
             jpopupmenu_addseperator (popup);
     
             if (USER) {
@@ -968,7 +965,6 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
         case 66     :   tralala_setSelectedNotesVelocity (x, 127);  x->flags |= FLAG_HAVE_CHANGED; break;
         case 100    :   object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_USER);      break;
         case 101    :   object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_LIVE);      break;
-        case 102    :   object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_LISTEN);    break;
         case 200    :   tralala_setSelectedNotesChannel (x, 0);  x->flags |= FLAG_HAVE_CHANGED; break;
         case 201    :   tralala_setSelectedNotesChannel (x, 1);  x->flags |= FLAG_HAVE_CHANGED; break;
         case 202    :   tralala_setSelectedNotesChannel (x, 2);  x->flags |= FLAG_HAVE_CHANGED; break;

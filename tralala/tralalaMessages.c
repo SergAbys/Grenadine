@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 13/02/12.
+ *  Last modified : 20/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ void tralala_copy (t_tralala *x)
 
         for (i = (count - 1); i >= 0; i--) {
             if (100 * (rand ( ) / (RAND_MAX + 1.0)) < chance) {
-            pizGrowingArrayAppendPtr (tempArrayB, PIZ_DATA_NOTE_SIZE, ptr + (PIZ_DATA_NOTE_SIZE * i));
+                pizGrowingArrayAppendPtr (tempArrayB, PIZ_DATA_NOTE_SIZE, ptr + (PIZ_DATA_NOTE_SIZE * i));
             }
         }
         
@@ -235,67 +235,49 @@ void tralala_handleMessages (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         PIZSequence *sequence = NULL;
         
         if (s == tll_sym_live) {
-                sequence = x->live; draw = LIVE;
-            }
-        else if (s == tll_sym_user) { 
-                sequence = x->user; draw = USER;
-            }
-        else if (s == tll_sym_listen) {
-                sequence = x->listen; draw = LISTEN;
-            }
+            sequence = x->live; draw = LIVE;
+        } else if (s == tll_sym_user) { 
+            sequence = x->user; draw = USER;
+        } else if (s == tll_sym_listen) {
+            sequence = x->listen; 
+        }
         
         if (sequence && (atom_gettype (argv) == A_SYM)) {
             if (atom_getsym (argv) == tll_sym_clear) {
-                    draw &= tralala_sequenceClear (x, sequence);
-                }
-            else if (atom_getsym (argv) == tll_sym_clean) {
-                    draw &= tralala_sequenceClean (x, sequence, argc - 1, argv + 1);
-                }
-            else if (atom_getsym (argv) == tll_sym_note) {
-                    draw &= tralala_sequenceNote (x, sequence, argc - 1, argv + 1);
-                }
-            else if (atom_getsym (argv) == tll_sym_zone) {
-                    draw &= tralala_sequenceZone (x, sequence, argc - 1, argv + 1);
-                }
-            else if (atom_getsym (argv) == tll_sym_dump) {
-                    draw &= tralala_sequenceDump (x, sequence, argc - 1, argv + 1); 
-                }
-            else if (atom_getsym (argv) == tll_sym_rotate) {
-                    draw &= tralala_sequenceRotate (x, sequence, argc - 1, argv + 1);
-                }
-            else if (atom_getsym (argv) == tll_sym_scramble) {
-                    draw &= tralala_sequenceScramble (x, sequence, argc - 1, argv + 1);
-                }
-            else if (atom_getsym (argv) == tll_sym_sort) {
-                    draw &= tralala_sequenceSort (x, sequence, argc - 1, argv + 1);
-                }
-            else if (atom_getsym (argv) == tll_sym_change) {
-                    draw &= tralala_sequenceChange (x, sequence, argc - 1, argv + 1);
-                }
-            else if (atom_getsym (argv) == tll_sym_set) {
-                    draw &= tralala_sequenceSet (x, sequence, argc - 1, argv + 1);
-                }
-            else if (atom_getsym (argv) == tll_sym_november) {
-                    draw &= tralala_sequenceNovember (x, sequence, argc - 1, argv + 1);
-                }
-            else if (atom_getsym (argv) == tll_sym_juliet) {
-                    draw &= tralala_sequenceJuliet (x, sequence, argc - 1, argv + 1);
-                }
-            else if (atom_getsym (argv) == tll_sym_cycle) {
-                    draw &= tralala_sequenceCycle (x, sequence, argc - 1, argv + 1);
-                }
-            else if (atom_getsym (argv) == tll_sym_kill) {
-                    draw &= tralala_sequenceKill (x, sequence);
-                }
-            else if (atom_getsym (argv) == tll_sym_zoulou) {
-                    draw &= tralala_sequenceZoulou (x, sequence);
-                }
-            else if (atom_getsym (argv) == tll_sym_romeo) {
-                    draw &= tralala_sequenceRomeo (x, sequence);
-                }
-            else if (atom_getsym (argv) == tll_sym_uniform) {
-                    draw &= tralala_sequenceUniform (x, sequence);
-                }
+                draw &= tralala_sequenceClear (x, sequence);
+            } else if (atom_getsym (argv) == tll_sym_clean) {
+                draw &= tralala_sequenceClean (x, sequence, argc - 1, argv + 1);
+            } else if (atom_getsym (argv) == tll_sym_note) {
+                draw &= tralala_sequenceNote (x, sequence, argc - 1, argv + 1);
+            } else if (atom_getsym (argv) == tll_sym_zone) {
+                draw &= tralala_sequenceZone (x, sequence, argc - 1, argv + 1);
+            } else if (atom_getsym (argv) == tll_sym_dump) {
+                draw &= tralala_sequenceDump (x, sequence, argc - 1, argv + 1); 
+            } else if (atom_getsym (argv) == tll_sym_rotate) {
+                draw &= tralala_sequenceRotate (x, sequence, argc - 1, argv + 1);
+            } else if (atom_getsym (argv) == tll_sym_scramble) {
+                draw &= tralala_sequenceScramble (x, sequence, argc - 1, argv + 1);
+            } else if (atom_getsym (argv) == tll_sym_sort) {
+                draw &= tralala_sequenceSort (x, sequence, argc - 1, argv + 1);
+            } else if (atom_getsym (argv) == tll_sym_change) {
+                draw &= tralala_sequenceChange (x, sequence, argc - 1, argv + 1);
+            } else if (atom_getsym (argv) == tll_sym_set) {
+                draw &= tralala_sequenceSet (x, sequence, argc - 1, argv + 1);
+            } else if (atom_getsym (argv) == tll_sym_november) {
+                draw &= tralala_sequenceNovember (x, sequence, argc - 1, argv + 1);
+            } else if (atom_getsym (argv) == tll_sym_juliet) {
+                draw &= tralala_sequenceJuliet (x, sequence, argc - 1, argv + 1);
+            } else if (atom_getsym (argv) == tll_sym_cycle) {
+                draw &= tralala_sequenceCycle (x, sequence, argc - 1, argv + 1);
+            } else if (atom_getsym (argv) == tll_sym_kill) {
+                draw &= tralala_sequenceKill (x, sequence);
+            } else if (atom_getsym (argv) == tll_sym_zoulou) {
+                draw &= tralala_sequenceZoulou (x, sequence);
+            } else if (atom_getsym (argv) == tll_sym_romeo) {
+                draw &= tralala_sequenceRomeo (x, sequence);
+            } else if (atom_getsym (argv) == tll_sym_uniform) {
+                draw &= tralala_sequenceUniform (x, sequence);
+            }
             
             if (draw) {
                 tralala_willChange (x);

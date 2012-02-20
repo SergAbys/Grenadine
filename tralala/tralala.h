@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 31/01/12.
+ *  Last modified : 20/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -29,9 +29,9 @@
 #include "ext_atomic.h"
 
 #include "pizSequence.h"
-#include "pizSequenceTransform.h"
-#include "pizSequenceMaxMSP.h"
 #include "tralalaSymbols.h"
+#include "pizSequenceMaxMSP.h"
+#include "pizSequenceTransform.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -106,7 +106,6 @@
 #define MODE_TEXT_MOUSE_VELOCITY            3
 #define MODE_SEQUENCE_USER                  0
 #define MODE_SEQUENCE_LIVE                  1
-#define MODE_SEQUENCE_LISTEN                2
 #define MODE_ZOOM_A                         0
 #define MODE_ZOOM_B                         1
 #define MODE_ZOOM_C                         2
@@ -231,9 +230,6 @@
 #define DEFAULT_FOCUSED_LIVE_NOTE_COLOR                 "0.42 0.44 0.52 1."
 #define DEFAULT_FOCUSED_LIVE_PLAYED_NOTE_COLOR          "1.00 0.60 0.00 1."
 
-#define DEFAULT_UNFOCUSED_LISTEN_NOTE_COLOR             "0.94 0.88 0.94 1."
-#define DEFAULT_FOCUSED_LISTEN_NOTE_COLOR               "1.00 0.59 0.42 1."
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -241,7 +237,6 @@
 #define VIEWTEXT        (x->viewText == 1)
 #define USER            (x->sequenceMode == 0)
 #define LIVE            (x->sequenceMode == 1)
-#define LISTEN          (x->sequenceMode == 2)
 #define CMD             (modifiers & eCommandKey)
 #define SHIFT           (modifiers & eShiftKey)
 #define CTRL            (modifiers & eControlKey)
@@ -417,8 +412,6 @@ typedef struct _tralala {
     t_jrgba             unfocusedLivePlayedNoteColor;
     t_jrgba             focusedLiveNoteColor;
     t_jrgba             focusedLivePlayedNoteColor;
-    t_jrgba             unfocusedListenNoteColor;
-    t_jrgba             focusedListenNoteColor;
     } t_tralala;
 
 // -------------------------------------------------------------------------------------------------------------

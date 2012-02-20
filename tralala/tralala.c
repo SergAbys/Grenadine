@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 13/02/12.
+ *  Last modified : 20/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -146,7 +146,7 @@ CLASS_ATTR_FILTER_CLIP     (c, "tempo",             TIME_TEMPO_MIN, TIME_TEMPO_M
 
 CLASS_ATTR_LONG            (c, "velocity",          0, t_tralala, velocity);
 CLASS_ATTR_DEFAULT         (c, "velocity",          0, "0");
-CLASS_ATTR_LABEL           (c, "velocity",          0, "Velocity Change");
+CLASS_ATTR_LABEL           (c, "velocity",          0, "Velocity");
 CLASS_ATTR_ACCESSORS       (c, "velocity",          NULL, tralala_setVelocity);
 
 CLASS_ATTR_SYM             (c, "scalekey",          0, t_tralala, scaleKey);
@@ -187,12 +187,12 @@ CLASS_STICKY_ATTR_CLEAR     (c, "category");
 
 CLASS_ATTR_ORDER            (c, "tempo",            0, "201");
 CLASS_ATTR_ORDER            (c, "chance",           0, "202");
-CLASS_ATTR_ORDER            (c, "scalekey",         0, "203");
-CLASS_ATTR_ORDER            (c, "scaletype",        0, "204");
-CLASS_ATTR_ORDER            (c, "scalecustom",      0, "205");
-CLASS_ATTR_ORDER            (c, "patterncell",      0, "206");
-CLASS_ATTR_ORDER            (c, "patterncustom",    0, "207");
-CLASS_ATTR_ORDER            (c, "velocity",         0, "208");
+CLASS_ATTR_ORDER            (c, "velocity",         0, "203");
+CLASS_ATTR_ORDER            (c, "scalekey",         0, "204");
+CLASS_ATTR_ORDER            (c, "scaletype",        0, "205");
+CLASS_ATTR_ORDER            (c, "scalecustom",      0, "206");
+CLASS_ATTR_ORDER            (c, "patterncell",      0, "207");
+CLASS_ATTR_ORDER            (c, "patterncustom",    0, "208");
 
 CLASS_ATTR_LONG             (c, "viewtext",         0, t_tralala, viewText);
 CLASS_ATTR_DEFAULT_SAVE     (c, "viewtext",         0, DEFAULT_VIEW_TEXT);
@@ -213,7 +213,7 @@ CLASS_ATTR_LABEL            (c, "windowoffsety",    0, "Window Y Offset");
 
 CLASS_ATTR_LONG             (c, "sequencemode",     0, t_tralala, sequenceMode);
 CLASS_ATTR_DEFAULT          (c, "sequencemode",     0, DEFAULT_MODE_SEQUENCE);
-CLASS_ATTR_ENUMINDEX        (c, "sequencemode",     0, "user live listen");
+CLASS_ATTR_ENUMINDEX        (c, "sequencemode",     0, "user live");
 CLASS_ATTR_LABEL            (c, "sequencemode",     0, "Sequence Mode");
 CLASS_ATTR_ACCESSORS        (c, "sequencemode",     NULL, tralala_setSequenceMode);
 
@@ -285,13 +285,6 @@ CLASS_ATTR_STYLE_LABEL      (c, "focusedlivenotecolor",          0, "rgba", "Foc
 CLASS_ATTR_RGBA             (c, "focusedliveplayednotecolor",    0, t_tralala, focusedLivePlayedNoteColor);
 CLASS_ATTR_DEFAULTNAME_SAVE (c, "focusedliveplayednotecolor",    0, DEFAULT_FOCUSED_LIVE_PLAYED_NOTE_COLOR);
 CLASS_ATTR_STYLE_LABEL      (c, "focusedliveplayednotecolor",    0, "rgba", "Focused Live Played Note");
-
-CLASS_ATTR_RGBA             (c, "unfocusedlistennotecolor",      0, t_tralala, unfocusedListenNoteColor);
-CLASS_ATTR_DEFAULTNAME_SAVE (c, "unfocusedlistennotecolor",      0, DEFAULT_UNFOCUSED_LISTEN_NOTE_COLOR);
-CLASS_ATTR_STYLE_LABEL      (c, "unfocusedlistennotecolor",      0, "rgba", "Unfocused Listen Note");
-CLASS_ATTR_RGBA             (c, "focusedlistennotecolor",        0, t_tralala, focusedListenNoteColor);
-CLASS_ATTR_DEFAULTNAME_SAVE (c, "focusedlistennotecolor",        0, DEFAULT_FOCUSED_LISTEN_NOTE_COLOR);
-CLASS_ATTR_STYLE_LABEL      (c, "focusedlistennotecolor",        0, "rgba", "Focused Listen Note");
 
 CLASS_ATTR_RGBA             (c, "popuptextcolor",           0, t_tralala, popupTextColor);
 CLASS_ATTR_DEFAULTNAME_SAVE (c, "popuptextcolor",           0, DEFAULT_POPUP_TEXT_COLOR);
@@ -380,23 +373,21 @@ CLASS_ATTR_ORDER            (c, "focusedusermarkednotecolor",       0, "4");
 CLASS_ATTR_ORDER            (c, "focusedusersilentnotecolor",       0, "5");
 CLASS_ATTR_ORDER            (c, "focusedlivenotecolor",             0, "6");
 CLASS_ATTR_ORDER            (c, "focusedliveplayednotecolor",       0, "7");
-CLASS_ATTR_ORDER            (c, "focusedlistennotecolor",           0, "8");
-CLASS_ATTR_ORDER            (c, "focuseduserzonecolor",             0, "9");
-CLASS_ATTR_ORDER            (c, "focusedlivezonecolor",             0, "10");
-CLASS_ATTR_ORDER            (c, "focusedselectedzonecolor",         0, "11");
-CLASS_ATTR_ORDER            (c, "unfocusedtextcolor",               0, "12");
-CLASS_ATTR_ORDER            (c, "unfocusedbordercolor",             0, "13");
-CLASS_ATTR_ORDER            (c, "unfocusedusernotecolor",           0, "14");
-CLASS_ATTR_ORDER            (c, "unfocuseduserselectednotecolor",   0, "15");
-CLASS_ATTR_ORDER            (c, "unfocusedlivenotecolor",           0, "16");
-CLASS_ATTR_ORDER            (c, "unfocusedliveplayednotecolor",     0, "17");
-CLASS_ATTR_ORDER            (c, "unfocusedlistennotecolor",         0, "18");
-CLASS_ATTR_ORDER            (c, "unfocusedzonecolor",               0, "19");
-CLASS_ATTR_ORDER            (c, "selectedtextcolor",                0, "20");
-CLASS_ATTR_ORDER            (c, "popuptextcolor",                   0, "21");
-CLASS_ATTR_ORDER            (c, "popubgcolor",                      0, "22");
-CLASS_ATTR_ORDER            (c, "popuphlttextcolor",                0, "23");
-CLASS_ATTR_ORDER            (c, "popuhltbgcolor",                   0, "24");
+CLASS_ATTR_ORDER            (c, "focuseduserzonecolor",             0, "8");
+CLASS_ATTR_ORDER            (c, "focusedlivezonecolor",             0, "9");
+CLASS_ATTR_ORDER            (c, "focusedselectedzonecolor",         0, "10");
+CLASS_ATTR_ORDER            (c, "unfocusedtextcolor",               0, "11");
+CLASS_ATTR_ORDER            (c, "unfocusedbordercolor",             0, "12");
+CLASS_ATTR_ORDER            (c, "unfocusedusernotecolor",           0, "13");
+CLASS_ATTR_ORDER            (c, "unfocuseduserselectednotecolor",   0, "14");
+CLASS_ATTR_ORDER            (c, "unfocusedlivenotecolor",           0, "15");
+CLASS_ATTR_ORDER            (c, "unfocusedliveplayednotecolor",     0, "16");
+CLASS_ATTR_ORDER            (c, "unfocusedzonecolor",               0, "17");
+CLASS_ATTR_ORDER            (c, "selectedtextcolor",                0, "18");
+CLASS_ATTR_ORDER            (c, "popuptextcolor",                   0, "19");
+CLASS_ATTR_ORDER            (c, "popubgcolor",                      0, "20");
+CLASS_ATTR_ORDER            (c, "popuphlttextcolor",                0, "21");
+CLASS_ATTR_ORDER            (c, "popuhltbgcolor",                   0, "22");
 
 tll_thirtySecond            [0] = jgraphics_image_surface_create_from_resource (moduleRef, "16A");
 tll_thirtySecond            [1] = jgraphics_image_surface_create_from_resource (moduleRef, "32B");
@@ -504,9 +495,9 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
             systhread_mutex_new (&x->arraysMutex,       SYSTHREAD_MUTEX_NORMAL);
             
             for (i = 0; i < TEXT_CELL_COUNT; i++) {
-                    x->textLayers[i]     = jtextlayout_create ( );
-                    x->textIsSelected[i] = false;
-                }
+                x->textLayers[i]     = jtextlayout_create ( );
+                x->textIsSelected[i] = false;
+            }
             
             jbox_ready ((t_jbox *)x);
 
@@ -563,8 +554,8 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                 x->cell             = PIZ_NOTE_NONE;
                 x->dirtyLayer       = (DIRTY_ZONE | DIRTY_NOTES | DIRTY_GRID | DIRTY_CHANGE);
                 
-                pizSequenceSetGrid (x->user, PIZ_EIGHTH_NOTE);
-                pizSequenceSetCell (x->user, PIZ_EIGHTH_NOTE);
+                pizSequenceSetGrid  (x->user, PIZ_EIGHTH_NOTE);
+                pizSequenceSetCell  (x->user, PIZ_EIGHTH_NOTE);
                 pizLinklistSetFlags (x->slots, PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY);
                 
                 if (dictionary_hasentry (d, tll_sym_tralala) && 
@@ -998,7 +989,7 @@ t_max_err tralala_setSequenceMode (t_tralala *x, t_object *attr, long argc, t_at
         long k = atom_getlong (argv);
         
         tralala_willChange (x);
-        x->sequenceMode = CLAMP (k, MODE_SEQUENCE_USER, MODE_SEQUENCE_LISTEN);
+        x->sequenceMode = CLAMP (k, MODE_SEQUENCE_USER, MODE_SEQUENCE_LIVE);
 
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE | DIRTY_GRID);
     }

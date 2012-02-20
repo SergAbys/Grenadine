@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 13/02/12.
+ *  Last modified : 20/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -89,7 +89,6 @@ void tralala_paintTask (t_tralala *x)
                 switch (x->sequenceMode) {
                     case MODE_SEQUENCE_USER     : sequence = x->user;   break;
                     case MODE_SEQUENCE_LIVE     : sequence = x->live;   break;
-                    case MODE_SEQUENCE_LISTEN   : err = PIZ_ERROR;      break;
                 }
             
                 if (sequence) {
@@ -115,10 +114,8 @@ void tralala_paintTask (t_tralala *x)
                     
                 if (USER) {
                     err = pizSequenceNotesToArray (x->user, x->unselected, x->selected);
-                } else if (LIVE) {
+                } else {
                     err = pizSequenceNotesToArray (x->live, x->unselected, x->unselected);
-                } else if (LISTEN) {
-                    err = pizSequenceNotesToArray (x->listen, x->unselected, x->unselected);
                 }
                 
                 if (LIVE && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1))) {    
@@ -180,11 +177,7 @@ void tralala_paint (t_tralala *x, t_object *patcherview)
     
     if (ATOMIC_INCREMENT (&x->paintLock) == 1) {
         tralala_paintGrid (x, patcherview);
-        
-        if (!LISTEN) {
-            tralala_paintZone (x, patcherview);
-        }
-        
+        tralala_paintZone (x, patcherview);
         tralala_paintNotes (x, patcherview);
         
         if (LIVE && !(x->flags & FLAG_IS_MUTED)) {
@@ -618,17 +611,15 @@ void tralala_paintNotes (t_tralala *x, t_object *patcherview)
             switch (x->sequenceMode) {
                 case MODE_SEQUENCE_USER   : jrgba_copy (&color3, &x->unfocusedUserSelectedNoteColor);
                                             jrgba_copy (&color2, &x->unfocusedUserSelectedNoteColor);
-                                            jrgba_copy (&color1, &x->unfocusedUserNoteColor);   break;
-                case MODE_SEQUENCE_LIVE   : jrgba_copy (&color1, &x->unfocusedLiveNoteColor);   break;
-                case MODE_SEQUENCE_LISTEN : jrgba_copy (&color1, &x->unfocusedListenNoteColor); break;
+                                            jrgba_copy (&color1, &x->unfocusedUserNoteColor); break;
+                case MODE_SEQUENCE_LIVE   : jrgba_copy (&color1, &x->unfocusedLiveNoteColor); break;
             }
         } else {
             switch (x->sequenceMode) {
                 case MODE_SEQUENCE_USER   : jrgba_copy (&color3, &x->focusedUserMarkedNoteColor);
                                             jrgba_copy (&color2, &x->focusedUserSelectedNoteColor); break;
                 case MODE_SEQUENCE_LIVE   : jrgba_copy (&color2, &x->focusedLivePlayedNoteColor);
-                                            jrgba_copy (&color1, &x->focusedLiveNoteColor);   break;
-                case MODE_SEQUENCE_LISTEN : jrgba_copy (&color1, &x->focusedListenNoteColor); break;
+                                            jrgba_copy (&color1, &x->focusedLiveNoteColor); break;
             }
         }
 
@@ -636,27 +627,27 @@ void tralala_paintNotes (t_tralala *x, t_object *patcherview)
         
         if ((x->flags & FLAG_FOCUS) && USER) {
             for (i = 0; i < notesCount; i++) {
-                long position   = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_POSITION);
-                long pitch      = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_PITCH);
-                long velocity   = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_VELOCITY);
-                long duration   = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_DURATION);
+                long position   = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                    + PIZ_DATA_POSITION);
+                long pitch      = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                    + PIZ_DATA_PITCH);
+                long velocity   = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                    + PIZ_DATA_VELOCITY);
+                long duration   = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                    + PIZ_DATA_DURATION);
                 
                 tralala_paintNoteCandycane (x, g, position, pitch, velocity, duration);
             }
         } else {
             for (i = 0; i < notesCount; i++) {
-                long position   = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_POSITION);
-                long pitch      = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_PITCH);
-                long velocity   = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_VELOCITY);
-                long duration   = pizGrowingArrayValueAtIndex (x->unselectedCopy, 
-                                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_DURATION);
+                long position   = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                    + PIZ_DATA_POSITION);
+                long pitch      = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                    + PIZ_DATA_PITCH);
+                long velocity   = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                    + PIZ_DATA_VELOCITY);
+                long duration   = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                    + PIZ_DATA_DURATION);
                                             
                 tralala_paintNoteWithColor (x, g, position, pitch, velocity, duration, &color1);
             }
@@ -665,16 +656,16 @@ void tralala_paintNotes (t_tralala *x, t_object *patcherview)
         notesCount = pizGrowingArrayCount (x->selectedCopy) / PIZ_DATA_NOTE_SIZE;
         
         for (i = 0; i < notesCount; i++) {
-            long position   = pizGrowingArrayValueAtIndex (x->selectedCopy, 
-                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_POSITION);
-            long pitch      = pizGrowingArrayValueAtIndex (x->selectedCopy, 
-                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_PITCH);
-            long velocity   = pizGrowingArrayValueAtIndex (x->selectedCopy, 
-                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_VELOCITY);
-            long duration   = pizGrowingArrayValueAtIndex (x->selectedCopy, 
-                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_DURATION);
-            long isMarked   = pizGrowingArrayValueAtIndex (x->selectedCopy, 
-                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_IS_MARKED);
+            long position   = pizGrowingArrayValueAtIndex (x->selectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                + PIZ_DATA_POSITION);
+            long pitch      = pizGrowingArrayValueAtIndex (x->selectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                + PIZ_DATA_PITCH);
+            long velocity   = pizGrowingArrayValueAtIndex (x->selectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                + PIZ_DATA_VELOCITY);
+            long duration   = pizGrowingArrayValueAtIndex (x->selectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                + PIZ_DATA_DURATION);
+            long isMarked   = pizGrowingArrayValueAtIndex (x->selectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                + PIZ_DATA_IS_MARKED);
             
             if (!isMarked) {
                 tralala_paintNoteWithColor (x, g, position, pitch, velocity, duration, &color2);
@@ -724,14 +715,14 @@ void tralala_paintPlayedNotes (t_tralala *x, t_object *patcherview)
         notesCount = pizGrowingArrayCount (x->playedCopy) / PIZ_DATA_NOTE_SIZE;
         
         for (i = 0; i < notesCount; i++) {
-            long position   = pizGrowingArrayValueAtIndex (x->playedCopy, 
-                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_POSITION);
-            long pitch      = pizGrowingArrayValueAtIndex (x->playedCopy, 
-                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_PITCH);
-            long velocity   = pizGrowingArrayValueAtIndex (x->playedCopy, 
-                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_VELOCITY);
-            long duration   = pizGrowingArrayValueAtIndex (x->playedCopy, 
-                                (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_DURATION);
+            long position   = pizGrowingArrayValueAtIndex (x->playedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                + PIZ_DATA_POSITION);
+            long pitch      = pizGrowingArrayValueAtIndex (x->playedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                + PIZ_DATA_PITCH);
+            long velocity   = pizGrowingArrayValueAtIndex (x->playedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                + PIZ_DATA_VELOCITY);
+            long duration   = pizGrowingArrayValueAtIndex (x->playedCopy, (PIZ_DATA_NOTE_SIZE * i) 
+                                + PIZ_DATA_DURATION);
             
             tralala_paintNoteWithColor (x, g, position, pitch, velocity, duration, &color);
         }
@@ -742,8 +733,8 @@ void tralala_paintPlayedNotes (t_tralala *x, t_object *patcherview)
   jbox_paint_layer ((t_object *)x, patcherview, tll_sym_playedNotesLayer, -x->windowOffsetX, -x->windowOffsetY);
 }
 
-void tralala_paintNoteCandycane (t_tralala *x, t_jgraphics *g, long position, long pitch, 
-long velocity, long duration)
+void tralala_paintNoteCandycane (t_tralala *x, t_jgraphics *g, long position, long pitch, long velocity, 
+long duration)
 {
     long            noteTone;
     t_rect          noteRect;
