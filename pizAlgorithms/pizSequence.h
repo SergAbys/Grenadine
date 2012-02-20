@@ -290,14 +290,6 @@ typedef struct _PIZSequence {
     PIZNoteValue        cell;                       /* Cell for generators. */
     PIZNoteValue        grid;                       /* Magnetic grid of the sequence. */
     PIZNoteValue        noteValue;                  /* Default note value. */
-    long                tempStart;                  /* Temporary zone storage. */
-    long                tempEnd;                    /* Temporary zone storage. */
-    long                tempDown;                   /* Temporary zone storage. */
-    long                tempUp;                     /* Temporary zone storage. */
-    long                tempOriginStart;            /* Temporary zone storage. */
-    long                tempOriginDown;             /* Temporary zone storage. */
-    long                tempOriginWidth;            /* Temporary zone storage. */
-    long                tempOriginHeight;           /* Temporary zone storage. */
     } PIZSequence;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -317,9 +309,6 @@ PIZSequence *pizSequenceNew (void);
  * \ingroup sequenceClass
  */
 void pizSequenceFree (PIZSequence *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 
 /**
  * \brief   Get the number of notes in the sequence.
@@ -447,8 +436,33 @@ PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type
  */
 PIZError pizSequenceSetPattern (PIZSequence *x, const PIZGrowingArray *a);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
+/**
+ * \brief   Test if a note is marked in the sequence.
+ * \param   x A valid pointer.
+ * \return  True if a note is marked, otherwise false.  
+ * \ingroup sequenceBases
+ */
+bool pizSequenceHasMarkedNote (PIZSequence *x);
+
+/**
+ * \brief   Get MIDI data of the marked note.
+ * \remark  The function return -1 in case of error.
+ * \param   x A valid pointer.
+ * \param   selector A selector to choose the MIDI data type to query as \ref PIZSelector.
+ * \return  The MIDI value.  
+ * \ingroup sequenceBases
+ */
+long pizSequenceMarkedNoteValue (PIZSequence *x, PIZSelector selector);
+
+/**
+ * \brief   Change MIDI data of the marked note.
+ * \remark  Duration is increment (by grid's value) with positive argument (otherwise decrement).
+ * \param   x A valid pointer.
+ * \param   selector A selector to choose the MIDI data type to change as \ref PIZSelector.
+ * \param   value The value to add. 
+ * \ingroup sequenceBases
+ */
+void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, long value);
 
 /**
  * \brief   Clear the sequence.
@@ -583,7 +597,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a);
 
 /**
  * \brief   Add a note to the sequence.
- * \details The count of the array must be \ref PIZ_DATA_NOTE_SIZE. 
+ * \details The size of the array must be \ref PIZ_DATA_NOTE_SIZE. 
  * \param   x A valid pointer.
  * \param   values A pointer to note values.
  * \param   flags The flags (as ORed \ref PIZAddFlag).
@@ -600,7 +614,7 @@ PIZ_LOCAL PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
  * \return  An error code.
  * \ingroup sequencePrivate
  */
-PIZ_LOCAL void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note);
+PIZ_LOCAL PIZError pizSequenceRemoveNote (PIZSequence *x, PIZNote *note);
 
 /**
  * \brief   Clear the sequence.

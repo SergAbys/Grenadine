@@ -95,8 +95,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 351415957;
-			PBXWorkspaceStateSaveDate = 351415957;
+			PBXPerProjectTemplateStateSaveDate = 351445278;
+			PBXWorkspaceStateSaveDate = 351445278;
 		};
 		sourceControlManager = 965F6CC112FF252E00F96EF1 /* Source Control */;
 		userBuildSettings = {
@@ -137,15 +137,15 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1233, 38075}}";
 			sepNavSelRange = "{2075, 5}";
-			sepNavVisRect = "{{0, 760}, {1233, 643}}";
+			sepNavVisRect = "{{0, 1112}, {1233, 501}}";
 			sepNavWindowFrame = "{{0, 6}, {1278, 772}}";
 		};
 	};
 	96CB9E2913C1A24600C00CC4 /* tralala.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 15300}}";
-			sepNavSelRange = "{16795, 30}";
-			sepNavVisRect = "{{0, 8539}, {1233, 454}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1233, 15275}}";
+			sepNavSelRange = "{811, 0}";
+			sepNavVisRect = "{{0, 524}, {1233, 528}}";
 			sepNavWindowFrame = "{{-2, 4}, {1282, 774}}";
 		};
 	};
@@ -160,8 +160,8 @@
 	96D8DAAE142CE346007F5BAD /* tralalaHide.txt */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1234, 5050}}";
-			sepNavSelRange = "{2454, 0}";
-			sepNavVisRect = "{{0, 2499}, {1234, 645}}";
+			sepNavSelRange = "{2014, 0}";
+			sepNavVisRect = "{{0, 1943}, {1234, 645}}";
 			sepNavWindowFrame = "{{-1, 4}, {1279, 774}}";
 		};
 	};
@@ -182,7 +182,7 @@
 	96EFB31714E90ACB000857F4 /* tralalaPaint.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1235, 21900}}";
-			sepNavSelRange = "{8179, 24}";
+			sepNavSelRange = "{8027, 0}";
 			sepNavVisRect = "{{0, 5707}, {1235, 645}}";
 			sepNavWindowFrame = "{{-7, 4}, {1280, 774}}";
 		};
@@ -190,8 +190,8 @@
 	96EFB33214E915F7000857F4 /* tralalaHI.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1235, 26575}}";
-			sepNavSelRange = "{11868, 24}";
-			sepNavVisRect = "{{0, 6615}, {1235, 645}}";
+			sepNavSelRange = "{10639, 0}";
+			sepNavVisRect = "{{0, 5740}, {1235, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1280, 774}}";
 		};
 	};

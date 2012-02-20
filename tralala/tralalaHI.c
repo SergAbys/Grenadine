@@ -240,11 +240,11 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
             DIRTYLAYER_SET (DIRTY_REFRESH);
             
             if (x->flags & FLAG_ORIGIN_HAD_SHIFT_KEY) {
-                if (pizSequenceSelectNotesWithLasso (x->user, &x->originCoordinates, &x->coordinates, INVERT)) {
+                if (pizSequenceDragLasso (x->user, &x->originCoordinates, &x->coordinates, INVERT)) {
                     DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
                 }
             } else if 
-                (pizSequenceSelectNotesWithLasso (x->user, &x->originCoordinates, &x->coordinates, SELECT)) {
+                (pizSequenceDragLasso (x->user, &x->originCoordinates, &x->coordinates, SELECT)) {
                 DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
             }
             
@@ -275,7 +275,7 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
         }
 
         if (x->flags & FLAG_ZONE_IS_SELECTED) {
-            pizSequencePlaceTempZone (x->user);
+            pizSequencePutTempZone (x->user);
             x->flags &= ~FLAG_ZONE_IS_SELECTED;
             DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_CHANGE);
             

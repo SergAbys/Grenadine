@@ -143,15 +143,13 @@
 /**
  * \defgroup sequenceTypes Types
  * \ingroup  sequence
- * \defgroup sequenceClass Attributes
+ * \defgroup sequenceClass Life & Attributes
  * \ingroup  sequence
- * \defgroup sequenceBases Bases
+ * \defgroup sequenceBases Groundworks
  * \ingroup  sequence
  * \defgroup sequenceTransform Transformations
  * \ingroup  sequence
- * \defgroup sequenceInterface GUI
- * \ingroup  sequence
- * \defgroup sequencePrivate Private
+ * \defgroup sequencePrivate Privates
  * \ingroup  sequence
  */
  

@@ -122,7 +122,7 @@ bool pizSequenceScramble (PIZSequence *x, PIZSelector selector);
  * \brief   Sort MIDI data in the sequence.
  * \param   x A valid pointer.
  * \param   selector A selector to set the MIDI data type altered as \ref PIZSelector.
- * \param   down Set True if sort down, otherwise up. 
+ * \param   down Set true if sort down, otherwise up. 
  * \return  True if something changed, otherwise false.  
  * \ingroup sequenceTransform
  */
@@ -185,11 +185,17 @@ bool pizSequenceKillNotes (PIZSequence *x);
 bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a);
 
 /**
+ * \param   x A valid pointer.
+ * \return  The size of the array filled.
  * \ingroup sequencePrivate
  */
 PIZ_LOCAL long pizSequencePickUpNotes (PIZSequence *x);
 
 /**
+ * \param   x A valid pointer.
+ * \param   selector A selector to set the MIDI data type concerned as \ref PIZSelector.
+ * \param   k The size of arrays.
+ * \param   reverse Array is traversed in reverse mode if true.
  * \ingroup sequencePrivate
  */
 PIZ_LOCAL void pizSequenceFillValues (PIZSequence *x, PIZSelector selector, long k, bool reverse);

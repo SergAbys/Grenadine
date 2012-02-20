@@ -56,6 +56,464 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+static long piz_start        = PIZ_DEFAULT_START;
+static long piz_end          = PIZ_DEFAULT_END;
+static long piz_down         = PIZ_DEFAULT_DOWN;
+static long piz_up           = PIZ_DEFAULT_UP;
+static long piz_originStart  = PIZ_DEFAULT_START;
+static long piz_originDown   = PIZ_DEFAULT_DOWN;
+static long piz_originWidth  = PIZ_DEFAULT_END - PIZ_DEFAULT_START;
+static long piz_originHeight = PIZ_DEFAULT_UP  - PIZ_DEFAULT_DOWN;
+                
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizSequenceInitTempZone (PIZSequence *x)
+{
+    PIZLOCK
+    
+    piz_start         = x->start;
+    piz_end           = x->end;
+    piz_down          = x->down;
+    piz_up            = x->up;
+    piz_originStart   = x->start;
+    piz_originDown    = x->down;
+    piz_originWidth   = x->end - x->start;
+    piz_originHeight  = x->up  - x->down;
+    
+    PIZUNLOCK
+}
+
+PIZError pizSequencePutTempZone (PIZSequence *x)
+{
+    long err = PIZ_ERROR;
+    
+    PIZLOCK
+    
+    if (!(piz_start == piz_end)) {
+    
+        if (piz_end < piz_start) {
+            long k    = piz_end;
+            piz_end   = piz_start;
+            piz_start = k;
+        }
+        
+        if (piz_up < piz_down) {
+            long k   = piz_up;
+            piz_up   = piz_down;
+            piz_down = k;
+        }
+        
+        x->start = piz_start;
+        x->end   = piz_end;
+        x->down  = piz_down;
+        x->up    = piz_up;
+        
+        err = PIZ_GOOD;
+    }
+        
+    PIZUNLOCK
+    
+    return err;
+}
+
+bool pizSequenceResizeTempZone (PIZSequence *x, const PIZCoordinates *c, PIZDataIndex side)
+{
+    long temp;
+    bool haveChanged = false;
+    
+    PIZLOCK
+    
+    switch (side) {
+    case PIZ_DATA_START : temp = CLAMP (pizSequenceSnapRound (x, c->position), 0, PIZ_SEQUENCE_TIMELINE_SIZE);
+                          if (piz_start != temp) { 
+                          piz_start = temp; haveChanged = true; 
+                          } break;
+    case PIZ_DATA_END   : temp = CLAMP (pizSequenceSnapRound (x, c->position), 0, PIZ_SEQUENCE_TIMELINE_SIZE); 
+                          if (piz_end != temp) { 
+                          piz_end = temp; haveChanged = true; 
+                          } break;
+    case PIZ_DATA_DOWN  : if (c->pitch <= piz_up) { 
+                          temp = CLAMP (c->pitch, 0, PIZ_MAGIC_PITCH); 
+                          } 
+                          if (piz_down != temp) { 
+                          piz_down = temp; haveChanged = true; 
+                          } break;
+    case PIZ_DATA_UP    : if (c->pitch >= piz_down) { 
+                          temp = CLAMP (c->pitch, 0, PIZ_MAGIC_PITCH); 
+                          } 
+                          if (piz_up != temp) { 
+                          piz_up = temp; haveChanged = true; 
+                          } break;
+    }
+    
+    PIZUNLOCK
+    
+    return haveChanged;
+}
+
+bool pizSequenceMoveTempZone (PIZSequence *x, long pitch, long position)
+{
+    bool haveChanged = false;
+    long tempStart, tempDown;
+    
+    PIZLOCK
+    
+    tempStart = pizSequenceSnapRound (x, piz_originStart + position);
+    tempStart = CLAMP (tempStart, 0, (PIZ_SEQUENCE_TIMELINE_SIZE - piz_originWidth));
+    tempDown  = CLAMP (piz_originDown + pitch, 0, (PIZ_MAGIC_PITCH - piz_originHeight));
+    
+    if ((tempStart != piz_start) || (tempDown != piz_down)) {
+        piz_start = tempStart;
+        piz_end   = tempStart + piz_originWidth;
+        piz_down  = tempDown;
+        piz_up    = tempDown + piz_originHeight;
+        
+        haveChanged = true;
+    }
+    
+    PIZUNLOCK
+    
+    return haveChanged;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZError pizSequenceTempZoneToArray (PIZSequence *x, PIZGrowingArray *a)
+{
+    long err = PIZ_ERROR;
+
+    PIZLOCK
+    
+    if (a) {
+        err = PIZ_GOOD;
+        
+        err |= pizGrowingArrayAppend (a, piz_start);
+        err |= pizGrowingArrayAppend (a, piz_end);
+        err |= pizGrowingArrayAppend (a, piz_down);
+        err |= pizGrowingArrayAppend (a, piz_up);
+    }
+        
+    PIZUNLOCK
+    
+    return err;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizSequenceSelectAllNotes (PIZSequence *x)
+{
+    long i;
+    
+    PIZLOCK
+    
+    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
+        PIZNote *note       = NULL;
+        PIZNote *nextNote   = NULL;
+        
+        long p = pizGrowingArrayValueAtIndex (x->map, i);
+        
+        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+        
+        while (note) {
+            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+            note->isSelected = true;
+            note = nextNote;
+        }
+    }
+    
+    PIZUNLOCK
+}
+
+void pizSequenceUnselectAllNotes (PIZSequence *x)
+{
+    PIZLOCK
+    
+    pizSequenceUnselectNotes (x);
+    
+    PIZUNLOCK
+}
+
+long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c)
+{
+    long i, count;
+    long k = 0;
+
+    PIZLOCK
+    
+    count = pizGrowingArrayCount (x->map);
+        
+    for (i = (count - 1); i >= 0; i--) {
+        PIZNote *note       = NULL;
+        PIZNote *nextNote   = NULL;
+        
+        long p = pizGrowingArrayValueAtIndex (x->map, i);
+        
+        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+        
+        while (note && !k) {
+            long err = PIZ_GOOD;
+            
+            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+            
+            err |= (c->position < p);
+            err |= (c->position > (p + note->data[PIZ_DURATION]));
+            err |= (c->pitch != note->data[PIZ_PITCH]);
+            
+            if (!err) {
+            
+                if (!note->isSelected) {
+                    pizSequenceUnselectNotes (x);
+                    note->isSelected = true;
+                    x->markedNote = note;
+                }
+                
+                k = 1;
+            }
+            
+            note = nextNote;
+        }
+        
+        if (k) { 
+            break;
+        }
+    }
+    
+    PIZUNLOCK
+    
+    return k;
+}
+
+long pizSequenceInvertNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c)
+{
+    long i, count;
+    long k = -1;
+    
+    PIZLOCK
+    
+    count = pizGrowingArrayCount (x->map);
+        
+    for (i = (count - 1); i >= 0; i--) {
+        PIZNote *note       = NULL;
+        PIZNote *nextNote   = NULL;
+        
+        long p = pizGrowingArrayValueAtIndex (x->map, i);
+        
+        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+        
+        while (note) {
+            long err = PIZ_GOOD;
+            
+            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+            
+            err |= (c->position < p);
+            err |= (c->position > (p + note->data[PIZ_DURATION]));
+            err |= (c->pitch != note->data[PIZ_PITCH]);
+            
+            if (!err) {
+                if (note->isSelected) {
+                    if (x->markedNote == note) {
+                        x->markedNote = NULL;
+                    }
+                            
+                    note->isSelected = false;
+                    k = 0;
+                } else {
+                    note->isSelected = true;
+                    k = 1;
+                }
+                
+                break;
+            }
+            
+            note = nextNote;
+        }
+        
+        if (k != -1) {
+            break;
+        }
+    }
+    
+    PIZUNLOCK
+    
+    return k;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizSequenceInitLasso (PIZSequence *x)
+{
+    long i;
+    
+    PIZLOCK
+    
+    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
+        PIZNote *note       = NULL;
+        PIZNote *nextNote   = NULL;
+        
+        long p = pizGrowingArrayValueAtIndex (x->map, i);
+        
+        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+        
+        while (note) {
+            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+            note->flags &= ~PIZ_NOTE_FLAG_LASSO;
+            note = nextNote;
+        }
+    }
+    
+    PIZUNLOCK
+}
+
+long pizSequenceDragLasso (PIZSequence *x, const PIZCoordinates *m, const PIZCoordinates *n, bool reverse)
+{
+    long i, a, b, u, v;
+    long k = 0;
+    
+    PIZLOCK
+    
+    a = MIN (m->position,  n->position);
+    b = MIN (m->pitch,     n->pitch);
+    u = MAX (m->position,  n->position);
+    v = MAX (m->pitch,     n->pitch);
+    
+    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {
+        PIZNote *note       = NULL;
+        PIZNote *nextNote   = NULL;
+        
+        long p = pizGrowingArrayValueAtIndex (x->map, i);
+        
+        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+        
+        while (note) {
+            long err, end;
+            
+            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+            
+            err = PIZ_GOOD;
+            end = p + note->data[PIZ_DURATION];
+            
+            err |= !(note->data[PIZ_PITCH] >= b && note->data[PIZ_PITCH] <= v);
+            err |= !((p >= a && p <= u) || ((end >= a) && (end <= u)));
+                
+            if (!err) {
+                if (reverse) {
+                    if (!(note->flags & PIZ_NOTE_FLAG_LASSO)) {
+                        note->isSelected = !note->isSelected;
+                        note->flags |= PIZ_NOTE_FLAG_LASSO;
+                        k = 1;
+                            
+                        if (note == x->markedNote) {
+                            x->markedNote = NULL;
+                        }
+                    }
+                } else if (!note->isSelected) {
+                    note->isSelected = true;
+                    k = 1;
+                }
+            } else {
+                if (reverse) {
+                    if (note->flags & PIZ_NOTE_FLAG_LASSO) {
+                        note->isSelected = !note->isSelected;
+                        note->flags &= ~PIZ_NOTE_FLAG_LASSO;
+                        k = 1;
+                    }
+                } else if (note->isSelected)  {
+                    note->isSelected = false;
+                    k = 1;
+                }
+            }
+            
+            note = nextNote;
+        }
+    }
+
+    PIZUNLOCK
+    
+    return k;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZError pizSequenceRemoveSelectedNotes (PIZSequence *x)
+{
+    bool haveChanged = false;
+    long i, err = PIZ_GOOD;
+    
+    PIZLOCK
+    
+    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
+        PIZNote *note       = NULL;
+        PIZNote *nextNote   = NULL;
+        
+        long p = pizGrowingArrayValueAtIndex (x->map, i);
+        
+        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+        
+        while (note) {
+            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+            
+            if (note->isSelected) {
+                err |= pizSequenceRemoveNote (x, note);
+                haveChanged = true;
+            }
+                
+            note = nextNote;
+        }
+    }
+    
+    if (haveChanged) {
+        pizSequenceMakeMap (x);
+    }
+    
+    PIZUNLOCK
+    
+    return err; 
+}
+
+PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c, long flags)
+{
+    long err = PIZ_GOOD;
+    long values[PIZ_DATA_NOTE_SIZE];
+    
+    PIZLOCK
+        
+    values[PIZ_DATA_POSITION]    = c->position;
+    values[PIZ_DATA_PITCH]       = c->pitch;
+    values[PIZ_DATA_VELOCITY]    = PIZ_DEFAULT_VELOCITY;
+    values[PIZ_DATA_CHANNEL]     = PIZ_CHANNEL_NONE;
+    values[PIZ_DATA_IS_SELECTED] = true;
+    values[PIZ_DATA_IS_MARKED]   = true;
+
+    if (x->noteValue != PIZ_NOTE_NONE) {
+        values[PIZ_DATA_DURATION] = x->noteValue;
+    } else {
+        values[PIZ_DATA_DURATION] = x->grid;
+    }
+    
+    if (!(pizSequenceAddNote (x, values, flags))) {
+        err |= PIZ_ERROR;
+    } else {
+        pizSequenceMakeMap (x);
+    }
+                    
+    PIZUNLOCK
+    
+    return err;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 PIZError pizSequenceEncodeToArray (PIZSequence *x, PIZGrowingArray *a)
 {
     long err = PIZ_ERROR;
@@ -190,6 +648,37 @@ PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a)
     PIZUNLOCK
     
     return err;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZ_INLINE void pizSequenceUnselectNotes (PIZSequence *x)
+{
+    long i;
+    
+    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
+        PIZNote *note       = NULL;
+        PIZNote *nextNote   = NULL;
+        
+        long p = pizGrowingArrayValueAtIndex (x->map, i);
+        
+        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+        
+        while (note) {
+            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+            note->isSelected = false;
+            note = nextNote;
+        }
+    }
+    
+    x->markedNote = NULL;
+}
+
+PIZ_INLINE long pizSequenceSnapRound (PIZSequence *x, long toBeSnapped)
+{
+    return MAX (((long)(((toBeSnapped / (double)x->grid) + 0.5)) * x->grid), 0);
 }
 
 // -------------------------------------------------------------------------------------------------------------

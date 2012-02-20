@@ -106,7 +106,6 @@ PIZSequence *pizSequenceNew ( )
             x->notes2 &&
             x->hashTable &&
             (x->timeline = (PIZLinklist **)calloc (PIZ_SEQUENCE_TIMELINE_SIZE, sizeof(PIZLinklist **)))) {
-            
                 srand ((unsigned int)time(NULL));
                                 
                 pthread_mutex_init (&x->lock, NULL);
@@ -124,15 +123,6 @@ PIZSequence *pizSequenceNew ( )
                 x->cell             = PIZ_NOTE_NONE;
                 x->grid             = PIZ_NOTE_NONE;
                 x->noteValue        = PIZ_NOTE_NONE;
-                x->tempStart        = PIZ_DEFAULT_START;
-                x->tempEnd          = PIZ_DEFAULT_END;
-                x->tempDown         = PIZ_DEFAULT_DOWN;
-                x->tempUp           = PIZ_DEFAULT_UP;
-                x->tempOriginStart  = PIZ_DEFAULT_START;
-                x->tempOriginDown   = PIZ_DEFAULT_DOWN;
-                x->tempOriginWidth  = PIZ_DEFAULT_END   - PIZ_DEFAULT_START;
-                x->tempOriginHeight = PIZ_DEFAULT_UP    - PIZ_DEFAULT_DOWN;
-                
         } else {
             pizSequenceFree (x);
             x = NULL;
@@ -348,6 +338,86 @@ PIZError pizSequenceSetPattern (PIZSequence *x, const PIZGrowingArray *a)
     PIZUNLOCK
     
     return err;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+bool pizSequenceHasMarkedNote (PIZSequence *x)
+{
+    bool k;
+    
+    PIZLOCK
+    k = (x->markedNote != NULL);
+    PIZUNLOCK;
+    
+    return k;
+}
+
+long pizSequenceMarkedNoteValue (PIZSequence *x, PIZSelector selector)
+{
+    long k = -1;
+    
+    PIZLOCK
+    
+    if (x->markedNote) {
+        if (selector == PIZ_CHANNEL) {
+            if (x->markedNote->data[PIZ_CHANNEL] == PIZ_CHANNEL_NONE) {
+                k = x->channel;
+            } else {
+                k = x->markedNote->data[PIZ_CHANNEL];
+            }
+        } else {
+            k = x->markedNote->data[selector];
+        }
+    }
+        
+    PIZUNLOCK
+    
+    return k;
+}
+
+void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, long value)
+{
+    PIZLOCK
+    
+    if (x->markedNote)  {
+        long temp;
+        
+        if (selector == PIZ_DURATION) {
+            long err = PIZ_GOOD;
+            
+            temp = x->markedNote->data[PIZ_DURATION];
+            
+            if (value > 0) {
+                temp += x->grid;
+            } else {
+                temp -= x->grid;
+            }
+            
+            err |= ((x->markedNote->position + temp) > PIZ_SEQUENCE_TIMELINE_SIZE);
+            err |= (temp > PIZ_SEQUENCE_MAXIMUM_DURATION);
+            err |= (temp <= 0);
+            
+            if (!err) {
+                x->markedNote->data[PIZ_DURATION] = temp;
+            }
+        } else {
+            temp = x->markedNote->data[selector];
+            temp += value;
+            
+            switch (selector) {
+                case PIZ_PITCH    : temp = CLAMP (temp, 0, PIZ_MAGIC_PITCH);    break;
+                case PIZ_VELOCITY : temp = CLAMP (temp, 0, PIZ_MAGIC_VELOCITY); break;
+                case PIZ_CHANNEL  : temp = CLAMP (temp, 0, PIZ_MAGIC_CHANNEL);  break;
+            }
+            
+            x->markedNote->data[selector] = temp;
+        }
+    }
+        
+    PIZUNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -809,17 +879,20 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
     return newNote;
 }   
 
-void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note) 
+PIZError pizSequenceRemoveNote (PIZSequence *x, PIZNote *note) 
 {
+    long err = PIZ_GOOD;
     long p = note->position;
     
     if (note == x->markedNote) {
         x->markedNote = NULL;
     }
                     
-    if (!pizLinklistRemoveByPtr (x->timeline[p], (void *)note)) {
+    if (!(err = pizLinklistRemoveByPtr (x->timeline[p], (void *)note))) {
         x->count --;
     }
+    
+    return err;
 }
 
 void pizSequenceRemoveAllNotes (PIZSequence *x)
@@ -838,7 +911,7 @@ void pizSequenceRemoveAllNotes (PIZSequence *x)
         x->markedNote = NULL;
     }
 }
-/*
+
 void pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
 {
     long err = PIZ_GOOD; 
@@ -857,7 +930,7 @@ void pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
             }
         } 
     }
-}*/
+}
 
 void pizSequenceMakeMap (PIZSequence *x)
 {

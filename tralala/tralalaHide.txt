@@ -84,6 +84,7 @@ _pizSequenceClear
 _pizSequenceCount
 _pizSequenceCycle
 _pizSequenceDecodeWithArray
+_pizSequenceDragLasso
 _pizSequenceEncodeToArray
 _pizSequenceFree
 _pizSequenceGenerator
@@ -103,7 +104,7 @@ _pizSequenceNoteValue
 _pizSequenceNotesToArray
 _pizSequenceProceedAlgorithm
 _pizSequenceProceedStep
-_pizSequencePlaceTempZone
+_pizSequencePutTempZone
 _pizSequenceRandom
 _pizSequenceRemoveSelectedNotes
 _pizSequenceResizeTempZone
@@ -111,7 +112,6 @@ _pizSequenceRotate
 _pizSequenceScramble
 _pizSequenceSelectAllNotes
 _pizSequenceSelectNoteWithCoordinates
-_pizSequenceSelectNotesWithLasso
 _pizSequenceSet
 _pizSequenceSetCell
 _pizSequenceSetChance
