@@ -55,6 +55,7 @@
 
 /**
  * \ingroup sequenceTransform
+ * \ingroup sequenceTypes
  */
 typedef enum _PIZAlgorithm {
     PIZ_ALGORITHM_NONE  = 0,            /*!<  */
@@ -65,15 +66,6 @@ typedef enum _PIZAlgorithm {
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-/**
- * \brief   Avoid pitch clusters in the sequence.
- * \param   x A valid pointer.
- * \param   value The interval to keep empty between notes in semitones. 
- * \return  True if something changed, otherwise false.  
- * \ingroup sequenceTransform
- */
-bool pizSequenceClean (PIZSequence *x, long value);
 
 /**
  * \brief   Learn from data-mining algorithms.
@@ -97,11 +89,11 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate);
 
 /**
  * \brief   Rhythms generator.
- * \details The function searches the biggest beat divider (according to the grid) in the list 
+ * \details The function searches the biggest beat divider (according to the cell) in the list 
  *          {2, 3, 4, 5, 7, 11} ; then random distribution tables are used to create/delete notes. 
  * \param   x A valid pointer.
  * \param   iterate The number of iterations of the process.
- * \param   division Force a divider (for example 2 even if 4 later match).
+ * \param   division Force a divider (for example 2 even if 4 match later).
  * \return  True if something changed, otherwise false.  
  * \ingroup sequenceTransform
  */

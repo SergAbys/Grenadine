@@ -55,9 +55,9 @@
  */
  
 typedef struct _PIZGrowingArray {
-    long size;                                  /*!< Current size of the array. */
-    long index;                                 /*!< Number of values in the array. */
-    long *values;                               /*!< Pointer to the array. */
+    long size;                                  /* Current size of the array. */
+    long index;                                 /* Number of values in the array. */
+    long *values;                               /* Pointer to the array. */
     } PIZGrowingArray;
 
 // -------------------------------------------------------------------------------------------------------------

@@ -76,7 +76,7 @@
  * \ingroup itemset1024 
  */
 typedef struct _PIZItemset1024 {
-    unsigned long items[32];                            /*!< 1024 Bits field as 32 \c long */
+    unsigned long items[32];                            /* 1024 Bits field as 32 longs */
     } PIZItemset1024;
     
 // -------------------------------------------------------------------------------------------------------------

@@ -56,12 +56,12 @@
  */
  
 typedef struct _PIZBoundedQueue {
-    long count;                             /*!< Number of value in the queue. */
-    long bound;                             /*!< Maximum number of value in the queue. */
-    long head;                              /*!< Index of the head of the queue. */
-    long tail;                              /*!< Index of the tail of the queue. */
-    long poppedValue;                       /*!< Last dequeued value. */
-    long *values;                           /*!< Pointer to the array. */
+    long count;                             /* Number of value in the queue. */
+    long bound;                             /* Maximum number of value in the queue. */
+    long head;                              /* Index of the head of the queue. */
+    long tail;                              /* Index of the tail of the queue. */
+    long poppedValue;                       /* Last dequeued value. */
+    long *values;                           /* Pointer to the array. */
     } PIZBoundedQueue; 
 
 // -------------------------------------------------------------------------------------------------------------

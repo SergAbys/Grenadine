@@ -55,9 +55,9 @@
  */
  
 typedef struct _PIZQueueElement {
-    long                    value;                  /*!< Value to store. */
-    struct _PIZQueueElement *next;                  /*!< Pointer to next element. */
-    struct _PIZQueueElement *previous;              /*!< Pointer to previous element. */
+    long                    value;                  /* Value to store. */
+    struct _PIZQueueElement *next;                  /* Pointer to next element. */
+    struct _PIZQueueElement *previous;              /* Pointer to previous element. */
     } PIZQueueElement;
 
 /**
@@ -66,10 +66,10 @@ typedef struct _PIZQueueElement {
  */
  
 typedef struct _PIZQueue {
-    long            count;                          /*!< Number of value in the queue. */
-    long            poppedValue;                    /*!< Last dequeued value. */
-    PIZQueueElement *head;                          /*!< Pointer to first element. */
-    PIZQueueElement *tail;                          /*!< Pointer to last element. */
+    long            count;                          /* Number of value in the queue. */
+    long            poppedValue;                    /* Last dequeued value. */
+    PIZQueueElement *head;                          /* Pointer to first element. */
+    PIZQueueElement *tail;                          /* Pointer to last element. */
     } PIZQueue;
 
 // -------------------------------------------------------------------------------------------------------------

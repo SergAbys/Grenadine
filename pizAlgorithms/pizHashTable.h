@@ -74,8 +74,8 @@
  */
  
 typedef struct _PIZHashTableElement {
-    long key;                                   /*!< The key as \c long. */
-    void *ptr;                                  /*!< Pointer to the item to store. */
+    long key;                                   /* The key as long. */
+    void *ptr;                                  /* Pointer to the item to store. */
     } PIZHashTableElement;
 
 /**
@@ -86,10 +86,10 @@ typedef struct _PIZHashTableElement {
  */
  
 typedef struct _PIZHashTable {
-    long                flags;                  /*!< Bit Flags. */
-    long                count;                  /*!< Number of elements in the hashtable. */
-    long                size;                   /*!< Number of linklists in the hashtable. */
-    PIZLinklist         **hashTable;            /*!< Pointer to the hashtable's array of linklists. */
+    long                flags;                  /* Bit Flags. */
+    long                count;                  /* Number of elements in the hashtable. */
+    long                size;                   /* Number of linklists in the hashtable. */
+    PIZLinklist         **hashTable;            /* Pointer to the hashtable's array of linklists. */
     } PIZHashTable;
 
 // -------------------------------------------------------------------------------------------------------------

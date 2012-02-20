@@ -65,11 +65,11 @@
  */
  
 typedef struct _PIZArrayPool {
-    pthread_mutex_t     lock;                       /*!< POSIX mutex. */
-    long                retain;                     /*!< Number of arrays in use. */
-    long                initArraySize;              /*!< Memory size of the new arrays. */
-    PIZGrowingArray     *cache;                     /*!< Pointer to the last array delivered. */
-    PIZLinklist         *pool;                      /*!< Pointer to the pool's linklist. */
+    pthread_mutex_t     lock;                       /* POSIX mutex. */
+    long                retain;                     /* Number of arrays in use. */
+    long                initArraySize;              /* Memory size of the new arrays. */
+    PIZGrowingArray     *cache;                     /* Pointer to the last array delivered. */
+    PIZLinklist         *pool;                      /* Pointer to the pool's linklist. */
     } PIZArrayPool;
 
 // -------------------------------------------------------------------------------------------------------------

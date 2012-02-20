@@ -183,7 +183,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                 tralala_testAutoscroll (x, patcherview, pt);
             }
         } else if (x->hitTest == HIT_ZONE) {
-            bool draw = pizSequenceMoveTempZoneWithDelta (x->user, deltaPitch, deltaPosition);
+            bool draw = pizSequenceMoveTempZone (x->user, deltaPitch, deltaPosition);
                 
             tralala_testAutoscroll (x, patcherview, pt);
                 
@@ -211,15 +211,15 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                 + (GUI_PIXELS_PER_SEMITONE / 2. * f)) / (GUI_PIXELS_PER_SEMITONE * f))), 0);
                         
             switch (x->hitTest) {
-                case HIT_START              : draw = pizSequenceSetTempZoneWithCoordinates 
+                case HIT_START              : draw = pizSequenceResizeTempZone 
                                                 (x->user, &x->coordinates, PIZ_DATA_START); break;
-                case HIT_END                : draw = pizSequenceSetTempZoneWithCoordinates
+                case HIT_END                : draw = pizSequenceResizeTempZone
                                                 (x->user, &x->coordinates, PIZ_DATA_END); break;
-                case HIT_DOWN               : draw = pizSequenceSetTempZoneWithCoordinates 
+                case HIT_DOWN               : draw = pizSequenceResizeTempZone 
                                                 (x->user, &c1, PIZ_DATA_DOWN); break;
-                case HIT_UP                 : draw = pizSequenceSetTempZoneWithCoordinates 
+                case HIT_UP                 : draw = pizSequenceResizeTempZone 
                                                 (x->user, &c2, PIZ_DATA_UP); break;
-                case (HIT_START | HIT_END)  : draw = pizSequenceSetTempZoneWithCoordinates 
+                case (HIT_START | HIT_END)  : draw = pizSequenceResizeTempZone 
                                                 (x->user, &x->coordinates, PIZ_DATA_END); break;
                 }
         
@@ -275,7 +275,7 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
         }
 
         if (x->flags & FLAG_ZONE_IS_SELECTED) {
-            pizSequenceSetZoneByTempZone (x->user);
+            pizSequencePlaceTempZone (x->user);
             x->flags &= ~FLAG_ZONE_IS_SELECTED;
             DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_CHANGE);
             
@@ -429,13 +429,13 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
         case MODE_SEQUENCE_LISTEN : object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_USER); break;
         }
     } else if (keycode == JKEY_UPARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
-        pizSequenceTransposeOctave (x->user, UP);
+        pizSequenceTranspose (x->user, PIZ_MAGIC_SCALE);
         
         DIRTYSLOTS 
         DIRTYPATTR
         DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE);
     } else if (keycode == JKEY_DOWNARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
-        pizSequenceTransposeOctave (x->user, DOWN);
+        pizSequenceTranspose (x->user, -PIZ_MAGIC_SCALE);
         
         DIRTYSLOTS 
         DIRTYPATTR

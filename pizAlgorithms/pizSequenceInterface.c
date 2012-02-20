@@ -140,97 +140,7 @@ void pizSequenceInitTempZone (PIZSequence *x)
     PIZUNLOCK
 }
 
-bool pizSequenceSetTempZoneWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates, long side)
-{
-    long tempValue = -1;
-    bool haveChanged = false;
-    
-    PIZLOCK
-    
-    switch (side) {
-        case PIZ_DATA_START :   tempValue = CLAMP (pizSequenceSnapRound (x, coordinates->position), 
-                                    0, PIZ_SEQUENCE_TIMELINE_SIZE); break;
-        case PIZ_DATA_END   :   tempValue = CLAMP (pizSequenceSnapRound (x, coordinates->position), 
-                                    0, PIZ_SEQUENCE_TIMELINE_SIZE); break;
-        case PIZ_DATA_DOWN  :   if (coordinates->pitch <= x->tempUp) {
-                                        tempValue = CLAMP (coordinates->pitch, 0, PIZ_MAGIC_PITCH);
-                                    } break;
-        case PIZ_DATA_UP    :   if (coordinates->pitch >= x->tempDown) {
-                                        tempValue = CLAMP (coordinates->pitch, 0, PIZ_MAGIC_PITCH);
-                                    } break;
-    }
-    
-    if (tempValue != -1) {
-        if ((side == PIZ_DATA_START) && (x->tempStart != tempValue)) {
-            x->tempStart = tempValue;
-            haveChanged = true;
-        } else if ((side == PIZ_DATA_END) && (x->tempEnd != tempValue)) {
-            x->tempEnd = tempValue;
-            haveChanged = true;
-        } else if ((side == PIZ_DATA_DOWN) && (x->tempDown != tempValue)) {
-            x->tempDown = tempValue;
-            haveChanged = true;
-        } else if ((side == PIZ_DATA_UP) && (x->tempUp != tempValue)) {
-            x->tempUp = tempValue;
-            haveChanged = true;
-        }
-    }
-    
-    PIZUNLOCK
-    
-    return haveChanged;
-}
-
-bool pizSequenceMoveTempZoneWithDelta (PIZSequence *x, long pitch, long position)
-{
-    bool haveChanged = false;
-    long tempStart, tempDown;
-    
-    PIZLOCK
-    
-    tempStart = CLAMP (pizSequenceSnapRound (x, x->tempOriginStart + position), 0, 
-                    (PIZ_SEQUENCE_TIMELINE_SIZE - x->tempOriginWidth));
-    tempDown  = CLAMP (x->tempOriginDown + pitch, 0, (PIZ_MAGIC_PITCH - x->tempOriginHeight));
-    
-    if ((tempStart != x->tempStart) || (tempDown != x->tempDown)) {
-        x->tempStart = tempStart;
-        x->tempEnd   = tempStart + x->tempOriginWidth;
-        x->tempDown  = tempDown;
-        x->tempUp    = tempDown + x->tempOriginHeight;
-        
-        haveChanged = true;
-    }
-    
-    PIZUNLOCK
-    
-    return haveChanged;
-}
-
-PIZError pizSequenceTempZoneToArray (PIZSequence *x, PIZGrowingArray *a)
-{
-    long err = PIZ_ERROR;
-
-    PIZLOCK
-    
-    if (a) {
-            err = PIZ_GOOD;
-            
-            err |= pizGrowingArrayAppend (a, x->tempStart);
-            err |= pizGrowingArrayAppend (a, x->tempEnd);
-            err |= pizGrowingArrayAppend (a, x->tempDown);
-            err |= pizGrowingArrayAppend (a, x->tempUp);
-        }
-        
-    PIZUNLOCK
-    
-    return err;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-PIZError pizSequenceSetZoneByTempZone (PIZSequence *x)
+PIZError pizSequencePlaceTempZone (PIZSequence *x)
 {
     long err = PIZ_ERROR;
     
@@ -256,6 +166,86 @@ PIZError pizSequenceSetZoneByTempZone (PIZSequence *x)
         x->up    = x->tempUp;
         
         err = PIZ_GOOD;
+    }
+        
+    PIZUNLOCK
+    
+    return err;
+}
+
+bool pizSequenceResizeTempZone (PIZSequence *x, const PIZCoordinates *c, PIZDataIndex side)
+{
+    long temp;
+    bool haveChanged = false;
+    
+    PIZLOCK
+    
+    switch (side) {
+    case PIZ_DATA_START : temp = CLAMP (pizSequenceSnapRound (x, c->position), 0, PIZ_SEQUENCE_TIMELINE_SIZE);
+                          if (x->tempStart != temp) { 
+                          x->tempStart = temp; haveChanged = true; 
+                          } break;
+    case PIZ_DATA_END   : temp = CLAMP (pizSequenceSnapRound (x, c->position), 0, PIZ_SEQUENCE_TIMELINE_SIZE); 
+                          if (x->tempEnd != temp) { 
+                          x->tempEnd = temp; haveChanged = true; 
+                          } break;
+    case PIZ_DATA_DOWN  : if (c->pitch <= x->tempUp) { 
+                          temp = CLAMP (c->pitch, 0, PIZ_MAGIC_PITCH); 
+                          } 
+                          if (x->tempDown != temp) { 
+                          x->tempDown = temp; haveChanged = true; 
+                          } break;
+    case PIZ_DATA_UP    : if (c->pitch >= x->tempDown) { 
+                          temp = CLAMP (c->pitch, 0, PIZ_MAGIC_PITCH); 
+                          } 
+                          if (x->tempUp != temp) { 
+                          x->tempUp = temp; haveChanged = true; 
+                          } break;
+    }
+    
+    PIZUNLOCK
+    
+    return haveChanged;
+}
+
+bool pizSequenceMoveTempZone (PIZSequence *x, long pitch, long position)
+{
+    bool haveChanged = false;
+    long tempStart, tempDown;
+    
+    PIZLOCK
+    
+    tempStart = pizSequenceSnapRound (x, x->tempOriginStart + position);
+    tempStart = CLAMP (tempStart, 0, (PIZ_SEQUENCE_TIMELINE_SIZE - x->tempOriginWidth));
+    tempDown  = CLAMP (x->tempOriginDown + pitch, 0, (PIZ_MAGIC_PITCH - x->tempOriginHeight));
+    
+    if ((tempStart != x->tempStart) || (tempDown != x->tempDown)) {
+        x->tempStart = tempStart;
+        x->tempEnd   = tempStart + x->tempOriginWidth;
+        x->tempDown  = tempDown;
+        x->tempUp    = tempDown + x->tempOriginHeight;
+        
+        haveChanged = true;
+    }
+    
+    PIZUNLOCK
+    
+    return haveChanged;
+}
+
+PIZError pizSequenceTempZoneToArray (PIZSequence *x, PIZGrowingArray *a)
+{
+    long err = PIZ_ERROR;
+
+    PIZLOCK
+    
+    if (a) {
+        err = PIZ_GOOD;
+        
+        err |= pizGrowingArrayAppend (a, x->tempStart);
+        err |= pizGrowingArrayAppend (a, x->tempEnd);
+        err |= pizGrowingArrayAppend (a, x->tempDown);
+        err |= pizGrowingArrayAppend (a, x->tempUp);
     }
         
     PIZUNLOCK
@@ -300,7 +290,7 @@ void pizSequenceUnselectAllNotes (PIZSequence *x)
     PIZUNLOCK
 }
 
-long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates)
+long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c)
 {
     long i, count;
     long k = 0;
@@ -320,8 +310,8 @@ long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, const PIZCoordinates 
         while (note && !k) {
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
-            if (((coordinates->position >= p) && (coordinates->position <= (p + note->data[PIZ_DURATION]))) 
-                && (coordinates->pitch == note->data[PIZ_PITCH])) {
+            if (((c->position >= p) && (c->position <= (p + note->data[PIZ_DURATION]))) 
+                && (c->pitch == note->data[PIZ_PITCH])) {
                     if (!note->isSelected) {
                         pizSequenceUnselectNotes (x);
                         note->isSelected = true;
@@ -344,7 +334,7 @@ long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, const PIZCoordinates 
     return k;
 }
 
-long pizSequenceInvertNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates)
+long pizSequenceInvertNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c)
 {
     long i, count;
     long k = -1;
@@ -364,8 +354,8 @@ long pizSequenceInvertNoteWithCoordinates (PIZSequence *x, const PIZCoordinates 
         while (note) {
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
-            if (((coordinates->position >= p) && (coordinates->position <= (p + note->data[PIZ_DURATION]))) 
-                && (coordinates->pitch == note->data[PIZ_PITCH])) {
+            if (((c->position >= p) && (c->position <= (p + note->data[PIZ_DURATION]))) 
+                && (c->pitch == note->data[PIZ_PITCH])) {
                 
                     if (note->isSelected) {
                         if (x->markedNote == note) {
@@ -523,15 +513,15 @@ PIZError pizSequenceRemoveSelectedNotes (PIZSequence *x)
     return err; 
 }
 
-PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *coordinates, long flags)
+PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c, long flags)
 {
     long err = PIZ_GOOD;
     long values[PIZ_DATA_NOTE_SIZE];
     
     PIZLOCK
         
-    values[PIZ_DATA_POSITION]       = coordinates->position;
-    values[PIZ_DATA_PITCH]          = coordinates->pitch;
+    values[PIZ_DATA_POSITION]       = c->position;
+    values[PIZ_DATA_PITCH]          = c->pitch;
     values[PIZ_DATA_VELOCITY]       = PIZ_DEFAULT_VELOCITY;
     values[PIZ_DATA_CHANNEL]        = PIZ_CHANNEL_NONE;
     values[PIZ_DATA_IS_SELECTED]    = true;
@@ -552,41 +542,6 @@ PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates
     PIZUNLOCK
     
     return err;
-}
-
-void pizSequenceTransposeOctave (PIZSequence *x, bool down)
-{
-    long i, step;
-    
-    if (down) {
-        step = -PIZ_MAGIC_SCALE;
-    } else {
-        step = PIZ_MAGIC_SCALE;
-    }
-        
-    PIZLOCK
-        
-    x->down = CLAMP (x->down + step, 0, PIZ_MAGIC_PITCH);
-    x->up   = CLAMP (x->up + step, 0, PIZ_MAGIC_PITCH);
-    
-    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
-        PIZNote *note       = NULL;
-        PIZNote *nextNote   = NULL;
-        
-        long p = pizGrowingArrayValueAtIndex (x->map, i);
-        
-        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-        
-        while (note) {
-            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-
-            note->data[PIZ_PITCH] = CLAMP (note->data[PIZ_PITCH] + step, 0, PIZ_MAGIC_PITCH);
-            
-            note = nextNote;
-        }
-    }
-    
-    PIZUNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------

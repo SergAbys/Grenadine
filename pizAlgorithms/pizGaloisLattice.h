@@ -56,10 +56,10 @@
  */
  
 typedef struct _PIZGaloisLatticeConcept {
-    long            cardinal;                           /*!< Number of values in the concept. */
-    PIZItemset128   itemset;                            /*!< Values in the concept (as bit field). */
-    PIZItemset128   parents;                            /*!< Arcs (indexes as bit field). */
-    PIZItemset128   childs;                             /*!< Arcs (indexes as bit field). */
+    long            cardinal;                           /* Number of values in the concept. */
+    PIZItemset128   itemset;                            /* Values in the concept (as bit field). */
+    PIZItemset128   parents;                            /* Arcs (indexes as bit field). */
+    PIZItemset128   childs;                             /* Arcs (indexes as bit field). */
     } PIZGaloisLatticeConcept;
 
 /**
@@ -72,21 +72,21 @@ typedef struct _PIZGaloisLatticeConcept {
  */
  
 typedef struct _PIZGaloisLattice {
-    PIZItemset128           toBeAdded;                  /*!< Values to add (as bit field). */
-    PIZItemset128           intersection;               /*!< Temporary intersection between concepts. */
-    long                    count;                      /*!< Number of concepts in the lattice. */
-    long                    thresholdToKillConcepts;    /*!< Number of concepts to start killing. */
-    long                    targetedConcept;            /*!< Index of a marked concept. */ 
-    long                    shuttle;                    /*!< Index of the playback head. */
-    long                    previousShuttle;            /*!< Previous index of the playback head. */
-    long                    intersectionCardinal;       /*!< Cardinal of the temporary intersection. */
-    long                    mapPeak;                    /*!< Maximum cardinal reached in the map. */
-    long                    tempMapPeak;                /*!< Maximum cardinal reached in the temporary map. */
-    bool                    needToMakeMap;              /*!< Flag (set after birth or death). */
-    PIZGrowingArray         **map;                      /*!< Concepts sort by cardinal. */
-    PIZGrowingArray         **tempMap;                  /*!< Temporay map to build lattice. */
-    PIZBoundedStack         *ticketMachine;             /*!< Pool management. */
-    PIZGaloisLatticeConcept *stock;                     /*!< Pool of concepts. */
+    PIZItemset128           toBeAdded;                  /* Values to add (as bit field). */
+    PIZItemset128           intersection;               /* Temporary intersection between concepts. */
+    long                    count;                      /* Number of concepts in the lattice. */
+    long                    thresholdToKillConcepts;    /* Number of concepts to start killing. */
+    long                    targetedConcept;            /* Index of a marked concept. */ 
+    long                    shuttle;                    /* Index of the playback head. */
+    long                    previousShuttle;            /* Previous index of the playback head. */
+    long                    intersectionCardinal;       /* Cardinal of the temporary intersection. */
+    long                    mapPeak;                    /* Maximum cardinal reached in the map. */
+    long                    tempMapPeak;                /* Maximum cardinal reached in the temporary map. */
+    bool                    needToMakeMap;              /* Flag (set after birth or death). */
+    PIZGrowingArray         **map;                      /* Concepts sort by cardinal. */
+    PIZGrowingArray         **tempMap;                  /* Temporay map to build lattice. */
+    PIZBoundedStack         *ticketMachine;             /* Pool management. */
+    PIZGaloisLatticeConcept *stock;                     /* Pool of concepts. */
     } PIZGaloisLattice;
 
 // -------------------------------------------------------------------------------------------------------------

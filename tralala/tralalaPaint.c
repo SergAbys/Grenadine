@@ -237,7 +237,7 @@ void tralala_focuslost (t_tralala *x, t_object *patcherview)
     
     if (USER) {
         if (x->flags & FLAG_ZONE_IS_SELECTED) {
-            pizSequenceSetZoneByTempZone (x->user);
+            pizSequencePlaceTempZone (x->user);
                 
             x->flags &= ~FLAG_ZONE_IS_SELECTED;
             DIRTYLAYER_SET (DIRTY_CHANGE);

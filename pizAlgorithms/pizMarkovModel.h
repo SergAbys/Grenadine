@@ -57,20 +57,20 @@
  */
  
 typedef struct _PIZMarkovModel {
-    long    count;                              /*!< Number of learning iterations performed. */
-    long    vectorSize;                         /*!< Size of learning vectors. */
-    long    graphSize;                          /*!< Number of nodes in the HMM. */
-    double  persistence;                        /*!< Ratio between old and new HMM after learning. */
-    double  *start;                             /*!< Start probabilities. */
-    double  *emission;                          /*!< Emission probabilities. */
-    double  *transition;                        /*!< Transition probabilities. */
-    double  *tempStart;                         /*!< Reestimated start probabilities. */
-    double  *tempEmission;                      /*!< Reestimated emission probabilities. */
-    double  *tempTransition;                    /*!< Reestimated transition probabilities. */
-    double  *alpha;                             /*!< Forward values. */
-    double  *tempAlpha;                         /*!< Rescaled forward values. */
-    double  *beta;                              /*!< Backward values. */
-    double  *coefficient;                       /*!< Rescaling coefficients. */
+    long    count;                              /* Number of learning iterations performed. */
+    long    vectorSize;                         /* Size of learning vectors. */
+    long    graphSize;                          /* Number of nodes in the HMM. */
+    double  persistence;                        /* Ratio between old and new HMM after learning. */
+    double  *start;                             /* Start probabilities. */
+    double  *emission;                          /* Emission probabilities. */
+    double  *transition;                        /* Transition probabilities. */
+    double  *tempStart;                         /* Reestimated start probabilities. */
+    double  *tempEmission;                      /* Reestimated emission probabilities. */
+    double  *tempTransition;                    /* Reestimated transition probabilities. */
+    double  *alpha;                             /* Forward values. */
+    double  *tempAlpha;                         /* Rescaled forward values. */
+    double  *beta;                              /* Backward values. */
+    double  *coefficient;                       /* Rescaling coefficients. */
     } PIZMarkovModel;
 
 // -------------------------------------------------------------------------------------------------------------

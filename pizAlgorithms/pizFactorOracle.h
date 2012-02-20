@@ -57,10 +57,10 @@
  */
  
 typedef struct _PIZFactorOracleNode {
-    long                referTo;                        /*!< Final index of longest repeated sequence. */
-    long                lengthRepeatedSuffix;           /*!< Size of longest repeated sequence. */
-    PIZGrowingArray     *arcDestinations;               /*!< Arc destinations indexes. */
-    PIZGrowingArray     *arcValues;                     /*!< Arc values */
+    long                referTo;                        /* Final index of longest repeated sequence. */
+    long                lengthRepeatedSuffix;           /* Size of longest repeated sequence. */
+    PIZGrowingArray     *arcDestinations;               /* Arc destinations indexes. */
+    PIZGrowingArray     *arcValues;                     /* Arc values. */
     } PIZFactorOracleNode;
     
 /**
@@ -71,13 +71,13 @@ typedef struct _PIZFactorOracleNode {
  */
      
 typedef struct _PIZFactorOracle {
-    long                size;                           /*!< Current number of nodes allocated. */
-    long                peak;                           /*!< Maximum number of nodes reached. */
-    long                index;                          /*!< Current number of nodes. */
-    long                shuttle;                        /*!< Index of the playback head. */
-    long                backwardThreshold;              /*!< Threshold for backward playback. */
-    double              straightRatio;                  /*!< Threshold for straight playback. */
-    PIZFactorOracleNode *nodes;                         /*!< Array of nodes. */
+    long                size;                           /* Current number of nodes allocated. */
+    long                peak;                           /* Maximum number of nodes reached. */
+    long                index;                          /* Current number of nodes. */
+    long                shuttle;                        /* Index of the playback head. */
+    long                backwardThreshold;              /* Threshold for backward playback. */
+    double              straightRatio;                  /* Threshold for straight playback. */
+    PIZFactorOracleNode *nodes;                         /* Array of nodes. */
     } PIZFactorOracle;
 
 // -------------------------------------------------------------------------------------------------------------

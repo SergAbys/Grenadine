@@ -76,7 +76,7 @@
  * \ingroup itemset128 
  */
 typedef struct _PIZItemset128 {
-    unsigned long items[4];                             /*!< 128 Bits field as 4 \c long */
+    unsigned long items[4];                             /* 128 Bits field as 4 longs */
     } PIZItemset128;
     
 // -------------------------------------------------------------------------------------------------------------

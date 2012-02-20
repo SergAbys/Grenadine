@@ -52,14 +52,15 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /**
+ * \details Coordinates.   
  * \ingroup sequenceInterface
  */
- 
+
 typedef struct  _PIZCoordinates {
-    long    position;                        /*!< Timeline's position (in steps). */
-    long    pitch;                           /*!< Pitch. */
+    long    position;
+    long    pitch;
     } PIZCoordinates;
-    
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
@@ -95,18 +96,51 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \brief   Initialize with values of the zone.
+ * \brief   Initialize the temporary zone with the zone.
  * \param   x A valid pointer.
  * \ingroup sequenceInterface
  */
 void pizSequenceInitTempZone (PIZSequence *x);
 
-bool pizSequenceSetTempZoneWithCoordinates (PIZSequence *x, const PIZCoordinates *c, long side);
-bool pizSequenceMoveTempZoneWithDelta (PIZSequence *x, long pitch, long position);
+/**
+ * \brief   Replace the zone with the temporary zone.
+ * \param   x A valid pointer.
+ * \return  An error code.   
+ * \ingroup sequenceInterface
+ */
+PIZError pizSequencePlaceTempZone (PIZSequence *x);
 
+/**
+ * \brief   Resize the temporary zone with a \ref PIZCoordinates.
+ * \details Use \ref PIZ_DATA_START, \ref PIZ_DATA_END, \ref PIZ_DATA_UP or \ref PIZ_DATA_DOWN 
+ *          to indicate the side to change.
+ * \param   x A valid pointer.
+ * \param   c The Coordinates.
+ * \param   side The side to set.
+ * \return  True if something changed, otherwise false. 
+ * \ingroup sequenceInterface
+ */
+bool pizSequenceResizeTempZone (PIZSequence *x, const PIZCoordinates *c, PIZDataIndex side);
+
+/**
+ * \brief   Move the temporary zone with delta values.
+ * \details The temporary zone is snapped to the grid.
+ * \param   x A valid pointer.
+ * \param   pitch The pitch offset.
+ * \param   position The position offset.
+ * \return  True if something changed, otherwise false.   
+ * \ingroup sequenceInterface
+ */
+bool pizSequenceMoveTempZone (PIZSequence *x, long pitch, long position);
+
+/**
+ * \brief   Get the temporary zone with a dynamic array.
+ * \param   x A valid pointer.
+ * \param   a A pointer to the array.
+ * \return  An error code.   
+ * \ingroup sequenceInterface
+ */
 PIZError pizSequenceTempZoneToArray (PIZSequence *x, PIZGrowingArray *a);
-
-PIZError pizSequenceSetZoneByTempZone (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -122,7 +156,6 @@ long pizSequenceSelectNotesWithLasso (PIZSequence *x, const PIZCoordinates *m, c
 
 PIZError pizSequenceRemoveSelectedNotes (PIZSequence *x);
 PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c,  long flags);
-void pizSequenceTransposeOctave (PIZSequence *x, bool down);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -56,10 +56,10 @@
  */
  
 typedef struct _PIZBoundedStack {
-    long bound;                             /*!< Maximum number of value in the queue. */
-    long stack;                             /*!< Number of value in the queue. */
-    long poppedValue;                       /*!< Last unstacked value. */
-    long *values;                           /*!< Pointer to the array. */
+    long bound;                             /* Maximum number of value in the queue. */
+    long stack;                             /* Number of value in the queue. */
+    long poppedValue;                       /* Last unstacked value. */
+    long *values;                           /* Pointer to the array. */
     } PIZBoundedStack; 
 
 // -------------------------------------------------------------------------------------------------------------

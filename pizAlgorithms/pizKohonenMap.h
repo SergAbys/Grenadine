@@ -58,13 +58,13 @@
  */
  
 typedef struct _PIZKohonenMap {
-    long            mapSize;                /*!< Number of nodes in the Kohonen map. */
-    long            vectorSize;             /*!< Size of node's vector.*/
-    long            count;                  /*!< Number of learning iterations performed. */
-    long            range;                  /*!< Neighborhood influence. */
-    long            training;               /*!< Number of learning iterations planned. */
-    double          step;                   /*!< Learning step. */
-    double          *map;                   /*!< The data. */
+    long            mapSize;                /* Number of nodes in the Kohonen map. */
+    long            vectorSize;             /* Size of node's vector.*/
+    long            count;                  /* Number of learning iterations performed. */
+    long            range;                  /* Neighborhood influence. */
+    long            training;               /* Number of learning iterations planned. */
+    double          step;                   /* Learning step. */
+    double          *map;                   /* The data. */
     } PIZKohonenMap;
 
 // -------------------------------------------------------------------------------------------------------------

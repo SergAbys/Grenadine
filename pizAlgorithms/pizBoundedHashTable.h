@@ -68,8 +68,8 @@
  */
  
 typedef struct _PIZBoundedHashTableElement {
-    long key;                                           /*!< The key as \c long. */
-    void *ptr;                                          /*!< Pointer to the item to store. */
+    long key;                                           /* The key as long. */
+    void *ptr;                                          /* Pointer to the item to store. */
     } PIZBoundedHashTableElement;
     
 /**
@@ -80,13 +80,13 @@ typedef struct _PIZBoundedHashTableElement {
  */
  
 typedef struct _PIZBoundedHashTable {
-    long                        flags;              /*!< Bit Flags. */
-    long                        count;              /*!< Number of elements in the hashtable. */
-    long                        hashSize;           /*!< Number of dynamic arrays in the hashtable. */
-    long                        poolSize;           /*!< Maximum number of items in the hashtable. */
-    PIZBoundedStack             *ticketMachine;     /*!< Ticket machine for pool management. */
-    PIZBoundedHashTableElement  *pool;              /*!< Pool of elements. */
-    PIZGrowingArray             **hashTable;        /*!< Pointer to the hashtable's array of dynamic arrays. */
+    long                        flags;              /* Flags as bit field. */
+    long                        count;              /* Number of elements in the hashtable. */
+    long                        hashSize;           /* Number of dynamic arrays in the hashtable. */
+    long                        poolSize;           /* Maximum number of items in the hashtable. */
+    PIZBoundedStack             *ticketMachine;     /* Ticket machine for pool management. */
+    PIZBoundedHashTableElement  *pool;              /* Pool of elements. */
+    PIZGrowingArray             **hashTable;        /* Pointer to the hashtable's array of dynamic arrays. */
     } PIZBoundedHashTable;
 
 // -------------------------------------------------------------------------------------------------------------

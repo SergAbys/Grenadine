@@ -80,9 +80,9 @@
  */
  
 typedef struct _PIZLinklistElement {
-    void                        *ptr;               /*!< Pointer to item. */
-    struct _PIZLinklistElement  *next;              /*!< Pointer to next element. */
-    struct _PIZLinklistElement  *previous;          /*!< Pointer to previous element. */
+    void                        *ptr;               /* Pointer to the item. */
+    struct _PIZLinklistElement  *next;              /* Pointer to next element. */
+    struct _PIZLinklistElement  *previous;          /* Pointer to previous element. */
     } PIZLinklistElement;
 
 /**
@@ -90,11 +90,11 @@ typedef struct _PIZLinklistElement {
  */
  
 typedef struct _PIZLinklist {
-    long                flags;                      /*!< Bit Flags. */
-    long                count;                      /*!< Number of elements in the linked list. */
-    PIZLinklistElement  *head;                      /*!< Pointer to head element. */
-    PIZLinklistElement  *tail;                      /*!< Pointer to tail element. */
-    PIZLinklistElement  *cache;                     /*!< Pointer to cached element. */
+    long                flags;                      /* Flags as bit field. */
+    long                count;                      /* Number of elements in the linked list. */
+    PIZLinklistElement  *head;                      /* Pointer to head element. */
+    PIZLinklistElement  *tail;                      /* Pointer to tail element. */
+    PIZLinklistElement  *cache;                     /* Pointer to cached element. */
     } PIZLinklist;
 
 // -------------------------------------------------------------------------------------------------------------

@@ -249,53 +249,55 @@ typedef enum _PIZAddFlag {
 // -------------------------------------------------------------------------------------------------------------
 
 /**
+ * \details Note. 
  * \ingroup sequenceTypes
  */
  
 typedef struct _PIZNote {
-    long    flags;                                  /*!< Various flags. */
-    long    data[4];                                /*!< MIDI values. */
-    long    isSelected;                             /*!< True if the note is selected. */
-    long    position;                               /*!< Position of the note. */
-    long    tag;                                    /*!< Label (unique) of the note. */
+    long    flags;                                  /* Various flags as bit field. */
+    long    data[4];                                /* MIDI values. */
+    long    isSelected;                             /* True if the note is selected. */
+    long    position;                               /* Position of the note. */
+    long    tag;                                    /* Label (unique) of the note. */
     } PIZNote;
 
 /**
+ * \details Sequence.  
  * \ingroup sequenceTypes
  */
  
 typedef struct _PIZSequence {
-    pthread_mutex_t     lock;                       /*!< POSIX mutex. */
-    long                *values1;                   /*!< Private for temporary storage. */
-    long                *values2;                   /*!< Private for temporary storage. */
-    PIZNote             **notes1;                   /*!< Private for temporary storage. */
-    PIZNote             **notes2;                   /*!< Private for temporary storage. */
-    PIZBoundedHashTable *hashTable;                 /*!< Private for temporary storage. */
-    PIZLinklist         **timeline;                 /*!< Sequence as a timeline. */
-    PIZGrowingArray     *scale;                     /*!< Mode/scale. */
-    PIZGrowingArray     *pattern;                   /*!< Rythmic pattern. */
-    PIZNote             *markedNote;                /*!< Pointer to one note in the sequence. */
-    PIZGrowingArray     *map;                       /*!< List of timeline's in use indexes. */
-    long                start;                      /*!< Zone's start (included). */
-    long                end;                        /*!< Zone's end (not included). */
-    long                down;                       /*!< Zone's low ambitus (included). */
-    long                up;                         /*!< Zone's high ambitus (included). */
-    long                count;                      /*!< Number of notes. */
-    long                index;                      /*!< Current playback head's index. */
-    long                chance;                     /*!< Chance value [0, 100]. */
-    long                channel;                    /*!< Global MIDI channel. */
-    long                velocity;                   /*!< Global MIDI velocity. */
-    PIZNoteValue        cell;                       /*!< Cell for generators. */
-    PIZNoteValue        grid;                       /*!< Magnetic grid of the sequence. */
-    PIZNoteValue        noteValue;                  /*!< Default note value. */
-    long                tempStart;                  /*!< Temporary zone storage. */
-    long                tempEnd;                    /*!< Temporary zone storage. */
-    long                tempDown;                   /*!< Temporary zone storage. */
-    long                tempUp;                     /*!< Temporary zone storage. */
-    long                tempOriginStart;            /*!< Temporary zone storage. */
-    long                tempOriginDown;             /*!< Temporary zone storage. */
-    long                tempOriginWidth;            /*!< Temporary zone storage. */
-    long                tempOriginHeight;           /*!< Temporary zone storage. */
+    pthread_mutex_t     lock;                       /* POSIX mutex. */
+    long                *values1;                   /* Private for temporary storage. */
+    long                *values2;                   /* Private for temporary storage. */
+    PIZNote             **notes1;                   /* Private for temporary storage. */
+    PIZNote             **notes2;                   /* Private for temporary storage. */
+    PIZBoundedHashTable *hashTable;                 /* Private for temporary storage. */
+    PIZLinklist         **timeline;                 /* Sequence as a timeline. */
+    PIZGrowingArray     *scale;                     /* Mode/scale. */
+    PIZGrowingArray     *pattern;                   /* Rythmic pattern. */
+    PIZNote             *markedNote;                /* Pointer to one note in the sequence. */
+    PIZGrowingArray     *map;                       /* List of timeline's indexes in use. */
+    long                start;                      /* Zone's start (included). */
+    long                end;                        /* Zone's end (not included). */
+    long                down;                       /* Zone's low ambitus (included). */
+    long                up;                         /* Zone's high ambitus (included). */
+    long                count;                      /* Number of notes. */
+    long                index;                      /* Current playback head's index. */
+    long                chance;                     /* Chance value [0, 100]. */
+    long                channel;                    /* Global MIDI channel. */
+    long                velocity;                   /* Global MIDI velocity. */
+    PIZNoteValue        cell;                       /* Cell for generators. */
+    PIZNoteValue        grid;                       /* Magnetic grid of the sequence. */
+    PIZNoteValue        noteValue;                  /* Default note value. */
+    long                tempStart;                  /* Temporary zone storage. */
+    long                tempEnd;                    /* Temporary zone storage. */
+    long                tempDown;                   /* Temporary zone storage. */
+    long                tempUp;                     /* Temporary zone storage. */
+    long                tempOriginStart;            /* Temporary zone storage. */
+    long                tempOriginDown;             /* Temporary zone storage. */
+    long                tempOriginWidth;            /* Temporary zone storage. */
+    long                tempOriginHeight;           /* Temporary zone storage. */
     } PIZSequence;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -346,7 +348,7 @@ long pizSequenceVelocity (PIZSequence *x);
 long pizSequenceChannel (PIZSequence *x);
 
 /**
- * \brief   Get the cell value (\ref sequenceTransform).
+ * \brief   Get the cell value.
  * \param   x A valid pointer.
  * \return  The cell value.
  * \ingroup sequenceClass
@@ -395,7 +397,7 @@ void pizSequenceSetVelocity (PIZSequence *x, long value);
 void pizSequenceSetChannel (PIZSequence *x, long channel);
 
 /**
- * \brief   Set the cell for generators (\ref sequenceTransform).
+ * \brief   Set the cell for pizSequenceGenerator (), pizSequenceCellularAutomata() ...
  * \param   x A valid pointer.
  * \param   value The cell value.
  * \ingroup sequenceClass
@@ -526,6 +528,23 @@ PIZError pizSequenceZoneToArray (PIZSequence *x, PIZGrowingArray *a);
 PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *a);
 
 /**
+ * \brief   Change the register : transpose the zone and all the notes.
+ * \param   x A valid pointer.
+ * \param   n The number of semitones.  
+ * \ingroup sequenceTransform
+ */
+void pizSequenceTranspose (PIZSequence *x, long n);
+
+/**
+ * \brief   Avoid pitch clusters in the sequence.
+ * \param   x A valid pointer.
+ * \param   value The interval to keep empty between notes in semitones. 
+ * \return  True if something changed, otherwise false.  
+ * \ingroup sequenceTransform
+ */
+bool pizSequenceClean (PIZSequence *x, long value);
+
+/**
  * \brief   Get the current playback head's index.
  * \param   x A valid pointer.
  * \return  The index.
@@ -564,7 +583,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a);
 
 /**
  * \brief   Add a note to the sequence.
- * \details Array must be \ref PIZ_DATA_NOTE_SIZE long. 
+ * \details The count of the array must be \ref PIZ_DATA_NOTE_SIZE. 
  * \param   x A valid pointer.
  * \param   values A pointer to note values.
  * \param   flags The flags (as ORed \ref PIZAddFlag).

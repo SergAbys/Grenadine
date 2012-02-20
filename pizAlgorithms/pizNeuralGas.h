@@ -56,37 +56,35 @@
  */
  
 typedef struct _PIZNeuralGasHead {
-    double          error;                      /*!< Cumulative error of the node. */
-    double          utility;                    /*!< Cumulative utility of the node. */
-    PIZItemset128   arcs;                       /*!< Arcs (indexes as bit field). */
+    double          error;                      /* Cumulative error of the node. */
+    double          utility;                    /* Cumulative utility of the node. */
+    PIZItemset128   arcs;                       /* Arcs (indexes as bit field). */
     }PIZNeuralGasHead;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 /**
- * \remark  Version with no arc's age and modifications about birth and death events.
- *          Implemented with two synchronized pools  
- *          (one of pre-allocated heads, one of pre-allocated vectors), 
+ * \remark  Implemented with two synchronized pools (pre-allocated heads and pre-allocated vectors), 
  *          and a map to mark slots used. 
  * \ingroup neuralGas
  */
  
 typedef struct _PIZNeuralGas {
-    PIZItemset128       map;                    /*!< In use (as bit field). */
-    long                count;                  /*!< Number of learning iterations performed. */
-    long                vectorSize;             /*!< Size of a node's vector. */
-    long                mapSize;                /*!< Number of nodes in the neural gas. */
-    long                maximumSize;            /*!< Maximum number of nodes in the neural gas. */
-    long                lambda;                 /*!< New node rate. */
-    double              epsilon1;               /*!< Move winner factor. */
-    double              epsilon2;               /*!< Move neighbours factor. */
-    double              alpha;                  /*!< Decrease generators error factor. */
-    double              beta;                   /*!< Decrease global error factor. */
-    double              kappa;                  /*!< Utility threshold. */
-    double              *vectorStock;           /*!< Pool of vectors. */
-    PIZNeuralGasHead    *headStock;             /*!< Pool of heads. */
-    PIZBoundedStack     *ticketMachine;         /*!< Pool management. */
+    PIZItemset128       map;                    /* In use (as bit field). */
+    long                count;                  /* Number of learning iterations performed. */
+    long                vectorSize;             /* Size of a node's vector. */
+    long                mapSize;                /* Number of nodes in the neural gas. */
+    long                maximumSize;            /* Maximum number of nodes in the neural gas. */
+    long                lambda;                 /* New node rate. */
+    double              epsilon1;               /* Move winner factor. */
+    double              epsilon2;               /* Move neighbours factor. */
+    double              alpha;                  /* Decrease generators error factor. */
+    double              beta;                   /* Decrease global error factor. */
+    double              kappa;                  /* Utility threshold. */
+    double              *vectorStock;           /* Pool of vectors. */
+    PIZNeuralGasHead    *headStock;             /* Pool of heads. */
+    PIZBoundedStack     *ticketMachine;         /* Pool management. */
     } PIZNeuralGas;
 
 // -------------------------------------------------------------------------------------------------------------

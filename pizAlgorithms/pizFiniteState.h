@@ -56,10 +56,10 @@
  */
  
 typedef struct _PIZFiniteStateNode {
-    long            value;                      /*!< Value of the node. */
-    bool            final;                      /*!< Terminal node state. */
-    PIZItemset128   parents;                    /*!< Arcs (indexes as bit field). */
-    PIZItemset128   childs;                     /*!< Arcs (indexes as bit field). */
+    long            value;                      /* Value of the node. */
+    bool            final;                      /* Terminal node state. */
+    PIZItemset128   parents;                    /* Arcs (indexes as bit field). */
+    PIZItemset128   childs;                     /* Arcs (indexes as bit field). */
     } PIZFiniteStateNode;
 
 /** 
@@ -69,15 +69,15 @@ typedef struct _PIZFiniteStateNode {
  */
  
 typedef struct _PIZFiniteState {
-    long                count;                  /*!< Number of nodes in the automaton. */
-    long                shuttle;                /*!< Index of the playback head. */
-    long                lotteryIndex;           /*!< Number of elements in the lottery array. */
-    long                jumpChance;             /*!< Cumulative chance to jump when reading. */ 
-    long                thresholdToMergeNodes;  /*!< Number of nodes to start crossing-over. */ 
-    long                *lottery;               /*!< Temporary array for lottery drawing. */ 
-    PIZBoundedQueue     **mapByValue;           /*!< Pointer to the array of bounded queues. */ 
-    PIZBoundedStack     *ticketMachine;         /*!< Pool management. */ 
-    PIZFiniteStateNode  *stock;                 /*!< Pool of nodes. */ 
+    long                count;                  /* Number of nodes in the automaton. */
+    long                shuttle;                /* Index of the playback head. */
+    long                lotteryIndex;           /* Number of elements in the lottery array. */
+    long                jumpChance;             /* Cumulative chance to jump when reading. */ 
+    long                thresholdToMergeNodes;  /* Number of nodes to start crossing-over. */ 
+    long                *lottery;               /* Temporary array for lottery drawing. */ 
+    PIZBoundedQueue     **mapByValue;           /* Pointer to the array of bounded queues. */ 
+    PIZBoundedStack     *ticketMachine;         /* Pool management. */ 
+    PIZFiniteStateNode  *stock;                 /* Pool of nodes. */ 
     } PIZFiniteState;
     
 // -------------------------------------------------------------------------------------------------------------
