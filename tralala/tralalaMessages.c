@@ -59,7 +59,7 @@ void tralala_copy (t_tralala *x)
     ARRAY_RELEASE (tempArrayB);
     
     if (LIVE) {
-        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
     }
 }
 
@@ -68,7 +68,7 @@ void tralala_enter (t_tralala *x)
     tralala_setLiveByUser (x);
     
     if (LIVE) {
-        DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE);
+        DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_LOAD);
     }
 }
 
@@ -282,7 +282,7 @@ void tralala_handleMessages (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
             if (draw) {
                 tralala_willChange (x);
                     
-                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE);
+                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_LOAD);
                     
                 if (USER) {
                     DIRTYSLOTS 
@@ -874,7 +874,7 @@ void tralala_slotRecall (t_tralala *x, long n)
         DIRTYLAYER_SET (DIRTY_GRID);
     }
     
-    DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE);
+    DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_LOAD);
 }
 
 void tralala_slotStore (t_tralala *x)

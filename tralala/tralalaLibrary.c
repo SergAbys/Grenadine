@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 20/02/12.
+ *  Last modified : 21/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -26,119 +26,101 @@ extern tralalaSymbolsTableB tll_symbolsB;
 
 bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitch)
 {
-    long i;
-    long count;
-    bool moved = false;
-    long grid = pizSequenceGrid (x->user);
-        
-    systhread_mutex_lock (&x->arraysMutex);
+    long i, count, grid = pizSequenceGrid (x->user);
+    bool haveChanged = false;
 
-    count = pizGrowingArrayCount (x->selected) / PIZ_DATA_NOTE_SIZE;
+    ARRAYSLOCK
     
-    for (i = 0; i < count; i++) {
-        long previousPosition   = pizGrowingArrayValueAtIndex (x->selected, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_POSITION);
-        long previousPitch      = pizGrowingArrayValueAtIndex (x->selected, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_PITCH);
-        long position           = pizGrowingArrayValueAtIndex (x->origin, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_POSITION);
-        long pitch              = pizGrowingArrayValueAtIndex (x->origin, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_PITCH);
-        long duration           = pizGrowingArrayValueAtIndex (x->origin, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_DURATION);
+    count = pizGrowingArrayCount (x->selected);
+    
+    for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
+        long position     = pizGrowingArrayValueAtIndex (x->origin,   i + PIZ_DATA_POSITION);
+        long pitch        = pizGrowingArrayValueAtIndex (x->origin,   i + PIZ_DATA_PITCH);
+        long duration     = pizGrowingArrayValueAtIndex (x->origin,   i + PIZ_DATA_DURATION);
+        long tempPosition = pizGrowingArrayValueAtIndex (x->selected, i + PIZ_DATA_POSITION);
+        long tempPitch    = pizGrowingArrayValueAtIndex (x->selected, i + PIZ_DATA_PITCH);
         
-        pitch       += deltaPitch;
-        position    += deltaPosition;
+        pitch    += deltaPitch;
+        position += deltaPosition;
         
         position = MAX ((long)((position / (double)grid) + 0.5) * grid, 0);
         
-        pizGrowingArraySetValueAtIndex (x->selected, (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_POSITION,
-                                        CLAMP (position, 0, PIZ_SEQUENCE_TIMELINE_SIZE - duration));
-        pizGrowingArraySetValueAtIndex (x->selected, (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_PITCH,
-                                        CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
+        position = CLAMP (position, 0, PIZ_SEQUENCE_TIMELINE_SIZE - duration);
+        pitch    = CLAMP (pitch, 0, PIZ_MAGIC_PITCH);
         
-        if ((previousPosition != position) || (previousPitch != pitch)) {
-            moved = true;
+        pizGrowingArraySetValueAtIndex (x->selected, i + PIZ_DATA_POSITION, position);
+        pizGrowingArraySetValueAtIndex (x->selected, i + PIZ_DATA_PITCH, pitch);
+        
+        if ((tempPosition != position) || (tempPitch != pitch)) {
+            haveChanged = true;
         }
     }
     
-    systhread_mutex_unlock (&x->arraysMutex);
+    ARRAYSUNLOCK
     
-    return moved;
+    return haveChanged;
 }
 
 bool tralala_changeSelectedNotesDuration (t_tralala *x, long deltaPosition)
 {
-    long i;
-    long count;
-    bool changed = false;
-    long grid = pizSequenceGrid (x->user);
+    long i, count, grid = pizSequenceGrid (x->user);
+    bool haveChanged = false;
                 
-    systhread_mutex_lock (&x->arraysMutex);
+    ARRAYSLOCK
 
-    count = pizGrowingArrayCount (x->selected) / PIZ_DATA_NOTE_SIZE;
+    count = pizGrowingArrayCount (x->selected);
     
-    for (i = 0; i < count; i++) {
-        long previousDuration   = pizGrowingArrayValueAtIndex (x->selected, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_DURATION);
-        long duration           = pizGrowingArrayValueAtIndex (x->origin, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_DURATION);
-        long position           = pizGrowingArrayValueAtIndex (x->origin, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_POSITION);
-        long maximum            = MIN (PIZ_SEQUENCE_MAXIMUM_DURATION, (PIZ_SEQUENCE_TIMELINE_SIZE - position));
+    for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
+        long maximum;
+        long duration = pizGrowingArrayValueAtIndex (x->origin,   i + PIZ_DATA_DURATION);
+        long position = pizGrowingArrayValueAtIndex (x->origin,   i + PIZ_DATA_POSITION);
+        long temp     = pizGrowingArrayValueAtIndex (x->selected, i + PIZ_DATA_DURATION);
+        
+        maximum  = MIN (PIZ_SEQUENCE_MAXIMUM_DURATION, (PIZ_SEQUENCE_TIMELINE_SIZE - position));
                                     
         duration += deltaPosition;
+        
         duration = MAX ((long)((duration / (double)grid) + 0.5) * grid, 0);
+        duration = CLAMP (duration, grid, maximum);
         
-        pizGrowingArraySetValueAtIndex (x->selected, (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_DURATION,
-                                        CLAMP (duration, grid, maximum));
+        pizGrowingArraySetValueAtIndex (x->selected, i + PIZ_DATA_DURATION, duration);
         
-        if (duration != previousDuration) {
-            changed = true;
+        if (duration != temp) {
+            haveChanged = true;
         }
     }
     
-    systhread_mutex_unlock (&x->arraysMutex);
+    ARRAYSUNLOCK
     
-    return changed;
+    return haveChanged;
 }
 
-void tralala_duplicateSelectedNotes (t_tralala *x)
-{
-    systhread_mutex_lock        (&x->arraysMutex);
-    pizGrowingArrayAppendArray  (x->unselected, x->selected);
-    systhread_mutex_unlock      (&x->arraysMutex);
-            
-    pizSequenceUnselectAllNotes (x->user);
-            
-    x->flags |= FLAG_HAVE_BEEN_DUPLICATED;
-}
-
-void tralala_changeSelectedNotesVelocity (t_tralala *x, bool decrement)
+bool tralala_changeSelectedNotesVelocity (t_tralala *x, bool decrement)
 {
     long count;
+    bool haveChanged = false;
     
-    systhread_mutex_lock (&x->arraysMutex);
+    ARRAYSLOCK
     
-    if (count = pizGrowingArrayCount (x->selected) / PIZ_DATA_NOTE_SIZE) {
+    if (count = pizGrowingArrayCount (x->selected)) {
         long i, step;
-        long temp, k = 0;
-        long originVelocity = pizGrowingArrayValueAtIndex (x->origin, PIZ_DATA_VELOCITY);
-        long velocity       = pizGrowingArrayValueAtIndex (x->selected, PIZ_DATA_VELOCITY);
+        long k = 0;
+        long temp     = pizGrowingArrayValueAtIndex (x->origin,   PIZ_DATA_VELOCITY);
+        long velocity = pizGrowingArrayValueAtIndex (x->selected, PIZ_DATA_VELOCITY);
         
-        step = (long)((ABS (velocity - originVelocity)) / 5) + 1;
+        step = (long)((ABS (velocity - temp)) / 5.) + 1;
         
-        for (i = 0; i < count; i++) {
+        for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
+            long m = pizGrowingArrayValueAtIndex (x->selected, i + PIZ_DATA_VELOCITY);
+            
             if (decrement) {
-                temp =  pizGrowingArrayValueAtIndex (x->selected, (PIZ_DATA_NOTE_SIZE * i) 
-                    + PIZ_DATA_VELOCITY) - step;
+                m = m - step;
             } else {
-                temp = PIZ_MAGIC_VELOCITY - (pizGrowingArrayValueAtIndex (x->selected, 
-                    (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_VELOCITY) + step);
+                m = PIZ_MAGIC_VELOCITY - (m + step);
             }
             
-            if (temp < k) {
-                   k = temp;
+            if (m < k) {
+                k = m;
             }
         }
         
@@ -146,55 +128,68 @@ void tralala_changeSelectedNotesVelocity (t_tralala *x, bool decrement)
         
         if (step > 0) {
             if (decrement) {
-                    step = -step;
-                }
+                step = -step;
+            }
                 
-            for (i = 0; i < count; i++) { 
-                temp = pizGrowingArrayValueAtIndex (x->selected, 
-                        (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_VELOCITY) + step;
-                pizGrowingArraySetValueAtIndex (x->selected,  
-                        (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_VELOCITY, temp);
+            for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) { 
+                long m = pizGrowingArrayValueAtIndex (x->selected, i + PIZ_DATA_VELOCITY) + step;
+                pizGrowingArraySetValueAtIndex (x->selected, i + PIZ_DATA_VELOCITY, m);
             }
             
-            x->mouseVelocityValue = velocity + step - originVelocity;
+            x->mouseVelocityValue = velocity - temp + step;
+            haveChanged = true;
         }
     }
     
-    systhread_mutex_unlock (&x->arraysMutex);
+    ARRAYSUNLOCK
+    
+    return haveChanged;
+}
+
+void tralala_duplicateSelectedNotes (t_tralala *x)
+{
+    ARRAYSLOCK
+    
+    pizGrowingArrayAppendArray (x->unselected, x->selected);
+    
+    ARRAYSUNLOCK
+    
+    pizSequenceUnselectAllNotes (x->user);
+    x->flags |= FLAG_HAVE_BEEN_DUPLICATED;
 }
 
 void tralala_setSelectedNotesVelocity (t_tralala *x, long velocity)
 {
-    long i;
-    long count;
+    long i, count;
     
-    systhread_mutex_lock (&x->arraysMutex);
+    velocity = CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY);
+    
+    ARRAYSLOCK
 
-    count = pizGrowingArrayCount (x->selected) / PIZ_DATA_NOTE_SIZE;
+    count = pizGrowingArrayCount (x->selected);
     
-    for (i = 0; i < count; i++) {
-        pizGrowingArraySetValueAtIndex (x->selected, (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_VELOCITY,
-            CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY));
+    for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
+        pizGrowingArraySetValueAtIndex (x->selected, i + PIZ_DATA_VELOCITY, velocity);
     }
     
-    systhread_mutex_unlock (&x->arraysMutex);
+    ARRAYSUNLOCK
 }
 
 void tralala_setSelectedNotesChannel (t_tralala *x, long channel)
 {
-    long i;
-    long count;
+    long i, count;
     
-    systhread_mutex_lock (&x->arraysMutex);
+    channel = CLAMP (channel, 0, PIZ_MAGIC_CHANNEL);
+    
+    ARRAYSLOCK
 
-    count = pizGrowingArrayCount (x->selected) / PIZ_DATA_NOTE_SIZE;
+    count = pizGrowingArrayCount (x->selected);
     
-    for (i = 0; i < count; i++) {
-        pizGrowingArraySetValueAtIndex (x->selected, (PIZ_DATA_NOTE_SIZE * i) + PIZ_DATA_CHANNEL,
-            CLAMP (channel, 0, PIZ_MAGIC_CHANNEL));
+    for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
+        pizGrowingArraySetValueAtIndex (x->selected, i + PIZ_DATA_CHANNEL, channel);
     }
     
-    systhread_mutex_unlock (&x->arraysMutex);
+    ARRAYSUNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -205,72 +200,71 @@ long tralala_hitZoneWithPoint (t_tralala *x, t_pt pt)
 {
     t_rect  zoneRect;
     bool    a, b, c, d, e, f;
-    long    start, end, down, up;
+    long    start, end, down, up, k;
     long    hitTest = HIT_NOTHING;
 
-    systhread_mutex_lock (&x->arraysMutex);
+    ARRAYSLOCK
 
-    start   = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_START);
-    end     = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_END);
-    down    = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_DOWN);
-    up      = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_UP);
+    start = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_START);
+    end   = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_END);
+    down  = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_DOWN);
+    up    = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_UP);
 
-    systhread_mutex_unlock  (&x->arraysMutex);
+    ARRAYSUNLOCK
                         
     tralala_setRectWithZoneValues (x, &zoneRect, start, end, down, up);
     
     zoneRect.x -= x->windowOffsetX;
     zoneRect.y -= x->windowOffsetY;
     
-    a = ((ABS (pt.x - zoneRect.x)) < GUI_HIT_ZONE_RANGE);
-    b = ((ABS (pt.x - (zoneRect.x + zoneRect.width))) < GUI_HIT_ZONE_RANGE);
-    c = ((pt.x > (zoneRect.x + (GUI_HIT_ZONE_RANGE / 2.))) 
-            && (pt.x < (zoneRect.x + zoneRect.width - (GUI_HIT_ZONE_RANGE / 2.))));
+    k = GUI_HIT_ZONE_RANGE;
     
-    d = ((ABS (pt.y - (zoneRect.y + zoneRect.height))) < GUI_HIT_ZONE_RANGE);
-    e = ((ABS (pt.y - zoneRect.y)) < GUI_HIT_ZONE_RANGE);
-    f = ((pt.y > (zoneRect.y + (GUI_HIT_ZONE_RANGE / 2.))) 
-            && (pt.y < (zoneRect.y + zoneRect.height - (GUI_HIT_ZONE_RANGE / 2.))));
+    a = ((ABS (pt.x - zoneRect.x)) < k);
+    b = ((ABS (pt.x - (zoneRect.x + zoneRect.width))) < k);
+    c = ((pt.x > (zoneRect.x + (k / 2.))) && (pt.x < (zoneRect.x + zoneRect.width - (k / 2.))));
+    d = ((ABS (pt.y - (zoneRect.y + zoneRect.height))) < k);
+    e = ((ABS (pt.y - zoneRect.y)) < k);
+    f = ((pt.y > (zoneRect.y + (k / 2.))) && (pt.y < (zoneRect.y + zoneRect.height - (k / 2.))));
                         
     if (a && f) {
-            hitTest |= HIT_START;
-        }
+        hitTest |= HIT_START;
+    }
     if (b && f) {
-            hitTest |= HIT_END;
-        }
+        hitTest |= HIT_END;
+    }
     if (d && c) {
-            hitTest |= HIT_DOWN;
-        }
+        hitTest |= HIT_DOWN;
+    }
     if (e && c) {
-            hitTest |= HIT_UP;
-        }
+        hitTest |= HIT_UP;
+    }
     if (c && f) {
-            hitTest |= HIT_ZONE;
-        }
+        hitTest |= HIT_ZONE;
+    }
     
     return hitTest;
 }
 
 long tralala_hitTextWithPoint (t_tralala *x, t_object *patcherview, t_pt pt)
 {
-    long    isHit = HIT_NOTHING;
     long    i, numlines;
-    double  textWidth, textHeight, fontSize, h1, h2; 
+    double  textWidth, textHeight, fontSize, h1, h2, end; 
     t_rect  rect;
+    long    isHit = HIT_NOTHING;
             
     jbox_get_rect_for_view ((t_object *)x, patcherview, &rect);
     fontSize = jbox_get_fontsize ((t_object *)x);
     jtextlayout_measure (x->textLayers[0], 0, -1, 1, &textWidth, &textHeight, &numlines);
 
-    h1 = rect.height - (GUI_TEXT_SPACE + fontSize);
-    h2 = h1 + textHeight;
+    h1  = rect.height - (GUI_TEXT_SPACE + fontSize);
+    h2  = h1 + textHeight;
+    end = (x->textPosition[TEXT_CELL_COUNT - 1] + x->textWidth[TEXT_CELL_COUNT - 1] + GUI_TEXT_SPACE);
     
     if ((pt.y > h1) && (pt.y < h2)) {
         if (pizSequenceHasMarkedNote (x->user)) {
-            if ((pt.x > 0) && (pt.x < (x->textPosition[TEXT_CELL_COUNT - 1] 
-                + x->textWidth[TEXT_CELL_COUNT - 1] + GUI_TEXT_SPACE))) {
-                    isHit = HIT_LOCK;
-                }
+            if ((pt.x > 0) && (pt.x < end)) {
+                isHit = HIT_LOCKED;
+            }
         
             for (i = 0; i < TEXT_CELL_COUNT; i++) {
                 if ((pt.x > x->textPosition[i]) && (pt.x < (x->textPosition[i] + x->textWidth[i]))) {
@@ -280,8 +274,8 @@ long tralala_hitTextWithPoint (t_tralala *x, t_object *patcherview, t_pt pt)
                 }
             }
         } else if ((pt.x > x->textPosition[0]) && (pt.x < (x->textPosition[0] + x->textWidth[0]))) {
-            isHit = HIT_LOCK;
-        }
+            isHit = HIT_LOCKED;
+        }   
     }
 
     return isHit;
@@ -289,13 +283,13 @@ long tralala_hitTextWithPoint (t_tralala *x, t_object *patcherview, t_pt pt)
 
 bool tralala_hitNotesByRunIndex (t_tralala *x)
 {
-    bool needToDraw = false;
+    bool haveChanged = false;
 
     pizGrowingArrayClear (x->played);
 
     if (x->runIndex == -1) {
-            x->runIndex = 0;
-            needToDraw  = true;
+        x->runIndex = 0;
+        haveChanged = true;
     } else {
         long i, count, start, end, down, up;
         long err = PIZ_GOOD;
@@ -305,47 +299,42 @@ bool tralala_hitNotesByRunIndex (t_tralala *x)
         down    = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_DOWN);
         up      = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_UP);
         
-        count = pizGrowingArrayCount (x->unselected) / PIZ_DATA_NOTE_SIZE;
+        count = pizGrowingArrayCount (x->unselected);
         
-        for (i = 0; i < count; i++) {
-            long position   = pizGrowingArrayValueAtIndex (x->unselected, (PIZ_DATA_NOTE_SIZE * i) 
-                                + PIZ_DATA_POSITION);
-            long pitch      = pizGrowingArrayValueAtIndex (x->unselected, (PIZ_DATA_NOTE_SIZE * i) 
-                                + PIZ_DATA_PITCH);
-            long duration   = pizGrowingArrayValueAtIndex (x->unselected, (PIZ_DATA_NOTE_SIZE * i) 
-                                + PIZ_DATA_DURATION);
-            long isMarked   = pizGrowingArrayValueAtIndex (x->unselected, (PIZ_DATA_NOTE_SIZE * i) 
-                                + PIZ_DATA_IS_MARKED);
-                                
-            if ((position >= start) && 
-                (pitch >= down) &&
-                (pitch <= up) &&
-                (x->runIndex >= position) && 
-                (x->runIndex < (position + duration))) {
-                    err |= pizGrowingArrayAppend (x->played, position);
-                    err |= pizGrowingArrayAppend (x->played, pitch);
-                    err |= pizGrowingArrayAppend (x->played, PIZ_MAGIC_VELOCITY);
-                    err |= pizGrowingArrayAppend (x->played, duration);
-                    err |= pizGrowingArrayAppend (x->played, false);
-                    err |= pizGrowingArrayAppend (x->played, false);
-                    err |= pizGrowingArrayAppend (x->played, false);
-                    
-                    if (!isMarked) {
-                        pizGrowingArraySetValueAtIndex (x->unselected, (PIZ_DATA_NOTE_SIZE * i) 
-                            + PIZ_DATA_IS_MARKED, true);
-                            
-                        needToDraw = true;
-                    }
+        for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
+            long err2       = PIZ_GOOD;
+            long position   = pizGrowingArrayValueAtIndex (x->unselected, i + PIZ_DATA_POSITION);
+            long pitch      = pizGrowingArrayValueAtIndex (x->unselected, i + PIZ_DATA_PITCH);
+            long duration   = pizGrowingArrayValueAtIndex (x->unselected, i + PIZ_DATA_DURATION);
+            long isMarked   = pizGrowingArrayValueAtIndex (x->unselected, i + PIZ_DATA_IS_MARKED);
+            
+            err2 |= (position < start);
+            err2 |= (pitch < down);
+            err2 |= (pitch > up);
+            err2 |= (x->runIndex < position);
+            err2 |= (x->runIndex > (position + duration));
+            
+            if (!err2) {
+                err |= pizGrowingArrayAppend (x->played, position);
+                err |= pizGrowingArrayAppend (x->played, pitch);
+                err |= pizGrowingArrayAppend (x->played, PIZ_MAGIC_VELOCITY);
+                err |= pizGrowingArrayAppend (x->played, duration);
+                err |= pizGrowingArrayAppend (x->played, PIZ_MAGIC_CHANNEL);
+                err |= pizGrowingArrayAppend (x->played, false);
+                err |= pizGrowingArrayAppend (x->played, false);
+                
+                if (!isMarked) {
+                    pizGrowingArraySetValueAtIndex (x->unselected, i + PIZ_DATA_IS_MARKED, true);
+                    haveChanged = true;
+                }
             } else if (isMarked){
-                pizGrowingArraySetValueAtIndex (x->unselected, (PIZ_DATA_NOTE_SIZE * i) 
-                    + PIZ_DATA_IS_MARKED, false);
-                            
-                needToDraw = true;
+                pizGrowingArraySetValueAtIndex (x->unselected, i + PIZ_DATA_IS_MARKED, false);
+                haveChanged = true;
             }
         }
     }
         
-    return needToDraw;
+    return haveChanged;
 }
 
 bool tralala_setCursorType (t_tralala *x, t_object *patcherview, t_jmouse_cursortype type)
@@ -354,9 +343,7 @@ bool tralala_setCursorType (t_tralala *x, t_object *patcherview, t_jmouse_cursor
     
     if (type != x->cursorType) {
         x->cursorType = type;
-            
         jmouse_setcursor (patcherview, (t_object *)x, type);
-            
         cursorSet = true;
     }
     
@@ -365,23 +352,25 @@ bool tralala_setCursorType (t_tralala *x, t_object *patcherview, t_jmouse_cursor
                                                         
 bool tralala_setCoordinatesWithPoint (t_tralala *x, PIZCoordinates *coordinates, t_pt pt)
 {
+    long    m, n;
     double  f = 1.;
     bool    inside = true;
     
     switch (x->zoomMode) {
-        case MODE_ZOOM_A    : f = 0.5;  break;
-        case MODE_ZOOM_B    : f = 1.;   break;
-        case MODE_ZOOM_C    : f = 2.;   break;
+        case MODE_ZOOM_A : f = 0.5; break;
+        case MODE_ZOOM_B : f = 1.;  break;
+        case MODE_ZOOM_C : f = 2.;  break;
     }
     
-    coordinates->position   = (long)((x->windowOffsetX + pt.x) / (GUI_PIXELS_PER_STEP * f));
-    coordinates->pitch      = PIZ_MAGIC_PITCH - MAX (((long)((x->windowOffsetY + pt.y) / 
-                                (GUI_PIXELS_PER_SEMITONE * f))), 0);
+    m = (long)((x->windowOffsetX + pt.x) / (GUI_PIXELS_PER_STEP * f));
+    n = PIZ_MAGIC_PITCH - MAX (((long)((x->windowOffsetY + pt.y) / (GUI_PIXELS_PER_SEMITONE * f))), 0);
     
-    if ((coordinates->pitch < 0) || (coordinates->pitch > PIZ_MAGIC_PITCH) || 
-        (coordinates->position < 0) || (coordinates->position > (PIZ_SEQUENCE_TIMELINE_SIZE - 1))) {
-            inside = false;
-        }
+    coordinates->position = m;
+    coordinates->pitch    = n;
+    
+    if ((n < 0) || (n > PIZ_MAGIC_PITCH) || (m < 0) || (m > (PIZ_SEQUENCE_TIMELINE_SIZE - 1))) {
+        inside = false;
+    }
         
     return inside;
 }
@@ -392,32 +381,32 @@ void tralala_setRectWithZoneValues (t_tralala *x, t_rect *zoneRect, long start, 
     double  f = 1.;
 
     switch (x->zoomMode) {
-        case MODE_ZOOM_A    : f = 0.5;  break;
-        case MODE_ZOOM_B    : f = 1.;   break;
-        case MODE_ZOOM_C    : f = 2.;   break;
+        case MODE_ZOOM_A : f = 0.5; break;
+        case MODE_ZOOM_B : f = 1.;  break;
+        case MODE_ZOOM_C : f = 2.;  break;
     }
     
     if (end < start) {
         long k  = start;
         start   = end;
         end     = k;
-        }
+    }
         
     if (down > up) {
         long k  = up;
         up      = down;
         down    = k;
-        }
+    }
     
     x1 = start * GUI_PIXELS_PER_STEP  * f;
     x2 = end * GUI_PIXELS_PER_STEP  * f;
     y1 = (PIZ_MAGIC_PITCH - up) * GUI_PIXELS_PER_SEMITONE * f;
     y2 = ((PIZ_MAGIC_PITCH + 1) - down) * GUI_PIXELS_PER_SEMITONE * f;
     
-    zoneRect->x         = x1;
-    zoneRect->y         = y1;
-    zoneRect->width     = x2 - x1;
-    zoneRect->height    = y2 - y1;
+    zoneRect->x      = x1;
+    zoneRect->y      = y1;
+    zoneRect->width  = x2 - x1;
+    zoneRect->height = y2 - y1;
 }
 
 void tralala_setRectWithCoordinatesAndDuration (t_tralala *x, t_rect *noteRect, PIZCoordinates *c, long d)
@@ -426,35 +415,34 @@ void tralala_setRectWithCoordinatesAndDuration (t_tralala *x, t_rect *noteRect, 
     double  f = 1.;
 
     switch (x->zoomMode) {
-        case MODE_ZOOM_A    : f = 0.5;  break;
-        case MODE_ZOOM_B    : f = 1.;   break;
-        case MODE_ZOOM_C    : f = 2.;   break;
-        }
+        case MODE_ZOOM_A : f = 0.5; break;
+        case MODE_ZOOM_B : f = 1.;  break;
+        case MODE_ZOOM_C : f = 2.;  break;
+    }
     
     x1 = (c->position * GUI_PIXELS_PER_STEP  * f);
     x2 = x1 + (d * GUI_PIXELS_PER_STEP * f);
     y1 = ((PIZ_MAGIC_PITCH - c->pitch) * GUI_PIXELS_PER_SEMITONE * f);
     y2 = y1 + (GUI_PIXELS_PER_SEMITONE * f);
     
-    noteRect->x         = x1;
-    noteRect->y         = y1;
-    noteRect->width     = x2 - x1;
-    noteRect->height    = y2 - y1;
+    noteRect->x      = x1;
+    noteRect->y      = y1;
+    noteRect->width  = x2 - x1;
+    noteRect->height = y2 - y1;
 }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_setStringWithLong (char *string, long longToBeFormatted, long formatMode)
+void tralala_setStringWithLong (char *string, long value, long formatMode)
 {
     if (formatMode == MODE_FORMAT_LONG) {
-        snprintf (string, SIZE_STRING_MAX, "%ld", longToBeFormatted);
-    } else if (formatMode == MODE_FORMAT_NOTENAME) {
-        long m, n;
+        snprintf (string, SIZE_STRING_MAX, "%ld", value);
         
-        m = longToBeFormatted % 12;
-        n = (long)(longToBeFormatted / 12.) - 2;
+    } else if (formatMode == MODE_FORMAT_NOTENAME) {
+        long m = value % 12;
+        long n = (long)(value / 12.) - 2;
                     
         switch (m) {
             case 0  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "C", n);  break;
@@ -469,48 +457,36 @@ void tralala_setStringWithLong (char *string, long longToBeFormatted, long forma
             case 9  : snprintf (string, SIZE_STRING_MAX, "%s%ld", "A", n);  break;
             case 10 : snprintf (string, SIZE_STRING_MAX, "%s%ld", "A#", n); break;
             case 11 : snprintf (string, SIZE_STRING_MAX, "%s%ld", "B", n);  break;
-            }
-    } else if (formatMode == MODE_FORMAT_TICKS) {
-        snprintf (string, SIZE_STRING_MAX, "%ld", longToBeFormatted * TIME_TICKS_PER_STEP);
-    } else if (formatMode == MODE_FORMAT_GRID) {
-        switch (longToBeFormatted) {
-        case PIZ_WHOLE_NOTE_DOTTED          :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_wholeDotted->s_name); break;
-        case PIZ_WHOLE_NOTE                 :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_whole->s_name); break;
-        case PIZ_WHOLE_NOTE_TRIPLET         :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_wholeTriplet->s_name); break;
-        case PIZ_HALF_NOTE_DOTTED           :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_halfDotted->s_name); break;
-        case PIZ_HALF_NOTE                  :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_half->s_name); break;
-        case PIZ_HALF_NOTE_TRIPLET          :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_halfTriplet->s_name); break;
-        case PIZ_QUARTER_NOTE_DOTTED        :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_quarterDotted->s_name); break;
-        case PIZ_QUARTER_NOTE               :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_quarter->s_name); break;
-        case PIZ_QUARTER_NOTE_TRIPLET       :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_quarterTriplet->s_name); break;
-        case PIZ_EIGHTH_NOTE_DOTTED         :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_eighthDotted->s_name); break;
-        case PIZ_EIGHTH_NOTE                    :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_eighth->s_name); break;
-        case PIZ_EIGHTH_NOTE_TRIPLET            :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_eighthTriplet->s_name); break;
-        case PIZ_SIXTEENTH_NOTE_DOTTED      :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_sixteenthDotted->s_name); break;
-        case PIZ_SIXTEENTH_NOTE             :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_sixteenth->s_name); break;
-        case PIZ_SIXTEENTH_NOTE_TRIPLET     :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_sixteenthTriplet->s_name); break;
-        case PIZ_THIRTY_SECOND_NOTE         :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_thirtySecond->s_name); break;
-        case PIZ_THIRTY_SECOND_NOTE_TRIPLET :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_thirtySecondTriplet->s_name); break;
-        case PIZ_NOTE_NONE                  :
-            snprintf (string, SIZE_STRING_MAX, "%s", tll_sym_none->s_name); break;
         }
+        
+    } else if (formatMode == MODE_FORMAT_TICKS) {
+        snprintf (string, SIZE_STRING_MAX, "%ld", value * TIME_TICKS_PER_STEP);
+        
+    } else if (formatMode == MODE_FORMAT_GRID) {
+        char *s = "Error";
+        
+        switch (value) {
+            case PIZ_WHOLE_NOTE_DOTTED          : s = tll_sym_wholeDotted->s_name;          break;
+            case PIZ_WHOLE_NOTE                 : s = tll_sym_whole->s_name;                break;
+            case PIZ_WHOLE_NOTE_TRIPLET         : s = tll_sym_wholeTriplet->s_name;         break;
+            case PIZ_HALF_NOTE_DOTTED           : s = tll_sym_halfDotted->s_name;           break;
+            case PIZ_HALF_NOTE                  : s = tll_sym_half->s_name;                 break;
+            case PIZ_HALF_NOTE_TRIPLET          : s = tll_sym_halfTriplet->s_name;          break;
+            case PIZ_QUARTER_NOTE_DOTTED        : s = tll_sym_quarterDotted->s_name;        break;
+            case PIZ_QUARTER_NOTE               : s = tll_sym_quarter->s_name;              break;
+            case PIZ_QUARTER_NOTE_TRIPLET       : s = tll_sym_quarterTriplet->s_name;       break;
+            case PIZ_EIGHTH_NOTE_DOTTED         : s = tll_sym_eighthDotted->s_name;         break;
+            case PIZ_EIGHTH_NOTE                : s = tll_sym_eighth->s_name;               break;
+            case PIZ_EIGHTH_NOTE_TRIPLET        : s = tll_sym_eighthTriplet->s_name;        break;
+            case PIZ_SIXTEENTH_NOTE_DOTTED      : s = tll_sym_sixteenthDotted->s_name;      break;
+            case PIZ_SIXTEENTH_NOTE             : s = tll_sym_sixteenth->s_name;            break;
+            case PIZ_SIXTEENTH_NOTE_TRIPLET     : s = tll_sym_sixteenthTriplet->s_name;     break;
+            case PIZ_THIRTY_SECOND_NOTE         : s = tll_sym_thirtySecond->s_name;         break;
+            case PIZ_THIRTY_SECOND_NOTE_TRIPLET : s = tll_sym_thirtySecondTriplet->s_name;  break;
+            case PIZ_NOTE_NONE                  : s = tll_sym_none->s_name;                 break;
+        }  
+        
+        snprintf (string, SIZE_STRING_MAX, "%s", s); 
     }
     
     string[SIZE_STRING_MAX - 1] = 0;
@@ -525,23 +501,23 @@ void tralala_unselectAllText (t_tralala *x)
     long i;
     
     for (i = 0; i < TEXT_CELL_COUNT; i++) {
-            x->textIsSelected[i] = false;
-        }
+        x->textIsSelected[i] = false;
+    }
 }
 
-bool tralala_hasSelectedText (t_tralala *x, long *selectedText)
+bool tralala_hasSelectedText (t_tralala *x, long *result)
 {
     long i;
-    bool isSelectedText = false;
+    bool isSelected = false;
     
     for (i = 0; i < TEXT_CELL_COUNT; i++) {
         if (x->textIsSelected[i]) {
-                isSelectedText = true;
-                *selectedText = i;
-            }
+            isSelected = true;
+            *result = i;
+        }
     }
     
-    return isSelectedText;
+    return isSelected;
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -580,28 +556,28 @@ void tralala_testAutoscroll (t_tralala *x, t_object *patcherview, t_pt pt)
     jbox_get_rect_for_view ((t_object *)x, patcherview, &rect); 
     
     if (pt.x < GUI_AUTOSCROLL_RANGE) {
-            DIRTYLAYER_SET (DIRTY_LOCATE_LEFT);
-            stop = false;
-        }
+        DIRTYLAYER_SET (DIRTY_LOCATE_LEFT);
+        stop = false;
+    }
         
     if ((rect.width - pt.x) < GUI_AUTOSCROLL_RANGE) {
-            DIRTYLAYER_SET (DIRTY_LOCATE_RIGHT);
-            stop = false;
-        }
+        DIRTYLAYER_SET (DIRTY_LOCATE_RIGHT);
+        stop = false;
+    }
         
     if ((rect.height - pt.y) < GUI_AUTOSCROLL_RANGE) {
-            DIRTYLAYER_SET (DIRTY_LOCATE_DOWN);
-            stop = false;
-        }
+        DIRTYLAYER_SET (DIRTY_LOCATE_DOWN);
+        stop = false;
+    }
         
     if (pt.y < GUI_AUTOSCROLL_RANGE) {
-            DIRTYLAYER_SET (DIRTY_LOCATE_UP);
-            stop = false;
-        }
+        DIRTYLAYER_SET (DIRTY_LOCATE_UP);
+        stop = false;
+    }
         
     if (stop) {
-            tralala_stopAutoscroll (x);
-        }
+        tralala_stopAutoscroll (x);
+    }
 }
 
 void tralala_stopAutoscroll (t_tralala *x)

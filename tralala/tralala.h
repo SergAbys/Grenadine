@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 20/02/12.
+ *  Last modified : 21/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -128,14 +128,14 @@
 #define HIT_UP                              (1<<4)
 #define HIT_ZONE                            (1<<5)
 #define HIT_TEXT                            (1<<6)
-#define HIT_LOCK                            (1<<7)
+#define HIT_LOCKED                          (1<<7)
 
 #define DIRTY_NONE                          (0L)
-#define DIRTY_REFRESH                       (1<<0)
-#define DIRTY_CHANGE                        (1<<1)
+#define DIRTY_LOAD                          (1<<0)
+#define DIRTY_TEXT                          (1<<1)
 #define DIRTY_GRID                          (1<<2)
-#define DIRTY_NOTES                         (1<<3)
-#define DIRTY_ZONE                          (1<<4)  
+#define DIRTY_ZONE                          (1<<3)  
+#define DIRTY_NOTES                         (1<<4)
 #define DIRTY_PLAYED                        (1<<5)
 #define DIRTY_LOCATE_LEFT                   (1<<6)
 #define DIRTY_LOCATE_RIGHT                  (1<<7)
@@ -262,6 +262,9 @@
 #define DIRTYCHANNEL    if (x->saveChannelWithPatcher) {                                    \
                                 jpatcher_set_dirty (jbox_get_patcher ((t_object *)x), 1);   \
                             }   
+
+#define ARRAYSLOCK      systhread_mutex_lock (&x->arraysMutex);
+#define ARRAYSUNLOCK    systhread_mutex_unlock (&x->arraysMutex);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -533,17 +536,18 @@ void            tralala_patcherview_invis       (t_tralala *x, t_object *patcher
 
 PIZ_LOCAL void  tralala_paintText               (t_tralala *x, t_object *patcherview);
 PIZ_LOCAL void  tralala_paintGrid               (t_tralala *x, t_object *patcherview);
-PIZ_LOCAL void  tralala_paintNotes              (t_tralala *x, t_object *patcherview);
-PIZ_LOCAL void  tralala_paintPlayedNotes        (t_tralala *x, t_object *patcherview);
 
-PIZ_LOCAL void  tralala_paintNoteCandycane      (t_tralala *x, 
+PIZ_LOCAL void  tralala_paintNotes              (t_tralala *x, t_object *patcherview);
+PIZ_LOCAL void  tralala_paintPlayed             (t_tralala *x, t_object *patcherview);
+
+PIZ_LOCAL void  tralala_paintCandy              (t_tralala *x, 
                                                 t_jgraphics *g,
                                                 long position,
                                                 long pitch,
                                                 long velocity,
                                                 long duration); 
-
-PIZ_LOCAL void  tralala_paintNoteWithColor      (t_tralala *x, 
+                                                
+PIZ_LOCAL void  tralala_paintColored            (t_tralala *x, 
                                                 t_jgraphics *g,
                                                 long position,
                                                 long pitch,
@@ -559,8 +563,8 @@ PIZ_LOCAL void  tralala_paintLasso              (t_tralala *x, t_object *patcher
 
 PIZ_LOCAL bool  tralala_moveSelectedNotes                   (t_tralala *x, long deltaPosition, long deltaPitch);
 PIZ_LOCAL bool  tralala_changeSelectedNotesDuration         (t_tralala *x, long deltaPosition);
+PIZ_LOCAL bool  tralala_changeSelectedNotesVelocity         (t_tralala *x, bool decrement);
 PIZ_LOCAL void  tralala_duplicateSelectedNotes              (t_tralala *x);
-PIZ_LOCAL void  tralala_changeSelectedNotesVelocity         (t_tralala *x, bool decrement);
 PIZ_LOCAL void  tralala_setSelectedNotesVelocity            (t_tralala *x, long velocity);
 PIZ_LOCAL void  tralala_setSelectedNotesChannel             (t_tralala *x, long channel);
 
@@ -568,7 +572,8 @@ PIZ_LOCAL long  tralala_hitZoneWithPoint                    (t_tralala *x, t_pt 
 PIZ_LOCAL long  tralala_hitTextWithPoint                    (t_tralala *x, t_object *patcherview, t_pt pt);
 PIZ_LOCAL bool  tralala_hitNotesByRunIndex                  (t_tralala *x);
 
-PIZ_LOCAL bool  tralala_setCursorType                       (t_tralala *x, t_object *patcherview, 
+PIZ_LOCAL bool  tralala_setCursorType                       (t_tralala *x, 
+                                                            t_object *patcherview, 
                                                             t_jmouse_cursortype type);
 
 PIZ_LOCAL bool  tralala_setCoordinatesWithPoint             (t_tralala *x, 
@@ -592,10 +597,8 @@ PIZ_LOCAL void  tralala_setStringWithLong                   (char *string,
                                                             long formatMode);
 
 PIZ_LOCAL void  tralala_unselectAllText                     (t_tralala *x);
-PIZ_LOCAL bool  tralala_hasSelectedText                     (t_tralala *x, long *selectedText);
-
+PIZ_LOCAL bool  tralala_hasSelectedText                     (t_tralala *x, long *result);
 PIZ_LOCAL void  tralala_willChange                          (t_tralala *x);
-
 PIZ_LOCAL void  tralala_testAutoscroll                      (t_tralala *x, t_object *patcherview, t_pt pt);
 PIZ_LOCAL void  tralala_stopAutoscroll                      (t_tralala *x);
 

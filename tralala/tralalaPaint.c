@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 20/02/12.
+ *  Last modified : 21/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -43,110 +43,106 @@ extern t_jsurface *tll_whole              [3];
 void tralala_paintTask (t_tralala *x) 
 {   
     PIZError    err = PIZ_GOOD;
+    PIZSequence *sequence = NULL;
     ulong       dirty = x->dirtyLayer;
     
     if (ATOMIC_INCREMENT (&x->paintLock) == 1) {
+    //
     
-    DIRTYLAYER_UNSET (~(DIRTY_GRID | DIRTY_ZONE | DIRTY_NOTES | DIRTY_CHANGE | DIRTY_REFRESH | DIRTY_PLAYED));
+    DIRTYLAYER_UNSET (~(DIRTY_LOAD | DIRTY_TEXT | DIRTY_GRID | DIRTY_ZONE | DIRTY_NOTES | DIRTY_PLAYED));
+        
+    ARRAYSLOCK
     
-    systhread_mutex_lock (&x->arraysMutex);
-    
-    if (LIVE && !(dirty & DIRTY_CHANGE) && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1))) {
+    if (LIVE && !(dirty & DIRTY_LOAD) && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1))) {
         if (tralala_hitNotesByRunIndex (x)) {           
             dirty |= DIRTY_PLAYED;
         }
     }
+    
+    if (dirty) {
+    //
+    
+    if (USER) {
+        sequence = x->user;
+    } else {
+        sequence = x->live;
+    }
+    
+    if (dirty & DIRTY_GRID) {   
+        jbox_invalidate_layer ((t_object*)x, NULL, tll_sym_gridLayer);
+    }
         
-    if (dirty) {   
-        if (dirty & DIRTY_LOCATE_LEFT) {
-            x->windowOffsetX    -= GUI_AUTOSCROLL_STEP;
-            x->originPoint.x    += GUI_AUTOSCROLL_STEP; 
-        }
-        
-        if (dirty & DIRTY_LOCATE_RIGHT) {
-            x->windowOffsetX    += GUI_AUTOSCROLL_STEP;
-            x->originPoint.x    -= GUI_AUTOSCROLL_STEP;
-        }
-        
-        if (dirty & DIRTY_LOCATE_DOWN) {
-            x->windowOffsetY    += GUI_AUTOSCROLL_STEP;
-            x->originPoint.y    -= GUI_AUTOSCROLL_STEP;
-        }
-        
-        if (dirty & DIRTY_LOCATE_UP) {
-            x->windowOffsetY    -= GUI_AUTOSCROLL_STEP;
-            x->originPoint.y    += GUI_AUTOSCROLL_STEP;
-        }
-            
-        if (dirty & DIRTY_GRID) {   
-            jbox_invalidate_layer ((t_object*)x, NULL, tll_sym_gridLayer);
-        }
-            
-        if (dirty & DIRTY_ZONE) {
-            if (dirty & DIRTY_CHANGE) {
-                PIZSequence *sequence = NULL;
-            
-                switch (x->sequenceMode) {
-                    case MODE_SEQUENCE_USER     : sequence = x->user;   break;
-                    case MODE_SEQUENCE_LIVE     : sequence = x->live;   break;
-                }
-            
-                if (sequence) {
-                    pizGrowingArrayClear (x->zone);
-                    
-                    if (x->flags & FLAG_ZONE_IS_SELECTED) {
-                        err = pizSequenceTempZoneToArray (sequence, x->zone);
-                    } else {
-                        err = pizSequenceZoneToArray (sequence, x->zone);
-                    }
-                }
-            }
-            
-            if (!err) {
-                jbox_invalidate_layer ((t_object*)x, NULL, tll_sym_zoneLayer);
-            }
-        }
-            
-        if (dirty & DIRTY_NOTES) {
-            if (dirty & DIRTY_CHANGE) {
-                pizGrowingArrayClear (x->unselected);
-                pizGrowingArrayClear (x->selected);
-                    
-                if (USER) {
-                    err = pizSequenceNotesToArray (x->user, x->unselected, x->selected);
-                } else {
-                    err = pizSequenceNotesToArray (x->live, x->unselected, x->unselected);
-                }
-                
-                if (LIVE && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1))) {    
-                    tralala_hitNotesByRunIndex (x);
-                    dirty |= DIRTY_PLAYED;
-                }
-            }
-                                            
-            if (!err) {
-                jbox_invalidate_layer ((t_object*)x, NULL, tll_sym_notesLayer);
+    if (dirty & DIRTY_ZONE) {
+        if (dirty & DIRTY_LOAD) {
+            pizGrowingArrayClear (x->zone);
+            if (x->flags & FLAG_ZONE_IS_SELECTED) {
+                pizSequenceTempZoneToArray (sequence, x->zone);
+            } else {
+                pizSequenceZoneToArray (sequence, x->zone);
             }
         }
         
-        if (dirty & DIRTY_PLAYED) {
-            jbox_invalidate_layer ((t_object*)x, NULL, tll_sym_playedNotesLayer);
+        jbox_invalidate_layer ((t_object*)x, NULL, tll_sym_zoneLayer);
+    }
+        
+    if (dirty & DIRTY_NOTES) {
+        if (dirty & DIRTY_LOAD) {
+            pizGrowingArrayClear (x->selected);
+            pizGrowingArrayClear (x->unselected);
+            if (USER) {
+                err = pizSequenceNotesToArray (sequence, x->unselected, x->selected);
+            } else {
+                err = pizSequenceNotesToArray (sequence, x->unselected, x->unselected);
+            }
+            
+            if (LIVE && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1))) {    
+                tralala_hitNotesByRunIndex (x);
+                dirty |= DIRTY_PLAYED;
+            }
         }
-        
-        err = PIZ_GOOD;
-        
-        err |= pizGrowingArrayCopy (x->zoneCopy, x->zone);
-        err |= pizGrowingArrayCopy (x->playedCopy, x->played);
-        err |= pizGrowingArrayCopy (x->selectedCopy, x->selected);
-        err |= pizGrowingArrayCopy (x->unselectedCopy, x->unselected);
-        
+                                        
         if (!err) {
-            jbox_redraw ((t_jbox *)x);
+            jbox_invalidate_layer ((t_object*)x, NULL, tll_sym_notesLayer);
         }
     }
     
-    systhread_mutex_unlock  (&x->arraysMutex);
-           
+    if (dirty & DIRTY_PLAYED) {
+        jbox_invalidate_layer ((t_object*)x, NULL, tll_sym_playedNotesLayer);
+    }
+    
+    err = PIZ_GOOD;
+    
+    err |= pizGrowingArrayCopy (x->zoneCopy, x->zone);
+    err |= pizGrowingArrayCopy (x->playedCopy, x->played);
+    err |= pizGrowingArrayCopy (x->selectedCopy, x->selected);
+    err |= pizGrowingArrayCopy (x->unselectedCopy, x->unselected);
+    
+    ARRAYSUNLOCK
+        
+    if (dirty & DIRTY_LOCATE_LEFT) {
+        x->windowOffsetX -= GUI_AUTOSCROLL_STEP;
+        x->originPoint.x += GUI_AUTOSCROLL_STEP; 
+    }
+    if (dirty & DIRTY_LOCATE_RIGHT) {
+        x->windowOffsetX += GUI_AUTOSCROLL_STEP;
+        x->originPoint.x -= GUI_AUTOSCROLL_STEP;
+    }
+    if (dirty & DIRTY_LOCATE_DOWN) {
+        x->windowOffsetY += GUI_AUTOSCROLL_STEP;
+        x->originPoint.y -= GUI_AUTOSCROLL_STEP;
+    }
+    if (dirty & DIRTY_LOCATE_UP) {
+        x->windowOffsetY -= GUI_AUTOSCROLL_STEP;
+        x->originPoint.y += GUI_AUTOSCROLL_STEP;
+    }
+    
+    if (!err) {
+        jbox_redraw ((t_jbox *)x);
+    }
+    
+    // 
+    }
+    //      
     } ATOMIC_DECREMENT (&x->paintLock);
     
     clock_fdelay (x->paintClock, CLOCK_PAINT_INTERVAL + CLOCK_RANDOMIZE * (rand ( ) / (RAND_MAX + 1.0)));
@@ -170,18 +166,14 @@ void tralala_notifyTask (t_tralala *x)
 
 void tralala_paint (t_tralala *x, t_object *patcherview)
 {   
-    if (!(x->flags & FLAG_INIT_PAINT_CLOCK)) {
-        clock_fdelay (x->paintClock, CLOCK_PAINT_INTERVAL + CLOCK_RANDOMIZE * (rand ( ) / (RAND_MAX + 1.0)));
-        x->flags |= FLAG_INIT_PAINT_CLOCK;
-    }
-    
     if (ATOMIC_INCREMENT (&x->paintLock) == 1) {
-        tralala_paintGrid (x, patcherview);
-        tralala_paintZone (x, patcherview);
-        tralala_paintNotes (x, patcherview);
+    
+        tralala_paintGrid   (x, patcherview);
+        tralala_paintZone   (x, patcherview);
+        tralala_paintNotes  (x, patcherview);
         
         if (LIVE && !(x->flags & FLAG_IS_MUTED)) {
-            tralala_paintPlayedNotes (x, patcherview);
+            tralala_paintPlayed (x, patcherview);
         }
 
         if (x->viewText) {
@@ -191,12 +183,13 @@ void tralala_paint (t_tralala *x, t_object *patcherview)
         if (x->flags & FLAG_IS_LASSO) {
             tralala_paintLasso (x, patcherview);
         }
-        
-        ATOMIC_DECREMENT (&x->paintLock);
-    } else {
-        DIRTYLAYER_SET (DIRTY_REFRESH);
-            
-        ATOMIC_DECREMENT (&x->paintLock);
+    } 
+    
+    ATOMIC_DECREMENT (&x->paintLock);
+    
+    if (!(x->flags & FLAG_INIT_PAINT_CLOCK)) {
+        x->flags |= FLAG_INIT_PAINT_CLOCK;
+        clock_fdelay (x->paintClock, CLOCK_PAINT_INTERVAL + CLOCK_RANDOMIZE * (rand ( ) / (RAND_MAX + 1.0)));
     }
 }
 
@@ -233,12 +226,12 @@ void tralala_focuslost (t_tralala *x, t_object *patcherview)
             pizSequencePutTempZone (x->user);
                 
             x->flags &= ~FLAG_ZONE_IS_SELECTED;
-            DIRTYLAYER_SET (DIRTY_CHANGE);
+            DIRTYLAYER_SET (DIRTY_LOAD);
         }
         
         if (x->flags & FLAG_IS_LASSO) {
             x->flags &= ~FLAG_IS_LASSO;
-            DIRTYLAYER_SET (DIRTY_REFRESH);
+            DIRTYLAYER_SET (DIRTY_TEXT);
         }
     
         tralala_stopAutoscroll (x);
@@ -248,7 +241,7 @@ void tralala_focuslost (t_tralala *x, t_object *patcherview)
     
     if (x->textMode != MODE_TEXT_NOTE) {
         x->textMode = MODE_TEXT_NOTE;
-        DIRTYLAYER_SET (DIRTY_REFRESH);
+        DIRTYLAYER_SET (DIRTY_TEXT);
     }
 
     DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED);
@@ -636,7 +629,7 @@ void tralala_paintNotes (t_tralala *x, t_object *patcherview)
                 long duration   = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
                                     + PIZ_DATA_DURATION);
                 
-                tralala_paintNoteCandycane (x, g, position, pitch, velocity, duration);
+                tralala_paintCandy (x, g, position, pitch, velocity, duration);
             }
         } else {
             for (i = 0; i < notesCount; i++) {
@@ -649,7 +642,7 @@ void tralala_paintNotes (t_tralala *x, t_object *patcherview)
                 long duration   = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
                                     + PIZ_DATA_DURATION);
                                             
-                tralala_paintNoteWithColor (x, g, position, pitch, velocity, duration, &color1);
+                tralala_paintColored (x, g, position, pitch, velocity, duration, &color1);
             }
         }
         
@@ -668,7 +661,7 @@ void tralala_paintNotes (t_tralala *x, t_object *patcherview)
                                 + PIZ_DATA_IS_MARKED);
             
             if (!isMarked) {
-                tralala_paintNoteWithColor (x, g, position, pitch, velocity, duration, &color2);
+                tralala_paintColored (x, g, position, pitch, velocity, duration, &color2);
             } else {
                 markedNotePosition  = position;
                 markedNotePitch     = pitch;
@@ -678,7 +671,7 @@ void tralala_paintNotes (t_tralala *x, t_object *patcherview)
         }
         
         if (markedNotePosition != -1) {
-            tralala_paintNoteWithColor (x, g, markedNotePosition, markedNotePitch, markedNoteVelocity,
+            tralala_paintColored (x, g, markedNotePosition, markedNotePitch, markedNoteVelocity,
                     markedNoteDuration, &color3);
         }
     
@@ -688,7 +681,7 @@ void tralala_paintNotes (t_tralala *x, t_object *patcherview)
     jbox_paint_layer ((t_object *)x, patcherview, tll_sym_notesLayer, -x->windowOffsetX, -x->windowOffsetY);
 }
 
-void tralala_paintPlayedNotes (t_tralala *x, t_object *patcherview)
+void tralala_paintPlayed (t_tralala *x, t_object *patcherview)
 {
     double      f = 1.;
     t_jgraphics *g = NULL;
@@ -724,7 +717,7 @@ void tralala_paintPlayedNotes (t_tralala *x, t_object *patcherview)
             long duration   = pizGrowingArrayValueAtIndex (x->playedCopy, (PIZ_DATA_NOTE_SIZE * i) 
                                 + PIZ_DATA_DURATION);
             
-            tralala_paintNoteWithColor (x, g, position, pitch, velocity, duration, &color);
+            tralala_paintColored (x, g, position, pitch, velocity, duration, &color);
         }
         
         jbox_end_layer ((t_object*)x, patcherview, tll_sym_playedNotesLayer);
@@ -733,8 +726,7 @@ void tralala_paintPlayedNotes (t_tralala *x, t_object *patcherview)
   jbox_paint_layer ((t_object *)x, patcherview, tll_sym_playedNotesLayer, -x->windowOffsetX, -x->windowOffsetY);
 }
 
-void tralala_paintNoteCandycane (t_tralala *x, t_jgraphics *g, long position, long pitch, long velocity, 
-long duration)
+void tralala_paintCandy (t_tralala *x, t_jgraphics *g, long p, long pitch, long v, long d)
 {
     long            noteTone;
     t_rect          noteRect;
@@ -743,10 +735,10 @@ long duration)
     t_jrgba         color;
     double          alpha = 0.75;
     
-    coordinates.position    = position;
+    coordinates.position    = p;
     coordinates.pitch       = pitch;
     
-    tralala_setRectWithCoordinatesAndDuration (x, &noteRect, &coordinates, duration);
+    tralala_setRectWithCoordinatesAndDuration (x, &noteRect, &coordinates, d);
     
     noteTone = pitch % 12;
     
@@ -765,7 +757,7 @@ long duration)
         case 11 : jrgba_to_atoms (&x->bNoteColor, temp);        break;
     } 
 
-    alpha = (double)(velocity + GUI_VELOCITY_OFFSET) / (double)PIZ_MAGIC_VELOCITY;
+    alpha = (double)(v + GUI_VELOCITY_OFFSET) / (double)PIZ_MAGIC_VELOCITY;
     
     if (alpha > 0.005) {
         atom_setfloat   (temp + 3, CLAMP (alpha, 0.25, 1.));
@@ -778,8 +770,7 @@ long duration)
     jgraphics_rectangle_fill_fast (g, noteRect.x, noteRect.y, noteRect.width, noteRect.height);
 }                                                       
                                                             
-void tralala_paintNoteWithColor (t_tralala *x, t_jgraphics *g, long position, long pitch, long velocity, 
-long duration, t_jrgba *color)
+void tralala_paintColored (t_tralala *x, t_jgraphics *g, long p, long pitch, long v, long d, t_jrgba *color)
 {
     t_rect          noteRect;
     PIZCoordinates  coordinates;
@@ -787,12 +778,12 @@ long duration, t_jrgba *color)
     t_atom          temp[4];
     double          alpha;
     
-    coordinates.position    = position;
+    coordinates.position    = p;
     coordinates.pitch       = pitch;
     
-    tralala_setRectWithCoordinatesAndDuration (x, &noteRect, &coordinates, duration);
+    tralala_setRectWithCoordinatesAndDuration (x, &noteRect, &coordinates, d);
     
-    alpha = (double)velocity / (double)PIZ_MAGIC_VELOCITY;
+    alpha = (double)v / (double)PIZ_MAGIC_VELOCITY;
     
     jrgba_to_atoms  (color, temp);
     atom_setfloat   (temp + 3, CLAMP (alpha, 0.25, 1.));

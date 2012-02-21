@@ -552,7 +552,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                 x->learnCycle       = PIZ_ALGORITHM_NONE;
                 x->learnThreshold   = SIZE_LEARN_MIN;
                 x->cell             = PIZ_NOTE_NONE;
-                x->dirtyLayer       = (DIRTY_ZONE | DIRTY_NOTES | DIRTY_GRID | DIRTY_CHANGE);
+                x->dirtyLayer       = (DIRTY_ZONE | DIRTY_NOTES | DIRTY_GRID | DIRTY_LOAD);
                 
                 pizSequenceSetGrid  (x->user, PIZ_EIGHTH_NOTE);
                 pizSequenceSetCell  (x->user, PIZ_EIGHTH_NOTE);
@@ -719,7 +719,7 @@ t_max_err tralala_setvalueof (t_tralala *x, long argc, t_atom *argv)
             
             if (!err) {
                 pizSequenceDecodeWithArray (x->user, tempArray);
-                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE);
+                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_LOAD);
                 DIRTYSLOTS
             }
             
@@ -991,7 +991,7 @@ t_max_err tralala_setSequenceMode (t_tralala *x, t_object *attr, long argc, t_at
         tralala_willChange (x);
         x->sequenceMode = CLAMP (k, MODE_SEQUENCE_USER, MODE_SEQUENCE_LIVE);
 
-        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_CHANGE | DIRTY_GRID);
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_LOAD | DIRTY_GRID);
     }
 
     return MAX_ERR_NONE;
@@ -1100,7 +1100,7 @@ t_max_err tralala_setScaleKey (t_tralala *x, t_object *attr, long argc, t_atom *
                     }
                 }
                 
-                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
+                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
             }
         }
     }
@@ -1200,7 +1200,7 @@ t_max_err tralala_setScaleType (t_tralala *x, t_object *attr, long argc, t_atom 
                     }
                     
                     if (LIVE) {
-                        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
+                        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
                     }
                 }
             }
@@ -1233,7 +1233,7 @@ t_max_err tralala_setScaleCustom (t_tralala *x, t_object *attr, long argc, t_ato
             }
             
             if (LIVE) {
-                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_CHANGE);
+                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
             }
         }
     }
