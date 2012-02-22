@@ -214,8 +214,8 @@ long tralala_hitZoneWithPoint (t_tralala *x, t_pt pt)
                         
     tralala_setRectWithZoneValues (x, &zoneRect, start, end, down, up);
     
-    zoneRect.x -= x->windowOffsetX;
-    zoneRect.y -= x->windowOffsetY;
+    zoneRect.x -= x->offsetX;
+    zoneRect.y -= x->offsetY;
     
     k = GUI_HIT_ZONE_RANGE;
     
@@ -362,8 +362,8 @@ bool tralala_setCoordinatesWithPoint (t_tralala *x, PIZCoordinates *coordinates,
         case MODE_ZOOM_C : f = 2.;  break;
     }
     
-    m = (long)((x->windowOffsetX + pt.x) / (GUI_PIXELS_PER_STEP * f));
-    n = PIZ_MAGIC_PITCH - MAX (((long)((x->windowOffsetY + pt.y) / (GUI_PIXELS_PER_SEMITONE * f))), 0);
+    m = (long)((x->offsetX + pt.x) / (GUI_PIXELS_PER_STEP * f));
+    n = PIZ_MAGIC_PITCH - MAX (((long)((x->offsetY + pt.y) / (GUI_PIXELS_PER_SEMITONE * f))), 0);
     
     coordinates->position = m;
     coordinates->pitch    = n;

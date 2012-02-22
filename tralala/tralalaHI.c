@@ -32,7 +32,7 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
             
     if (USER && CMD && !RIGHT && !CAPS) {
         if (!pizSequenceAddNoteWithCoordinates (x->user, &x->coordinates, PIZ_ADD_FLAG_SNAP)) {
-            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
+            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
                 
             DIRTYSLOTS
             DIRTYPATTR
@@ -47,17 +47,17 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
             
         pizSequenceInitTempZone (x->user);
 
-        DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_LOAD);
+        DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_SEQUENCE);
     } else if (USER && SHIFT && !RIGHT && !CAPS) {
         long k = pizSequenceInvertNoteWithCoordinates (x->user, &x->coordinates);
             
         if (k != -1) {
             x->hitTest = k;
-            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
+            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
         }
     } else if (USER && !CAPS && 
         (x->hitTest = pizSequenceSelectNoteWithCoordinates (x->user, &x->coordinates))) {
-        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
                         
         if (RIGHT) {
             tralala_popupRightClickMenu (x, pt, MODE_MENU_NOTE);
@@ -67,7 +67,7 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
         tralala_popupRightClickMenu (x, pt, MODE_MENU_SEQUENCE);
     } else if (USER) {
         pizSequenceUnselectAllNotes (x->user);
-        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
                     
         tralala_unselectAllText (x);
         DIRTYLAYER_SET (DIRTY_TEXT);
@@ -76,7 +76,7 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
 
 void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers)
 {
-    if (!RIGHT && USER && !(x->dirtyLayer & DIRTY_LOAD)) {
+    if (!RIGHT && USER && !(x->dirtyLayer & DIRTY_SEQUENCE)) {
         long        deltaPitch, deltaPosition;
         PIZError    err = PIZ_GOOD;
         long        selectedText = -1;
@@ -131,7 +131,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                 }
             }
             
-            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
+            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
         } else if (x->hitTest & HIT_LOCKED) {
             ;
         } else if ((x->hitTest == HIT_NOTE) && !err) {
@@ -187,7 +187,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
             tralala_testAutoscroll (x, patcherview, pt);
                 
             if (draw) {
-                DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_LOAD);
+                DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_SEQUENCE);
             }
         } else if (x->hitTest) {
             PIZCoordinates  c1;
@@ -201,12 +201,12 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
                 case MODE_ZOOM_C    : f = 2.;   break;
             }
 
-            c1.position = (long)((x->windowOffsetX + pt.x) / (GUI_PIXELS_PER_STEP * f));
-            c2.position = (long)((x->windowOffsetX + pt.x) / (GUI_PIXELS_PER_STEP * f));
+            c1.position = (long)((x->offsetX + pt.x) / (GUI_PIXELS_PER_STEP * f));
+            c2.position = (long)((x->offsetX + pt.x) / (GUI_PIXELS_PER_STEP * f));
             
-            c1.pitch = PIZ_MAGIC_PITCH - MAX (((long)((x->windowOffsetY + pt.y 
+            c1.pitch = PIZ_MAGIC_PITCH - MAX (((long)((x->offsetY + pt.y 
                 - (GUI_PIXELS_PER_SEMITONE / 2. * f)) / (GUI_PIXELS_PER_SEMITONE * f))), 0);
-            c2.pitch = PIZ_MAGIC_PITCH - MAX (((long)((x->windowOffsetY + pt.y 
+            c2.pitch = PIZ_MAGIC_PITCH - MAX (((long)((x->offsetY + pt.y 
                 + (GUI_PIXELS_PER_SEMITONE / 2. * f)) / (GUI_PIXELS_PER_SEMITONE * f))), 0);
                         
             switch (x->hitTest) {
@@ -225,11 +225,11 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
             tralala_testAutoscroll (x, patcherview, pt);
 
             if (draw) {
-                DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_LOAD);
+                DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_SEQUENCE);
             } 
         } else if (CAPS) {
-            x->windowOffsetX -= pt.x - x->previousPoint.x;
-            x->windowOffsetY -= pt.y - x->previousPoint.y;
+            x->offsetX -= pt.x - x->previousPoint.x;
+            x->offsetY -= pt.y - x->previousPoint.y;
                 
             tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_DRAGGINGHAND);
                 
@@ -240,11 +240,11 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
             
             if (x->flags & FLAG_ORIGIN_HAD_SHIFT_KEY) {
                 if (pizSequenceDragLasso (x->user, &x->originCoordinates, &x->coordinates, INVERT)) {
-                    DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
+                    DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
                 }
             } else if 
                 (pizSequenceDragLasso (x->user, &x->originCoordinates, &x->coordinates, SELECT)) {
-                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
+                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
             }
             
             tralala_testAutoscroll (x, patcherview, pt);
@@ -276,7 +276,7 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
         if (x->flags & FLAG_ZONE_IS_SELECTED) {
             pizSequencePutTempZone (x->user);
             x->flags &= ~FLAG_ZONE_IS_SELECTED;
-            DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_LOAD);
+            DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_SEQUENCE);
             
             DIRTYSLOTS 
             DIRTYPATTR
@@ -290,7 +290,7 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
             
             x->textMode     = MODE_TEXT_NOTE;
             x->flags        &= ~(FLAG_HAVE_MOVED | FLAG_HAVE_CHANGED | FLAG_HAVE_BEEN_DUPLICATED);
-            x->dirtyLayer   |= (DIRTY_NOTES | DIRTY_LOAD);
+            x->dirtyLayer   |= (DIRTY_NOTES | DIRTY_SEQUENCE);
             
             DIRTYSLOTS 
             DIRTYPATTR
@@ -399,17 +399,17 @@ void tralala_mousewheel (t_tralala *x, t_object *view, t_pt pt, long modifiers, 
         }
         
         if (k == 1) {
-            x->windowOffsetX = ((2. * x->windowOffsetX) + rect.width) - (rect.width  / 2.); 
-            x->windowOffsetY = ((2. * x->windowOffsetY) + rect.height) - (rect.height  / 2.); 
+            x->offsetX = ((2. * x->offsetX) + rect.width) - (rect.width  / 2.); 
+            x->offsetY = ((2. * x->offsetY) + rect.height) - (rect.height  / 2.); 
         } else if (k == 2) {
-            x->windowOffsetX = (((2. * x->windowOffsetX) + rect.width) / 4.) - (rect.width / 2.);
-            x->windowOffsetY = (((2. * x->windowOffsetY) + rect.height) / 4.) - (rect.height / 2.);
+            x->offsetX = (((2. * x->offsetX) + rect.width) / 4.) - (rect.width / 2.);
+            x->offsetY = (((2. * x->offsetY) + rect.height) / 4.) - (rect.height / 2.);
         }
         
         DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES);
     } else {
-        x->windowOffsetX -= x_inc * GUI_MOUSEWHEEL_FACTOR;
-        x->windowOffsetY -= y_inc * GUI_MOUSEWHEEL_FACTOR;
+        x->offsetX -= x_inc * GUI_MOUSEWHEEL_FACTOR;
+        x->offsetY -= y_inc * GUI_MOUSEWHEEL_FACTOR;
             
         DIRTYLAYER_SET (DIRTY_TEXT);
     }
@@ -431,18 +431,18 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
         
         DIRTYSLOTS 
         DIRTYPATTR
-        DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_LOAD);
+        DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_SEQUENCE);
     } else if (keycode == JKEY_DOWNARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
         pizSequenceTranspose (x->user, -PIZ_MAGIC_SCALE);
         
         DIRTYSLOTS 
         DIRTYPATTR
-        DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_LOAD);
+        DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_SEQUENCE);
     } else if (keycode == JKEY_ENTER) {
         tralala_setLiveByUser (x);
         
         if (LIVE) {
-            DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_LOAD);
+            DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_SEQUENCE);
         }
     } else if (keycode == JKEY_RIGHTARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
         if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
@@ -455,25 +455,25 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
     } else if (USER && ((keycode == JKEY_DELETE) || (keycode == JKEY_BACKSPACE))) {
         pizSequenceRemoveSelectedNotes (x->user);
         
-        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
         DIRTYSLOTS 
         DIRTYPATTR
     } else if (USER && CMD && !(x->flags & (FLAG_HAVE_MOVED | FLAG_HAVE_CHANGED | FLAG_HAVE_BEEN_DUPLICATED))) {
         if (ALL) {
             pizSequenceSelectAllNotes (x->user);
                 
-            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
+            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
         } else if (COPY)  {
             pizGrowingArrayClear (tll_clipboard);
             tll_clipboardError = pizSequenceNotesToArray (x->user, NULL, tll_clipboard);
                 
-            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
+            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
         } else if (CUT)  {
             pizGrowingArrayClear (tll_clipboard);
             tll_clipboardError = pizSequenceNotesToArray (x->user, NULL, tll_clipboard);
             pizSequenceRemoveSelectedNotes (x->user);
                 
-            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
+            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
         } else if (PASTE) {
             if (!tll_clipboardError) {
                 long count;
@@ -515,7 +515,7 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
                     
                     pizSequenceAddNotesWithArray (x->user, tll_clipboard, PIZ_ADD_FLAG_SNAP);
                         
-                    DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
+                    DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
                 }
             }
         }
@@ -529,25 +529,25 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
         if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
             if (!SHIFT) {
                 switch (keycode) {
-                    case 55 : pizSequenceSetGrid (x->user, PIZ_NOTE_NONE);          break;
-                    case 54 : pizSequenceSetGrid (x->user, PIZ_WHOLE_NOTE);         break;
-                    case 53 : pizSequenceSetGrid (x->user, PIZ_HALF_NOTE);          break;
-                    case 52 : pizSequenceSetGrid (x->user, PIZ_QUARTER_NOTE);       break;
-                    case 51 : pizSequenceSetGrid (x->user, PIZ_EIGHTH_NOTE);        break;
-                    case 50 : pizSequenceSetGrid (x->user, PIZ_SIXTEENTH_NOTE);     break;
-                    case 49 : pizSequenceSetGrid (x->user, PIZ_THIRTY_SECOND_NOTE); break;
+                    case 55 : pizSequenceSetGrid (x->user, x->grid = PIZ_NOTE_NONE);          break;
+                    case 54 : pizSequenceSetGrid (x->user, x->grid = PIZ_WHOLE_NOTE);         break;
+                    case 53 : pizSequenceSetGrid (x->user, x->grid = PIZ_HALF_NOTE);          break;
+                    case 52 : pizSequenceSetGrid (x->user, x->grid = PIZ_QUARTER_NOTE);       break;
+                    case 51 : pizSequenceSetGrid (x->user, x->grid = PIZ_EIGHTH_NOTE);        break;
+                    case 50 : pizSequenceSetGrid (x->user, x->grid = PIZ_SIXTEENTH_NOTE);     break;
+                    case 49 : pizSequenceSetGrid (x->user, x->grid = PIZ_THIRTY_SECOND_NOTE); break;
                     }
                 
                 DIRTYLAYER_SET (DIRTY_GRID);
             } else {
                 switch (keycode) {
-                    case 55 : pizSequenceSetNoteValue (x->user, PIZ_NOTE_NONE);         break;
-                    case 54 : pizSequenceSetNoteValue (x->user, PIZ_WHOLE_NOTE);        break;
-                    case 53 : pizSequenceSetNoteValue (x->user, PIZ_HALF_NOTE);         break;
-                    case 52 : pizSequenceSetNoteValue (x->user, PIZ_QUARTER_NOTE);      break;
-                    case 51 : pizSequenceSetNoteValue (x->user, PIZ_EIGHTH_NOTE);       break;
-                    case 50 : pizSequenceSetNoteValue (x->user, PIZ_SIXTEENTH_NOTE);    break;
-                    case 49 : pizSequenceSetNoteValue (x->user, PIZ_THIRTY_SECOND_NOTE);break;
+                    case 55 : pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_NOTE_NONE);          break;
+                    case 54 : pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_WHOLE_NOTE);         break;
+                    case 53 : pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_HALF_NOTE);          break;
+                    case 52 : pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_QUARTER_NOTE);       break;
+                    case 51 : pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_EIGHTH_NOTE);        break;
+                    case 50 : pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_SIXTEENTH_NOTE);     break;
+                    case 49 : pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_THIRTY_SECOND_NOTE); break;
                     }
                 
                 DIRTYLAYER_SET (DIRTY_TEXT);
@@ -586,10 +586,10 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
             }
             
             if (!SHIFT) {
-                pizSequenceSetGrid (x->user, new);
+                pizSequenceSetGrid (x->user, x->grid = new);
                 DIRTYLAYER_SET (DIRTY_GRID);
             } else {
-                pizSequenceSetNoteValue (x->user, new);
+                pizSequenceSetNoteValue (x->user, x->noteValue = new);
                 DIRTYLAYER_SET (DIRTY_TEXT);
             }
         } ATOMIC_DECREMENT (&x->popupLock);
@@ -625,10 +625,10 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
             }
             
             if (!SHIFT) {
-                pizSequenceSetGrid (x->user, new);
+                pizSequenceSetGrid (x->user, x->grid = new);
                 DIRTYLAYER_SET (DIRTY_GRID);
             } else {
-                pizSequenceSetNoteValue (x->user, new);
+                pizSequenceSetNoteValue (x->user, x->noteValue = new);
                 DIRTYLAYER_SET (DIRTY_TEXT);
             }
         } ATOMIC_DECREMENT (&x->popupLock);
@@ -928,24 +928,24 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
             
     switch (returnedPopupValue) {
         case 0      :   break;
-        case 10     :   pizSequenceSetGrid  (x->user, PIZ_NOTE_NONE);                    break;
-        case 11     :   pizSequenceSetGrid  (x->user, PIZ_WHOLE_NOTE);                   break;
-        case 12     :   pizSequenceSetGrid  (x->user, PIZ_HALF_NOTE);                    break;
-        case 13     :   pizSequenceSetGrid  (x->user, PIZ_QUARTER_NOTE);                 break;
-        case 14     :   pizSequenceSetGrid  (x->user, PIZ_EIGHTH_NOTE);                  break;
-        case 15     :   pizSequenceSetGrid  (x->user, PIZ_SIXTEENTH_NOTE);               break;
-        case 16     :   pizSequenceSetGrid  (x->user, PIZ_THIRTY_SECOND_NOTE);           break;
-        case 17     :   pizSequenceSetGrid  (x->user, PIZ_WHOLE_NOTE_TRIPLET);           break;
-        case 18     :   pizSequenceSetGrid  (x->user, PIZ_HALF_NOTE_TRIPLET);            break;
-        case 19     :   pizSequenceSetGrid  (x->user, PIZ_QUARTER_NOTE_TRIPLET);         break;
-        case 20     :   pizSequenceSetGrid  (x->user, PIZ_EIGHTH_NOTE_TRIPLET);          break;
-        case 21     :   pizSequenceSetGrid  (x->user, PIZ_SIXTEENTH_NOTE_TRIPLET);       break;
-        case 22     :   pizSequenceSetGrid  (x->user, PIZ_THIRTY_SECOND_NOTE_TRIPLET);   break;
-        case 23     :   pizSequenceSetGrid  (x->user, PIZ_WHOLE_NOTE_DOTTED);            break;
-        case 24     :   pizSequenceSetGrid  (x->user, PIZ_HALF_NOTE_DOTTED);             break;
-        case 25     :   pizSequenceSetGrid  (x->user, PIZ_QUARTER_NOTE_DOTTED);          break;
-        case 26     :   pizSequenceSetGrid  (x->user, PIZ_EIGHTH_NOTE_DOTTED);           break;
-        case 27     :   pizSequenceSetGrid  (x->user, PIZ_SIXTEENTH_NOTE_DOTTED);        break;
+        case 10     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_NOTE_NONE);                    break;
+        case 11     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_WHOLE_NOTE);                   break;
+        case 12     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_HALF_NOTE);                    break;
+        case 13     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_QUARTER_NOTE);                 break;
+        case 14     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_EIGHTH_NOTE);                  break;
+        case 15     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_SIXTEENTH_NOTE);               break;
+        case 16     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_THIRTY_SECOND_NOTE);           break;
+        case 17     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_WHOLE_NOTE_TRIPLET);           break;
+        case 18     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_HALF_NOTE_TRIPLET);            break;
+        case 19     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_QUARTER_NOTE_TRIPLET);         break;
+        case 20     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_EIGHTH_NOTE_TRIPLET);          break;
+        case 21     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_SIXTEENTH_NOTE_TRIPLET);       break;
+        case 22     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_THIRTY_SECOND_NOTE_TRIPLET);   break;
+        case 23     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_WHOLE_NOTE_DOTTED);            break;
+        case 24     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_HALF_NOTE_DOTTED);             break;
+        case 25     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_QUARTER_NOTE_DOTTED);          break;
+        case 26     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_EIGHTH_NOTE_DOTTED);           break;
+        case 27     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_SIXTEENTH_NOTE_DOTTED);        break;
         case 50     :   tralala_setSelectedNotesVelocity (x, 0);    x->flags |= FLAG_HAVE_CHANGED; break;
         case 51     :   tralala_setSelectedNotesVelocity (x, 8);    x->flags |= FLAG_HAVE_CHANGED; break;
         case 52     :   tralala_setSelectedNotesVelocity (x, 16);   x->flags |= FLAG_HAVE_CHANGED; break;
@@ -982,24 +982,24 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
         case 214    :   tralala_setSelectedNotesChannel (x, 14); x->flags |= FLAG_HAVE_CHANGED; break;
         case 215    :   tralala_setSelectedNotesChannel (x, 15); x->flags |= FLAG_HAVE_CHANGED; break;
         case 216    :   tralala_setSelectedNotesChannel (x, 16); x->flags |= FLAG_HAVE_CHANGED; break;
-        case 300    :   pizSequenceSetNoteValue (x->user, PIZ_NOTE_NONE);                   break;
-        case 301    :   pizSequenceSetNoteValue (x->user, PIZ_WHOLE_NOTE);                  break;
-        case 302    :   pizSequenceSetNoteValue (x->user, PIZ_HALF_NOTE);                   break;
-        case 303    :   pizSequenceSetNoteValue (x->user, PIZ_QUARTER_NOTE);                break;
-        case 304    :   pizSequenceSetNoteValue (x->user, PIZ_EIGHTH_NOTE);                 break;
-        case 305    :   pizSequenceSetNoteValue (x->user, PIZ_SIXTEENTH_NOTE);              break;
-        case 306    :   pizSequenceSetNoteValue (x->user, PIZ_THIRTY_SECOND_NOTE);          break;
-        case 307    :   pizSequenceSetNoteValue (x->user, PIZ_WHOLE_NOTE_TRIPLET);          break;
-        case 308    :   pizSequenceSetNoteValue (x->user, PIZ_HALF_NOTE_TRIPLET);           break;
-        case 309    :   pizSequenceSetNoteValue (x->user, PIZ_QUARTER_NOTE_TRIPLET);        break;
-        case 310    :   pizSequenceSetNoteValue (x->user, PIZ_EIGHTH_NOTE_TRIPLET);         break;
-        case 311    :   pizSequenceSetNoteValue (x->user, PIZ_SIXTEENTH_NOTE_TRIPLET);      break;
-        case 312    :   pizSequenceSetNoteValue (x->user, PIZ_THIRTY_SECOND_NOTE_TRIPLET);  break;
-        case 313    :   pizSequenceSetNoteValue (x->user, PIZ_WHOLE_NOTE_DOTTED);           break;
-        case 314    :   pizSequenceSetNoteValue (x->user, PIZ_HALF_NOTE_DOTTED);            break;
-        case 315    :   pizSequenceSetNoteValue (x->user, PIZ_QUARTER_NOTE_DOTTED);         break;
-        case 316    :   pizSequenceSetNoteValue (x->user, PIZ_EIGHTH_NOTE_DOTTED);          break;
-        case 317    :   pizSequenceSetNoteValue (x->user, PIZ_SIXTEENTH_NOTE_DOTTED);       break;
+        case 300    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_NOTE_NONE);                  break;
+        case 301    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_WHOLE_NOTE);                 break;
+        case 302    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_HALF_NOTE);                  break;
+        case 303    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_QUARTER_NOTE);               break;
+        case 304    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_EIGHTH_NOTE);                break;
+        case 305    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_SIXTEENTH_NOTE);             break;
+        case 306    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_THIRTY_SECOND_NOTE);         break;
+        case 307    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_WHOLE_NOTE_TRIPLET);         break;
+        case 308    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_HALF_NOTE_TRIPLET);          break;
+        case 309    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_QUARTER_NOTE_TRIPLET);       break;
+        case 310    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_EIGHTH_NOTE_TRIPLET);        break;
+        case 311    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_SIXTEENTH_NOTE_TRIPLET);     break;
+        case 312    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_THIRTY_SECOND_NOTE_TRIPLET); break;
+        case 313    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_WHOLE_NOTE_DOTTED);          break;
+        case 314    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_HALF_NOTE_DOTTED);           break;
+        case 315    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_QUARTER_NOTE_DOTTED);        break;
+        case 316    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_EIGHTH_NOTE_DOTTED);         break;
+        case 317    :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_SIXTEENTH_NOTE_DOTTED);      break;
         case 501    :   object_attr_setlong (x, tll_sym_channel, 1);  break;
         case 502    :   object_attr_setlong (x, tll_sym_channel, 2);  break;
         case 503    :   object_attr_setlong (x, tll_sym_channel, 3);  break;

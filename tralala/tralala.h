@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 21/02/12.
+ *  Last modified : 22/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@
 #define SIZE_LEARN_RANGE                    4
 #define SIZE_LEARN_ARRAY                    8
 #define SIZE_STRING_MAX                     75
-#define SIZE_PATTERN_MAX                    28
+#define SIZE_PATTERN_MAX                    21
 #define SIZE_NOVEMBER_MAX                   10
 #define SIZE_JULIET_MAX                     10
 
@@ -131,12 +131,12 @@
 #define HIT_LOCKED                          (1<<7)
 
 #define DIRTY_NONE                          (0L)
-#define DIRTY_LOAD                          (1<<0)
-#define DIRTY_TEXT                          (1<<1)
-#define DIRTY_GRID                          (1<<2)
-#define DIRTY_ZONE                          (1<<3)  
-#define DIRTY_NOTES                         (1<<4)
-#define DIRTY_PLAYED                        (1<<5)
+#define DIRTY_TEXT                          (1<<0)
+#define DIRTY_GRID                          (1<<1)
+#define DIRTY_ZONE                          (1<<2)  
+#define DIRTY_NOTES                         (1<<3)
+#define DIRTY_PLAYED                        (1<<4)
+#define DIRTY_SEQUENCE                      (1<<5)                      
 #define DIRTY_LOCATE_LEFT                   (1<<6)
 #define DIRTY_LOCATE_RIGHT                  (1<<7)
 #define DIRTY_LOCATE_DOWN                   (1<<8)
@@ -348,6 +348,13 @@ typedef struct _tralala {
     PIZNoteValue        cell;
     PIZScaleKey         key;
     PIZScaleType        type;
+    PIZNoteValue        grid;
+    PIZNoteValue        noteValue;
+    long                isMarkedNote;
+    long                markedPitch;
+    long                markedVelocity;
+    long                markedDuration;
+    long                markedChannel;
     long                mousePitchValue;
     long                mouseVelocityValue;
     long                zoomMode;
@@ -369,8 +376,8 @@ typedef struct _tralala {
     PIZGrowingArray     *unselectedCopy;
     PIZCoordinates      coordinates;
     PIZCoordinates      originCoordinates;   
-    double              windowOffsetX;
-    double              windowOffsetY;
+    double              offsetX;
+    double              offsetY;
     t_jmouse_cursortype cursorType;
     t_pt                point;
     t_pt                originPoint;
@@ -536,28 +543,19 @@ void            tralala_patcherview_invis       (t_tralala *x, t_object *patcher
 
 PIZ_LOCAL void  tralala_paintText               (t_tralala *x, t_object *patcherview);
 PIZ_LOCAL void  tralala_paintGrid               (t_tralala *x, t_object *patcherview);
-
 PIZ_LOCAL void  tralala_paintNotes              (t_tralala *x, t_object *patcherview);
 PIZ_LOCAL void  tralala_paintPlayed             (t_tralala *x, t_object *patcherview);
+PIZ_LOCAL void  tralala_paintZone               (t_tralala *x, t_object *patcherview);
+PIZ_LOCAL void  tralala_paintLasso              (t_tralala *x, t_object *patcherview);
 
-PIZ_LOCAL void  tralala_paintCandy              (t_tralala *x, 
-                                                t_jgraphics *g,
-                                                long position,
-                                                long pitch,
-                                                long velocity,
-                                                long duration); 
-                                                
-PIZ_LOCAL void  tralala_paintColored            (t_tralala *x, 
+PIZ_LOCAL void  tralala_noteWithColor           (t_tralala *x, 
                                                 t_jgraphics *g,
                                                 long position,
                                                 long pitch,
                                                 long velocity,
                                                 long duration,
                                                 t_jrgba *color);
-
-PIZ_LOCAL void  tralala_paintZone               (t_tralala *x, t_object *patcherview);
-PIZ_LOCAL void  tralala_paintLasso              (t_tralala *x, t_object *patcherview);
-
+                                                
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 

@@ -203,11 +203,11 @@ CLASS_ATTR_FILTER_CLIP      (c, "viewtext",         0, 1);
 
 CLASS_STICKY_ATTR           (c, "category",         0, "Window");
 
-CLASS_ATTR_DOUBLE           (c, "windowoffsetx",    0, t_tralala, windowOffsetX);
+CLASS_ATTR_DOUBLE           (c, "windowoffsetx",    0, t_tralala, offsetX);
 CLASS_ATTR_DEFAULT          (c, "windowoffsetx",    0, DEFAULT_WINDOW_OFFSET_X);
 CLASS_ATTR_LABEL            (c, "windowoffsetx",    0, "Window X Offset");
 
-CLASS_ATTR_DOUBLE           (c, "windowoffsety",    0, t_tralala, windowOffsetY);
+CLASS_ATTR_DOUBLE           (c, "windowoffsety",    0, t_tralala, offsetY);
 CLASS_ATTR_DEFAULT          (c, "windowoffsety",    0, DEFAULT_WINDOW_OFFSET_Y);
 CLASS_ATTR_LABEL            (c, "windowoffsety",    0, "Window Y Offset");
 
@@ -545,16 +545,17 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                 
                 attr_dictionary_process (x, d);
 
-                x->flags            = FLAG_NONE;
+                x->flags            = FLAG_INIT_PAINT_CLOCK;
                 x->textMode         = MODE_TEXT_NOTE;
                 x->hitTest          = HIT_NOTHING;
                 x->cursorType       = JMOUSE_CURSOR_ARROW;
                 x->learnCycle       = PIZ_ALGORITHM_NONE;
                 x->learnThreshold   = SIZE_LEARN_MIN;
                 x->cell             = PIZ_NOTE_NONE;
-                x->dirtyLayer       = (DIRTY_ZONE | DIRTY_NOTES | DIRTY_GRID | DIRTY_LOAD);
+                x->noteValue        = PIZ_NOTE_NONE;
+                x->dirtyLayer       = (DIRTY_ZONE | DIRTY_NOTES | DIRTY_GRID | DIRTY_SEQUENCE);
                 
-                pizSequenceSetGrid  (x->user, PIZ_EIGHTH_NOTE);
+                pizSequenceSetGrid  (x->user, x->grid = PIZ_EIGHTH_NOTE);
                 pizSequenceSetCell  (x->user, PIZ_EIGHTH_NOTE);
                 pizLinklistSetFlags (x->slots, PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY);
                 
@@ -719,7 +720,7 @@ t_max_err tralala_setvalueof (t_tralala *x, long argc, t_atom *argv)
             
             if (!err) {
                 pizSequenceDecodeWithArray (x->user, tempArray);
-                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_LOAD);
+                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_SEQUENCE);
                 DIRTYSLOTS
             }
             
@@ -794,8 +795,8 @@ void tralala_dataToDictionary (t_tralala *x, t_dictionary *d)
             dictionary_appendlong   (d, tll_sym_version, PIZ_SEQUENCE_VERSION_MAJOR);
             dictionary_appendlong   (d, tll_sym_sequenceMode, x->sequenceMode);
             dictionary_appendlong   (d, tll_sym_zoomMode, x->zoomMode);
-            dictionary_appendfloat  (d, tll_sym_windowOffsetX, x->windowOffsetX);
-            dictionary_appendfloat  (d, tll_sym_windowOffsetY, x->windowOffsetY); 
+            dictionary_appendfloat  (d, tll_sym_windowOffsetX, x->offsetX);
+            dictionary_appendfloat  (d, tll_sym_windowOffsetY, x->offsetY); 
             
             if (x->saveSlotsWithPatcher) {
                 long            index = 0;
@@ -875,8 +876,8 @@ void tralala_dataWithDictionary (t_tralala *x, t_dictionary *d)
             long channel = -1;
             
             dictionary_getlong  (d, tll_sym_zoomMode, &x->zoomMode);
-            dictionary_getfloat (d, tll_sym_windowOffsetX, &x->windowOffsetX);
-            dictionary_getfloat (d, tll_sym_windowOffsetY, &x->windowOffsetY);
+            dictionary_getfloat (d, tll_sym_windowOffsetX, &x->offsetX);
+            dictionary_getfloat (d, tll_sym_windowOffsetY, &x->offsetY);
             dictionary_getlong  (d, tll_sym_sequenceMode, &sequenceMode);
             
             if (x->saveChannelWithPatcher) {
@@ -991,7 +992,7 @@ t_max_err tralala_setSequenceMode (t_tralala *x, t_object *attr, long argc, t_at
         tralala_willChange (x);
         x->sequenceMode = CLAMP (k, MODE_SEQUENCE_USER, MODE_SEQUENCE_LIVE);
 
-        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_LOAD | DIRTY_GRID);
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_SEQUENCE | DIRTY_GRID);
     }
 
     return MAX_ERR_NONE;
@@ -1100,7 +1101,7 @@ t_max_err tralala_setScaleKey (t_tralala *x, t_object *attr, long argc, t_atom *
                     }
                 }
                 
-                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
+                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
             }
         }
     }
@@ -1200,7 +1201,7 @@ t_max_err tralala_setScaleType (t_tralala *x, t_object *attr, long argc, t_atom 
                     }
                     
                     if (LIVE) {
-                        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
+                        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
                     }
                 }
             }
@@ -1233,7 +1234,7 @@ t_max_err tralala_setScaleCustom (t_tralala *x, t_object *attr, long argc, t_ato
             }
             
             if (LIVE) {
-                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_LOAD);
+                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
             }
         }
     }

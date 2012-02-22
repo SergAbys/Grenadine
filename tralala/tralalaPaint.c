@@ -8,13 +8,18 @@
  */
 
 /*
- *  Last modified : 21/02/12.
+ *  Last modified : 22/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #include "tralala.h"
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define STRINGSAFE      textCell[SIZE_STRING_MAX - 1] = 0;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -49,11 +54,11 @@ void tralala_paintTask (t_tralala *x)
     if (ATOMIC_INCREMENT (&x->paintLock) == 1) {
     //
     
-    DIRTYLAYER_UNSET (~(DIRTY_LOAD | DIRTY_TEXT | DIRTY_GRID | DIRTY_ZONE | DIRTY_NOTES | DIRTY_PLAYED));
+    DIRTYLAYER_UNSET (~(DIRTY_SEQUENCE | DIRTY_TEXT | DIRTY_GRID | DIRTY_ZONE | DIRTY_NOTES | DIRTY_PLAYED));
         
     ARRAYSLOCK
     
-    if (LIVE && !(dirty & DIRTY_LOAD) && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1))) {
+    if (LIVE && !(dirty & DIRTY_SEQUENCE) && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1))) {
         if (tralala_hitNotesByRunIndex (x)) {           
             dirty |= DIRTY_PLAYED;
         }
@@ -73,8 +78,10 @@ void tralala_paintTask (t_tralala *x)
     }
         
     if (dirty & DIRTY_ZONE) {
-        if (dirty & DIRTY_LOAD) {
+        if (dirty & DIRTY_SEQUENCE) {
+        
             pizGrowingArrayClear (x->zone);
+            
             if (x->flags & FLAG_ZONE_IS_SELECTED) {
                 pizSequenceTempZoneToArray (sequence, x->zone);
             } else {
@@ -86,9 +93,20 @@ void tralala_paintTask (t_tralala *x)
     }
         
     if (dirty & DIRTY_NOTES) {
-        if (dirty & DIRTY_LOAD) {
+        if (dirty & DIRTY_SEQUENCE) {
+        
+            if (USER) {  
+                if (x->isMarkedNote = pizSequenceHasMarkedNote (x->user)) {
+                    x->markedPitch      = pizSequenceMarkedNoteValue (x->user, PIZ_PITCH);
+                    x->markedVelocity   = pizSequenceMarkedNoteValue (x->user, PIZ_VELOCITY);
+                    x->markedDuration   = pizSequenceMarkedNoteValue (x->user, PIZ_DURATION);
+                    x->markedChannel    = pizSequenceMarkedNoteValue (x->user, PIZ_CHANNEL);
+                }
+            }
+        
             pizGrowingArrayClear (x->selected);
             pizGrowingArrayClear (x->unselected);
+            
             if (USER) {
                 err = pizSequenceNotesToArray (sequence, x->unselected, x->selected);
             } else {
@@ -120,20 +138,20 @@ void tralala_paintTask (t_tralala *x)
     ARRAYSUNLOCK
         
     if (dirty & DIRTY_LOCATE_LEFT) {
-        x->windowOffsetX -= GUI_AUTOSCROLL_STEP;
-        x->originPoint.x += GUI_AUTOSCROLL_STEP; 
+        x->offsetX          -= GUI_AUTOSCROLL_STEP;
+        x->originPoint.x    += GUI_AUTOSCROLL_STEP; 
     }
     if (dirty & DIRTY_LOCATE_RIGHT) {
-        x->windowOffsetX += GUI_AUTOSCROLL_STEP;
-        x->originPoint.x -= GUI_AUTOSCROLL_STEP;
+        x->offsetX          += GUI_AUTOSCROLL_STEP;
+        x->originPoint.x    -= GUI_AUTOSCROLL_STEP;
     }
     if (dirty & DIRTY_LOCATE_DOWN) {
-        x->windowOffsetY += GUI_AUTOSCROLL_STEP;
-        x->originPoint.y -= GUI_AUTOSCROLL_STEP;
+        x->offsetY          += GUI_AUTOSCROLL_STEP;
+        x->originPoint.y    -= GUI_AUTOSCROLL_STEP;
     }
     if (dirty & DIRTY_LOCATE_UP) {
-        x->windowOffsetY -= GUI_AUTOSCROLL_STEP;
-        x->originPoint.y += GUI_AUTOSCROLL_STEP;
+        x->offsetY          -= GUI_AUTOSCROLL_STEP;
+        x->originPoint.y    += GUI_AUTOSCROLL_STEP;
     }
     
     if (!err) {
@@ -187,8 +205,8 @@ void tralala_paint (t_tralala *x, t_object *patcherview)
     
     ATOMIC_DECREMENT (&x->paintLock);
     
-    if (!(x->flags & FLAG_INIT_PAINT_CLOCK)) {
-        x->flags |= FLAG_INIT_PAINT_CLOCK;
+    if (x->flags & FLAG_INIT_PAINT_CLOCK) {
+        x->flags &= ~FLAG_INIT_PAINT_CLOCK;
         clock_fdelay (x->paintClock, CLOCK_PAINT_INTERVAL + CLOCK_RANDOMIZE * (rand ( ) / (RAND_MAX + 1.0)));
     }
 }
@@ -217,46 +235,24 @@ void tralala_focuslost (t_tralala *x, t_object *patcherview)
 {
     clock_unset (x->focusClock);
     
+    tralala_willChange (x);
+    
     x->flags &= ~FLAG_FOCUS;
-    
     tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_ARROW);
-    
-    if (USER) {
-        if (x->flags & FLAG_ZONE_IS_SELECTED) {
-            pizSequencePutTempZone (x->user);
-                
-            x->flags &= ~FLAG_ZONE_IS_SELECTED;
-            DIRTYLAYER_SET (DIRTY_LOAD);
-        }
-        
-        if (x->flags & FLAG_IS_LASSO) {
-            x->flags &= ~FLAG_IS_LASSO;
-            DIRTYLAYER_SET (DIRTY_TEXT);
-        }
-    
-        tralala_stopAutoscroll (x);
-        
-        x->hitTest = HIT_NOTHING;
-    }
-    
-    if (x->textMode != MODE_TEXT_NOTE) {
-        x->textMode = MODE_TEXT_NOTE;
-        DIRTYLAYER_SET (DIRTY_TEXT);
-    }
 
-    DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED);
+    DIRTYLAYER_SET (DIRTY_TEXT | DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED);
 }
 
 void tralala_patcherview_vis (t_tralala *x, t_object *patcherview)
 {
-    DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED);
+    DIRTYLAYER_SET (DIRTY_TEXT | DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED);
     
     clock_fdelay (x->paintClock, 0.);
 }
 
 void tralala_patcherview_invis (t_tralala *x, t_object *patcherview)
 {
-    clock_unset  (x->paintClock);
+    clock_unset (x->paintClock);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -265,7 +261,8 @@ void tralala_patcherview_invis (t_tralala *x, t_object *patcherview)
 
 void tralala_paintText (t_tralala *x, t_object *patcherview)
 {
-    long                            i;
+    long                            i, t;
+    long                            down, up;
     bool                            draw = false;
     double                          k = GUI_TEXT_SPACE;
     t_jgraphics                     *g = NULL;
@@ -276,9 +273,14 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
     double                          fontSize, textHeight;
     t_atom                          color[4];
     char                            textCell[SIZE_STRING_MAX];
+    char                            temp[SIZE_STRING_MAX];
+    long                            textValues[TEXT_CELL_COUNT]; 
     t_jrgba                         backgroundTextColor;
-    t_jgraphics_textlayout_flags    flags = (t_jgraphics_textlayout_flags)
-                                    (JGRAPHICS_TEXTLAYOUT_NOWRAP | JGRAPHICS_TEXTLAYOUT_USEELLIPSIS); 
+    t_jgraphics_textlayout_flags    flags;
+    t_jgraphics_text_justification  justification;
+    
+    flags = (t_jgraphics_textlayout_flags)(JGRAPHICS_TEXTLAYOUT_NOWRAP | JGRAPHICS_TEXTLAYOUT_USEELLIPSIS); 
+    justification = (t_jgraphics_text_justification) (JGRAPHICS_TEXT_JUSTIFICATION_LEFT);
     
     snprintf (textCell, SIZE_STRING_MAX, "Error");
     
@@ -296,180 +298,125 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
     atom_setfloat   (color + 3, GUI_TEXT_BACKGROUND_ALPHA);
     atoms_to_jrgba  (4, color, &backgroundTextColor);
     
-    if (x->textMode == MODE_TEXT_NOTE && USER) {
-        if (pizSequenceHasMarkedNote (x->user)) {
-            long textValues[TEXT_CELL_COUNT];           
-            
-            textValues[TEXT_ORDER_VELOCITY] = pizSequenceMarkedNoteValue (x->user, PIZ_VELOCITY);
-            textValues[TEXT_ORDER_DURATION] = pizSequenceMarkedNoteValue (x->user, PIZ_DURATION);
-            textValues[TEXT_ORDER_CHANNEL]  = pizSequenceMarkedNoteValue (x->user, PIZ_CHANNEL);
-            textValues[TEXT_ORDER_PITCH]    = pizSequenceMarkedNoteValue (x->user, PIZ_PITCH);
-            
-            x->textPosition[0] = GUI_TEXT_SPACE;
-            
-            for (i = 0; i < TEXT_CELL_COUNT; i++) {
-                switch (i)  {
-                case TEXT_ORDER_PITCH       : tralala_setStringWithLong (textCell, textValues[i], 
-                                                MODE_FORMAT_NOTENAME); break;
-                case TEXT_ORDER_DURATION    : tralala_setStringWithLong (textCell, textValues[i], 
-                                                MODE_FORMAT_TICKS); break;
-                default                     : tralala_setStringWithLong (textCell, textValues[i], 
-                                                MODE_FORMAT_LONG); break;
-                }
-                
-                jtextlayout_set (x->textLayers[i], textCell, font, x->textPosition[i], 
-                    (rect.height - (fontSize + GUI_TEXT_SPACE)), (rect.width - k), fontSize, 
-                    (t_jgraphics_text_justification) (JGRAPHICS_TEXT_JUSTIFICATION_LEFT), flags);
-                
-                jtextlayout_measure (x->textLayers[i], 0, -1, 1, &x->textWidth[i], &textHeight, &numlines);
-                
-                k += (x->textWidth[i] + GUI_TEXT_SPACE);
-                
-                if (i < (TEXT_CELL_COUNT - 1)) {
-                    x->textPosition[i + 1] = x->textPosition[i] + (x->textWidth[i] + GUI_TEXT_SPACE);
-                }
-                
-                if (x->flags & FLAG_FOCUS) {
-                    if (x->textIsSelected[i]) {
-                        jtextlayout_settextcolor (x->textLayers[i], &x->selectedTextColor);
-                    } else {
-                        jtextlayout_settextcolor (x->textLayers[i], &x->focusedTextColor);
-                    }
-                } else {
-                    jtextlayout_settextcolor (x->textLayers[i], &x->unfocusedTextColor);
-                }
-            }
-            
-            jgraphics_set_source_jrgba (g, &backgroundTextColor);
-
-            jgraphics_rectangle_fill_fast (g, 0., (rect.height - (fontSize + GUI_TEXT_SPACE)), 
-                k, textHeight);
+    if (x->textMode == MODE_TEXT_NOTE && USER && x->isMarkedNote) {  
+        textValues[TEXT_ORDER_VELOCITY] = x->markedVelocity;
+        textValues[TEXT_ORDER_DURATION] = x->markedDuration;
+        textValues[TEXT_ORDER_CHANNEL]  = x->markedChannel;
+        textValues[TEXT_ORDER_PITCH]    = x->markedPitch;
         
-            for (i = 0; i < TEXT_CELL_COUNT; i++) {
-                jtextlayout_draw (x->textLayers[i], g);
+        x->textPosition[0] = GUI_TEXT_SPACE;
+        
+        for (i = 0; i < TEXT_CELL_COUNT; i++) {
+            switch (i)  {
+                case    TEXT_ORDER_PITCH    : t = MODE_FORMAT_NOTENAME;  break;
+                case    TEXT_ORDER_DURATION : t = MODE_FORMAT_TICKS;     break;
+                default                     : t = MODE_FORMAT_LONG;      break;
             }
+            
+            tralala_setStringWithLong (textCell, textValues[i], t);
+                                            
+            jtextlayout_set (x->textLayers[i], 
+                            textCell, 
+                            font, 
+                            x->textPosition[i], 
+                            (rect.height - (fontSize + GUI_TEXT_SPACE)), 
+                            (rect.width - k), 
+                            fontSize, 
+                            justification, flags);
+            
+            jtextlayout_measure (x->textLayers[i], 0, -1, 1, &x->textWidth[i], &textHeight, &numlines);
+            
+            k += (x->textWidth[i] + GUI_TEXT_SPACE);
+            
+            if (i < (TEXT_CELL_COUNT - 1)) {
+                x->textPosition[i + 1] = x->textPosition[i] + (x->textWidth[i] + GUI_TEXT_SPACE);
+            }
+            
+            if (x->flags & FLAG_FOCUS) {
+                if (x->textIsSelected[i]) {
+                    jtextlayout_settextcolor (x->textLayers[i], &x->selectedTextColor);
+                } else {
+                    jtextlayout_settextcolor (x->textLayers[i], &x->focusedTextColor);
+                }
+            } else {
+                jtextlayout_settextcolor (x->textLayers[i], &x->unfocusedTextColor);
+            }
+        }
+        
+        jgraphics_set_source_jrgba (g, &backgroundTextColor);
+        jgraphics_rectangle_fill_fast (g, 0., (rect.height - (fontSize + GUI_TEXT_SPACE)), k, textHeight);
+    
+        for (i = 0; i < TEXT_CELL_COUNT; i++) {
+            jtextlayout_draw (x->textLayers[i], g);
+        }
+        
+    } else if (x->textMode == MODE_TEXT_NOTE && USER) {
+        draw = true;
+        tralala_setStringWithLong (temp, x->grid, MODE_FORMAT_GRID);
+        
+        snprintf (textCell, SIZE_STRING_MAX, "Slot %ld", x->slotIndex); STRINGSAFE
+        snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, temp); STRINGSAFE
+        
+        if (x->noteValue != PIZ_NOTE_NONE) {
+            tralala_setStringWithLong (temp, x->noteValue, MODE_FORMAT_GRID);
+            snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, temp); STRINGSAFE
+        }
+        
+    } else if (x->textMode == MODE_TEXT_MOUSE_PITCH) {
+        draw = true;
+        tralala_setStringWithLong (textCell, x->mousePitchValue, MODE_FORMAT_NOTENAME);
+        
+    } else if (x->textMode == MODE_TEXT_MOUSE_VELOCITY) {
+        draw = true;
+        tralala_setStringWithLong (temp, x->mouseVelocityValue, MODE_FORMAT_LONG);
+        
+        if (x->mouseVelocityValue >= 0) {
+            snprintf (textCell, SIZE_STRING_MAX, "Velocity : +%s", temp); STRINGSAFE
         } else {
-            char         temp[SIZE_STRING_MAX];
-            PIZNoteValue grid = pizSequenceGrid (x->user);
-            PIZNoteValue value = pizSequenceNoteValue (x->user);
-            
-            snprintf (textCell, SIZE_STRING_MAX, "Slot %ld", x->slotIndex);
-            textCell[SIZE_STRING_MAX - 1] = 0;
-            
-            tralala_setStringWithLong (temp, grid, MODE_FORMAT_GRID);
-            
-            snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, temp);
-            textCell[SIZE_STRING_MAX - 1] = 0;
-            
-            if (value != PIZ_NOTE_NONE) {
-                tralala_setStringWithLong (temp, value, MODE_FORMAT_GRID);
-            
-                snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, temp);
-                textCell[SIZE_STRING_MAX - 1] = 0;
-            }
-            
-            draw = true;
+            snprintf (textCell, SIZE_STRING_MAX, "Velocity : %s", temp); STRINGSAFE
         }
-    } else {
-        if (x->textMode == MODE_TEXT_MOUSE_PITCH) {
-            tralala_setStringWithLong (textCell, x->mousePitchValue, MODE_FORMAT_NOTENAME);
-            draw = true;
+        
+    } else if (x->textMode == MODE_TEXT_ZONE && pizGrowingArrayCount (x->zoneCopy)) {
+        draw = true;
+        down = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_DOWN);
+        up   = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_UP);
+                
+        tralala_setStringWithLong (textCell, down, MODE_FORMAT_NOTENAME);
+        tralala_setStringWithLong (temp, up, MODE_FORMAT_NOTENAME);
+        
+        snprintf (textCell, SIZE_STRING_MAX, "%s %s", textCell, temp); STRINGSAFE
+        
+    } else if (LIVE) {
+        draw = true;
+        
+        snprintf (textCell, SIZE_STRING_MAX, "%s", x->scaleKey->s_name); STRINGSAFE
+        
+        if (x->scaleType != tll_sym_none) {
+            snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, x->scaleType->s_name); STRINGSAFE
         }
-        else if (x->textMode == MODE_TEXT_MOUSE_VELOCITY) {
-            char textVelocity [SIZE_STRING_MAX];
-            
-            tralala_setStringWithLong (textVelocity, x->mouseVelocityValue, MODE_FORMAT_LONG);
-            
-            if (x->mouseVelocityValue >= 0) {
-                snprintf (textCell, SIZE_STRING_MAX, "Velocity : +%s", textVelocity);
-            } else {
-                snprintf (textCell, SIZE_STRING_MAX, "Velocity : %s", textVelocity);
-            }
-            
-            textCell[SIZE_STRING_MAX - 1] = 0;
-            
-            draw = true;
-        } else if (x->textMode == MODE_TEXT_ZONE && pizGrowingArrayCount (x->zoneCopy)) {
-            char         textDown[SIZE_STRING_MAX];
-            char         textUp [SIZE_STRING_MAX];
-            long         s      = -1;
-            long         start  = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_START);
-            long         end    = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_END);
-            long         down   = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_DOWN);
-            long         up     = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_UP);
-            PIZNoteValue grid   = pizSequenceGrid (x->user);
-                    
-            tralala_setStringWithLong (textDown, down, MODE_FORMAT_NOTENAME);
-            tralala_setStringWithLong (textUp, up, MODE_FORMAT_NOTENAME);
-            
-            if (grid == PIZ_QUARTER_NOTE || grid == PIZ_EIGHTH_NOTE || grid == PIZ_SIXTEENTH_NOTE) {
-                long temp = (end - start) / grid;
-                
-                if ((temp * grid) == (end - start)) {
-                    s = temp;
-                }
-                
-                if ((grid == PIZ_EIGHTH_NOTE && s == 8) || (grid == PIZ_SIXTEENTH_NOTE && s == 16)) {
-                    s = 4;
-                    grid = PIZ_QUARTER_NOTE;
-                }
-                
-                if ((grid == PIZ_QUARTER_NOTE && s == 6) || (grid == PIZ_SIXTEENTH_NOTE && s == 24)) {
-                    s = 12;
-                    grid = PIZ_EIGHTH_NOTE;
-                }
-            }
-            
-            if (s != -1) {
-                if (grid == PIZ_QUARTER_NOTE) {
-                    snprintf (textCell, SIZE_STRING_MAX, "%s %s : %ld/4", textDown, textUp, s);
-                } else if (grid == PIZ_EIGHTH_NOTE) {
-                    snprintf (textCell, SIZE_STRING_MAX, "%s %s : %ld/8", textDown, textUp, s);
-                } else if (grid == PIZ_SIXTEENTH_NOTE) {
-                    snprintf (textCell, SIZE_STRING_MAX, "%s %s : %ld/16", textDown, textUp, s);
-                }
-            } else {
-                snprintf (textCell, SIZE_STRING_MAX, "%s %s", textDown, textUp);
-            }
-            
-            textCell[SIZE_STRING_MAX - 1] = 0;
-            
-            draw = true;
-        } else if (LIVE) {
-            snprintf (textCell, SIZE_STRING_MAX, "%s", x->scaleKey->s_name);
-            textCell[SIZE_STRING_MAX - 1] = 0;
-            
-            if (x->scaleType != tll_sym_none) {
-                snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, x->scaleType->s_name);
-                textCell[SIZE_STRING_MAX - 1] = 0;
-            }
-            
-            if (x->patternCell != tll_sym_none) {
-                snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, x->patternCell->s_name);
-                textCell[SIZE_STRING_MAX - 1] = 0;
-            }
-                        
-            if (x->patternSize) {
-                snprintf (textCell, SIZE_STRING_MAX, "%s / pattern", textCell);
-                textCell[SIZE_STRING_MAX - 1] = 0;
-            }
-            
-            if (x->velocity > 0) {
-                snprintf (textCell, SIZE_STRING_MAX, "%s / +%ld", textCell, x->velocity);
-                textCell[SIZE_STRING_MAX - 1] = 0;
-            } else if (x->velocity < 0) {
-                snprintf (textCell, SIZE_STRING_MAX, "%s / %ld", textCell, x->velocity);
-                textCell[SIZE_STRING_MAX - 1] = 0;
-            }
-                    
-            draw = true;
+        if (x->patternCell != tll_sym_none) {
+            snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, x->patternCell->s_name); STRINGSAFE
+        }
+        if (x->patternSize) {
+            snprintf (textCell, SIZE_STRING_MAX, "%s / pattern", textCell); STRINGSAFE
+        }
+        
+        if (x->velocity > 0) {
+            snprintf (textCell, SIZE_STRING_MAX, "%s / +%ld", textCell, x->velocity); STRINGSAFE
+        } else if (x->velocity < 0) {
+            snprintf (textCell, SIZE_STRING_MAX, "%s / %ld", textCell, x->velocity); STRINGSAFE
         }
     }
     
     if (draw) {
-        jtextlayout_set (x->textLayers[0], textCell, font, k, 
-            (rect.height - (fontSize + GUI_TEXT_SPACE)), (rect.width - k), fontSize, 
-            (t_jgraphics_text_justification) (JGRAPHICS_TEXT_JUSTIFICATION_LEFT), flags);
+        jtextlayout_set (x->textLayers[0], 
+                        textCell, 
+                        font, 
+                        k, 
+                        (rect.height - (fontSize + GUI_TEXT_SPACE)), 
+                        (rect.width - k), 
+                        fontSize, 
+                        justification, flags);
         
         jtextlayout_measure (x->textLayers[0], 0, -1, 1, &x->textWidth[0], &textHeight, &numlines);
         
@@ -482,8 +429,8 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
             jtextlayout_settextcolor (x->textLayers[0], &x->unfocusedTextColor);
         }
         
-        jgraphics_set_source_jrgba      (g, &backgroundTextColor);
-        jgraphics_rectangle_fill_fast   (g, 0., (rect.height - (fontSize + GUI_TEXT_SPACE)), k, textHeight);
+        jgraphics_set_source_jrgba    (g, &backgroundTextColor);
+        jgraphics_rectangle_fill_fast (g, 0., (rect.height - (fontSize + GUI_TEXT_SPACE)), k, textHeight);
 
         jtextlayout_draw (x->textLayers[0], g);
     }
@@ -493,34 +440,32 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
             
 void tralala_paintGrid (t_tralala *x, t_object *patcherview)
 {
-    double      f = 1.;
+    double      gridWidth, gridHeight, f = 1.;
+    long        z = x->zoomMode;
     t_jgraphics *g = NULL;
-    
-    switch (x->zoomMode) {
-        case MODE_ZOOM_A    : f = 0.5;  break;
-        case MODE_ZOOM_B    : f = 1.;   break;
-        case MODE_ZOOM_C    : f = 2.;   break;
+            
+    switch (z) {
+        case MODE_ZOOM_A : f = 0.5;  break;
+        case MODE_ZOOM_B : f = 1.;   break;
+        case MODE_ZOOM_C : f = 2.;   break;
     }
-        
-    g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_gridLayer, PIZ_SEQUENCE_TIMELINE_SIZE 
-        * GUI_PIXELS_PER_STEP * f, (PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE * f);
+    
+    gridWidth   = f * (PIZ_SEQUENCE_TIMELINE_SIZE * GUI_PIXELS_PER_STEP);
+    gridHeight  = f * ((PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE);
 
-    if (g) {
-        long            i;
+    if (g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_gridLayer, gridWidth, gridHeight)) {
+        long            i, j;
         t_rect          srcRect, destRect;
-        double          imageWidth, imageHeight, gridWidth, gridHeight;
+        double          imageWidth, imageHeight;
         t_jrgba         gridColor;
         t_jsurface      *background = NULL;
-        long            z = x->zoomMode;
-        PIZNoteValue    grid = PIZ_NOTE_NONE;
+        PIZNoteValue    grid;
         
-        if (LIVE) {
+        if (USER) {
+            grid = x->grid;       
+        } else {
             grid = x->cell;
         } 
-        
-        if (grid == PIZ_NOTE_NONE) {
-            grid = pizSequenceGrid (x->user);
-        }
         
         switch (grid) {
             case PIZ_WHOLE_NOTE_DOTTED          :   background = tll_half                   [z]; break;
@@ -546,17 +491,12 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
         imageWidth  = jgraphics_image_surface_get_width (background);
         imageHeight = jgraphics_image_surface_get_height (background);
         
-        gridWidth   = PIZ_SEQUENCE_TIMELINE_SIZE * GUI_PIXELS_PER_STEP * f;
-        gridHeight  = (PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE * f;
-        
         srcRect.x       = 0.;
         srcRect.y       = 0.;
         srcRect.width   = imageWidth;
         srcRect.height  = imageHeight;
         
         for (i = 0; i < ((PIZ_MAGIC_PITCH + 1) / GUI_JSURFACE_SEMITONES); i ++) {
-            long j;
-            
             for (j = 0; j < (PIZ_SEQUENCE_TIMELINE_SIZE / GUI_JSURFACE_STEPS); j++) {
                 destRect.x      = j * imageWidth;
                 destRect.y      = i * imageHeight;
@@ -569,134 +509,121 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
     
         jrgba_set (&gridColor, 0.87, 0.87, 0.87, 1.);
         jgraphics_set_source_jrgba (g, &gridColor);
-        
         jgraphics_rectangle_draw_fast (g, 0., 0., gridWidth, gridHeight, 1.);
         
         jbox_end_layer ((t_object*)x, patcherview, tll_sym_gridLayer);
     }
         
-    jbox_paint_layer ((t_object *)x, patcherview, tll_sym_gridLayer, -x->windowOffsetX, -x->windowOffsetY);
+    jbox_paint_layer ((t_object *)x, patcherview, tll_sym_gridLayer, -x->offsetX, -x->offsetY);
 }
 
 void tralala_paintNotes (t_tralala *x, t_object *patcherview)
 {
-    double      f = 1.;
+    double      gridWidth, gridHeight, f = 1.;
     t_jgraphics *g = NULL;
     
     switch (x->zoomMode) {
-        case MODE_ZOOM_A    : f = 0.5;  break;
-        case MODE_ZOOM_B    : f = 1.;   break;
-        case MODE_ZOOM_C    : f = 2.;   break;
+        case MODE_ZOOM_A : f = 0.5;  break;
+        case MODE_ZOOM_B : f = 1.;   break;
+        case MODE_ZOOM_C : f = 2.;   break;
     }
     
-    g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_notesLayer, PIZ_SEQUENCE_TIMELINE_SIZE 
-        * GUI_PIXELS_PER_STEP * f, (PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE * f);
+    gridWidth   = f * (PIZ_SEQUENCE_TIMELINE_SIZE * GUI_PIXELS_PER_STEP);
+    gridHeight  = f * ((PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE);
     
-    if (g) {
-        long    i, notesCount; 
+    if (g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_notesLayer, gridWidth, gridHeight)) {
+        long    i, count; 
+        long    markedPosition  = -1;
+        long    markedPitch     = -1;
+        long    markedVelocity  = -1;
+        long    markedDuration  = -1;
         t_jrgba color1, color2, color3;
-        long    markedNotePosition  = -1;
-        long    markedNotePitch     = -1;
-        long    markedNoteVelocity  = -1;
-        long    markedNoteDuration  = -1;
         
-        if (!(x->flags & FLAG_FOCUS)) {
-            switch (x->sequenceMode) {
-                case MODE_SEQUENCE_USER   : jrgba_copy (&color3, &x->unfocusedUserSelectedNoteColor);
-                                            jrgba_copy (&color2, &x->unfocusedUserSelectedNoteColor);
-                                            jrgba_copy (&color1, &x->unfocusedUserNoteColor); break;
-                case MODE_SEQUENCE_LIVE   : jrgba_copy (&color1, &x->unfocusedLiveNoteColor); break;
+        if (x->flags & FLAG_FOCUS) {
+            if (USER) {
+                jrgba_copy (&color3, &x->focusedUserMarkedNoteColor);
+                jrgba_copy (&color2, &x->focusedUserSelectedNoteColor);
+            } else {
+                jrgba_copy (&color2, &x->focusedLivePlayedNoteColor);
+                jrgba_copy (&color1, &x->focusedLiveNoteColor); 
             }
         } else {
-            switch (x->sequenceMode) {
-                case MODE_SEQUENCE_USER   : jrgba_copy (&color3, &x->focusedUserMarkedNoteColor);
-                                            jrgba_copy (&color2, &x->focusedUserSelectedNoteColor); break;
-                case MODE_SEQUENCE_LIVE   : jrgba_copy (&color2, &x->focusedLivePlayedNoteColor);
-                                            jrgba_copy (&color1, &x->focusedLiveNoteColor); break;
+           if (USER) {
+                jrgba_copy (&color3, &x->unfocusedUserSelectedNoteColor);
+                jrgba_copy (&color2, &x->unfocusedUserSelectedNoteColor);
+                jrgba_copy (&color1, &x->unfocusedUserNoteColor);
+            } else {
+                jrgba_copy (&color1, &x->unfocusedLiveNoteColor);
             }
         }
 
-        notesCount = pizGrowingArrayCount (x->unselectedCopy) / PIZ_DATA_NOTE_SIZE;
+        count = pizGrowingArrayCount (x->unselectedCopy);
         
         if ((x->flags & FLAG_FOCUS) && USER) {
-            for (i = 0; i < notesCount; i++) {
-                long position   = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_POSITION);
-                long pitch      = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_PITCH);
-                long velocity   = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_VELOCITY);
-                long duration   = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_DURATION);
+            for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
+                long position   = pizGrowingArrayValueAtIndex (x->unselectedCopy, i + PIZ_DATA_POSITION);
+                long pitch      = pizGrowingArrayValueAtIndex (x->unselectedCopy, i + PIZ_DATA_PITCH);
+                long velocity   = pizGrowingArrayValueAtIndex (x->unselectedCopy, i + PIZ_DATA_VELOCITY);
+                long duration   = pizGrowingArrayValueAtIndex (x->unselectedCopy, i + PIZ_DATA_DURATION);
                 
-                tralala_paintCandy (x, g, position, pitch, velocity, duration);
+                tralala_noteWithColor (x, g, position, pitch, velocity, duration, NULL);
             }
         } else {
-            for (i = 0; i < notesCount; i++) {
-                long position   = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_POSITION);
-                long pitch      = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_PITCH);
-                long velocity   = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_VELOCITY);
-                long duration   = pizGrowingArrayValueAtIndex (x->unselectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                    + PIZ_DATA_DURATION);
+            for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
+                long position   = pizGrowingArrayValueAtIndex (x->unselectedCopy, i + PIZ_DATA_POSITION);
+                long pitch      = pizGrowingArrayValueAtIndex (x->unselectedCopy, i + PIZ_DATA_PITCH);
+                long velocity   = pizGrowingArrayValueAtIndex (x->unselectedCopy, i + PIZ_DATA_VELOCITY);
+                long duration   = pizGrowingArrayValueAtIndex (x->unselectedCopy, i + PIZ_DATA_DURATION);
                                             
-                tralala_paintColored (x, g, position, pitch, velocity, duration, &color1);
+                tralala_noteWithColor (x, g, position, pitch, velocity, duration, &color1);
             }
         }
         
-        notesCount = pizGrowingArrayCount (x->selectedCopy) / PIZ_DATA_NOTE_SIZE;
+        count = pizGrowingArrayCount (x->selectedCopy);
         
-        for (i = 0; i < notesCount; i++) {
-            long position   = pizGrowingArrayValueAtIndex (x->selectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                + PIZ_DATA_POSITION);
-            long pitch      = pizGrowingArrayValueAtIndex (x->selectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                + PIZ_DATA_PITCH);
-            long velocity   = pizGrowingArrayValueAtIndex (x->selectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                + PIZ_DATA_VELOCITY);
-            long duration   = pizGrowingArrayValueAtIndex (x->selectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                + PIZ_DATA_DURATION);
-            long isMarked   = pizGrowingArrayValueAtIndex (x->selectedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                + PIZ_DATA_IS_MARKED);
+        for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
+            long position   = pizGrowingArrayValueAtIndex (x->selectedCopy, i + PIZ_DATA_POSITION);
+            long pitch      = pizGrowingArrayValueAtIndex (x->selectedCopy, i + PIZ_DATA_PITCH);
+            long velocity   = pizGrowingArrayValueAtIndex (x->selectedCopy, i + PIZ_DATA_VELOCITY);
+            long duration   = pizGrowingArrayValueAtIndex (x->selectedCopy, i + PIZ_DATA_DURATION);
+            long isMarked   = pizGrowingArrayValueAtIndex (x->selectedCopy, i + PIZ_DATA_IS_MARKED);
             
-            if (!isMarked) {
-                tralala_paintColored (x, g, position, pitch, velocity, duration, &color2);
+            if (isMarked) {
+                markedPosition  = position;
+                markedPitch     = pitch;
+                markedVelocity  = velocity;
+                markedDuration  = duration;
             } else {
-                markedNotePosition  = position;
-                markedNotePitch     = pitch;
-                markedNoteVelocity  = velocity;
-                markedNoteDuration  = duration;
+                tralala_noteWithColor (x, g, position, pitch, velocity, duration, &color2);
             }
         }
         
-        if (markedNotePosition != -1) {
-            tralala_paintColored (x, g, markedNotePosition, markedNotePitch, markedNoteVelocity,
-                    markedNoteDuration, &color3);
+        if (markedPosition != -1) {
+            tralala_noteWithColor (x, g, markedPosition, markedPitch, markedVelocity, markedDuration, &color3);
         }
     
         jbox_end_layer ((t_object*)x, patcherview, tll_sym_notesLayer);
     }
         
-    jbox_paint_layer ((t_object *)x, patcherview, tll_sym_notesLayer, -x->windowOffsetX, -x->windowOffsetY);
+    jbox_paint_layer ((t_object *)x, patcherview, tll_sym_notesLayer, -x->offsetX, -x->offsetY);
 }
 
 void tralala_paintPlayed (t_tralala *x, t_object *patcherview)
 {
-    double      f = 1.;
+    double      gridWidth, gridHeight, f = 1.;
     t_jgraphics *g = NULL;
     
     switch (x->zoomMode) {
-        case MODE_ZOOM_A    : f = 0.5;  break;
-        case MODE_ZOOM_B    : f = 1.;   break;
-        case MODE_ZOOM_C    : f = 2.;   break;
+        case MODE_ZOOM_A : f = 0.5;  break;
+        case MODE_ZOOM_B : f = 1.;   break;
+        case MODE_ZOOM_C : f = 2.;   break;
     }
     
-    g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_playedNotesLayer, PIZ_SEQUENCE_TIMELINE_SIZE 
-        * GUI_PIXELS_PER_STEP * f, (PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE * f);
-    
-    if (g) {
-        long    i, notesCount; 
+    gridWidth   = f * (PIZ_SEQUENCE_TIMELINE_SIZE * GUI_PIXELS_PER_STEP);
+    gridHeight  = f * ((PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE);
+
+    if (g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_playedNotesLayer, gridWidth, gridHeight)) {
+        long    i, count; 
         t_jrgba color;
             
         if (x->flags & FLAG_FOCUS) {
@@ -705,116 +632,45 @@ void tralala_paintPlayed (t_tralala *x, t_object *patcherview)
             jrgba_copy (&color, &x->unfocusedLivePlayedNoteColor);
         }
 
-        notesCount = pizGrowingArrayCount (x->playedCopy) / PIZ_DATA_NOTE_SIZE;
+        count = pizGrowingArrayCount (x->playedCopy);
         
-        for (i = 0; i < notesCount; i++) {
-            long position   = pizGrowingArrayValueAtIndex (x->playedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                + PIZ_DATA_POSITION);
-            long pitch      = pizGrowingArrayValueAtIndex (x->playedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                + PIZ_DATA_PITCH);
-            long velocity   = pizGrowingArrayValueAtIndex (x->playedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                + PIZ_DATA_VELOCITY);
-            long duration   = pizGrowingArrayValueAtIndex (x->playedCopy, (PIZ_DATA_NOTE_SIZE * i) 
-                                + PIZ_DATA_DURATION);
+        for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
+            long position   = pizGrowingArrayValueAtIndex (x->playedCopy, i + PIZ_DATA_POSITION);
+            long pitch      = pizGrowingArrayValueAtIndex (x->playedCopy, i + PIZ_DATA_PITCH);
+            long velocity   = pizGrowingArrayValueAtIndex (x->playedCopy, i + PIZ_DATA_VELOCITY);
+            long duration   = pizGrowingArrayValueAtIndex (x->playedCopy, i + PIZ_DATA_DURATION);
             
-            tralala_paintColored (x, g, position, pitch, velocity, duration, &color);
+            tralala_noteWithColor (x, g, position, pitch, velocity, duration, &color);
         }
         
         jbox_end_layer ((t_object*)x, patcherview, tll_sym_playedNotesLayer);
     }
         
-  jbox_paint_layer ((t_object *)x, patcherview, tll_sym_playedNotesLayer, -x->windowOffsetX, -x->windowOffsetY);
-}
-
-void tralala_paintCandy (t_tralala *x, t_jgraphics *g, long p, long pitch, long v, long d)
-{
-    long            noteTone;
-    t_rect          noteRect;
-    PIZCoordinates  coordinates;
-    t_atom          temp[4];
-    t_jrgba         color;
-    double          alpha = 0.75;
-    
-    coordinates.position    = p;
-    coordinates.pitch       = pitch;
-    
-    tralala_setRectWithCoordinatesAndDuration (x, &noteRect, &coordinates, d);
-    
-    noteTone = pitch % 12;
-    
-    switch (noteTone) {
-        case 0  : jrgba_to_atoms (&x->cNoteColor, temp);        break;
-        case 1  : jrgba_to_atoms (&x->cSharpNoteColor, temp);   break;
-        case 2  : jrgba_to_atoms (&x->dNoteColor, temp);        break;
-        case 3  : jrgba_to_atoms (&x->dSharpNoteColor, temp);   break;
-        case 4  : jrgba_to_atoms (&x->eNoteColor, temp);        break;
-        case 5  : jrgba_to_atoms (&x->fNoteColor, temp);        break;
-        case 6  : jrgba_to_atoms (&x->fSharpNoteColor, temp);   break;
-        case 7  : jrgba_to_atoms (&x->gNoteColor, temp);        break;
-        case 8  : jrgba_to_atoms (&x->gSharpNoteColor, temp);   break;
-        case 9  : jrgba_to_atoms (&x->aNoteColor, temp);        break;
-        case 10 : jrgba_to_atoms (&x->aSharpNoteColor, temp);   break;
-        case 11 : jrgba_to_atoms (&x->bNoteColor, temp);        break;
-    } 
-
-    alpha = (double)(v + GUI_VELOCITY_OFFSET) / (double)PIZ_MAGIC_VELOCITY;
-    
-    if (alpha > 0.005) {
-        atom_setfloat   (temp + 3, CLAMP (alpha, 0.25, 1.));
-        atoms_to_jrgba  (4, temp, &color);
-    } else {
-        jrgba_copy (&color, &x->focusedUserSilentNoteColor);
-    }
-    
-    jgraphics_set_source_jrgba (g, &color);
-    jgraphics_rectangle_fill_fast (g, noteRect.x, noteRect.y, noteRect.width, noteRect.height);
-}                                                       
-                                                            
-void tralala_paintColored (t_tralala *x, t_jgraphics *g, long p, long pitch, long v, long d, t_jrgba *color)
-{
-    t_rect          noteRect;
-    PIZCoordinates  coordinates;
-    t_jrgba         noteColor;
-    t_atom          temp[4];
-    double          alpha;
-    
-    coordinates.position    = p;
-    coordinates.pitch       = pitch;
-    
-    tralala_setRectWithCoordinatesAndDuration (x, &noteRect, &coordinates, d);
-    
-    alpha = (double)v / (double)PIZ_MAGIC_VELOCITY;
-    
-    jrgba_to_atoms  (color, temp);
-    atom_setfloat   (temp + 3, CLAMP (alpha, 0.25, 1.));
-    atoms_to_jrgba  (4, temp, &noteColor);
-        
-    jgraphics_set_source_jrgba (g, &noteColor);
-    jgraphics_rectangle_fill_fast (g, noteRect.x, noteRect.y, noteRect.width, noteRect.height);
-}
-
+    jbox_paint_layer ((t_object *)x, patcherview, tll_sym_playedNotesLayer, -x->offsetX, -x->offsetY);
+}                                                      
+                                                        
 void tralala_paintZone (t_tralala *x, t_object *patcherview)
 {
-    double      f = 1.;
+    double      gridWidth, gridHeight, f = 1.;
     t_jgraphics *g = NULL;
 
     switch (x->zoomMode) {
-        case MODE_ZOOM_A    : f = 0.5;  break;
-        case MODE_ZOOM_B    : f = 1.;   break;
-        case MODE_ZOOM_C    : f = 2.;   break;
+        case MODE_ZOOM_A : f = 0.5;  break;
+        case MODE_ZOOM_B : f = 1.;   break;
+        case MODE_ZOOM_C : f = 2.;   break;
     }
     
-    g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_zoneLayer, PIZ_SEQUENCE_TIMELINE_SIZE 
-        * GUI_PIXELS_PER_STEP * f, (PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE * f);
+    gridWidth   = f * (PIZ_SEQUENCE_TIMELINE_SIZE * GUI_PIXELS_PER_STEP);
+    gridHeight  = f * ((PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE);
     
-    if (g) {
+    if (g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_zoneLayer, gridWidth, gridHeight)) {
         if (pizGrowingArrayCount (x->zoneCopy)) {
-            t_rect  zoneRect;
             long    start   = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_START);
             long    end     = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_END);
             long    down    = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_DOWN);
             long    up      = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_UP);
-            
+            t_rect  zoneRect;
+                        
             tralala_setRectWithZoneValues (x, &zoneRect, start, end, down, up);
                         
             if (!(x->flags & FLAG_FOCUS)) {
@@ -833,7 +689,7 @@ void tralala_paintZone (t_tralala *x, t_object *patcherview)
         jbox_end_layer ((t_object*)x, patcherview, tll_sym_zoneLayer);
     }
         
-    jbox_paint_layer ((t_object *)x, patcherview, tll_sym_zoneLayer, -x->windowOffsetX, -x->windowOffsetY);
+    jbox_paint_layer ((t_object *)x, patcherview, tll_sym_zoneLayer, -x->offsetX, -x->offsetY);
 }
 
 void tralala_paintLasso (t_tralala *x, t_object *patcherview)
@@ -852,6 +708,52 @@ void tralala_paintLasso (t_tralala *x, t_object *patcherview)
     jgraphics_set_source_jrgba (g, &x->lassoColor);
             
     jgraphics_rectangle_fill_fast (g, a, b, width, height);
+}
+
+void tralala_noteWithColor (t_tralala *x, t_jgraphics *g, long p, long pitch, long v, long d, t_jrgba *color)
+{
+    t_rect          noteRect;
+    PIZCoordinates  coordinates;
+    t_jrgba         noteColor;
+    t_atom          temp[4];
+    
+    coordinates.position = p;
+    coordinates.pitch    = pitch;
+    
+    tralala_setRectWithCoordinatesAndDuration (x, &noteRect, &coordinates, d);
+    
+    if (color) {
+        jrgba_to_atoms (color, temp);
+        atom_setfloat  (temp + 3, CLAMP ((v / (double)PIZ_MAGIC_VELOCITY), 0.25, 1.));
+        atoms_to_jrgba (4, temp, &noteColor);
+    } else {
+        if (v == 0) {
+            jrgba_copy (&noteColor, &x->focusedUserSilentNoteColor);
+        } else {
+            double alpha = (v + GUI_VELOCITY_OFFSET) / (double)PIZ_MAGIC_VELOCITY;
+    
+            switch (pitch % PIZ_MAGIC_SCALE) {
+                case 0  : jrgba_to_atoms (&x->cNoteColor, temp);        break;
+                case 1  : jrgba_to_atoms (&x->cSharpNoteColor, temp);   break;
+                case 2  : jrgba_to_atoms (&x->dNoteColor, temp);        break;
+                case 3  : jrgba_to_atoms (&x->dSharpNoteColor, temp);   break;
+                case 4  : jrgba_to_atoms (&x->eNoteColor, temp);        break;
+                case 5  : jrgba_to_atoms (&x->fNoteColor, temp);        break;
+                case 6  : jrgba_to_atoms (&x->fSharpNoteColor, temp);   break;
+                case 7  : jrgba_to_atoms (&x->gNoteColor, temp);        break;
+                case 8  : jrgba_to_atoms (&x->gSharpNoteColor, temp);   break;
+                case 9  : jrgba_to_atoms (&x->aNoteColor, temp);        break;
+                case 10 : jrgba_to_atoms (&x->aSharpNoteColor, temp);   break;
+                case 11 : jrgba_to_atoms (&x->bNoteColor, temp);        break;
+            } 
+    
+            atom_setfloat   (temp + 3, CLAMP (alpha, 0.25, 1.));
+            atoms_to_jrgba  (4, temp, &noteColor);
+        }
+    }    
+        
+    jgraphics_set_source_jrgba (g, &noteColor);
+    jgraphics_rectangle_fill_fast (g, noteRect.x, noteRect.y, noteRect.width, noteRect.height);
 }
 
 // -------------------------------------------------------------------------------------------------------------
