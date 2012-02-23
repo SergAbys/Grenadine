@@ -8,13 +8,22 @@
  */
 
 /*
- *  Last modified : 20/02/12.
+ *  Last modified : 23/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #include "tralala.h"
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define LEARNLOCK           systhread_mutex_lock (&x->learnMutex);
+#define LEARNUNLOCK         systhread_mutex_unlock (&x->learnMutex);
+
+#define ALGORITHMSLOCK      systhread_mutex_lock (&x->algorithmsMutex);
+#define ALGORITHMSUNLOCK    systhread_mutex_unlock (&x->algorithmsMutex);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -40,15 +49,13 @@ void tralala_copy (t_tralala *x)
     
     if (!err) {
         long i;
-        long chance = object_attr_getlong (x, tll_sym_chance);
-        long count = pizGrowingArrayCount (tempArrayA) / PIZ_DATA_NOTE_SIZE;
+        long chance = x->chance;
+        long count = pizGrowingArrayCount (tempArrayA);
         long *ptr = pizGrowingArrayPtr (tempArrayA);
-        
-        pizGrowingArrayClear (tempArrayB);
 
-        for (i = (count - 1); i >= 0; i--) {
+        for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
             if (100 * (rand ( ) / (RAND_MAX + 1.0)) < chance) {
-                pizGrowingArrayAppendPtr (tempArrayB, PIZ_DATA_NOTE_SIZE, ptr + (PIZ_DATA_NOTE_SIZE * i));
+                pizGrowingArrayAppendPtr (tempArrayB, PIZ_DATA_NOTE_SIZE, ptr + i);
             }
         }
         
@@ -104,29 +111,23 @@ void tralala_setLiveByUser (t_tralala *x)
 
 void tralala_int (t_tralala *x, long n)
 {
-    if (n >= 0 && n <= PIZ_MAGIC_PITCH) {
-        systhread_mutex_lock (&x->learnMutex);
-        pizBoundedQueueAppend (x->learnQueue, n);
-        systhread_mutex_unlock (&x->learnMutex);
-    }
+    LEARNLOCK
+        
+    pizBoundedQueueAppend (x->learnQueue, CLAMP (n, 0, PIZ_MAGIC_PITCH));
+        
+    LEARNUNLOCK
 }
 
 void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
     if (argc && argv && (atom_gettype (argv) == A_LONG)) {
-        long n = atom_getlong (argv);
-            
-        if (n >= 0 && n <= PIZ_MAGIC_PITCH) {
-            systhread_mutex_lock (&x->learnMutex);
-            pizBoundedQueueAppend (x->learnQueue, n);
-            systhread_mutex_unlock (&x->learnMutex);
-        }
+        tralala_int (x, atom_getlong (argv));
     }
 }
 
 void tralala_mute (t_tralala *x, long n)
 {   
-    systhread_mutex_lock (&x->methodsMutex);
+    METHODSLOCK
     
     if (n) {
         x->flags |= FLAG_IS_MUTED;
@@ -134,18 +135,18 @@ void tralala_mute (t_tralala *x, long n)
         x->flags &= ~FLAG_IS_MUTED;
     }
     
-    systhread_mutex_unlock (&x->methodsMutex);
+    METHODSUNLOCK
 }
 
 void tralala_forget (t_tralala *x)
 {
-    systhread_mutex_lock (&x->algorithmsMutex);
+    ALGORITHMSLOCK
     
-    pizFactorOracleClear    (x->factorOracle);
-    pizGaloisLatticeClear   (x->galoisLattice);
-    pizFiniteStateClear     (x->finiteState);
+    pizFactorOracleClear  (x->factorOracle);
+    pizGaloisLatticeClear (x->galoisLattice);
+    pizFiniteStateClear   (x->finiteState);
     
-    systhread_mutex_unlock (&x->algorithmsMutex);
+    ALGORITHMSUNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -157,7 +158,7 @@ void tralala_learnTask (t_tralala *x)
     if (x->learnCycle == PIZ_ALGORITHM_NONE) {
         long i = x->learnThreshold;
         
-        systhread_mutex_lock (&x->learnMutex);
+        LEARNLOCK
         
         if (pizBoundedQueueCount (x->learnQueue) >= i) {
             long err = PIZ_GOOD;
@@ -168,32 +169,31 @@ void tralala_learnTask (t_tralala *x)
                 if (!(err |= pizBoundedQueuePop (x->learnQueue))) {
                 err |= pizGrowingArrayAppend (x->valuesToBeLearned, pizBoundedQueuePoppedValue (x->learnQueue));
                 }
-                
                 i --;
             }
             
-            x->learnCycle = PIZ_FACTOR_ORACLE;
+            x->learnCycle     = PIZ_FACTOR_ORACLE;
             x->learnThreshold = SIZE_LEARN_MIN + ((SIZE_LEARN_RANGE + 1) * (rand ( ) / (RAND_MAX + 1.0)));
         }
             
-        systhread_mutex_unlock (&x->learnMutex);
+        LEARNUNLOCK
+        
     } else {
         long k = pizGrowingArrayCount (x->valuesToBeLearned);
         long *values = pizGrowingArrayPtr (x->valuesToBeLearned);
         
+        ALGORITHMSLOCK
+        
         switch (x->learnCycle) {
-            
-            systhread_mutex_lock (&x->algorithmsMutex);
-            
             case PIZ_FACTOR_ORACLE  :   pizFactorOracleAdd (x->factorOracle, k, values);
                                         x->learnCycle = PIZ_GALOIS_LATTICE; break;
             case PIZ_GALOIS_LATTICE :   pizGaloisLatticeAdd (x->galoisLattice, k, values);
                                         x->learnCycle = PIZ_FINITE_STATE; break;
             case PIZ_FINITE_STATE   :   pizFiniteStateAdd (x->finiteState, k, values);
                                         x->learnCycle = PIZ_ALGORITHM_NONE; break;
-                                        
-            systhread_mutex_unlock (&x->algorithmsMutex);                            
         }
+        
+        ALGORITHMSUNLOCK
     }
     
     clock_fdelay (x->learnClock, CLOCK_LEARN_INTERVAL + CLOCK_RANDOMIZE * (rand ( ) / (RAND_MAX + 1.0)));
@@ -205,27 +205,24 @@ void tralala_learnTask (t_tralala *x)
 
 void tralala_anything (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    char            alloc;
-    long            size = 0;
-    t_atom          *atoms = NULL;
+    char    alloc;
+    long    i, size = 0;
+    t_atom  *atoms = NULL;
     
     if (atom_alloc_array ((argc + 1), &size, &atoms, &alloc) == MAX_ERR_NONE) {
-        long i;
-        
         atom_setsym (atoms, s);
         
         for (i = 0; i < argc; i++) {
             switch (atom_gettype (argv + i)) {
-                case A_SYM  : atom_setsym (atoms + 1 + i, atom_getsym (argv + i)); break;
-                case A_LONG : atom_setlong (atoms + 1 + i, atom_getlong (argv + i)); break;
-                default     : atom_setfloat (atoms + 1 + i, 0.); break;
+                case A_SYM   : atom_setsym   (atoms + 1 + i, atom_getsym (argv + i));   break;
+                case A_LONG  : atom_setlong  (atoms + 1 + i, atom_getlong (argv + i));  break;
+                case A_FLOAT : atom_setfloat (atoms + 1 + i, atom_getfloat (argv + i)); break;
             }
         }
         
         tralala_handleMessages (x, tll_sym_live, argc + 1, atoms);
-        
         sysmem_freeptr (atoms);
-    }
+    } 
 }
     
 void tralala_handleMessages (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
@@ -723,11 +720,11 @@ bool tralala_sequenceZoulou (t_tralala *x, PIZSequence *sequence)
 {
     bool draw = false;
     
-    systhread_mutex_lock (&x->algorithmsMutex);
+    ALGORITHMSLOCK
 
     draw = pizSequenceProceedAlgorithm (sequence, PIZ_FACTOR_ORACLE, (void *)x->factorOracle);
     
-    systhread_mutex_unlock (&x->algorithmsMutex);
+    ALGORITHMSUNLOCK
     
     return draw; 
 }
@@ -736,11 +733,11 @@ bool tralala_sequenceRomeo (t_tralala *x, PIZSequence *sequence)
 {
     bool draw = false;
     
-    systhread_mutex_lock (&x->algorithmsMutex);
+    ALGORITHMSLOCK
     
     draw = pizSequenceProceedAlgorithm (sequence, PIZ_GALOIS_LATTICE, (void *)x->galoisLattice);
     
-    systhread_mutex_unlock (&x->algorithmsMutex);
+    ALGORITHMSUNLOCK
     
     return draw;
 }
@@ -749,11 +746,11 @@ bool tralala_sequenceUniform (t_tralala *x, PIZSequence *sequence)
 {
     bool draw = false;
     
-    systhread_mutex_lock (&x->algorithmsMutex);
+    ALGORITHMSLOCK
     
     draw = pizSequenceProceedAlgorithm (sequence, PIZ_FINITE_STATE, (void *)x->finiteState);
     
-    systhread_mutex_unlock (&x->algorithmsMutex);
+    ALGORITHMSUNLOCK
 
     return draw;
 }   
