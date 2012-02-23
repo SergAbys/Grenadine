@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 22/02/12.
+ *  Last modified : 23/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -120,18 +120,8 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define HIT_NOTHING                         (0L)
-#define HIT_NOTE                            (1<<0)
-#define HIT_START                           (1<<1)
-#define HIT_END                             (1<<2)
-#define HIT_DOWN                            (1<<3)
-#define HIT_UP                              (1<<4)
-#define HIT_ZONE                            (1<<5)
-#define HIT_TEXT                            (1<<6)
-#define HIT_LOCKED                          (1<<7)
-
 #define DIRTY_NONE                          (0L)
-#define DIRTY_TEXT                          (1<<0)
+#define DIRTY_REFRESH                       (1<<0)
 #define DIRTY_GRID                          (1<<1)
 #define DIRTY_ZONE                          (1<<2)  
 #define DIRTY_NOTES                         (1<<3)
@@ -158,6 +148,16 @@
 #define FLAG_IS_MUTED                       (1<<12)
 #define FLAG_INIT_PAINT_CLOCK               (1<<13)
 #define FLAG_ORIGIN_HAD_SHIFT_KEY           (1<<14)
+
+#define HIT_NOTHING                         0
+#define HIT_NOTE                            1
+#define HIT_START                           (1<<1)
+#define HIT_END                             (1<<2)
+#define HIT_DOWN                            (1<<3)
+#define HIT_UP                              (1<<4)
+#define HIT_ZONE                            (1<<5)
+#define HIT_TEXT                            (1<<6)
+#define HIT_LOCKED                          (1<<7)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -237,34 +237,21 @@
 #define VIEWTEXT        (x->viewText == 1)
 #define USER            (x->sequenceMode == 0)
 #define LIVE            (x->sequenceMode == 1)
-#define CMD             (modifiers & eCommandKey)
-#define SHIFT           (modifiers & eShiftKey)
-#define CTRL            (modifiers & eControlKey)
-#define ALT             (modifiers & eAltKey)
-#define CAPS            (modifiers & eCapsLock)
-#define RIGHT           (modifiers & eRightButton)
-#define SHARP           (keycode == 167)
-#define ALL             (keycode == 97)
-#define CUT             (keycode == 120)
-#define COPY            (keycode == 99)
-#define PASTE           (keycode == 118)
-#define TERNARY         (keycode == 116)
-#define DOTTED          (keycode == 100)
 #define SELECT          0
 #define INVERT          1
 #define UP              0
-#define DOWN            1
-
-#define DIRTYPATTR      clock_fdelay (x->notifyClock, CLOCK_NOTIFY_INTERVAL); 
-#define DIRTYSLOTS      if (x->saveSlotsWithPatcher) {                                      \
-                                jpatcher_set_dirty (jbox_get_patcher ((t_object *)x), 1);   \
-                            }   
-#define DIRTYCHANNEL    if (x->saveChannelWithPatcher) {                                    \
-                                jpatcher_set_dirty (jbox_get_patcher ((t_object *)x), 1);   \
-                            }   
+#define DOWN            1   
 
 #define ARRAYSLOCK      systhread_mutex_lock (&x->arraysMutex);
 #define ARRAYSUNLOCK    systhread_mutex_unlock (&x->arraysMutex);
+
+#define DIRTYPATTR      clock_fdelay (x->notifyClock, CLOCK_NOTIFY_INTERVAL); 
+#define DIRTYSLOTS      if (x->saveSlotsWithPatcher) {                                  \
+                            jpatcher_set_dirty (jbox_get_patcher ((t_object *)x), 1);   \
+                        }   
+#define DIRTYCHANNEL    if (x->saveChannelWithPatcher) {                                \
+                            jpatcher_set_dirty (jbox_get_patcher ((t_object *)x), 1);   \
+                        }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -511,6 +498,8 @@ PIZ_LOCAL void  tralala_slotPrevious            (t_tralala *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+void            tralala_notifyTask              (t_tralala *x);
+
 void            tralala_mousedown               (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
 void            tralala_mousedrag               (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
 void            tralala_mouseup                 (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
@@ -531,7 +520,6 @@ PIZ_LOCAL void  tralala_popupRightClickMenu     (t_tralala *x, t_pt pt, long men
 
 void            tralala_paintTask               (t_tralala *x);
 void            tralala_focusTask               (t_tralala *x);
-void            tralala_notifyTask              (t_tralala *x);
 
 void            tralala_paint                   (t_tralala *x, t_object *patcherview);
 void            tralala_getdrawparams           (t_tralala *x, t_object *patcherview, t_jboxdrawparams *params);
@@ -562,19 +550,22 @@ PIZ_LOCAL void  tralala_noteWithColor           (t_tralala *x,
 PIZ_LOCAL bool  tralala_moveSelectedNotes                   (t_tralala *x, long deltaPosition, long deltaPitch);
 PIZ_LOCAL bool  tralala_changeSelectedNotesDuration         (t_tralala *x, long deltaPosition);
 PIZ_LOCAL bool  tralala_changeSelectedNotesVelocity         (t_tralala *x, bool decrement);
+
 PIZ_LOCAL void  tralala_duplicateSelectedNotes              (t_tralala *x);
 PIZ_LOCAL void  tralala_setSelectedNotesVelocity            (t_tralala *x, long velocity);
 PIZ_LOCAL void  tralala_setSelectedNotesChannel             (t_tralala *x, long channel);
 
-PIZ_LOCAL long  tralala_hitZoneWithPoint                    (t_tralala *x, t_pt pt);
-PIZ_LOCAL long  tralala_hitTextWithPoint                    (t_tralala *x, t_object *patcherview, t_pt pt);
+PIZ_LOCAL long  tralala_hitZone                             (t_tralala *x, t_pt pt);
+PIZ_LOCAL long  tralala_hitText                             (t_tralala *x, t_object *patcherview, t_pt pt);
+
 PIZ_LOCAL bool  tralala_hitNotesByRunIndex                  (t_tralala *x);
+PIZ_LOCAL bool  tralala_pasteFromClipboard                  (t_tralala *x); 
 
 PIZ_LOCAL bool  tralala_setCursorType                       (t_tralala *x, 
                                                             t_object *patcherview, 
                                                             t_jmouse_cursortype type);
 
-PIZ_LOCAL bool  tralala_setCoordinatesWithPoint             (t_tralala *x, 
+PIZ_LOCAL void  tralala_setCoordinates                      (t_tralala *x, 
                                                             PIZCoordinates *coordinates, 
                                                             t_pt pt);
 
@@ -594,8 +585,8 @@ PIZ_LOCAL void  tralala_setStringWithLong                   (char *string,
                                                             long longToBeFormatted, 
                                                             long formatMode);
 
-PIZ_LOCAL void  tralala_unselectAllText                     (t_tralala *x);
 PIZ_LOCAL bool  tralala_hasSelectedText                     (t_tralala *x, long *result);
+PIZ_LOCAL void  tralala_unselectAllText                     (t_tralala *x);
 PIZ_LOCAL void  tralala_willChange                          (t_tralala *x);
 PIZ_LOCAL void  tralala_testAutoscroll                      (t_tralala *x, t_object *patcherview, t_pt pt);
 PIZ_LOCAL void  tralala_stopAutoscroll                      (t_tralala *x);

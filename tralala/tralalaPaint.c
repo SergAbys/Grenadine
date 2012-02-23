@@ -23,6 +23,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 extern tralalaSymbolsTableA tll_symbolsA;
 extern tralalaSymbolsTableB tll_symbolsB;
@@ -54,7 +55,7 @@ void tralala_paintTask (t_tralala *x)
     if (ATOMIC_INCREMENT (&x->paintLock) == 1) {
     //
     
-    DIRTYLAYER_UNSET (~(DIRTY_SEQUENCE | DIRTY_TEXT | DIRTY_GRID | DIRTY_ZONE | DIRTY_NOTES | DIRTY_PLAYED));
+    DIRTYLAYER_UNSET (~(DIRTY_SEQUENCE | DIRTY_REFRESH | DIRTY_GRID | DIRTY_ZONE | DIRTY_NOTES | DIRTY_PLAYED));
         
     ARRAYSLOCK
     
@@ -173,11 +174,6 @@ void tralala_focusTask (t_tralala *x)
     DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED);
 }
 
-void tralala_notifyTask (t_tralala *x)
-{
-    object_notify (x, tll_sym_modified, NULL);
-}
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -240,12 +236,12 @@ void tralala_focuslost (t_tralala *x, t_object *patcherview)
     x->flags &= ~FLAG_FOCUS;
     tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_ARROW);
 
-    DIRTYLAYER_SET (DIRTY_TEXT | DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED);
+    DIRTYLAYER_SET (DIRTY_REFRESH | DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED);
 }
 
 void tralala_patcherview_vis (t_tralala *x, t_object *patcherview)
 {
-    DIRTYLAYER_SET (DIRTY_TEXT | DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED);
+    DIRTYLAYER_SET (DIRTY_REFRESH | DIRTY_NOTES | DIRTY_ZONE | DIRTY_PLAYED);
     
     clock_fdelay (x->paintClock, 0.);
 }

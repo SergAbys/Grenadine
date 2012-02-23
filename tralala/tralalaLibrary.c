@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 21/02/12.
+ *  Last modified : 23/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -19,10 +19,12 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+extern PIZGrowingArray      *tll_clipboard;
 extern tralalaSymbolsTableB tll_symbolsB;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitch)
 {
@@ -196,7 +198,7 @@ void tralala_setSelectedNotesChannel (t_tralala *x, long channel)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-long tralala_hitZoneWithPoint (t_tralala *x, t_pt pt)
+long tralala_hitZone (t_tralala *x, t_pt pt)
 {
     t_rect  zoneRect;
     bool    a, b, c, d, e, f;
@@ -245,7 +247,7 @@ long tralala_hitZoneWithPoint (t_tralala *x, t_pt pt)
     return hitTest;
 }
 
-long tralala_hitTextWithPoint (t_tralala *x, t_object *patcherview, t_pt pt)
+long tralala_hitText (t_tralala *x, t_object *patcherview, t_pt pt)
 {
     long    i, numlines;
     double  textWidth, textHeight, fontSize, h1, h2, end; 
@@ -283,7 +285,7 @@ long tralala_hitTextWithPoint (t_tralala *x, t_object *patcherview, t_pt pt)
 
 bool tralala_hitNotesByRunIndex (t_tralala *x)
 {
-    bool haveChanged = false;
+    bool haveChanged = 0;
 
     pizGrowingArrayClear (x->played);
 
@@ -337,24 +339,63 @@ bool tralala_hitNotesByRunIndex (t_tralala *x)
     return haveChanged;
 }
 
+bool tralala_pasteFromClipboard (t_tralala *x) 
+{
+    bool haveChanged = false;
+    long count, i, offsetPosition, offsetPitch;
+    long w = (PIZ_SEQUENCE_TIMELINE_SIZE / 2);
+    long h = (PIZ_MAGIC_PITCH / 2);
+        
+    if (count = pizGrowingArrayCount (tll_clipboard)) {
+        pizSequenceUnselectAllNotes (x->user);
+        
+        if (pizGrowingArrayValueAtIndex (tll_clipboard, PIZ_DATA_POSITION) < w) {
+            offsetPosition = x->grid;
+        } else {
+            offsetPosition = -x->grid;
+        }
+            
+        if (pizGrowingArrayValueAtIndex (tll_clipboard, PIZ_DATA_PITCH) < h) {
+            offsetPitch = 1;
+        } else {
+            offsetPitch = -1;
+        }
+        
+        for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
+            long position = pizGrowingArrayValueAtIndex (tll_clipboard, i + PIZ_DATA_POSITION);
+            long pitch = pizGrowingArrayValueAtIndex (tll_clipboard, i + PIZ_DATA_PITCH);
+                
+            position += offsetPosition;
+            pitch    += offsetPitch;
+            
+            pizGrowingArraySetValueAtIndex (tll_clipboard, i + PIZ_DATA_POSITION, position);
+            pizGrowingArraySetValueAtIndex (tll_clipboard, i + PIZ_DATA_PITCH, pitch);
+        }
+        
+        pizSequenceAddNotesWithArray (x->user, tll_clipboard, PIZ_ADD_FLAG_SNAP);
+        haveChanged = true;
+    }
+    
+    return haveChanged;
+}
+        
 bool tralala_setCursorType (t_tralala *x, t_object *patcherview, t_jmouse_cursortype type)
 {
-    bool cursorSet = false;
+    bool haveChanged = false;
     
     if (type != x->cursorType) {
         x->cursorType = type;
         jmouse_setcursor (patcherview, (t_object *)x, type);
-        cursorSet = true;
+        haveChanged = true;
     }
     
-    return cursorSet;
+    return haveChanged;
 }
                                                         
-bool tralala_setCoordinatesWithPoint (t_tralala *x, PIZCoordinates *coordinates, t_pt pt)
+void tralala_setCoordinates (t_tralala *x, PIZCoordinates *coordinates, t_pt pt)
 {
     long    m, n;
     double  f = 1.;
-    bool    inside = true;
     
     switch (x->zoomMode) {
         case MODE_ZOOM_A : f = 0.5; break;
@@ -367,12 +408,6 @@ bool tralala_setCoordinatesWithPoint (t_tralala *x, PIZCoordinates *coordinates,
     
     coordinates->position = m;
     coordinates->pitch    = n;
-    
-    if ((n < 0) || (n > PIZ_MAGIC_PITCH) || (m < 0) || (m > (PIZ_SEQUENCE_TIMELINE_SIZE - 1))) {
-        inside = false;
-    }
-        
-    return inside;
 }
 
 void tralala_setRectWithZoneValues (t_tralala *x, t_rect *zoneRect, long start, long end, long down, long up)
@@ -508,16 +543,16 @@ void tralala_unselectAllText (t_tralala *x)
 bool tralala_hasSelectedText (t_tralala *x, long *result)
 {
     long i;
-    bool isSelected = false;
+    bool hasSelected = false;
     
     for (i = 0; i < TEXT_CELL_COUNT; i++) {
         if (x->textIsSelected[i]) {
-            isSelected = true;
+            hasSelected = true;
             *result = i;
         }
     }
     
-    return isSelected;
+    return hasSelected;
 }
 
 // -------------------------------------------------------------------------------------------------------------

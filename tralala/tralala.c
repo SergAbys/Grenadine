@@ -557,6 +557,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                 
                 pizSequenceSetGrid  (x->user, x->grid = PIZ_EIGHTH_NOTE);
                 pizSequenceSetCell  (x->user, PIZ_EIGHTH_NOTE);
+                
                 pizLinklistSetFlags (x->slots, PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY);
                 
                 if (dictionary_hasentry (d, tll_sym_tralala) && 

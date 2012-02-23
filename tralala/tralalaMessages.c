@@ -285,7 +285,6 @@ void tralala_handleMessages (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
                 DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_SEQUENCE);
                     
                 if (USER) {
-                    DIRTYSLOTS 
                     DIRTYPATTR
                 }
             }   
