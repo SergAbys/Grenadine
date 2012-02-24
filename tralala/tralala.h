@@ -70,7 +70,7 @@
 #define SIZE_PATTERN_MAX                    21
 #define SIZE_NOVEMBER_MAX                   10
 #define SIZE_JULIET_MAX                     10
-#define SIZE_TRALALA_DATA                   2
+#define SIZE_TRALALA_DATA                   5
 
 #define SIZE_PATCH_MIN                      "100. 100."
 
@@ -415,12 +415,23 @@ typedef struct _tralala {
     t_jrgba             focusedLivePlayedNoteColor;
     } t_tralala;
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 typedef struct _tralalaData {
     long        draw;
     long        values[SIZE_TRALALA_DATA];
     long        count;
+    long        option;
     PIZSequence *sequence;
 } t_tralalaData;
+
+enum {
+    OPTION_NONE = 0,
+    OPTION_NOTES,
+    OPTION_ZONE,
+    OPTION_COUNT
+};
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
