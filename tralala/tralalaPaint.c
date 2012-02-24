@@ -231,7 +231,9 @@ void tralala_focuslost (t_tralala *x, t_object *patcherview)
 {
     clock_unset (x->focusClock);
     
-    tralala_willChange (x);
+    if (USER) {
+        tralala_willChange (x);
+    }
     
     x->flags &= ~FLAG_FOCUS;
     tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_ARROW);

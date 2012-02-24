@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 20/02/12.
+ *  Last modified : 24/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -87,11 +87,27 @@ class_addmethod (c, (method)object_obex_dumpout,            "dumpout",          
 class_addmethod (c, (method)tralala_int,                    "int",                  A_LONG, 0);
 class_addmethod (c, (method)tralala_mute,                   "mute",                 A_LONG, 0);
 class_addmethod (c, (method)tralala_list,                   "list",                 A_GIMME, 0);
-class_addmethod (c, (method)tralala_handleMessages,         "user",                 A_GIMME, 0);
-class_addmethod (c, (method)tralala_handleMessages,         "live",                 A_GIMME, 0);
-class_addmethod (c, (method)tralala_handleMessages,         "listen",               A_GIMME, 0);
 class_addmethod (c, (method)tralala_slot,                   "slot",                 A_GIMME, 0);
-class_addmethod (c, (method)tralala_anything,               "anything",             A_GIMME, 0);
+class_addmethod (c, (method)tralala_handle,                 "user",                 A_GIMME, 0);
+class_addmethod (c, (method)tralala_handle,                 "live",                 A_GIMME, 0);
+class_addmethod (c, (method)tralala_handle,                 "listen",               A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceClear,          "clear",                A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceKill,           "kill",                 A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceZoulou,         "zoulou",               A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceRomeo,          "romeo",                A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceUniform,        "uniform",              A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceClean,          "clean",                A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceNote,           "note",                 A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceZone,           "zone",                 A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceDump,           "dump",                 A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceRotate,         "rotate",               A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceScramble,       "scramble",             A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceSort,           "sort",                 A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceChange,         "change",               A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceSet,            "set",                  A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceNovember,       "november",             A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceJuliet,         "juliet",               A_GIMME, 0);
+class_addmethod (c, (method)tralala_sequenceCycle,          "cycle",                A_GIMME, 0);
 class_addmethod (c, (method)tralala_play,                   "bang",                 0);
 class_addmethod (c, (method)tralala_play,                   "play",                 0);
 class_addmethod (c, (method)tralala_stop,                   "stop",                 0);
@@ -990,7 +1006,10 @@ t_max_err tralala_setSequenceMode (t_tralala *x, t_object *attr, long argc, t_at
     if (argc && argv) {
         long k = atom_getlong (argv);
         
-        tralala_willChange (x);
+        if (USER) {
+            tralala_willChange (x);
+        }
+        
         x->sequenceMode = CLAMP (k, MODE_SEQUENCE_USER, MODE_SEQUENCE_LIVE);
 
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_SEQUENCE | DIRTY_GRID);

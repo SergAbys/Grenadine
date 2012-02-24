@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 23/02/12.
+ *  Last modified : 24/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -561,22 +561,20 @@ bool tralala_hasSelectedText (t_tralala *x, long *result)
 
 void tralala_willChange (t_tralala *x)
 {
-    if (USER) {
-        x->hitTest  = HIT_NOTHING;
-        x->textMode = MODE_TEXT_NOTE;
-        x->flags    &= ~(FLAG_HAVE_CHANGED 
-                        | FLAG_HAVE_MOVED 
-                        | FLAG_HAVE_BEEN_DUPLICATED
-                        | FLAG_ZONE_IS_SELECTED
-                        | FLAG_ORIGIN_IS_SET
-                        | FLAG_IS_LASSO);
-        
-        x->mouseVelocityValue = 0;
-        
-        tralala_unselectAllText (x);
-        pizSequenceInitLasso (x->user);
-        tralala_stopAutoscroll (x);
-    }
+    x->hitTest  = HIT_NOTHING;
+    x->textMode = MODE_TEXT_NOTE;
+    x->flags    &= ~(FLAG_HAVE_CHANGED 
+                    | FLAG_HAVE_MOVED 
+                    | FLAG_HAVE_BEEN_DUPLICATED
+                    | FLAG_ZONE_IS_SELECTED
+                    | FLAG_ORIGIN_IS_SET
+                    | FLAG_IS_LASSO);
+    
+    x->mouseVelocityValue = 0;
+    
+    tralala_unselectAllText (x);
+    pizSequenceInitLasso (x->user);
+    tralala_stopAutoscroll (x);
 }
 
 // -------------------------------------------------------------------------------------------------------------

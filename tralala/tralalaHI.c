@@ -63,7 +63,6 @@ extern tralalaSymbolsTableA tll_symbolsA;
 void tralala_notifyTask (t_tralala *x)
 {
     object_notify (x, tll_sym_modified, NULL);
-    
     DIRTYSLOTS
 }
 

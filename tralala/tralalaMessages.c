@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 23/02/12.
+ *  Last modified : 24/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -24,7 +24,7 @@
 
 #define ALGORITHMSLOCK      systhread_mutex_lock (&x->algorithmsMutex);
 #define ALGORITHMSUNLOCK    systhread_mutex_unlock (&x->algorithmsMutex);
-
+           
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
@@ -203,122 +203,148 @@ void tralala_learnTask (t_tralala *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_anything (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
-{
-    char    alloc;
-    long    i, size = 0;
-    t_atom  *atoms = NULL;
-    
-    if (atom_alloc_array ((argc + 1), &size, &atoms, &alloc) == MAX_ERR_NONE) {
-        atom_setsym (atoms, s);
-        
-        for (i = 0; i < argc; i++) {
-            switch (atom_gettype (argv + i)) {
-                case A_SYM   : atom_setsym   (atoms + 1 + i, atom_getsym (argv + i));   break;
-                case A_LONG  : atom_setlong  (atoms + 1 + i, atom_getlong (argv + i));  break;
-                case A_FLOAT : atom_setfloat (atoms + 1 + i, atom_getfloat (argv + i)); break;
-            }
-        }
-        
-        tralala_handleMessages (x, tll_sym_live, argc + 1, atoms);
-        sysmem_freeptr (atoms);
-    } 
-}
-    
-void tralala_handleMessages (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+void tralala_handle (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
     if (argc && argv && atom_gettype (argv) == A_SYM) {
-        bool        draw = false;
-        PIZSequence *sequence = NULL;
-        
-        if (s == tll_sym_live) {
-            sequence = x->live; draw = LIVE;
-        } else if (s == tll_sym_user) { 
-            sequence = x->user; draw = USER;
-        } else if (s == tll_sym_listen) {
-            sequence = x->listen; 
-        }
-        
-        if (sequence && (atom_gettype (argv) == A_SYM)) {
-            if (atom_getsym (argv) == tll_sym_clear) {
-                draw &= tralala_sequenceClear (x, sequence);
-            } else if (atom_getsym (argv) == tll_sym_clean) {
-                draw &= tralala_sequenceClean (x, sequence, argc - 1, argv + 1);
-            } else if (atom_getsym (argv) == tll_sym_note) {
-                draw &= tralala_sequenceNote (x, sequence, argc - 1, argv + 1);
-            } else if (atom_getsym (argv) == tll_sym_zone) {
-                draw &= tralala_sequenceZone (x, sequence, argc - 1, argv + 1);
-            } else if (atom_getsym (argv) == tll_sym_dump) {
-                draw &= tralala_sequenceDump (x, sequence, argc - 1, argv + 1); 
-            } else if (atom_getsym (argv) == tll_sym_rotate) {
-                draw &= tralala_sequenceRotate (x, sequence, argc - 1, argv + 1);
-            } else if (atom_getsym (argv) == tll_sym_scramble) {
-                draw &= tralala_sequenceScramble (x, sequence, argc - 1, argv + 1);
-            } else if (atom_getsym (argv) == tll_sym_sort) {
-                draw &= tralala_sequenceSort (x, sequence, argc - 1, argv + 1);
-            } else if (atom_getsym (argv) == tll_sym_change) {
-                draw &= tralala_sequenceChange (x, sequence, argc - 1, argv + 1);
-            } else if (atom_getsym (argv) == tll_sym_set) {
-                draw &= tralala_sequenceSet (x, sequence, argc - 1, argv + 1);
-            } else if (atom_getsym (argv) == tll_sym_november) {
-                draw &= tralala_sequenceNovember (x, sequence, argc - 1, argv + 1);
-            } else if (atom_getsym (argv) == tll_sym_juliet) {
-                draw &= tralala_sequenceJuliet (x, sequence, argc - 1, argv + 1);
-            } else if (atom_getsym (argv) == tll_sym_cycle) {
-                draw &= tralala_sequenceCycle (x, sequence, argc - 1, argv + 1);
-            } else if (atom_getsym (argv) == tll_sym_kill) {
-                draw &= tralala_sequenceKill (x, sequence);
-            } else if (atom_getsym (argv) == tll_sym_zoulou) {
-                draw &= tralala_sequenceZoulou (x, sequence);
-            } else if (atom_getsym (argv) == tll_sym_romeo) {
-                draw &= tralala_sequenceRomeo (x, sequence);
-            } else if (atom_getsym (argv) == tll_sym_uniform) {
-                draw &= tralala_sequenceUniform (x, sequence);
-            }
+        t_symbol *temp = atom_getsym (argv);
+        atom_setsym (argv, s);
+        object_method_typed (x, temp, argc, argv, NULL);
+    }
+}
+
+void tralala_parseArguments (t_tralala *x, t_tralalaData *data, long argc, t_atom *argv)
+{
+    long i;
+    
+    data->draw      = LIVE;
+    data->count     = 0;
+    data->sequence  = x->live;
+    
+    if (argc && argv && data) {
+        for (i = 0; i < argc; i++) {
+            long t = atom_gettype (argv + i);
             
-            if (draw) {
-                tralala_willChange (x);
-                    
-                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_SEQUENCE);
-                    
-                if (USER) {
-                    DIRTYPATTR
+            if (t == A_SYM) {
+                t_symbol *s = atom_getsym (argv + i);
+                
+                if (s == tll_sym_user) {
+                    data->draw     = USER;
+                    data->sequence = x->user;
+                } else if (s == tll_sym_listen) {
+                    data->draw     = 0;
+                    data->sequence = x->listen;
                 }
-            }   
+            } else if (t == A_LONG) {
+                if (data->count < SIZE_TRALALA_DATA) {
+                    data->values[data->count] = atom_getlong (argv + i);
+                    data->count ++;
+                }
+            }
         }
     }
+    
+    if (USER) {
+        tralala_willChange (x);
+        DIRTYPATTR
+    } 
 }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-
-bool tralala_sequenceClear (t_tralala *x, PIZSequence *sequence)
-{
-    bool draw = (pizSequenceCount (sequence) != 0);
-    
-    pizSequenceClear (sequence);
-    
-    return draw;
-}
-
-
-bool tralala_sequenceClean (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv)
-{
-    bool draw = false;
-    long value = 1;
-    
-    if (argc && atom_gettype (argv) == A_LONG) {
-            value = atom_getlong (argv);
-        }
         
-    draw = pizSequenceClean (sequence, value);
+void tralala_sequenceClear (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{   
+    t_tralalaData data;
+    tralala_parseArguments (x, &data, argc, argv);
     
-    return draw;
+    data.draw &= (pizSequenceCount (data.sequence) > 0);
+    pizSequenceClear (data.sequence); 
+    
+    if (data.draw) {
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+    }
 }
 
-bool tralala_sequenceNote (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv)
+void tralala_sequenceKill (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
+    t_tralalaData data;
+    tralala_parseArguments (x, &data, argc, argv);
+    
+    data.draw &= pizSequenceKillNotes (data.sequence);
+    
+    if (data.draw) {
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+    }
+}
+
+void tralala_sequenceZoulou (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    t_tralalaData data;
+    tralala_parseArguments (x, &data, argc, argv);
+    
+    ALGORITHMSLOCK
+    
+    data.draw &= pizSequenceProceedAlgorithm (data.sequence, PIZ_FACTOR_ORACLE, (void *)x->factorOracle);
+    
+    ALGORITHMSUNLOCK
+    
+    if (data.draw) {
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+    }
+}
+
+void tralala_sequenceRomeo (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    t_tralalaData data;
+    tralala_parseArguments (x, &data, argc, argv);
+    
+    ALGORITHMSLOCK
+    
+    data.draw &= pizSequenceProceedAlgorithm (data.sequence, PIZ_GALOIS_LATTICE, (void *)x->galoisLattice);
+    
+    ALGORITHMSUNLOCK
+    
+    if (data.draw) {
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+    }
+}
+
+void tralala_sequenceUniform (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    t_tralalaData data;
+    tralala_parseArguments (x, &data, argc, argv);
+    
+    ALGORITHMSLOCK
+    
+    data.draw &= pizSequenceProceedAlgorithm (data.sequence, PIZ_FINITE_STATE, (void *)x->finiteState);
+    
+    ALGORITHMSUNLOCK
+    
+    if (data.draw) {
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+    }
+}
+
+void tralala_sequenceClean (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    long value = 1;
+    t_tralalaData data;
+    tralala_parseArguments (x, &data, argc, argv);
+    
+    if (data.count) {
+        value = data.values[0];
+    }
+    
+    data.draw &= pizSequenceClean (data.sequence, value);
+        
+    if (data.draw) {
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+    }
+}
+
+void tralala_sequenceNote (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{/*
     bool draw = false;
     
     if (argc == 5) {
@@ -368,11 +394,11 @@ bool tralala_sequenceNote (t_tralala *x, PIZSequence *sequence, long argc, t_ato
         ARRAY_RELEASE (tempArray);
     }
     
-    return draw;
+    return draw;*/
 }
 
-bool tralala_sequenceZone (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv)
-{
+void tralala_sequenceZone (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{/*
     bool draw = false;
     
     if (argc == PIZ_DATA_ZONE_SIZE) {
@@ -412,11 +438,11 @@ bool tralala_sequenceZone (t_tralala *x, PIZSequence *sequence, long argc, t_ato
         ARRAY_RELEASE (tempArray);
     }
     
-    return draw;
+    return draw;*/
 }   
 
-bool tralala_sequenceDump (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv)
-{
+void tralala_sequenceDump (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{/*
     if ((argc == 1) && (atom_gettype (argv) == A_SYM)) {
         if (atom_getsym (argv) == tll_sym_notes) {   
             long        i, count;
@@ -498,11 +524,11 @@ bool tralala_sequenceDump (t_tralala *x, PIZSequence *sequence, long argc, t_ato
         }
     }
 
-    return false;
+    return false;*/
 }
 
-bool tralala_sequenceRotate (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv)
-{
+void tralala_sequenceRotate (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{/*
     long        shift = 1;
     PIZSelector selector = PIZ_PITCH;
     bool        draw = false;
@@ -527,11 +553,11 @@ bool tralala_sequenceRotate (t_tralala *x, PIZSequence *sequence, long argc, t_a
     
     draw = pizSequenceRotate (sequence, selector, -(shift));
     
-    return draw;
+    return draw;*/
 }
 
-bool tralala_sequenceScramble (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv)
-{
+void tralala_sequenceScramble (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{/*
     bool        draw = false;
     PIZSelector selector = PIZ_PITCH;
     
@@ -549,11 +575,11 @@ bool tralala_sequenceScramble (t_tralala *x, PIZSequence *sequence, long argc, t
     
     draw = pizSequenceScramble (sequence, selector);
     
-    return draw;
+    return draw;*/
 }
 
-bool tralala_sequenceSort (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv)
-{
+void tralala_sequenceSort (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{/*
     long        i;
     bool        draw = false;
     bool        mode = UP;
@@ -578,11 +604,11 @@ bool tralala_sequenceSort (t_tralala *x, PIZSequence *sequence, long argc, t_ato
     
     draw = pizSequenceSort (sequence, selector, mode);
                     
-    return draw;
+    return draw;*/
 }
 
-bool tralala_sequenceChange (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv)
-{
+void tralala_sequenceChange (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{/*
     bool draw = false;
     
     if ((argc == 2) && (atom_gettype (argv) == A_SYM) && (atom_gettype (argv + 1) == A_LONG)) {
@@ -617,11 +643,11 @@ bool tralala_sequenceChange (t_tralala *x, PIZSequence *sequence, long argc, t_a
         }
     }
     
-    return draw;
+    return draw;*/
 }
 
-bool tralala_sequenceSet (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv)
-{
+void tralala_sequenceSet (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{/*
     bool draw = false;
     
     if ((argc == 2) && (atom_gettype (argv) == A_SYM) && (atom_gettype (argv + 1) == A_LONG)) {   
@@ -638,11 +664,11 @@ bool tralala_sequenceSet (t_tralala *x, PIZSequence *sequence, long argc, t_atom
         }
     }
     
-    return draw;
+    return draw;*/
 }
 
-bool tralala_sequenceNovember (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv)
-{
+void tralala_sequenceNovember (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{/*
     bool draw = false;
     long iterate = 1;
     
@@ -652,11 +678,11 @@ bool tralala_sequenceNovember (t_tralala *x, PIZSequence *sequence, long argc, t
         
     draw = pizSequenceCellularAutomata (sequence, iterate);
 
-    return draw;
+    return draw;*/
 }
 
-bool tralala_sequenceJuliet (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv)
-{
+void tralala_sequenceJuliet (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{/*
     bool draw = false;
     long division = 0;
     long iterate = 1;
@@ -679,11 +705,11 @@ bool tralala_sequenceJuliet (t_tralala *x, PIZSequence *sequence, long argc, t_a
         
     draw = pizSequenceGenerator (sequence, iterate, division);
 
-    return draw;
+    return draw;*/
 }
 
-bool tralala_sequenceCycle (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv)
-{
+void tralala_sequenceCycle (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{/*
     bool draw = false;
     
     if (argc) {
@@ -704,56 +730,10 @@ bool tralala_sequenceCycle (t_tralala *x, PIZSequence *sequence, long argc, t_at
         }
     }
 
-    return draw;
+    return draw;*/
 }
 
-bool tralala_sequenceKill (t_tralala *x, PIZSequence *sequence)
-{
-    bool draw = false;
-    
-    draw = pizSequenceKillNotes (sequence);
-    
-    return draw;
-}
-
-bool tralala_sequenceZoulou (t_tralala *x, PIZSequence *sequence)
-{
-    bool draw = false;
-    
-    ALGORITHMSLOCK
-
-    draw = pizSequenceProceedAlgorithm (sequence, PIZ_FACTOR_ORACLE, (void *)x->factorOracle);
-    
-    ALGORITHMSUNLOCK
-    
-    return draw; 
-}
-
-bool tralala_sequenceRomeo (t_tralala *x, PIZSequence *sequence)
-{
-    bool draw = false;
-    
-    ALGORITHMSLOCK
-    
-    draw = pizSequenceProceedAlgorithm (sequence, PIZ_GALOIS_LATTICE, (void *)x->galoisLattice);
-    
-    ALGORITHMSUNLOCK
-    
-    return draw;
-}
-
-bool tralala_sequenceUniform (t_tralala *x, PIZSequence *sequence)
-{
-    bool draw = false;
-    
-    ALGORITHMSLOCK
-    
-    draw = pizSequenceProceedAlgorithm (sequence, PIZ_FINITE_STATE, (void *)x->finiteState);
-    
-    ALGORITHMSUNLOCK
-
-    return draw;
-}   
+   
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -855,7 +835,10 @@ void tralala_slotRecall (t_tralala *x, long n)
     PIZGrowingArray *slot = NULL;
     
     if (!pizLinklistPtrAtIndex (x->slots, n, (void **)&slot)) {
-        tralala_willChange (x);
+        
+        if (USER) {
+            tralala_willChange (x);
+        }
         
         if (x->slotIndex != n) {
             tralala_slotStore (x);

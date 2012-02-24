@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 23/02/12.
+ *  Last modified : 24/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -70,6 +70,7 @@
 #define SIZE_PATTERN_MAX                    21
 #define SIZE_NOVEMBER_MAX                   10
 #define SIZE_JULIET_MAX                     10
+#define SIZE_TRALALA_DATA                   2
 
 #define SIZE_PATCH_MIN                      "100. 100."
 
@@ -414,6 +415,13 @@ typedef struct _tralala {
     t_jrgba             focusedLivePlayedNoteColor;
     } t_tralala;
 
+typedef struct _tralalaData {
+    long        draw;
+    long        values[SIZE_TRALALA_DATA];
+    long        count;
+    PIZSequence *sequence;
+} t_tralalaData;
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -464,27 +472,28 @@ void            tralala_forget                  (t_tralala *x);
 
 void            tralala_learnTask               (t_tralala *x);
 
-void            tralala_slot                    (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-void            tralala_anything                (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-void            tralala_handleMessages          (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+void            tralala_handle                  (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+void            tralala_parseArguments          (t_tralala *x, t_tralalaData *data, long argc, t_atom *argv);
 
-PIZ_LOCAL bool  tralala_sequenceClear           (t_tralala *x, PIZSequence *sequence);
-PIZ_LOCAL bool  tralala_sequenceClean           (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv);
-PIZ_LOCAL bool  tralala_sequenceNote            (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv);
-PIZ_LOCAL bool  tralala_sequenceZone            (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv);
-PIZ_LOCAL bool  tralala_sequenceDump            (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv);
-PIZ_LOCAL bool  tralala_sequenceRotate          (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv);
-PIZ_LOCAL bool  tralala_sequenceScramble        (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv);
-PIZ_LOCAL bool  tralala_sequenceSort            (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv);
-PIZ_LOCAL bool  tralala_sequenceChange          (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv);
-PIZ_LOCAL bool  tralala_sequenceSet             (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv);
-PIZ_LOCAL bool  tralala_sequenceNovember        (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv);
-PIZ_LOCAL bool  tralala_sequenceJuliet          (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv);
-PIZ_LOCAL bool  tralala_sequenceCycle           (t_tralala *x, PIZSequence *sequence, long argc, t_atom *argv);
-PIZ_LOCAL bool  tralala_sequenceKill            (t_tralala *x, PIZSequence *sequence);
-PIZ_LOCAL bool  tralala_sequenceZoulou          (t_tralala *x, PIZSequence *sequence);
-PIZ_LOCAL bool  tralala_sequenceRomeo           (t_tralala *x, PIZSequence *sequence);
-PIZ_LOCAL bool  tralala_sequenceUniform         (t_tralala *x, PIZSequence *sequence);
+PIZ_LOCAL void  tralala_sequenceClear           (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceKill            (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceZoulou          (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceRomeo           (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceUniform         (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceClean           (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceNote            (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceZone            (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceDump            (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceRotate          (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceScramble        (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceSort            (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceChange          (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceSet             (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceNovember        (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceJuliet          (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+PIZ_LOCAL void  tralala_sequenceCycle           (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+
+void            tralala_slot                    (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 
 PIZ_LOCAL void  tralala_slotNew                 (t_tralala *x);
 PIZ_LOCAL void  tralala_slotNewCopy             (t_tralala *x);
