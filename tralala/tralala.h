@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 24/02/12.
+ *  Last modified : 25/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -70,7 +70,6 @@
 #define SIZE_PATTERN_MAX                    21
 #define SIZE_NOVEMBER_MAX                   10
 #define SIZE_JULIET_MAX                     10
-#define SIZE_TRALALA_DATA                   5
 
 #define SIZE_PATCH_MIN                      "100. 100."
 
@@ -239,9 +238,9 @@
 #define USER            (x->sequenceMode == 0)
 #define LIVE            (x->sequenceMode == 1)
 #define SELECT          0
-#define INVERT          1
+#define INVERT          1 
 #define UP              0
-#define DOWN            1   
+#define DOWN            1
 
 #define ARRAYSLOCK      systhread_mutex_lock (&x->arraysMutex);
 #define ARRAYSUNLOCK    systhread_mutex_unlock (&x->arraysMutex);
@@ -420,9 +419,10 @@ typedef struct _tralala {
 
 typedef struct _tralalaData {
     long        draw;
-    long        values[SIZE_TRALALA_DATA];
+    long        values[PIZ_MAGIC_SCALE];
     long        count;
     long        option;
+    PIZSelector selector;
     PIZSequence *sequence;
 } t_tralalaData;
 
@@ -430,7 +430,19 @@ enum {
     OPTION_NONE = 0,
     OPTION_NOTES,
     OPTION_ZONE,
-    OPTION_COUNT
+    OPTION_COUNT,
+    OPTION_DOWN, 
+    OPTION_DUPLE,
+    OPTION_TRIPLE,
+    OPTION_RECALL,
+    OPTION_STORE,
+    OPTION_NEW,
+    OPTION_NEWCOPY,
+    OPTION_REMOVE,
+    OPTION_SWAP,
+    OPTION_COPY,
+    OPTION_NEXT,
+    OPTION_PREVIOUS
 };
 
 // -------------------------------------------------------------------------------------------------------------
@@ -483,6 +495,7 @@ void            tralala_forget                  (t_tralala *x);
 
 void            tralala_learnTask               (t_tralala *x);
 
+void            tralala_slot                    (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void            tralala_handle                  (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void            tralala_parseArguments          (t_tralala *x, t_tralalaData *data, long argc, t_atom *argv);
 
@@ -504,17 +517,13 @@ PIZ_LOCAL void  tralala_sequenceNovember        (t_tralala *x, t_symbol *s, long
 PIZ_LOCAL void  tralala_sequenceJuliet          (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 PIZ_LOCAL void  tralala_sequenceCycle           (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 
-void            tralala_slot                    (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-
 PIZ_LOCAL void  tralala_slotNew                 (t_tralala *x);
 PIZ_LOCAL void  tralala_slotNewCopy             (t_tralala *x);
-
 PIZ_LOCAL void  tralala_slotRecall              (t_tralala *x, long n);
 PIZ_LOCAL void  tralala_slotStore               (t_tralala *x);
 PIZ_LOCAL void  tralala_slotRemove              (t_tralala *x, long n);
 PIZ_LOCAL void  tralala_slotSwap                (t_tralala *x, long m, long n);
 PIZ_LOCAL void  tralala_slotCopy                (t_tralala *x, long m, long n);
-
 PIZ_LOCAL void  tralala_slotNext                (t_tralala *x);
 PIZ_LOCAL void  tralala_slotPrevious            (t_tralala *x);
 

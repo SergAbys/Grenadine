@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 24/02/12.
+ *  Last modified : 25/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -203,6 +203,50 @@ void tralala_learnTask (t_tralala *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+void tralala_slot (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
+        t_tralalaData   data;
+        long            m = x->slotIndex;
+        long            n = x->slotIndex;
+        
+        tralala_parseArguments (x, &data, argc, argv);        
+        
+        if (data.count) {
+            m = data.values[0];
+        }
+        if (data.count > 1) {
+            n = data.values[1];
+        }
+        
+        if (data.option) {
+            if (data.option == OPTION_RECALL) {
+                tralala_slotRecall (x, m);
+            } else if (data.option == OPTION_STORE) {
+                tralala_slotStore (x);
+            } else if (data.option == OPTION_NEW) {
+                tralala_slotNew (x);
+            } else if (data.option == OPTION_NEWCOPY) {
+                tralala_slotNewCopy (x);
+            } else if (data.option == OPTION_REMOVE) {
+                tralala_slotRemove (x, m);
+            } else if (data.option == OPTION_SWAP) {
+                tralala_slotSwap (x, m, n);
+            } else if (data.option == OPTION_COPY) {
+                tralala_slotCopy (x, m, n);
+            } else if (data.option == OPTION_NEXT) {
+                tralala_slotNext (x);
+            } else if (data.option == OPTION_PREVIOUS) {
+                tralala_slotPrevious (x);
+            }   
+        
+            DIRTYSLOTS
+        }
+    }
+
+    ATOMIC_DECREMENT (&x->popupLock);
+}
+
 void tralala_handle (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
     if (argc && argv && atom_gettype (argv) == A_SYM) {
@@ -217,6 +261,7 @@ void tralala_parseArguments (t_tralala *x, t_tralalaData *data, long argc, t_ato
     data->draw      = LIVE;
     data->count     = 0;
     data->option    = OPTION_NONE;
+    data->selector  = PIZ_PITCH;
     data->sequence  = x->live;
     
     if (argc && argv && data) {
@@ -228,21 +273,31 @@ void tralala_parseArguments (t_tralala *x, t_tralalaData *data, long argc, t_ato
             if (t == A_SYM) {
                 t_symbol *s = atom_getsym (argv + i);
                 
-                if (s == tll_sym_user) {
-                    data->draw     = USER;
-                    data->sequence = x->user;
-                } else if (s == tll_sym_listen) {
-                    data->draw     = 0;
-                    data->sequence = x->listen;
-                } else if (s == tll_sym_notes) {
-                    data->option = OPTION_NOTES;
-                } else if (s == tll_sym_zone) {
-                    data->option = OPTION_ZONE;
-                } else if (s == tll_sym_count) {
-                    data->option = OPTION_COUNT;
-                }
+                if (s == tll_sym_live)          { data->draw = LIVE; data->sequence  = x->live; }
+                else if (s == tll_sym_user)     { data->draw = USER; data->sequence = x->user; } 
+                else if (s == tll_sym_listen)   { data->draw = 0; data->sequence = x->listen; } 
+                else if (s == tll_sym_pitch)    { data->selector = PIZ_PITCH; } 
+                else if (s == tll_sym_velocity) { data->selector = PIZ_VELOCITY; } 
+                else if (s == tll_sym_duration) { data->selector = PIZ_DURATION; } 
+                else if (s == tll_sym_channel)  { data->selector = PIZ_CHANNEL; }
+                else if (s == tll_sym_notes)    { data->option = OPTION_NOTES; } 
+                else if (s == tll_sym_zone)     { data->option = OPTION_ZONE; } 
+                else if (s == tll_sym_count)    { data->option = OPTION_COUNT; } 
+                else if (s == tll_sym_down)     { data->option = OPTION_DOWN; } 
+                else if (s == tll_sym_duple)    { data->option = OPTION_DUPLE; } 
+                else if (s == tll_sym_triple)   { data->option = OPTION_TRIPLE; }
+                else if (s == tll_sym_recall )  { data->option = OPTION_RECALL; }
+                else if (s == tll_sym_store )   { data->option = OPTION_STORE; }
+                else if (s == tll_sym_new)      { data->option = OPTION_NEW; }
+                else if (s == tll_sym_newCopy)  { data->option = OPTION_NEWCOPY; }
+                else if (s == tll_sym_remove )  { data->option = OPTION_REMOVE; }
+                else if (s == tll_sym_swap)     { data->option = OPTION_SWAP; }
+                else if (s == tll_sym_copy)     { data->option = OPTION_COPY; }
+                else if (s == tll_sym_next)     { data->option = OPTION_NEXT; }
+                else if (s == tll_sym_previous) { data->option = OPTION_PREVIOUS; }
+                
             } else if (t == A_LONG) {
-                if (data->count < SIZE_TRALALA_DATA) {
+                if (data->count < PIZ_MAGIC_SCALE) {
                     data->values[data->count] = atom_getlong (argv + i);
                     data->count ++;
                 }
@@ -253,6 +308,7 @@ void tralala_parseArguments (t_tralala *x, t_tralalaData *data, long argc, t_ato
     if (USER) {
         tralala_willChange (x);
         DIRTYPATTR
+        DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_SEQUENCE);
     } 
 }
 
@@ -335,8 +391,8 @@ void tralala_sequenceUniform (t_tralala *x, t_symbol *s, long argc, t_atom *argv
 
 void tralala_sequenceClean (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    long value = 1;
-    t_tralalaData data;
+    long            value = 1;
+    t_tralalaData   data;
     tralala_parseArguments (x, &data, argc, argv);
     
     if (data.count) {
@@ -385,10 +441,10 @@ void tralala_sequenceNote (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         }
         
         ARRAY_RELEASE (tempArray);
-    }
-    
-    if (data.draw) {
-        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+        
+        if (data.draw) {
+            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+        }
     }
 }
 
@@ -414,10 +470,10 @@ void tralala_sequenceZone (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         }
         
         ARRAY_RELEASE (tempArray);
-    }
-    
-    if (data.draw) {
-        DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_SEQUENCE);
+        
+        if (data.draw) {
+            DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_SEQUENCE);
+        }
     }
 }   
 
@@ -494,268 +550,154 @@ void tralala_sequenceDump (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 }
 
 void tralala_sequenceRotate (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
-{/*
-    long        shift = 1;
-    PIZSelector selector = PIZ_PITCH;
-    bool        draw = false;
+{
+    long            value = -1;
+    t_tralalaData   data;
+    tralala_parseArguments (x, &data, argc, argv);
     
-    if (argc && argv) {
-        long i;
-            
-        for (i = 0; i < argc; i++) {
-            if (atom_gettype (argv + i) == A_LONG) {
-                    shift = atom_getlong (argv + i);
-            } else if (atom_gettype (argv + i) == A_SYM) {
-                if (atom_getsym (argv + i) == tll_sym_velocity) {
-                    selector = PIZ_VELOCITY;
-                } else if (atom_getsym (argv + i) == tll_sym_duration) {
-                    selector = PIZ_DURATION;
-                } else if (atom_getsym (argv + i) == tll_sym_channel) {
-                    selector = PIZ_CHANNEL;
-                }
-            }
-        }
+    if (data.count) {
+        value = data.values[0];
     }
     
-    draw = pizSequenceRotate (sequence, selector, -(shift));
+    data.draw &= pizSequenceRotate (data.sequence, data.selector, value);
     
-    return draw;*/
+    if (data.draw) {
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+    }
 }
 
 void tralala_sequenceScramble (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
-{/*
-    bool        draw = false;
-    PIZSelector selector = PIZ_PITCH;
+{
+    t_tralalaData data;
+    tralala_parseArguments (x, &data, argc, argv);
     
-    if (argc && argv) {
-        if (atom_gettype (argv) == A_SYM) {
-            if (atom_getsym (argv) == tll_sym_velocity) {
-                selector = PIZ_VELOCITY;
-            } else if (atom_getsym (argv) == tll_sym_duration) {
-                selector = PIZ_DURATION;
-            } else if (atom_getsym (argv) == tll_sym_channel) {
-                selector = PIZ_CHANNEL;
-            }
-        }
+    data.draw &= pizSequenceScramble (data.sequence, data.selector);
+    
+    if (data.draw) {
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
     }
-    
-    draw = pizSequenceScramble (sequence, selector);
-    
-    return draw;*/
 }
 
 void tralala_sequenceSort (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
-{/*
-    long        i;
-    bool        draw = false;
-    bool        mode = UP;
-    PIZSelector selector = PIZ_PITCH;
+{
+    t_tralalaData data;
+    tralala_parseArguments (x, &data, argc, argv);
     
-    if (argc && argv) {
-        for (i = 0; i < argc; i++) {
-            if (atom_gettype (argv + i) == A_SYM) {
-                if (atom_getsym (argv + i) == tll_sym_down) {
-                    mode = DOWN;
-                }
-                if (atom_getsym (argv + i) == tll_sym_velocity) {
-                    selector = PIZ_VELOCITY;
-                } else if (atom_getsym (argv + i) == tll_sym_duration) {
-                    selector = PIZ_DURATION;
-                } else if (atom_getsym (argv + i) == tll_sym_channel) {
-                    selector = PIZ_CHANNEL;
-                }
-            }
-        }
+    data.draw &= pizSequenceSort (data.sequence, data.selector, (data.option == OPTION_DOWN));
+    
+    if (data.draw) {
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
     }
-    
-    draw = pizSequenceSort (sequence, selector, mode);
-                    
-    return draw;*/
 }
 
 void tralala_sequenceChange (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
-{/*
-    bool draw = false;
+{
+    t_tralalaData data;
+    tralala_parseArguments (x, &data, argc, argv);
     
-    if ((argc == 2) && (atom_gettype (argv) == A_SYM) && (atom_gettype (argv + 1) == A_LONG)) {
-        long value = atom_getlong (argv + 1);
-
-        if (atom_getsym (argv) == tll_sym_pitch) {
-            draw = pizSequenceChange (sequence, PIZ_PITCH, value);
-        } else if (atom_getsym (argv) == tll_sym_velocity) {
-            draw = pizSequenceChange (sequence, PIZ_VELOCITY, value);
-        } else if (atom_getsym (argv) == tll_sym_duration) {
-            draw = pizSequenceChange (sequence, PIZ_DURATION, (long)(value / TIME_TICKS_PER_STEP));
-        } else if (atom_getsym (argv) == tll_sym_channel) {
-            draw = pizSequenceChange (sequence, PIZ_CHANNEL, value);
+    if (data.count == 1) {
+        if (data.selector == PIZ_DURATION) {
+            data.values[0] = (long)(data.values[0] / TIME_TICKS_PER_STEP);
         }
-    } else if ((argc == 3) && 
-        (atom_gettype (argv) == A_SYM) && 
-        (atom_gettype (argv + 1) == A_LONG) &&
-        (atom_gettype (argv + 2) == A_LONG)) {
-        
-        long minValue = atom_getlong (argv + 1);
-        long maxValue = atom_getlong (argv + 2);
 
-        if (atom_getsym (argv) == tll_sym_pitch) {
-            draw = pizSequenceRandom (sequence, PIZ_PITCH, minValue, maxValue);
-        } else if (atom_getsym (argv) == tll_sym_velocity) {
-            draw = pizSequenceRandom (sequence, PIZ_VELOCITY, minValue, maxValue);
-        } else if (atom_getsym (argv) == tll_sym_duration) {
-            draw = pizSequenceRandom (sequence, PIZ_DURATION, (long)(minValue / TIME_TICKS_PER_STEP),
-                (long)(maxValue / TIME_TICKS_PER_STEP));
-        } else if (atom_getsym (argv) == tll_sym_channel) {
-            draw = pizSequenceRandom (sequence, PIZ_CHANNEL, minValue, maxValue);
+        data.draw &= pizSequenceChange (data.sequence, data.selector, data.values[0]);
+        
+        if (data.draw) {
+            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+        }
+        
+    } else if (data.count == 2) {
+        if (data.selector == PIZ_DURATION) {
+            data.values[0] = (long)(data.values[0] / TIME_TICKS_PER_STEP);
+            data.values[1] = (long)(data.values[1] / TIME_TICKS_PER_STEP);
+        }
+        
+        data.draw &= pizSequenceRandom (data.sequence, data.selector, data.values[0], data.values[1]);
+        
+        if (data.draw) {
+            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
         }
     }
-    
-    return draw;*/
 }
 
 void tralala_sequenceSet (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
-{/*
-    bool draw = false;
+{
+    t_tralalaData data;
+    tralala_parseArguments (x, &data, argc, argv);
     
-    if ((argc == 2) && (atom_gettype (argv) == A_SYM) && (atom_gettype (argv + 1) == A_LONG)) {   
-        long value = atom_getlong (argv + 1);
-
-        if (atom_getsym (argv) == tll_sym_pitch) {
-            draw = pizSequenceSet (sequence, PIZ_PITCH, value);
-        } else if (atom_getsym (argv) == tll_sym_velocity) {
-            draw = pizSequenceSet (sequence, PIZ_VELOCITY, value);
-        } else if (atom_getsym (argv) == tll_sym_duration) {
-            draw = pizSequenceSet (sequence, PIZ_DURATION, (long)(value / TIME_TICKS_PER_STEP));
-        } else if (atom_getsym (argv) == tll_sym_channel) {
-            draw = pizSequenceSet (sequence, PIZ_CHANNEL, value);
+    if (data.count == 1) {
+        if (data.selector == PIZ_DURATION) {
+            data.values[0] = (long)(data.values[0] / TIME_TICKS_PER_STEP);
         }
-    }
-    
-    return draw;*/
+
+        data.draw &= pizSequenceSet (data.sequence, data.selector, data.values[0]);
+        
+        if (data.draw) {
+            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+        }
+    } 
 }
 
 void tralala_sequenceNovember (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
-{/*
-    bool draw = false;
-    long iterate = 1;
+{
+    long            value = 1;
+    t_tralalaData   data;
+    tralala_parseArguments (x, &data, argc, argv);
     
-    if (argc && (atom_gettype (argv) == A_LONG)) {
-        iterate = CLAMP (atom_getlong (argv), 1, SIZE_NOVEMBER_MAX);
+    if (data.count) {
+        value = CLAMP (data.values[0], 1, SIZE_NOVEMBER_MAX);
     }
-        
-    draw = pizSequenceCellularAutomata (sequence, iterate);
-
-    return draw;*/
+    
+    data.draw &= pizSequenceCellularAutomata (data.sequence, value);
+    
+    if (data.draw) {
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+    }
 }
 
 void tralala_sequenceJuliet (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
-{/*
-    bool draw = false;
-    long division = 0;
-    long iterate = 1;
+{
+    long            value = 1;
+    long            division = 0;
+    t_tralalaData   data;
+    tralala_parseArguments (x, &data, argc, argv);
     
-    if (argc) {
-        long i;
-        
-        for (i = 0; i < argc; i++) {
-            if (atom_gettype (argv + i) == A_LONG) {
-                iterate = CLAMP (atom_getlong (argv + i), 1, SIZE_JULIET_MAX);
-            } else if (atom_gettype (argv + i) == A_SYM) {
-                if (atom_getsym (argv + i) == tll_sym_duple) {
-                    division = 2;
-                } else if (atom_getsym (argv + i) == tll_sym_triple) {
-                    division = 3;
-                }
-            }
-        }
+    if (data.count) {
+        value = CLAMP (data.values[0], 1, SIZE_JULIET_MAX);
     }
-        
-    draw = pizSequenceGenerator (sequence, iterate, division);
-
-    return draw;*/
+    
+    if (data.option == OPTION_DUPLE) {
+        division = 2;
+    } else if (data.option == OPTION_TRIPLE) {
+        division = 3;
+    }
+    
+    data.draw &= pizSequenceGenerator (data.sequence, value, division);
+    
+    if (data.draw) {
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+    }
 }
 
 void tralala_sequenceCycle (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
-{/*
-    bool draw = false;
+{
+    t_tralalaData   data;
+    tralala_parseArguments (x, &data, argc, argv);
     
-    if (argc) {
-        long i;
-        
+    if (data.count) {
         ARRAY_GET (tempArray);
-        
+            
         if (tempArray) {
-            for (i = 0; i < argc; i++) {
-                if (atom_gettype (argv + i) == A_LONG) {
-                    pizGrowingArrayAppend (tempArray, atom_getlong (argv + i));
-                }
-            }
-        
-            draw = pizSequenceCycle (sequence, x->key, tempArray);
+            pizGrowingArrayAppendPtr (tempArray, data.count, data.values);
+            data.draw = pizSequenceCycle (data.sequence, x->key, tempArray);
             
             ARRAY_RELEASE (tempArray);
+            
+            if (data.draw) {
+                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+            }
         }
     }
-
-    return draw;*/
-}
-
-   
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void tralala_slot (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
-{
-    if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
-        if (argc && argv) {
-            if (atom_gettype (argv) == A_SYM) {
-                if (atom_getsym (argv) == tll_sym_store) {
-                    tralala_slotStore (x);
-                } else if (atom_getsym (argv) == tll_sym_new) {
-                    tralala_slotNew (x);
-                } else if (atom_getsym (argv) == tll_sym_newCopy) {
-                    tralala_slotNewCopy (x);
-                } else if (atom_getsym (argv) == tll_sym_recall) {
-                    long n = x->slotIndex;
-                        
-                    if ((argc == 2) && atom_gettype (argv + 1) == A_LONG) { 
-                        n = atom_getlong (argv + 1);
-                    }
-
-                    tralala_slotRecall (x, n);
-                } else if (atom_getsym (argv) == tll_sym_remove) {
-                    long n = x->slotIndex;
-                        
-                    if ((argc == 2) && atom_gettype (argv + 1) == A_LONG) { 
-                        n = atom_getlong (argv + 1);
-                    }
-
-                    tralala_slotRemove (x, n);
-                } else if (atom_getsym (argv) == tll_sym_swap) {
-                    if ((argc == 3) && atom_gettype (argv + 1) == A_LONG && atom_gettype (argv + 2) == A_LONG) {
-                        long m = atom_getlong (argv + 1);
-                        long n = atom_getlong (argv + 2);
-                        
-                        tralala_slotSwap (x, m, n);
-                    }   
-                } else if (atom_getsym (argv) == tll_sym_copy) {
-                    if ((argc == 3) && atom_gettype (argv + 1) == A_LONG && atom_gettype (argv + 2) == A_LONG) {
-                        long m = atom_getlong (argv + 1);
-                        long n = atom_getlong (argv + 2);
-                        
-                        tralala_slotCopy (x, m, n);
-                    }
-                } else if (atom_getsym (argv) == tll_sym_next) {
-                    tralala_slotNext (x);
-                } else if (atom_getsym (argv) == tll_sym_previous) {
-                    tralala_slotPrevious (x);
-                }
-            }
-        }       
-    }
-
-    ATOMIC_DECREMENT (&x->popupLock);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -769,8 +711,6 @@ void tralala_slotNew (t_tralala *x)
     if (newSlot = pizGrowingArrayNew (SIZE_GROWING_ARRAY)) {
         pizLinklistAppend (x->slots, newSlot);
         tralala_slotRecall (x, pizLinklistCount (x->slots) - 1);
-            
-        DIRTYSLOTS
     }
 }
 
@@ -791,8 +731,6 @@ void tralala_slotNewCopy (t_tralala *x)
     
         pizLinklistAppend (x->slots, newSlot);
         tralala_slotRecall (x, pizLinklistCount (x->slots) - 1);
-        
-        DIRTYSLOTS
     }
 }
 
@@ -801,25 +739,16 @@ void tralala_slotRecall (t_tralala *x, long n)
     PIZGrowingArray *slot = NULL;
     
     if (!pizLinklistPtrAtIndex (x->slots, n, (void **)&slot)) {
-        
-        if (USER) {
-            tralala_willChange (x);
-        }
-        
         if (x->slotIndex != n) {
             tralala_slotStore (x);
+            x->slotIndex = n;
         }
-        
-        x->slotIndex = n;
         
         pizSequenceDecodeWithArray (x->user, slot);
         
         DIRTYPATTR
-        
-        DIRTYLAYER_SET (DIRTY_GRID);
+        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_GRID | DIRTY_ZONE | DIRTY_SEQUENCE);
     }
-    
-    DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_SEQUENCE);
 }
 
 void tralala_slotStore (t_tralala *x)
@@ -839,8 +768,6 @@ void tralala_slotRemove (t_tralala *x, long n)
     
     if (!(err |= pizLinklistPtrAtIndex (x->slots, n, (void **)&slot))) {
         err |= pizLinklistRemoveByPtr (x->slots, slot);
-            
-        DIRTYSLOTS
     }
     
     if (!err) {
@@ -851,9 +778,8 @@ void tralala_slotRemove (t_tralala *x, long n)
                 x->slotIndex --;
             } else if (x->slotIndex == n) {
                 if (x->slotIndex == pizLinklistCount (x->slots)) {
-                        x->slotIndex --;
-                    }
-                    
+                    x->slotIndex --;
+                }
                 tralala_slotRecall (x, x->slotIndex);
             }   
         }
@@ -876,8 +802,6 @@ void tralala_slotSwap (t_tralala *x, long m, long n)
         } else if (x->slotIndex == n) {
             tralala_slotRecall (x, x->slotIndex);
         }
-        
-        DIRTYSLOTS
     }
 }
 
@@ -892,8 +816,6 @@ void tralala_slotCopy (t_tralala *x, long m, long n)
     
     if (!err) {
         err |= pizGrowingArrayCopy (a, b);
-            
-        DIRTYSLOTS
     }
     
     if (!err && (x->slotIndex == m)) {
