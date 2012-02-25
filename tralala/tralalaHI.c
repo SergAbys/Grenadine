@@ -543,6 +543,7 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
         } else {
             if (x->grid != k) {
                 pizSequenceSetGrid (x->user, x->grid = k); 
+                pizSequenceSetCell (x->user, k);
                 DIRTYLAYER_SET (DIRTY_GRID);
             }
         }
@@ -607,6 +608,7 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
         
         if (!SHIFT) {
             pizSequenceSetGrid (x->user, x->grid = new);
+            pizSequenceSetCell (x->user, new);
             DIRTYLAYER_SET (DIRTY_GRID);
         } else {
             pizSequenceSetNoteValue (x->user, x->noteValue = new);
@@ -902,6 +904,7 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
     }
     
     if (popup >= 10 && popup <= 27) {
+        pizSequenceSetCell (x->user, x->grid);
         DIRTYLAYER_SET (DIRTY_GRID);
     }
     

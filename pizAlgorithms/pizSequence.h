@@ -582,12 +582,12 @@ bool pizSequenceIsAtEnd (PIZSequence *x);
 void pizSequenceGoToStart (PIZSequence *x);
 
 /**
- * \brief   Fill an array with current index's notes and increment it.
- * \details Notes are appended.  Return PIZ_ERROR if index is at end. 
- *          Notes are transposed according to scale and velocity is modified by global velocity.
+ * \brief   Append an array with notes located at current index ; then increment the index.
+ * \details Return PIZ_ERROR if the index is at end. 
+ *          Notes are transposed according to scale, and velocity is modified by the global velocity.
  * \param   x A valid pointer.
  * \param   a A pointer to a dynamic array.
- * \return  True if index is equal to zone's end otherwise false.
+ * \return  An error code.
  * \ingroup sequenceBases
  */
 PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a);

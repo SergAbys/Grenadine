@@ -784,11 +784,14 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a)
                     if (noteChannel == PIZ_CHANNEL_NONE) {
                         noteChannel = x->channel;
                     }
-                        
+                      
+                    err |= pizGrowingArrayAppend (a, note->position);      
                     err |= pizGrowingArrayAppend (a, CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
                     err |= pizGrowingArrayAppend (a, CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY));
                     err |= pizGrowingArrayAppend (a, note->data[PIZ_DURATION]);
                     err |= pizGrowingArrayAppend (a, noteChannel);
+                    err |= pizGrowingArrayAppend (a, note->isSelected);
+                    err |= pizGrowingArrayAppend (a, (note == x->markedNote));
                 }
                 
                 note = nextNote;

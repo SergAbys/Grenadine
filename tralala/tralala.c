@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 24/02/12.
+ *  Last modified : 25/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -53,6 +53,7 @@ static t_class *tll_class = NULL;
 
 int main (void *moduleRef) 
 {   
+//
 t_class *c;
 
 c = class_new ("tralala", (method)tralala_new, (method)tralala_free, sizeof(t_tralala), 0L, A_GIMME, 0);
@@ -84,8 +85,6 @@ class_addmethod (c, (method)tralala_focuslost,              "focuslost",        
 class_addmethod (c, (method)tralala_patcherview_vis,        "patcherview_vis",      A_CANT, 0);
 class_addmethod (c, (method)tralala_patcherview_invis,      "patcherview_invis",    A_CANT, 0);
 class_addmethod (c, (method)object_obex_dumpout,            "dumpout",              A_CANT, 0);
-class_addmethod (c, (method)tralala_int,                    "int",                  A_LONG, 0);
-class_addmethod (c, (method)tralala_mute,                   "mute",                 A_LONG, 0);
 class_addmethod (c, (method)tralala_list,                   "list",                 A_GIMME, 0);
 class_addmethod (c, (method)tralala_slot,                   "slot",                 A_GIMME, 0);
 class_addmethod (c, (method)tralala_handle,                 "user",                 A_GIMME, 0);
@@ -108,6 +107,8 @@ class_addmethod (c, (method)tralala_sequenceSet,            "set",              
 class_addmethod (c, (method)tralala_sequenceNovember,       "november",             A_GIMME, 0);
 class_addmethod (c, (method)tralala_sequenceJuliet,         "juliet",               A_GIMME, 0);
 class_addmethod (c, (method)tralala_sequenceCycle,          "cycle",                A_GIMME, 0);
+class_addmethod (c, (method)tralala_int,                    "int",                  A_LONG, 0);
+class_addmethod (c, (method)tralala_mute,                   "mute",                 A_LONG, 0);
 class_addmethod (c, (method)tralala_play,                   "bang",                 0);
 class_addmethod (c, (method)tralala_play,                   "play",                 0);
 class_addmethod (c, (method)tralala_stop,                   "stop",                 0);
@@ -118,27 +119,27 @@ class_addmethod (c, (method)tralala_enter,                  "enter",            
 class_addmethod (c, (method)tralala_copy,                   "copy",                 0);
 class_addmethod (c, (method)tralala_forget,                 "forget",               0);
 
-CLASS_ATTR_DEFAULT         (c, "patching_rect",    0, DEFAULT_PATCHING_RECT);
-CLASS_ATTR_DEFAULT         (c, "fontname",         0, DEFAULT_FONTNAME);
-CLASS_ATTR_DEFAULT         (c, "fontsize",         0, DEFAULT_FONTSIZE);
-CLASS_ATTR_DEFAULT         (c, "fontface",         0, DEFAULT_FONTFACE);
-CLASS_ATTR_MIN             (c, "patching_size",    0, SIZE_PATCH_MIN);
+CLASS_ATTR_DEFAULT   (c, "patching_rect",    0, DEFAULT_PATCHING_RECT);
+CLASS_ATTR_DEFAULT   (c, "fontname",         0, DEFAULT_FONTNAME);
+CLASS_ATTR_DEFAULT   (c, "fontsize",         0, DEFAULT_FONTSIZE);
+CLASS_ATTR_DEFAULT   (c, "fontface",         0, DEFAULT_FONTFACE);
+CLASS_ATTR_MIN       (c, "patching_size",    0, SIZE_PATCH_MIN);
+CLASS_ATTR_INVISIBLE (c, "textcolor", 0);
+
+CLASS_STICKY_ATTR       (c, "category", 0, "Hint");
 
 CLASS_ATTR_LONG            (c, "embedslots",       0, t_tralala, saveSlotsWithPatcher);
 CLASS_ATTR_STYLE_LABEL     (c, "embedslots",       0, "onoff", "Save Slots With Patcher");
-CLASS_ATTR_CATEGORY        (c, "embedslots",       0, "Hint");
 CLASS_ATTR_DEFAULT_SAVE    (c, "embedslots",       0, "1"); 
 CLASS_ATTR_FILTER_CLIP     (c, "embedslots",       0, 1);
 
 CLASS_ATTR_LONG            (c, "embedchannel",     0, t_tralala, saveChannelWithPatcher);
 CLASS_ATTR_STYLE_LABEL     (c, "embedchannel",     0, "onoff", "Save Channel With Patcher");
-CLASS_ATTR_CATEGORY        (c, "embedchannel",     0, "Hint");
 CLASS_ATTR_DEFAULT_SAVE    (c, "embedchannel",     0, "1"); 
 CLASS_ATTR_FILTER_CLIP     (c, "embedchannel",     0, 1);
 
 CLASS_ATTR_LONG            (c, "embedvalues",      0, t_tralala, saveValuesWithPatcher);
 CLASS_ATTR_STYLE_LABEL     (c, "embedvalues",      0, "onoff", "Save Values With Patcher");
-CLASS_ATTR_CATEGORY        (c, "embedvalues",      0, "Hint");
 CLASS_ATTR_DEFAULT_SAVE    (c, "embedvalues",      0, "0"); 
 CLASS_ATTR_FILTER_CLIP     (c, "embedvalues",      0, 1);
 
@@ -146,14 +147,26 @@ CLASS_ATTR_ORDER           (c, "embedslots",       0, "1");
 CLASS_ATTR_ORDER           (c, "embedvalues",      0, "2");
 CLASS_ATTR_ORDER           (c, "embedchannel",     0, "3");
 
+CLASS_STICKY_ATTR_CLEAR (c, "category");
+CLASS_STICKY_ATTR       (c, "category", 0, "Midi");
+
 CLASS_ATTR_LONG            (c, "channel",          0, t_tralala, channel);
 CLASS_ATTR_DEFAULT         (c, "channel",          0, DEFAULT_CHANNEL);
 CLASS_ATTR_LABEL           (c, "channel",          0, "Channel");
-CLASS_ATTR_CATEGORY        (c, "channel",          0, "Midi");
 CLASS_ATTR_FILTER_CLIP     (c, "channel",          1, PIZ_MAGIC_CHANNEL);
 CLASS_ATTR_ACCESSORS       (c, "channel",          NULL, tralala_setChannel);
 
-CLASS_STICKY_ATTR          (c, "category",          0, "Value");
+CLASS_STICKY_ATTR_CLEAR (c, "category");
+CLASS_STICKY_ATTR       (c, "category", 0, "Appearance");
+
+CLASS_ATTR_LONG             (c, "viewtext",         0, t_tralala, viewText);
+CLASS_ATTR_DEFAULT_SAVE     (c, "viewtext",         0, DEFAULT_VIEW_TEXT);
+CLASS_ATTR_LABEL            (c, "viewtext",         0, "View Text");
+CLASS_ATTR_STYLE            (c, "viewtext",         0, "onoff");
+CLASS_ATTR_FILTER_CLIP      (c, "viewtext",         0, 1);
+
+CLASS_STICKY_ATTR_CLEAR (c, "category");
+CLASS_STICKY_ATTR       (c, "category", 0, "Value");
 
 CLASS_ATTR_LONG            (c, "tempo",             0, t_tralala, tempo);
 CLASS_ATTR_DEFAULT         (c, "tempo",             0, DEFAULT_TEMPO);
@@ -199,8 +212,6 @@ CLASS_ATTR_LABEL           (c, "chance",            0, "Chance");
 CLASS_ATTR_FILTER_CLIP     (c, "chance",            0, 100);
 CLASS_ATTR_ACCESSORS       (c, "chance",            NULL, tralala_setChance);
 
-CLASS_STICKY_ATTR_CLEAR     (c, "category");
-
 CLASS_ATTR_ORDER            (c, "tempo",            0, "201");
 CLASS_ATTR_ORDER            (c, "chance",           0, "202");
 CLASS_ATTR_ORDER            (c, "velocity",         0, "203");
@@ -210,14 +221,8 @@ CLASS_ATTR_ORDER            (c, "scalecustom",      0, "206");
 CLASS_ATTR_ORDER            (c, "patterncell",      0, "207");
 CLASS_ATTR_ORDER            (c, "patterncustom",    0, "208");
 
-CLASS_ATTR_LONG             (c, "viewtext",         0, t_tralala, viewText);
-CLASS_ATTR_DEFAULT_SAVE     (c, "viewtext",         0, DEFAULT_VIEW_TEXT);
-CLASS_ATTR_LABEL            (c, "viewtext",         0, "View Text");
-CLASS_ATTR_CATEGORY         (c, "viewtext",         0, "Appearance");
-CLASS_ATTR_STYLE            (c, "viewtext",         0, "onoff");
-CLASS_ATTR_FILTER_CLIP      (c, "viewtext",         0, 1);
-
-CLASS_STICKY_ATTR           (c, "category",         0, "Window");
+CLASS_STICKY_ATTR_CLEAR (c, "category");
+CLASS_STICKY_ATTR       (c, "category", 0, "Window");
 
 CLASS_ATTR_DOUBLE           (c, "windowoffsetx",    0, t_tralala, offsetX);
 CLASS_ATTR_DEFAULT          (c, "windowoffsetx",    0, DEFAULT_WINDOW_OFFSET_X);
@@ -238,16 +243,13 @@ CLASS_ATTR_DEFAULT          (c, "zoommode",         0, DEFAULT_MODE_ZOOM);
 CLASS_ATTR_LABEL            (c, "zoommode",         0, "Zoom Mode");
 CLASS_ATTR_FILTER_CLIP      (c, "zoommode",         0, 2);
 
-CLASS_STICKY_ATTR_CLEAR     (c, "category");
-
 CLASS_ATTR_ORDER            (c, "sequencemode",     0, "101");
 CLASS_ATTR_ORDER            (c, "zoommode",         0, "102");
 CLASS_ATTR_ORDER            (c, "windowoffsetx",    0, "103");
 CLASS_ATTR_ORDER            (c, "windowoffsety",    0, "104");
 
-CLASS_ATTR_INVISIBLE        (c, "textcolor", 0);
-
-CLASS_STICKY_ATTR           (c, "category",             0, "Color");
+CLASS_STICKY_ATTR_CLEAR (c, "category");
+CLASS_STICKY_ATTR       (c, "category", 0, "Color");
 
 CLASS_ATTR_RGBA             (c, "backgroundcolor",      0, t_tralala, backgroundColor);
 CLASS_ATTR_DEFAULTNAME_SAVE (c, "backgroundcolor",      0, DEFAULT_BACKGROUND_COLOR);
@@ -365,23 +367,6 @@ CLASS_ATTR_RGBA             (c, "candycaneb",       0, t_tralala, bNoteColor);
 CLASS_ATTR_DEFAULTNAME_SAVE (c, "candycaneb",       0, DEFAULT_B_NOTE_COLOR);
 CLASS_ATTR_STYLE_LABEL      (c, "candycaneb",       0, "rgba", "Candycane B");
 
-CLASS_STICKY_ATTR_CLEAR     (c, "category");
-CLASS_STICKY_ATTR           (c, "category",         0, "Font");
-
-CLASS_ATTR_SYM              (c, "popupfontname",    0, t_tralala, popupFontName);
-CLASS_ATTR_DEFAULTNAME_SAVE (c, "popupfontname",    0, DEFAULT_POPUP_FONTNAME);
-CLASS_ATTR_STYLE_LABEL      (c, "popupfontname",    0, "font", "Popup Font Name");
-CLASS_ATTR_DOUBLE           (c, "popupfontsize",    0, t_tralala, popupFontSize);
-CLASS_ATTR_DEFAULTNAME_SAVE (c, "popupfontsize",    0, DEFAULT_POPUP_FONTSIZE);
-CLASS_ATTR_ENUM             (c, "popupfontsize",    0, LIST_FONTSIZE);
-CLASS_ATTR_LABEL            (c, "popupfontsize",    0, "Popup Font Size");
-CLASS_ATTR_LONG             (c, "popupfontface",    0, t_tralala, popupFontFace);
-CLASS_ATTR_DEFAULTNAME_SAVE (c, "popupfontface",    0, DEFAULT_POPUP_FONTFACE);
-CLASS_ATTR_ENUMINDEX        (c, "popupfontface",    0, LIST_FONTSTYLE);
-CLASS_ATTR_LABEL            (c, "popupfontface",    0, "Popup Font Style");
-
-CLASS_STICKY_ATTR_CLEAR     (c, "category");
-
 CLASS_ATTR_ORDER            (c, "focusedtextcolor",                 0, "1");
 CLASS_ATTR_ORDER            (c, "focusedbordercolor",               0, "2");
 CLASS_ATTR_ORDER            (c, "focuseduserselectednotecolor",     0, "3");
@@ -405,61 +390,79 @@ CLASS_ATTR_ORDER            (c, "popubgcolor",                      0, "20");
 CLASS_ATTR_ORDER            (c, "popuphlttextcolor",                0, "21");
 CLASS_ATTR_ORDER            (c, "popuhltbgcolor",                   0, "22");
 
-tll_thirtySecond            [0] = jgraphics_image_surface_create_from_resource (moduleRef, "16A");
-tll_thirtySecond            [1] = jgraphics_image_surface_create_from_resource (moduleRef, "32B");
-tll_thirtySecond            [2] = jgraphics_image_surface_create_from_resource (moduleRef, "32C");
+CLASS_STICKY_ATTR_CLEAR (c, "category");
+CLASS_STICKY_ATTR       (c, "category", 0, "Font");
 
-tll_sixteenth               [0] = jgraphics_image_surface_create_from_resource (moduleRef, "16A");
-tll_sixteenth               [1] = jgraphics_image_surface_create_from_resource (moduleRef, "16B");
-tll_sixteenth               [2] = jgraphics_image_surface_create_from_resource (moduleRef, "16C");
-tll_sixteenthTriplet        [0] = jgraphics_image_surface_create_from_resource (moduleRef, "16TA");
-tll_sixteenthTriplet        [1] = jgraphics_image_surface_create_from_resource (moduleRef, "16TB");
-tll_sixteenthTriplet        [2] = jgraphics_image_surface_create_from_resource (moduleRef, "16TC");
-tll_sixteenthDotted         [0] = jgraphics_image_surface_create_from_resource (moduleRef, "16DA");
-tll_sixteenthDotted         [1] = jgraphics_image_surface_create_from_resource (moduleRef, "16DB");
-tll_sixteenthDotted         [2] = jgraphics_image_surface_create_from_resource (moduleRef, "16DC");
+CLASS_ATTR_SYM              (c, "popupfontname",    0, t_tralala, popupFontName);
+CLASS_ATTR_DEFAULTNAME_SAVE (c, "popupfontname",    0, DEFAULT_POPUP_FONTNAME);
+CLASS_ATTR_STYLE_LABEL      (c, "popupfontname",    0, "font", "Popup Font Name");
+CLASS_ATTR_DOUBLE           (c, "popupfontsize",    0, t_tralala, popupFontSize);
+CLASS_ATTR_DEFAULTNAME_SAVE (c, "popupfontsize",    0, DEFAULT_POPUP_FONTSIZE);
+CLASS_ATTR_ENUM             (c, "popupfontsize",    0, LIST_FONTSIZE);
+CLASS_ATTR_LABEL            (c, "popupfontsize",    0, "Popup Font Size");
+CLASS_ATTR_LONG             (c, "popupfontface",    0, t_tralala, popupFontFace);
+CLASS_ATTR_DEFAULTNAME_SAVE (c, "popupfontface",    0, DEFAULT_POPUP_FONTFACE);
+CLASS_ATTR_ENUMINDEX        (c, "popupfontface",    0, LIST_FONTSTYLE);
+CLASS_ATTR_LABEL            (c, "popupfontface",    0, "Popup Font Style");
 
-tll_eighth                  [0] = jgraphics_image_surface_create_from_resource (moduleRef, "8A");
-tll_eighth                  [1] = jgraphics_image_surface_create_from_resource (moduleRef, "8B");
-tll_eighth                  [2] = jgraphics_image_surface_create_from_resource (moduleRef, "8C");
-tll_eighthTriplet           [0] = jgraphics_image_surface_create_from_resource (moduleRef, "8TA");
-tll_eighthTriplet           [1] = jgraphics_image_surface_create_from_resource (moduleRef, "8TB");
-tll_eighthTriplet           [2] = jgraphics_image_surface_create_from_resource (moduleRef, "8TC");
-tll_eighthDotted            [0] = jgraphics_image_surface_create_from_resource (moduleRef, "8DA");
-tll_eighthDotted            [1] = jgraphics_image_surface_create_from_resource (moduleRef, "8DB");
-tll_eighthDotted            [2] = jgraphics_image_surface_create_from_resource (moduleRef, "8DC");
+CLASS_STICKY_ATTR_CLEAR (c, "category");
 
-tll_quarter                 [0] = jgraphics_image_surface_create_from_resource (moduleRef, "4A");
-tll_quarter                 [1] = jgraphics_image_surface_create_from_resource (moduleRef, "4B");
-tll_quarter                 [2] = jgraphics_image_surface_create_from_resource (moduleRef, "4C");
-tll_quarterTriplet          [0] = jgraphics_image_surface_create_from_resource (moduleRef, "4TA");
-tll_quarterTriplet          [1] = jgraphics_image_surface_create_from_resource (moduleRef, "4TB");
-tll_quarterTriplet          [2] = jgraphics_image_surface_create_from_resource (moduleRef, "4TC");
-tll_quarterDotted           [0] = jgraphics_image_surface_create_from_resource (moduleRef, "4DA");
-tll_quarterDotted           [1] = jgraphics_image_surface_create_from_resource (moduleRef, "4DB");
-tll_quarterDotted           [2] = jgraphics_image_surface_create_from_resource (moduleRef, "4DC");
+tll_thirtySecond        [0] = jgraphics_image_surface_create_from_resource (moduleRef, "16A");
+tll_thirtySecond        [1] = jgraphics_image_surface_create_from_resource (moduleRef, "32B");
+tll_thirtySecond        [2] = jgraphics_image_surface_create_from_resource (moduleRef, "32C");
 
-tll_half                    [0] = jgraphics_image_surface_create_from_resource (moduleRef, "2A");
-tll_half                    [1] = jgraphics_image_surface_create_from_resource (moduleRef, "2B");
-tll_half                    [2] = jgraphics_image_surface_create_from_resource (moduleRef, "2C");
-tll_halfTriplet             [0] = jgraphics_image_surface_create_from_resource (moduleRef, "2TA");
-tll_halfTriplet             [1] = jgraphics_image_surface_create_from_resource (moduleRef, "2TB");
-tll_halfTriplet             [2] = jgraphics_image_surface_create_from_resource (moduleRef, "2TC");
-tll_halfDotted              [0] = jgraphics_image_surface_create_from_resource (moduleRef, "2DA");
-tll_halfDotted              [1] = jgraphics_image_surface_create_from_resource (moduleRef, "2DB");
-tll_halfDotted              [2] = jgraphics_image_surface_create_from_resource (moduleRef, "2DC");
+tll_sixteenth           [0] = jgraphics_image_surface_create_from_resource (moduleRef, "16A");
+tll_sixteenth           [1] = jgraphics_image_surface_create_from_resource (moduleRef, "16B");
+tll_sixteenth           [2] = jgraphics_image_surface_create_from_resource (moduleRef, "16C");
+tll_sixteenthTriplet    [0] = jgraphics_image_surface_create_from_resource (moduleRef, "16TA");
+tll_sixteenthTriplet    [1] = jgraphics_image_surface_create_from_resource (moduleRef, "16TB");
+tll_sixteenthTriplet    [2] = jgraphics_image_surface_create_from_resource (moduleRef, "16TC");
+tll_sixteenthDotted     [0] = jgraphics_image_surface_create_from_resource (moduleRef, "16DA");
+tll_sixteenthDotted     [1] = jgraphics_image_surface_create_from_resource (moduleRef, "16DB");
+tll_sixteenthDotted     [2] = jgraphics_image_surface_create_from_resource (moduleRef, "16DC");
 
-tll_whole                   [0] = jgraphics_image_surface_create_from_resource (moduleRef, "1A");
-tll_whole                   [1] = jgraphics_image_surface_create_from_resource (moduleRef, "1B");
-tll_whole                   [2] = jgraphics_image_surface_create_from_resource (moduleRef, "1C");
+tll_eighth              [0] = jgraphics_image_surface_create_from_resource (moduleRef, "8A");
+tll_eighth              [1] = jgraphics_image_surface_create_from_resource (moduleRef, "8B");
+tll_eighth              [2] = jgraphics_image_surface_create_from_resource (moduleRef, "8C");
+tll_eighthTriplet       [0] = jgraphics_image_surface_create_from_resource (moduleRef, "8TA");
+tll_eighthTriplet       [1] = jgraphics_image_surface_create_from_resource (moduleRef, "8TB");
+tll_eighthTriplet       [2] = jgraphics_image_surface_create_from_resource (moduleRef, "8TC");
+tll_eighthDotted        [0] = jgraphics_image_surface_create_from_resource (moduleRef, "8DA");
+tll_eighthDotted        [1] = jgraphics_image_surface_create_from_resource (moduleRef, "8DB");
+tll_eighthDotted        [2] = jgraphics_image_surface_create_from_resource (moduleRef, "8DC");
 
-tll_clipboard = pizGrowingArrayNew (1);
+tll_quarter             [0] = jgraphics_image_surface_create_from_resource (moduleRef, "4A");
+tll_quarter             [1] = jgraphics_image_surface_create_from_resource (moduleRef, "4B");
+tll_quarter             [2] = jgraphics_image_surface_create_from_resource (moduleRef, "4C");
+tll_quarterTriplet      [0] = jgraphics_image_surface_create_from_resource (moduleRef, "4TA");
+tll_quarterTriplet      [1] = jgraphics_image_surface_create_from_resource (moduleRef, "4TB");
+tll_quarterTriplet      [2] = jgraphics_image_surface_create_from_resource (moduleRef, "4TC");
+tll_quarterDotted       [0] = jgraphics_image_surface_create_from_resource (moduleRef, "4DA");
+tll_quarterDotted       [1] = jgraphics_image_surface_create_from_resource (moduleRef, "4DB");
+tll_quarterDotted       [2] = jgraphics_image_surface_create_from_resource (moduleRef, "4DC");
+
+tll_half                [0] = jgraphics_image_surface_create_from_resource (moduleRef, "2A");
+tll_half                [1] = jgraphics_image_surface_create_from_resource (moduleRef, "2B");
+tll_half                [2] = jgraphics_image_surface_create_from_resource (moduleRef, "2C");
+tll_halfTriplet         [0] = jgraphics_image_surface_create_from_resource (moduleRef, "2TA");
+tll_halfTriplet         [1] = jgraphics_image_surface_create_from_resource (moduleRef, "2TB");
+tll_halfTriplet         [2] = jgraphics_image_surface_create_from_resource (moduleRef, "2TC");
+tll_halfDotted          [0] = jgraphics_image_surface_create_from_resource (moduleRef, "2DA");
+tll_halfDotted          [1] = jgraphics_image_surface_create_from_resource (moduleRef, "2DB");
+tll_halfDotted          [2] = jgraphics_image_surface_create_from_resource (moduleRef, "2DC");
+
+tll_whole               [0] = jgraphics_image_surface_create_from_resource (moduleRef, "1A");
+tll_whole               [1] = jgraphics_image_surface_create_from_resource (moduleRef, "1B");
+tll_whole               [2] = jgraphics_image_surface_create_from_resource (moduleRef, "1C");
+
+tll_clipboard = pizGrowingArrayNew (0);
 
 class_register (CLASS_BOX, c);
 
 tll_class = c;
 
 return MAX_ERR_NONE;
+//
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -470,11 +473,10 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 {
     t_tralala       *x = NULL;
     t_dictionary    *d = NULL;
-    long            boxflags;
 
     if (d = object_dictionaryarg (argc, argv)) {
         if (x = (t_tralala *)object_alloc (tll_class)) {
-            long i;
+            long i, k, boxflags;
             long initArrayPool[2] = {2, SIZE_GROWING_ARRAY};
             
             boxflags = 0 
@@ -488,22 +490,21 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
             jbox_new ((t_jbox *)x, boxflags, argc, argv);
             x->box.b_firstin = (void *)x;
             
-            x->rightOutlet          = outlet_new (x, NULL);
-            x->middleRightOutlet    = bangout ((t_object *)x);
-            x->middleLeftOutlet     = listout ((t_object *)x);
-            x->leftOutlet           = listout ((t_object *)x);
+            x->rightOutlet       = outlet_new (x, NULL);
+            x->middleRightOutlet = bangout ((t_object *)x);
+            x->middleLeftOutlet  = listout ((t_object *)x);
+            x->leftOutlet        = listout ((t_object *)x);
             
             object_obex_store ((void *)x, tll_sym_dumpout, (t_object *)x->rightOutlet);
             
-            x->paintClock           = clock_new (x, (method)tralala_paintTask);
-            x->learnClock           = clock_new (x, (method)tralala_learnTask);
-            x->focusClock           = clock_new (x, (method)tralala_focusTask);
-            x->notifyClock          = clock_new (x, (method)tralala_notifyTask);
-            
-            x->runClock             = clock_new (x, (method)tralala_runTask);
-            x->goToStartClock       = clock_new (x, (method)tralala_goToStartTask);
-            x->inhibitStartClock    = clock_new (x, (method)tralala_inhibitStartTask);
-            x->inhibitBangClock     = clock_new (x, (method)tralala_inhibitBangTask);
+            x->paintClock        = clock_new (x, (method)tralala_paintTask);
+            x->learnClock        = clock_new (x, (method)tralala_learnTask);
+            x->focusClock        = clock_new (x, (method)tralala_focusTask);
+            x->notifyClock       = clock_new (x, (method)tralala_notifyTask);
+            x->runClock          = clock_new (x, (method)tralala_runTask);
+            x->goToStartClock    = clock_new (x, (method)tralala_goToStartTask);
+            x->inhibitStartClock = clock_new (x, (method)tralala_inhibitStartTask);
+            x->inhibitBangClock  = clock_new (x, (method)tralala_inhibitBangTask);
             
             systhread_mutex_new (&x->methodsMutex,      SYSTHREAD_MUTEX_NORMAL);
             systhread_mutex_new (&x->algorithmsMutex,   SYSTHREAD_MUTEX_NORMAL);
@@ -517,26 +518,26 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
             
             jbox_ready ((t_jbox *)x);
 
-            x->user                     = pizSequenceNew        ( );
-            x->live                     = pizSequenceNew        ( );
-            x->listen                   = pizSequenceNew        ( );
-            x->arrayPool                = pizArrayPoolNew       (2, initArrayPool);
-            x->factorOracle             = pizFactorOracleNew    (0, NULL);
-            x->galoisLattice            = pizGaloisLatticeNew   (0, NULL);
-            x->finiteState              = pizFiniteStateNew     (0, NULL);
-            x->unselected               = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->selected                 = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->played                   = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->zone                     = pizGrowingArrayNew    (PIZ_DATA_ZONE_SIZE);
-            x->unselectedCopy           = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->selectedCopy             = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->playedCopy               = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->zoneCopy                 = pizGrowingArrayNew    (PIZ_DATA_ZONE_SIZE);
-            x->origin                   = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->result                   = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->valuesToBeLearned        = pizGrowingArrayNew    (SIZE_LEARN_ARRAY);
-            x->learnQueue               = pizBoundedQueueNew    (SIZE_LEARN_QUEUE);
-            x->slots                    = pizLinklistNew        ( );
+            x->user                 = pizSequenceNew        ( );
+            x->live                 = pizSequenceNew        ( );
+            x->listen               = pizSequenceNew        ( );
+            x->arrayPool            = pizArrayPoolNew       (2, initArrayPool);
+            x->factorOracle         = pizFactorOracleNew    (0, NULL);
+            x->galoisLattice        = pizGaloisLatticeNew   (0, NULL);
+            x->finiteState          = pizFiniteStateNew     (0, NULL);
+            x->unselected           = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+            x->selected             = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+            x->played               = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+            x->zone                 = pizGrowingArrayNew    (PIZ_DATA_ZONE_SIZE);
+            x->unselectedCopy       = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+            x->selectedCopy         = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+            x->playedCopy           = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+            x->zoneCopy             = pizGrowingArrayNew    (PIZ_DATA_ZONE_SIZE);
+            x->origin               = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+            x->result               = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+            x->valuesToBeLearned    = pizGrowingArrayNew    (SIZE_LEARN_ARRAY);
+            x->learnQueue           = pizBoundedQueueNew    (SIZE_LEARN_QUEUE);
+            x->slots                = pizLinklistNew        ( );
     
             if (x->user && 
                 x->live && 
@@ -559,6 +560,9 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                 x->learnQueue &&
                 x->slots) {
                 
+                t_dictionary    *dictionary = NULL;
+                PIZGrowingArray *firstSlot = NULL;
+                
                 attr_dictionary_process (x, d);
 
                 x->flags            = FLAG_INIT_PAINT_CLOCK;
@@ -576,29 +580,28 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                 
                 pizLinklistSetFlags (x->slots, PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY);
                 
-                if (dictionary_hasentry (d, tll_sym_tralala) && 
-                    (x->saveSlotsWithPatcher || x->saveChannelWithPatcher || x->saveValuesWithPatcher)) {
-                    t_dictionary *data = NULL;
-                    dictionary_getdictionary (d, tll_sym_tralala, (t_object **)&data);
+                k = (x->saveSlotsWithPatcher || x->saveChannelWithPatcher || x->saveValuesWithPatcher);
+                
+                if (k && dictionary_hasentry (d, tll_sym_tralala)) {
+                    dictionary_getdictionary (d, tll_sym_tralala, (t_object **)&dictionary);
                     
-                    if (data) {
-                            tralala_dataWithDictionary (x, data);
-                        }
+                    if (dictionary) {
+                        tralala_dataWithDictionary (x, dictionary);
                     }
+                }
                 
                 if (!pizLinklistCount (x->slots)) {
-                    PIZGrowingArray *firstSlot = NULL;
-                    
                     if (firstSlot = pizGrowingArrayNew (SIZE_GROWING_ARRAY)) {
-                            pizLinklistAppend (x->slots, firstSlot);
-                        }
+                        pizLinklistAppend (x->slots, firstSlot);
                     }
+                }
                 
                 tralala_slotRecall (x, x->slotIndex);
                 
                 srand ((unsigned int)time(NULL));
                 
                 clock_fdelay (x->learnClock, CLOCK_LEARN_INTERVAL);
+                
             } else {
                 object_free (x);
                 x = NULL;
@@ -616,48 +619,48 @@ void tralala_free (t_tralala *x)
     if (x->paintClock) {
         clock_unset (x->paintClock);
         object_free (x->paintClock);
-        }
+    }
     if (x->learnClock) {
         clock_unset (x->learnClock);
         object_free (x->learnClock);
-        }
+    }
     if (x->runClock) {
         clock_unset (x->runClock);
         object_free (x->runClock);
-        }
+    }
     if (x->goToStartClock) {
         clock_unset (x->goToStartClock);
         object_free (x->goToStartClock);
-        }
+    }
     if (x->inhibitStartClock) {
         clock_unset (x->inhibitStartClock);
         object_free (x->inhibitStartClock);
-        }
+    }
     if (x->inhibitBangClock) {
         clock_unset (x->inhibitBangClock);
         object_free (x->inhibitBangClock);
-        }
+    }
     if (x->focusClock) {
         clock_unset (x->focusClock);
         object_free (x->focusClock);
-        }
+    }
     if (x->notifyClock) {
         clock_unset (x->notifyClock);
         object_free (x->notifyClock);
-        }
+    }
     
     if (x->learnMutex) {
         systhread_mutex_free (x->learnMutex);
-        }
+    }
     if (x->arraysMutex) {
         systhread_mutex_free (x->arraysMutex);
-        }
+    }
     if (x->methodsMutex) {
         systhread_mutex_free (x->methodsMutex);
-        }
+    }
     if (x->algorithmsMutex) {
         systhread_mutex_free (x->algorithmsMutex);
-        }
+    }
     
     for (i = 0; i < TEXT_CELL_COUNT; i++) {
         if (x->textLayers[i]) {
@@ -702,24 +705,24 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
         sprintf (s, "Messages");
     } else {   
         switch (a) {
-            case 0  : sprintf (s, "(list) Played Notes"); break;    
-            case 1  : sprintf (s, "(list) Dumped Notes"); break;
-            case 2  : sprintf (s, "(bang) End Of Loop"); break;
-            case 3  : sprintf (s, "(anything) Dumpout"); break;
+            case 0  : sprintf (s, "(list) Played Notes");   break;    
+            case 1  : sprintf (s, "(list) Dumped Notes");   break;
+            case 2  : sprintf (s, "(bang) End Of Loop");    break;
+            case 3  : sprintf (s, "(anything) Dumpout");    break;
         }
     }
 }
 
 void tralala_jsave (t_tralala *x, t_dictionary *d)
 {
-    t_dictionary *data = NULL;
-
-    if ((x->saveSlotsWithPatcher || x->saveChannelWithPatcher || x->saveValuesWithPatcher) 
-        && d && (data = dictionary_new ())) {
-            tralala_slotStore (x);
-            tralala_dataToDictionary (x, data);
-            dictionary_appenddictionary (d, tll_sym_tralala, (t_object *)data); 
-        }
+    t_dictionary *dictionary = NULL;
+    long k = (x->saveSlotsWithPatcher || x->saveChannelWithPatcher || x->saveValuesWithPatcher);
+    
+    if (k && d && (dictionary = dictionary_new ())) {
+        tralala_slotStore (x);
+        tralala_dataToDictionary (x, dictionary);
+        dictionary_appenddictionary (d, tll_sym_tralala, (t_object *)dictionary); 
+    }
 }
 
 t_max_err tralala_setvalueof (t_tralala *x, long argc, t_atom *argv)
@@ -728,8 +731,8 @@ t_max_err tralala_setvalueof (t_tralala *x, long argc, t_atom *argv)
         ARRAY_GET (tempArray);
         
         if (tempArray) {
-            long        i;
-            PIZError    err = PIZ_GOOD;
+            long     i;
+            PIZError err = PIZ_GOOD;
             
             for (i = 0; i < argc; i++) {    
                 err |= pizGrowingArrayAppend (tempArray, atom_getlong (argv + i));
@@ -740,9 +743,9 @@ t_max_err tralala_setvalueof (t_tralala *x, long argc, t_atom *argv)
                 DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_SEQUENCE);
                 DIRTYSLOTS
             }
-            
-            ARRAY_RELEASE (tempArray);
         }
+        
+        ARRAY_RELEASE (tempArray);
     }
     
     return MAX_ERR_NONE;
@@ -769,9 +772,9 @@ t_max_err tralala_getvalueof (t_tralala *x, long *argc, t_atom **argv)
                     atom_setlong_array (*argc, *argv, size, ptr);
                 }
             }
-            
-            ARRAY_RELEASE (tempArray);
         }
+        
+        ARRAY_RELEASE (tempArray);
     }
 
     return MAX_ERR_NONE;
@@ -808,192 +811,172 @@ t_max_err jbox_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, void
 void tralala_dataToDictionary (t_tralala *x, t_dictionary *d)
 {
     if (d) {
-        if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
-            dictionary_appendlong   (d, tll_sym_version, PIZ_SEQUENCE_VERSION_MAJOR);
-            dictionary_appendlong   (d, tll_sym_sequenceMode, x->sequenceMode);
-            dictionary_appendlong   (d, tll_sym_zoomMode, x->zoomMode);
-            dictionary_appendfloat  (d, tll_sym_windowOffsetX, x->offsetX);
-            dictionary_appendfloat  (d, tll_sym_windowOffsetY, x->offsetY); 
-            
-            if (x->saveSlotsWithPatcher) {
-                long            index = 0;
-                PIZGrowingArray *slot = NULL;
-                PIZGrowingArray *nextSlot = NULL;
-                
-                pizLinklistPtrAtIndex (x->slots, 0, (void **)&slot);
-                
-                while (slot) {
-                    pizLinklistNextByPtr (x->slots, (void *)slot, (void **)&nextSlot);
-                    
-                    t_atom  *storage = NULL;
-                    long    count = pizGrowingArrayCount (slot);
-                    
-                    if (storage = (t_atom *)sysmem_newptrclear (sizeof(t_atom) * count)) {
-                        long *ptr = NULL;
-                        char key[SIZE_STRING_MAX];
-                        
-                        ptr = pizGrowingArrayPtr (slot);
-                        atom_setlong_array (count, storage, count, ptr);
-                        snprintf (key, SIZE_STRING_MAX, "slot %ld", index);
-                        key[SIZE_STRING_MAX - 1] = 0;
-                        
-                        dictionary_appendatoms (d, gensym (key), count, storage);
-                        
-                        sysmem_freeptr (storage);
-                    }
-                    
-                    slot = nextSlot;
-                    index ++;
-                }
-                
-                dictionary_appendlong (d, tll_sym_slots, index);
-            }   
-                
-            if (x->saveChannelWithPatcher) {
-                dictionary_appendlong (d, tll_sym_channel, x->channel);
-            }
-            
-            if (x->saveValuesWithPatcher) {
-                char alloc1, alloc2;
-                long argc1 = 0;
-                long argc2 = 0;
-                t_atom *argv1 = NULL;
-                t_atom *argv2 = NULL;
-                
-                dictionary_appendlong   (d, tll_sym_tempo, x->tempo);
-                dictionary_appendlong   (d, tll_sym_chance, x->chance);
-                dictionary_appendsym    (d, tll_sym_scaleKey, x->scaleKey);
-                dictionary_appendsym    (d, tll_sym_scaleType, x->scaleType);
-                dictionary_appendsym    (d, tll_sym_patternCell, x->patternCell);
-                dictionary_appendlong   (d, tll_sym_velocity, x->velocity);
-                
-                if ((atom_alloc_array (PIZ_MAGIC_SCALE, &argc1, &argv1, &alloc1)) == MAX_ERR_NONE) {
-                    atom_setlong_array (argc1, argv1, PIZ_MAGIC_SCALE, x->scaleCustom);
-                    dictionary_appendatoms (d, tll_sym_scaleCustom, argc1, argv1);
-                    sysmem_freeptr (argv1);
-                }
-                
-                if ((atom_alloc_array (x->patternSize, &argc2, &argv2, &alloc2)) == MAX_ERR_NONE) {
-                    atom_setlong_array (argc2, argv2, x->patternSize, x->patternCustom);
-                    dictionary_appendatoms (d, tll_sym_patternCustom, argc2, argv2);
-                    sysmem_freeptr (argv2);
-                }
-            }
-        }
-
-        ATOMIC_DECREMENT (&x->popupLock);
+    //
+    if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
+    //
+    dictionary_appendlong   (d, tll_sym_sequenceMode, x->sequenceMode);
+    dictionary_appendlong   (d, tll_sym_zoomMode, x->zoomMode);
+    dictionary_appendfloat  (d, tll_sym_windowOffsetX, x->offsetX);
+    dictionary_appendfloat  (d, tll_sym_windowOffsetY, x->offsetY); 
+    
+    dictionary_appendlong   (d, tll_sym_version, PIZ_SEQUENCE_VERSION_MAJOR);
+    
+    if (x->saveChannelWithPatcher) {
+        dictionary_appendlong (d, tll_sym_channel, x->channel);
     }
+    
+    if (x->saveSlotsWithPatcher) {
+        long            index = 0;
+        PIZGrowingArray *slot = NULL;
+        PIZGrowingArray *nextSlot = NULL;
+        
+        pizLinklistPtrAtIndex (x->slots, 0, (void **)&slot);
+        
+        while (slot) {
+            long    count;
+            char    key[SIZE_STRING_MAX];
+            t_atom  *storage = NULL;
+            long    *ptr = NULL;
+            
+            pizLinklistNextByPtr (x->slots, (void *)slot, (void **)&nextSlot);
+            count = pizGrowingArrayCount (slot);
+            
+            if (storage = (t_atom *)sysmem_newptrclear (sizeof(t_atom) * count)) {
+                ptr = pizGrowingArrayPtr (slot);
+                atom_setlong_array (count, storage, count, ptr);
+                snprintf (key, SIZE_STRING_MAX, "slot %ld", index);
+                key[SIZE_STRING_MAX - 1] = 0;
+                dictionary_appendatoms (d, gensym (key), count, storage);
+                sysmem_freeptr (storage);
+            }
+            
+            slot = nextSlot;
+            index ++;
+        }
+        
+        dictionary_appendlong (d, tll_sym_slots, index);
+    }   
+        
+    if (x->saveValuesWithPatcher) {
+        char alloc1, alloc2;
+        long argc1 = 0;
+        long argc2 = 0;
+        t_atom *argv1 = NULL;
+        t_atom *argv2 = NULL;
+        
+        dictionary_appendlong   (d, tll_sym_tempo, x->tempo);
+        dictionary_appendlong   (d, tll_sym_chance, x->chance);
+        dictionary_appendsym    (d, tll_sym_scaleKey, x->scaleKey);
+        dictionary_appendsym    (d, tll_sym_scaleType, x->scaleType);
+        dictionary_appendsym    (d, tll_sym_patternCell, x->patternCell);
+        dictionary_appendlong   (d, tll_sym_velocity, x->velocity);
+        
+        if ((atom_alloc_array (PIZ_MAGIC_SCALE, &argc1, &argv1, &alloc1)) == MAX_ERR_NONE) {
+            atom_setlong_array (argc1, argv1, PIZ_MAGIC_SCALE, x->scaleCustom);
+            dictionary_appendatoms (d, tll_sym_scaleCustom, argc1, argv1);
+            sysmem_freeptr (argv1);
+        }
+        
+        if ((atom_alloc_array (x->patternSize, &argc2, &argv2, &alloc2)) == MAX_ERR_NONE) {
+            atom_setlong_array (argc2, argv2, x->patternSize, x->patternCustom);
+            dictionary_appendatoms (d, tll_sym_patternCustom, argc2, argv2);
+            sysmem_freeptr (argv2);
+        }
+    }
+    //    
+    } ATOMIC_DECREMENT (&x->popupLock);  
+    //    
+    } 
 }
 
 void tralala_dataWithDictionary (t_tralala *x, t_dictionary *d)
 {
     if (d) {
-        if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
-            long sequenceMode = -1;
-            long channel = -1;
-            
-            dictionary_getlong  (d, tll_sym_zoomMode, &x->zoomMode);
-            dictionary_getfloat (d, tll_sym_windowOffsetX, &x->offsetX);
-            dictionary_getfloat (d, tll_sym_windowOffsetY, &x->offsetY);
-            dictionary_getlong  (d, tll_sym_sequenceMode, &sequenceMode);
-            
-            if (x->saveChannelWithPatcher) {
-                dictionary_getlong (d, tll_sym_channel, &channel);
-            }
-                
-            if (x->saveSlotsWithPatcher) {
-                long i;
-                long count = 0;
-                
-                dictionary_getlong (d, tll_sym_slots, &count);
-                
-                for (i = 0; i < count; i++) {
-                    long    argc = 0;
-                    t_atom  *argv = NULL;
-                    char    key[SIZE_STRING_MAX];
+    //
+    if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
+    //
+    long tempA = 0;
+    long tempB = 0;
     
-                    snprintf (key, SIZE_STRING_MAX, "slot %ld", i);
-                    key[SIZE_STRING_MAX - 1] = 0;
-                    
-                    dictionary_getatoms (d, gensym (key), &argc, &argv);
-                    
-                    if (argv) {
-                        long j;
-                        PIZGrowingArray *slot = NULL;
-                        
-                        if (slot = pizGrowingArrayNew (SIZE_GROWING_ARRAY)) {
-                            for (j = 0; j < argc; j++) {
-                                pizGrowingArrayAppend (slot, atom_getlong (argv + j));
-                            }
-                            
-                            pizLinklistAppend (x->slots, slot);
-                        }
+    dictionary_getlong  (d, tll_sym_sequenceMode, &tempA);
+    dictionary_getlong  (d, tll_sym_zoomMode, &x->zoomMode);
+    dictionary_getfloat (d, tll_sym_windowOffsetX, &x->offsetX);
+    dictionary_getfloat (d, tll_sym_windowOffsetY, &x->offsetY);
+    
+    if (x->saveChannelWithPatcher) {
+        dictionary_getlong (d, tll_sym_channel, &tempB);
+    }
+        
+    if (x->saveSlotsWithPatcher) {
+        long            i, j;
+        long            count = 0;
+        long            argc = 0;
+        t_atom          *argv = NULL;
+        char            key[SIZE_STRING_MAX];
+        PIZGrowingArray *slot = NULL;
+        
+        dictionary_getlong (d, tll_sym_slots, &count);
+        
+        for (i = 0; i < count; i++) {
+            snprintf (key, SIZE_STRING_MAX, "slot %ld", i);
+            key[SIZE_STRING_MAX - 1] = 0;
+            dictionary_getatoms (d, gensym (key), &argc, &argv);
+            
+            if (argv) {
+                if (slot = pizGrowingArrayNew (SIZE_GROWING_ARRAY)) {
+                    for (j = 0; j < argc; j++) {
+                        pizGrowingArrayAppend (slot, atom_getlong (argv + j));
                     }
+                    pizLinklistAppend (x->slots, slot);
                 }
             }
-            
-            if (x->saveValuesWithPatcher) {
-                long        argc1 = 0;
-                long        argc2 = 0;
-                long        velocity = 0;
-                long        chance = -1;
-                t_symbol    *scaleKey = NULL;
-                t_symbol    *scaleType = NULL;
-                t_symbol    *patternCell = NULL;
-                t_atom      *argv1 = NULL;
-                t_atom      *argv2 = NULL;
-                
-                dictionary_getlong      (d, tll_sym_tempo, &x->tempo);
-                dictionary_getlong      (d, tll_sym_chance, &chance);
-                dictionary_getlong      (d, tll_sym_velocity, &velocity);
-                dictionary_getsym       (d, tll_sym_scaleKey, &scaleKey);
-                dictionary_getsym       (d, tll_sym_scaleType, &scaleType);
-                dictionary_getsym       (d, tll_sym_patternCell, &patternCell);
-                dictionary_copyatoms    (d, tll_sym_scaleCustom, &argc1, &argv1);
-                dictionary_copyatoms    (d, tll_sym_patternCustom, &argc2, &argv2);
-                
-                if ((chance > 0) && chance != x->chance) {
-                    object_attr_setlong (x, tll_sym_chance, chance);
-                    }
-                if (velocity != x->velocity) {
-                    object_attr_setlong (x, tll_sym_velocity, velocity);
-                    }
-                if (scaleKey) {
-                    object_attr_setsym (x, tll_sym_scaleKey, scaleKey);
-                    }
-                if (scaleType) {
-                    object_attr_setsym (x, tll_sym_scaleType, scaleType);
-                    }
-                if (patternCell) {
-                    object_attr_setsym (x, tll_sym_patternCell, patternCell);
-                    }
-                if (argc1) {
-                    object_attr_setvalueof (x, tll_sym_scaleCustom, argc1, argv1);
-                    }
-                if (argc2) {
-                    object_attr_setvalueof (x, tll_sym_patternCustom, argc2, argv2);
-                    }
-                    
-                if (argv1) {
-                    sysmem_freeptr (argv1);
-                    }
-                if (argv2) {
-                    sysmem_freeptr (argv2);
-                    }
-            }
-            
-            ATOMIC_DECREMENT (&x->popupLock);
-            
-            if ((sequenceMode >= 0) && sequenceMode != x->sequenceMode) {
-                object_attr_setlong (x, tll_sym_sequenceMode, sequenceMode);
-            }
-                
-            if ((channel > 0) && channel != x->channel) {
-                object_attr_setlong (x, tll_sym_channel, channel);
-            }
-        } else {
-            ATOMIC_DECREMENT (&x->popupLock);
         }
+    }
+    
+    if (x->saveValuesWithPatcher) {
+        long     argc1, argc2, chance, velocity;
+        t_atom   *argv1, *argv2;
+        t_symbol *scaleKey, *scaleType, *patternCell;
+        
+        argc1 = argc2 = chance = velocity = 0;
+        argv1 = argv2 = NULL;
+        scaleKey = scaleType = patternCell = NULL;
+        
+        dictionary_getlong      (d, tll_sym_tempo, &x->tempo);
+        dictionary_getlong      (d, tll_sym_chance, &chance);
+        dictionary_getlong      (d, tll_sym_velocity, &velocity);
+        dictionary_getsym       (d, tll_sym_scaleKey, &scaleKey);
+        dictionary_getsym       (d, tll_sym_scaleType, &scaleType);
+        dictionary_getsym       (d, tll_sym_patternCell, &patternCell);
+        dictionary_copyatoms    (d, tll_sym_scaleCustom, &argc1, &argv1);
+        dictionary_copyatoms    (d, tll_sym_patternCustom, &argc2, &argv2);
+        
+        object_attr_setlong     (x, tll_sym_chance, chance);
+        object_attr_setlong     (x, tll_sym_velocity, velocity);
+        object_attr_setsym      (x, tll_sym_scaleKey, scaleKey);
+        object_attr_setsym      (x, tll_sym_scaleType, scaleType);
+        object_attr_setsym      (x, tll_sym_patternCell, patternCell);
+        object_attr_setvalueof  (x, tll_sym_scaleCustom, argc1, argv1);
+        object_attr_setvalueof  (x, tll_sym_patternCustom, argc2, argv2);
+
+        if (argv1) {
+            sysmem_freeptr (argv1);
+        }
+        if (argv2) {
+            sysmem_freeptr (argv2);
+        }
+    }
+    
+    ATOMIC_DECREMENT (&x->popupLock);
+    
+    object_attr_setlong (x, tll_sym_channel, tempB);
+    object_attr_setlong (x, tll_sym_sequenceMode, tempA);
+
+    //        
+    } else {
+        ATOMIC_DECREMENT (&x->popupLock);
+    }
+    //    
     }
 }
 
@@ -1004,14 +987,12 @@ void tralala_dataWithDictionary (t_tralala *x, t_dictionary *d)
 t_max_err tralala_setSequenceMode (t_tralala *x, t_object *attr, long argc, t_atom *argv)
 {
     if (argc && argv) {
-        long k = atom_getlong (argv);
+        x->sequenceMode = CLAMP (atom_getlong (argv), MODE_SEQUENCE_USER, MODE_SEQUENCE_LIVE);
         
         if (USER) {
             tralala_willChange (x);
         }
         
-        x->sequenceMode = CLAMP (k, MODE_SEQUENCE_USER, MODE_SEQUENCE_LIVE);
-
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_SEQUENCE | DIRTY_GRID);
     }
 
@@ -1024,13 +1005,14 @@ t_max_err tralala_setChannel (t_tralala *x, t_object *attr, long argc, t_atom *a
     
         if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
             x->channel = atom_getlong (argv);
-            pizSequenceSetChannel (x->user, x->channel);
-            pizSequenceSetChannel (x->live, x->channel);
+            
+            pizSequenceSetChannel (x->user,   x->channel);
+            pizSequenceSetChannel (x->live,   x->channel);
             pizSequenceSetChannel (x->listen, x->channel);
             
             DIRTYCHANNEL
-        }
-
+        } 
+        
         ATOMIC_DECREMENT (&x->popupLock);
     }
 
@@ -1040,12 +1022,7 @@ t_max_err tralala_setChannel (t_tralala *x, t_object *attr, long argc, t_atom *a
 t_max_err tralala_setVelocity (t_tralala *x, t_object *attr, long argc, t_atom *argv)
 {
     if (argc && argv) {
-        long tempVelocity = atom_getlong (argv);
-        
-        if (x->velocity != tempVelocity) {
-            x->velocity = tempVelocity;
-            pizSequenceSetVelocity (x->live, x->velocity);
-        }
+        pizSequenceSetVelocity (x->live, atom_getlong (argv));
     }
 
     return MAX_ERR_NONE;
@@ -1054,14 +1031,11 @@ t_max_err tralala_setVelocity (t_tralala *x, t_object *attr, long argc, t_atom *
 t_max_err tralala_setChance (t_tralala *x, t_object *attr, long argc, t_atom *argv)
 {
     if (argc && argv) {
-        long tempChance = atom_getlong (argv);
-            
-        if (x->chance != tempChance) {
-            x->chance = tempChance;
-            pizSequenceSetChance (x->user, x->chance);
-            pizSequenceSetChance (x->live, x->chance);
-            pizSequenceSetChance (x->listen, x->chance);
-        }
+        x->chance = atom_getlong (argv);
+        
+        pizSequenceSetChance (x->user,   x->chance);
+        pizSequenceSetChance (x->live,   x->chance);
+        pizSequenceSetChance (x->listen, x->chance);
     }
 
     return MAX_ERR_NONE;
@@ -1070,59 +1044,49 @@ t_max_err tralala_setChance (t_tralala *x, t_object *attr, long argc, t_atom *ar
 t_max_err tralala_setScaleKey (t_tralala *x, t_object *attr, long argc, t_atom *argv)
 {
     if (argc && argv) {
+        long     i;
         bool     err = false;
-        t_symbol *temp = atom_getsym (argv);
+        t_symbol *s = atom_getsym (argv);
         
-        if (temp != x->scaleKey) {
-            if (temp == tll_sym_c) {
-                x->key = PIZ_KEY_C;
-            } else if (temp == tll_sym_cSharp) {
-                x->key = PIZ_KEY_C_SHARP;
-            } else if (temp == tll_sym_d) {
-                x->key = PIZ_KEY_D;
-            } else if (temp == tll_sym_dSharp) {
-                x->key = PIZ_KEY_D_SHARP;
-            } else if (temp == tll_sym_e) {
-                x->key = PIZ_KEY_E;
-            } else if (temp == tll_sym_f) {
-                x->key = PIZ_KEY_F;
-            } else if (temp == tll_sym_fSharp) {
-                x->key = PIZ_KEY_F_SHARP;
-            } else if (temp == tll_sym_g) {
-                x->key = PIZ_KEY_G;
-            } else if (temp == tll_sym_gSharp) {
-                x->key = PIZ_KEY_G_SHARP;
-            } else if (temp == tll_sym_a) {
-                x->key = PIZ_KEY_A;
-            } else if (temp == tll_sym_aSharp) {
-                x->key = PIZ_KEY_A_SHARP;
-            } else if (temp == tll_sym_b) {
-                x->key = PIZ_KEY_B;
-            } else { err = true; }
+        if (s != x->scaleKey) {
+        //
+        if (s == tll_sym_c)             { x->key = PIZ_KEY_C; } 
+        else if (s == tll_sym_cSharp)   { x->key = PIZ_KEY_C_SHARP; } 
+        else if (s == tll_sym_d)        { x->key = PIZ_KEY_D; } 
+        else if (s == tll_sym_dSharp)   { x->key = PIZ_KEY_D_SHARP; } 
+        else if (s == tll_sym_e)        { x->key = PIZ_KEY_E; } 
+        else if (s == tll_sym_f)        { x->key = PIZ_KEY_F; } 
+        else if (s == tll_sym_fSharp)   { x->key = PIZ_KEY_F_SHARP; }
+        else if (s == tll_sym_g)        { x->key = PIZ_KEY_G; } 
+        else if (s == tll_sym_gSharp)   { x->key = PIZ_KEY_G_SHARP; } 
+        else if (s == tll_sym_a)        { x->key = PIZ_KEY_A; } 
+        else if (s == tll_sym_aSharp)   { x->key = PIZ_KEY_A_SHARP; } 
+        else if (s == tll_sym_b)        { x->key = PIZ_KEY_B; } 
+        else { err = true; }
 
-            if (!err) {   
-                x->scaleKey = temp;
+        if (!err) {   
+            x->scaleKey = s;
+            
+            if (x->type == PIZ_SCALE_CUSTOM) {
+            
+                ARRAY_GET (tempArray);
                 
-                if (x->type != PIZ_SCALE_CUSTOM) {
-                    pizSequenceSetScale (x->live, x->key, x->type, NULL);
-                } else {
-                    ARRAY_GET (tempArray);
-                    
-                    if (tempArray) {
-                        long i;
-                        
-                        for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
-                            pizGrowingArrayAppend (tempArray, x->scaleCustom[i]);
-                        }
-                            
-                        pizSequenceSetScale (x->live, x->key, x->type, tempArray);
-                        
-                        ARRAY_RELEASE (tempArray);
+                if (tempArray) {
+                    for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
+                        pizGrowingArrayAppend (tempArray, x->scaleCustom[i]);
                     }
+                    pizSequenceSetScale (x->live, x->key, x->type, tempArray);                        
                 }
                 
-                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+                ARRAY_RELEASE (tempArray);
+                
+            } else {
+                pizSequenceSetScale (x->live, x->key, x->type, NULL);
             }
+            
+            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+        }
+        // 
         }
     }
 
@@ -1134,96 +1098,71 @@ t_max_err tralala_setScaleType (t_tralala *x, t_object *attr, long argc, t_atom 
     if (argc && argv) {
         long        size = 0;
         char        *tempString = NULL;
-        t_symbol    *temp = NULL;
+        t_symbol    *s = NULL;
         bool        err = false;            
 
         atom_gettext (argc, argv, &size, &tempString, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
         
         if (tempString) {
-            temp = gensym (tempString);
+            s = gensym (tempString);
             
-            if (temp != x->scaleType) {
-                if (temp == tll_sym_none) {
-                    x->type = PIZ_SCALE_NONE;
-                } else if (temp == tll_sym_custom) {
-                    x->type = PIZ_SCALE_CUSTOM;
-                } else if (temp == tll_sym_ionian) {
-                    x->type = PIZ_IONIAN;
-                } else if (temp == tll_sym_dorian) {
-                    x->type = PIZ_DORIAN;
-                } else if (temp == tll_sym_phrygian) {
-                    x->type = PIZ_PHRYGIAN;
-                } else if (temp == tll_sym_lydian) {
-                    x->type = PIZ_LYDIAN;
-                } else if (temp == tll_sym_mixolydian) {
-                    x->type = PIZ_MIXOLYDIAN;
-                } else if (temp == tll_sym_aeolian) {
-                    x->type = PIZ_AEOLIAN;
-                } else if (temp == tll_sym_locrian) {
-                    x->type = PIZ_LOCRIAN;
-                } else if (temp == tll_sym_natural) {
-                    x->type = PIZ_NATURAL;
-                } else if (temp == tll_sym_harmonic) {
-                    x->type = PIZ_HARMONIC;
-                } else if (temp == tll_sym_melodic) {
-                    x->type = PIZ_MELODIC;
-                } else if (temp == tll_sym_wholeTone) {
-                    x->type = PIZ_WHOLE_TONE;
-                } else if (temp == tll_sym_pentatonicMajor) {
-                    x->type = PIZ_PENTATONIC_MAJOR;
-                } else if (temp == tll_sym_pentatonicMinor) {
-                    x->type = PIZ_PENTATONIC_MINOR;
-                } else if (temp == tll_sym_octatonicHalfWhole) {
-                    x->type = PIZ_OCTATONIC_HALF_WHOLE;
-                } else if (temp == tll_sym_octatonicWholeHalf) {
-                    x->type = PIZ_OCTATONIC_WHOLE_HALF;
-                } else if (temp == tll_sym_seventhMajor) {
-                    x->type = PIZ_SEVENTH_MAJOR;
-                } else if (temp == tll_sym_seventhDominant) {
-                    x->type = PIZ_SEVENTH_DOMINANT;
-                } else if (temp == tll_sym_seventhMinor) {
-                    x->type = PIZ_SEVENTH_MINOR;
-                } else if (temp == tll_sym_seventhMajorSixth) {
-                    x->type = PIZ_SEVENTH_MAJOR_SIXTH;
-                } else if (temp == tll_sym_seventhMinorSixth) {
-                    x->type = PIZ_SEVENTH_MINOR_SIXTH;
-                } else if (temp == tll_sym_seventhHalfDiminished) {
-                    x->type = PIZ_SEVENTH_HALF_DIMINISHED;
-                } else if (temp == tll_sym_seventhDiminished) {
-                    x->type = PIZ_SEVENTH_DIMINISHED;
-                } else if (temp == tll_sym_seventhSuspended) {
-                    x->type = PIZ_SEVENTH_SUSPENDED;
-                } else if (temp == tll_sym_seventhSharpFive) {
-                    x->type = PIZ_SEVENTH_SHARP_FIVE;
-                } else if (temp == tll_sym_seventhFlatFive) {
-                    x->type = PIZ_SEVENTH_FLAT_FIVE;
-                } else { err = true; }
+            if (s != x->scaleType) {
+            //
+            if (s == tll_sym_none)                          { x->type = PIZ_SCALE_NONE; } 
+            else if (s == tll_sym_custom)                   { x->type = PIZ_SCALE_CUSTOM; } 
+            else if (s == tll_sym_ionian)                   { x->type = PIZ_IONIAN; } 
+            else if (s == tll_sym_dorian)                   { x->type = PIZ_DORIAN; } 
+            else if (s == tll_sym_phrygian)                 { x->type = PIZ_PHRYGIAN; } 
+            else if (s == tll_sym_lydian)                   { x->type = PIZ_LYDIAN; } 
+            else if (s == tll_sym_mixolydian)               { x->type = PIZ_MIXOLYDIAN; } 
+            else if (s == tll_sym_aeolian)                  { x->type = PIZ_AEOLIAN; } 
+            else if (s == tll_sym_locrian)                  { x->type = PIZ_LOCRIAN; }
+            else if (s == tll_sym_natural)                  { x->type = PIZ_NATURAL; } 
+            else if (s == tll_sym_harmonic)                 { x->type = PIZ_HARMONIC; } 
+            else if (s == tll_sym_melodic)                  { x->type = PIZ_MELODIC; } 
+            else if (s == tll_sym_wholeTone)                { x->type = PIZ_WHOLE_TONE; } 
+            else if (s == tll_sym_pentatonicMajor)          { x->type = PIZ_PENTATONIC_MAJOR; } 
+            else if (s == tll_sym_pentatonicMinor)          { x->type = PIZ_PENTATONIC_MINOR; } 
+            else if (s == tll_sym_octatonicHalfWhole)       { x->type = PIZ_OCTATONIC_HALF_WHOLE; } 
+            else if (s == tll_sym_octatonicWholeHalf)       { x->type = PIZ_OCTATONIC_WHOLE_HALF; } 
+            else if (s == tll_sym_seventhMajor)             { x->type = PIZ_SEVENTH_MAJOR; } 
+            else if (s == tll_sym_seventhDominant)          { x->type = PIZ_SEVENTH_DOMINANT; } 
+            else if (s == tll_sym_seventhMinor)             { x->type = PIZ_SEVENTH_MINOR; } 
+            else if (s == tll_sym_seventhMajorSixth)        { x->type = PIZ_SEVENTH_MAJOR_SIXTH; } 
+            else if (s == tll_sym_seventhMinorSixth)        { x->type = PIZ_SEVENTH_MINOR_SIXTH; }
+            else if (s == tll_sym_seventhHalfDiminished)    { x->type = PIZ_SEVENTH_HALF_DIMINISHED; } 
+            else if (s == tll_sym_seventhDiminished)        { x->type = PIZ_SEVENTH_DIMINISHED; } 
+            else if (s == tll_sym_seventhSuspended)         { x->type = PIZ_SEVENTH_SUSPENDED; } 
+            else if (s == tll_sym_seventhSharpFive)         { x->type = PIZ_SEVENTH_SHARP_FIVE; } 
+            else if (s == tll_sym_seventhFlatFive)          { x->type = PIZ_SEVENTH_FLAT_FIVE; } 
+            else { err = true; }
+            
+            if (!err) {   
+                x->scaleType = s;
                 
-                if (!err) {   
-                    x->scaleType = temp;
+                if (x->type != PIZ_SCALE_CUSTOM)  {
+                    pizSequenceSetScale (x->live, x->key, x->type, NULL);
+                } else {
+                    ARRAY_GET (tempArray);
                     
-                    if (x->type != PIZ_SCALE_CUSTOM)  {
-                        pizSequenceSetScale (x->live, x->key, x->type, NULL);
-                    } else {
-                        ARRAY_GET (tempArray);
+                    if (tempArray) {
+                        long i;
                         
-                        if (tempArray) {
-                            long i;
-                            
-                            for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
-                                pizGrowingArrayAppend (tempArray, x->scaleCustom[i]);
-                            }
-                            
-                            pizSequenceSetScale (x->live, x->key, x->type, tempArray);
-                            
-                            ARRAY_RELEASE (tempArray);
+                        for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
+                            pizGrowingArrayAppend (tempArray, x->scaleCustom[i]);
                         }
+                        
+                        pizSequenceSetScale (x->live, x->key, x->type, tempArray);
                     }
                     
-                    if (LIVE) {
-                        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
-                    }
+                    ARRAY_RELEASE (tempArray);
                 }
+                
+                if (LIVE) {
+                    DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+                }
+            }
+            //
             }
             
             sysmem_freeptr (tempString);
@@ -1249,9 +1188,8 @@ t_max_err tralala_setScaleCustom (t_tralala *x, t_object *attr, long argc, t_ato
                 }
                     
                 pizSequenceSetScale (x->live, x->key, x->type, tempArray);
-                
-                ARRAY_RELEASE (tempArray);
             }
+            ARRAY_RELEASE (tempArray);
             
             if (LIVE) {
                 DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
@@ -1267,61 +1205,47 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
     if (argc && argv) {
         long        size = 0;
         char        *tempString = NULL;
-        t_symbol    *temp = NULL;
+        t_symbol    *s = NULL;
         PIZError    err = PIZ_GOOD;            
 
         atom_gettext (argc, argv, &size, &tempString, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
         
         if (tempString) {
-            temp = gensym (tempString);
+            s = gensym (tempString);
     
-            if (temp != x->patternCell) {
-                if (temp == tll_sym_none) {
-                    x->cell = PIZ_NOTE_NONE;
-                } else if (temp == tll_sym_whole) {
-                    x->cell = PIZ_WHOLE_NOTE;
-                } else if (temp == tll_sym_half) {
-                    x->cell = PIZ_HALF_NOTE;
-                } else if (temp == tll_sym_quarter) {
-                    x->cell = PIZ_QUARTER_NOTE;
-                } else if (temp == tll_sym_eighth) {
-                    x->cell = PIZ_EIGHTH_NOTE;
-                } else if (temp == tll_sym_sixteenth) {
-                    x->cell = PIZ_SIXTEENTH_NOTE;
-                } else if (temp == tll_sym_thirtySecond) {
-                    x->cell = PIZ_THIRTY_SECOND_NOTE;
-                } else if (temp == tll_sym_wholeTriplet) {
-                    x->cell = PIZ_WHOLE_NOTE_TRIPLET;
-                } else if (temp == tll_sym_halfTriplet) {
-                    x->cell = PIZ_HALF_NOTE_TRIPLET;
-                } else if (temp == tll_sym_quarterTriplet) {
-                    x->cell = PIZ_QUARTER_NOTE_TRIPLET;
-                } else if (temp == tll_sym_eighthTriplet) {
-                    x->cell = PIZ_EIGHTH_NOTE_TRIPLET;
-                } else if (temp == tll_sym_sixteenthTriplet) {
-                    x->cell = PIZ_SIXTEENTH_NOTE_TRIPLET;
-                } else if (temp == tll_sym_thirtySecondTriplet) {
-                    x->cell = PIZ_THIRTY_SECOND_NOTE_TRIPLET;
-                } else if (temp == tll_sym_wholeDotted) {
-                     x->cell = PIZ_WHOLE_NOTE_DOTTED;
-                } else if (temp == tll_sym_halfDotted) {
-                    x->cell = PIZ_HALF_NOTE_DOTTED;
-                } else if (temp == tll_sym_quarterDotted) {
-                    x->cell = PIZ_QUARTER_NOTE_DOTTED;
-                } else if (temp == tll_sym_eighthDotted) {
-                    x->cell = PIZ_EIGHTH_NOTE_DOTTED;
-                } else if (temp == tll_sym_sixteenthDotted) {
-                    x->cell = PIZ_SIXTEENTH_NOTE_DOTTED;
-                } else { err = PIZ_ERROR; }
-                    
-                if (!err) {
-                    pizSequenceSetGrid (x->live, x->cell);
-                    pizSequenceSetCell (x->live, x->cell);
-                    
-                    x->patternCell = temp;
-                    
-                    DIRTYLAYER_SET (DIRTY_GRID);
-                }
+            if (s != x->patternCell) {
+            //
+            if (s == tll_sym_none)                      { x->cell = PIZ_NOTE_NONE; } 
+            else if (s == tll_sym_whole)                { x->cell = PIZ_WHOLE_NOTE; } 
+            else if (s == tll_sym_half)                 { x->cell = PIZ_HALF_NOTE; } 
+            else if (s == tll_sym_quarter)              { x->cell = PIZ_QUARTER_NOTE; } 
+            else if (s == tll_sym_eighth)               { x->cell = PIZ_EIGHTH_NOTE; } 
+            else if (s == tll_sym_sixteenth)            { x->cell = PIZ_SIXTEENTH_NOTE; } 
+            else if (s == tll_sym_thirtySecond)         { x->cell = PIZ_THIRTY_SECOND_NOTE; } 
+            else if (s == tll_sym_wholeTriplet)         { x->cell = PIZ_WHOLE_NOTE_TRIPLET; } 
+            else if (s == tll_sym_halfTriplet)          { x->cell = PIZ_HALF_NOTE_TRIPLET; } 
+            else if (s == tll_sym_quarterTriplet)       { x->cell = PIZ_QUARTER_NOTE_TRIPLET; }
+            else if (s == tll_sym_eighthTriplet)        { x->cell = PIZ_EIGHTH_NOTE_TRIPLET; }
+            else if (s == tll_sym_sixteenthTriplet)     { x->cell = PIZ_SIXTEENTH_NOTE_TRIPLET; }
+            else if (s == tll_sym_thirtySecondTriplet)  { x->cell = PIZ_THIRTY_SECOND_NOTE_TRIPLET; } 
+            else if (s == tll_sym_wholeDotted)          { x->cell = PIZ_WHOLE_NOTE_DOTTED; } 
+            else if (s == tll_sym_halfDotted)           { x->cell = PIZ_HALF_NOTE_DOTTED; } 
+            else if (s == tll_sym_quarterDotted)        { x->cell = PIZ_QUARTER_NOTE_DOTTED; } 
+            else if (s == tll_sym_eighthDotted)         { x->cell = PIZ_EIGHTH_NOTE_DOTTED; } 
+            else if (s == tll_sym_sixteenthDotted)      { x->cell = PIZ_SIXTEENTH_NOTE_DOTTED; } 
+            else { err = PIZ_ERROR; }
+                
+            if (!err) {
+                pizSequenceSetGrid (x->live,    x->cell);
+                pizSequenceSetCell (x->live,    x->cell);
+                pizSequenceSetGrid (x->listen,  x->cell);
+                pizSequenceSetCell (x->listen,  x->cell);
+                
+                x->patternCell = s;
+                
+                DIRTYLAYER_SET (DIRTY_GRID);
+            }
+            //    
             }
             
             sysmem_freeptr (tempString);
@@ -1333,24 +1257,23 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
 
 t_max_err tralala_setPatternCustom (t_tralala *x, t_object *attr, long argc, t_atom *argv)
 {
-    if (argv) {   
+    if (argc && argv) {  
+        long i;
+        
         ARRAY_GET (tempArray);
 
         x->patternSize = MIN (argc, SIZE_PATTERN_MAX);
-        
         atom_getlong_array (argc, argv, x->patternSize, x->patternCustom);
                         
         if (tempArray) {
-            long i;
-            
             for (i = 0; i < x->patternSize; i++) {
                 pizGrowingArrayAppend (tempArray, x->patternCustom[i]);
             }
                 
             pizSequenceSetPattern (x->live, tempArray);
-            
-            ARRAY_RELEASE (tempArray);
         }
+        
+        ARRAY_RELEASE (tempArray);
     }
 
     return MAX_ERR_NONE;
@@ -1362,15 +1285,13 @@ t_max_err tralala_setPatternCustom (t_tralala *x, t_object *attr, long argc, t_a
 
 void tralala_play (t_tralala *x)
 {   
-    systhread_mutex_lock (&x->methodsMutex);
+    METHODSLOCK
     
     x->flags &= ~FLAG_INHIBIT_START;
-    
     clock_unset (x->goToStartClock);
     
     if (pizSequenceIsAtEnd (x->live) && !(x->flags & FLAG_IS_LOOPED)) {
         x->flags &= ~FLAG_IS_RUNNING;
-        
         pizSequenceGoToStart (x->live);
         
         if (!(x->flags & FLAG_INHIBIT_BANG)) {
@@ -1381,22 +1302,21 @@ void tralala_play (t_tralala *x)
     if (!(x->flags & FLAG_IS_RUNNING) && !(x->flags & FLAG_INHIBIT_START)) {
         pizSequenceGoToStart (x->live);
         x->runIndex = pizSequenceIndex (x->live);
-            
+        
         x->flags |= FLAG_IS_RUNNING;
         x->flags &= ~(FLAG_IS_LOOPED | FLAG_IS_PAUSED);
 
         clock_fdelay (x->runClock, 0.);
     }
     
-    systhread_mutex_unlock (&x->methodsMutex);
+    METHODSUNLOCK
 }
 
 void tralala_stop (t_tralala *x)
 {   
-    systhread_mutex_lock (&x->methodsMutex);
+    METHODSLOCK
     
     clock_unset (x->runClock);
-    
     x->flags &= ~(FLAG_IS_LOOPED | FLAG_IS_RUNNING | FLAG_IS_PAUSED);
     x->runIndex = -1;
     
@@ -1405,15 +1325,14 @@ void tralala_stop (t_tralala *x)
     }
     
     x->flags |= FLAG_INHIBIT_START;
-    
     clock_fdelay (x->inhibitStartClock, CLOCK_DEFER_INTERVAL);
     
-    systhread_mutex_unlock (&x->methodsMutex);
+    METHODSUNLOCK
 }
 
 void tralala_loop (t_tralala *x)
 {   
-    systhread_mutex_lock (&x->methodsMutex);
+    METHODSLOCK
     
     if (!(x->flags & FLAG_IS_RUNNING)) {
         clock_unset (x->goToStartClock);
@@ -1425,31 +1344,33 @@ void tralala_loop (t_tralala *x)
         x->flags &= ~FLAG_IS_PAUSED;
 
         clock_fdelay (x->runClock, 0.);
+        
     } else {
         x->flags |= FLAG_IS_LOOPED;
     }
     
-    systhread_mutex_unlock (&x->methodsMutex);
+    METHODSUNLOCK
 }
 
 void tralala_unloop (t_tralala *x)
 {   
-    systhread_mutex_lock (&x->methodsMutex);
+    METHODSLOCK
     
     x->flags &= ~FLAG_IS_LOOPED;
     
-    systhread_mutex_unlock (&x->methodsMutex);
+    METHODSUNLOCK
 }
 
 void tralala_pause (t_tralala *x)
 {   
-    systhread_mutex_lock (&x->methodsMutex);
+    METHODSLOCK
     
     if ((x->flags & FLAG_IS_RUNNING) && !(x->flags & FLAG_IS_PAUSED)) {
         x->flags |= FLAG_IS_PAUSED;
         x->flags &= ~FLAG_IS_RUNNING;
         
         clock_unset (x->runClock);
+        
     } else {
         x->flags &= ~FLAG_IS_PAUSED;
         x->flags |= FLAG_IS_RUNNING;
@@ -1457,7 +1378,7 @@ void tralala_pause (t_tralala *x)
         clock_fdelay (x->runClock, 0.);
     }
     
-    systhread_mutex_unlock (&x->methodsMutex);
+    METHODSUNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -1478,29 +1399,33 @@ void tralala_runTask (t_tralala *x)
     err  = pizSequenceProceedStep (x->live, x->result);
     
     if (!err) {
-        long i;
-        long count;
+        double  k;
+        long    i, count;
+        long    pitch, velocity, duration, channel;
         
-        if (!(x->flags & FLAG_IS_MUTED) && ((count = pizGrowingArrayCount (x->result) / 4))) {
-            for (i = 0; i < count; i++) {
-            
-                long duration = (pizGrowingArrayValueAtIndex 
-                    (x->result, (i * 4) + 2)) * (TIME_STEPS_PER_MINUTE / (double)x->tempo);
+        if (!(x->flags & FLAG_IS_MUTED) && (count = pizGrowingArrayCount (x->result))) {
+        
+            for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
+                pitch    = pizGrowingArrayValueAtIndex (x->result, i + PIZ_DATA_PITCH);
+                velocity = pizGrowingArrayValueAtIndex (x->result, i + PIZ_DATA_VELOCITY);
+                channel  = pizGrowingArrayValueAtIndex (x->result, i + PIZ_DATA_CHANNEL);
+                
+                k = (TIME_STEPS_PER_MINUTE / (double)x->tempo);
+                duration = (long)((pizGrowingArrayValueAtIndex (x->result, i + PIZ_DATA_DURATION)) * k);
                     
-                atom_setlong (x->playedNote,     pizGrowingArrayValueAtIndex (x->result, i * 4));
-                atom_setlong (x->playedNote + 1, pizGrowingArrayValueAtIndex (x->result, (i * 4) + 1));
+                atom_setlong (x->playedNote + 0, pitch);
+                atom_setlong (x->playedNote + 1, velocity);
                 atom_setlong (x->playedNote + 2, duration);
-                atom_setlong (x->playedNote + 3, pizGrowingArrayValueAtIndex (x->result, (i * 4) + 3));
+                atom_setlong (x->playedNote + 3, channel);
                 
                 outlet_list  (x->leftOutlet, NULL, 4, x->playedNote);
             }
         }
-                            
-        pizGrowingArrayClear (x->result);
-
+        
         if (x->flags & FLAG_IS_RUNNING) {
             clock_fdelay (x->runClock, TIME_STEPS_PER_MINUTE / (double)x->tempo);
         }
+        
     } else {
         temp = -1;
         
@@ -1512,6 +1437,8 @@ void tralala_runTask (t_tralala *x)
         
         outlet_bang (x->middleRightOutlet);
     }
+    
+    pizGrowingArrayClear (x->result);
 
     x->runIndex = temp;
 }

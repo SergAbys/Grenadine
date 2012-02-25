@@ -513,6 +513,7 @@ PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZError pizSequenceEncodeToArray (PIZSequence *x, PIZGrowingArray *a)
 {
@@ -624,7 +625,7 @@ PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a)
             case PIZ_THIRTY_SECOND_NOTE_TRIPLET : x->noteValue = PIZ_THIRTY_SECOND_NOTE_TRIPLET;    break;
             case PIZ_NOTE_NONE                  : x->noteValue = PIZ_NOTE_NONE;                     break;
             }
-
+            
             x->start    = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_START);
             x->end      = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_END);
             x->down     = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_DOWN);

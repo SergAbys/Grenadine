@@ -95,8 +95,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 351849867;
-			PBXWorkspaceStateSaveDate = 351849867;
+			PBXPerProjectTemplateStateSaveDate = 351880427;
+			PBXWorkspaceStateSaveDate = 351880427;
 		};
 		sourceControlManager = 965F6CC112FF252E00F96EF1 /* Source Control */;
 		userBuildSettings = {
@@ -135,17 +135,17 @@
 	};
 	9676982513B7784800FE77F4 /* tralala.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 38375}}";
-			sepNavSelRange = "{11703, 16}";
-			sepNavVisRect = "{{0, 4441}, {1233, 643}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1233, 36550}}";
+			sepNavSelRange = "{2075, 5}";
+			sepNavVisRect = "{{0, 1139}, {1233, 448}}";
 			sepNavWindowFrame = "{{0, 6}, {1278, 772}}";
 		};
 	};
 	96CB9E2913C1A24600C00CC4 /* tralala.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1237, 15700}}";
-			sepNavSelRange = "{106, 0}";
-			sepNavVisRect = "{{0, 10506}, {1237, 645}}";
+			sepNavSelRange = "{2335, 0}";
+			sepNavVisRect = "{{0, 2929}, {1237, 645}}";
 			sepNavWindowFrame = "{{-1, 4}, {1282, 774}}";
 		};
 	};
@@ -174,7 +174,7 @@
 	96EFB30614E9089C000857F4 /* tralalaLibrary.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1235, 15550}}";
-			sepNavSelRange = "{20263, 0}";
+			sepNavSelRange = "{20074, 0}";
 			sepNavVisRect = "{{0, 13986}, {1235, 645}}";
 			sepNavWindowFrame = "{{0, 4}, {1280, 774}}";
 		};
@@ -182,24 +182,24 @@
 	96EFB31714E90ACB000857F4 /* tralalaPaint.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1235, 18950}}";
-			sepNavSelRange = "{2474, 0}";
-			sepNavVisRect = "{{0, 1928}, {1235, 645}}";
+			sepNavSelRange = "{2603, 0}";
+			sepNavVisRect = "{{0, 1667}, {1235, 645}}";
 			sepNavWindowFrame = "{{3, 4}, {1280, 774}}";
 		};
 	};
 	96EFB33214E915F7000857F4 /* tralalaHI.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 23050}}";
-			sepNavSelRange = "{7273, 71}";
-			sepNavVisRect = "{{0, 4633}, {1233, 459}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 23125}}";
+			sepNavSelRange = "{24853, 18}";
+			sepNavVisRect = "{{0, 13480}, {1235, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1280, 774}}";
 		};
 	};
 	96EFB34214E91771000857F4 /* tralalaMessages.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 21075}}";
-			sepNavSelRange = "{26413, 0}";
-			sepNavVisRect = "{{0, 0}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 21150}}";
+			sepNavSelRange = "{24266, 0}";
+			sepNavVisRect = "{{0, 18008}, {1235, 645}}";
 			sepNavWindowFrame = "{{-1, 4}, {1280, 774}}";
 		};
 	};

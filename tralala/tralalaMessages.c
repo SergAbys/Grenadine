@@ -48,8 +48,7 @@ void tralala_copy (t_tralala *x)
     }
     
     if (!err) {
-        long i;
-        long chance = x->chance;
+        long i, chance = x->chance;
         long count = pizGrowingArrayCount (tempArrayA);
         long *ptr = pizGrowingArrayPtr (tempArrayA);
 
@@ -691,12 +690,12 @@ void tralala_sequenceCycle (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
             pizGrowingArrayAppendPtr (tempArray, data.count, data.values);
             data.draw = pizSequenceCycle (data.sequence, x->key, tempArray);
             
-            ARRAY_RELEASE (tempArray);
-            
             if (data.draw) {
                 DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
             }
         }
+        
+        ARRAY_RELEASE (tempArray);
     }
 }
 
@@ -745,6 +744,10 @@ void tralala_slotRecall (t_tralala *x, long n)
         }
         
         pizSequenceDecodeWithArray (x->user, slot);
+        
+        x->cell      = pizSequenceCell (x->user);
+        x->grid      = pizSequenceGrid (x->user);
+        x->noteValue = pizSequenceNoteValue (x->user);
         
         DIRTYPATTR
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_GRID | DIRTY_ZONE | DIRTY_SEQUENCE);
