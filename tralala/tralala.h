@@ -248,6 +248,12 @@
 #define METHODSLOCK     systhread_mutex_lock (&x->methodsMutex);
 #define METHODSUNLOCK   systhread_mutex_unlock (&x->methodsMutex);
 
+#define LEARNLOCK           systhread_mutex_lock (&x->learnMutex);
+#define LEARNUNLOCK         systhread_mutex_unlock (&x->learnMutex);
+
+#define ALGORITHMSLOCK      systhread_mutex_lock (&x->algorithmsMutex);
+#define ALGORITHMSUNLOCK    systhread_mutex_unlock (&x->algorithmsMutex);
+
 #define DIRTYPATTR      clock_fdelay (x->notifyClock, CLOCK_NOTIFY_INTERVAL); 
 #define DIRTYSLOTS      if (x->saveSlotsWithPatcher) {                                  \
                             jpatcher_set_dirty (jbox_get_patcher ((t_object *)x), 1);   \
@@ -496,7 +502,6 @@ void            tralala_forget                  (t_tralala *x);
 void            tralala_learnTask               (t_tralala *x);
 
 void            tralala_slot                    (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-void            tralala_handle                  (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void            tralala_parseArguments          (t_tralala *x, t_tralalaData *data, long argc, t_atom *argv);
 
 PIZ_LOCAL void  tralala_sequenceClear           (t_tralala *x, t_symbol *s, long argc, t_atom *argv);

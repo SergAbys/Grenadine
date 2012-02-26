@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 25/02/12.
+ *  Last modified : 26/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -16,15 +16,6 @@
 
 #include "tralala.h"
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define LEARNLOCK           systhread_mutex_lock (&x->learnMutex);
-#define LEARNUNLOCK         systhread_mutex_unlock (&x->learnMutex);
-
-#define ALGORITHMSLOCK      systhread_mutex_lock (&x->algorithmsMutex);
-#define ALGORITHMSUNLOCK    systhread_mutex_unlock (&x->algorithmsMutex);
-           
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
@@ -246,15 +237,6 @@ void tralala_slot (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     }
 
     ATOMIC_DECREMENT (&x->popupLock);
-}
-
-void tralala_handle (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
-{
-    if (argc && argv && atom_gettype (argv) == A_SYM) {
-        t_symbol *temp = atom_getsym (argv);
-        atom_setsym (argv, s);
-        object_method_typed (x, temp, argc, argv, NULL);
-    }
 }
 
 void tralala_parseArguments (t_tralala *x, t_tralalaData *data, long argc, t_atom *argv)

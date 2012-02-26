@@ -301,7 +301,6 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
             
         if (tralala_hasSelectedText (x, &selectedText)) {
             tralala_unselectAllText (x);
-            
             DIRTYLAYER_SET (DIRTY_REFRESH); 
         }
 
@@ -453,6 +452,8 @@ void tralala_mousewheel (t_tralala *x, t_object *view, t_pt pt, long modifiers, 
                                     
 void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifiers, long textcharacter)
 {
+    bool dirty = false;
+    
     if (SHARP || (keycode == JKEY_SPACEBAR)) {
         switch (x->sequenceMode) {
             case MODE_SEQUENCE_USER : object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_LIVE); break;
@@ -462,12 +463,12 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
     } else if (keycode == JKEY_UPARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
         pizSequenceTranspose (x->user, PIZ_MAGIC_SCALE);
         DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_SEQUENCE);
-        DIRTYPATTR DIRTYSLOTS
+        dirty = true;
         
     } else if (keycode == JKEY_DOWNARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
         pizSequenceTranspose (x->user, -PIZ_MAGIC_SCALE);
         DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_SEQUENCE);
-        DIRTYPATTR DIRTYSLOTS
+        dirty = true;
         
     } else if (keycode == JKEY_ENTER) {
         tralala_setLiveByUser (x);
@@ -489,7 +490,7 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
     } else if (USER && ((keycode == JKEY_DELETE) || (keycode == JKEY_BACKSPACE))) {
         pizSequenceRemoveSelectedNotes (x->user);
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
-        DIRTYPATTR DIRTYSLOTS
+        dirty = true;
         
     } else if (USER && CMD && !(x->flags & (FLAG_HAVE_MOVED | FLAG_HAVE_CHANGED | FLAG_HAVE_BEEN_DUPLICATED))) {
         if (ALL) {
@@ -506,12 +507,12 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
             tll_clipboardError = pizSequenceNotesToArray (x->user, NULL, tll_clipboard);
             pizSequenceRemoveSelectedNotes (x->user);
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
-            DIRTYPATTR DIRTYSLOTS
+            dirty = true;
             
         } else if (PASTE) {
             if (!tll_clipboardError && tralala_pasteFromClipboard (x)) {
                 DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
-                DIRTYPATTR DIRTYSLOTS
+                dirty = true;
             }
         }
 
@@ -533,12 +534,14 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
         if (SHIFT) {
             if (x->noteValue != k) {
                 pizSequenceSetNoteValue (x->user, x->noteValue = k); 
+                dirty = true;
                 DIRTYLAYER_SET (DIRTY_REFRESH);
             }
         } else {
             if (x->grid != k) {
                 pizSequenceSetGrid (x->user, x->grid = k); 
                 pizSequenceSetCell (x->user, k);
+                dirty = true;
                 DIRTYLAYER_SET (DIRTY_GRID);
             }
         }
@@ -604,14 +607,20 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
         if (!SHIFT) {
             pizSequenceSetGrid (x->user, x->grid = new);
             pizSequenceSetCell (x->user, new);
+            dirty = true;
             DIRTYLAYER_SET (DIRTY_GRID);
         } else {
             pizSequenceSetNoteValue (x->user, x->noteValue = new);
+            dirty = true;
             DIRTYLAYER_SET (DIRTY_REFRESH);
         }
         
     } ATOMIC_DECREMENT (&x->popupLock);
     //    
+    }
+    
+    if (dirty) {
+        DIRTYPATTR DIRTYSLOTS
     }
 }
 
@@ -625,7 +634,8 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
     t_jfont         *font;
     t_jpopupmenu    *pop[POP_SIZE];
     int             mouseX, mouseY;
-    long            i, t, popup = 0;      
+    long            i, t, popup = 0;  
+    bool            dirty = false;
 
     jmouse_getposition_global (&mouseX, &mouseY);
     
@@ -894,26 +904,29 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
         ARRAYSUNLOCK
             
         x->flags &= ~FLAG_HAVE_CHANGED;
-            
+        dirty = true;    
         DIRTYLAYER_SET (DIRTY_NOTES);
-        DIRTYPATTR DIRTYSLOTS
     }
     
     if (popup >= 10 && popup <= 27) {
         pizSequenceSetCell (x->user, x->grid);
+        dirty = true;
         DIRTYLAYER_SET (DIRTY_GRID);
-        DIRTYPATTR DIRTYSLOTS
     }
     
     if (popup >= 80 && popup <= 97) {
+        dirty = true;
         DIRTYLAYER_SET (DIRTY_GRID);
-        DIRTYPATTR DIRTYSLOTS
     }
 
     jfont_destroy (font);
 
     for (i = 0; i < POP_SIZE; i++) {
         jpopupmenu_destroy (pop[i]);
+    }
+    
+    if (dirty) {
+        DIRTYPATTR DIRTYSLOTS
     }
 }
 

@@ -87,9 +87,6 @@ class_addmethod (c, (method)tralala_patcherview_invis,      "patcherview_invis",
 class_addmethod (c, (method)object_obex_dumpout,            "dumpout",              A_CANT, 0);
 class_addmethod (c, (method)tralala_list,                   "list",                 A_GIMME, 0);
 class_addmethod (c, (method)tralala_slot,                   "slot",                 A_GIMME, 0);
-class_addmethod (c, (method)tralala_handle,                 "user",                 A_GIMME, 0);
-class_addmethod (c, (method)tralala_handle,                 "live",                 A_GIMME, 0);
-class_addmethod (c, (method)tralala_handle,                 "listen",               A_GIMME, 0);
 class_addmethod (c, (method)tralala_sequenceClear,          "clear",                A_GIMME, 0);
 class_addmethod (c, (method)tralala_sequenceKill,           "kill",                 A_GIMME, 0);
 class_addmethod (c, (method)tralala_sequenceZoulou,         "zoulou",               A_GIMME, 0);
@@ -1257,7 +1254,7 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
 
 t_max_err tralala_setPatternCustom (t_tralala *x, t_object *attr, long argc, t_atom *argv)
 {
-    if (argc && argv) {  
+    if (argv) {  
         long i;
         
         ARRAY_GET (tempArray);
