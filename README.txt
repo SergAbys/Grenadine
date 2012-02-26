@@ -5,7 +5,10 @@ Layout of the Grenadine repository :
 * Ufo :
   max/MSP externals.
 
-* Tralala :
+* hmtl : 
+  Documentation for pizAlgorithms.
+
+* tralala :
   max/MSP prototype.
 
 * pizAlgorithms : 
