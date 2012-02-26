@@ -685,6 +685,7 @@ void tralala_free (t_tralala *x)
     pizGrowingArrayFree  (x->playedPaint);
     pizGrowingArrayFree  (x->selectedPaint);
     pizGrowingArrayFree  (x->unselectedPaint);
+    
     pizGrowingArrayFree  (x->result);
     pizGrowingArrayFree  (x->origin);
     pizGrowingArrayFree  (x->valuesToBeLearned);
