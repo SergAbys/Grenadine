@@ -239,7 +239,9 @@ void tralala_slot (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
                 tralala_slotPrevious (x);
             }   
         
-            DIRTYSLOTS
+            if (data.option != OPTION_RECALL) {
+                DIRTYSLOTS
+            } 
         }
     }
 
@@ -304,10 +306,13 @@ void tralala_parseArguments (t_tralala *x, t_tralalaData *data, long argc, t_ato
         }
     }
     
-    if (USER) {
-        tralala_willChange (x);
+    if ((data->sequence == x->user)) {
+        if (USER) {
+            tralala_willChange (x);
+            DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_SEQUENCE);
+        }
+        
         DIRTYPATTR
-        DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_SEQUENCE);
     } 
 }
 

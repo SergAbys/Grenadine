@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 25/02/12.
+ *  Last modified : 26/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@
 #define SIZE_LEARN_RANGE                    4
 #define SIZE_LEARN_ARRAY                    8
 #define SIZE_STRING_MAX                     75
-#define SIZE_PATTERN_MAX                    21
+#define SIZE_PATTERN_MAX                    16
 #define SIZE_NOVEMBER_MAX                   10
 #define SIZE_JULIET_MAX                     10
 
@@ -326,27 +326,17 @@ typedef struct _tralala {
     void                *middleLeftOutlet;
     void                *middleRightOutlet;
     void                *rightOutlet;
-    t_symbol            *patternCell;
     t_symbol            *scaleKey;
     t_symbol            *scaleType;
-    t_symbol            *popupFontName;
-    double              popupFontSize;
-    long                popupFontFace;
-    long                scaleCustom     [PIZ_MAGIC_SCALE];
-    long                patternCustom   [SIZE_PATTERN_MAX];
-    long                patternSize;
-    PIZNoteValue        cell;
+    t_symbol            *patternCell;
     PIZScaleKey         key;
     PIZScaleType        type;
+    PIZNoteValue        cell;
     PIZNoteValue        grid;
     PIZNoteValue        noteValue;
-    long                isMarkedNote;
-    long                markedPitch;
-    long                markedVelocity;
-    long                markedDuration;
-    long                markedChannel;
-    long                mousePitchValue;
-    long                mouseVelocityValue;
+    long                patternSize;
+    long                scaleCustom     [PIZ_MAGIC_SCALE];
+    long                patternCustom   [SIZE_PATTERN_MAX];
     long                zoomMode;
     long                sequenceMode;
     long                textMode;
@@ -363,15 +353,25 @@ typedef struct _tralala {
     PIZGrowingArray     *zoneCopy;
     PIZGrowingArray     *playedCopy;
     PIZGrowingArray     *selectedCopy;
-    PIZGrowingArray     *unselectedCopy;
+    PIZGrowingArray     *unselectedCopy; 
+    long                isMarkedNote;
+    long                markedPitch;
+    long                markedVelocity;
+    long                markedDuration;
+    long                markedChannel;
+    long                mousePitchValue;
+    long                mouseVelocityValue;  
     PIZCoordinates      coordinates;
-    PIZCoordinates      originCoordinates;   
-    double              offsetX;
-    double              offsetY;
+    PIZCoordinates      originCoordinates;
     t_jmouse_cursortype cursorType;
     t_pt                point;
     t_pt                originPoint;
     t_pt                previousPoint;
+    t_symbol            *popupFontName;
+    long                popupFontFace;
+    double              popupFontSize;
+    double              offsetX;
+    double              offsetY;
     double              textPosition    [TEXT_CELL_COUNT];
     double              textWidth       [TEXT_CELL_COUNT];
     bool                textIsSelected  [TEXT_CELL_COUNT];

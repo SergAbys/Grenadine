@@ -63,7 +63,6 @@ extern tralalaSymbolsTableA tll_symbolsA;
 void tralala_notifyTask (t_tralala *x)
 {
     object_notify (x, tll_sym_modified, NULL);
-    DIRTYSLOTS
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -77,7 +76,7 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
     if (USER && CMD && !RIGHT && !MAJ) {
         pizSequenceAddNoteWithCoordinates (x->user, &x->coordinates, PIZ_ADD_FLAG_SNAP); 
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE); 
-        DIRTYPATTR 
+        DIRTYPATTR DIRTYSLOTS 
         
     } else if (USER && VIEWTEXT && !RIGHT && !MAJ && (x->hitTest = tralala_hitText (x, patcherview, pt))) {
         DIRTYLAYER_SET (DIRTY_REFRESH);
@@ -304,7 +303,6 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
             tralala_unselectAllText (x);
             
             DIRTYLAYER_SET (DIRTY_REFRESH); 
-            DIRTYPATTR
         }
 
         if (x->flags & FLAG_ZONE_IS_SELECTED) {
@@ -312,7 +310,7 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
             x->flags &= ~FLAG_ZONE_IS_SELECTED;
             
             DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_SEQUENCE);
-            DIRTYPATTR
+            DIRTYPATTR DIRTYSLOTS
         }
         
         if (x->flags & (FLAG_HAVE_CHANGED | FLAG_HAVE_MOVED | FLAG_HAVE_BEEN_DUPLICATED)) {
@@ -328,7 +326,7 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
             x->flags    &= ~(FLAG_HAVE_MOVED | FLAG_HAVE_CHANGED | FLAG_HAVE_BEEN_DUPLICATED);
             
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
-            DIRTYPATTR
+            DIRTYPATTR DIRTYSLOTS
         }
         
         if (x->flags & FLAG_IS_LASSO) {
@@ -336,7 +334,6 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
             pizSequenceInitLasso (x->user);
             
             DIRTYLAYER_SET (DIRTY_REFRESH);
-            DIRTYPATTR
         }
 
         x->flags &= ~FLAG_ORIGIN_IS_SET;
@@ -465,12 +462,12 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
     } else if (keycode == JKEY_UPARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
         pizSequenceTranspose (x->user, PIZ_MAGIC_SCALE);
         DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_SEQUENCE);
-        DIRTYPATTR
+        DIRTYPATTR DIRTYSLOTS
         
     } else if (keycode == JKEY_DOWNARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
         pizSequenceTranspose (x->user, -PIZ_MAGIC_SCALE);
         DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_SEQUENCE);
-        DIRTYPATTR
+        DIRTYPATTR DIRTYSLOTS
         
     } else if (keycode == JKEY_ENTER) {
         tralala_setLiveByUser (x);
@@ -492,31 +489,29 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
     } else if (USER && ((keycode == JKEY_DELETE) || (keycode == JKEY_BACKSPACE))) {
         pizSequenceRemoveSelectedNotes (x->user);
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
-        DIRTYPATTR
+        DIRTYPATTR DIRTYSLOTS
         
     } else if (USER && CMD && !(x->flags & (FLAG_HAVE_MOVED | FLAG_HAVE_CHANGED | FLAG_HAVE_BEEN_DUPLICATED))) {
         if (ALL) {
             pizSequenceSelectAllNotes (x->user);
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
-            DIRTYPATTR
             
         } else if (COPY)  {
             pizGrowingArrayClear (tll_clipboard);
             tll_clipboardError = pizSequenceNotesToArray (x->user, NULL, tll_clipboard);
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
-            DIRTYPATTR
             
         } else if (CUT)  {
             pizGrowingArrayClear (tll_clipboard);
             tll_clipboardError = pizSequenceNotesToArray (x->user, NULL, tll_clipboard);
             pizSequenceRemoveSelectedNotes (x->user);
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
-            DIRTYPATTR
+            DIRTYPATTR DIRTYSLOTS
             
         } else if (PASTE) {
             if (!tll_clipboardError && tralala_pasteFromClipboard (x)) {
                 DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
-                DIRTYPATTR
+                DIRTYPATTR DIRTYSLOTS
             }
         }
 
@@ -901,15 +896,18 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
         x->flags &= ~FLAG_HAVE_CHANGED;
             
         DIRTYLAYER_SET (DIRTY_NOTES);
+        DIRTYPATTR DIRTYSLOTS
     }
     
     if (popup >= 10 && popup <= 27) {
         pizSequenceSetCell (x->user, x->grid);
         DIRTYLAYER_SET (DIRTY_GRID);
+        DIRTYPATTR DIRTYSLOTS
     }
     
     if (popup >= 80 && popup <= 97) {
         DIRTYLAYER_SET (DIRTY_GRID);
+        DIRTYPATTR DIRTYSLOTS
     }
 
     jfont_destroy (font);
@@ -917,8 +915,6 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
     for (i = 0; i < POP_SIZE; i++) {
         jpopupmenu_destroy (pop[i]);
     }
-    
-    DIRTYPATTR
 }
 
 // -------------------------------------------------------------------------------------------------------------

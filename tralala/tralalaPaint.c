@@ -197,7 +197,9 @@ void tralala_paint (t_tralala *x, t_object *patcherview)
         if (x->flags & FLAG_IS_LASSO) {
             tralala_paintLasso (x, patcherview);
         }
-    } 
+    } else { 
+        post ("Toto !"); 
+    }
     
     ATOMIC_DECREMENT (&x->paintLock);
     
