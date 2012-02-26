@@ -5,7 +5,7 @@ Layout of the Grenadine repository :
 * Ufo :
   max/MSP externals.
 
-* hmtl : 
+* html : 
   Documentation for pizAlgorithms.
 
 * tralala :
