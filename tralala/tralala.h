@@ -613,7 +613,7 @@ PIZ_LOCAL void  tralala_setRectWithCoordinatesAndDuration   (t_tralala *x,
                                                             PIZCoordinates *coordinates, 
                                                             long duration); 
 
-PIZ_LOCAL void  tralala_setStringWithLong                   (char *string, 
+PIZ_LOCAL void  tralala_setString                           (char *string, 
                                                             long longToBeFormatted, 
                                                             long formatMode);
 

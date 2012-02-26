@@ -285,7 +285,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>312 293 350 420 0 0 1280 778 </string>
+								<string>313 294 350 420 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -424,8 +424,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96DB76BF14E4F50F005A37F9</string>
-				<string>96DB76C014E4F50F005A37F9</string>
+				<string>96D6DDC414FA1C050039486C</string>
+				<string>96D6DDC514FA1C050039486C</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -458,10 +458,11 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/Ufo/quebec/quebec.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>312 293 350 420 0 0 1280 778 </string>
+	<string>313 294 350 420 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -675,7 +676,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96A05CBD14E4060F0028A323</string>
+				<string>96D6DDC614FA1C050039486C</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

@@ -8,7 +8,7 @@
  */
  
 /*
- *  Last modified : 31/01/12.
+ *  Last modified : 26/02/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ int main (void)
 {   
     t_class *c = NULL;
     
-    c = class_new   ("zoulou", (method)zoulou_new, (method)zoulou_free, (long)sizeof(t_zoulou), 0L, A_GIMME, 0);
+    c = class_new ("zoulou", (method)zoulou_new, (method)zoulou_free, (long)sizeof(t_zoulou), 0L, A_GIMME, 0);
 
     class_addmethod (c, (method)zoulou_assist,              "assist",   A_CANT, 0); 
     class_addmethod (c, (method)zoulou_learn,               "learn",    A_GIMME);
@@ -116,31 +116,27 @@ void *zoulou_new (t_symbol *s, long argc, t_atom *argv)
 {
     t_zoulou *x = NULL;
 
-    if (x = (t_zoulou *)object_alloc (zoulou_class)) 
-        {
-            x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_LIST_SIZE);
-            x->factorOracle = pizFactorOracleNew (0, NULL);
+    if (x = (t_zoulou *)object_alloc (zoulou_class)) {
+        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_LIST_SIZE);
+        x->factorOracle = pizFactorOracleNew (0, NULL);
+        
+        if (x->values && x->factorOracle) {
+            x->straightRatio        = DEFAULT_STRAIGHT_RATIO;
+            x->backwardThreshold    = DEFAULT_BACKWARD_THRESHOLD;
             
-            if (x->values && x->factorOracle)
-                {
-                    x->straightRatio        = DEFAULT_STRAIGHT_RATIO;
-                    x->backwardThreshold    = DEFAULT_BACKWARD_THRESHOLD;
+            x->rightOutlet  = outlet_new (x, NULL);
+            object_obex_store ((void *)x, zoulou_sym_dumpout, (t_object *)x->rightOutlet);
+            x->leftOutlet = listout ((t_object *)x);
                     
-                    x->rightOutlet  = outlet_new (x, NULL);
-                    object_obex_store ((void *)x, zoulou_sym_dumpout, (t_object *)x->rightOutlet);
-                    
-                    x->leftOutlet = listout ((t_object *)x);
-                            
-                    systhread_mutex_new (&x->algorithmMutex, SYSTHREAD_MUTEX_NORMAL);
-                    
-                    attr_args_process (x, argc, argv);
-                }
-            else
-                {
-                    object_free (x);
-                    x = NULL;
-                }
+            systhread_mutex_new (&x->algorithmMutex, SYSTHREAD_MUTEX_NORMAL);
+            
+            attr_args_process (x, argc, argv);
+                
+        } else {
+            object_free (x);
+            x = NULL;
         }
+    }
             
     return x;
 }
@@ -148,14 +144,14 @@ void *zoulou_new (t_symbol *s, long argc, t_atom *argv)
 void zoulou_free (t_zoulou *x)
 {       
     if (x->values) {
-            sysmem_freeptr (x->values);
-        }
+        sysmem_freeptr (x->values);
+    }
     
     pizFactorOracleFree (x->factorOracle);
         
     if (x->algorithmMutex) {
-            systhread_mutex_free (x->algorithmMutex);
-        }
+        systhread_mutex_free (x->algorithmMutex);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -163,21 +159,14 @@ void zoulou_free (t_zoulou *x)
     
 void zoulou_assist (t_zoulou *x, void *b, long m, long a, char *s)
 {
-    if (m == ASSIST_INLET) 
-        { 
-            sprintf (s, "(int) learn clear dump");
-        } 
-    else 
-        {   
-            switch (a) {
-                case 0 :
-                    sprintf (s, "(list) Navigate");
-                    break;
-                case 1 :
-                    sprintf (s, "Dumpout");
-                    break;
-            }
+    if (m == ASSIST_INLET) { 
+        sprintf (s, "(int) learn clear dump");
+    } else {   
+        switch (a) {
+            case 0 : sprintf (s, "(list) Navigate"); break;
+            case 1 : sprintf (s, "Dumpout"); break;
         }
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -186,9 +175,9 @@ void zoulou_assist (t_zoulou *x, void *b, long m, long a, char *s)
 t_max_err zoulou_setStraightRatio (t_zoulou *x, t_object *attr, long argc, t_atom *argv)
 {
     if (argc && argv) {
-            x->straightRatio = atom_getfloat (argv);
-            pizFactorOracleSetStraightRatio (x->factorOracle, x->straightRatio);
-        }
+        x->straightRatio = atom_getfloat (argv);
+        pizFactorOracleSetStraightRatio (x->factorOracle, x->straightRatio);
+    }
 
     return MAX_ERR_NONE;
 }
@@ -196,9 +185,9 @@ t_max_err zoulou_setStraightRatio (t_zoulou *x, t_object *attr, long argc, t_ato
 t_max_err zoulou_setBackwardThreshold (t_zoulou *x, t_object *attr, long argc, t_atom *argv)
 {
     if (argc && argv) {
-            x->backwardThreshold = atom_getlong (argv);
-            pizFactorOracleSetBackwardThreshold (x->factorOracle, x->backwardThreshold);
-        }
+        x->backwardThreshold = atom_getlong (argv);
+        pizFactorOracleSetBackwardThreshold (x->factorOracle, x->backwardThreshold);
+    }
 
     return MAX_ERR_NONE;
 }
@@ -222,25 +211,25 @@ void zoulou_int (t_zoulou *x, long n)
     t_atom  *argv = NULL;
     long    argc = 0;
 
-    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE))
-        {
-            long err = PIZ_ERROR;
-                
-            systhread_mutex_lock (&x->algorithmMutex);
-    
-            if (pizFactorOracleCount (x->factorOracle) &&
-                (!(err = pizFactorOracleProceed (x->factorOracle, argc, x->values)))) {
-                    atom_setlong_array (argc, argv, argc, x->values);
-                }
+    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
+        long err = PIZ_ERROR;
             
-            systhread_mutex_unlock (&x->algorithmMutex);
-    
-            if (!err) {
-                    outlet_list (x->leftOutlet, NULL, argc, argv);
-                }
-                
-            sysmem_freeptr (argv);
+        systhread_mutex_lock (&x->algorithmMutex);
+
+        if (pizFactorOracleCount (x->factorOracle)) {
+            if (!(err = pizFactorOracleProceed (x->factorOracle, argc, x->values))) {
+                atom_setlong_array (argc, argv, argc, x->values);
+            }
         }
+        
+        systhread_mutex_unlock (&x->algorithmMutex);
+
+        if (!err) {
+            outlet_list (x->leftOutlet, NULL, argc, argv);
+        }
+            
+        sysmem_freeptr (argv);
+    }
 }
     
 void zoulou_clear (t_zoulou *x)
@@ -261,35 +250,32 @@ void zoulou_dump (t_zoulou *x, long n)
     err = pizFactorOracleEncodeToArray (x->factorOracle, n, values);
     systhread_mutex_unlock (&x->algorithmMutex);
     
-    if (!err)
-        {
-            long    i, k;
-            long    ref;
-            long    lrs;
-            t_atom  result[4];
-            
-            ref = pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_REFER);
-            lrs = pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_LRS);
-            k   = pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_ARCS);
-            
-            atom_setlong        (result, n);
-            atom_setsym         (result + 1, zoulou_sym_ref);
-            atom_setlong        (result + 2, ref);
-            outlet_anything     (x->rightOutlet, zoulou_sym_node, 3, result);
-            
-            atom_setsym         (result + 1, zoulou_sym_lrs);
-            atom_setlong        (result + 2, lrs);
-            outlet_anything     (x->rightOutlet, zoulou_sym_node, 3, result);
-            
-            atom_setsym         (result + 1, zoulou_sym_arc);
-            
-            for (i = 0; i < k; i++) {
-                atom_setlong (result + 2, pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i));
-                atom_setlong (result + 3, pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i + k));
+    if (!err) {
+        long    i, k, ref, lrs;
+        t_atom  result[4];
         
-                outlet_anything (x->rightOutlet, zoulou_sym_node, 4, result);
-            }
+        ref = pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_REFER);
+        lrs = pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_LRS);
+        k   = pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_ARCS);
+        
+        atom_setlong        (result, n);
+        atom_setsym         (result + 1, zoulou_sym_ref);
+        atom_setlong        (result + 2, ref);
+        outlet_anything     (x->rightOutlet, zoulou_sym_node, 3, result);
+        
+        atom_setsym         (result + 1, zoulou_sym_lrs);
+        atom_setlong        (result + 2, lrs);
+        outlet_anything     (x->rightOutlet, zoulou_sym_node, 3, result);
+        
+        atom_setsym         (result + 1, zoulou_sym_arc);
+        
+        for (i = 0; i < k; i++) {
+            atom_setlong (result + 2, pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i));
+            atom_setlong (result + 3, pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i + k));
+    
+            outlet_anything (x->rightOutlet, zoulou_sym_node, 4, result);
         }
+    }
     
     pizGrowingArrayFree (values);
 }

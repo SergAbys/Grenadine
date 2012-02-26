@@ -311,7 +311,7 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
                 default                     : t = MODE_FORMAT_LONG;      break;
             }
             
-            tralala_setStringWithLong (textCell, textValues[i], t);
+            tralala_setString (textCell, textValues[i], t);
                                             
             jtextlayout_set (x->textLayers[i], 
                             textCell, 
@@ -350,23 +350,23 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
         
     } else if (x->textMode == MODE_TEXT_NOTE && USER) {
         draw = true;
-        tralala_setStringWithLong (temp, x->grid, MODE_FORMAT_GRID);
+        tralala_setString (temp, x->grid, MODE_FORMAT_GRID);
         
         snprintf (textCell, SIZE_STRING_MAX, "Slot %ld", x->slotIndex); STRINGSAFE
         snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, temp); STRINGSAFE
         
         if (x->noteValue != PIZ_NOTE_NONE) {
-            tralala_setStringWithLong (temp, x->noteValue, MODE_FORMAT_GRID);
+            tralala_setString (temp, x->noteValue, MODE_FORMAT_GRID);
             snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, temp); STRINGSAFE
         }
         
     } else if (x->textMode == MODE_TEXT_MOUSE_PITCH) {
         draw = true;
-        tralala_setStringWithLong (textCell, x->mousePitchValue, MODE_FORMAT_NOTENAME);
+        tralala_setString (textCell, x->mousePitchValue, MODE_FORMAT_NOTENAME);
         
     } else if (x->textMode == MODE_TEXT_MOUSE_VELOCITY) {
         draw = true;
-        tralala_setStringWithLong (temp, x->mouseVelocityValue, MODE_FORMAT_LONG);
+        tralala_setString (temp, x->mouseVelocityValue, MODE_FORMAT_LONG);
         
         if (x->mouseVelocityValue >= 0) {
             snprintf (textCell, SIZE_STRING_MAX, "Velocity : +%s", temp); STRINGSAFE
@@ -379,8 +379,8 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
         down = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_DOWN);
         up   = pizGrowingArrayValueAtIndex (x->zoneCopy, PIZ_DATA_UP);
                 
-        tralala_setStringWithLong (textCell, down, MODE_FORMAT_NOTENAME);
-        tralala_setStringWithLong (temp, up, MODE_FORMAT_NOTENAME);
+        tralala_setString (textCell, down, MODE_FORMAT_NOTENAME);
+        tralala_setString (temp, up, MODE_FORMAT_NOTENAME);
         
         snprintf (textCell, SIZE_STRING_MAX, "%s %s", textCell, temp); STRINGSAFE
         

@@ -470,7 +470,7 @@ void tralala_setRectWithCoordinatesAndDuration (t_tralala *x, t_rect *noteRect, 
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_setStringWithLong (char *string, long value, long formatMode)
+void tralala_setString (char *string, long value, long formatMode)
 {
     if (formatMode == MODE_FORMAT_LONG) {
         snprintf (string, SIZE_STRING_MAX, "%ld", value);

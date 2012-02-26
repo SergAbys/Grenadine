@@ -8,7 +8,7 @@
  */
  
 /*
- *  Last modified : 31/01/12.
+ *  Last modified : 26/02/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -84,32 +84,28 @@ void *romeo_new (t_symbol *s, long argc, t_atom *argv)
 {
     t_romeo *x = NULL;
     
-    if (x = (t_romeo *)object_alloc (romeo_class)) 
-        {
-            long k = 0;
-            
-            if (argc && atom_gettype (argv) == A_LONG) {
-                    k = atom_getlong (argv);
-                }
-            
-            x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_LIST_SIZE);
-            x->galoisLattice = pizGaloisLatticeNew (1, &k);
-                                    
-            if (x->values && x->galoisLattice)
-                {
-                    x->rightOutlet  = outlet_new (x, NULL);
-                    object_obex_store ((void *)x, gensym ("dumpout"), (t_object *)x->rightOutlet);
-                    
-                    x->leftOutlet = listout ((t_object *)x);
-                            
-                    systhread_mutex_new (&x->algorithmMutex, SYSTHREAD_MUTEX_NORMAL);
-                }
-            else
-                {
-                    object_free (x);
-                    x = NULL;
-                }
+    if (x = (t_romeo *)object_alloc (romeo_class)) {
+        long k = 0;
+        
+        if (argc && atom_gettype (argv) == A_LONG) {
+            k = atom_getlong (argv);
         }
+        
+        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_LIST_SIZE);
+        x->galoisLattice = pizGaloisLatticeNew (1, &k);
+                                
+        if (x->values && x->galoisLattice) {
+            x->rightOutlet  = outlet_new (x, NULL);
+            object_obex_store ((void *)x, gensym ("dumpout"), (t_object *)x->rightOutlet);
+            x->leftOutlet = listout ((t_object *)x);
+                    
+            systhread_mutex_new (&x->algorithmMutex, SYSTHREAD_MUTEX_NORMAL);
+            
+        } else {
+            object_free (x);
+            x = NULL;
+        }
+    }
             
     return x;
 }
@@ -119,12 +115,12 @@ void romeo_free (t_romeo *x)
     pizGaloisLatticeFree (x->galoisLattice);
         
     if (x->values) {
-            sysmem_freeptr (x->values);
-        }
+        sysmem_freeptr (x->values);
+    }
         
     if (x->algorithmMutex) {
-            systhread_mutex_free (x->algorithmMutex);
-        }
+        systhread_mutex_free (x->algorithmMutex);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -132,21 +128,14 @@ void romeo_free (t_romeo *x)
     
 void romeo_assist (t_romeo *x, void *b, long m, long a, char *s)
 {
-    if (m == ASSIST_INLET) 
-        { 
-            sprintf (s, "(int) learn clear dump");
-        } 
-    else 
-        {   
-            switch (a) {
-                case 0 :
-                    sprintf (s, "(list) Navigate");
-                    break;
-                case 1 :
-                    sprintf (s, "Dumpout");
-                    break;
-            }
+    if (m == ASSIST_INLET) { 
+        sprintf (s, "(int) learn clear dump");
+    } else {   
+        switch (a) {
+            case 0 : sprintf (s, "(list) Navigate"); break;
+            case 1 : sprintf (s, "Dumpout"); break;
         }
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -168,25 +157,25 @@ void romeo_int (t_romeo *x, long n)
     t_atom  *argv = NULL;
     long    argc = 0;
 
-    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE)) 
-        {
-            long err = PIZ_ERROR;
-                
-            systhread_mutex_lock (&x->algorithmMutex);
-    
-            if (pizGaloisLatticeCount (x->galoisLattice) &&
-                (!(err = pizGaloisLatticeProceed (x->galoisLattice, argc, x->values)))) {
-                    atom_setlong_array (argc, argv, argc, x->values);
-                }
+    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
+        long err = PIZ_ERROR;
             
-            systhread_mutex_unlock (&x->algorithmMutex);
-    
-            if (!err) {
-                    outlet_list (x->leftOutlet, NULL, argc, argv);
-                }
-                
-            sysmem_freeptr (argv);
+        systhread_mutex_lock (&x->algorithmMutex);
+
+        if (pizGaloisLatticeCount (x->galoisLattice)) {
+            if (!(err = pizGaloisLatticeProceed (x->galoisLattice, argc, x->values))) {
+                atom_setlong_array (argc, argv, argc, x->values);
+            }
         }
+        
+        systhread_mutex_unlock (&x->algorithmMutex);
+
+        if (!err) {
+            outlet_list (x->leftOutlet, NULL, argc, argv);
+        }
+            
+        sysmem_freeptr (argv);
+    }
 }
     
 void romeo_clear (t_romeo *x)
@@ -204,30 +193,27 @@ void romeo_dump (t_romeo *x, long n)
     t_atom          *argv = NULL;
     long            argc = 0;
 
-    if (atom_alloc_array (n, &argc, &argv, &alloc) == MAX_ERR_NONE)
-        {
-            long            err = PIZ_GOOD;
-            PIZGrowingArray *values = pizGrowingArrayNew (4);
-    
-            systhread_mutex_lock (&x->algorithmMutex);
-            err = pizGaloisLatticeEncodeToArray (x->galoisLattice, n, values);
-            systhread_mutex_unlock (&x->algorithmMutex);
+    if (atom_alloc_array (n, &argc, &argv, &alloc) == MAX_ERR_NONE) {
+        long            err = PIZ_GOOD;
+        PIZGrowingArray *values = pizGrowingArrayNew (4);
 
-            if (!err)
-                {
-                    long i;
-                    long count = pizGrowingArrayValueAtIndex (values, PIZ_GALOIS_LATTICE_CONCEPTS);
-                    long *ptr  = pizGrowingArrayPtr (values);
-                                        
-                    for (i = 0; i < count; i++) {
-                        atom_setlong_array (argc, argv, argc, ptr + PIZ_GALOIS_LATTICE_DATA + (n * i));
-                        outlet_list (x->rightOutlet, NULL, argc, argv);
-                    }
-                }
-                
-            sysmem_freeptr (argv);
-            pizGrowingArrayFree (values);
+        systhread_mutex_lock (&x->algorithmMutex);
+        err = pizGaloisLatticeEncodeToArray (x->galoisLattice, n, values);
+        systhread_mutex_unlock (&x->algorithmMutex);
+
+        if (!err) {
+            long i, count = pizGrowingArrayValueAtIndex (values, PIZ_GALOIS_LATTICE_CONCEPTS);
+            long *ptr  = pizGrowingArrayPtr (values);
+                                
+            for (i = 0; i < count; i++) {
+                atom_setlong_array (argc, argv, argc, ptr + PIZ_GALOIS_LATTICE_DATA + (n * i));
+                outlet_list (x->rightOutlet, NULL, argc, argv);
+            }
         }
+            
+        sysmem_freeptr (argv);
+        pizGrowingArrayFree (values);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------

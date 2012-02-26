@@ -11,8 +11,8 @@
 		breakpointsGroup = 968F41EB129A9DCD00CACE6F /* XCBreakpointsBucket */;
 		codeSenseManager = 96BF2F54128976F00018D097 /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 350736138;
-			PBXWorkspaceStateSaveDate = 350736138;
+			PBXPerProjectTemplateStateSaveDate = 351935501;
+			PBXWorkspaceStateSaveDate = 351935501;
 		};
 		sourceControlManager = 96BF2F53128976F00018D097 /* Source Control */;
 		userBuildSettings = {
@@ -41,8 +41,8 @@
 	};
 	96BF2F57128977430018D097 /* romeo.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1231, 5850}}";
-			sepNavSelRange = "{410, 0}";
+			sepNavIntBoundsRect = "{{0, 0}, {1231, 5500}}";
+			sepNavSelRange = "{6948, 0}";
 			sepNavVisRect = "{{0, 0}, {1231, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1276, 774}}";
 		};
