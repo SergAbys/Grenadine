@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 25/02/12.
+ *  Last modified : 26/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -526,10 +526,14 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
             x->selected             = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->played               = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->zone                 = pizGrowingArrayNew    (PIZ_DATA_ZONE_SIZE);
-            x->unselectedCopy       = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->selectedCopy         = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->playedCopy           = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->zoneCopy             = pizGrowingArrayNew    (PIZ_DATA_ZONE_SIZE);
+            x->unselectedTemp       = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+            x->selectedTemp         = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+            x->playedTemp           = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+            x->zoneTemp             = pizGrowingArrayNew    (PIZ_DATA_ZONE_SIZE);
+            x->unselectedPaint      = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+            x->selectedPaint        = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+            x->playedPaint          = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
+            x->zonePaint            = pizGrowingArrayNew    (PIZ_DATA_ZONE_SIZE);
             x->origin               = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->result               = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->valuesToBeLearned    = pizGrowingArrayNew    (SIZE_LEARN_ARRAY);
@@ -547,10 +551,14 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                 x->selected && 
                 x->played &&
                 x->zone && 
-                x->unselectedCopy && 
-                x->selectedCopy && 
-                x->playedCopy &&
-                x->zoneCopy && 
+                x->unselectedTemp && 
+                x->selectedTemp && 
+                x->playedTemp &&
+                x->zoneTemp && 
+                x->unselectedPaint && 
+                x->selectedPaint && 
+                x->playedPaint &&
+                x->zonePaint &&
                 x->origin &&
                 x->result &&
                 x->valuesToBeLearned &&
@@ -669,10 +677,14 @@ void tralala_free (t_tralala *x)
     pizGrowingArrayFree  (x->played);
     pizGrowingArrayFree  (x->selected);
     pizGrowingArrayFree  (x->unselected);
-    pizGrowingArrayFree  (x->zoneCopy);
-    pizGrowingArrayFree  (x->playedCopy);
-    pizGrowingArrayFree  (x->selectedCopy);
-    pizGrowingArrayFree  (x->unselectedCopy);
+    pizGrowingArrayFree  (x->zoneTemp);
+    pizGrowingArrayFree  (x->playedTemp);
+    pizGrowingArrayFree  (x->selectedTemp);
+    pizGrowingArrayFree  (x->unselectedTemp);
+    pizGrowingArrayFree  (x->zonePaint);
+    pizGrowingArrayFree  (x->playedPaint);
+    pizGrowingArrayFree  (x->selectedPaint);
+    pizGrowingArrayFree  (x->unselectedPaint);
     pizGrowingArrayFree  (x->result);
     pizGrowingArrayFree  (x->origin);
     pizGrowingArrayFree  (x->valuesToBeLearned);
