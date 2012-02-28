@@ -5,9 +5,6 @@ Layout of the Grenadine repository :
 * Ufo :
   max/MSP externals.
 
-* html : 
-  doxygen's documentation for pizAlgorithms.
-
 * tralala :
   max/MSP prototype.
 
