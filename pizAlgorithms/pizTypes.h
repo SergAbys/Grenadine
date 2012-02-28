@@ -1,8 +1,7 @@
 /**
  * \file    pizTypes.h
  * \author  Jean Sapristi
- * \date    31 janvier 2012
- * \ingroup types
+ * \date    28 February 2012
  */
  
 /*
@@ -45,67 +44,37 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Error codes.
- * \ingroup types
- */
- 
 typedef enum {
-    PIZ_GOOD    =  0,                       /*!< No error. */
-    PIZ_ERROR   =  1,                       /*!< Generic error. */
-    PIZ_MEMORY  =  2                        /*!< Memory allocation error. */
+    PIZ_GOOD    =  0,
+    PIZ_ERROR   =  1, 
+    PIZ_MEMORY  =  2
     }PIZError;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Magic numbers.
- * \ingroup types
- */
- 
 typedef enum {
-    PIZ_MAGIC_SCALE      = 12,               /*!< Chromatic scale size. */
-    PIZ_MAGIC_CHANNEL    = 16,               /*!< Maximum midi channel. */
-    PIZ_MAGIC_VELOCITY   = 127,              /*!< Maximum midi velocity. */
-    PIZ_MAGIC_PITCH      = 127               /*!< Maximum midi pitch. */
+    PIZ_MAGIC_SCALE      = 12,
+    PIZ_MAGIC_CHANNEL    = 16,
+    PIZ_MAGIC_VELOCITY   = 127,
+    PIZ_MAGIC_PITCH      = 127
     }PIZMagic;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief Compute the maximum of \a x and \a y.
- * \ingroup types
- */
- 
 #ifndef MAX
 #define MAX(x,y) ((x)>(y)?(x):(y))
 #endif
 
-/**
- * \brief Compute the minimum of \a x and \a y.
- * \ingroup types
- */
- 
 #ifndef MIN
 #define MIN(x,y) ((x)<(y)?(x):(y))
 #endif
 
-/**
- * \brief Compute absolute value of \a x.
- * \ingroup types
- */
- 
 #ifndef ABS
 #define ABS(x) ((x)<0?-(x):(x))
 #endif
 
-/**
- * \brief Keep \a x between \a a and \a b.
- * \ingroup types
- */
- 
 #ifndef CLAMP
 #define CLAMP(x,a,b) ((x)<(a)?(a):(x)>(b)?(b):(x))
 #endif
@@ -113,24 +82,6 @@ typedef enum {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \def     true 
- * \brief   Boolean value.
- * \ingroup types
- */
- 
-/**
- * \def     false 
- * \brief   Boolean value.
- * \ingroup types
- */
- 
-/**
- * \def     bool 
- * \brief   Boolean type.
- * \ingroup types
- */
- 
 #ifndef __cplusplus
     #ifndef __bool_true_false_are_defined
         #define true                            1
@@ -142,11 +93,6 @@ typedef enum {
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-/**
- * \brief   Hide the function in the exported symbol table.
- * \ingroup types
- */
  
 #ifndef WIN_VERSION
     #define PIZ_LOCAL  __attribute__ ((visibility("hidden")))
@@ -156,12 +102,6 @@ typedef enum {
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-/**
- * \def     PIZ_INLINE
- * \brief   Inline the function.
- * \ingroup types
- */
  
 #ifndef WIN_VERSION
     #define PIZ_EXTERN_INLINE
@@ -174,11 +114,6 @@ typedef enum {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   For C++ linker.
- * \ingroup types
- */
- 
 #ifdef __cplusplus
     #define PIZ_START_C_LINKAGE \
         extern "C" {
@@ -186,11 +121,6 @@ typedef enum {
     #define PIZ_START_C_LINKAGE //
 #endif 
 
-/**
- * \brief   For C++ linker.
- * \ingroup types
- */
- 
 #ifdef __cplusplus
     #define PIZ_END_C_LINKAGE \
         }

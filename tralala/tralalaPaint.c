@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 26/02/12.
+ *  Last modified : 27/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -165,6 +165,62 @@ void tralala_paintTask (t_tralala *x)
     } ATOMIC_DECREMENT (&x->paintLock);
     
     clock_fdelay (x->paintClock, CLOCK_PAINT_INTERVAL + CLOCK_RANDOMIZE * (rand ( ) / (RAND_MAX + 1.0)));
+}
+
+bool tralala_hitNotesByRunIndex (t_tralala *x)
+{
+    bool haveChanged = 0;
+
+    pizGrowingArrayClear (x->played);
+
+    if (x->runIndex == -1) {
+        x->runIndex = 0;
+        haveChanged = true;
+    } else {
+        long i, count, start, end, down, up;
+        long err = PIZ_GOOD;
+        
+        start   = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_START);
+        end     = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_END);
+        down    = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_DOWN);
+        up      = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_UP);
+        
+        count = pizGrowingArrayCount (x->unselected);
+        
+        for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
+            long err2       = PIZ_GOOD;
+            long position   = pizGrowingArrayValueAtIndex (x->unselected, i + PIZ_DATA_POSITION);
+            long pitch      = pizGrowingArrayValueAtIndex (x->unselected, i + PIZ_DATA_PITCH);
+            long duration   = pizGrowingArrayValueAtIndex (x->unselected, i + PIZ_DATA_DURATION);
+            long isMarked   = pizGrowingArrayValueAtIndex (x->unselected, i + PIZ_DATA_IS_MARKED);
+            
+            err2 |= (position < start);
+            err2 |= (pitch < down);
+            err2 |= (pitch > up);
+            err2 |= (x->runIndex < position);
+            err2 |= (x->runIndex > (position + duration));
+            
+            if (!err2) {
+                err |= pizGrowingArrayAppend (x->played, position);
+                err |= pizGrowingArrayAppend (x->played, pitch);
+                err |= pizGrowingArrayAppend (x->played, PIZ_MAGIC_VELOCITY);
+                err |= pizGrowingArrayAppend (x->played, duration);
+                err |= pizGrowingArrayAppend (x->played, PIZ_MAGIC_CHANNEL);
+                err |= pizGrowingArrayAppend (x->played, false);
+                err |= pizGrowingArrayAppend (x->played, false);
+                
+                if (!isMarked) {
+                    pizGrowingArraySetValueAtIndex (x->unselected, i + PIZ_DATA_IS_MARKED, true);
+                    haveChanged = true;
+                }
+            } else if (isMarked){
+                pizGrowingArraySetValueAtIndex (x->unselected, i + PIZ_DATA_IS_MARKED, false);
+                haveChanged = true;
+            }
+        }
+    }
+        
+    return haveChanged;
 }
 
 void tralala_focusTask (t_tralala *x)

@@ -1,8 +1,7 @@
 /**
  * \file    pizBoundedHashTable.h
  * \author  Jean Sapristi
- * \date    23 janvier 2012
- * \ingroup boundedHashTable
+ * \date    28 February 2012
  */
  
 /*
@@ -52,41 +51,24 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \def     PIZ_BOUNDED_HASHTABLE_FLAG_NONE 
- * \brief   (DEFAULT) Don't free items.
- * \ingroup boundedHashTable
- */
- 
 #define PIZ_BOUNDED_HASHTABLE_FLAG_NONE (0L)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \ingroup boundedHashTable
- */
- 
 typedef struct _PIZBoundedHashTableElement {
-    long key;                                           /* The key as long. */
-    void *ptr;                                          /* Pointer to the item to store. */
+    long    key;
+    void    *ptr;
     } PIZBoundedHashTableElement;
     
-/**
- * \remark  Bounded hashtable with \c long keys.
- *          Implemented with an array of dynamic arrays, and a pre-allocated pool of elements.
- *          To obtain the hash value : index =  key % size.
- * \ingroup boundedHashTable
- */
- 
 typedef struct _PIZBoundedHashTable {
-    long                        flags;              /* Flags as bit field. */
-    long                        count;              /* Number of elements in the hashtable. */
-    long                        hashSize;           /* Number of dynamic arrays in the hashtable. */
-    long                        poolSize;           /* Maximum number of items in the hashtable. */
-    PIZBoundedStack             *ticketMachine;     /* Ticket machine for pool management. */
-    PIZBoundedHashTableElement  *pool;              /* Pool of elements. */
-    PIZGrowingArray             **hashTable;        /* Pointer to the hashtable's array of dynamic arrays. */
+    long                        flags;
+    long                        count;
+    long                        hashSize;
+    long                        poolSize;
+    PIZBoundedStack             *ticketMachine;
+    PIZBoundedHashTableElement  *pool;
+    PIZGrowingArray             **hashTable;
     } PIZBoundedHashTable;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -94,107 +76,15 @@ typedef struct _PIZBoundedHashTable {
 
 PIZ_START_C_LINKAGE
 
-/**
- * \brief   Create the bounded hashtable.
- * \details The function accepts two arguments : the size and the pool size. 
- *          The size should be a prime number, default is 157.
- *          Default pool size is 128.
- *          In case of failure the pointer is NULL.
- * \param   argc The number of arguments.
- * \param   argv A pointer to arguments.
- * \return  A pointer to the new bounded hashtable.
- * \remark	The following shows how to create a bounded hashtable.  
- * \code
- * long                    args[2] = {59, 100};
- * PIZBoundedHashTable     *myHashtab = NULL;
- *
- * myHashtab = pizBoundedHashTableNew (2, args);  
- * myHashtab = pizBoundedHashTableNew (0, NULL);  // default values.
- *
- * \endcode
- * \ingroup boundedHashTable
- */
-PIZBoundedHashTable *pizBoundedHashTableNew (long argc, long *argv);
-
-/**
- * \brief   Set bounded hashtable's bit flags.
- * \param   x A valid pointer.
- * \param   flags Bit flags.
- * \warning Free methods are not implemented.
- * \ingroup boundedHashTable
- */
-void pizBoundedHashTableSetFlags (PIZBoundedHashTable *x, long flags);
-
-/**
- * \brief   Free the bounded hashtable.
- * \details It is safe to pass NULL pointer. 
- *          Item's memory is released according to flags.
- * \param   x A Pointer.
- * \warning Free methods are not implemented.
- * \ingroup boundedHashTable
- */
-void pizBoundedHashTableFree (PIZBoundedHashTable *x);
-
-/**
- * \brief   Clear the bounded hashtable.
- * \details Item's memory is released according to flags.
- * \param   x A valid pointer.
- * \warning Free methods are not implemented.
- * \ingroup boundedHashTable
- */
-void pizBoundedHashTableClear (PIZBoundedHashTable *x);
-
-/**
- * \brief   Add an item to the bounded hashtable.
- * \details The provided pointer can not be NULL. 
- *          Key must be superior or equal to zero.
- * \param   x A valid pointer.
- * \param   key The key.
- * \param   ptr A pointer to the item.
- * \return  An error code.
- * \remark  It is safe to add items with equal keys.
- * \ingroup boundedHashTable
- */
-PIZError pizBoundedHashTableAdd (PIZBoundedHashTable *x, long key, void *ptr);
-
-/**
- * \brief   Remove an item with a given key and a given pointer.
- * \param   x A valid pointer.
- * \param   key The key.
- * \param   ptr A pointer to the item.
- * \return  An error code.
- * \warning Free methods are not implemented.
- * \ingroup boundedHashTable
- */
-PIZError pizBoundedHashTableRemoveByKeyAndPtr (PIZBoundedHashTable *x, long key, void *ptr);
-
-/**
- * \brief   Get an item with a given key.
- * \param   x A valid pointer.
- * \param   key The key.
- * \param   ptr The adress of a pointer to set.
- * \return  An error code.
- * \remark  In case of equal keys, older item is returned.
- * \ingroup boundedHashTable
- */
-PIZError pizBoundedHashTablePtrByKey (const PIZBoundedHashTable *x, long key, void **ptr);
-
-/**
- * \brief   Test if the bounded hashtable countains an item with a given key.
- * \param   x A valid pointer.
- * \param   key The key.
- * \return  True if found the key, otherwise false.
- * \ingroup boundedHashTable
- */
-bool pizBoundedHashTableContainsKey (const PIZBoundedHashTable *x, long key);
-
-/**
- * \brief   Get the number of items in the bounded hashtable.
- * \param   x A valid pointer.
- * \return  The number of items in the bounded hashtable.
- * \ingroup boundedHashTable
- */
-long pizBoundedHashTableCount (const PIZBoundedHashTable *x);
+PIZBoundedHashTable *pizBoundedHashTableNew               (long argc, long *argv);
+void                pizBoundedHashTableSetFlags           (PIZBoundedHashTable *x, long flags);
+void                pizBoundedHashTableFree               (PIZBoundedHashTable *x);
+void                pizBoundedHashTableClear              (PIZBoundedHashTable *x);
+PIZError            pizBoundedHashTableAdd                (PIZBoundedHashTable *x, long key, void *ptr);
+PIZError            pizBoundedHashTableRemoveByKeyAndPtr  (PIZBoundedHashTable *x, long key, void *ptr);
+PIZError            pizBoundedHashTablePtrByKey           (const PIZBoundedHashTable *x, long key, void **ptr);
+bool                pizBoundedHashTableContainsKey        (const PIZBoundedHashTable *x, long key);
+long                pizBoundedHashTableCount              (const PIZBoundedHashTable *x);
 
 PIZ_END_C_LINKAGE
 

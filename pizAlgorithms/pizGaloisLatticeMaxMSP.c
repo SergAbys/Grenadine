@@ -61,8 +61,8 @@ PIZError pizGaloisLatticeEncodeToArray (const PIZGaloisLattice *x, long n, PIZGr
             
             for (j = 0; j < PIZ_ITEMSET128_SIZE; j++) {
                 if (pizItemset128IsSetAtIndex (&(x->stock[p].itemset), j)) {
-                        err |= pizGrowingArrayAppend (a, j);
-                    }
+                    err |= pizGrowingArrayAppend (a, j);
+                }
             }
         }
     }

@@ -56,8 +56,8 @@ void pizKohonenMapSetTraining (PIZKohonenMap *x, long n)
 void pizKohonenMapSetStep (PIZKohonenMap *x, double f)
 {
     if (f > 0.) {
-            x->step = f;
-        }
+        x->step = f;
+    }
 }
 
 long pizKohonenMapRange (const PIZKohonenMap *x)

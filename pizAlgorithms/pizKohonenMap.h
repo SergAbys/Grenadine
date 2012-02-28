@@ -1,9 +1,7 @@
 /**
  * \file    pizKohonenMap.h
  * \author  Jean Sapristi
- * \date    31 janvier 2012
- * \ingroup charlie
- * \ingroup kohonenMap
+ * \date    28 February 2012
  */
  
 /*
@@ -51,20 +49,14 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \details This is a \a ONE dimension self-organizing map.
- * \remark  Implemented simply with an array.
- * \ingroup kohonenMap
- */
- 
 typedef struct _PIZKohonenMap {
-    long            mapSize;                /* Number of nodes in the Kohonen map. */
-    long            vectorSize;             /* Size of node's vector.*/
-    long            count;                  /* Number of learning iterations performed. */
-    long            range;                  /* Neighborhood influence. */
-    long            training;               /* Number of learning iterations planned. */
-    double          step;                   /* Learning step. */
-    double          *map;                   /* The data. */
+    long            mapSize;
+    long            vectorSize;
+    long            count;
+    long            range;
+    long            training;
+    double          step;
+    double          *map;
     } PIZKohonenMap;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -75,72 +67,12 @@ PIZ_START_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Create the Kohonen map.
- * \details The function accepts two arguments, the size of the map, and the size of the vectors.
- *          For the map, maximum is 100, default is 20.
- *          For the vectors, maximum is 256, default is 4.
- *          In case of failure the pointer is NULL.
- * \param   argc The number of arguments.
- * \param   argv A pointer to arguments.
- * \return  A pointer to the new Kohonen map.
- * \remark	The following shows how to create a Kohonen map.  
- * \code
- * long args[2] = {50, 8};
- *
- * PIZKohonenMap *map = pizKohonenMapNew (2, &args);
- * PIZKohonenMap *map = pizKohonenMapNew (0, NULL); // default values
- *
- * \endcode
- * \ingroup kohonenMap
- */
-PIZKohonenMap *pizKohonenMapNew (long argc, long *argv);
-
-/**
- * \brief   Free the Kohonen map.
- * \details It is safe to pass NULL pointer. 
- * \param   x A Pointer.
- * \ingroup kohonenMap
- */
-void pizKohonenMapFree (PIZKohonenMap *x);
-
-/**
- * \brief   Add values to the Kohonen map.
- * \param   x A valid pointer.
- * \param   argc The number of values.
- * \param   argv A pointer to the values.
- * \return  An error code.
- * \remark  Values provided are clipped [0, 127].
- *          The Kohonen map continue to learn even when the number of learnings planned is reached.
- * \ingroup kohonenMap
- */
-PIZError pizKohonenMapAdd (PIZKohonenMap *x, long argc, long *argv);
-
-/**
- * \brief   Clear the Kohonen map.
- * \param   x A valid pointer.
- * \ingroup kohonenMap
- */
-void pizKohonenMapClear (PIZKohonenMap *x);
-
-/**
- * \brief   Fill a given array with Kohonen map values.
- * \remark  A node is randomly drawn, and the array filled with values from the vector. 
- *          If the array is longer than the vector, values are copied again.
- * \param   argc Number of values to proceed.
- * \param   argv Pointer to the array to fill.
- * \return  An error code.
- * \ingroup kohonenMap
- */
-PIZError pizKohonenMapProceed (const PIZKohonenMap *x, long argc, long *argv);
-
-/**
- * \brief   Get the number of learnings currently performed.
- * \param   x A valid pointer.
- * \return  The number of learnings.
- * \ingroup kohonenMap
- */
-long pizKohonenMapCount (const PIZKohonenMap *x);
+PIZKohonenMap   *pizKohonenMapNew       (long argc, long *argv);
+void            pizKohonenMapFree       (PIZKohonenMap *x);
+PIZError        pizKohonenMapAdd        (PIZKohonenMap *x, long argc, long *argv);
+void            pizKohonenMapClear      (PIZKohonenMap *x);
+PIZError        pizKohonenMapProceed    (const PIZKohonenMap *x, long argc, long *argv);
+long            pizKohonenMapCount      (const PIZKohonenMap *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -1,9 +1,7 @@
 /**
- * \file        pizFactorOracle.h
- * \author      Jean Sapristi
- * \date        31 janvier 2012
- * \ingroup     zoulou
- * \ingroup     factorOracle
+ * \file    pizFactorOracle.h
+ * \author  Jean Sapristi
+ * \date    28 February 2012
  */
 
 /*
@@ -51,33 +49,21 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/** 
- * \remark  The arc from one node to next node (straight) is the first.
- * \ingroup factorOracle
- */
- 
 typedef struct _PIZFactorOracleNode {
-    long                referTo;                        /* Final index of longest repeated sequence. */
-    long                lengthRepeatedSuffix;           /* Size of longest repeated sequence. */
-    PIZGrowingArray     *arcDestinations;               /* Arc destinations indexes. */
-    PIZGrowingArray     *arcValues;                     /* Arc values. */
+    long                referTo;
+    long                lengthRepeatedSuffix;
+    PIZGrowingArray     *arcDestinations;
+    PIZGrowingArray     *arcValues;
     } PIZFactorOracleNode;
-    
-/**
- * \remark  Implemented with dynamic array of nodes ; For each node, arcs are stored in dynamic arrays too.
-            Node's dynamic arrays are created on the \a first query and keep in memory 
-            until pizFactorOracleFree() is called.
- * \ingroup factorOracle
- */
-     
+       
 typedef struct _PIZFactorOracle {
-    long                size;                           /* Current number of nodes allocated. */
-    long                peak;                           /* Maximum number of nodes reached. */
-    long                index;                          /* Current number of nodes. */
-    long                shuttle;                        /* Index of the playback head. */
-    long                backwardThreshold;              /* Threshold for backward playback. */
-    double              straightRatio;                  /* Threshold for straight playback. */
-    PIZFactorOracleNode *nodes;                         /* Array of nodes. */
+    long                size;
+    long                peak;
+    long                index;
+    long                shuttle;
+    long                backwardThreshold;
+    double              straightRatio;
+    PIZFactorOracleNode *nodes;
     } PIZFactorOracle;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -88,69 +74,12 @@ PIZ_START_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Create the factor oracle.
- * \details The function currently do not need arguments (provided for later improvements).
- *          In case of failure the pointer is NULL.
- * \param   argc 0.
- * \param   argv NULL.
- * \return  A pointer to the new factor oracle.
- * \remark	The following shows how to create a factor oracle.  
- * \code
- * PIZFactorOracle *oracle = pizFactorOracleNew (0, NULL);
- *
- * \endcode
- * \ingroup factorOracle
- */
-PIZFactorOracle *pizFactorOracleNew (long argc, long *argv);
-
-/**
- * \brief   Free the factor oracle.
- * \details It is safe to pass NULL pointer. 
- * \param   x A Pointer.
- * \ingroup factorOracle
- */
-void pizFactorOracleFree (PIZFactorOracle *x);
-
-/**
- * \brief   Add values to the factor oracle.
- * \param   x A valid pointer.
- * \param   argc The number of values.
- * \param   argv A pointer to the values.
- * \return  An error code.
- * \remark  The number of allocated nodes is doubled in case of exceeding.
- * \ingroup factorOracle
- */
-PIZError pizFactorOracleAdd (PIZFactorOracle *x, long argc, long *argv);
-
-/**
- * \brief   Clear the factor oracle.
- * \param   x A valid pointer.
- * \ingroup factorOracle
- */
-void pizFactorOracleClear (PIZFactorOracle *x);
-
-/**
- * \brief   Fill a given array with factor oracle values.
- * \remark  Each step a number between 0. and 1. is randomly drawn : 
- *          if it is inferior to the straightRatio the playback head moves straight, 
- *          otherwise, there is half chance to moves backward (if backward threshold is reached), 
- *          and half chance to moves forward (if arcs exist).
- *
- * \param   argc Number of step to proceed.
- * \param   argv Pointer to the array.
- * \return  An error code.
- * \ingroup factorOracle
- */
-PIZError pizFactorOracleProceed (PIZFactorOracle *x, long argc, long *argv);
-
-/**
- * \brief   Get the number of nodes in the factor oracle.
- * \param   x A valid pointer.
- * \return  The number of nodes.
- * \ingroup factorOracle
- */
-long pizFactorOracleCount (const PIZFactorOracle *x);
+PIZFactorOracle     *pizFactorOracleNew     (long argc, long *argv);
+void                pizFactorOracleFree     (PIZFactorOracle *x);
+PIZError            pizFactorOracleAdd      (PIZFactorOracle *x, long argc, long *argv);
+void                pizFactorOracleClear    (PIZFactorOracle *x);
+PIZError            pizFactorOracleProceed  (PIZFactorOracle *x, long argc, long *argv);
+long                pizFactorOracleCount    (const PIZFactorOracle *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

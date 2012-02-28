@@ -1,9 +1,7 @@
 /**
  * \file    pizFiniteState.h
  * \author  Jean Sapristi
- * \date    31 janvier 2012
- * \ingroup uniform
- * \ingroup finiteState
+ * \date    28 February 2012
  */
 
 /*
@@ -51,33 +49,23 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \ingroup finiteState
- */
- 
 typedef struct _PIZFiniteStateNode {
-    long            value;                      /* Value of the node. */
-    bool            final;                      /* Terminal node state. */
-    PIZItemset128   parents;                    /* Arcs (indexes as bit field). */
-    PIZItemset128   childs;                     /* Arcs (indexes as bit field). */
+    long            value;
+    bool            final;
+    PIZItemset128   parents;
+    PIZItemset128   childs;
     } PIZFiniteStateNode;
 
-/** 
- * \remark  Implemented with an array of bounded queues, one per alphabet's value (alphabet is 0-127). 
- *          Bounded queues contains indexes of pre-allocated nodes (pool size is 128).
- * \ingroup finiteState
- */
- 
 typedef struct _PIZFiniteState {
-    long                count;                  /* Number of nodes in the automaton. */
-    long                shuttle;                /* Index of the playback head. */
-    long                lotteryIndex;           /* Number of elements in the lottery array. */
-    long                jumpChance;             /* Cumulative chance to jump when reading. */ 
-    long                thresholdToMergeNodes;  /* Number of nodes to start crossing-over. */ 
-    long                *lottery;               /* Temporary array for lottery drawing. */ 
-    PIZBoundedQueue     **mapByValue;           /* Pointer to the array of bounded queues. */ 
-    PIZBoundedStack     *ticketMachine;         /* Pool management. */ 
-    PIZFiniteStateNode  *stock;                 /* Pool of nodes. */ 
+    long                count;
+    long                shuttle;
+    long                lotteryIndex;
+    long                jumpChance;
+    long                thresholdToMergeNodes; 
+    long                *lottery; 
+    PIZBoundedQueue     **mapByValue;
+    PIZBoundedStack     *ticketMachine; 
+    PIZFiniteStateNode  *stock;
     } PIZFiniteState;
     
 // -------------------------------------------------------------------------------------------------------------
@@ -88,71 +76,12 @@ PIZ_START_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Create the automaton.
- * \details The function accept one argument : the threshold to start crossing-over. 
- *          Minimum is 1, maximum is 100, default is 35.
- *          In case of failure the pointer is NULL.
- * \param   argc The number of arguments.
- * \param   argv A pointer to arguments.
- * \return  A pointer to the new automaton.
- * \remark	The following shows how to create an automaton.  
- * \code
- * long args = 50;
- *
- * PIZFiniteState *fsa = pizFiniteStateNew (1, &args);
- * PIZFiniteState *fsa = pizFiniteStateNew (0, NULL); // default value
- *
- * \endcode
- * \ingroup finiteState
- */
-PIZFiniteState *pizFiniteStateNew (long argc, long *argv);
-
-/**
- * \brief   Free the automaton.
- * \details It is safe to pass NULL pointer. 
- * \param   x A Pointer.
- * \ingroup finiteState
- */
-void pizFiniteStateFree (PIZFiniteState *x);
-
-/**
- * \brief   Add values to the automaton.
- * \param   x A valid pointer.
- * \param   argc The number of values.
- * \param   argv A pointer to the values.
- * \return  An error code.
- * \remark  The number of nodes can not be more than 128 at a given time, exceedings ones will be ignored.
- * \ingroup finiteState
- */
-PIZError pizFiniteStateAdd (PIZFiniteState *x, long argc, long *argv);
-
-/**
- * \brief   Clear the automaton.
- * \param   x A valid pointer.
- * \ingroup finiteState
- */
-void pizFiniteStateClear (PIZFiniteState *x);
-
-/**
- * \brief   Fill a given array with automaton values.
- * \remark  Each step the playback head randomly moves in the automaton. 
- *          It does not reverse. At the end of a branch, it jumps. 
- *          Each step, chances to jump increase (terminal states raise it more).
- * \param   argc Number of step to proceed.
- * \param   argv Pointer to the array.
- * \return  An error code.
- * \ingroup finiteState
- */
-PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv);
-
-/**
- * \brief   Get the number of nodes in the automaton.
- * \param   x A valid pointer.
- * \return  The number of nodes.
- * \ingroup finiteState
- */
-long pizFiniteStateCount (const PIZFiniteState *x);
+PIZFiniteState  *pizFiniteStateNew      (long argc, long *argv);
+void            pizFiniteStateFree      (PIZFiniteState *x);
+PIZError        pizFiniteStateAdd       (PIZFiniteState *x, long argc, long *argv);
+void            pizFiniteStateClear     (PIZFiniteState *x);
+PIZError        pizFiniteStateProceed   (PIZFiniteState *x, long argc, long *argv);
+long            pizFiniteStateCount     (const PIZFiniteState *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

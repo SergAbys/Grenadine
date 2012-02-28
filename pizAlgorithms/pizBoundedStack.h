@@ -1,8 +1,7 @@
 /**
  * \file    pizBoundedStack.h
  * \author  Jean Sapristi
- * \date    31 janvier 2012
- * \ingroup boundedStack
+ * \date    28 February 2012
  */
  
 /*
@@ -49,17 +48,12 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-/**
- * \remark  Implemented with an array.
- * \ingroup boundedStack
- */
  
 typedef struct _PIZBoundedStack {
-    long bound;                             /* Maximum number of value in the queue. */
-    long stack;                             /* Number of value in the queue. */
-    long poppedValue;                       /* Last unstacked value. */
-    long *values;                           /* Pointer to the array. */
+    long bound;
+    long stack;
+    long poppedValue;
+    long *values;
     } PIZBoundedStack; 
 
 // -------------------------------------------------------------------------------------------------------------
@@ -67,66 +61,13 @@ typedef struct _PIZBoundedStack {
 
 PIZ_START_C_LINKAGE
 
-/**
- * \brief   Create the stack.
- * \details In case of failure the pointer is NULL.
- * \param   size The maximum number of values in the stack.
- * \return  A pointer to the new queue.
- * \ingroup boundedStack
- */
-PIZBoundedStack *pizBoundedStackNew (long size);
-
-/**
- * \brief   Free the stack.
- * \details It is safe to pass NULL pointer.
- * \param   x A Pointer.
- * \ingroup boundedStack
- */
-void pizBoundedStackFree (PIZBoundedStack *x);
-
-/**
- * \brief   Clear the stack.
- * \param   x A valid pointer.
- * \ingroup boundedStack
- */
-void pizBoundedStackClear (PIZBoundedStack *x);
-
-/**
- * \brief   Stack a value.
- * \details Return PIZ_ERROR if the number of values is over the size of the stack.
- * \param   x A valid pointer.
- * \param   value The value to append.
- * \return  An error code.
- * \ingroup boundedStack
- */
-PIZError pizBoundedStackPush (PIZBoundedStack *x, long value);
-
-/**
- * \brief   Unstack a value.
- * \details To get the unstacked value use pizBoundedStackPoppedValue().
- *          Return PIZ_ERROR if the queue is empty.
- * \param   x A valid pointer.
- * \return  An error code.
- * \ingroup boundedStack
- */
-PIZError pizBoundedStackPop (PIZBoundedStack *x);
-
-/**
- * \brief   Get the number of values in the stack.
- * \param   x A valid pointer.
- * \return  The number of values.
- * \ingroup boundedStack
- */
-long pizBoundedStackCount (const PIZBoundedStack *x);
-
-/**
- * \brief   Get the unstacked value.
- * \remark  This value is initialized with -1. 
- * \param   x A valid pointer.
- * \return  The value.
- * \ingroup boundedStack
- */
-long pizBoundedStackPoppedValue (const PIZBoundedStack *x);
+PIZBoundedStack     *pizBoundedStackNew         (long size);
+void                pizBoundedStackFree         (PIZBoundedStack *x);
+void                pizBoundedStackClear        (PIZBoundedStack *x);
+PIZError            pizBoundedStackPush         (PIZBoundedStack *x, long value);
+PIZError            pizBoundedStackPop          (PIZBoundedStack *x);
+long                pizBoundedStackCount        (const PIZBoundedStack *x);
+long                pizBoundedStackPoppedValue  (const PIZBoundedStack *x);
 
 PIZ_END_C_LINKAGE
 

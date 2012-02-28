@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 26/02/12.
+ *  Last modified : 27/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -505,6 +505,8 @@ void            tralala_forget                  (t_tralala *x);
 
 void            tralala_learnTask               (t_tralala *x);
 
+void            tralala_handle                  (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+void            tralala_anything                (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void            tralala_slot                    (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void            tralala_parseArguments          (t_tralala *x, t_tralalaData *data, long argc, t_atom *argv);
 
@@ -560,6 +562,7 @@ PIZ_LOCAL void  tralala_popupRightClickMenu     (t_tralala *x, t_pt pt, long men
 // -------------------------------------------------------------------------------------------------------------
 
 void            tralala_paintTask               (t_tralala *x);
+PIZ_LOCAL bool  tralala_hitNotesByRunIndex      (t_tralala *x);
 void            tralala_focusTask               (t_tralala *x);
 
 void            tralala_paint                   (t_tralala *x, t_object *patcherview);
@@ -588,6 +591,8 @@ PIZ_LOCAL void  tralala_noteWithColor           (t_tralala *x,
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+PIZ_LOCAL void  tralala_willChange                          (t_tralala *x);
+
 PIZ_LOCAL bool  tralala_moveSelectedNotes                   (t_tralala *x, long deltaPosition, long deltaPitch);
 PIZ_LOCAL bool  tralala_changeSelectedNotesDuration         (t_tralala *x, long deltaPosition);
 PIZ_LOCAL bool  tralala_changeSelectedNotesVelocity         (t_tralala *x, bool decrement);
@@ -598,18 +603,25 @@ PIZ_LOCAL void  tralala_setSelectedNotesChannel             (t_tralala *x, long 
 
 PIZ_LOCAL long  tralala_hitZone                             (t_tralala *x, t_pt pt);
 PIZ_LOCAL long  tralala_hitText                             (t_tralala *x, t_object *patcherview, t_pt pt);
-
-PIZ_LOCAL bool  tralala_hitNotesByRunIndex                  (t_tralala *x);
-PIZ_LOCAL bool  tralala_pasteFromClipboard                  (t_tralala *x); 
-
-PIZ_LOCAL bool  tralala_setCursorType                       (t_tralala *x, 
-                                                            t_object *patcherview, 
-                                                            t_jmouse_cursortype type);
+PIZ_LOCAL bool  tralala_pasteFromClipboard                  (t_tralala *x);
 
 PIZ_LOCAL void  tralala_setCoordinates                      (t_tralala *x, 
                                                             PIZCoordinates *coordinates, 
                                                             t_pt pt);
+                                                            
+PIZ_LOCAL bool  tralala_hasSelectedText                     (t_tralala *x, long *result);
+PIZ_LOCAL void  tralala_unselectAllText                     (t_tralala *x);
+PIZ_LOCAL void  tralala_testAutoscroll                      (t_tralala *x, t_object *patcherview, t_pt pt);
+PIZ_LOCAL void  tralala_stopAutoscroll                      (t_tralala *x);
+                                                            
+ PIZ_LOCAL bool  tralala_setCursorType                       (t_tralala *x, 
+                                                            t_object *patcherview, 
+                                                            t_jmouse_cursortype type);
 
+PIZ_LOCAL void  tralala_setString                           (char *string, 
+                                                            long longToBeFormatted, 
+                                                            long formatMode);
+                                                            
 PIZ_LOCAL void  tralala_setRectWithZoneValues               (t_tralala *x, 
                                                             t_rect *zoneRect, 
                                                             long start, 
@@ -621,16 +633,6 @@ PIZ_LOCAL void  tralala_setRectWithCoordinatesAndDuration   (t_tralala *x,
                                                             t_rect *noteRect, 
                                                             PIZCoordinates *coordinates, 
                                                             long duration); 
-
-PIZ_LOCAL void  tralala_setString                           (char *string, 
-                                                            long longToBeFormatted, 
-                                                            long formatMode);
-
-PIZ_LOCAL bool  tralala_hasSelectedText                     (t_tralala *x, long *result);
-PIZ_LOCAL void  tralala_unselectAllText                     (t_tralala *x);
-PIZ_LOCAL void  tralala_willChange                          (t_tralala *x);
-PIZ_LOCAL void  tralala_testAutoscroll                      (t_tralala *x, t_object *patcherview, t_pt pt);
-PIZ_LOCAL void  tralala_stopAutoscroll                      (t_tralala *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -1,8 +1,7 @@
 /**
- * \file    pizSequenceMaxMSP.h
+ * \file    pizSequenceApply.h
  * \author  Jean Sapristi
- * \date    31 janvier 2012
- * \ingroup sequenceTransform
+ * \date    28 February 2012
  */
  
 /*
@@ -50,22 +49,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Transpose all notes according to ambitus.
- * \param   x A valid pointer.
- * \return  True if changed otherwise false.
- * \ingroup tralala
- * \ingroup sequenceTransform
- */
 bool pizSequenceApplyAmbitus (PIZSequence *x);
-
-/**
- * \brief   Snap all notes according to pattern.
- * \param   x A valid pointer.
- * \return  True if changed otherwise false.
- * \ingroup tralala
- * \ingroup sequenceTransform
- */
 bool pizSequenceApplyPattern (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------

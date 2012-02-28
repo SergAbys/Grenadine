@@ -1,8 +1,7 @@
 /**
  * \file    pizItemset1024.h
  * \author  Jean Sapristi
- * \date    31 janvier 2012
- * \ingroup itemset1024
+ * \date    28 February 2012
  */
 
 /*
@@ -55,28 +54,15 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \def     PIZ_ITEMSET1024_SIZE 
- * \brief   Number of bits in the bit field.
- * \ingroup itemset1024
- */
- 
-#define PIZ_ITEMSET1024_SIZE 1024
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
+#define PIZ_ITEMSET1024_SIZE            1024
 #define PIZ_ITEMSET1024_SIZE_OF_ULONG   32
 #define PIZ_ITEMSET1024_SIZE_IN_WORDS   32
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \ingroup itemset1024 
- */
 typedef struct _PIZItemset1024 {
-    unsigned long items[32];                            /* 1024 Bits field as 32 longs */
+    unsigned long items[32];
     } PIZItemset1024;
     
 // -------------------------------------------------------------------------------------------------------------
@@ -84,86 +70,15 @@ typedef struct _PIZItemset1024 {
 
 PIZ_START_C_LINKAGE
 
-/**
- * \brief   At specified index, set/let the bit to 1.
- * \param   itemset A valid pointer.
- * \param   index The index (zero-based).
- * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
- * \ingroup itemset1024
- */
-void pizItemset1024SetAtIndex (PIZItemset1024 *itemset, long index);
-
-/**
- * \brief   At specified index, set/let the bit to 0.
- * \param   itemset A valid pointer.
- * \param   index The index (zero-based).
- * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
- * \ingroup itemset1024
- */
+void pizItemset1024SetAtIndex   (PIZItemset1024 *itemset, long index);
 void pizItemset1024UnsetAtIndex (PIZItemset1024 *itemset, long index);
-
-/**
- * \brief   Set/let all bits to 0.
- * \param   itemset A valid pointer.
- * \ingroup itemset1024
- */
-void pizItemset1024Clear (PIZItemset1024 *itemset);
-
-/**
- * \brief   Get the number of set bits.
- * \param   itemset A valid pointer.
- * \return  The number of set bits.
- * \ingroup itemset1024
- */
-long pizItemset1024Count (const PIZItemset1024 *itemset);
-
-/**
- * \brief   At specified index, get the value of a bit.
- * \param   itemset A valid pointer.
- * \param   index The index (zero-based).
- * \return  True if set, otherwise false.
- * \warning For efficiency the index is NOT checked ; so crash may occur with invalid indexing.
- * \ingroup itemset1024
- */
+void pizItemset1024Clear        (PIZItemset1024 *itemset);
+long pizItemset1024Count        (const PIZItemset1024 *itemset);
 bool pizItemset1024IsSetAtIndex (const PIZItemset1024 *itemset, long index);
-
-/**
- * \brief   Compute union between two bit fields.
- * \details r = a | b.
- * \param   a A valid pointer.
- * \param   b A valid pointer.
- * \param   r A valid pointer.
- * \ingroup itemset1024
- */
-void pizItemset1024Union (const PIZItemset1024 *a, const PIZItemset1024 *b, PIZItemset1024 *r);
-
-/**
- * \brief   Compute intersection between two bit fields.
- * \details r = a & b.
- * \param   a A valid pointer.
- * \param   b A valid pointer.
- * \param   r A valid pointer.
- * \ingroup itemset1024
- */
+void pizItemset1024Union        (const PIZItemset1024 *a, const PIZItemset1024 *b, PIZItemset1024 *r);
 void pizItemset1024Intersection (const PIZItemset1024 *a, const PIZItemset1024 *b, PIZItemset1024 *r);
-
-/**
- * \brief   Test if the bit field \a a is included in the bit field \a b.
- * \param   a A valid pointer.
- * \param   b A valid pointer.
- * \return  True if included, otherwise false.
- * \ingroup itemset1024
- */
-bool pizItemset1024IsIncluded (const PIZItemset1024 *a, const PIZItemset1024 *b);
-
-/**
- * \brief   Test if the bit field \a a is equal to the bit field \a b.
- * \param   a A valid pointer.
- * \param   b A valid pointer.
- * \return  True if equal, otherwise false.
- * \ingroup itemset1024
- */
-bool pizItemset1024IsEqual (const PIZItemset1024 *a, const PIZItemset1024 *b);
+bool pizItemset1024IsIncluded   (const PIZItemset1024 *a, const PIZItemset1024 *b);
+bool pizItemset1024IsEqual      (const PIZItemset1024 *a, const PIZItemset1024 *b);
 
 PIZ_END_C_LINKAGE
 

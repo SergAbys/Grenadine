@@ -46,15 +46,15 @@
 void pizFactorOracleSetBackwardThreshold (PIZFactorOracle *x, long n)
 {
     if (n >= 0) {
-            x->backwardThreshold = n;
-        }
+        x->backwardThreshold = n;
+    }
 }
 
 void pizFactorOracleSetStraightRatio (PIZFactorOracle *x, double f)
 {
     if ((f >= 0.) && (f <= 1.)) {
-            x->straightRatio = f;
-        }
+        x->straightRatio = f;
+    }
 }
 
 long pizFactorOracleBackwardThreshold (const PIZFactorOracle *x)

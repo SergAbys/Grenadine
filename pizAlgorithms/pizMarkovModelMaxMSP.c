@@ -46,8 +46,8 @@
 void pizMarkovModelSetPersistence (PIZMarkovModel *x, double f)
 {
     if (f >= 0.) {
-            x->persistence = f;
-        }
+        x->persistence = f;
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------

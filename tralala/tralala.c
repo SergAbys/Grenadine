@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 26/02/12.
+ *  Last modified : 27/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -115,6 +115,11 @@ class_addmethod (c, (method)tralala_pause,                  "pause",            
 class_addmethod (c, (method)tralala_enter,                  "enter",                0);
 class_addmethod (c, (method)tralala_copy,                   "copy",                 0);
 class_addmethod (c, (method)tralala_forget,                 "forget",               0);
+
+class_addmethod (c, (method)tralala_handle,                 "user",                 A_GIMME, 0);
+class_addmethod (c, (method)tralala_handle,                 "live",                 A_GIMME, 0);
+class_addmethod (c, (method)tralala_handle,                 "listen",               A_GIMME, 0);
+class_addmethod (c, (method)tralala_anything,               "anything",             A_GIMME, 0);
 
 CLASS_ATTR_DEFAULT   (c, "patching_rect",    0, DEFAULT_PATCHING_RECT);
 CLASS_ATTR_DEFAULT   (c, "fontname",         0, DEFAULT_FONTNAME);

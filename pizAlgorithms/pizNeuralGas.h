@@ -1,9 +1,7 @@
 /**
  * \file    pizNeuralGas.h
  * \author  Jean Sapristi
- * \date    31 janvier 2012
- * \ingroup yankee
- * \ingroup neuralGas
+ * \date    28 February 2012
  */
  
 /*
@@ -51,40 +49,30 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \ingroup neuralGas  
- */
- 
 typedef struct _PIZNeuralGasHead {
-    double          error;                      /* Cumulative error of the node. */
-    double          utility;                    /* Cumulative utility of the node. */
-    PIZItemset128   arcs;                       /* Arcs (indexes as bit field). */
+    double          error;
+    double          utility;
+    PIZItemset128   arcs;
     }PIZNeuralGasHead;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \remark  Implemented with two synchronized pools (pre-allocated heads and pre-allocated vectors), 
- *          and a map to mark slots used. 
- * \ingroup neuralGas
- */
- 
 typedef struct _PIZNeuralGas {
-    PIZItemset128       map;                    /* In use (as bit field). */
-    long                count;                  /* Number of learning iterations performed. */
-    long                vectorSize;             /* Size of a node's vector. */
-    long                mapSize;                /* Number of nodes in the neural gas. */
-    long                maximumSize;            /* Maximum number of nodes in the neural gas. */
-    long                lambda;                 /* New node rate. */
-    double              epsilon1;               /* Move winner factor. */
-    double              epsilon2;               /* Move neighbours factor. */
-    double              alpha;                  /* Decrease generators error factor. */
-    double              beta;                   /* Decrease global error factor. */
-    double              kappa;                  /* Utility threshold. */
-    double              *vectorStock;           /* Pool of vectors. */
-    PIZNeuralGasHead    *headStock;             /* Pool of heads. */
-    PIZBoundedStack     *ticketMachine;         /* Pool management. */
+    PIZItemset128       map;
+    long                count;
+    long                vectorSize;
+    long                mapSize;
+    long                maximumSize;
+    long                lambda;
+    double              epsilon1;
+    double              epsilon2;
+    double              alpha;
+    double              beta;
+    double              kappa;
+    double              *vectorStock;
+    PIZNeuralGasHead    *headStock;
+    PIZBoundedStack     *ticketMachine;
     } PIZNeuralGas;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -95,72 +83,12 @@ PIZ_START_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Create the neural gas.
- * \details The function accepts two arguments, the maximum size of the neural gas, and the size of the vectors.
- *          For the neural gas size, maximum is 128, default is 20.
- *          For the vectors, maximum is 256, default is 4.
- *          In case of failure the pointer is NULL.
- * \param   argc The number of arguments.
- * \param   argv A pointer to arguments.
- * \return  A pointer to the new neural gas.
- * \remark	The following shows how to create a neural gas.  
- * \code
- * long args[2] = {50, 8};
- *
- * PIZKohonenMap *map = pizKohonenMapNew (2, &args);
- * PIZKohonenMap *map = pizKohonenMapNew (0, NULL); // default values
- *
- * \endcode
- * \ingroup neuralGas
- */
-PIZNeuralGas *pizNeuralGasNew (long argc, long *argv);
-
-/**
- * \brief   Free the neural gas.
- * \details It is safe to pass NULL pointer. 
- * \param   x A Pointer.
- * \ingroup neuralGas
- */
-void pizNeuralGasFree (PIZNeuralGas *x);
-
-/**
- * \brief   Add values to the neural gas.
- * \param   x A valid pointer.
- * \param   argc The number of values.
- * \param   argv A pointer to the values.
- * \return  An error code.
- * \remark  The birth and death of nodes occurs according to lambda value (1 time out of lambda).
- *          Values provided are clipped [0, 127].
- * \ingroup neuralGas
- */
-PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv);
-
-/**
- * \brief   Clear the neural gas.
- * \param   x A valid pointer.
- * \ingroup neuralGas
- */
-void pizNeuralGasClear (PIZNeuralGas *x);
-
-/**
- * \brief   Fill a given array with neural gas values.
- * \remark  A node is randomly drawn, and the array filled with values from the node's vector. 
- *          While the array is not full, process is iterated.
- * \param   argc Number of values to proceed.
- * \param   argv Pointer to the array to fill.
- * \return  An error code.
- * \ingroup neuralGas
- */
-PIZError pizNeuralGasProceed (const PIZNeuralGas *x, long argc, long *argv);
-
-/**
- * \brief   Get the number of learnings currently performed.
- * \param   x A valid pointer.
- * \return  The number of learnings.
- * \ingroup neuralGas
- */
-long pizNeuralGasCount (const PIZNeuralGas *x);
+PIZNeuralGas    *pizNeuralGasNew    (long argc, long *argv);
+void            pizNeuralGasFree    (PIZNeuralGas *x);
+PIZError        pizNeuralGasAdd     (PIZNeuralGas *x, long argc, long *argv);
+void            pizNeuralGasClear   (PIZNeuralGas *x);
+PIZError        pizNeuralGasProceed (const PIZNeuralGas *x, long argc, long *argv);
+long            pizNeuralGasCount   (const PIZNeuralGas *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -51,22 +51,22 @@ void pizNeuralGasSetLambda (PIZNeuralGas *x, long n)
 void pizNeuralGasSetEpsilon1 (PIZNeuralGas *x, double f)
 {
     if (f > 0. && f < 1.) {
-            x->epsilon1 = f;
-        }
+        x->epsilon1 = f;
+    }
 }
 
 void pizNeuralGasSetEpsilon2 (PIZNeuralGas *x, double f)
 {
     if (f > 0. && f < 1.) {
-            x->epsilon2 = f;
-        }
+        x->epsilon2 = f;
+    }
 }
 
 void pizNeuralGasSetAlpha (PIZNeuralGas *x, double f)
 {
     if (f > 0. && f < 1.) {
-            x->alpha = f;
-        }
+        x->alpha = f;
+    }
 }
 
 void pizNeuralGasSetBeta (PIZNeuralGas *x, double f)
@@ -79,8 +79,8 @@ void pizNeuralGasSetBeta (PIZNeuralGas *x, double f)
 void pizNeuralGasSetKappa (PIZNeuralGas *x, double f)
 {
     if (f > 0.) {
-            x->kappa = f;
-        }
+        x->kappa = f;
+    }
 }
 
 long pizNeuralGasLambda (const PIZNeuralGas *x)
@@ -121,21 +121,18 @@ PIZError pizNeuralGasEncodeToArray (const PIZNeuralGas *x, long n, PIZGrowingArr
     long err = PIZ_ERROR;
     
     if ((n >= 0) && (n < x->mapSize) && a) {
-        long i;
-        long k = 0;
+        long i, j, t, k = 0;
         
         err = PIZ_GOOD;
         
         for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
             if (pizItemset128IsSetAtIndex (&x->map, i)) {
                 if (k == n) {
-                    long j;
-                    
                     for (j = 0; j < x->vectorSize; j++) {
-                        err |= pizGrowingArrayAppend 
-                            (a, (long)(((*(x->vectorStock + (n * x->vectorSize) + j)) + 0.5)));
-                        }
+                        t = (long)(((*(x->vectorStock + (n * x->vectorSize) + j)) + 0.5));
+                        err |= pizGrowingArrayAppend (a, t);
                     }
+                }
                 
                 k ++;
             }

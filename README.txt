@@ -6,7 +6,7 @@ Layout of the Grenadine repository :
   max/MSP externals.
 
 * html : 
-  documentation for pizAlgorithms.
+  doxygen's documentation for pizAlgorithms.
 
 * tralala :
   max/MSP prototype.

@@ -1,11 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    31 janvier 2012
- * \ingroup sequenceTypes
- * \ingroup sequenceClass
- * \ingroup sequenceBases
- * \ingroup sequencePrivate
+ * \date    28 February 2012
  */
  
 /*
@@ -58,36 +54,6 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/** 
- * \def     PIZ_SEQUENCE_VERSION_MAJOR 
- * \brief   Current version.
- * \ingroup sequenceTypes
- */
- 
-/** 
- * \def     PIZ_SEQUENCE_VERSION_MINOR
- * \brief   Current version.
- * \ingroup sequenceTypes
- */
- 
-/** 
- * \def     PIZ_SEQUENCE_TIMELINE_SIZE
- * \brief   Number of steps in the sequence.
- * \ingroup sequenceTypes
- */
- 
-/**
- * \def     PIZ_SEQUENCE_MAXIMUM_NOTES 
- * \brief   Maximum number of notes in the sequence.
- * \ingroup sequenceTypes
- */
-
-/**
- * \def     PIZ_SEQUENCE_MAXIMUM_DURATION
- * \brief   Maximum duration for a note.
- * \ingroup sequenceTypes
- */
-
 #define PIZ_SEQUENCE_VERSION_MAJOR      1
 #define PIZ_SEQUENCE_VERSION_MINOR      0
 #define PIZ_SEQUENCE_TIMELINE_SIZE      576   
@@ -121,545 +87,214 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \ingroup sequenceTypes
- */
-
 typedef enum _PIZNoteValue {
-    PIZ_WHOLE_NOTE_DOTTED           = 144,  /*!<  */
-    PIZ_WHOLE_NOTE                  = 96,   /*!<  */
-    PIZ_WHOLE_NOTE_TRIPLET          = 64,   /*!<  */
-    PIZ_HALF_NOTE_DOTTED            = 72,   /*!<  */
-    PIZ_HALF_NOTE                   = 48,   /*!<  */
-    PIZ_HALF_NOTE_TRIPLET           = 32,   /*!<  */
-    PIZ_QUARTER_NOTE_DOTTED         = 36,   /*!<  */
-    PIZ_QUARTER_NOTE                = 24,   /*!<  */
-    PIZ_QUARTER_NOTE_TRIPLET        = 16,   /*!<  */
-    PIZ_EIGHTH_NOTE_DOTTED          = 18,   /*!<  */
-    PIZ_EIGHTH_NOTE                 = 12,   /*!<  */
-    PIZ_EIGHTH_NOTE_TRIPLET         = 8,    /*!<  */
-    PIZ_SIXTEENTH_NOTE_DOTTED       = 9,    /*!<  */
-    PIZ_SIXTEENTH_NOTE              = 6,    /*!<  */
-    PIZ_SIXTEENTH_NOTE_TRIPLET      = 4,    /*!<  */
-    PIZ_THIRTY_SECOND_NOTE          = 3,    /*!<  */
-    PIZ_THIRTY_SECOND_NOTE_TRIPLET  = 2,    /*!<  */
-    PIZ_NOTE_NONE                   = 1     /*!<  */
+    PIZ_WHOLE_NOTE_DOTTED           = 144,
+    PIZ_WHOLE_NOTE                  = 96,
+    PIZ_WHOLE_NOTE_TRIPLET          = 64,
+    PIZ_HALF_NOTE_DOTTED            = 72,
+    PIZ_HALF_NOTE                   = 48,
+    PIZ_HALF_NOTE_TRIPLET           = 32,
+    PIZ_QUARTER_NOTE_DOTTED         = 36,
+    PIZ_QUARTER_NOTE                = 24,
+    PIZ_QUARTER_NOTE_TRIPLET        = 16,
+    PIZ_EIGHTH_NOTE_DOTTED          = 18,
+    PIZ_EIGHTH_NOTE                 = 12,
+    PIZ_EIGHTH_NOTE_TRIPLET         = 8,
+    PIZ_SIXTEENTH_NOTE_DOTTED       = 9,
+    PIZ_SIXTEENTH_NOTE              = 6,
+    PIZ_SIXTEENTH_NOTE_TRIPLET      = 4,
+    PIZ_THIRTY_SECOND_NOTE          = 3,
+    PIZ_THIRTY_SECOND_NOTE_TRIPLET  = 2,
+    PIZ_NOTE_NONE                   = 1
     } PIZNoteValue;
 
-/**
- * \ingroup sequenceTypes
- */
- 
 typedef enum _PIZScaleType {
-    PIZ_SCALE_CUSTOM                = -2,   /*!<  */
-    PIZ_SCALE_NONE                  = -1,   /*!<  */
-    PIZ_IONIAN                      =  0,   /*!<  */
-    PIZ_DORIAN,                             /*!<  */
-    PIZ_PHRYGIAN,                           /*!<  */
-    PIZ_LYDIAN,                             /*!<  */
-    PIZ_MIXOLYDIAN,                         /*!<  */
-    PIZ_AEOLIAN,                            /*!<  */
-    PIZ_LOCRIAN,                            /*!<  */
-    PIZ_NATURAL,                            /*!<  */
-    PIZ_HARMONIC,                           /*!<  */
-    PIZ_MELODIC,                            /*!<  */
-    PIZ_WHOLE_TONE,                         /*!<  */
-    PIZ_PENTATONIC_MAJOR,                   /*!<  */
-    PIZ_PENTATONIC_MINOR,                   /*!<  */
-    PIZ_OCTATONIC_HALF_WHOLE,               /*!<  */
-    PIZ_OCTATONIC_WHOLE_HALF,               /*!<  */
-    PIZ_SEVENTH_MAJOR,                      /*!<  */
-    PIZ_SEVENTH_DOMINANT,                   /*!<  */
-    PIZ_SEVENTH_MINOR,                      /*!<  */
-    PIZ_SEVENTH_MAJOR_SIXTH,                /*!<  */
-    PIZ_SEVENTH_MINOR_SIXTH,                /*!<  */
-    PIZ_SEVENTH_HALF_DIMINISHED,            /*!<  */
-    PIZ_SEVENTH_DIMINISHED,                 /*!<  */
-    PIZ_SEVENTH_SUSPENDED,                  /*!<  */
-    PIZ_SEVENTH_SHARP_FIVE,                 /*!<  */
-    PIZ_SEVENTH_FLAT_FIVE                   /*!<  */
+    PIZ_SCALE_CUSTOM                = -2,
+    PIZ_SCALE_NONE                  = -1,
+    PIZ_IONIAN                      =  0,
+    PIZ_DORIAN,
+    PIZ_PHRYGIAN,
+    PIZ_LYDIAN,
+    PIZ_MIXOLYDIAN,
+    PIZ_AEOLIAN,
+    PIZ_LOCRIAN,
+    PIZ_NATURAL,
+    PIZ_HARMONIC,
+    PIZ_MELODIC,
+    PIZ_WHOLE_TONE,
+    PIZ_PENTATONIC_MAJOR,
+    PIZ_PENTATONIC_MINOR,
+    PIZ_OCTATONIC_HALF_WHOLE,
+    PIZ_OCTATONIC_WHOLE_HALF,
+    PIZ_SEVENTH_MAJOR,
+    PIZ_SEVENTH_DOMINANT,
+    PIZ_SEVENTH_MINOR,
+    PIZ_SEVENTH_MAJOR_SIXTH,
+    PIZ_SEVENTH_MINOR_SIXTH,
+    PIZ_SEVENTH_HALF_DIMINISHED,
+    PIZ_SEVENTH_DIMINISHED,
+    PIZ_SEVENTH_SUSPENDED,
+    PIZ_SEVENTH_SHARP_FIVE,
+    PIZ_SEVENTH_FLAT_FIVE
     } PIZScaleType;
 
-/**
- * \ingroup sequenceTypes
- */
- 
 typedef enum _PIZScaleKey {
-    PIZ_KEY_C = 0,                          /*!<  */
-    PIZ_KEY_C_SHARP,                        /*!<  */
-    PIZ_KEY_D,                              /*!<  */
-    PIZ_KEY_D_SHARP,                        /*!<  */
-    PIZ_KEY_E,                              /*!<  */
-    PIZ_KEY_F,                              /*!<  */
-    PIZ_KEY_F_SHARP,                        /*!<  */
-    PIZ_KEY_G,                              /*!<  */
-    PIZ_KEY_G_SHARP,                        /*!<  */
-    PIZ_KEY_A,                              /*!<  */
-    PIZ_KEY_A_SHARP,                        /*!<  */
-    PIZ_KEY_B                               /*!<  */
+    PIZ_KEY_C = 0,
+    PIZ_KEY_C_SHARP,
+    PIZ_KEY_D,
+    PIZ_KEY_D_SHARP,
+    PIZ_KEY_E,
+    PIZ_KEY_F,
+    PIZ_KEY_F_SHARP,
+    PIZ_KEY_G,
+    PIZ_KEY_G_SHARP,
+    PIZ_KEY_A,
+    PIZ_KEY_A_SHARP,
+    PIZ_KEY_B
     } PIZScaleKey;
 
-/**
- * \ingroup sequenceTypes
- * \ingroup sequenceTransform
- */
- 
 typedef enum _PIZSelector {
-    PIZ_PITCH       = 0,                    /*!<  */
-    PIZ_VELOCITY    = 1,                    /*!<  */
-    PIZ_DURATION    = 2,                    /*!<  */
-    PIZ_CHANNEL     = 3                     /*!<  */
+    PIZ_PITCH       = 0,
+    PIZ_VELOCITY    = 1,
+    PIZ_DURATION    = 2,
+    PIZ_CHANNEL     = 3
     } PIZSelector;
-
-/**
- * \ingroup sequenceTypes
- */
  
 typedef enum _PIZDataIndex {
-    PIZ_DATA_POSITION       = 0,            /*!<  */
-    PIZ_DATA_PITCH,                         /*!<  */
-    PIZ_DATA_VELOCITY,                      /*!<  */
-    PIZ_DATA_DURATION,                      /*!<  */
-    PIZ_DATA_CHANNEL,                       /*!<  */
-    PIZ_DATA_IS_SELECTED,                   /*!<  */
-    PIZ_DATA_IS_MARKED,                     /*!<  */
-    PIZ_DATA_NOTE_SIZE      = 7,            /*!<  */
-    PIZ_DATA_START          = 0,            /*!<  */
-    PIZ_DATA_END,                           /*!<  */
-    PIZ_DATA_DOWN,                          /*!<  */
-    PIZ_DATA_UP,                            /*!<  */
-    PIZ_DATA_ZONE_SIZE                      /*!<  */
+    PIZ_DATA_POSITION       = 0,
+    PIZ_DATA_PITCH,
+    PIZ_DATA_VELOCITY,
+    PIZ_DATA_DURATION,
+    PIZ_DATA_CHANNEL,
+    PIZ_DATA_IS_SELECTED,
+    PIZ_DATA_IS_MARKED,
+    PIZ_DATA_NOTE_SIZE      = 7,
+    PIZ_DATA_START          = 0,
+    PIZ_DATA_END,
+    PIZ_DATA_DOWN,
+    PIZ_DATA_UP,
+    PIZ_DATA_ZONE_SIZE
     } PIZDataIndex;
-
-/**
- * \ingroup sequenceTypes
- */
  
 typedef enum _PIZAddFlag {
-    PIZ_ADD_FLAG_NONE       = 0,                    /*!< No flag. */
-    PIZ_ADD_FLAG_SNAP       = 1,                    /*!< Snap notes to grid. */
-    PIZ_ADD_FLAG_PATTERN    = 2,                    /*!< Snap notes to pattern. */
-    PIZ_ADD_FLAG_AMBITUS    = 4,                    /*!< Transpose notes to zone's ambitus. */
-    PIZ_ADD_FLAG_CLIP       = 8,                    /*!< Restrict notes to zone. */
-    PIZ_ADD_FLAG_UNSELECT   = 16,                   /*!< Force notes unselected/unmarked. */
-    PIZ_ADD_FLAG_CLEAR      = 32,                   /*!< Clear sequence before. */
+    PIZ_ADD_FLAG_NONE       = 0,
+    PIZ_ADD_FLAG_SNAP       = 1,
+    PIZ_ADD_FLAG_PATTERN    = 2,
+    PIZ_ADD_FLAG_AMBITUS    = 4,
+    PIZ_ADD_FLAG_CLIP       = 8,
+    PIZ_ADD_FLAG_UNSELECT   = 16,
+    PIZ_ADD_FLAG_CLEAR      = 32,
     } PIZAddFlag;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-/**
- * \details Note. 
- * \ingroup sequenceTypes
- */
  
 typedef struct _PIZNote {
-    long    flags;                                  /* Various flags as bit field. */
-    long    data[4];                                /* MIDI values. */
-    long    isSelected;                             /* True if the note is selected. */
-    long    position;                               /* Position of the note. */
-    long    tag;                                    /* Label (unique) of the note. */
+    long    flags;
+    long    data[4];
+    long    isSelected;
+    long    position;
+    long    tag;
     } PIZNote;
 
-/**
- * \details Sequence.  
- * \ingroup sequenceTypes
- */
- 
 typedef struct _PIZSequence {
-    pthread_mutex_t     lock;                       /* POSIX mutex. */
-    long                *values1;                   /* Private for temporary storage. */
-    long                *values2;                   /* Private for temporary storage. */
-    PIZNote             **notes1;                   /* Private for temporary storage. */
-    PIZNote             **notes2;                   /* Private for temporary storage. */
-    PIZBoundedHashTable *hashTable;                 /* Private for temporary storage. */
-    PIZLinklist         **timeline;                 /* Sequence as a timeline. */
-    PIZGrowingArray     *scale;                     /* Mode/scale. */
-    PIZGrowingArray     *pattern;                   /* Rythmic pattern. */
-    PIZNote             *markedNote;                /* Pointer to one note in the sequence. */
-    PIZGrowingArray     *map;                       /* List of timeline's indexes in use. */
-    long                start;                      /* Zone's start (included). */
-    long                end;                        /* Zone's end (not included). */
-    long                down;                       /* Zone's low ambitus (included). */
-    long                up;                         /* Zone's high ambitus (included). */
-    long                count;                      /* Number of notes. */
-    long                index;                      /* Current playback head's index. */
-    long                chance;                     /* Chance value [0, 100]. */
-    long                channel;                    /* Global MIDI channel. */
-    long                velocity;                   /* Global MIDI velocity. */
-    PIZNoteValue        cell;                       /* Cell for generators. */
-    PIZNoteValue        grid;                       /* Magnetic grid of the sequence. */
-    PIZNoteValue        noteValue;                  /* Default note value. */
+    pthread_mutex_t     lock;
+    long                *values1;
+    long                *values2;
+    PIZNote             **notes1;
+    PIZNote             **notes2;
+    PIZBoundedHashTable *hashTable;
+    PIZLinklist         **timeline;
+    PIZGrowingArray     *scale;
+    PIZGrowingArray     *pattern;
+    PIZNote             *markedNote;
+    PIZGrowingArray     *map;
+    long                start;
+    long                end;
+    long                down;
+    long                up;
+    long                count;
+    long                index;
+    long                chance;
+    long                channel;
+    long                velocity;
+    PIZNoteValue        cell;
+    PIZNoteValue        grid;
+    PIZNoteValue        noteValue;
     } PIZSequence;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Create the sequence.
- * \return  A pointer to the new sequence.  
- * \ingroup sequenceClass
- */
-PIZSequence *pizSequenceNew (void);
-
-/**
- * \brief   Free the sequence.
- * \details It is safe to pass NULL pointer. 
- * \param   x A Pointer.
- * \ingroup sequenceClass
- */
-void pizSequenceFree (PIZSequence *x);
-
-/**
- * \brief   Get the number of notes in the sequence.
- * \param   x A valid pointer.
- * \return  The number of notes.
- * \ingroup sequenceClass
- */
-long pizSequenceCount (PIZSequence *x);
-
-/**
- * \brief       Get the global velocity of the sequence. 
- * \details     Default is 0.
- * \param       x A valid pointer.
- * \return      The velocity.
- * \ingroup     sequenceClass
- */
-long pizSequenceVelocity (PIZSequence *x);
-
-/**
- * \brief       Get the MIDI channel of the sequence.
- * \details     Default is 1.
- * \param       x A valid pointer.
- * \return      The MIDI channel.
- * \ingroup     sequenceClass
- */
-long pizSequenceChannel (PIZSequence *x);
-
-/**
- * \brief   Get the cell value.
- * \param   x A valid pointer.
- * \return  The cell value.
- * \ingroup sequenceClass
- */
-PIZNoteValue pizSequenceCell (PIZSequence *x);
-
-/**
- * \brief   Get the grid value of the sequence.
- * \param   x A valid pointer.
- * \return  The grid value.
- * \ingroup sequenceClass
- */
-PIZNoteValue pizSequenceGrid (PIZSequence *x);
-
-/**
- * \brief   Get the default note duration.
- * \param   x A valid pointer.
- * \return  The default duration.
- * \ingroup sequenceClass
- */
-PIZNoteValue pizSequenceNoteValue (PIZSequence *x);
-
-/**
- * \brief       Set the \a chance value of the sequence.
- * \details     Default is 100.
- * \param       x A valid pointer.
- * \param       value The value [0, 100].
- * \ingroup     sequenceClass
- */
-void pizSequenceSetChance (PIZSequence *x, long value);
-
-/**
- * \brief   Set the global velocity of the sequence.
- * \param   x A valid pointer.
- * \param   value The velocity.
- * \ingroup sequenceClass
- */
-void pizSequenceSetVelocity (PIZSequence *x, long value);
-
-/**
- * \brief   Set the MIDI channel of the sequence.
- * \param   x A valid pointer.
- * \param   value The MIDI channel.
- * \ingroup sequenceClass
- */
-void pizSequenceSetChannel (PIZSequence *x, long channel);
-
-/**
- * \brief   Set the cell for pizSequenceGenerator (), pizSequenceCellularAutomata() ...
- * \param   x A valid pointer.
- * \param   value The cell value.
- * \ingroup sequenceClass
- */
-void pizSequenceSetCell (PIZSequence *x, PIZNoteValue snapValue);
-
-/**
- * \brief   Set the grid of the sequence.
- * \param   x A valid pointer.
- * \param   value The grid value.
- * \ingroup sequenceClass
- */
-void pizSequenceSetGrid (PIZSequence *x, PIZNoteValue snapValue);
-
-/**
- * \brief   Set the default note duration.
- * \param   x A valid pointer.
- * \param   value The default note.
- * \ingroup sequenceClass
- */
-void pizSequenceSetNoteValue (PIZSequence *x, PIZNoteValue noteValue);
-
-/**
- * \brief   Set the scale of the sequence.
- * \param   x A valid pointer.
- * \param   key The scale key.
- * \param   type The scale type.
- * \param   a The scale if the type provided is custom, otherwise should be NULL.
- * \remark	An example :  
- * \code
- *  if (type != PIZ_SCALE_CUSTOM) {
- *      pizSequenceSetScale (sequence, PIZ_KEY_C, PIZ_DORIAN, NULL);
- *  } else {
- *      pizSequenceSetScale (sequence, PIZ_KEY_C, PIZ_SCALE_CUSTOM, growingArrayPtr);
- *  }
- * \endcode 
- * \warning Custom scales must be twelve values long.
- * \ingroup sequenceClass
- */
-PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type, const PIZGrowingArray *a);
-
-/**
- * \brief   Set pattern of the sequence.
- * \param   x A valid pointer.
- * \param   a The motif.
- * \ingroup sequenceClass
- */
-PIZError pizSequenceSetPattern (PIZSequence *x, const PIZGrowingArray *a);
-
-/**
- * \brief   Test if a note is marked in the sequence.
- * \param   x A valid pointer.
- * \return  True if a note is marked, otherwise false.  
- * \ingroup sequenceBases
- */
-bool pizSequenceHasMarkedNote (PIZSequence *x);
-
-/**
- * \brief   Get MIDI data of the marked note.
- * \remark  The function return -1 in case of error.
- * \param   x A valid pointer.
- * \param   selector A selector to choose the MIDI data type to query as \ref PIZSelector.
- * \return  The MIDI value.  
- * \ingroup sequenceBases
- */
-long pizSequenceMarkedNoteValue (PIZSequence *x, PIZSelector selector);
-
-/**
- * \brief   Change MIDI data of the marked note.
- * \remark  Duration is increment (by grid's value) with positive argument (otherwise decrement).
- * \param   x A valid pointer.
- * \param   selector A selector to choose the MIDI data type to change as \ref PIZSelector.
- * \param   value The value to add. 
- * \ingroup sequenceBases
- */
-void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, long value);
-
-/**
- * \brief   Clear the sequence.
- * \param   x A valid pointer.
- * \ingroup sequenceBases
- */
-void pizSequenceClear (PIZSequence *x);
-
-/**
- * \brief   Get notes splitted in two dynamic arrays according to note's selected state.
- * \param   x A valid pointer.
- * \param   unselected A pointer to the dynamic array to fill with unselected notes.
- * \param   selected A pointer to the dynamic array to fill with selected notes
- * \return  An error code.
- * \details Notes are appended. The pointer can be NULL. 
- *          Notes are transposed according to scale.
- * \remark  Examples :
- * \code
- * err |= pizSequenceNotesToArray (sequence, ptrA, ptrB); 
- * err |= pizSequenceNotesToArray (sequence, ptrA, NULL); 
- * err |= pizSequenceNotesToArray (sequence, ptrA, ptrA);
- * \endcode 
- * \ingroup sequenceBases
- */
-PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *unselected, PIZGrowingArray *selected);
-
-/**
- * \brief   Add notes with a dynamic array.
- * \param   x A valid pointer.
- * \param   a A pointer to the array.
- * \param   flags The flags (as ORed \ref PIZAddFlag).
- * \return  An error code.
- * \remark  An example :
- * \code
- * long noteC[PIZ_DATA_NOTE_SIZE];
- * long noteG[PIZ_DATA_NOTE_SIZE] = {24, 67, 90, 24, 1, 0, 0}; 
- *
- * noteC[PIZ_DATA_POSITION]     = 0;
- * noteC[PIZ_DATA_PITCH]        = 60;
- * noteC[PIZ_DATA_VELOCITY]     = 90;
- * noteC[PIZ_DATA_DURATION]     = 24;
- * noteC[PIZ_DATA_CHANNEL]      = 0;    // use sequence's global MIDI channel
- * noteC[PIZ_DATA_IS_SELECTED]  = 0;
- * noteC[PIZ_DATA_IS_MARKED]    = 0;
- *
- * for (i = 0; i < PIZ_DATA_NOTE_SIZE; i++) {
- *      pizGrowingArrayAppend (arrayPtr, noteC[i]);
- * }
- *
- * for (i = 0; i < PIZ_DATA_NOTE_SIZE; i++) {
- *      pizGrowingArrayAppend (arrayPtr, noteG[i]);
- * }
- *
- * pizSequenceAddNotesWithArray (sequencePtr, arrayPtr, PIZ_ADD_FLAG_SNAP | PIZ_ADD_FLAG_CLEAR);
- *
- * \endcode 
- * \ingroup sequenceBases
- */
-PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *a, long flags);
-
-/**
- * \brief   Get the zone with a dynamic array.
- * \param   x A valid pointer.
- * \param   a A pointer to the array.
- * \return  An error code.
- * \ingroup sequenceBases
- */
-PIZError pizSequenceZoneToArray (PIZSequence *x, PIZGrowingArray *a);
-
-/**
- * \brief   Set the zone with a dynamic array.
- * \param   x A valid pointer.
- * \param   a A pointer to the array.
- * \return  An error code.
- * \ingroup sequenceBases
- */
-PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *a);
-
-/**
- * \brief   Change the register : transpose the zone and all the notes.
- * \param   x A valid pointer.
- * \param   n The number of semitones.  
- * \ingroup sequenceTransform
- */
-void pizSequenceTranspose (PIZSequence *x, long n);
-
-/**
- * \brief   Avoid pitch clusters in the sequence.
- * \param   x A valid pointer.
- * \param   value The interval to keep empty between notes in semitones. 
- * \return  True if something changed, otherwise false.  
- * \ingroup sequenceTransform
- */
-bool pizSequenceClean (PIZSequence *x, long value);
-
-/**
- * \brief   Get the current playback head's index.
- * \param   x A valid pointer.
- * \return  The index.
- * \ingroup sequenceBases
- */
-long pizSequenceIndex (PIZSequence *x);
-
-/**
- * \brief   Test the end of the sequence.
- * \param   x A valid pointer.
- * \return  True if index is equal to zone's end otherwise false.
- * \ingroup sequenceBases
- */
-bool pizSequenceIsAtEnd (PIZSequence *x);
-
-/**
- * \brief   Set the index to zone's start.
- * \param   x A valid pointer.
- * \ingroup sequenceBases
- */
-void pizSequenceGoToStart (PIZSequence *x);
-
-/**
- * \brief   Append an array with notes located at current index ; then increment the index.
- * \details Return PIZ_ERROR if the index is at end. 
- *          Notes are transposed according to scale, and velocity is modified by the global velocity.
- * \param   x A valid pointer.
- * \param   a A pointer to a dynamic array.
- * \return  An error code.
- * \ingroup sequenceBases
- */
-PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a);
+PIZSequence     *pizSequenceNew                     (void);
+void            pizSequenceFree                     (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Add a note to the sequence.
- * \details The size of the array must be \ref PIZ_DATA_NOTE_SIZE. 
- * \param   x A valid pointer.
- * \param   values A pointer to note values.
- * \param   flags The flags (as ORed \ref PIZAddFlag).
- * \return  A pointer to the new note, NULL in case of error.
- * \warning For efficiency array size is NOT checked ; so crash may occured with invalid size.
- * \ingroup sequencePrivate
- */
-PIZ_LOCAL PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags);
+long            pizSequenceCount                    (PIZSequence *x);
+long            pizSequenceVelocity                 (PIZSequence *x);
+long            pizSequenceChannel                  (PIZSequence *x);
+PIZNoteValue    pizSequenceCell                     (PIZSequence *x);
+PIZNoteValue    pizSequenceGrid                     (PIZSequence *x);
+PIZNoteValue    pizSequenceNoteValue                (PIZSequence *x);
+void            pizSequenceSetChance                (PIZSequence *x, long value);
+void            pizSequenceSetVelocity              (PIZSequence *x, long value);
+void            pizSequenceSetChannel               (PIZSequence *x, long channel);
+void            pizSequenceSetCell                  (PIZSequence *x, PIZNoteValue snapValue);
+void            pizSequenceSetGrid                  (PIZSequence *x, PIZNoteValue snapValue);
+void            pizSequenceSetNoteValue             (PIZSequence *x, PIZNoteValue noteValue);
 
-/**
- * \brief   Remove a note from the sequence. 
- * \param   x A valid pointer.
- * \param   note A valid pointer.
- * \return  An error code.
- * \ingroup sequencePrivate
- */
-PIZ_LOCAL PIZError pizSequenceRemoveNote (PIZSequence *x, PIZNote *note);
+PIZError        pizSequenceSetScale                 (PIZSequence *x, 
+                                                    PIZScaleKey key, 
+                                                    PIZScaleType type, 
+                                                    const PIZGrowingArray *a);
+                                        
+PIZError        pizSequenceSetPattern               (PIZSequence *x, const PIZGrowingArray *a);
 
-/**
- * \brief   Clear the sequence.
- * \param   x A valid pointer.
- * \ingroup sequencePrivate
- */
-PIZ_LOCAL void pizSequenceRemoveAllNotes (PIZSequence *x);
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Move a note in the sequence.
- * \param   x A valid pointer.
- * \param   note A valid pointer.
- * \param   newPosition The new position;
- * \warning For efficiency new position is NOT checked ; so crash may occured with invalid position.
- * \ingroup sequencePrivate
- */
-PIZ_LOCAL void pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition);
+bool            pizSequenceHasMarkedNote            (PIZSequence *x);
+long            pizSequenceMarkedNoteValue          (PIZSequence *x, PIZSelector selector);
+void            pizSequenceChangeMarkedNoteValue    (PIZSequence *x, PIZSelector selector, long value);
 
-/**
- * \brief   Restore the map after notes have been created, deleted or moved.
- * \param   x A valid pointer.
- * \remark  For efficiency a list of linked lists currently used is stored in an array ; 
- *          this function MUST be called to rebuild the list after modifications on note positions.
- * \ingroup sequencePrivate
- */
-PIZ_LOCAL void pizSequenceMakeMap (PIZSequence *x);
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
-/**
- * \brief   Transpose the pitch to fit the zone's ambitus.
- * \param   x A valid pointer.
- * \param   pitch The pitch to move.
- * \return  The pitch.
- * \ingroup sequencePrivate
- */
-PIZ_LOCAL long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch);
+void            pizSequenceClear                    (PIZSequence *x);
+PIZError        pizSequenceNotesToArray             (PIZSequence *x, 
+                                                    PIZGrowingArray *unselected, 
+                                                    PIZGrowingArray *selected);
+                                                
+PIZError        pizSequenceAddNotesWithArray        (PIZSequence *x, const PIZGrowingArray *a, long flags);
+PIZError        pizSequenceZoneToArray              (PIZSequence *x, PIZGrowingArray *a);
+PIZError        pizSequenceSetZoneWithArray         (PIZSequence *x, const PIZGrowingArray *a);
 
-/**
- * \brief   Given a position return the new position snapped to the sequence's pattern.
- * \param   x A valid pointer.
- * \param   pitch The position to be snapped.
- * \param   patternSize The size of the sequence's pattern.
- * \return  The new position.
- * \ingroup sequencePrivate
- */
-PIZ_LOCAL long pizSequenceSnapPositionToPattern  (PIZSequence *x, long toSnapped, long patternSize);
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+void            pizSequenceTranspose                (PIZSequence *x, long n);
+bool            pizSequenceClean                    (PIZSequence *x, long value);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+long            pizSequenceIndex                    (PIZSequence *x);
+bool            pizSequenceIsAtEnd                  (PIZSequence *x);
+void            pizSequenceGoToStart                (PIZSequence *x);
+PIZError        pizSequenceProceedStep              (PIZSequence *x, PIZGrowingArray *a);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZ_LOCAL PIZNote   *pizSequenceAddNote (PIZSequence *x, long *values, long flags);
+PIZ_LOCAL PIZError  pizSequenceRemoveNote (PIZSequence *x, PIZNote *note);
+PIZ_LOCAL void      pizSequenceRemoveAllNotes (PIZSequence *x);
+PIZ_LOCAL void      pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition);
+PIZ_LOCAL void      pizSequenceMakeMap (PIZSequence *x);
+PIZ_LOCAL long      pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch);
+PIZ_LOCAL long      pizSequenceSnapPositionToPattern  (PIZSequence *x, long toSnapped, long patternSize);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

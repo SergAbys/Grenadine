@@ -1,8 +1,7 @@
 /**
  * \file    pizQueue.h
  * \author  Jean Sapristi
- * \date    31 janvier 2012
- * \ingroup queue
+ * \date    28 February 2012
  */
 
 /*
@@ -50,26 +49,17 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/**
- * \ingroup queue
- */
- 
 typedef struct _PIZQueueElement {
-    long                    value;                  /* Value to store. */
-    struct _PIZQueueElement *next;                  /* Pointer to next element. */
-    struct _PIZQueueElement *previous;              /* Pointer to previous element. */
+    long                    value;
+    struct _PIZQueueElement *next;
+    struct _PIZQueueElement *previous;
     } PIZQueueElement;
 
-/**
- * \remark Implemented with a linklist.
- * \ingroup queue
- */
- 
 typedef struct _PIZQueue {
-    long            count;                          /* Number of value in the queue. */
-    long            poppedValue;                    /* Last dequeued value. */
-    PIZQueueElement *head;                          /* Pointer to first element. */
-    PIZQueueElement *tail;                          /* Pointer to last element. */
+    long            count;
+    long            poppedValue;
+    PIZQueueElement *head;
+    PIZQueueElement *tail;
     } PIZQueue;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -77,74 +67,14 @@ typedef struct _PIZQueue {
 
 PIZ_START_C_LINKAGE
 
-/**
- * \brief   Create the queue.
- * \details In case of failure the pointer is NULL.
- * \return  A pointer to the new queue.
- * \ingroup queue
- */
-PIZQueue *pizQueueNew (void); 
-
-/**
- * \brief   Free the queue.
- * \details It is safe to pass NULL pointer.
- * \param   x A Pointer.
- * \ingroup queue
- */
-void pizQueueFree (PIZQueue *x);
-
-/**
- * \brief   Clear the queue.
- * \param   x A valid pointer.
- * \ingroup queue
- */
-void pizQueueClear (PIZQueue *x);
-
-/**
- * \brief   Enqueue a value.
- * \param   x A valid pointer.
- * \param   value The value to append.
- * \return  An error code.
- * \ingroup queue
- */
-PIZError pizQueueAppend (PIZQueue *x, long value);
-
-/**
- * \brief   Dequeue a value.
- * \details To get the dequeued value use pizQueuePoppedValue(). 
- *          Return PIZ_ERROR if the queue is empty.
- * \param   x A valid pointer.
- * \return  An error code.
- * \ingroup queue
- */
-PIZError pizQueuePop (PIZQueue *x);
-
-/**
- * \brief   Dequeue last value (stack way).
- * \details To get the dequeued value use pizQueuePoppedValue(). 
- *          Return PIZ_ERROR if the queue is empty.
- * \param   x A valid pointer.
- * \return  An error code.
- * \ingroup queue
- */
-PIZError pizQueuePopLastValue (PIZQueue *x);
-
-/**
- * \brief   Get the number of values in the queue.
- * \param   x A valid pointer.
- * \return  The number of values.
- * \ingroup queue
- */
-long pizQueueCount (const PIZQueue *x);
-
-/**
- * \brief   Get the dequeued value.
- * \remark  This value is initialized with -1. 
- * \param   x A valid pointer.
- * \return  The value.
- * \ingroup queue
- */
-long pizQueuePoppedValue (const PIZQueue *x);
+PIZQueue    *pizQueueNew            (void); 
+void        pizQueueFree            (PIZQueue *x);
+void        pizQueueClear           (PIZQueue *x);
+PIZError    pizQueueAppend          (PIZQueue *x, long value);
+PIZError    pizQueuePop             (PIZQueue *x);
+PIZError    pizQueuePopLastValue    (PIZQueue *x);
+long        pizQueueCount           (const PIZQueue *x);
+long        pizQueuePoppedValue     (const PIZQueue *x);
 
 PIZ_END_C_LINKAGE
  

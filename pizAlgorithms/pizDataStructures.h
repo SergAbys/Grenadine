@@ -1,7 +1,7 @@
 /**
- * \file        pizDataStructures.h
- * \author      Jean Sapristi
- * \date        31 janvier 2012
+ * \file    pizDataStructures.h
+ * \author  Jean Sapristi
+ * \date    28 February 2012
  */
 
 /*

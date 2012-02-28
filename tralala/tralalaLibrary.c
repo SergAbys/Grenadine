@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 26/02/12.
+ *  Last modified : 27/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -21,6 +21,28 @@
 
 extern PIZGrowingArray      *tll_clipboard;
 extern tralalaSymbolsTableB tll_symbolsB;
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void tralala_willChange (t_tralala *x)
+{
+    x->hitTest  = HIT_NOTHING;
+    x->textMode = MODE_TEXT_NOTE;
+    x->flags    &= ~(FLAG_HAVE_CHANGED 
+                    | FLAG_HAVE_MOVED 
+                    | FLAG_HAVE_BEEN_DUPLICATED
+                    | FLAG_ZONE_IS_SELECTED
+                    | FLAG_ORIGIN_IS_SET
+                    | FLAG_IS_LASSO);
+    
+    x->mouseVelocityValue = 0;
+    
+    tralala_unselectAllText (x);
+    pizSequenceInitLasso (x->user);
+    tralala_stopAutoscroll (x);
+}
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -283,62 +305,6 @@ long tralala_hitText (t_tralala *x, t_object *patcherview, t_pt pt)
     return isHit;
 }
 
-bool tralala_hitNotesByRunIndex (t_tralala *x)
-{
-    bool haveChanged = 0;
-
-    pizGrowingArrayClear (x->played);
-
-    if (x->runIndex == -1) {
-        x->runIndex = 0;
-        haveChanged = true;
-    } else {
-        long i, count, start, end, down, up;
-        long err = PIZ_GOOD;
-        
-        start   = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_START);
-        end     = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_END);
-        down    = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_DOWN);
-        up      = pizGrowingArrayValueAtIndex (x->zone, PIZ_DATA_UP);
-        
-        count = pizGrowingArrayCount (x->unselected);
-        
-        for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
-            long err2       = PIZ_GOOD;
-            long position   = pizGrowingArrayValueAtIndex (x->unselected, i + PIZ_DATA_POSITION);
-            long pitch      = pizGrowingArrayValueAtIndex (x->unselected, i + PIZ_DATA_PITCH);
-            long duration   = pizGrowingArrayValueAtIndex (x->unselected, i + PIZ_DATA_DURATION);
-            long isMarked   = pizGrowingArrayValueAtIndex (x->unselected, i + PIZ_DATA_IS_MARKED);
-            
-            err2 |= (position < start);
-            err2 |= (pitch < down);
-            err2 |= (pitch > up);
-            err2 |= (x->runIndex < position);
-            err2 |= (x->runIndex > (position + duration));
-            
-            if (!err2) {
-                err |= pizGrowingArrayAppend (x->played, position);
-                err |= pizGrowingArrayAppend (x->played, pitch);
-                err |= pizGrowingArrayAppend (x->played, PIZ_MAGIC_VELOCITY);
-                err |= pizGrowingArrayAppend (x->played, duration);
-                err |= pizGrowingArrayAppend (x->played, PIZ_MAGIC_CHANNEL);
-                err |= pizGrowingArrayAppend (x->played, false);
-                err |= pizGrowingArrayAppend (x->played, false);
-                
-                if (!isMarked) {
-                    pizGrowingArraySetValueAtIndex (x->unselected, i + PIZ_DATA_IS_MARKED, true);
-                    haveChanged = true;
-                }
-            } else if (isMarked){
-                pizGrowingArraySetValueAtIndex (x->unselected, i + PIZ_DATA_IS_MARKED, false);
-                haveChanged = true;
-            }
-        }
-    }
-        
-    return haveChanged;
-}
-
 bool tralala_pasteFromClipboard (t_tralala *x) 
 {
     bool haveChanged = false;
@@ -378,20 +344,7 @@ bool tralala_pasteFromClipboard (t_tralala *x)
     
     return haveChanged;
 }
-        
-bool tralala_setCursorType (t_tralala *x, t_object *patcherview, t_jmouse_cursortype type)
-{
-    bool haveChanged = false;
-    
-    if (type != x->cursorType) {
-        x->cursorType = type;
-        jmouse_setcursor (patcherview, (t_object *)x, type);
-        haveChanged = true;
-    }
-    
-    return haveChanged;
-}
-                                                        
+
 void tralala_setCoordinates (t_tralala *x, PIZCoordinates *coordinates, t_pt pt)
 {
     long    m, n;
@@ -410,60 +363,86 @@ void tralala_setCoordinates (t_tralala *x, PIZCoordinates *coordinates, t_pt pt)
     coordinates->pitch    = n;
 }
 
-void tralala_setRectWithZoneValues (t_tralala *x, t_rect *zoneRect, long start, long end, long down, long up)
-{
-    double  x1, x2, y1, y2;
-    double  f = 1.;
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
-    switch (x->zoomMode) {
-        case MODE_ZOOM_A : f = 0.5; break;
-        case MODE_ZOOM_B : f = 1.;  break;
-        case MODE_ZOOM_C : f = 2.;  break;
-    }
+void tralala_unselectAllText (t_tralala *x)
+{
+    long i;
     
-    if (end < start) {
-        long k  = start;
-        start   = end;
-        end     = k;
+    for (i = 0; i < TEXT_CELL_COUNT; i++) {
+        x->textIsSelected[i] = false;
     }
-        
-    if (down > up) {
-        long k  = up;
-        up      = down;
-        down    = k;
-    }
-    
-    x1 = start * GUI_PIXELS_PER_STEP  * f;
-    x2 = end * GUI_PIXELS_PER_STEP  * f;
-    y1 = (PIZ_MAGIC_PITCH - up) * GUI_PIXELS_PER_SEMITONE * f;
-    y2 = ((PIZ_MAGIC_PITCH + 1) - down) * GUI_PIXELS_PER_SEMITONE * f;
-    
-    zoneRect->x      = x1;
-    zoneRect->y      = y1;
-    zoneRect->width  = x2 - x1;
-    zoneRect->height = y2 - y1;
 }
 
-void tralala_setRectWithCoordinatesAndDuration (t_tralala *x, t_rect *noteRect, PIZCoordinates *c, long d)
+bool tralala_hasSelectedText (t_tralala *x, long *result)
 {
-    double  x1, x2, y1, y2;
-    double  f = 1.;
-
-    switch (x->zoomMode) {
-        case MODE_ZOOM_A : f = 0.5; break;
-        case MODE_ZOOM_B : f = 1.;  break;
-        case MODE_ZOOM_C : f = 2.;  break;
+    long i;
+    bool hasSelected = false;
+    
+    for (i = 0; i < TEXT_CELL_COUNT; i++) {
+        if (x->textIsSelected[i]) {
+            hasSelected = true;
+            *result = i;
+        }
     }
     
-    x1 = (c->position * GUI_PIXELS_PER_STEP  * f);
-    x2 = x1 + (d * GUI_PIXELS_PER_STEP * f);
-    y1 = ((PIZ_MAGIC_PITCH - c->pitch) * GUI_PIXELS_PER_SEMITONE * f);
-    y2 = y1 + (GUI_PIXELS_PER_SEMITONE * f);
+    return hasSelected;
+}
+
+void tralala_testAutoscroll (t_tralala *x, t_object *patcherview, t_pt pt)
+{
+    t_rect  rect;
+    bool    stop = true;
+
+    jbox_get_rect_for_view ((t_object *)x, patcherview, &rect); 
     
-    noteRect->x      = x1;
-    noteRect->y      = y1;
-    noteRect->width  = x2 - x1;
-    noteRect->height = y2 - y1;
+    if (pt.x < GUI_AUTOSCROLL_RANGE) {
+        DIRTYLAYER_SET (DIRTY_LOCATE_LEFT);
+        stop = false;
+    }
+        
+    if ((rect.width - pt.x) < GUI_AUTOSCROLL_RANGE) {
+        DIRTYLAYER_SET (DIRTY_LOCATE_RIGHT);
+        stop = false;
+    }
+        
+    if ((rect.height - pt.y) < GUI_AUTOSCROLL_RANGE) {
+        DIRTYLAYER_SET (DIRTY_LOCATE_DOWN);
+        stop = false;
+    }
+        
+    if (pt.y < GUI_AUTOSCROLL_RANGE) {
+        DIRTYLAYER_SET (DIRTY_LOCATE_UP);
+        stop = false;
+    }
+        
+    if (stop) {
+        tralala_stopAutoscroll (x);
+    }
+}
+
+void tralala_stopAutoscroll (t_tralala *x)
+{
+    DIRTYLAYER_UNSET (~(DIRTY_LOCATE_LEFT | DIRTY_LOCATE_RIGHT | DIRTY_LOCATE_DOWN | DIRTY_LOCATE_UP));
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+bool tralala_setCursorType (t_tralala *x, t_object *patcherview, t_jmouse_cursortype type)
+{
+    bool haveChanged = false;
+    
+    if (type != x->cursorType) {
+        x->cursorType = type;
+        jmouse_setcursor (patcherview, (t_object *)x, type);
+        haveChanged = true;
+    }
+    
+    return haveChanged;
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -526,96 +505,61 @@ void tralala_setString (char *string, long value, long formatMode)
     
     string[SIZE_STRING_MAX - 1] = 0;
 }
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void tralala_unselectAllText (t_tralala *x)
+                                                        
+void tralala_setRectWithZoneValues (t_tralala *x, t_rect *zoneRect, long start, long end, long down, long up)
 {
-    long i;
-    
-    for (i = 0; i < TEXT_CELL_COUNT; i++) {
-        x->textIsSelected[i] = false;
-    }
-}
+    double  x1, x2, y1, y2;
+    double  f = 1.;
 
-bool tralala_hasSelectedText (t_tralala *x, long *result)
-{
-    long i;
-    bool hasSelected = false;
-    
-    for (i = 0; i < TEXT_CELL_COUNT; i++) {
-        if (x->textIsSelected[i]) {
-            hasSelected = true;
-            *result = i;
-        }
+    switch (x->zoomMode) {
+        case MODE_ZOOM_A : f = 0.5; break;
+        case MODE_ZOOM_B : f = 1.;  break;
+        case MODE_ZOOM_C : f = 2.;  break;
     }
     
-    return hasSelected;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void tralala_willChange (t_tralala *x)
-{
-    x->hitTest  = HIT_NOTHING;
-    x->textMode = MODE_TEXT_NOTE;
-    x->flags    &= ~(FLAG_HAVE_CHANGED 
-                    | FLAG_HAVE_MOVED 
-                    | FLAG_HAVE_BEEN_DUPLICATED
-                    | FLAG_ZONE_IS_SELECTED
-                    | FLAG_ORIGIN_IS_SET
-                    | FLAG_IS_LASSO);
-    
-    x->mouseVelocityValue = 0;
-    
-    tralala_unselectAllText (x);
-    pizSequenceInitLasso (x->user);
-    tralala_stopAutoscroll (x);
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void tralala_testAutoscroll (t_tralala *x, t_object *patcherview, t_pt pt)
-{
-    t_rect  rect;
-    bool    stop = true;
-
-    jbox_get_rect_for_view ((t_object *)x, patcherview, &rect); 
-    
-    if (pt.x < GUI_AUTOSCROLL_RANGE) {
-        DIRTYLAYER_SET (DIRTY_LOCATE_LEFT);
-        stop = false;
+    if (end < start) {
+        long k  = start;
+        start   = end;
+        end     = k;
     }
         
-    if ((rect.width - pt.x) < GUI_AUTOSCROLL_RANGE) {
-        DIRTYLAYER_SET (DIRTY_LOCATE_RIGHT);
-        stop = false;
+    if (down > up) {
+        long k  = up;
+        up      = down;
+        down    = k;
     }
-        
-    if ((rect.height - pt.y) < GUI_AUTOSCROLL_RANGE) {
-        DIRTYLAYER_SET (DIRTY_LOCATE_DOWN);
-        stop = false;
-    }
-        
-    if (pt.y < GUI_AUTOSCROLL_RANGE) {
-        DIRTYLAYER_SET (DIRTY_LOCATE_UP);
-        stop = false;
-    }
-        
-    if (stop) {
-        tralala_stopAutoscroll (x);
-    }
+    
+    x1 = start * GUI_PIXELS_PER_STEP  * f;
+    x2 = end * GUI_PIXELS_PER_STEP  * f;
+    y1 = (PIZ_MAGIC_PITCH - up) * GUI_PIXELS_PER_SEMITONE * f;
+    y2 = ((PIZ_MAGIC_PITCH + 1) - down) * GUI_PIXELS_PER_SEMITONE * f;
+    
+    zoneRect->x      = x1;
+    zoneRect->y      = y1;
+    zoneRect->width  = x2 - x1;
+    zoneRect->height = y2 - y1;
 }
 
-void tralala_stopAutoscroll (t_tralala *x)
+void tralala_setRectWithCoordinatesAndDuration (t_tralala *x, t_rect *noteRect, PIZCoordinates *c, long d)
 {
-    DIRTYLAYER_UNSET (~(DIRTY_LOCATE_LEFT | DIRTY_LOCATE_RIGHT | DIRTY_LOCATE_DOWN | DIRTY_LOCATE_UP));
+    double  x1, x2, y1, y2;
+    double  f = 1.;
+
+    switch (x->zoomMode) {
+        case MODE_ZOOM_A : f = 0.5; break;
+        case MODE_ZOOM_B : f = 1.;  break;
+        case MODE_ZOOM_C : f = 2.;  break;
+    }
+    
+    x1 = (c->position * GUI_PIXELS_PER_STEP  * f);
+    x2 = x1 + (d * GUI_PIXELS_PER_STEP * f);
+    y1 = ((PIZ_MAGIC_PITCH - c->pitch) * GUI_PIXELS_PER_SEMITONE * f);
+    y2 = y1 + (GUI_PIXELS_PER_SEMITONE * f);
+    
+    noteRect->x      = x1;
+    noteRect->y      = y1;
+    noteRect->width  = x2 - x1;
+    noteRect->height = y2 - y1;
 }
 
 // -------------------------------------------------------------------------------------------------------------

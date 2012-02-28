@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 26/02/12.
+ *  Last modified : 27/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -192,6 +192,39 @@ void tralala_learnTask (t_tralala *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+
+void tralala_handle (t_tralala *x, t_symbol *s, long argc, t_atom *argv) 
+{
+    if (s && argc && argv && atom_gettype(argv) == A_SYM) {
+        char     alloc = 0;
+        long     i, ac = 0;
+        t_atom   rv;
+        t_atom   *av = NULL;
+
+        t_symbol *t = atom_getsym (argv); 
+        
+        if ((atom_alloc_array (argc, &ac, &av, &alloc)) == MAX_ERR_NONE) {
+        
+            atom_setsym (av, s);
+            
+            for (i = 1; i < ac; i ++) {
+                switch (atom_gettype (argv + i)) {
+                    case A_SYM  : atom_setsym (av + i, atom_getsym (argv + i));     break;
+                    case A_LONG : atom_setlong (av + i, atom_getlong (argv + i));   break;
+                    default     : atom_setlong (av + i, 0);
+                }
+            }
+            
+            object_method_typed (x, t, ac, av, &rv);
+            sysmem_freeptr (av);
+        }
+    } 
+}
+
+void tralala_anything (t_tralala *x, t_symbol *s, long argc, t_atom *argv) 
+{
+    ;
+}
 
 void tralala_slot (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
