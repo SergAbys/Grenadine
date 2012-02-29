@@ -52,9 +52,9 @@ void tralala_paintTask (t_tralala *x)
     PIZSequence *sequence = NULL;
     ulong       dirty;
     
-    if (ATOMIC_INCREMENT (&x->paintLock) == 1) {
+    if (ATOMIC_INCREMENT (&x->paintLock) == 1) { 
     //
-    dirty = x->dirtyLayer;
+    dirty = x->dirtyLayer; 
     DIRTYLAYER_UNSET (~(DIRTY_SEQUENCE | DIRTY_REFRESH | DIRTY_GRID | DIRTY_ZONE | DIRTY_NOTES | DIRTY_PLAYED));
         
     if (LIVE && !(dirty & DIRTY_SEQUENCE) && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1))) {
@@ -69,7 +69,6 @@ void tralala_paintTask (t_tralala *x)
     
     if (dirty) {
     //
-    
     ARRAYSLOCK
     
     if (USER) {

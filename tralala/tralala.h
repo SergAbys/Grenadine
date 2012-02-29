@@ -273,7 +273,7 @@
 
     typedef volatile uint32_t t_uint32_atomic;
     
-    #define DIRTYLAYER_SET(mask)        OSAtomicOr32((uint32_t)(mask), (uint32_t *)&x->dirtyLayer)  
+    #define DIRTYLAYER_SET(mask)        OSAtomicOr32((uint32_t)(mask), (uint32_t *)&x->dirtyLayer) 
     #define DIRTYLAYER_UNSET(mask)      OSAtomicAnd32((uint32_t)(mask), (uint32_t *)&x->dirtyLayer)
     
 #else
