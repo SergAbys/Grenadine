@@ -1,7 +1,7 @@
 /*
  * \file    pizMarkovModel.c
  * \author  Jean Sapristi
- * \date    31 janvier 2012
+ * \date    29 February 2012
  */
  
 /*
@@ -66,59 +66,61 @@ PIZMarkovModel *pizMarkovModelNew (long argc, long *argv)
     PIZMarkovModel *x = NULL;
 
     if (x = (PIZMarkovModel *)malloc (sizeof(PIZMarkovModel))) {
-        x->vectorSize   = PIZ_DEFAULT_VECTOR_SIZE;
-        x->graphSize    = PIZ_DEFAULT_GRAPH_SIZE;
-        x->persistence  = PIZ_DEFAULT_PERSISTENCE;
-        
-        if (argc && ((argv[0] > 0)  && (argv[0] <= PIZ_MAXIMUM_GRAPH_SIZE))) {
-                x->graphSize = argv[0];
-            }
-        
-        if ((argc == 2) && ((argv[1] > 0) && (argv[1] <= PIZ_MAXIMUM_VECTOR_SIZE))) {
-                x->vectorSize = argv[1];
-            }
+    //
+    x->vectorSize   = PIZ_DEFAULT_VECTOR_SIZE;
+    x->graphSize    = PIZ_DEFAULT_GRAPH_SIZE;
+    x->persistence  = PIZ_DEFAULT_PERSISTENCE;
+    
+    if (argc && ((argv[0] > 0)  && (argv[0] <= PIZ_MAXIMUM_GRAPH_SIZE))) {
+        x->graphSize = argv[0];
+    }
+    
+    if ((argc == 2) && ((argv[1] > 0) && (argv[1] <= PIZ_MAXIMUM_VECTOR_SIZE))) {
+        x->vectorSize = argv[1];
+    }
 
-        x->start            = (double *)malloc (x->graphSize  * sizeof(double));
-        x->transition       = (double *)malloc (x->graphSize  * x->graphSize * sizeof(double));
-        x->emission         = (double *)malloc (x->graphSize  * PIZ_ALPHABET_SIZE * sizeof(double));
-        x->tempStart        = (double *)malloc (x->graphSize  * sizeof(double));
-        x->tempTransition   = (double *)malloc (x->graphSize  * x->graphSize * sizeof(double));
-        x->tempEmission     = (double *)malloc (x->graphSize  * PIZ_ALPHABET_SIZE * sizeof(double));
-        x->alpha            = (double *)malloc (x->vectorSize * x->graphSize * sizeof(double));
-        x->tempAlpha        = (double *)malloc (x->vectorSize * x->graphSize * sizeof(double));
-        x->beta             = (double *)malloc (x->vectorSize * x->graphSize * sizeof(double));
-        x->coefficient      = (double *)malloc (x->vectorSize * sizeof(double));
+    x->start            = (double *)malloc (x->graphSize  * sizeof(double));
+    x->transition       = (double *)malloc (x->graphSize  * x->graphSize * sizeof(double));
+    x->emission         = (double *)malloc (x->graphSize  * PIZ_ALPHABET_SIZE * sizeof(double));
+    x->tempStart        = (double *)malloc (x->graphSize  * sizeof(double));
+    x->tempTransition   = (double *)malloc (x->graphSize  * x->graphSize * sizeof(double));
+    x->tempEmission     = (double *)malloc (x->graphSize  * PIZ_ALPHABET_SIZE * sizeof(double));
+    x->alpha            = (double *)malloc (x->vectorSize * x->graphSize * sizeof(double));
+    x->tempAlpha        = (double *)malloc (x->vectorSize * x->graphSize * sizeof(double));
+    x->beta             = (double *)malloc (x->vectorSize * x->graphSize * sizeof(double));
+    x->coefficient      = (double *)malloc (x->vectorSize * sizeof(double));
+    
+    if (x->start &&
+        x->transition &&
+        x->emission &&
+        x->tempStart &&
+        x->tempTransition &&
+        x->tempEmission &&
+        x->alpha &&
+        x->beta &&
+        x->coefficient &&
+        x->tempAlpha) {
+        long i;
         
-        if (x->start &&
-            x->transition &&
-            x->emission &&
-            x->tempStart &&
-            x->tempTransition &&
-            x->tempEmission &&
-            x->alpha &&
-            x->beta &&
-            x->coefficient &&
-            x->tempAlpha) {
-            
-                long i;
-                
-                x->count = 0;
-                
-                srand ((unsigned int)time(NULL));
-                
-                pizMarkovModelFillStochastically (x->graphSize, x->start);
-                
-                for (i = 0; i < x->graphSize; i++) {
-                    pizMarkovModelFillStochastically (x->graphSize, x->transition + (i * x->graphSize));
-                }
-                
-                for (i = 0; i < x->graphSize; i++)  {
-                    pizMarkovModelFillStochastically (PIZ_ALPHABET_SIZE, x->emission + (i * PIZ_ALPHABET_SIZE));
-                }
-            } else {
-                pizMarkovModelFree (x);
-                x = NULL;
-            }
+        x->count = 0;
+        
+        srand ((unsigned int)time(NULL));
+        
+        pizMarkovModelFillStochastically (x->graphSize, x->start);
+        
+        for (i = 0; i < x->graphSize; i++) {
+            pizMarkovModelFillStochastically (x->graphSize, x->transition + (i * x->graphSize));
+        }
+        
+        for (i = 0; i < x->graphSize; i++)  {
+            pizMarkovModelFillStochastically (PIZ_ALPHABET_SIZE, x->emission + (i * PIZ_ALPHABET_SIZE));
+        }
+        
+    } else {
+        pizMarkovModelFree (x);
+        x = NULL;
+    }
+    //
     }
     
     return x;
@@ -129,34 +131,34 @@ void pizMarkovModelFree (PIZMarkovModel *x)
     if (x) {
         if (x->start) {
             free (x->start);
-            }
+        }
         if (x->transition) {
             free (x->transition);
-            }
+        }
         if (x->emission) {
             free (x->emission);
-            }
+        }
         if (x->tempStart) {
             free (x->tempStart);
-            }
+        }
         if (x->tempTransition) {
             free (x->tempTransition);
-            }
+        }
         if (x->tempEmission) {
             free (x->tempEmission);
-            }
+        }
         if (x->alpha) {
             free (x->alpha);
-            }
+        }
         if (x->tempAlpha) {
             free (x->tempAlpha);
-            }
+        }
         if (x->beta) {
             free (x->beta);
-            }
+        }
         if (x->coefficient) {
             free (x->coefficient);
-            }
+        }
         
         free (x);
     }
@@ -174,12 +176,12 @@ void pizMarkovModelClear (PIZMarkovModel *x)
     pizMarkovModelFillStochastically (x->graphSize, x->start);
                     
     for (i = 0; i < x->graphSize; i++) {
-            pizMarkovModelFillStochastically (x->graphSize, x->transition + (i * x->graphSize));
-        }
+        pizMarkovModelFillStochastically (x->graphSize, x->transition + (i * x->graphSize));
+    }
         
     for (i = 0; i < x->graphSize; i++) {
-            pizMarkovModelFillStochastically (PIZ_ALPHABET_SIZE, x->emission + (i * PIZ_ALPHABET_SIZE));
-        }
+        pizMarkovModelFillStochastically (PIZ_ALPHABET_SIZE, x->emission + (i * PIZ_ALPHABET_SIZE));
+    }
 }
 
 PIZError pizMarkovModelAdd (PIZMarkovModel *x, long argc, long *argv)
@@ -192,13 +194,13 @@ PIZError pizMarkovModelAdd (PIZMarkovModel *x, long argc, long *argv)
         err = PIZ_GOOD;
 
         for (t = 0; t < argc; t++) {
-                argv[t] = CLAMP (argv[t], 0, PIZ_ALPHABET_SIZE - 1); 
-            }   
+            argv[t] = CLAMP (argv[t], 0, PIZ_ALPHABET_SIZE - 1); 
+        }   
             
         for (t = 0; t < argc; t += x->vectorSize) {
-                pizMarkovModelBaumWelch (x, MIN ((argc - t), x->vectorSize), argv + t);
-                x->count ++;
-            }
+            pizMarkovModelBaumWelch (x, MIN ((argc - t), x->vectorSize), argv + t);
+            x->count ++;
+        }
     }
         
     return err;
@@ -209,12 +211,10 @@ PIZError pizMarkovModelProceed (const PIZMarkovModel *x, long argc, long *argv)
     long err = PIZ_ERROR;
     
     if (argc && argv) {
-        long    i;
-        double  h;
+        long    i, j = 1;
         long    p = 0;
         long    v = 0;
-        long    j = 1;
-        double  k = 0.;
+        double  h, k = 0.;
 
         err = PIZ_GOOD;
         
@@ -224,9 +224,9 @@ PIZError pizMarkovModelProceed (const PIZMarkovModel *x, long argc, long *argv)
             k += x->start[i];
             
             if (k > h) {
-                    p = i;
-                    break;
-                }
+                p = i;
+                break;
+            }
         }
         
         k = 0.;
@@ -236,9 +236,9 @@ PIZError pizMarkovModelProceed (const PIZMarkovModel *x, long argc, long *argv)
             k += x->emission[(p * PIZ_ALPHABET_SIZE) + i];
             
             if (k > h) {
-                    v = i;
-                    break;
-                }
+                v = i;
+                break;
+            }
         }
         
         argv[0] = v;
@@ -252,9 +252,9 @@ PIZError pizMarkovModelProceed (const PIZMarkovModel *x, long argc, long *argv)
                 k += x->transition[(p * x->graphSize) + i];
                 
                 if (k > h) {
-                        p = i;
-                        break;
-                    }
+                    p = i;
+                    break;
+                }
             }
             
             k = 0.;
@@ -264,9 +264,9 @@ PIZError pizMarkovModelProceed (const PIZMarkovModel *x, long argc, long *argv)
                 k += x->emission[(p * PIZ_ALPHABET_SIZE) + i];
                 
                 if (k > h) {
-                        v = i;
-                        break;
-                    }
+                    v = i;
+                    break;
+                }
             }
             
             argv[j] = v;
@@ -288,7 +288,7 @@ long pizMarkovModelCount (const PIZMarkovModel *x)
 
 PIZ_INLINE void pizMarkovModelBaumWelch (PIZMarkovModel *x, long argc, long *argv)
 {
-    long    t;
+    long    t, i, j, n;
     double  f = 0.;
     double  s = 0.;
                 
@@ -308,153 +308,140 @@ PIZ_INLINE void pizMarkovModelBaumWelch (PIZMarkovModel *x, long argc, long *arg
     }
     
     for (t = 0; t < (argc - 1); t++) {
+    //
+    s = 0.;
+    for (j = 0; j < x->graphSize; j++) {
+        double k = 0.;
+        
+        for (i = 0; i < x->graphSize; i++) {
+            k += x->alpha[(i * x->vectorSize) + t] * x->transition[(i * x->graphSize) + j];
+        }
+        
+        x->tempAlpha[(j * x->vectorSize) + t + 1] = k * x->emission[(j * PIZ_ALPHABET_SIZE) + argv[t + 1]];
+        s += x->tempAlpha[(j * x->vectorSize) + t + 1];
+    }
     
-        long j;
-        
-        s = 0.;
-        
-        for (j = 0; j < x->graphSize; j++) {
-            long    i;
-            double  k = 0.;
-            
-            for (i = 0; i < x->graphSize; i++) {
-                    k += x->alpha[(i * x->vectorSize) + t] * x->transition[(i * x->graphSize) + j];
-                }
-            
-            x->tempAlpha[(j * x->vectorSize) + t + 1] = k * x->emission[(j * PIZ_ALPHABET_SIZE) + argv[t + 1]];
-            s += x->tempAlpha[(j * x->vectorSize) + t + 1];
-        }
-        
-        if (s) {
-            x->coefficient[t + 1] = 1. / s;
-        } else {
-            x->coefficient[t + 1] = 0.;
-        }
-    
-        for (j = 0; j < x->graphSize; j++) {
-            x->alpha[(j * x->vectorSize) + t + 1] = x->tempAlpha[(j * x->vectorSize) + t + 1] 
-                * x->coefficient[t + 1];
-        }
+    if (s) {
+        x->coefficient[t + 1] = 1. / s;
+    } else {
+        x->coefficient[t + 1] = 0.;
+    }
+
+    for (j = 0; j < x->graphSize; j++) {
+    x->alpha[(j * x->vectorSize) + t + 1] = x->tempAlpha[(j * x->vectorSize) + t + 1] * x->coefficient[t + 1];
+    }
+    //    
     }
     
     for (t = 0; t < x->graphSize; t++) {
-            x->beta[(t * x->vectorSize) + argc - 1] = x->coefficient[argc - 1];
-        }
+        x->beta[(t * x->vectorSize) + argc - 1] = x->coefficient[argc - 1];
+    }
     
     for (t = (argc - 2); t >= 0; t--) {
-        long i;
+    //
+    for (i = 0; i < x->graphSize; i++) {
+        double k = 0.;
         
-        for (i = 0; i < x->graphSize; i++) {
-            long    j;
-            double  k = 0.;
-            
-            for (j = 0; j < x->graphSize; j++) {
-                k += x->transition[(i * x->graphSize) + j] * x->beta[(j * x->vectorSize) + t + 1] 
-                    * x->emission[(j * PIZ_ALPHABET_SIZE) + argv[t + 1]];
-            }
-            
-            x->beta[(i * x->vectorSize) + t] = x->coefficient[t] * k;
+        for (j = 0; j < x->graphSize; j++) {
+            double temp = x->emission[(j * PIZ_ALPHABET_SIZE) + argv[t + 1]];
+            k += x->transition[(i * x->graphSize) + j] * x->beta[(j * x->vectorSize) + t + 1] * temp;
         }
+        
+        x->beta[(i * x->vectorSize) + t] = x->coefficient[t] * k;
+    }
+    //    
     }
     
     f = x->coefficient[0]; 
     
     for (t = 1; t < argc; t++) {
-            f *= x->coefficient[t];
-        }
+        f *= x->coefficient[t];
+    }
         
     if (f) {
-        long i;
+    //
+    for (i = 0; i < x->graphSize; i++) {
+        x->tempStart[i] = (x->alpha[i * x->vectorSize] * x->beta[i * x->vectorSize]) / x->coefficient[0];
+    }
+                        
+    for (i = 0; i < x->graphSize; i++) {
+        double tab[PIZ_MAXIMUM_GRAPH_SIZE];
         
-        for (i = 0; i < x->graphSize; i++) {
-            x->tempStart[i] = (x->alpha[i * x->vectorSize] * x->beta[i * x->vectorSize]) / x->coefficient[0];
-        }
-                            
-        for (i = 0; i < x->graphSize; i++) {
-            long    j;
-            double  temp[PIZ_MAXIMUM_GRAPH_SIZE];
-            
-            s = 0.;
-            
-            for (j = 0; j < x->graphSize; j++) {
-                long n;
-                
-                temp[j] = 0.;
-                
-                for (n = 0; n < (argc - 1); n++) {
-                        temp[j] += x->alpha[(i * x->vectorSize) + n] 
-                            * x->transition[(i * x->graphSize) + j]
-                            * x->emission[(j * PIZ_ALPHABET_SIZE) + argv[n + 1]]
-                            * x->beta[(j * x->vectorSize) + n + 1];
-                    }
-                
-                s += temp[j];
-            }
-                
-            for (j = 0; j < x->graphSize; j++) {
-                if (s) {
-                    x->tempTransition[(i * x->graphSize) + j] = temp[j] / s;
-                }
-            }
-        }
+        s = 0.;
         
-        for (i = 0; i < x->graphSize; i++) {
-            long    j;
-            double  temp[PIZ_MAXIMUM_VECTOR_SIZE];
+        for (j = 0; j < x->graphSize; j++) {
+            tab[j] = 0.;
             
-            s = 0.;
-            
-            for (j = 0; j < argc; j++) {
-                temp[j] = (x->alpha[(i * x->vectorSize) + j] * x->beta[(i * x->vectorSize) + j]) 
-                    / x->coefficient[j];
-                s += temp[j];
+            for (n = 0; n < (argc - 1); n++) {
+                tab[j] += x->alpha[(i * x->vectorSize) + n] 
+                        * x->transition[(i * x->graphSize) + j]
+                        * x->emission[(j * PIZ_ALPHABET_SIZE) + argv[n + 1]]
+                        * x->beta[(j * x->vectorSize) + n + 1];
             }
-                
+            
+            s += tab[j];
+        }
+            
+        for (j = 0; j < x->graphSize; j++) {
             if (s) {
-                for (j = 0; j < PIZ_ALPHABET_SIZE; j++) {
-                    long    n;
-                    double  k = 0.;
-                    
-                    for (n = 0; n < argc; n++) {
-                        if (argv[n] == j) {
-                            k += temp[n];   
-                        }
-                    }
-                
-                    x->tempEmission[(i * PIZ_ALPHABET_SIZE) + j] = k / s;
-                }
+                x->tempTransition[(i * x->graphSize) + j] = tab[j] / s;
             }
         }
+    }
+    
+    for (i = 0; i < x->graphSize; i++) {
+        double tab[PIZ_MAXIMUM_VECTOR_SIZE];
         
-        for (i = 0; i < x->graphSize; i++) {
-            x->start[i] = ((x->start[i] * x->persistence) + x->tempStart[i]) / (x->persistence + 1.);
-        }
+        s = 0.;
         
-        for (i = 0; i < (x->graphSize * x->graphSize); i++) {
-            x->transition[i] = ((x->transition[i] * x->persistence) + x->tempTransition[i]) 
-                / (x->persistence + 1.);
+        for (j = 0; j < argc; j++) {
+            tab[j] = (x->alpha[(i * x->vectorSize) + j] * x->beta[(i * x->vectorSize) + j]) / x->coefficient[j];
+            s += tab[j];
         }
-        
-        for (i = 0; i < (x->graphSize * PIZ_ALPHABET_SIZE); i++) {
-            x->emission[i] = ((x->emission[i] * x->persistence) + x->tempEmission[i]) / (x->persistence + 1.);
+            
+        if (s) {
+            for (j = 0; j < PIZ_ALPHABET_SIZE; j++) {
+                double k = 0.;
+                
+                for (n = 0; n < argc; n++) {
+                    if (argv[n] == j) {
+                        k += tab[n];   
+                    }
+                }
+            
+                x->tempEmission[(i * PIZ_ALPHABET_SIZE) + j] = k / s;
+            }
         }
+    }
+    
+    for (i = 0; i < x->graphSize; i++) {
+        x->start[i] = ((x->start[i] * x->persistence) + x->tempStart[i]) / (x->persistence + 1.);
+    }
+    
+    for (i = 0; i < (x->graphSize * x->graphSize); i++) {
+        x->transition[i] = ((x->transition[i] * x->persistence) + x->tempTransition[i]) / (x->persistence + 1.);
+    }
+    
+    for (i = 0; i < (x->graphSize * PIZ_ALPHABET_SIZE); i++) {
+        x->emission[i] = ((x->emission[i] * x->persistence) + x->tempEmission[i]) / (x->persistence + 1.);
+    }
+    //    
     } 
 }
 
 void pizMarkovModelFillStochastically (long argc, double *argv)
 {
-    long    i;
-    long    f = (long)(6 * (rand ( ) / (RAND_MAX + 1.0)) + 1.);
+    long    i, f = (long)(6 * (rand ( ) / (RAND_MAX + 1.0)) + 1.);
     double  s = 0.;
     
     for (i = 0; i < argc; i++) {
-            argv[i] = pow ((rand ( ) / (RAND_MAX + 1.0)), f);
-            s += argv[i];
-        }
+        argv[i] = pow ((rand ( ) / (RAND_MAX + 1.0)), f);
+        s += argv[i];
+    }
         
     for (i = 0; i < argc; i++) {
-            argv[i] = argv[i] / s;
-        }
+        argv[i] = argv[i] / s;
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------

@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 27/02/12.
+ *  Last modified : 28/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -47,26 +47,30 @@ extern t_jsurface *tll_whole              [3];
 // -------------------------------------------------------------------------------------------------------------
 
 void tralala_paintTask (t_tralala *x) 
-{   
+{       
     PIZError    err = PIZ_GOOD;
     PIZSequence *sequence = NULL;
-    ulong       dirty = x->dirtyLayer;
+    ulong       dirty;
     
     if (ATOMIC_INCREMENT (&x->paintLock) == 1) {
     //
-    
+    dirty = x->dirtyLayer;
     DIRTYLAYER_UNSET (~(DIRTY_SEQUENCE | DIRTY_REFRESH | DIRTY_GRID | DIRTY_ZONE | DIRTY_NOTES | DIRTY_PLAYED));
         
-    ARRAYSLOCK
-    
     if (LIVE && !(dirty & DIRTY_SEQUENCE) && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1))) {
+        ARRAYSLOCK
+
         if (tralala_hitNotesByRunIndex (x)) {           
             dirty |= DIRTY_PLAYED;
         }
+        
+        ARRAYSUNLOCK
     }
     
     if (dirty) {
     //
+    
+    ARRAYSLOCK
     
     if (USER) {
         sequence = x->user;
@@ -241,7 +245,9 @@ void tralala_paint (t_tralala *x, t_object *patcherview)
         pizGrowingArrayCopy (x->playedPaint, x->playedTemp);
         pizGrowingArrayCopy (x->selectedPaint, x->selectedTemp);
         pizGrowingArrayCopy (x->unselectedPaint, x->unselectedTemp);
+        
     } else {
+        DIRTYLAYER_SET (DIRTY_SEQUENCE | DIRTY_GRID | DIRTY_ZONE | DIRTY_NOTES | DIRTY_PLAYED);
         jbox_redraw ((t_jbox *)x);
     }
     

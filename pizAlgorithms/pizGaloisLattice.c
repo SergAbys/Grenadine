@@ -1,7 +1,7 @@
 /*
  * \file    pizGaloisLattice.c
  * \author  Jean Sapristi
- * \date    31 janvier 2012
+ * \date    29 February 2012
  */
  
 /*
@@ -50,11 +50,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_ALPHABET_SIZE                           128
-#define PIZ_ARRAY_INIT_SIZE                         4
+#define PIZ_ALPHABET_SIZE               128
+#define PIZ_ARRAY_INIT_SIZE             4
 
-#define PIZ_MAXIMUM_THRESHOLD_TO_KILL_CONCEPTS      100
-#define PIZ_DEFAULT_THRESHOLD_TO_KILL_CONCEPTS      50
+#define PIZ_MAXIMUM_TO_KILL_CONCEPTS    100
+#define PIZ_DEFAULT_TO_KILL_CONCEPTS    50
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -64,75 +64,77 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
     PIZGaloisLattice *x = NULL;
 
     if (x = (PIZGaloisLattice *)calloc (1, sizeof(PIZGaloisLattice))) {
-    
+    //
     long err = PIZ_GOOD;
     
     if (x->stock = (PIZGaloisLatticeConcept *)calloc (PIZ_ITEMSET128_SIZE, sizeof(PIZGaloisLatticeConcept))) {
-        long i;
+    //
+    long i;
+    
+    x->thresholdToKillConcepts  = PIZ_DEFAULT_TO_KILL_CONCEPTS;
+    x->targetedConcept          = -1;
+    x->shuttle                  = -1;
+    x->previousShuttle          = -1;
+    
+    srand ((unsigned int)time(NULL));
         
-        x->thresholdToKillConcepts  = PIZ_DEFAULT_THRESHOLD_TO_KILL_CONCEPTS;
-        x->targetedConcept          = -1;
-        x->shuttle                  = -1;
-        x->previousShuttle          = -1;
-        
-        srand ((unsigned int)time(NULL));
-            
-        if (argc && ((argv[0] > 0)  && (argv[0] <= PIZ_MAXIMUM_THRESHOLD_TO_KILL_CONCEPTS))) {
-                x->thresholdToKillConcepts = argv[0];
-            }
-        
-        for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-                pizItemset128SetAtIndex (&(x->stock[1].itemset), i);
-            }
-        
-        x->stock[0].cardinal = 0;
-        x->stock[1].cardinal = PIZ_ITEMSET128_SIZE;
-        
-        pizItemset128SetAtIndex (&(x->stock[0].childs), 1);
-        pizItemset128SetAtIndex (&(x->stock[1].parents), 0);
-        
-        if (x->ticketMachine = pizBoundedStackNew ((PIZ_ITEMSET128_SIZE - 2))) {
-            for (i = (PIZ_ITEMSET128_SIZE - 1); i > 1; i--) {
-                pizBoundedStackPush (x->ticketMachine, i);
-            }
-        } else {
-            err = PIZ_MEMORY;
+    if (argc && ((argv[0] > 0)  && (argv[0] <= PIZ_MAXIMUM_TO_KILL_CONCEPTS))) {
+        x->thresholdToKillConcepts = argv[0];
+    }
+    
+    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+        pizItemset128SetAtIndex (&(x->stock[1].itemset), i);
+    }
+    
+    x->stock[0].cardinal = 0;
+    x->stock[1].cardinal = PIZ_ITEMSET128_SIZE;
+    
+    pizItemset128SetAtIndex (&(x->stock[0].childs), 1);
+    pizItemset128SetAtIndex (&(x->stock[1].parents), 0);
+    
+    if (x->ticketMachine = pizBoundedStackNew ((PIZ_ITEMSET128_SIZE - 2))) {
+        for (i = (PIZ_ITEMSET128_SIZE - 1); i > 1; i--) {
+            pizBoundedStackPush (x->ticketMachine, i);
         }
-            
-        if (x->map = (PIZGrowingArray **)malloc ((PIZ_ITEMSET128_SIZE + 1) * sizeof(PIZGrowingArray *))) {
-            for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
-                if (!(x->map[i] = pizGrowingArrayNew (PIZ_ARRAY_INIT_SIZE))) {
-                        err = PIZ_MEMORY;
-                }
-            }
-        } else {
-            err = PIZ_MEMORY;
-        }
+    } else {
+        err = PIZ_MEMORY;
+    }
         
-        if (x->tempMap = (PIZGrowingArray **)malloc ((PIZ_ITEMSET128_SIZE + 1) * sizeof(PIZGrowingArray *))) {
-            for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
-                if (!(x->tempMap[i] = pizGrowingArrayNew (PIZ_ARRAY_INIT_SIZE))) {
-                    err = PIZ_MEMORY;
-                }
+    if (x->map = (PIZGrowingArray **)malloc ((PIZ_ITEMSET128_SIZE + 1) * sizeof(PIZGrowingArray *))) {
+        for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
+            if (!(x->map[i] = pizGrowingArrayNew (PIZ_ARRAY_INIT_SIZE))) {
+                err = PIZ_MEMORY;
             }
-        } else {
-            err = PIZ_MEMORY;
         }
-        
-        if (!err) {
-                err |= pizGrowingArrayAppend (x->map[0], 0);
-                err |= pizGrowingArrayAppend (x->map[PIZ_ITEMSET128_SIZE], 1);
+    } else {
+        err = PIZ_MEMORY;
+    }
+    
+    if (x->tempMap = (PIZGrowingArray **)malloc ((PIZ_ITEMSET128_SIZE + 1) * sizeof(PIZGrowingArray *))) {
+        for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
+            if (!(x->tempMap[i] = pizGrowingArrayNew (PIZ_ARRAY_INIT_SIZE))) {
+                err = PIZ_MEMORY;
             }
-        
-        if (err) {
-                pizGaloisLatticeFree (x);
-                x = NULL;
-            }
-                
-        } else {
-            free (x);
-            x = NULL;
         }
+    } else {
+        err = PIZ_MEMORY;
+    }
+    
+    if (!err) {
+        err |= pizGrowingArrayAppend (x->map[0], 0);
+        err |= pizGrowingArrayAppend (x->map[PIZ_ITEMSET128_SIZE], 1);
+    }
+    
+    if (err) {
+        pizGaloisLatticeFree (x);
+        x = NULL;
+    }
+    //            
+    } else {
+        free (x);
+        x = NULL;
+    }
+    //    
     }
     
     return x;
@@ -145,9 +147,9 @@ void pizGaloisLatticeFree (PIZGaloisLattice *x)
         
         if (x->map) {
             for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
-                    pizGrowingArrayFree (x->map[i]);
-                    x->map[i] = NULL;
-                }
+                pizGrowingArrayFree (x->map[i]);
+                x->map[i] = NULL;
+            }
             
             free (x->map);
             x->map = NULL;
@@ -155,9 +157,9 @@ void pizGaloisLatticeFree (PIZGaloisLattice *x)
         
         if (x->tempMap) {
             for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
-                    pizGrowingArrayFree (x->tempMap[i]);
-                    x->tempMap[i] = NULL;
-                }
+                pizGrowingArrayFree (x->tempMap[i]);
+                x->tempMap[i] = NULL;
+            }
             
             free (x->tempMap);
             x->tempMap = NULL;
@@ -185,12 +187,11 @@ PIZError pizGaloisLatticeAdd (PIZGaloisLattice *x, long argc, long *argv)
     
     if (argv && (argc > 0)) {
         long j;
-
         for (j = 0; j < argc; j++) {
             if ((argv[j] >= 0) && (argv[j] < PIZ_ITEMSET128_SIZE)) {
-                    pizItemset128SetAtIndex (&(x->toBeAdded), argv[j]);
-                }
+                pizItemset128SetAtIndex (&(x->toBeAdded), argv[j]);
             }
+        }
         
         err = PIZ_GOOD;
     }
@@ -199,80 +200,81 @@ PIZError pizGaloisLatticeAdd (PIZGaloisLattice *x, long argc, long *argv)
     pizGrowingArrayClear (x->tempMap[PIZ_ITEMSET128_SIZE]);
     
     for (i = 1; i <= x->tempMapPeak; i++) {
-            pizGrowingArrayClear (x->tempMap[i]);
-        }
+        pizGrowingArrayClear (x->tempMap[i]);
+    }
     
     x->tempMapPeak = 0;
     
     for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
-        long j;
+    //
+    long j;
+    for (j = 0; j < pizGrowingArrayCount (x->map[i]); j++) {   
+        long g = pizGrowingArrayValueAtIndex (x->map[i], j);
         
-        for (j = 0; j < pizGrowingArrayCount (x->map[i]); j++) {   
-            long g = pizGrowingArrayValueAtIndex (x->map[i], j);
+        if (pizItemset128IsEqual (&(x->stock[g].itemset), &(x->toBeAdded))) {
+            goto end;
             
-            if (pizItemset128IsEqual (&(x->stock[g].itemset), &(x->toBeAdded))) {
-                goto end;
-            } else if (pizItemset128IsIncluded (&(x->stock[g].itemset), &(x->toBeAdded))) {
-                if (pizGrowingArrayAppend (x->tempMap[i], g)) {
-                    err = PIZ_MEMORY;
-                } else {
-                    if (i > x->tempMapPeak) {
-                        x->tempMapPeak = i;
-                    }
-                }
+        } else if (pizItemset128IsIncluded (&(x->stock[g].itemset), &(x->toBeAdded))) {
+            if (pizGrowingArrayAppend (x->tempMap[i], g)) {
+                err = PIZ_MEMORY;
             } else {
-                long generator = false;
+                if (i > x->tempMapPeak) {
+                    x->tempMapPeak = i;
+                }
+            }
+            
+        } else {
+            long generator = false;
+            
+            pizItemset128Intersection (&(x->stock[g].itemset), &(x->toBeAdded), &(x->intersection));
                 
-                pizItemset128Intersection (&(x->stock[g].itemset), &(x->toBeAdded), &(x->intersection));
+            if (x->intersectionCardinal = pizItemset128Count (&(x->intersection))) {
+                long t;
+                
+                generator = true;
+                
+                for (t = 0; t < pizGrowingArrayCount (x->tempMap [x->intersectionCardinal]); t++) {
+                    long p = pizGrowingArrayValueAtIndex (x->tempMap[x->intersectionCardinal], t);
                     
-                if (x->intersectionCardinal = pizItemset128Count (&(x->intersection))) {
-                    long t;
-                    
-                    generator = true;
-                    
-                    for (t = 0; t < pizGrowingArrayCount (x->tempMap [x->intersectionCardinal]); t++) {
-                        long p;
-                        
-                        p = pizGrowingArrayValueAtIndex (x->tempMap[x->intersectionCardinal], t);
-                        
-                        if (pizItemset128IsEqual (&(x->stock[p].itemset),
-                            &(x->intersection))) {
-                                generator = false;
-                            }
+                    if (pizItemset128IsEqual (&(x->stock[p].itemset), &(x->intersection))) {
+                        generator = false;
                     }
                 }
-                
-                if (generator) {
-                    if (!pizBoundedStackPop (x->ticketMachine)) {
-                        long n = pizBoundedStackPoppedValue (x->ticketMachine);
+            }
+            
+            if (generator) {
+                if (!pizBoundedStackPop (x->ticketMachine)) {
+                    long n = pizBoundedStackPoppedValue (x->ticketMachine);
+                    
+                    if (pizGrowingArrayAppend (x->tempMap [x->intersectionCardinal], n)) {
+                        pizBoundedStackPush (x->ticketMachine, n);
+                        err = PIZ_MEMORY;
                         
-                        if (pizGrowingArrayAppend (x->tempMap [x->intersectionCardinal], n)) {
-                            pizBoundedStackPush (x->ticketMachine, n);
-                            err = PIZ_MEMORY;
-                        } else {
-                            x->stock[n].cardinal = x->intersectionCardinal;
-                            x->stock[n].itemset = x->intersection;
-                    
-                            x->count ++;
-                            x->needToMakeMap = true;
-                    
-                            if (x->intersectionCardinal > x->tempMapPeak) {
-                                    x->tempMapPeak = x->intersectionCardinal;
-                                }
-                            
-                            pizItemset128SetAtIndex (&(x->stock[n].childs), g);
-                            pizItemset128SetAtIndex (&(x->stock[g].parents), n);
-                            
-                            pizGaloisLatticeReconnect (x, g, n);
-                            
-                            if (pizItemset128IsEqual (&(x->intersection), &(x->toBeAdded))) {
-                                    goto end;
-                                }
+                    } else {
+                        x->stock[n].cardinal = x->intersectionCardinal;
+                        x->stock[n].itemset = x->intersection;
+                
+                        x->count ++;
+                        x->needToMakeMap = true;
+                
+                        if (x->intersectionCardinal > x->tempMapPeak) {
+                            x->tempMapPeak = x->intersectionCardinal;
+                        }
+                        
+                        pizItemset128SetAtIndex (&(x->stock[n].childs), g);
+                        pizItemset128SetAtIndex (&(x->stock[g].parents), n);
+                        
+                        pizGaloisLatticeReconnect (x, g, n);
+                        
+                        if (pizItemset128IsEqual (&(x->intersection), &(x->toBeAdded))) {
+                            goto end;
                         }
                     }
                 }
             }
         }
+    }
+    //    
     }
         
 end:
@@ -281,14 +283,14 @@ end:
         err |= pizGaloisLatticeMakeMap (x);
         
         while (x->count > x->thresholdToKillConcepts) {
-                pizGaloisLatticeKillConcept (x, x->targetedConcept);
-                pizGaloisLatticeMakeMap (x);
-            }
+            pizGaloisLatticeKillConcept (x, x->targetedConcept);
+            pizGaloisLatticeMakeMap (x);
+        }
     
         if (!x->count) {
-                pizItemset128SetAtIndex (&(x->stock[0].childs), 1);
-                pizItemset128SetAtIndex (&(x->stock[1].parents), 0);
-            }
+            pizItemset128SetAtIndex (&(x->stock[0].childs), 1);
+            pizItemset128SetAtIndex (&(x->stock[1].parents), 0);
+        }
         
         x->needToMakeMap = false;
     }
@@ -301,8 +303,8 @@ void pizGaloisLatticeClear (PIZGaloisLattice *x)
     long i;
     
     for (i = 1; i <= x->mapPeak; i++) {
-            pizGrowingArrayClear (x->map[i]);
-        }
+        pizGrowingArrayClear (x->map[i]);
+    }
         
     x->mapPeak = 0;
     
@@ -314,18 +316,18 @@ void pizGaloisLatticeClear (PIZGaloisLattice *x)
                     
     for (i = 2; i < PIZ_ITEMSET128_SIZE; i++) {
         if (x->stock[i].cardinal) {
-                x->stock[i].cardinal = 0;
-                pizItemset128Clear (&(x->stock[i].itemset));
-                pizItemset128Clear (&(x->stock[i].childs));
-                pizItemset128Clear (&(x->stock[i].parents));
-            }
+            x->stock[i].cardinal = 0;
+            pizItemset128Clear (&(x->stock[i].itemset));
+            pizItemset128Clear (&(x->stock[i].childs));
+            pizItemset128Clear (&(x->stock[i].parents));
         }
+    }
     
     pizBoundedStackClear (x->ticketMachine);
                                 
     for (i = (PIZ_ITEMSET128_SIZE - 1); i > 1; i--) {
-            pizBoundedStackPush (x->ticketMachine, i);
-        }
+        pizBoundedStackPush (x->ticketMachine, i);
+    }
         
     x->count            = 0;
     x->shuttle          = -1;
@@ -337,59 +339,59 @@ PIZError pizGaloisLatticeProceed (PIZGaloisLattice *x, long argc, long *argv)
     long err = PIZ_ERROR;
     
     if ((argc > 0 && argv) && (x->count > 0)) {
-        long k = 0;
-        
-        if (x->shuttle == -1) {
-                x->shuttle          = x->targetedConcept;
-                x->previousShuttle  = x->targetedConcept;
-            }
-        
-        while (argc) {
-            long i;
-            long indexConnections = 0;
-            long connections[PIZ_ITEMSET128_SIZE];
-            
-            if (x->shuttle > 1) {
-                long j;
-                long t = (long)(PIZ_ITEMSET128_SIZE * (rand ( ) / (RAND_MAX + 1.0)));
-                                            
-                for (j = 0; j < PIZ_ITEMSET128_SIZE; j++) {
-                    if (pizItemset128IsSetAtIndex (&(x->stock[x->shuttle].itemset), 
-                        (t + j) % PIZ_ITEMSET128_SIZE)) {
-                            if (argc) {
-                                argv[k] = (t + j) % PIZ_ITEMSET128_SIZE;
-                                
-                                argc --;
-                                k ++;
-                            }
-                        }
-                    }
+    //
+    long k = 0;
+    
+    if (x->shuttle == -1) {
+        x->shuttle          = x->targetedConcept;
+        x->previousShuttle  = x->targetedConcept;
+    }
+    
+    while (argc) {
+    //
+    long i, indexConnections = 0;
+    long connections[PIZ_ITEMSET128_SIZE];
+    
+    if (x->shuttle > 1) {
+        long j, t = (long)(PIZ_ITEMSET128_SIZE * (rand ( ) / (RAND_MAX + 1.0)));
+                                    
+        for (j = 0; j < PIZ_ITEMSET128_SIZE; j++) {
+            if (pizItemset128IsSetAtIndex (&(x->stock[x->shuttle].itemset), (t + j) % PIZ_ITEMSET128_SIZE)) {
+                if (argc) {
+                    argv[k] = (t + j) % PIZ_ITEMSET128_SIZE;
+                    argc --;
+                    k ++;
                 }
-            
-            for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-                if (pizItemset128IsSetAtIndex (&(x->stock[x->shuttle].childs), i) || 
-                    pizItemset128IsSetAtIndex (&(x->stock[x->shuttle].parents), i)) {
-                        connections[indexConnections] = i;
-                        indexConnections ++;
-                    }
-                }
-            
-            if (x->shuttle < 2) {
-                x->previousShuttle = x->shuttle;
-                x->shuttle = connections[(long)(indexConnections * (rand ( ) / (RAND_MAX + 1.0)))];
-            } else {
-                long n;
-                
-                do {        
-                n = connections[(long)(indexConnections * (rand ( ) / (RAND_MAX + 1.0)))];
-                } while (n == x->previousShuttle);
-                
-                x->previousShuttle = x->shuttle;
-                x->shuttle = n;
             }
         }
-            
-        err = PIZ_GOOD;
+    }
+    
+    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+        if (pizItemset128IsSetAtIndex (&(x->stock[x->shuttle].childs), i) || 
+            pizItemset128IsSetAtIndex (&(x->stock[x->shuttle].parents), i)) {
+            connections[indexConnections] = i;
+            indexConnections ++;
+        }
+    }
+    
+    if (x->shuttle < 2) {
+        x->previousShuttle = x->shuttle;
+        x->shuttle = connections[(long)(indexConnections * (rand ( ) / (RAND_MAX + 1.0)))];
+    } else {
+        long n;
+        
+        do {        
+        n = connections[(long)(indexConnections * (rand ( ) / (RAND_MAX + 1.0)))];
+        } while (n == x->previousShuttle);
+        
+        x->previousShuttle = x->shuttle;
+        x->shuttle = n;
+    }
+    //    
+    }
+        
+    err = PIZ_GOOD;
+    //    
     }
     
     return err;
@@ -409,29 +411,27 @@ PIZ_INLINE void pizGaloisLatticeReconnect (PIZGaloisLattice *x, long g, long n)
     
     for (i = 0; i < x->intersectionCardinal; i++) {
         long j;
-        
         for (j = 0; j < pizGrowingArrayCount (x->tempMap[i]); j++) {
             long p = pizGrowingArrayValueAtIndex (x->tempMap[i], j);
             
             if (pizItemset128IsIncluded (&(x->stock[p].itemset), &(x->intersection))) {
-                long t;
-                long isParentOfGenerator = true;
+                long t, isParentOfGenerator = true;
                 
                 for (t = 0; t < PIZ_ITEMSET128_SIZE; t++) {
                     if (pizItemset128IsSetAtIndex (&(x->stock[p].childs), t)) {
                         if (pizItemset128IsIncluded (&(x->stock[t].itemset), &(x->intersection))) {
-                                isParentOfGenerator = false;
-                                break;
-                            }
+                            isParentOfGenerator = false;
+                            break;
                         }
                     }
+                }
                 
                 if (isParentOfGenerator) {
-                        pizItemset128UnsetAtIndex   (&(x->stock[g].parents),    p);
-                        pizItemset128UnsetAtIndex   (&(x->stock[p].childs),     g);
-                        pizItemset128SetAtIndex     (&(x->stock[n].parents),    p);
-                        pizItemset128SetAtIndex     (&(x->stock[p].childs),     n);
-                    }
+                    pizItemset128UnsetAtIndex   (&(x->stock[g].parents),    p);
+                    pizItemset128UnsetAtIndex   (&(x->stock[p].childs),     g);
+                    pizItemset128SetAtIndex     (&(x->stock[n].parents),    p);
+                    pizItemset128SetAtIndex     (&(x->stock[p].childs),     n);
+                }
             }
         }
     }
@@ -439,34 +439,33 @@ PIZ_INLINE void pizGaloisLatticeReconnect (PIZGaloisLattice *x, long g, long n)
 
 PIZError pizGaloisLatticeMakeMap (PIZGaloisLattice *x)
 {
-    long i;
-    long j = 0;
+    long i, j = 0;
     long err = PIZ_GOOD;
     long k = -1;
     
     x->targetedConcept = -1;
     
     if (x->count) {
-            k = (long)(x->count * (rand ( ) / (RAND_MAX + 1.0)));
-        }
+        k = (long)(x->count * (rand ( ) / (RAND_MAX + 1.0)));
+    }
     
     for (i = 1; i <= x->mapPeak; i++) {
-            pizGrowingArrayClear (x->map[i]);
-        }
+        pizGrowingArrayClear (x->map[i]);
+    }
     
     x->mapPeak = 0;
         
     for (i = 2; i < PIZ_ITEMSET128_SIZE; i++) {
         if (x->stock[i].cardinal) {
             if (x->stock[i].cardinal > x->mapPeak) {
-                    x->mapPeak = x->stock[i].cardinal;
-                }
+                x->mapPeak = x->stock[i].cardinal;
+            }
             
             err |= pizGrowingArrayAppend (x->map[x->stock[i].cardinal], i);
             
             if (k == j) {
-                    x->targetedConcept = i;
-                }
+                x->targetedConcept = i;
+            }
                 
             j ++;
         }
@@ -478,39 +477,40 @@ PIZError pizGaloisLatticeMakeMap (PIZGaloisLattice *x)
 void pizGaloisLatticeKillConcept (PIZGaloisLattice *x, long n)
 {
     if (n > 1) {
-    
-        long i;
+    //
+    long i;
+        
+    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+        if (pizItemset128IsSetAtIndex (&(x->stock[n].parents), i)) {
+            pizItemset128UnsetAtIndex (&(x->stock[i].childs), n);
+            pizItemset128UnsetAtIndex (&(x->stock[n].parents), i);
             
-        for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-            if (pizItemset128IsSetAtIndex (&(x->stock[n].parents), i)) {
-                pizItemset128UnsetAtIndex (&(x->stock[i].childs), n);
-                pizItemset128UnsetAtIndex (&(x->stock[n].parents), i);
-                
-                if (pizItemset128Count (&(x->stock[i].childs)) == 0) {
-                        pizGaloisLatticeKillConcept (x, i);
-                    }
-            }
-            
-            if (pizItemset128IsSetAtIndex (&(x->stock[n].childs), i)) {
-                pizItemset128UnsetAtIndex (&(x->stock[i].parents), n);
-                pizItemset128UnsetAtIndex (&(x->stock[n].childs), i);
-                
-                if (pizItemset128Count (&(x->stock[i].parents)) == 0) {
-                        pizGaloisLatticeKillConcept (x, i);
-                    }
+            if (pizItemset128Count (&(x->stock[i].childs)) == 0) {
+                pizGaloisLatticeKillConcept (x, i);
             }
         }
         
-        x->stock[n].cardinal = 0;
-        pizItemset128Clear (&(x->stock[n].itemset));
-                
-        x->count --;
-        pizBoundedStackPush (x->ticketMachine, n);
-        
-        if (x->shuttle == n) {
-                x->shuttle          = -1;
-                x->previousShuttle  = -1;
+        if (pizItemset128IsSetAtIndex (&(x->stock[n].childs), i)) {
+            pizItemset128UnsetAtIndex (&(x->stock[i].parents), n);
+            pizItemset128UnsetAtIndex (&(x->stock[n].childs), i);
+            
+            if (pizItemset128Count (&(x->stock[i].parents)) == 0) {
+                pizGaloisLatticeKillConcept (x, i);
             }
+        }
+    }
+    
+    x->stock[n].cardinal = 0;
+    pizItemset128Clear (&(x->stock[n].itemset));
+            
+    x->count --;
+    pizBoundedStackPush (x->ticketMachine, n);
+    
+    if (x->shuttle == n) {
+        x->shuttle          = -1;
+        x->previousShuttle  = -1;
+    }
+    //    
     }
 }
 

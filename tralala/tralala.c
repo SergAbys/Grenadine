@@ -1099,7 +1099,9 @@ t_max_err tralala_setScaleKey (t_tralala *x, t_object *attr, long argc, t_atom *
                 pizSequenceSetScale (x->live, x->key, x->type, NULL);
             }
             
-            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+            if (LIVE) {
+                DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+            }
         }
         // 
         }
@@ -1258,7 +1260,9 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
                 
                 x->patternCell = s;
                 
-                DIRTYLAYER_SET (DIRTY_GRID);
+                if (LIVE) {
+                    DIRTYLAYER_SET (DIRTY_GRID);
+                }
             }
             //    
             }

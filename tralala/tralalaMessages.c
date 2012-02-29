@@ -279,7 +279,7 @@ void tralala_parseArguments (t_tralala *x, t_tralalaData *data, long argc, t_ato
     data->option    = OPTION_NONE;
     data->selector  = PIZ_PITCH;
     data->sequence  = x->live;
-    
+        
     if (argc && argv && data) {
         long i;
         
@@ -770,7 +770,10 @@ void tralala_slotRecall (t_tralala *x, long n)
         x->noteValue = pizSequenceNoteValue (x->user);
         
         DIRTYPATTR
-        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_GRID | DIRTY_ZONE | DIRTY_SEQUENCE);
+        
+        if (USER) {
+            DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_GRID | DIRTY_ZONE | DIRTY_SEQUENCE);
+        }
     }
 }
 

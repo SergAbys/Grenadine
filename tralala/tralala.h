@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 27/02/12.
+ *  Last modified : 28/02/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -242,25 +242,25 @@
 #define UP              0
 #define DOWN            1
 
-#define ARRAYSLOCK      systhread_mutex_lock (&x->arraysMutex);
-#define ARRAYSUNLOCK    systhread_mutex_unlock (&x->arraysMutex);
+#define ARRAYSLOCK          systhread_mutex_lock (&x->arraysMutex); //post ("+++ %s", __FUNCTION__);
+#define ARRAYSUNLOCK        systhread_mutex_unlock (&x->arraysMutex); //post ("--- %s", __FUNCTION__);
 
-#define METHODSLOCK     systhread_mutex_lock (&x->methodsMutex);
-#define METHODSUNLOCK   systhread_mutex_unlock (&x->methodsMutex);
+#define METHODSLOCK         systhread_mutex_lock (&x->methodsMutex); 
+#define METHODSUNLOCK       systhread_mutex_unlock (&x->methodsMutex); 
 
-#define LEARNLOCK           systhread_mutex_lock (&x->learnMutex);
-#define LEARNUNLOCK         systhread_mutex_unlock (&x->learnMutex);
+#define LEARNLOCK           systhread_mutex_lock (&x->learnMutex); 
+#define LEARNUNLOCK         systhread_mutex_unlock (&x->learnMutex); 
 
-#define ALGORITHMSLOCK      systhread_mutex_lock (&x->algorithmsMutex);
-#define ALGORITHMSUNLOCK    systhread_mutex_unlock (&x->algorithmsMutex);
+#define ALGORITHMSLOCK      systhread_mutex_lock (&x->algorithmsMutex); 
+#define ALGORITHMSUNLOCK    systhread_mutex_unlock (&x->algorithmsMutex); 
 
-#define DIRTYPATTR      clock_fdelay (x->notifyClock, CLOCK_NOTIFY_INTERVAL); 
-#define DIRTYSLOTS      if (x->saveSlotsWithPatcher) {                                  \
-                            jpatcher_set_dirty (jbox_get_patcher ((t_object *)x), 1);   \
-                        }   
-#define DIRTYCHANNEL    if (x->saveChannelWithPatcher) {                                \
-                            jpatcher_set_dirty (jbox_get_patcher ((t_object *)x), 1);   \
-                        }
+#define DIRTYPATTR          clock_fdelay (x->notifyClock, CLOCK_NOTIFY_INTERVAL); 
+#define DIRTYSLOTS          if (x->saveSlotsWithPatcher) {                                  \
+                                jpatcher_set_dirty (jbox_get_patcher ((t_object *)x), 1);   \
+                            }   
+#define DIRTYCHANNEL        if (x->saveChannelWithPatcher) {                                \
+                                jpatcher_set_dirty (jbox_get_patcher ((t_object *)x), 1);   \
+                            }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
