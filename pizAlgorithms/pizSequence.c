@@ -85,48 +85,58 @@ PIZSequence *pizSequenceNew ( )
     PIZSequence *x = NULL;
     
     if (x = (PIZSequence *)malloc (sizeof(PIZSequence))) {
+    //
+    long argv[2]    = {0, PIZ_SEQUENCE_MAXIMUM_NOTES};
     
-        long argv[2]    = {0, PIZ_SEQUENCE_MAXIMUM_NOTES};
+    x->map           = pizGrowingArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
+    x->scale         = pizGrowingArrayNew (PIZ_MAGIC_SCALE);
+    x->pattern       = pizGrowingArrayNew (0);
+    x->values1       = (long *)malloc (sizeof(long) * PIZ_TEMP_SIZE);
+    x->values2       = (long *)malloc (sizeof(long) * PIZ_TEMP_SIZE);
+    x->notes1        = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_TEMP_SIZE);
+    x->notes2        = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_TEMP_SIZE);
+    x->hashTable     = pizBoundedHashTableNew (2, argv);
+    x->ticketMachine = pizBoundedStackNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
+    
+    if (x->map && 
+        x->scale &&
+        x->pattern &&
+        x->values1 &&
+        x->values2 &&
+        x->notes1 &&
+        x->notes2 &&
+        x->hashTable &&
+        x->ticketMachine &&
+        (x->timeline = (PIZLinklist **)calloc (PIZ_SEQUENCE_TIMELINE_SIZE, sizeof(PIZLinklist **)))) {
+        long i;
         
-        x->map          = pizGrowingArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
-        x->scale        = pizGrowingArrayNew (PIZ_MAGIC_SCALE);
-        x->pattern      = pizGrowingArrayNew (0);
-        x->values1      = (long *)malloc (sizeof(long) * PIZ_TEMP_SIZE);
-        x->values2      = (long *)malloc (sizeof(long) * PIZ_TEMP_SIZE);
-        x->notes1       = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_TEMP_SIZE);
-        x->notes2       = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_TEMP_SIZE);
-        x->hashTable    = pizBoundedHashTableNew (2, argv);
-        
-        if (x->map && 
-            x->scale &&
-            x->pattern &&
-            x->values1 &&
-            x->values2 &&
-            x->notes1 &&
-            x->notes2 &&
-            x->hashTable &&
-            (x->timeline = (PIZLinklist **)calloc (PIZ_SEQUENCE_TIMELINE_SIZE, sizeof(PIZLinklist **)))) {
-                srand ((unsigned int)time(NULL));
-                                
-                pthread_mutex_init (&x->lock, NULL);
-                
-                x->markedNote       = NULL;
-                x->start            = PIZ_DEFAULT_START;
-                x->end              = PIZ_DEFAULT_END;
-                x->down             = PIZ_DEFAULT_DOWN;
-                x->up               = PIZ_DEFAULT_UP;
-                x->count            = 0;
-                x->index            = 0;
-                x->chance           = PIZ_DEFAULT_CHANCE;
-                x->channel          = PIZ_DEFAULT_CHANNEL;
-                x->velocity         = 0;
-                x->cell             = PIZ_NOTE_NONE;
-                x->grid             = PIZ_NOTE_NONE;
-                x->noteValue        = PIZ_NOTE_NONE;
-        } else {
-            pizSequenceFree (x);
-            x = NULL;
+        for (i = (PIZ_SEQUENCE_MAXIMUM_NOTES - 1); i >= 0; i--) {
+            pizBoundedStackPush (x->ticketMachine, i);
         }
+        
+        srand ((unsigned int)time(NULL));
+                        
+        pthread_mutex_init (&x->lock, NULL);
+        
+        x->markedNote       = NULL;
+        x->start            = PIZ_DEFAULT_START;
+        x->end              = PIZ_DEFAULT_END;
+        x->down             = PIZ_DEFAULT_DOWN;
+        x->up               = PIZ_DEFAULT_UP;
+        x->count            = 0;
+        x->index            = 0;
+        x->chance           = PIZ_DEFAULT_CHANCE;
+        x->channel          = PIZ_DEFAULT_CHANNEL;
+        x->velocity         = 0;
+        x->cell             = PIZ_NOTE_NONE;
+        x->grid             = PIZ_NOTE_NONE;
+        x->noteValue        = PIZ_NOTE_NONE;
+            
+    } else {
+        pizSequenceFree (x);
+        x = NULL;
+    }
+    //
     }
     
     return x;
@@ -153,6 +163,7 @@ void pizSequenceFree (PIZSequence *x)
         pizGrowingArrayFree (x->pattern);
         
         pizBoundedHashTableFree (x->hashTable);
+        pizBoundedStackFree (x->ticketMachine);
         
         if (x->values1) {
             free (x->values1);
@@ -853,6 +864,10 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
         err |= (pitch > x->up);
     }
         
+    if (!err) {
+    //
+    err |= pizBoundedStackPop (x->ticketMachine);
+    
     if (!err && (newNote = (PIZNote *)malloc (sizeof(PIZNote)))) {
         newNote->flags              = PIZ_NOTE_FLAG_NONE;
         newNote->data[PIZ_PITCH]    = pitch;
@@ -861,6 +876,7 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
         newNote->data[PIZ_CHANNEL]  = channel;
         newNote->isSelected         = isSelected;
         newNote->position           = position;
+        newNote->tag                = pizBoundedStackPoppedValue (x->ticketMachine);
     
         if (!x->timeline[newNote->position]) {
             if (!(x->timeline[newNote->position] = pizLinklistNew ( ))) {
@@ -872,11 +888,13 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
             if (isMarked) {
                 x->markedNote = newNote;
             }
-            x->count ++;
+            x->count ++; 
         } else {
             free (newNote);
             newNote = NULL;
         }
+    }
+    //    
     }
         
     return newNote;
@@ -886,13 +904,15 @@ PIZError pizSequenceRemoveNote (PIZSequence *x, PIZNote *note)
 {
     long err = PIZ_GOOD;
     long p = note->position;
-    
-    if (note == x->markedNote) {
-        x->markedNote = NULL;
-    }
-                    
-    if (!(err = pizLinklistRemoveByPtr (x->timeline[p], (void *)note))) {
-        x->count --;
+
+    if (!(err |= pizBoundedStackPush (x->ticketMachine, note->tag))) {
+        if (note == x->markedNote) {
+            x->markedNote = NULL;
+        }
+
+        if (!(err = pizLinklistRemoveByPtr (x->timeline[p], (void *)note))) {
+            x->count --; 
+        }
     }
     
     return err;
@@ -902,6 +922,12 @@ void pizSequenceRemoveAllNotes (PIZSequence *x)
 {
     if (x->count) {
         long i, p;
+        
+        pizBoundedStackClear (x->ticketMachine);
+        
+        for (i = (PIZ_SEQUENCE_MAXIMUM_NOTES - 1); i >= 0; i--) {
+            pizBoundedStackPush (x->ticketMachine, i);
+        }
         
         for (i = 0; i < pizGrowingArrayCount (x->map); i++) {
             p = pizGrowingArrayValueAtIndex (x->map, i);
@@ -916,7 +942,7 @@ void pizSequenceRemoveAllNotes (PIZSequence *x)
 }
 
 void pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
-{
+{/*
     long err = PIZ_GOOD; 
     long position = note->position;
     
@@ -932,7 +958,7 @@ void pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
                 note->position = newPosition;
             }
         } 
-    }
+    }*/
 }
 
 void pizSequenceMakeMap (PIZSequence *x)
