@@ -207,7 +207,7 @@ PIZError pizFiniteStateAdd (PIZFiniteState *x, long argc, long *argv)
     while ((x->count > x->thresholdToMergeNodes) && !err2) {
         err2 = pizFiniteStateMergeNodes (x);
     }
-     //   
+    //   
     }
     
     return err1;

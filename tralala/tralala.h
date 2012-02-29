@@ -234,25 +234,25 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define VIEWTEXT        (x->viewText == 1)
-#define USER            (x->sequenceMode == 0)
-#define LIVE            (x->sequenceMode == 1)
-#define SELECT          0
-#define INVERT          1 
-#define UP              0
-#define DOWN            1
+#define VIEWTEXT            (x->viewText == 1)
+#define USER                (x->sequenceMode == 0)
+#define LIVE                (x->sequenceMode == 1)
+#define SELECT              0
+#define INVERT              1 
+#define UP                  0
+#define DOWN                1
 
-#define ARRAYSLOCK          systhread_mutex_lock (&x->arraysMutex); //post ("+++ %s", __FUNCTION__);
-#define ARRAYSUNLOCK        systhread_mutex_unlock (&x->arraysMutex); //post ("--- %s", __FUNCTION__);
+#define ARRAYSLOCK          systhread_mutex_lock (&x->arraysMutex); 
+#define ARRAYSUNLOCK        systhread_mutex_unlock (&x->arraysMutex);
 
 #define METHODSLOCK         systhread_mutex_lock (&x->methodsMutex); 
 #define METHODSUNLOCK       systhread_mutex_unlock (&x->methodsMutex); 
 
-#define LEARNLOCK           systhread_mutex_lock (&x->learnMutex); 
-#define LEARNUNLOCK         systhread_mutex_unlock (&x->learnMutex); 
+#define LEARNLOCK           systhread_mutex_lock (&x->learnMutex);
+#define LEARNUNLOCK         systhread_mutex_unlock (&x->learnMutex);
 
-#define ALGORITHMSLOCK      systhread_mutex_lock (&x->algorithmsMutex); 
-#define ALGORITHMSUNLOCK    systhread_mutex_unlock (&x->algorithmsMutex); 
+#define ALGORITHMSLOCK      systhread_mutex_lock (&x->algorithmsMutex);
+#define ALGORITHMSUNLOCK    systhread_mutex_unlock (&x->algorithmsMutex);
 
 #define DIRTYPATTR          clock_fdelay (x->notifyClock, CLOCK_NOTIFY_INTERVAL); 
 #define DIRTYSLOTS          if (x->saveSlotsWithPatcher) {                                  \
@@ -550,11 +550,18 @@ void            tralala_mouseenter              (t_tralala *x, t_object *patcher
 void            tralala_mouseleave              (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
 void            tralala_mousemove               (t_tralala *x, t_object *patcherview, t_pt pt, long modifiers);
 
-void            tralala_mousewheel              (t_tralala *x, t_object *view, t_pt pt, long modifiers, 
-                                                double x_inc, double y_inc);
+void            tralala_mousewheel              (t_tralala *x, 
+                                                t_object *view, 
+                                                t_pt pt, 
+                                                long modifiers, 
+                                                double x_inc,
+                                                double y_inc);
 
-void            tralala_key                     (t_tralala *x, t_object *patcherview, 
-                                                long keycode, long modifiers, long textcharacter);
+void            tralala_key                     (t_tralala *x, 
+                                                t_object *patcherview, 
+                                                long keycode, 
+                                                long modifiers,
+                                                long textcharacter);
 
 PIZ_LOCAL void  tralala_popupRightClickMenu     (t_tralala *x, t_pt pt, long menuMode);
 
