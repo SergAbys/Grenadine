@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    28 February 2012
+ * \date    29 February 2012
  */
  
 /*
@@ -290,6 +290,7 @@ PIZError        pizSequenceProceedStep              (PIZSequence *x, PIZGrowingA
 
 PIZ_LOCAL PIZNote   *pizSequenceAddNote                 (PIZSequence *x, long *values, long flags);
 PIZ_LOCAL PIZError  pizSequenceRemoveNote               (PIZSequence *x, PIZNote *note);
+
 PIZ_LOCAL void      pizSequenceRemoveAllNotes           (PIZSequence *x);
 PIZ_LOCAL void      pizSequenceMoveNote                 (PIZSequence *x, PIZNote *note, long newPosition);
 PIZ_LOCAL void      pizSequenceMakeMap                  (PIZSequence *x);

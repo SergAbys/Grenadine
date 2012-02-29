@@ -1,7 +1,7 @@
 /*
  * \file    pizFactorOracleExtended.c
  * \author  Jean Sapristi
- * \date    31 janvier 2012
+ * \date    29 February 2012
  */
 
 /*

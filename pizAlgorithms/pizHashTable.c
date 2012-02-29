@@ -1,7 +1,7 @@
 /*
  * \file    pizHashTable.c
  * \author  Jean Sapristi
- * \date    23 janvier 2012
+ * \date    29 February 2012
  */
  
 /*
