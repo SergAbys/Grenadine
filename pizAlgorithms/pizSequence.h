@@ -221,6 +221,7 @@ typedef struct _PIZSequence {
     PIZNoteValue        cell;
     PIZNoteValue        grid;
     PIZNoteValue        noteValue;
+    PIZBoundedStack     *ticketMachine;
     } PIZSequence;
 
 // -------------------------------------------------------------------------------------------------------------
