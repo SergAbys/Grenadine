@@ -199,7 +199,6 @@ typedef struct _PIZNote {
 
 typedef struct _PIZSequence {
     pthread_mutex_t     lock;
-    long                timelineSize;
     long                *values1;
     long                *values2;
     PIZNote             **notes1;
@@ -210,6 +209,11 @@ typedef struct _PIZSequence {
     PIZGrowingArray     *pattern;
     PIZNote             *markedNote;
     PIZGrowingArray     *map;
+    PIZBoundedStack     *ticketMachine;
+    PIZItemset128       addedTags;
+    PIZItemset128       removedTags;
+    PIZItemset128       changedTags;
+    long                timelineSize;
     long                start;
     long                end;
     long                down;
@@ -222,7 +226,6 @@ typedef struct _PIZSequence {
     PIZNoteValue        cell;
     PIZNoteValue        grid;
     PIZNoteValue        noteValue;
-    PIZBoundedStack     *ticketMachine;
     } PIZSequence;
 
 // -------------------------------------------------------------------------------------------------------------

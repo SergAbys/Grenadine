@@ -120,6 +120,10 @@ PIZSequence *pizSequenceNew (long size)
             pizBoundedStackPush (x->ticketMachine, i);
         }
         
+        pizItemset128Clear (&x->addedTags);
+        pizItemset128Clear (&x->removedTags);
+        pizItemset128Clear (&x->changedTags);
+        
         srand ((unsigned int)time(NULL));
                         
         pthread_mutex_init (&x->lock, NULL);
@@ -895,7 +899,10 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
                 x->markedNote = newNote;
             }
             x->count ++; 
+            pizItemset128SetAtIndex (&x->addedTags, newNote->tag);
+            post ("+ / %ld", newNote->tag);
         } else {
+            pizBoundedStackPush (x->ticketMachine, newNote->tag);
             free (newNote);
             newNote = NULL;
         }
@@ -910,14 +917,19 @@ PIZError pizSequenceRemoveNote (PIZSequence *x, PIZNote *note)
 {
     long err = PIZ_GOOD;
     long p = note->position;
-
-    if (!(err |= pizBoundedStackPush (x->ticketMachine, note->tag))) {
+    long tag = note->tag;
+    
+    if (!(err |= pizBoundedStackPush (x->ticketMachine, tag))) {
         if (note == x->markedNote) {
             x->markedNote = NULL;
         }
 
         if (!(err = pizLinklistRemoveByPtr (x->timeline[p], (void *)note))) {
             x->count --; 
+            pizItemset128SetAtIndex     (&x->removedTags, tag);
+            pizItemset128UnsetAtIndex   (&x->addedTags, tag);
+            pizItemset128UnsetAtIndex   (&x->changedTags, tag);
+            post ("- / %ld", tag);
         }
     }
     
@@ -927,23 +939,26 @@ PIZError pizSequenceRemoveNote (PIZSequence *x, PIZNote *note)
 void pizSequenceRemoveAllNotes (PIZSequence *x)
 {
     if (x->count) {
-        long i, p;
+    //
+    long i;
+    
+    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
+        PIZNote *note       = NULL;
+        PIZNote *nextNote   = NULL;
         
-        pizBoundedStackClear (x->ticketMachine);
+        long p = pizGrowingArrayValueAtIndex (x->map, i);
         
-        for (i = (PIZ_SEQUENCE_MAXIMUM_NOTES - 1); i >= 0; i--) {
-            pizBoundedStackPush (x->ticketMachine, i);
+        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+        
+        while (note) {
+            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+            pizSequenceRemoveNote (x, note);
+            note = nextNote;
         }
-        
-        for (i = 0; i < pizGrowingArrayCount (x->map); i++) {
-            p = pizGrowingArrayValueAtIndex (x->map, i);
-            pizLinklistClear (x->timeline[p]);
-        }
-        
-        pizGrowingArrayClear (x->map);
-        
-        x->count = 0;
-        x->markedNote = NULL;
+    }
+    
+    pizGrowingArrayClear (x->map);
+    //    
     }
 }
 
