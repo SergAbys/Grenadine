@@ -1,7 +1,7 @@
 /*
  * \file    pizGaloisLattice.c
  * \author  Jean Sapristi
- * \date    29 February 2012
+ * \date    February 29, 2012.
  */
  
 /*
