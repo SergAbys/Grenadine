@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    29 February 2012
+ * \date    1 March 2012
  */
  
 /*
@@ -55,8 +55,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #define PIZ_SEQUENCE_VERSION_MAJOR      1
-#define PIZ_SEQUENCE_VERSION_MINOR      0
-#define PIZ_SEQUENCE_TIMELINE_SIZE      576   
+#define PIZ_SEQUENCE_VERSION_MINOR      0  
 
 #define PIZ_SEQUENCE_MAXIMUM_NOTES      128   
 #define PIZ_SEQUENCE_MAXIMUM_DURATION   96
@@ -77,6 +76,7 @@
 #define PIZ_DEFAULT_CHANCE              100
 #define PIZ_DEFAULT_CHANNEL             1
 #define PIZ_DEFAULT_VELOCITY            90
+#define PIZ_DEFAULT_TIMELINE_SIZE       576 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -199,6 +199,7 @@ typedef struct _PIZNote {
 
 typedef struct _PIZSequence {
     pthread_mutex_t     lock;
+    long                timelineSize;
     long                *values1;
     long                *values2;
     PIZNote             **notes1;
@@ -227,7 +228,7 @@ typedef struct _PIZSequence {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZSequence     *pizSequenceNew                     (void);
+PIZSequence     *pizSequenceNew                     (long size);
 void            pizSequenceFree                     (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------

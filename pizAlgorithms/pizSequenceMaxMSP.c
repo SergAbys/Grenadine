@@ -126,11 +126,11 @@ bool pizSequenceResizeTempZone (PIZSequence *x, const PIZCoordinates *c, PIZData
     PIZLOCK
     
     switch (side) {
-    case PIZ_DATA_START : temp = CLAMP (pizSequenceSnapRound (x, c->position), 0, PIZ_SEQUENCE_TIMELINE_SIZE);
+    case PIZ_DATA_START : temp = CLAMP (pizSequenceSnapRound (x, c->position), 0, x->timelineSize);
                           if (piz_start != temp) { 
                           piz_start = temp; haveChanged = true; 
                           } break;
-    case PIZ_DATA_END   : temp = CLAMP (pizSequenceSnapRound (x, c->position), 0, PIZ_SEQUENCE_TIMELINE_SIZE); 
+    case PIZ_DATA_END   : temp = CLAMP (pizSequenceSnapRound (x, c->position), 0, x->timelineSize); 
                           if (piz_end != temp) { 
                           piz_end = temp; haveChanged = true; 
                           } break;
@@ -161,7 +161,7 @@ bool pizSequenceMoveTempZone (PIZSequence *x, long pitch, long position)
     PIZLOCK
     
     tempStart = pizSequenceSnapRound (x, piz_originStart + position);
-    tempStart = CLAMP (tempStart, 0, (PIZ_SEQUENCE_TIMELINE_SIZE - piz_originWidth));
+    tempStart = CLAMP (tempStart, 0, (x->timelineSize - piz_originWidth));
     tempDown  = CLAMP (piz_originDown + pitch, 0, (PIZ_MAGIC_PITCH - piz_originHeight));
     
     if ((tempStart != piz_start) || (tempDown != piz_down)) {

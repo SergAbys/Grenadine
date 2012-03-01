@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceTransform.c
  * \author  Jean Sapristi
- * \date    29 February 2012
+ * \date    1 March 2012
  */
  
 /*
@@ -702,7 +702,7 @@ bool pizSequenceChange (PIZSequence *x, PIZSelector selector, long value)
                                 0, PIZ_MAGIC_PITCH); break;
             case PIZ_VELOCITY : note->data[PIZ_VELOCITY] = CLAMP (note->data[PIZ_VELOCITY] + value, 
                                 0, PIZ_MAGIC_VELOCITY); break;
-            case PIZ_DURATION : max1 = PIZ_SEQUENCE_TIMELINE_SIZE - note->position;
+            case PIZ_DURATION : max1 = x->timelineSize - note->position;
                                 max2 = MIN (max1, PIZ_SEQUENCE_MAXIMUM_DURATION);
                                 note->data[PIZ_DURATION] = CLAMP (note->data[PIZ_DURATION] + value, 1, max2);
                                 break;
@@ -748,7 +748,7 @@ bool pizSequenceSet (PIZSequence *x, PIZSelector selector, long value)
                 switch (selector) {
                     case PIZ_PITCH    : note->data[PIZ_PITCH] = CLAMP (value, 0, PIZ_MAGIC_PITCH); break;
                     case PIZ_VELOCITY : note->data[PIZ_VELOCITY] = CLAMP (value, 0, PIZ_MAGIC_VELOCITY); break;
-                    case PIZ_DURATION : max1 = PIZ_SEQUENCE_TIMELINE_SIZE - note->position;
+                    case PIZ_DURATION : max1 = x->timelineSize - note->position;
                                         max2 = MIN (max1, PIZ_SEQUENCE_MAXIMUM_DURATION);
                                         note->data[PIZ_DURATION] = CLAMP (value, 1, max2); break;
                     case PIZ_CHANNEL  : note->data[PIZ_CHANNEL] = CLAMP (value, 0, PIZ_MAGIC_CHANNEL); break;
@@ -804,7 +804,7 @@ bool pizSequenceRandom (PIZSequence *x, PIZSelector selector, long minValue, lon
                                 0, PIZ_MAGIC_PITCH); break;
             case PIZ_VELOCITY : note->data[PIZ_VELOCITY] = CLAMP (note->data[PIZ_VELOCITY] + value, 
                                 0, PIZ_MAGIC_VELOCITY); break;
-            case PIZ_DURATION : max = PIZ_SEQUENCE_TIMELINE_SIZE - note->position;
+            case PIZ_DURATION : max = x->timelineSize - note->position;
                                 max = MIN (max, PIZ_SEQUENCE_MAXIMUM_DURATION);
                                 note->data[PIZ_DURATION] = CLAMP (note->data[PIZ_DURATION] + value, 1, max); 
                                 break;
@@ -977,13 +977,13 @@ void pizSequenceFillValues (PIZSequence *x, PIZSelector selector, long k, bool r
     if (selector == PIZ_DURATION) {
         if (!reverse) {
             for (i = 0; i < k; i++) {
-                x->notes1[i]->data[PIZ_DURATION] = MIN (x->values1[i], 
-                    PIZ_SEQUENCE_TIMELINE_SIZE - x->notes1[i]->position);
+                long t = x->timelineSize - x->notes1[i]->position;
+                x->notes1[i]->data[PIZ_DURATION] = MIN (x->values1[i], t);
             }
         } else {
             for (i = 0; i < k; i++) {
-                x->notes1[i]->data[PIZ_DURATION] = MIN (x->values1[(k - 1) - i], 
-                    PIZ_SEQUENCE_TIMELINE_SIZE - x->notes1[i]->position);
+                long t = x->timelineSize - x->notes1[i]->position;
+                x->notes1[i]->data[PIZ_DURATION] = MIN (x->values1[(k - 1) - i], t);
             }
         }
     } else {

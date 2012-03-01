@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    29 February 2012
+ * \date    1 March 2012
  */
  
 /*
@@ -80,13 +80,19 @@ static long piz_modes[ ] =
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZSequence *pizSequenceNew ( )
+PIZSequence *pizSequenceNew (long size)
 {
     PIZSequence *x = NULL;
     
     if (x = (PIZSequence *)malloc (sizeof(PIZSequence))) {
     //
     long argv[2]    = {0, PIZ_SEQUENCE_MAXIMUM_NOTES};
+    
+    if (size > 0) {
+        x->timelineSize = size;
+    } else {
+        x->timelineSize = PIZ_DEFAULT_TIMELINE_SIZE;
+    }
     
     x->map           = pizGrowingArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
     x->scale         = pizGrowingArrayNew (PIZ_MAGIC_SCALE);
@@ -107,7 +113,7 @@ PIZSequence *pizSequenceNew ( )
         x->notes2 &&
         x->hashTable &&
         x->ticketMachine &&
-        (x->timeline = (PIZLinklist **)calloc (PIZ_SEQUENCE_TIMELINE_SIZE, sizeof(PIZLinklist **)))) {
+        (x->timeline = (PIZLinklist **)calloc (x->timelineSize, sizeof(PIZLinklist **)))) {
         long i;
         
         for (i = (PIZ_SEQUENCE_MAXIMUM_NOTES - 1); i >= 0; i--) {
@@ -150,7 +156,7 @@ void pizSequenceFree (PIZSequence *x)
         if (x->timeline) {
             long i;
             
-            for (i = 0; i < PIZ_SEQUENCE_TIMELINE_SIZE; i++) {
+            for (i = 0; i < x->timelineSize; i++) {
                 pizLinklistFree (x->timeline[i]);
             }
                 
@@ -407,7 +413,7 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
                 temp -= x->grid;
             }
             
-            err |= ((x->markedNote->position + temp) > PIZ_SEQUENCE_TIMELINE_SIZE);
+            err |= ((x->markedNote->position + temp) > x->timelineSize);
             err |= (temp > PIZ_SEQUENCE_MAXIMUM_DURATION);
             err |= (temp <= 0);
             
@@ -577,8 +583,8 @@ PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *a)
         long tempDown   = pizGrowingArrayValueAtIndex (a, PIZ_DATA_DOWN);
         long tempUp     = pizGrowingArrayValueAtIndex (a, PIZ_DATA_UP);
         
-        tempStart   = CLAMP (tempStart, 0, PIZ_SEQUENCE_TIMELINE_SIZE);
-        tempEnd     = CLAMP (tempEnd,   0, PIZ_SEQUENCE_TIMELINE_SIZE);
+        tempStart   = CLAMP (tempStart, 0, x->timelineSize);
+        tempEnd     = CLAMP (tempEnd,   0, x->timelineSize);
         tempDown    = CLAMP (tempDown,  0, PIZ_MAGIC_PITCH);
         tempUp      = CLAMP (tempUp,    0, PIZ_MAGIC_PITCH);
 
@@ -854,7 +860,7 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
     }
                 
     err |= (position < 0);
-    err |= (position > (PIZ_SEQUENCE_TIMELINE_SIZE - MAX (duration, 1)));
+    err |= (position > (x->timelineSize - MAX (duration, 1)));
     err |= (x->count >= PIZ_SEQUENCE_MAXIMUM_NOTES);
     
     if (flags & PIZ_ADD_FLAG_CLIP) {
@@ -967,7 +973,7 @@ void pizSequenceMakeMap (PIZSequence *x)
             
     pizGrowingArrayClear (x->map);
                             
-    for (i = 0; i < PIZ_SEQUENCE_TIMELINE_SIZE; i++) {
+    for (i = 0; i < x->timelineSize; i++) {
         if (x->timeline[i] && pizLinklistCount (x->timeline[i])) {
             pizGrowingArrayAppend (x->map, i);
         }

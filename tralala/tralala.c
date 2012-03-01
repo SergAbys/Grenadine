@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 27/02/12.
+ *  Last modified : 01/03/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -520,9 +520,9 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
             
             jbox_ready ((t_jbox *)x);
 
-            x->user                 = pizSequenceNew        ( );
-            x->live                 = pizSequenceNew        ( );
-            x->listen               = pizSequenceNew        ( );
+            x->user                 = pizSequenceNew        (0);
+            x->live                 = pizSequenceNew        (0);
+            x->listen               = pizSequenceNew        (0);
             x->arrayPool            = pizArrayPoolNew       (2, initArrayPool);
             x->factorOracle         = pizFactorOracleNew    (0, NULL);
             x->galoisLattice        = pizGaloisLatticeNew   (0, NULL);
