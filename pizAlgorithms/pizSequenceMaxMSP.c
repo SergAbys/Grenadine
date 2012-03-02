@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceMaxMSP.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    March 2, 2012.
  */
  
 /*
@@ -222,7 +222,10 @@ void pizSequenceSelectAllNotes (PIZSequence *x)
         
         while (note) {
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-            note->isSelected = true;
+            if (!note->isSelected) {
+                note->isSelected = true;
+                PIZ_TAG (note->tag);
+            }
             note = nextNote;
         }
     }
@@ -269,7 +272,10 @@ long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, const PIZCoordinates 
             
                 if (!note->isSelected) {
                     pizSequenceUnselectNotes (x);
-                    note->isSelected = true;
+                    if (!note->isSelected) {
+                        note->isSelected = true;
+                        PIZ_TAG (note->tag);
+                    }
                     x->markedNote = note;
                 }
                 
@@ -327,7 +333,7 @@ long pizSequenceInvertNoteWithCoordinates (PIZSequence *x, const PIZCoordinates 
                     note->isSelected = true;
                     k = 1;
                 }
-                
+                PIZ_TAG (note->tag);
                 break;
             }
             
@@ -407,6 +413,7 @@ long pizSequenceDragLasso (PIZSequence *x, const PIZCoordinates *m, const PIZCoo
                 if (reverse) {
                     if (!(note->flags & PIZ_NOTE_FLAG_LASSO)) {
                         note->isSelected = !note->isSelected;
+                        PIZ_TAG (note->tag);
                         note->flags |= PIZ_NOTE_FLAG_LASSO;
                         k = 1;
                             
@@ -416,17 +423,20 @@ long pizSequenceDragLasso (PIZSequence *x, const PIZCoordinates *m, const PIZCoo
                     }
                 } else if (!note->isSelected) {
                     note->isSelected = true;
+                    PIZ_TAG (note->tag);
                     k = 1;
                 }
             } else {
                 if (reverse) {
                     if (note->flags & PIZ_NOTE_FLAG_LASSO) {
                         note->isSelected = !note->isSelected;
+                        PIZ_TAG (note->tag);
                         note->flags &= ~PIZ_NOTE_FLAG_LASSO;
                         k = 1;
                     }
                 } else if (note->isSelected)  {
                     note->isSelected = false;
+                    PIZ_TAG (note->tag);
                     k = 1;
                 }
             }
@@ -669,7 +679,10 @@ PIZ_INLINE void pizSequenceUnselectNotes (PIZSequence *x)
         
         while (note) {
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-            note->isSelected = false;
+            if (note->isSelected) {
+                note->isSelected = false;
+                PIZ_TAG (note->tag);
+            }
             note = nextNote;
         }
     }

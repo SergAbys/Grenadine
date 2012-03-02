@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    March 1, 2012.
+ * \date    March 2, 2012.
  */
  
 /*
@@ -120,9 +120,9 @@ PIZSequence *pizSequenceNew (long size)
             pizBoundedStackPush (x->ticketMachine, i);
         }
         
-        pizItemset128Clear (&x->addedTags);
-        pizItemset128Clear (&x->removedTags);
-        pizItemset128Clear (&x->changedTags);
+        pizItemset128Clear (&x->addedNotes);
+        pizItemset128Clear (&x->removedNotes);
+        pizItemset128Clear (&x->changedNotes);
         
         srand ((unsigned int)time(NULL));
                         
@@ -177,16 +177,16 @@ void pizSequenceFree (PIZSequence *x)
         
         if (x->values1) {
             free (x->values1);
-            }
+        }
         if (x->values2) {
             free (x->values2);
-            }
+        }
         if (x->notes1) {
             free (x->notes1);
-            }
+        }
         if (x->notes2) {
             free (x->notes2);
-            }
+        }
             
         PIZUNLOCK
         
@@ -423,6 +423,7 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
             
             if (!err) {
                 x->markedNote->data[PIZ_DURATION] = temp;
+                PIZ_TAG (x->markedNote->tag);
             }
         } else {
             temp = x->markedNote->data[selector];
@@ -434,7 +435,10 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
                 case PIZ_CHANNEL  : temp = CLAMP (temp, 0, PIZ_MAGIC_CHANNEL);  break;
             }
             
-            x->markedNote->data[selector] = temp;
+            if (x->markedNote->data[selector] != temp) {
+                x->markedNote->data[selector] = temp;
+                PIZ_TAG (x->markedNote->tag);
+            }
         }
     }
         
@@ -636,13 +640,19 @@ void pizSequenceTranspose (PIZSequence *x, long n)
         PIZNote *note       = NULL;
         PIZNote *nextNote   = NULL;
         
-        long p = pizGrowingArrayValueAtIndex (x->map, i);
+        long temp, p = pizGrowingArrayValueAtIndex (x->map, i);
         
         pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
         
         while (note) {
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-            note->data[PIZ_PITCH] = CLAMP (note->data[PIZ_PITCH] + n, 0, PIZ_MAGIC_PITCH);
+            
+            temp = CLAMP (note->data[PIZ_PITCH] + n, 0, PIZ_MAGIC_PITCH);
+            if (note->data[PIZ_PITCH] != temp) {
+                note->data[PIZ_PITCH] = temp;
+                PIZ_TAG (note->tag);
+            }
+            
             note = nextNote;
         }
     }
@@ -899,8 +909,7 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
                 x->markedNote = newNote;
             }
             x->count ++; 
-            pizItemset128SetAtIndex (&x->addedTags, newNote->tag);
-            post ("+ / %ld", newNote->tag);
+            pizItemset128SetAtIndex (&x->addedNotes, newNote->tag);
         } else {
             pizBoundedStackPush (x->ticketMachine, newNote->tag);
             free (newNote);
@@ -926,10 +935,9 @@ PIZError pizSequenceRemoveNote (PIZSequence *x, PIZNote *note)
 
         if (!(err = pizLinklistRemoveByPtr (x->timeline[p], (void *)note))) {
             x->count --; 
-            pizItemset128SetAtIndex     (&x->removedTags, tag);
-            pizItemset128UnsetAtIndex   (&x->addedTags, tag);
-            pizItemset128UnsetAtIndex   (&x->changedTags, tag);
-            post ("- / %ld", tag);
+            pizItemset128SetAtIndex     (&x->removedNotes, tag);
+            pizItemset128UnsetAtIndex   (&x->addedNotes, tag);
+            pizItemset128UnsetAtIndex   (&x->changedNotes, tag);
         }
     }
     
@@ -963,10 +971,12 @@ void pizSequenceRemoveAllNotes (PIZSequence *x)
 }
 
 void pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
-{/*
+{
     long err = PIZ_GOOD; 
     long position = note->position;
     
+    if (position != newPosition) {
+    //
     if (!x->timeline[newPosition]) {
         if (!(x->timeline[newPosition] = pizLinklistNew ( ))) {
             err |= PIZ_MEMORY;
@@ -977,9 +987,12 @@ void pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
         if (!pizLinklistChuckByPtr (x->timeline[position], (void *)note)) {            
             if (!pizLinklistInsert (x->timeline[newPosition], (void *)note)) {
                 note->position = newPosition;
+                PIZ_TAG (note->tag);
             }
         } 
-    }*/
+    }
+    //
+    }
 }
 
 void pizSequenceMakeMap (PIZSequence *x)

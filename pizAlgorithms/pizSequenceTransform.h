@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceTransform.h
  * \author  Jean Sapristi
- * \date    February 28, 2012.
+ * \date    March 2, 2012.
  */
  
 /*
@@ -78,7 +78,7 @@ bool pizSequenceCycle               (PIZSequence *x, PIZScaleKey key, const PIZG
 // -------------------------------------------------------------------------------------------------------------
 
 PIZ_LOCAL long pizSequencePickUpNotes   (PIZSequence *x);
-PIZ_LOCAL void pizSequenceFillValues    (PIZSequence *x, PIZSelector selector, long k, bool reverse);
+PIZ_LOCAL bool pizSequenceFillValues    (PIZSequence *x, PIZSelector selector, long k, bool reverse);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

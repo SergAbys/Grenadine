@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    March 1, 2012.
+ * \date    March 2, 2012.
  */
  
 /*
@@ -83,6 +83,11 @@
 
 #define PIZLOCK     pthread_mutex_lock (&x->lock);
 #define PIZUNLOCK   pthread_mutex_unlock (&x->lock);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define PIZ_TAG(n)  pizItemset128SetAtIndex (&x->changedNotes, (n))     
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -210,9 +215,9 @@ typedef struct _PIZSequence {
     PIZNote             *markedNote;
     PIZGrowingArray     *map;
     PIZBoundedStack     *ticketMachine;
-    PIZItemset128       addedTags;
-    PIZItemset128       removedTags;
-    PIZItemset128       changedTags;
+    PIZItemset128       addedNotes;
+    PIZItemset128       removedNotes;
+    PIZItemset128       changedNotes;
     long                timelineSize;
     long                start;
     long                end;
