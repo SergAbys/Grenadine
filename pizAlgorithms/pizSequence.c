@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    March 2, 2012.
+ * \date    March 6, 2012.
  */
  
 /*
@@ -120,15 +120,18 @@ PIZSequence *pizSequenceNew (long size)
             pizBoundedStackPush (x->ticketMachine, i);
         }
         
+        x->markedNote = NULL;
+        
         pizItemset128Clear (&x->addedNotes);
         pizItemset128Clear (&x->removedNotes);
         pizItemset128Clear (&x->changedNotes);
+        
+        x->changedZone = false;
         
         srand ((unsigned int)time(NULL));
                         
         pthread_mutex_init (&x->lock, NULL);
         
-        x->markedNote       = NULL;
         x->start            = PIZ_DEFAULT_START;
         x->end              = PIZ_DEFAULT_END;
         x->down             = PIZ_DEFAULT_DOWN;
@@ -614,6 +617,8 @@ PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *a)
             x->down  = tempDown;
             x->up    = tempUp;
             
+            x->changedZone = true;
+            
             err = PIZ_GOOD;
         } 
     }
@@ -629,12 +634,22 @@ PIZError pizSequenceSetZoneWithArray (PIZSequence *x, const PIZGrowingArray *a)
 
 void pizSequenceTranspose (PIZSequence *x, long n)
 {
-    long i;
+    long i, a, b;
         
     PIZLOCK
-        
-    x->down = CLAMP (x->down + n, 0, PIZ_MAGIC_PITCH);
-    x->up   = CLAMP (x->up + n, 0, PIZ_MAGIC_PITCH);
+    
+    a = CLAMP (x->down + n, 0, PIZ_MAGIC_PITCH);
+    b = CLAMP (x->up + n, 0, PIZ_MAGIC_PITCH);
+    
+    if (x->down != a) {
+        x->down = a;
+        x->changedZone = true;
+    }
+    
+    if (x->up != b) {
+        x->up = b;
+        x->changedZone = true;
+    }
     
     for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
         PIZNote *note       = NULL;
@@ -935,9 +950,9 @@ PIZError pizSequenceRemoveNote (PIZSequence *x, PIZNote *note)
 
         if (!(err = pizLinklistRemoveByPtr (x->timeline[p], (void *)note))) {
             x->count --; 
-            pizItemset128SetAtIndex     (&x->removedNotes, tag);
-            pizItemset128UnsetAtIndex   (&x->addedNotes, tag);
-            pizItemset128UnsetAtIndex   (&x->changedNotes, tag);
+            pizItemset128SetAtIndex   (&x->removedNotes, tag);
+            pizItemset128UnsetAtIndex (&x->addedNotes, tag);
+            pizItemset128UnsetAtIndex (&x->changedNotes, tag);
         }
     }
     

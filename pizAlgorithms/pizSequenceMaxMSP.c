@@ -92,25 +92,28 @@ PIZError pizSequencePutTempZone (PIZSequence *x)
     PIZLOCK
     
     if (!(piz_start == piz_end)) {
+    //
+    if (piz_end < piz_start) {
+        long k    = piz_end;
+        piz_end   = piz_start;
+        piz_start = k;
+    }
     
-        if (piz_end < piz_start) {
-            long k    = piz_end;
-            piz_end   = piz_start;
-            piz_start = k;
-        }
-        
-        if (piz_up < piz_down) {
-            long k   = piz_up;
-            piz_up   = piz_down;
-            piz_down = k;
-        }
-        
-        x->start = piz_start;
-        x->end   = piz_end;
-        x->down  = piz_down;
-        x->up    = piz_up;
-        
-        err = PIZ_GOOD;
+    if (piz_up < piz_down) {
+        long k   = piz_up;
+        piz_up   = piz_down;
+        piz_down = k;
+    }
+    
+    x->start = piz_start;
+    x->end   = piz_end;
+    x->down  = piz_down;
+    x->up    = piz_up;
+    
+    x->changedZone = true;
+    
+    err = PIZ_GOOD;
+    //    
     }
         
     PIZUNLOCK
@@ -580,80 +583,84 @@ PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a)
     PIZLOCK
     
     if (a) {
-        long i, t;
-        
-        err = PIZ_GOOD;
-        pizSequenceRemoveAllNotes (x);
+    //
+    long i, t;
+    
+    err = PIZ_GOOD;
+    pizSequenceRemoveAllNotes (x);
 
-        if (t = pizGrowingArrayCount (a)) {
-            long k, version, count, grid, noteValue;
-            long modeFlags = PIZ_ADD_FLAG_UNSELECT;
-            long *ptr = pizGrowingArrayPtr (a);
-            
-            version     = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_VERSION);
-            grid        = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_GRID);
-            noteValue   = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_NOTE_VALUE);
-            
-            switch (grid) {
-            case PIZ_WHOLE_NOTE_DOTTED          : x->cell = (x->grid = PIZ_WHOLE_NOTE_DOTTED);          break;
-            case PIZ_WHOLE_NOTE                 : x->cell = (x->grid = PIZ_WHOLE_NOTE);                 break;
-            case PIZ_WHOLE_NOTE_TRIPLET         : x->cell = (x->grid = PIZ_WHOLE_NOTE_TRIPLET);         break;
-            case PIZ_HALF_NOTE_DOTTED           : x->cell = (x->grid = PIZ_HALF_NOTE_DOTTED);           break;
-            case PIZ_HALF_NOTE                  : x->cell = (x->grid = PIZ_HALF_NOTE);                  break;
-            case PIZ_HALF_NOTE_TRIPLET          : x->cell = (x->grid = PIZ_HALF_NOTE_TRIPLET);          break;
-            case PIZ_QUARTER_NOTE_DOTTED        : x->cell = (x->grid = PIZ_QUARTER_NOTE_DOTTED);        break;
-            case PIZ_QUARTER_NOTE               : x->cell = (x->grid = PIZ_QUARTER_NOTE);               break;
-            case PIZ_QUARTER_NOTE_TRIPLET       : x->cell = (x->grid = PIZ_QUARTER_NOTE_TRIPLET);       break;
-            case PIZ_EIGHTH_NOTE_DOTTED         : x->cell = (x->grid = PIZ_EIGHTH_NOTE_DOTTED);         break;
-            case PIZ_EIGHTH_NOTE                : x->cell = (x->grid = PIZ_EIGHTH_NOTE);                break;
-            case PIZ_EIGHTH_NOTE_TRIPLET        : x->cell = (x->grid = PIZ_EIGHTH_NOTE_TRIPLET);        break;
-            case PIZ_SIXTEENTH_NOTE_DOTTED      : x->cell = (x->grid = PIZ_SIXTEENTH_NOTE_DOTTED);      break;
-            case PIZ_SIXTEENTH_NOTE             : x->cell = (x->grid = PIZ_SIXTEENTH_NOTE);             break;
-            case PIZ_SIXTEENTH_NOTE_TRIPLET     : x->cell = (x->grid = PIZ_SIXTEENTH_NOTE_TRIPLET);     break;
-            case PIZ_THIRTY_SECOND_NOTE         : x->cell = (x->grid = PIZ_THIRTY_SECOND_NOTE);         break;
-            case PIZ_THIRTY_SECOND_NOTE_TRIPLET : x->cell = (x->grid = PIZ_THIRTY_SECOND_NOTE_TRIPLET); break;
-            case PIZ_NOTE_NONE                  : x->cell = (x->grid = PIZ_NOTE_NONE);                  break;
-            }
-            
-            switch (noteValue) {
-            case PIZ_WHOLE_NOTE_DOTTED          : x->noteValue = PIZ_WHOLE_NOTE_DOTTED;             break;
-            case PIZ_WHOLE_NOTE                 : x->noteValue = PIZ_WHOLE_NOTE;                    break;
-            case PIZ_WHOLE_NOTE_TRIPLET         : x->noteValue = PIZ_WHOLE_NOTE_TRIPLET;            break;
-            case PIZ_HALF_NOTE_DOTTED           : x->noteValue = PIZ_HALF_NOTE_DOTTED;              break;
-            case PIZ_HALF_NOTE                  : x->noteValue = PIZ_HALF_NOTE;                     break;
-            case PIZ_HALF_NOTE_TRIPLET          : x->noteValue = PIZ_HALF_NOTE_TRIPLET;             break;
-            case PIZ_QUARTER_NOTE_DOTTED        : x->noteValue = PIZ_QUARTER_NOTE_DOTTED;           break;
-            case PIZ_QUARTER_NOTE               : x->noteValue = PIZ_QUARTER_NOTE;                  break;
-            case PIZ_QUARTER_NOTE_TRIPLET       : x->noteValue = PIZ_QUARTER_NOTE_TRIPLET;          break;
-            case PIZ_EIGHTH_NOTE_DOTTED         : x->noteValue = PIZ_EIGHTH_NOTE_DOTTED;            break;
-            case PIZ_EIGHTH_NOTE                : x->noteValue = PIZ_EIGHTH_NOTE;                   break;
-            case PIZ_EIGHTH_NOTE_TRIPLET        : x->noteValue = PIZ_EIGHTH_NOTE_TRIPLET;           break;
-            case PIZ_SIXTEENTH_NOTE_DOTTED      : x->noteValue = PIZ_SIXTEENTH_NOTE_DOTTED;         break;
-            case PIZ_SIXTEENTH_NOTE             : x->noteValue = PIZ_SIXTEENTH_NOTE;                break;
-            case PIZ_SIXTEENTH_NOTE_TRIPLET     : x->noteValue = PIZ_SIXTEENTH_NOTE_TRIPLET;        break;
-            case PIZ_THIRTY_SECOND_NOTE         : x->noteValue = PIZ_THIRTY_SECOND_NOTE;            break;
-            case PIZ_THIRTY_SECOND_NOTE_TRIPLET : x->noteValue = PIZ_THIRTY_SECOND_NOTE_TRIPLET;    break;
-            case PIZ_NOTE_NONE                  : x->noteValue = PIZ_NOTE_NONE;                     break;
-            }
-            
-            x->start    = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_START);
-            x->end      = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_END);
-            x->down     = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_DOWN);
-            x->up       = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_UP);
-            count       = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_COUNT);
-            
-            k = PIZ_SLOT_DATA;
-            
-            for (i = 0; i < count; i++) {
-                if (!(pizSequenceAddNote (x, ptr + (i * PIZ_DATA_NOTE_SIZE) + k, modeFlags))) {
-                    err |= PIZ_ERROR;
-                }
-            }
-            
-            if (count) {
-                pizSequenceMakeMap (x);
-            }
+    if (t = pizGrowingArrayCount (a)) {
+    //
+    long k, version, count, grid, noteValue;
+    long modeFlags = PIZ_ADD_FLAG_UNSELECT;
+    long *ptr = pizGrowingArrayPtr (a);
+    
+    version     = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_VERSION);
+    grid        = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_GRID);
+    noteValue   = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_NOTE_VALUE);
+    
+    switch (grid) {
+    case PIZ_WHOLE_NOTE_DOTTED          : x->cell = (x->grid = PIZ_WHOLE_NOTE_DOTTED);          break;
+    case PIZ_WHOLE_NOTE                 : x->cell = (x->grid = PIZ_WHOLE_NOTE);                 break;
+    case PIZ_WHOLE_NOTE_TRIPLET         : x->cell = (x->grid = PIZ_WHOLE_NOTE_TRIPLET);         break;
+    case PIZ_HALF_NOTE_DOTTED           : x->cell = (x->grid = PIZ_HALF_NOTE_DOTTED);           break;
+    case PIZ_HALF_NOTE                  : x->cell = (x->grid = PIZ_HALF_NOTE);                  break;
+    case PIZ_HALF_NOTE_TRIPLET          : x->cell = (x->grid = PIZ_HALF_NOTE_TRIPLET);          break;
+    case PIZ_QUARTER_NOTE_DOTTED        : x->cell = (x->grid = PIZ_QUARTER_NOTE_DOTTED);        break;
+    case PIZ_QUARTER_NOTE               : x->cell = (x->grid = PIZ_QUARTER_NOTE);               break;
+    case PIZ_QUARTER_NOTE_TRIPLET       : x->cell = (x->grid = PIZ_QUARTER_NOTE_TRIPLET);       break;
+    case PIZ_EIGHTH_NOTE_DOTTED         : x->cell = (x->grid = PIZ_EIGHTH_NOTE_DOTTED);         break;
+    case PIZ_EIGHTH_NOTE                : x->cell = (x->grid = PIZ_EIGHTH_NOTE);                break;
+    case PIZ_EIGHTH_NOTE_TRIPLET        : x->cell = (x->grid = PIZ_EIGHTH_NOTE_TRIPLET);        break;
+    case PIZ_SIXTEENTH_NOTE_DOTTED      : x->cell = (x->grid = PIZ_SIXTEENTH_NOTE_DOTTED);      break;
+    case PIZ_SIXTEENTH_NOTE             : x->cell = (x->grid = PIZ_SIXTEENTH_NOTE);             break;
+    case PIZ_SIXTEENTH_NOTE_TRIPLET     : x->cell = (x->grid = PIZ_SIXTEENTH_NOTE_TRIPLET);     break;
+    case PIZ_THIRTY_SECOND_NOTE         : x->cell = (x->grid = PIZ_THIRTY_SECOND_NOTE);         break;
+    case PIZ_THIRTY_SECOND_NOTE_TRIPLET : x->cell = (x->grid = PIZ_THIRTY_SECOND_NOTE_TRIPLET); break;
+    case PIZ_NOTE_NONE                  : x->cell = (x->grid = PIZ_NOTE_NONE);                  break;
+    }
+    
+    switch (noteValue) {
+    case PIZ_WHOLE_NOTE_DOTTED          : x->noteValue = PIZ_WHOLE_NOTE_DOTTED;             break;
+    case PIZ_WHOLE_NOTE                 : x->noteValue = PIZ_WHOLE_NOTE;                    break;
+    case PIZ_WHOLE_NOTE_TRIPLET         : x->noteValue = PIZ_WHOLE_NOTE_TRIPLET;            break;
+    case PIZ_HALF_NOTE_DOTTED           : x->noteValue = PIZ_HALF_NOTE_DOTTED;              break;
+    case PIZ_HALF_NOTE                  : x->noteValue = PIZ_HALF_NOTE;                     break;
+    case PIZ_HALF_NOTE_TRIPLET          : x->noteValue = PIZ_HALF_NOTE_TRIPLET;             break;
+    case PIZ_QUARTER_NOTE_DOTTED        : x->noteValue = PIZ_QUARTER_NOTE_DOTTED;           break;
+    case PIZ_QUARTER_NOTE               : x->noteValue = PIZ_QUARTER_NOTE;                  break;
+    case PIZ_QUARTER_NOTE_TRIPLET       : x->noteValue = PIZ_QUARTER_NOTE_TRIPLET;          break;
+    case PIZ_EIGHTH_NOTE_DOTTED         : x->noteValue = PIZ_EIGHTH_NOTE_DOTTED;            break;
+    case PIZ_EIGHTH_NOTE                : x->noteValue = PIZ_EIGHTH_NOTE;                   break;
+    case PIZ_EIGHTH_NOTE_TRIPLET        : x->noteValue = PIZ_EIGHTH_NOTE_TRIPLET;           break;
+    case PIZ_SIXTEENTH_NOTE_DOTTED      : x->noteValue = PIZ_SIXTEENTH_NOTE_DOTTED;         break;
+    case PIZ_SIXTEENTH_NOTE             : x->noteValue = PIZ_SIXTEENTH_NOTE;                break;
+    case PIZ_SIXTEENTH_NOTE_TRIPLET     : x->noteValue = PIZ_SIXTEENTH_NOTE_TRIPLET;        break;
+    case PIZ_THIRTY_SECOND_NOTE         : x->noteValue = PIZ_THIRTY_SECOND_NOTE;            break;
+    case PIZ_THIRTY_SECOND_NOTE_TRIPLET : x->noteValue = PIZ_THIRTY_SECOND_NOTE_TRIPLET;    break;
+    case PIZ_NOTE_NONE                  : x->noteValue = PIZ_NOTE_NONE;                     break;
+    }
+    
+    x->start    = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_START);
+    x->end      = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_END);
+    x->down     = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_DOWN);
+    x->up       = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_UP);
+    count       = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_COUNT);
+    
+    k = PIZ_SLOT_DATA;
+    
+    for (i = 0; i < count; i++) {
+        if (!(pizSequenceAddNote (x, ptr + (i * PIZ_DATA_NOTE_SIZE) + k, modeFlags))) {
+            err |= PIZ_ERROR;
         }
+    }
+    
+    if (count) {
+        pizSequenceMakeMap (x);
+    }
+    //    
+    }
+    //    
     }
 
     PIZUNLOCK

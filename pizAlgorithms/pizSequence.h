@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    March 2, 2012.
+ * \date    March 6, 2012.
  */
  
 /*
@@ -218,6 +218,7 @@ typedef struct _PIZSequence {
     PIZItemset128       addedNotes;
     PIZItemset128       removedNotes;
     PIZItemset128       changedNotes;
+    long                changedZone;
     long                timelineSize;
     long                start;
     long                end;
@@ -301,9 +302,11 @@ PIZError        pizSequenceProceedStep              (PIZSequence *x, PIZGrowingA
 PIZ_LOCAL PIZNote   *pizSequenceAddNote                 (PIZSequence *x, long *values, long flags);
 PIZ_LOCAL PIZError  pizSequenceRemoveNote               (PIZSequence *x, PIZNote *note);
 PIZ_LOCAL void      pizSequenceRemoveAllNotes           (PIZSequence *x);
-
 PIZ_LOCAL void      pizSequenceMoveNote                 (PIZSequence *x, PIZNote *note, long newPosition);
 PIZ_LOCAL void      pizSequenceMakeMap                  (PIZSequence *x);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
 PIZ_LOCAL long      pizSequenceMovePitchToAmbitus       (PIZSequence *x, long pitch);
 PIZ_LOCAL long      pizSequenceSnapPositionToPattern    (PIZSequence *x, long toSnapped, long patternSize);
