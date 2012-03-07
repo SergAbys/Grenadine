@@ -242,6 +242,8 @@
 #define UP                  0
 #define DOWN                1
 
+#define RANDOM              (rand_r (&x->seed) / (RAND_MAX + 1.0))
+
 #define ARRAYSLOCK          systhread_mutex_lock (&x->arraysMutex); 
 #define ARRAYSUNLOCK        systhread_mutex_unlock (&x->arraysMutex);
 
