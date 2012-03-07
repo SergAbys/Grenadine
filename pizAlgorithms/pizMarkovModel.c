@@ -1,7 +1,7 @@
 /*
  * \file    pizMarkovModel.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    March 7, 2012.
  */
  
 /*
@@ -104,16 +104,16 @@ PIZMarkovModel *pizMarkovModelNew (long argc, long *argv)
         
         x->count = 0;
         
-        srand ((unsigned int)time(NULL));
+        x->seed = (unsigned int)time(NULL);
         
-        pizMarkovModelFillStochastically (x->graphSize, x->start);
+        pizMarkovModelFillStochastically (x, x->graphSize, x->start);
         
         for (i = 0; i < x->graphSize; i++) {
-            pizMarkovModelFillStochastically (x->graphSize, x->transition + (i * x->graphSize));
+            pizMarkovModelFillStochastically (x, x->graphSize, x->transition + (i * x->graphSize));
         }
         
         for (i = 0; i < x->graphSize; i++)  {
-            pizMarkovModelFillStochastically (PIZ_ALPHABET_SIZE, x->emission + (i * PIZ_ALPHABET_SIZE));
+            pizMarkovModelFillStochastically (x, PIZ_ALPHABET_SIZE, x->emission + (i * PIZ_ALPHABET_SIZE));
         }
         
     } else {
@@ -173,14 +173,14 @@ void pizMarkovModelClear (PIZMarkovModel *x)
                     
     x->count = 0;
                     
-    pizMarkovModelFillStochastically (x->graphSize, x->start);
+    pizMarkovModelFillStochastically (x, x->graphSize, x->start);
                     
     for (i = 0; i < x->graphSize; i++) {
-        pizMarkovModelFillStochastically (x->graphSize, x->transition + (i * x->graphSize));
+        pizMarkovModelFillStochastically (x, x->graphSize, x->transition + (i * x->graphSize));
     }
         
     for (i = 0; i < x->graphSize; i++) {
-        pizMarkovModelFillStochastically (PIZ_ALPHABET_SIZE, x->emission + (i * PIZ_ALPHABET_SIZE));
+        pizMarkovModelFillStochastically (x, PIZ_ALPHABET_SIZE, x->emission + (i * PIZ_ALPHABET_SIZE));
     }
 }
 
@@ -206,7 +206,7 @@ PIZError pizMarkovModelAdd (PIZMarkovModel *x, long argc, long *argv)
     return err;
 }
 
-PIZError pizMarkovModelProceed (const PIZMarkovModel *x, long argc, long *argv)
+PIZError pizMarkovModelProceed (PIZMarkovModel *x, long argc, long *argv)
 {
     long err = PIZ_ERROR;
     
@@ -218,7 +218,7 @@ PIZError pizMarkovModelProceed (const PIZMarkovModel *x, long argc, long *argv)
 
         err = PIZ_GOOD;
         
-        h = rand ( ) / (RAND_MAX + 1.0);
+        h = rand_r (&x->seed) / (RAND_MAX + 1.0);
         
         for (i = 0; i < x->graphSize; i++) {
             k += x->start[i];
@@ -230,7 +230,7 @@ PIZError pizMarkovModelProceed (const PIZMarkovModel *x, long argc, long *argv)
         }
         
         k = 0.;
-        h = rand ( ) / (RAND_MAX + 1.0);
+        h = rand_r (&x->seed) / (RAND_MAX + 1.0);
         
         for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
             k += x->emission[(p * PIZ_ALPHABET_SIZE) + i];
@@ -246,7 +246,7 @@ PIZError pizMarkovModelProceed (const PIZMarkovModel *x, long argc, long *argv)
         
         while (argc)  {
             k = 0.;
-            h = rand ( ) / (RAND_MAX + 1.0);
+            h = rand_r (&x->seed) / (RAND_MAX + 1.0);
     
             for (i = 0; i < x->graphSize; i++) {
                 k += x->transition[(p * x->graphSize) + i];
@@ -258,7 +258,7 @@ PIZError pizMarkovModelProceed (const PIZMarkovModel *x, long argc, long *argv)
             }
             
             k = 0.;
-            h = rand ( ) / (RAND_MAX + 1.0);
+            h = rand_r (&x->seed) / (RAND_MAX + 1.0);
     
             for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
                 k += x->emission[(p * PIZ_ALPHABET_SIZE) + i];
@@ -429,13 +429,13 @@ PIZ_INLINE void pizMarkovModelBaumWelch (PIZMarkovModel *x, long argc, long *arg
     } 
 }
 
-void pizMarkovModelFillStochastically (long argc, double *argv)
+void pizMarkovModelFillStochastically (PIZMarkovModel *x, long argc, double *argv)
 {
-    long    i, f = (long)(6 * (rand ( ) / (RAND_MAX + 1.0)) + 1.);
+    long    i, f = (long)(6 * (rand_r (&x->seed) / (RAND_MAX + 1.0)) + 1.);
     double  s = 0.;
     
     for (i = 0; i < argc; i++) {
-        argv[i] = pow ((rand ( ) / (RAND_MAX + 1.0)), f);
+        argv[i] = pow ((rand_r (&x->seed) / (RAND_MAX + 1.0)), f);
         s += argv[i];
     }
         

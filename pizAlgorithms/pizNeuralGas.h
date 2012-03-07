@@ -1,7 +1,7 @@
 /**
  * \file    pizNeuralGas.h
  * \author  Jean Sapristi
- * \date    February 28, 2012.
+ * \date    March 7, 2012.
  */
  
 /*
@@ -71,6 +71,7 @@ typedef struct _PIZNeuralGas {
     double              beta;
     double              kappa;
     double              *vectorStock;
+    unsigned int        seed;
     PIZNeuralGasHead    *headStock;
     PIZBoundedStack     *ticketMachine;
     } PIZNeuralGas;
@@ -87,7 +88,7 @@ PIZNeuralGas    *pizNeuralGasNew    (long argc, long *argv);
 void            pizNeuralGasFree    (PIZNeuralGas *x);
 PIZError        pizNeuralGasAdd     (PIZNeuralGas *x, long argc, long *argv);
 void            pizNeuralGasClear   (PIZNeuralGas *x);
-PIZError        pizNeuralGasProceed (const PIZNeuralGas *x, long argc, long *argv);
+PIZError        pizNeuralGasProceed (PIZNeuralGas *x, long argc, long *argv);
 long            pizNeuralGasCount   (const PIZNeuralGas *x);
 
 // -------------------------------------------------------------------------------------------------------------

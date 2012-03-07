@@ -608,7 +608,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                 
                 tralala_slotRecall (x, x->slotIndex);
                 
-                srand ((unsigned int)time(NULL));
+                x->seed = (unsigned int)time(NULL);
                 
                 clock_fdelay (x->learnClock, CLOCK_LEARN_INTERVAL);
                 

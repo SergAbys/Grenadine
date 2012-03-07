@@ -1,7 +1,7 @@
 /*
  * \file    pizFactorOracle.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    March 7, 2012.
  */
  
 /*
@@ -70,14 +70,13 @@ PIZFactorOracle *pizFactorOracleNew (long argc, long *argv)
         x->nodes[0].arcDestinations = pizGrowingArrayNew (PIZ_ARRAY_INIT_SIZE);
         
         if (x->nodes[0].arcValues && x->nodes[0].arcDestinations) {
-            srand ((unsigned int)time(NULL));
-            
             x->size                 = PIZ_ORACLE_INIT_SIZE;
             x->peak                 = 1;
             x->index                = 1;
             x->shuttle              = 0;
             x->backwardThreshold    = PIZ_DEFAULT_BACKWARD_THRESHOLD;
             x->straightRatio        = PIZ_DEFAULT_STRAIGHT_RATIO;
+            x->seed                 = (unsigned int)time(NULL);
     
             x->nodes[0].referTo              = -1;
             x->nodes[0].lengthRepeatedSuffix = 0;
@@ -255,7 +254,7 @@ PIZError pizFactorOracleProceed (PIZFactorOracle *x, long argc, long *argv)
 
     while (argc) {
         long                t = false;
-        double              h = rand ( ) / (RAND_MAX + 1.0);
+        double              h = rand_r (&x->seed) / (RAND_MAX + 1.0);
         PIZFactorOracleNode *p = NULL;
         
         if (x->shuttle == (x->index - 1)) {
@@ -269,8 +268,7 @@ PIZError pizFactorOracleProceed (PIZFactorOracle *x, long argc, long *argv)
                 x->shuttle = p->referTo;
                 p = x->nodes + x->shuttle;
             } else if (pizGrowingArrayCount (p->arcValues) > 1) {
-                long i = (long)((pizGrowingArrayCount (p->arcValues) - 1) * (rand ( ) / (RAND_MAX + 1.0)));
-                
+                long i = (pizGrowingArrayCount (p->arcValues) - 1) * (rand_r (&x->seed) / (RAND_MAX + 1.0));
                 argv[k]     = pizGrowingArrayValueAtIndex (p->arcValues, (i + 1));
                 x->shuttle  = pizGrowingArrayValueAtIndex (p->arcDestinations, (i + 1));
                 t = true;

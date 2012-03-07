@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 28/02/12.
+ *  Last modified : 07/03/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -307,6 +307,7 @@ typedef struct _tralala {
     long                slotIndex;
     long                learnCycle;
     long                learnThreshold;
+    unsigned int        seed;
     t_uint32_atomic     dirtyLayer;
     t_int32_atomic      popupLock;
     t_int32_atomic      paintLock;
@@ -508,7 +509,8 @@ void            tralala_learnTask               (t_tralala *x);
 void            tralala_handle                  (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void            tralala_anything                (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void            tralala_slot                    (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-void            tralala_parseArguments          (t_tralala *x, t_tralalaData *data, long argc, t_atom *argv);
+
+PIZ_LOCAL void  tralala_parseArguments          (t_tralala *x, t_tralalaData *data, long argc, t_atom *argv);
 
 PIZ_LOCAL void  tralala_sequenceClear           (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 PIZ_LOCAL void  tralala_sequenceKill            (t_tralala *x, t_symbol *s, long argc, t_atom *argv);

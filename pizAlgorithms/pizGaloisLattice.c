@@ -1,7 +1,7 @@
 /*
  * \file    pizGaloisLattice.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    March 7, 2012.
  */
  
 /*
@@ -76,7 +76,7 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
     x->shuttle                  = -1;
     x->previousShuttle          = -1;
     
-    srand ((unsigned int)time(NULL));
+    x->seed = (unsigned int)time(NULL);
         
     if (argc && ((argv[0] > 0)  && (argv[0] <= PIZ_MAXIMUM_TO_KILL_CONCEPTS))) {
         x->thresholdToKillConcepts = argv[0];
@@ -353,7 +353,7 @@ PIZError pizGaloisLatticeProceed (PIZGaloisLattice *x, long argc, long *argv)
     long connections[PIZ_ITEMSET128_SIZE];
     
     if (x->shuttle > 1) {
-        long j, t = (long)(PIZ_ITEMSET128_SIZE * (rand ( ) / (RAND_MAX + 1.0)));
+        long j, t = (long)(PIZ_ITEMSET128_SIZE * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
                                     
         for (j = 0; j < PIZ_ITEMSET128_SIZE; j++) {
             if (pizItemset128IsSetAtIndex (&(x->stock[x->shuttle].itemset), (t + j) % PIZ_ITEMSET128_SIZE)) {
@@ -376,12 +376,12 @@ PIZError pizGaloisLatticeProceed (PIZGaloisLattice *x, long argc, long *argv)
     
     if (x->shuttle < 2) {
         x->previousShuttle = x->shuttle;
-        x->shuttle = connections[(long)(indexConnections * (rand ( ) / (RAND_MAX + 1.0)))];
+        x->shuttle = connections[(long)(indexConnections * (rand_r (&x->seed) / (RAND_MAX + 1.0)))];
     } else {
         long n;
         
         do {        
-        n = connections[(long)(indexConnections * (rand ( ) / (RAND_MAX + 1.0)))];
+        n = connections[(long)(indexConnections * (rand_r (&x->seed) / (RAND_MAX + 1.0)))];
         } while (n == x->previousShuttle);
         
         x->previousShuttle = x->shuttle;
@@ -446,7 +446,7 @@ PIZError pizGaloisLatticeMakeMap (PIZGaloisLattice *x)
     x->targetedConcept = -1;
     
     if (x->count) {
-        k = (long)(x->count * (rand ( ) / (RAND_MAX + 1.0)));
+        k = (long)(x->count * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
     }
     
     for (i = 1; i <= x->mapPeak; i++) {

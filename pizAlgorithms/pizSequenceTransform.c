@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceTransform.c
  * \author  Jean Sapristi
- * \date    March 2, 2012.
+ * \date    March 7, 2012.
  */
  
 /*
@@ -108,7 +108,7 @@ bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm select, void *alg
         }
         
         for (i = 0; i < k; i++) {        
-            h = 100 * (rand ( ) / (RAND_MAX + 1.0));
+            h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
             if (h >= x->chance) {
                 x->values1[i] = x->notes1[i]->data[PIZ_PITCH];
             } 
@@ -182,9 +182,9 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
         PIZNote *note = NULL;
 
         while (q == -1) {
-            p = pizGrowingArrayValueAtIndex (x->map, (long)(mapCount * (rand ( ) / (RAND_MAX + 1.0))));
+            p = pizGrowingArrayValueAtIndex (x->map, (long)(mapCount * (rand_r (&x->seed) / (RAND_MAX + 1.0))));
             if (pizLinklistCount (x->timeline[p])) {
-                q = (long)(pizLinklistCount (x->timeline[p]) * (rand ( ) / (RAND_MAX + 1.0)));
+                q = (long)(pizLinklistCount (x->timeline[p]) * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
             } 
         }                           
 
@@ -305,7 +305,7 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
         }
             
         for (j = 5; j > 0; j--)  {
-            long h          = (j + 1) * (rand ( ) / (RAND_MAX + 1.0));
+            long h          = (j + 1) * (rand_r (&x->seed) / (RAND_MAX + 1.0));
             long tempHPat   = hPat[h];
             hPat[h]         = hPat[j];
             hPat[j]         = tempHPat;
@@ -450,7 +450,7 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
     long    q = -1;
     long    p = -1;
     long    offset = 0;
-    double  h = rand ( ) / (RAND_MAX + 1.0);
+    double  h = rand_r (&x->seed) / (RAND_MAX + 1.0);
     double  *distribution = NULL;
     PIZNote *note1 = NULL;
     PIZNote *note2 = NULL;
@@ -458,15 +458,15 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
     mapCount = pizGrowingArrayCount (x->map);
 
     while (q == -1) {
-        p = pizGrowingArrayValueAtIndex (x->map, (long)(mapCount * (rand ( ) / (RAND_MAX + 1.0))));
+        p = pizGrowingArrayValueAtIndex (x->map, (long)(mapCount * (rand_r (&x->seed) / (RAND_MAX + 1.0))));
         if (pizLinklistCount (x->timeline[p])) {
-            q = (long)(pizLinklistCount (x->timeline[p]) * (rand ( ) / (RAND_MAX + 1.0)));
+            q = (long)(pizLinklistCount (x->timeline[p]) * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
         } 
     }                           
 
     pizLinklistPtrAtIndex (x->timeline[p], q, (void **)&note1);     
     
-    step = MIN (a, PIZ_MAXIMUM_OFFSET) * (rand ( ) / (RAND_MAX + 1.0));
+    step = MIN (a, PIZ_MAXIMUM_OFFSET) * (rand_r (&x->seed) / (RAND_MAX + 1.0));
     step *= b;
     
     switch (b) {
@@ -588,7 +588,7 @@ bool pizSequenceScramble (PIZSequence *x, PIZSelector selector)
     }
         
     for (i = (k - 1); i > 0; i--) {
-        long    h = (i + 1) * (rand ( ) / (RAND_MAX + 1.0));
+        long    h = (i + 1) * (rand_r (&x->seed) / (RAND_MAX + 1.0));
         PIZNote *temp = NULL;
             
         temp = x->notes1[h];
@@ -689,7 +689,7 @@ bool pizSequenceChange (PIZSequence *x, PIZSelector selector, long value)
     
     while (note) {
         long max, temp;
-        long h = 100 * (rand ( ) / (RAND_MAX + 1.0));
+        long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
         
         pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
         
@@ -738,7 +738,7 @@ bool pizSequenceSet (PIZSequence *x, PIZSelector selector, long value)
         
         while (note) {
             long max, temp;
-            long h = 100 * (rand ( ) / (RAND_MAX + 1.0));
+            long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
             
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
@@ -794,12 +794,12 @@ bool pizSequenceRandom (PIZSequence *x, PIZSelector selector, long minValue, lon
     
     while (note) {
         long max, temp;
-        long h = 100 * (rand ( ) / (RAND_MAX + 1.0));
+        long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
         
         pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
         
         if (h < x->chance) {
-            long value = minValue + (long)(range * (rand ( ) / (RAND_MAX + 1.0)));
+            long value = minValue + (long)(range * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
             
             switch (selector) {
                 case PIZ_PITCH    : temp = CLAMP (note->data[PIZ_PITCH] + value, 0, PIZ_MAGIC_PITCH); break;
@@ -846,7 +846,7 @@ bool pizSequenceKillNotes (PIZSequence *x)
         while (note) {
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
-            if (100 * (rand ( ) / (RAND_MAX + 1.0)) < x->chance) {
+            if (100 * (rand_r (&x->seed) / (RAND_MAX + 1.0)) < x->chance) {
                 pizSequenceRemoveNote (x, note);
                 haveChanged = true;
             }
@@ -908,7 +908,7 @@ bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a
         pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
         
         while (note) {
-            long h = 100 * (rand ( ) / (RAND_MAX + 1.0));
+            long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
             
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             

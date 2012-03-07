@@ -8,13 +8,18 @@
  */
 
 /*
- *  Last modified : 27/02/12.
+ *  Last modified : 07/03/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #include "tralala.h"
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define RANDOM (rand_r (&x->seed) / (RAND_MAX + 1.0))
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -44,7 +49,7 @@ void tralala_copy (t_tralala *x)
         long *ptr = pizGrowingArrayPtr (tempArrayA);
 
         for (i = 0; i < count; i += PIZ_DATA_NOTE_SIZE) {
-            if (100 * (rand ( ) / (RAND_MAX + 1.0)) < chance) {
+            if (100 * RANDOM < chance) {
                 pizGrowingArrayAppendPtr (tempArrayB, PIZ_DATA_NOTE_SIZE, ptr + i);
             }
         }
@@ -162,8 +167,8 @@ void tralala_learnTask (t_tralala *x)
                 i --;
             }
             
-            x->learnCycle     = PIZ_FACTOR_ORACLE;
-            x->learnThreshold = SIZE_LEARN_MIN + ((SIZE_LEARN_RANGE + 1) * (rand ( ) / (RAND_MAX + 1.0)));
+            x->learnCycle       = PIZ_FACTOR_ORACLE;
+            x->learnThreshold   = SIZE_LEARN_MIN + (SIZE_LEARN_RANGE + 1) * RANDOM;
         }
             
         LEARNUNLOCK
@@ -186,7 +191,7 @@ void tralala_learnTask (t_tralala *x)
         ALGORITHMSUNLOCK
     }
     
-    clock_fdelay (x->learnClock, CLOCK_LEARN_INTERVAL + CLOCK_RANDOMIZE * (rand ( ) / (RAND_MAX + 1.0)));
+    clock_fdelay (x->learnClock, CLOCK_LEARN_INTERVAL + CLOCK_RANDOMIZE * RANDOM);
 }
 
 // -------------------------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    March 6, 2012.
+ * \date    March 7, 2012.
  */
  
 /*
@@ -128,7 +128,7 @@ PIZSequence *pizSequenceNew (long size)
         
         x->changedZone = false;
         
-        srand ((unsigned int)time(NULL));
+        x->seed = (unsigned int)time(NULL);
                         
         pthread_mutex_init (&x->lock, NULL);
         

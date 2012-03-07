@@ -1,7 +1,7 @@
 /**
  * \file    pizKohonenMap.h
  * \author  Jean Sapristi
- * \date    February 28, 2012.
+ * \date    March 7, 2012.
  */
  
 /*
@@ -57,6 +57,7 @@ typedef struct _PIZKohonenMap {
     long            training;
     double          step;
     double          *map;
+    unsigned int    seed;
     } PIZKohonenMap;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -71,7 +72,7 @@ PIZKohonenMap   *pizKohonenMapNew       (long argc, long *argv);
 void            pizKohonenMapFree       (PIZKohonenMap *x);
 PIZError        pizKohonenMapAdd        (PIZKohonenMap *x, long argc, long *argv);
 void            pizKohonenMapClear      (PIZKohonenMap *x);
-PIZError        pizKohonenMapProceed    (const PIZKohonenMap *x, long argc, long *argv);
+PIZError        pizKohonenMapProceed    (PIZKohonenMap *x, long argc, long *argv);
 long            pizKohonenMapCount      (const PIZKohonenMap *x);
 
 // -------------------------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /**
  * \file    pizGaloisLattice.h
  * \author  Jean Sapristi
- * \date    February 28, 2012.
+ * \date    March 7, 2012.
  */
 
 /*
@@ -68,6 +68,7 @@ typedef struct _PIZGaloisLattice {
     long                    mapPeak;
     long                    tempMapPeak;
     bool                    needToMakeMap;
+    unsigned int            seed;
     PIZGrowingArray         **map;
     PIZGrowingArray         **tempMap;
     PIZBoundedStack         *ticketMachine;

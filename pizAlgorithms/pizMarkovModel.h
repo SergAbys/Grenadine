@@ -1,7 +1,7 @@
 /**
  * \file    pizMarkovModel.h
  * \author  Jean Sapristi
- * \date    February 28, 2012.
+ * \date    March 7, 2012.
  */
 
 /*
@@ -50,20 +50,21 @@
 // -------------------------------------------------------------------------------------------------------------
  
 typedef struct _PIZMarkovModel {
-    long    count;
-    long    vectorSize;
-    long    graphSize;
-    double  persistence;
-    double  *start;
-    double  *emission;
-    double  *transition;
-    double  *tempStart;
-    double  *tempEmission;
-    double  *tempTransition;
-    double  *alpha;
-    double  *tempAlpha;
-    double  *beta;
-    double  *coefficient;
+    long            count;
+    long            vectorSize;
+    long            graphSize;
+    double          persistence;
+    double          *start;
+    double          *emission;
+    double          *transition;
+    double          *tempStart;
+    double          *tempEmission;
+    double          *tempTransition;
+    double          *alpha;
+    double          *tempAlpha;
+    double          *beta;
+    double          *coefficient;
+    unsigned int    seed;
     } PIZMarkovModel;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -78,14 +79,14 @@ PIZMarkovModel  *pizMarkovModelNew      (long argc, long *argv);
 void            pizMarkovModelFree      (PIZMarkovModel *x);
 PIZError        pizMarkovModelAdd       (PIZMarkovModel *x, long argc, long *argv);
 void            pizMarkovModelClear     (PIZMarkovModel *x);
-PIZError        pizMarkovModelProceed   (const PIZMarkovModel *x, long argc, long *argv);
+PIZError        pizMarkovModelProceed   (PIZMarkovModel *x, long argc, long *argv);
 long            pizMarkovModelCount     (const PIZMarkovModel *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 PIZ_LOCAL PIZ_INLINE void   pizMarkovModelBaumWelch             (PIZMarkovModel *x, long argc, long *argv);
-PIZ_LOCAL void              pizMarkovModelFillStochastically    (long argc, double *argv);
+PIZ_LOCAL void              pizMarkovModelFillStochastically    (PIZMarkovModel *x, long argc, double *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

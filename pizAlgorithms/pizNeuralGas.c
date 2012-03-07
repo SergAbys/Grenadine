@@ -1,7 +1,7 @@
 /*
  * \file    pizNeuralGas.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    March 7, 2012.
  */
  
 /*
@@ -86,7 +86,7 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
         x->beta         = PIZ_DEFAULT_BETA;
         x->kappa        = PIZ_DEFAULT_KAPPA;
         
-        srand ((unsigned int)time(NULL));
+        x->seed = (unsigned int)time(NULL);
         
         if (argc && ((argv[0] > 1)  && (argv[0] <= PIZ_ITEMSET128_SIZE))) {
             x->maximumSize = argv[0];
@@ -112,7 +112,7 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
         
         if (!err) {
             for (i = 0; i < (x->vectorSize * 2); i++) {
-                x->vectorStock[i] = PIZ_ALPHABET_SIZE * (rand ( ) / (RAND_MAX + 1.0));
+                x->vectorStock[i] = PIZ_ALPHABET_SIZE * (rand_r (&x->seed) / (RAND_MAX + 1.0));
             }
             
             x->headStock[0].error   = 0.;
@@ -339,7 +339,7 @@ void pizNeuralGasClear (PIZNeuralGas *x)
     x->count = 0;
     
     for (i = 0; i < (x->vectorSize * 2); i++) {
-        x->vectorStock[i] = PIZ_ALPHABET_SIZE * (rand ( ) / (RAND_MAX + 1.0));
+        x->vectorStock[i] = PIZ_ALPHABET_SIZE * (rand_r (&x->seed) / (RAND_MAX + 1.0));
     }
     
     x->headStock[0].error   = 0.;
@@ -367,7 +367,7 @@ void pizNeuralGasClear (PIZNeuralGas *x)
     x->mapSize = 2;
 }
 
-PIZError pizNeuralGasProceed (const PIZNeuralGas *x, long argc, long *argv)
+PIZError pizNeuralGasProceed (PIZNeuralGas *x, long argc, long *argv)
 {
     long err = PIZ_ERROR;
     
@@ -379,7 +379,7 @@ PIZError pizNeuralGasProceed (const PIZNeuralGas *x, long argc, long *argv)
     for (i = 0; i < argc; i++) {
         if ((i % x->vectorSize) == 0) {
             long j, p = -1;
-            long h = (long)(x->mapSize * (rand ( ) / (RAND_MAX + 1.0)));
+            long h = (long)(x->mapSize * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
             
             for (j = 0; j < PIZ_ITEMSET128_SIZE; j++) {
                 if (pizItemset128IsSetAtIndex (&x->map, j)) {

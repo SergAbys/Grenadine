@@ -1,7 +1,7 @@
 /*
  * \file    pizKohonenMap.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    March 7, 2012.
  */
  
 /*
@@ -82,7 +82,7 @@ PIZKohonenMap *pizKohonenMapNew (long argc, long *argv)
             x->vectorSize = argv[1];
         }
         
-        srand ((unsigned int)time(NULL));
+        x->seed = (unsigned int)time(NULL);
                 
         if (x->map = (double *)malloc (sizeof(double) * (x->mapSize * x->vectorSize))) {
             long i;
@@ -90,7 +90,7 @@ PIZKohonenMap *pizKohonenMapNew (long argc, long *argv)
             x->count = 0;
             
             for (i = 0; i < (x->mapSize * x->vectorSize); i++) {
-                x->map[i] = PIZ_ALPHABET_SIZE * (rand ( ) / (RAND_MAX + 1.0));
+                x->map[i] = PIZ_ALPHABET_SIZE * (rand_r (&x->seed) / (RAND_MAX + 1.0));
             }
         } else {
             pizKohonenMapFree (x);
@@ -184,11 +184,11 @@ void pizKohonenMapClear (PIZKohonenMap *x)
     x->count = 0;
     
     for (i = 0; i < (x->mapSize * x->vectorSize); i++) {
-        x->map[i] = PIZ_ALPHABET_SIZE * (rand ( ) / (RAND_MAX + 1.0));
+        x->map[i] = PIZ_ALPHABET_SIZE * (rand_r (&x->seed) / (RAND_MAX + 1.0));
     }
 }
 
-PIZError pizKohonenMapProceed (const PIZKohonenMap *x, long argc, long *argv)
+PIZError pizKohonenMapProceed (PIZKohonenMap *x, long argc, long *argv)
 {
     long err = PIZ_ERROR;
     
@@ -198,7 +198,7 @@ PIZError pizKohonenMapProceed (const PIZKohonenMap *x, long argc, long *argv)
         
         for (i = 0; i < argc; i++) {
             if ((i % x->vectorSize) == 0) {
-                temp = x->map + (((long)(x->mapSize * (rand ( ) / (RAND_MAX + 1.0)))) * x->vectorSize);
+                temp = x->map + (((long)(x->mapSize * (rand_r (&x->seed) / (RAND_MAX + 1.0)))) * x->vectorSize);
             }
             
             argv[i] = (long)(*(temp + (i % x->vectorSize)) + 0.5);

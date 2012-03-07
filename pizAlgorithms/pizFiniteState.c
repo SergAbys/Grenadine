@@ -1,7 +1,7 @@
 /*
  * \file    pizFiniteState.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    March 7, 2012.
  */
  
 /*
@@ -74,7 +74,7 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
             x->jumpChance               = 0;
             x->thresholdToMergeNodes    = PIZ_DEFAULT_THRESHOLD_TO_MERGE_NODES;
             
-            srand ((unsigned int)time(NULL));
+            x->seed = (unsigned int)time(NULL);
                 
             if (argc && ((argv[0] > 0) && (argv[0] <= PIZ_MAXIMUM_THRESHOLD_TO_MERGE_NODES))) {
                 x->thresholdToMergeNodes = argv[0];
@@ -257,7 +257,7 @@ PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)
                 }
             }
             
-            h = (long)(x->lotteryIndex * (rand ( ) / (RAND_MAX + 1.0)));
+            h = (long)(x->lotteryIndex * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
 
             pizBoundedQueuePop (x->mapByValue[x->lottery[h]]);
             a = pizBoundedQueuePoppedValue (x->mapByValue[x->lottery[h]]);
@@ -272,7 +272,7 @@ PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)
         
         x->lotteryIndex = 0;
         
-        jump = ((100 * (rand ( ) / (RAND_MAX + 1.0))) < x->jumpChance);
+        jump = ((100 * (rand_r (&x->seed) / (RAND_MAX + 1.0))) < x->jumpChance);
         
         if (!jump) {
             for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
@@ -284,7 +284,7 @@ PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)
         }
         
         if (x->lotteryIndex) {
-            long h = (long)(x->lotteryIndex * (rand ( ) / (RAND_MAX + 1.0)));
+            long h = (long)(x->lotteryIndex * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
             x->shuttle = x->lottery[h];
             
             if (x->stock[x->shuttle].final) {
@@ -329,7 +329,7 @@ PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x)
     }
             
     if (x->lotteryIndex) {
-        long h = (long)(x->lotteryIndex * (rand ( ) / (RAND_MAX + 1.0)));
+        long h = (long)(x->lotteryIndex * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
         
         if (pizBoundedQueueCount (x->mapByValue[x->lottery[h]]) == 1) {
             long j, a;

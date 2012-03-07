@@ -1,7 +1,7 @@
 /**
  * \file    pizFiniteState.h
  * \author  Jean Sapristi
- * \date    February 28, 2012.
+ * \date    March 7, 2012.
  */
 
 /*
@@ -63,6 +63,7 @@ typedef struct _PIZFiniteState {
     long                jumpChance;
     long                thresholdToMergeNodes; 
     long                *lottery; 
+    unsigned int        seed;
     PIZBoundedQueue     **mapByValue;
     PIZBoundedStack     *ticketMachine; 
     PIZFiniteStateNode  *stock;

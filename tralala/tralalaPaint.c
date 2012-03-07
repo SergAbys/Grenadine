@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 01/03/12.
+ *  Last modified : 07/03/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -20,6 +20,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #define STRINGSAFE      textCell[SIZE_STRING_MAX - 1] = 0;
+#define RANDOM          (rand_r (&x->seed) / (RAND_MAX + 1.0))
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -167,7 +168,7 @@ void tralala_paintTask (t_tralala *x)
     //      
     } ATOMIC_DECREMENT (&x->paintLock);
     
-    clock_fdelay (x->paintClock, CLOCK_PAINT_INTERVAL + CLOCK_RANDOMIZE * (rand ( ) / (RAND_MAX + 1.0)));
+    clock_fdelay (x->paintClock, CLOCK_PAINT_INTERVAL + CLOCK_RANDOMIZE * RANDOM);
 }
 
 bool tralala_hitNotesByRunIndex (t_tralala *x)
@@ -270,7 +271,7 @@ void tralala_paint (t_tralala *x, t_object *patcherview)
     
     if (x->flags & FLAG_INIT_PAINT_CLOCK) {
         x->flags &= ~FLAG_INIT_PAINT_CLOCK;
-        clock_fdelay (x->paintClock, CLOCK_PAINT_INTERVAL + CLOCK_RANDOMIZE * (rand ( ) / (RAND_MAX + 1.0)));
+        clock_fdelay (x->paintClock, CLOCK_PAINT_INTERVAL + CLOCK_RANDOMIZE * RANDOM);
     }
 }
 

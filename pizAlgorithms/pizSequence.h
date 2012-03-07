@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    March 6, 2012.
+ * \date    March 7, 2012.
  */
  
 /*
@@ -232,6 +232,7 @@ typedef struct _PIZSequence {
     PIZNoteValue        cell;
     PIZNoteValue        grid;
     PIZNoteValue        noteValue;
+    unsigned int        seed;
     } PIZSequence;
 
 // -------------------------------------------------------------------------------------------------------------

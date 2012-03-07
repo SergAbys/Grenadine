@@ -1,7 +1,7 @@
 /**
  * \file    pizFactorOracle.h
  * \author  Jean Sapristi
- * \date    February 28, 2012.
+ * \date    March 7, 2012.
  */
 
 /*
@@ -63,6 +63,7 @@ typedef struct _PIZFactorOracle {
     long                shuttle;
     long                backwardThreshold;
     double              straightRatio;
+    unsigned int        seed;
     PIZFactorOracleNode *nodes;
     } PIZFactorOracle;
 
