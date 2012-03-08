@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    March 7, 2012.
+ * \date    March 8, 2012.
  */
  
 /*
@@ -86,7 +86,7 @@ PIZSequence *pizSequenceNew (long size)
     
     if (x = (PIZSequence *)malloc (sizeof(PIZSequence))) {
     //
-    long argv[2]    = {0, PIZ_SEQUENCE_MAXIMUM_NOTES};
+    long argv[2] = {0, PIZ_SEQUENCE_MAXIMUM_NOTES};
     
     if (size > 0) {
         x->timelineSize = size;
@@ -159,6 +159,7 @@ void pizSequenceFree (PIZSequence *x)
 {
     if (x) {
         PIZLOCK
+        PIZUNLOCK
         
         if (x->timeline) {
             long i;
@@ -190,8 +191,6 @@ void pizSequenceFree (PIZSequence *x)
         if (x->notes2) {
             free (x->notes2);
         }
-            
-        PIZUNLOCK
         
         pthread_mutex_destroy (&x->lock);
         
