@@ -706,7 +706,7 @@ bool pizSequenceChange (PIZSequence *x, PIZSelector selector, long value)
             
             if (note->data[selector] != temp) {
                 note->data[selector] = temp;
-                PIZ_TAG(note->tag);
+                PIZ_TAG (note->tag);
                 haveChanged = true;
             }
         }
@@ -754,7 +754,7 @@ bool pizSequenceSet (PIZSequence *x, PIZSelector selector, long value)
                 
                 if (note->data[selector] != temp) {
                     note->data[selector] = temp;
-                    PIZ_TAG(note->tag);
+                    PIZ_TAG (note->tag);
                     haveChanged = true;
                 }
             }
@@ -813,7 +813,7 @@ bool pizSequenceRandom (PIZSequence *x, PIZSelector selector, long minValue, lon
             
             if (note->data[selector] != temp) {
                 note->data[selector] = temp;
-                PIZ_TAG(note->tag);
+                PIZ_TAG (note->tag);
                 haveChanged = true;
             }
         }
@@ -988,7 +988,7 @@ bool pizSequenceFillValues (PIZSequence *x, PIZSelector selector, long k, bool r
             
             if (x->notes1[i]->data[PIZ_DURATION] != temp) {
                 x->notes1[i]->data[PIZ_DURATION] = temp;
-                PIZ_TAG(x->notes1[i]->tag);
+                PIZ_TAG (x->notes1[i]->tag);
                 haveChanged = true;
             }
         }
@@ -1002,7 +1002,7 @@ bool pizSequenceFillValues (PIZSequence *x, PIZSelector selector, long k, bool r
             
             if (x->notes1[i]->data[selector] != temp) {
                 x->notes1[i]->data[selector] = temp;
-                PIZ_TAG(x->notes1[i]->tag);
+                PIZ_TAG (x->notes1[i]->tag);
                 haveChanged = true;
             }
         }
