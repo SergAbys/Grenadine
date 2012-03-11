@@ -65,14 +65,8 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
             event->data[PIZ_DATA_END]       = x->end;
             event->data[PIZ_DATA_DOWN]      = x->down;
             event->data[PIZ_DATA_UP]        = x->up;
-    
-            post ("ZONE_CHANGED");
-            post ("-- Start %ld", event->data[0]);
-            post ("-- End %ld", event->data[1]);
-            post ("-- Down %ld", event->data[2]);
-            post ("-- Up %ld", event->data[3]);
                 
-            //pizLinklistAppend (queue, event);
+            pizLinklistAppend (queue, event);
         }
     }
     
@@ -85,10 +79,7 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
             event->name = PIZ_NOTE_REMOVED;
             event->tag  = i;
             
-            post ("NOTE_REMOVED");
-            post ("-- Tag %ld", event->tag);
-            
-            //pizLinklistAppend (queue, event);
+            pizLinklistAppend (queue, event);
         }
     }
     //    
@@ -117,19 +108,9 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
                 event->data[PIZ_DATA_IS_MARKED]     = (note == x->markedNote);
             }
             
+            pizLinklistAppend (queue, event);
+            
             pizItemset128UnsetAtIndex (&x->changedNotes, i);
-            
-            post ("NOTE_ADDED");
-            post ("-- Tag %ld", event->tag);
-            post ("-- Position %ld", event->data[0]);
-            post ("-- Pitch %ld", event->data[1]);
-            post ("-- Velocity %ld", event->data[2]);
-            post ("-- Duration %ld", event->data[3]);
-            post ("-- Channel %ld", event->data[4]);
-            post ("-- Is Selected %ld", event->data[5]);
-            post ("-- Is marked %ld", event->data[6]);
-            
-            //pizLinklistAppend (queue, event);
         }
     }
     //    
@@ -158,17 +139,7 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
                 event->data[PIZ_DATA_IS_MARKED]     = (note == x->markedNote);
             }
             
-            post ("NOTE_CHANGED");
-            post ("-- Tag %ld", event->tag);
-            post ("-- Position %ld", event->data[0]);
-            post ("-- Pitch %ld", event->data[1]);
-            post ("-- Velocity %ld", event->data[2]);
-            post ("-- Duration %ld", event->data[3]);
-            post ("-- Channel %ld", event->data[4]);
-            post ("-- Is Selected %ld", event->data[5]);
-            post ("-- Is Marked %ld", event->data[6]);
-            
-            //pizLinklistAppend (queue, event);
+            pizLinklistAppend (queue, event);
         }
     }
     //    

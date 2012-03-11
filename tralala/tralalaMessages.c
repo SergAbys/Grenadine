@@ -223,7 +223,7 @@ void tralala_handle (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_anything (t_tralala *x, t_symbol *s, long argc, t_atom *argv) 
 {
-    pizSequenceAppendGraphicEvents (x->user, NULL);
+    ;
 }
 
 void tralala_slot (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
