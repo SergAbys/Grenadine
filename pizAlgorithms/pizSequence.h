@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    March 7, 2012.
+ * \date    March 11, 2012.
  */
  
 /*
@@ -209,6 +209,7 @@ typedef struct _PIZSequence {
     PIZNote             **notes1;
     PIZNote             **notes2;
     PIZBoundedHashTable *hashTable;
+    PIZBoundedHashTable *lookup;
     PIZLinklist         **timeline;
     PIZGrowingArray     *scale;
     PIZGrowingArray     *pattern;
@@ -301,7 +302,7 @@ PIZError        pizSequenceProceedStep              (PIZSequence *x, PIZGrowingA
 // -------------------------------------------------------------------------------------------------------------
 
 PIZ_LOCAL PIZNote   *pizSequenceAddNote                 (PIZSequence *x, long *values, long flags);
-PIZ_LOCAL PIZError  pizSequenceRemoveNote               (PIZSequence *x, PIZNote *note);
+PIZ_LOCAL void      pizSequenceRemoveNote               (PIZSequence *x, PIZNote *note);
 PIZ_LOCAL void      pizSequenceRemoveAllNotes           (PIZSequence *x);
 PIZ_LOCAL void      pizSequenceMoveNote                 (PIZSequence *x, PIZNote *note, long newPosition);
 PIZ_LOCAL void      pizSequenceMakeMap                  (PIZSequence *x);

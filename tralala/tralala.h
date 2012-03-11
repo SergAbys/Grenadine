@@ -28,10 +28,12 @@
 #include "ext_systhread.h"
 #include "ext_atomic.h"
 
-#include "pizSequence.h"
 #include "tralalaSymbols.h"
+
+#include "pizSequence.h"
 #include "pizSequenceMaxMSP.h"
 #include "pizSequenceTransform.h"
+#include "pizSequenceUI.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

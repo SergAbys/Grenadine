@@ -1,7 +1,7 @@
 /**
- * \file	pizAgent.h
+ * \file	pizSequenceUI.h
  * \author	Jean Sapristi
- * \date	March 10, 2012.
+ * \date	March 11, 2012.
  */
 
 /*
@@ -38,37 +38,20 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_AGENT_H
-#define PIZ_AGENT_H
+#ifndef PIZ_SEQUENCE_UI_H
+#define PIZ_SEQUENCE_UI_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_EVENT_DATA_SIZE     7
+#include "pizAgent.h"
+#include "pizSequence.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-typedef enum _PIZEventType {
-    PIZ_RUN_EVENT = 1,
-    PIZ_GRAPHIC_EVENT,
-    PIZ_NOTIFY_EVENT
-    } PIZEventType;
+void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue);
 
-typedef enum _PIZEventName {
-    PIZ_NOTE_REMOVED = 1,
-    PIZ_NOTE_ADDED,
-    PIZ_NOTE_CHANGED,
-    PIZ_ZONE_CHANGED
-    } PIZEventName;
-    
-typedef struct _PIZEvent {
-    PIZEventType    type;
-    PIZEventName    name;
-    long            tag;
-    long            data[PIZ_EVENT_DATA_SIZE];
-    } PIZEvent;
-                                    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_AGENT_H
+#endif // PIZ_SEQUENCE_UI_H

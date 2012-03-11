@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceMaxMSP.h
  * \author  Jean Sapristi
- * \date    February 28, 2012.
+ * \date    March 11, 2012.
  */
  
 /*
@@ -58,14 +58,14 @@ typedef struct  _PIZCoordinates {
 // -------------------------------------------------------------------------------------------------------------
 
 void        pizSequenceInitTempZone                 (PIZSequence *x);
-PIZError    pizSequencePutTempZone                  (PIZSequence *x);
+void        pizSequencePutTempZone                  (PIZSequence *x);
 
 bool        pizSequenceResizeTempZone               (PIZSequence *x, 
                                                     const PIZCoordinates *c, 
                                                     PIZDataIndex side);
                                                     
 bool        pizSequenceMoveTempZone                 (PIZSequence *x, long pitch, long position);
-PIZError    pizSequenceTempZoneToArray              (PIZSequence *x, PIZGrowingArray *a);
+void        pizSequenceTempZoneToArray              (PIZSequence *x, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -81,8 +81,8 @@ long        pizSequenceDragLasso                    (PIZSequence *x,
                                                     const PIZCoordinates *n, 
                                                     bool reverse);
                                                     
-PIZError    pizSequenceRemoveSelectedNotes          (PIZSequence *x);
-PIZError    pizSequenceAddNoteWithCoordinates       (PIZSequence *x, const PIZCoordinates *c, long flags);
+void        pizSequenceRemoveSelectedNotes          (PIZSequence *x);
+void        pizSequenceAddNoteWithCoordinates       (PIZSequence *x, const PIZCoordinates *c, long flags);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

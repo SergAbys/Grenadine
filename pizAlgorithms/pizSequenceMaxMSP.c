@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceMaxMSP.c
  * \author  Jean Sapristi
- * \date    March 2, 2012.
+ * \date    March 11, 2012.
  */
  
 /*
@@ -85,40 +85,32 @@ void pizSequenceInitTempZone (PIZSequence *x)
     PIZUNLOCK
 }
 
-PIZError pizSequencePutTempZone (PIZSequence *x)
+void pizSequencePutTempZone (PIZSequence *x)
 {
-    long err = PIZ_ERROR;
-    
     PIZLOCK
     
     if (!(piz_start == piz_end)) {
-    //
-    if (piz_end < piz_start) {
-        long k    = piz_end;
-        piz_end   = piz_start;
-        piz_start = k;
-    }
-    
-    if (piz_up < piz_down) {
-        long k   = piz_up;
-        piz_up   = piz_down;
-        piz_down = k;
-    }
-    
-    x->start = piz_start;
-    x->end   = piz_end;
-    x->down  = piz_down;
-    x->up    = piz_up;
-    
-    x->changedZone = true;
-    
-    err = PIZ_GOOD;
-    //    
+        if (piz_end < piz_start) {
+            long k    = piz_end;
+            piz_end   = piz_start;
+            piz_start = k;
+        }
+        
+        if (piz_up < piz_down) {
+            long k   = piz_up;
+            piz_up   = piz_down;
+            piz_down = k;
+        }
+        
+        x->start = piz_start;
+        x->end   = piz_end;
+        x->down  = piz_down;
+        x->up    = piz_up;
+        
+        x->changedZone = true;
     }
         
     PIZUNLOCK
-    
-    return err;
 }
 
 bool pizSequenceResizeTempZone (PIZSequence *x, const PIZCoordinates *c, PIZDataIndex side)
@@ -185,24 +177,18 @@ bool pizSequenceMoveTempZone (PIZSequence *x, long pitch, long position)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizSequenceTempZoneToArray (PIZSequence *x, PIZGrowingArray *a)
+void pizSequenceTempZoneToArray (PIZSequence *x, PIZGrowingArray *a)
 {
-    long err = PIZ_ERROR;
-
     PIZLOCK
     
     if (a) {
-        err = PIZ_GOOD;
-        
-        err |= pizGrowingArrayAppend (a, piz_start);
-        err |= pizGrowingArrayAppend (a, piz_end);
-        err |= pizGrowingArrayAppend (a, piz_down);
-        err |= pizGrowingArrayAppend (a, piz_up);
+        pizGrowingArrayAppend (a, piz_start);
+        pizGrowingArrayAppend (a, piz_end);
+        pizGrowingArrayAppend (a, piz_down);
+        pizGrowingArrayAppend (a, piz_up);
     }
         
     PIZUNLOCK
-    
-    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -457,10 +443,10 @@ long pizSequenceDragLasso (PIZSequence *x, const PIZCoordinates *m, const PIZCoo
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizSequenceRemoveSelectedNotes (PIZSequence *x)
+void pizSequenceRemoveSelectedNotes (PIZSequence *x)
 {
+    long i;
     bool haveChanged = false;
-    long i, err = PIZ_GOOD;
     
     PIZLOCK
     
@@ -476,7 +462,7 @@ PIZError pizSequenceRemoveSelectedNotes (PIZSequence *x)
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
             if (note->isSelected) {
-                err |= pizSequenceRemoveNote (x, note);
+                pizSequenceRemoveNote (x, note);
                 haveChanged = true;
             }
                 
@@ -488,14 +474,11 @@ PIZError pizSequenceRemoveSelectedNotes (PIZSequence *x)
         pizSequenceMakeMap (x);
     }
     
-    PIZUNLOCK
-    
-    return err; 
+    PIZUNLOCK 
 }
 
-PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c, long flags)
+void pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c, long flags)
 {
-    long err = PIZ_GOOD;
     long values[PIZ_DATA_NOTE_SIZE];
     
     PIZLOCK
@@ -513,15 +496,11 @@ PIZError pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates
         values[PIZ_DATA_DURATION] = x->grid;
     }
     
-    if (!(pizSequenceAddNote (x, values, flags))) {
-        err |= PIZ_ERROR;
-    } else {
+    if (pizSequenceAddNote (x, values, flags)) {
         pizSequenceMakeMap (x);
     }
                     
     PIZUNLOCK
-    
-    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------
