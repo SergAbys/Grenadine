@@ -9,7 +9,7 @@ Layout of the Grenadine repository :
   max/MSP prototype.
 
 * pizAlgorithms : 
-  static library in C with, machine-learning, data 
-  structures, and everything for the Grenadine project.
+  static library in C with machine-learning algorithms, 
+  data structures, and everything for the Grenadine project.
 
 All that is "work in progress" ...
