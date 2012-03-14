@@ -1,7 +1,7 @@
 /*
  * \file    pizItemset128.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    March 14, 2012.
  */
  
 /*
@@ -71,7 +71,7 @@ void pizItemset128Clear (PIZItemset128 *itemset)
 {
     long i;
     
-    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_WORDS; i++) {
+    for (i = 0; i < PIZ_ITEMSET128_NUMBER_OF_ULONGS; i++) {
         itemset->items[i] = 0;
     }
 }
@@ -81,7 +81,7 @@ long pizItemset128Count (const PIZItemset128 *itemset)
     long i;
     long k = 0;
     
-    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_WORDS; i++) {
+    for (i = 0; i < PIZ_ITEMSET128_NUMBER_OF_ULONGS; i++) {
         unsigned long n = itemset->items[i];
             
         while (n != 0) {
@@ -114,7 +114,7 @@ void pizItemset128Union (const PIZItemset128 *a, const PIZItemset128 *b, PIZItem
 {
     long i;
     
-    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_WORDS; i++) {
+    for (i = 0; i < PIZ_ITEMSET128_NUMBER_OF_ULONGS; i++) {
         r->items[i] = a->items[i] | b->items[i];
     }
 }
@@ -123,7 +123,7 @@ void pizItemset128Intersection (const PIZItemset128 *a, const PIZItemset128 *b, 
 {
     long i;
     
-    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_WORDS; i++) {
+    for (i = 0; i < PIZ_ITEMSET128_NUMBER_OF_ULONGS; i++) {
         r->items[i] = a->items[i] & b->items[i];
     }
 }
@@ -133,7 +133,7 @@ bool pizItemset128IsIncluded (const PIZItemset128 *a, const PIZItemset128 *b)
     long i;
     bool k = true;
             
-    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_WORDS; i++) {
+    for (i = 0; i < PIZ_ITEMSET128_NUMBER_OF_ULONGS; i++) {
         if (b->items[i] != (b->items[i] | a->items[i])) {
             k = false;
             break;
@@ -148,7 +148,7 @@ bool pizItemset128IsEqual (const PIZItemset128 *a, const PIZItemset128 *b)
     long i;
     long k = true;
             
-    for (i = 0; i < PIZ_ITEMSET128_SIZE_IN_WORDS; i++) {
+    for (i = 0; i < PIZ_ITEMSET128_NUMBER_OF_ULONGS; i++) {
         if (a->items[i] != b->items[i]) {
             k = false;
             break;
