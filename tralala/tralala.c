@@ -1429,7 +1429,7 @@ void tralala_runTask (t_tralala *x)
                 velocity = pizGrowingArrayValueAtIndex (x->result, i + PIZ_DATA_VELOCITY);
                 channel  = pizGrowingArrayValueAtIndex (x->result, i + PIZ_DATA_CHANNEL);
                 
-                k = (TIME_STEPS_PER_MINUTE / (double)x->tempo);
+                k = (TIME_BPM_FACTOR / (double)x->tempo);
                 duration = (long)((pizGrowingArrayValueAtIndex (x->result, i + PIZ_DATA_DURATION)) * k);
                     
                 atom_setlong (x->playedNote + 0, pitch);
@@ -1442,7 +1442,7 @@ void tralala_runTask (t_tralala *x)
         }
         
         if (x->flags & FLAG_IS_RUNNING) {
-            clock_fdelay (x->runClock, TIME_STEPS_PER_MINUTE / (double)x->tempo);
+            clock_fdelay (x->runClock, TIME_BPM_FACTOR / (double)x->tempo);
         }
         
     } else {

@@ -39,7 +39,7 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TIME_STEPS_PER_MINUTE               2500.
+#define TIME_BPM_FACTOR                     2500.
 #define TIME_TICKS_PER_STEP                 20
 #define TIME_TEMPO_MIN                      20
 #define TIME_TEMPO_MAX                      300
