@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 07/03/12.
+ *  Last modified : 15/03/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -30,6 +30,7 @@
 
 #include "tralalaSymbols.h"
 
+#include "pizAgent.h"
 #include "pizSequence.h"
 #include "pizSequenceMaxMSP.h"
 #include "pizSequenceTransform.h"
@@ -39,10 +40,9 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TIME_BPM_FACTOR                     2500.
-#define TIME_TICKS_PER_STEP                 20
 #define TIME_TEMPO_MIN                      20
 #define TIME_TEMPO_MAX                      300
+#define TIME_TICKS_PER_STEP                 20
 
 #define CLOCK_RANDOMIZE                     10.
 #define CLOCK_PAINT_INTERVAL                31.
@@ -96,10 +96,10 @@
                                             \"quarter dotted\" \"eighth dotted\"                        \
                                             \"sixteenth dotted\""
 
-#define TEXT_ORDER_VELOCITY                 0
-#define TEXT_ORDER_DURATION                 1
-#define TEXT_ORDER_CHANNEL                  2
-#define TEXT_ORDER_PITCH                    3
+#define TEXT_CELL_VELOCITY                  0
+#define TEXT_CELL_DURATION                  1
+#define TEXT_CELL_CHANNEL                   2
+#define TEXT_CELL_PITCH                     3
 #define TEXT_CELL_COUNT                     4
 
 #define MODE_TEXT_NOTE                      0

@@ -159,17 +159,17 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
         
         if ((pt.y - x->previousPoint.y) < -DELTA) {
             switch (selectedText) {
-                case TEXT_ORDER_VELOCITY : pizSequenceChangeMarkedNoteValue (x->user, PIZ_VELOCITY, k); break;
-                case TEXT_ORDER_DURATION : pizSequenceChangeMarkedNoteValue (x->user, PIZ_DURATION, 1); break;
-                case TEXT_ORDER_CHANNEL  : pizSequenceChangeMarkedNoteValue (x->user, PIZ_CHANNEL, 1);  break;
-                case TEXT_ORDER_PITCH    : pizSequenceChangeMarkedNoteValue (x->user, PIZ_PITCH, 1);    break;
+                case TEXT_CELL_VELOCITY : pizSequenceChangeMarkedNoteValue (x->user, PIZ_VELOCITY, k); break;
+                case TEXT_CELL_DURATION : pizSequenceChangeMarkedNoteValue (x->user, PIZ_DURATION, 1); break;
+                case TEXT_CELL_CHANNEL  : pizSequenceChangeMarkedNoteValue (x->user, PIZ_CHANNEL, 1);  break;
+                case TEXT_CELL_PITCH    : pizSequenceChangeMarkedNoteValue (x->user, PIZ_PITCH, 1);    break;
             }
         } else if ((pt.y - x->previousPoint.y) > DELTA) {
             switch (selectedText) {
-                case TEXT_ORDER_VELOCITY : pizSequenceChangeMarkedNoteValue (x->user, PIZ_VELOCITY, -k); break;
-                case TEXT_ORDER_DURATION : pizSequenceChangeMarkedNoteValue (x->user, PIZ_DURATION, -1); break;
-                case TEXT_ORDER_CHANNEL  : pizSequenceChangeMarkedNoteValue (x->user, PIZ_CHANNEL, -1);  break;
-                case TEXT_ORDER_PITCH    : pizSequenceChangeMarkedNoteValue (x->user, PIZ_PITCH, -1);    break;
+                case TEXT_CELL_VELOCITY : pizSequenceChangeMarkedNoteValue (x->user, PIZ_VELOCITY, -k); break;
+                case TEXT_CELL_DURATION : pizSequenceChangeMarkedNoteValue (x->user, PIZ_DURATION, -1); break;
+                case TEXT_CELL_CHANNEL  : pizSequenceChangeMarkedNoteValue (x->user, PIZ_CHANNEL, -1);  break;
+                case TEXT_CELL_PITCH    : pizSequenceChangeMarkedNoteValue (x->user, PIZ_PITCH, -1);    break;
             }
         }
         

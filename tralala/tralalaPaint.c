@@ -364,18 +364,18 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
     atoms_to_jrgba  (4, color, &backgroundTextColor);
     
     if (x->textMode == MODE_TEXT_NOTE && USER && x->isMarkedNote) {  
-        textValues[TEXT_ORDER_VELOCITY] = x->markedVelocity;
-        textValues[TEXT_ORDER_DURATION] = x->markedDuration;
-        textValues[TEXT_ORDER_CHANNEL]  = x->markedChannel;
-        textValues[TEXT_ORDER_PITCH]    = x->markedPitch;
+        textValues[TEXT_CELL_VELOCITY] = x->markedVelocity;
+        textValues[TEXT_CELL_DURATION] = x->markedDuration;
+        textValues[TEXT_CELL_CHANNEL]  = x->markedChannel;
+        textValues[TEXT_CELL_PITCH]    = x->markedPitch;
         
         x->textPosition[0] = GUI_TEXT_SPACE;
         
         for (i = 0; i < TEXT_CELL_COUNT; i++) {
             switch (i)  {
-                case    TEXT_ORDER_PITCH    : t = MODE_FORMAT_NOTENAME;  break;
-                case    TEXT_ORDER_DURATION : t = MODE_FORMAT_TICKS;     break;
-                default                     : t = MODE_FORMAT_LONG;      break;
+                case    TEXT_CELL_PITCH    : t = MODE_FORMAT_NOTENAME;  break;
+                case    TEXT_CELL_DURATION : t = MODE_FORMAT_TICKS;     break;
+                default                    : t = MODE_FORMAT_LONG;      break;
             }
             
             tralala_setString (textCell, textValues[i], t);
