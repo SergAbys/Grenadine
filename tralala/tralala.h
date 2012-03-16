@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 15/03/12.
+ *  Last modified : 16/03/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -30,7 +30,6 @@
 
 #include "tralalaSymbols.h"
 
-#include "pizAgent.h"
 #include "pizSequence.h"
 #include "pizSequenceMaxMSP.h"
 #include "pizSequenceTransform.h"
@@ -43,6 +42,7 @@
 #define TIME_TEMPO_MIN                      20
 #define TIME_TEMPO_MAX                      300
 #define TIME_TICKS_PER_STEP                 20
+#define TIME_BPM_CONSTANT                   2500.
 
 #define CLOCK_RANDOMIZE                     10.
 #define CLOCK_PAINT_INTERVAL                31.

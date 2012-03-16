@@ -74,7 +74,6 @@ _pizLinklistSetFlags
 _pizLinklistSwapByIndexes
 _pizSequenceAddNoteWithCoordinates
 _pizSequenceAddNotesWithArray
-_pizSequenceAppendGraphicEvents
 _pizSequenceCell
 _pizSequenceCellularAutomata
 _pizSequenceChange

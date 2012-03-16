@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	March 15, 2012.
+ * \date	March 16, 2012.
  */
  
 /*
@@ -55,10 +55,24 @@ PIZAgent *pizAgentNew (void)
     
     if (x = (PIZAgent *)malloc (sizeof(PIZAgent))) {
     //
+    long err = PIZ_GOOD;
     
-    if (1) {
+    x->runQueue = pizLinklistNew ( );
+    
+    err |= pthread_mutex_init (&x->eventMutex, NULL);
+    err |= pthread_cond_init  (&x->eventCondition, NULL);
+    err |= pthread_attr_init  (&x->attr);
+    
+    if (!err) {
+        pthread_attr_setdetachstate (&x->attr, PTHREAD_CREATE_JOINABLE);
+        x->eventLoopErr = pthread_create (&x->eventLoop, &x->attr, pizAgentEventLoop, (void *)x); 
+        err |= x->eventLoopErr;
+    }
+        
+    if (!err && x->runQueue) {
         x->flags    = PIZ_AGENT_FLAG_NONE;  
         x->tempo    = PIZ_DEFAULT_TEMPO;  
+        x->quantum  = PIZ_BPM_CONSTANT / (double)x->tempo;
     } else {
         pizAgentFree (x);
         x = NULL;
@@ -67,6 +81,80 @@ PIZAgent *pizAgentNew (void)
     }
     
     return x;
+}
+
+void pizAgentFree (PIZAgent *x)
+{ 
+    if (x) {
+    //
+    if (!x->eventLoopErr) {
+        PIZLOCKEVENT
+        x->flags |= PIZ_AGENT_FLAG_EXIT;
+        PIZUNLOCKEVENT
+    
+        pthread_cond_signal (&x->eventCondition);
+        pthread_join (x->eventLoop, NULL); 
+    }
+    
+    pthread_attr_destroy  (&x->attr);
+    pthread_mutex_destroy (&x->eventMutex);
+    pthread_cond_destroy  (&x->eventCondition);
+    //
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+void *pizAgentEventLoop (void *agent) 
+{
+    PIZAgent *x = agent;
+    
+    while (!EXIT) {
+    //
+    PIZLOCKEVENT
+    
+    while (!(pizLinklistCount (x->runQueue))) {
+        pthread_cond_wait (&x->eventCondition, &x->eventMutex); 
+                
+        if (EXIT) {
+            break;
+        } 
+    }
+    
+    PIZUNLOCKEVENT
+    
+    if (!EXIT) {
+        PIZEvent *event = NULL;
+        
+        PIZLOCKEVENT
+        if (!pizLinklistPtrAtIndex (x->runQueue, 0, (void *)&event)) {
+            post ("Dequeue / %s", __FUNCTION__);
+            pizLinklistRemoveByPtr (x->runQueue, event);
+        }
+        PIZUNLOCKEVENT
+    }
+    
+    if (!EXIT) {
+        sleep (1);
+    }
+    //    
+    }
+    
+    pthread_exit (NULL);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+void pizAgentAppendEvent (PIZAgent *x, PIZEvent *event)
+{
+    if (event) {
+        PIZLOCKEVENT
+        pizLinklistAppend (x->runQueue, event);
+        PIZUNLOCKEVENT
+        pthread_cond_signal (&x->eventCondition);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------

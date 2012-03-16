@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	March 15, 2012.
+ * \date	March 16, 2012.
  */
 
 /*
@@ -67,6 +67,25 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#define PIZ_AGENT_FLAG_NONE     0L
+#define PIZ_AGENT_FLAG_EXIT     (1<<0)
+#define PIZ_AGENT_FLAG_PLAY     (1<<1)
+#define PIZ_AGENT_FLAG_LOOP     (1<<2)
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define PIZLOCKEVENT    pthread_mutex_lock   (&x->eventMutex);
+#define PIZUNLOCKEVENT  pthread_mutex_unlock (&x->eventMutex);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define EXIT (x->flags & PIZ_AGENT_FLAG_EXIT)
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 typedef enum _PIZEventType {
     PIZ_RUN_EVENT = 1,
     PIZ_GRAPHIC_EVENT,
@@ -86,27 +105,27 @@ typedef struct _PIZEvent {
     long            tag;
     long            data[PIZ_AGENT_EVENT_SIZE];
     } PIZEvent;
-
-typedef enum _PIZAgentFlag {
-    PIZ_AGENT_FLAG_NONE = 0
-    } PIZAgentFlag;
     
 typedef struct _PIZAgent {
     long                flags;
     long                tempo;
     double              quantum;
     PIZLinklist         *runQueue;
-    pthread_cond_t      condition;
-    pthread_mutex_t     mutex;
     pthread_attr_t      attr;
+    pthread_cond_t      eventCondition;
+    pthread_mutex_t     eventMutex;
     pthread_t           eventLoop;
+    long                eventLoopErr;
     } PIZAgent;                            
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZAgent    *pizAgentNew    (void);
-void        pizAgentFree    (PIZAgent *x);
+PIZAgent    *pizAgentNew            (void);
+void        pizAgentFree            (PIZAgent *x);
+
+void        *pizAgentEventLoop      (void *agent);
+void        pizAgentAppendEvent     (PIZAgent *x, PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
