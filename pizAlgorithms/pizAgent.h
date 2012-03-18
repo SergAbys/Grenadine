@@ -53,45 +53,28 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#include <assert.h>
-#include <CoreServices/CoreServices.h>
-#include <mach/mach.h>
-#include <mach/mach_time.h>
+
+#ifdef __MACH__
+    #include <mach/mach_time.h>
+#endif // __MACH__
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_AGENT_EVENT_SIZE    7
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
+#define PIZ_EVENT_SIZE          7
 #define PIZ_BPM_CONSTANT        25.E8
+
 #define PIZ_DEFAULT_TEMPO       120
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_AGENT_FLAG_NONE     0L
-#define PIZ_AGENT_FLAG_EXIT     (1<<0)
-#define PIZ_AGENT_FLAG_INIT     (1<<1)
-#define PIZ_AGENT_FLAG_PLAY     (1<<2)
-#define PIZ_AGENT_FLAG_LOOP     (1<<3)
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZ_AGENT_EVENT_NEW(event)      ((event) = (PIZEvent *)calloc (1, sizeof(PIZEvent)))
-#define PIZ_AGENT_EVENT_FREE(event)     if (event) {        \
-                                            free (event);   \
-                                        }
-#define PIZLOCKEVENT                    pthread_mutex_lock   (&x->eventMutex);
-#define PIZUNLOCKEVENT                  pthread_mutex_unlock (&x->eventMutex);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define EXIT (x->flags & PIZ_AGENT_FLAG_EXIT)
+#define PIZ_EVENT_NEW(event)    ((event) = (PIZEvent *)calloc (1, sizeof(PIZEvent)))
+#define PIZ_EVENT_FREE(event)   if (event) {        \
+                                    free (event);   \
+                                }
+#define PIZLOCKEVENT            pthread_mutex_lock   (&x->eventMutex);
+#define PIZUNLOCKEVENT          pthread_mutex_unlock (&x->eventMutex);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -104,6 +87,14 @@ typedef uint64_t PIZTime;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+typedef enum _PIZAgentFlag {
+    PIZ_FLAG_NONE = 0,
+    PIZ_FLAG_EXIT = 1,
+    PIZ_FLAG_INIT = 2,
+    PIZ_FLAG_PLAY = 4,
+    PIZ_FLAG_LOOP = 8
+    } PIZAgentFlag;
 
 typedef enum _PIZEventType {
     PIZ_RUN_EVENT = 1,
@@ -122,7 +113,7 @@ typedef struct _PIZEvent {
     PIZEventType    type;
     PIZEventName    name;
     long            tag;
-    long            data[PIZ_AGENT_EVENT_SIZE];
+    long            data[PIZ_EVENT_SIZE];
     } PIZEvent;
 
 typedef struct _PIZAgent {
@@ -151,8 +142,10 @@ void        pizAgentAppendEvent (PIZAgent *x, PIZEvent *event);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZ_INLINE    PIZError pizAgentGetTime     (PIZTime *t);
-PIZ_LOCAL               PIZError pizAgentElapsedTime (PIZTime t0, PIZTime t1, PIZTime *result);
+PIZ_LOCAL PIZ_INLINE    PIZError pizAgentEventLoopInit  (PIZAgent *x);
+
+PIZ_LOCAL PIZ_INLINE    PIZError pizAgentGetTime        (PIZTime *t);
+PIZ_LOCAL               PIZError pizAgentElapsedTime    (PIZTime t0, PIZTime t1, PIZTime *result);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

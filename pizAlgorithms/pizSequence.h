@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    March 11, 2012.
+ * \date    March 18, 2012.
  */
  
 /*
@@ -66,8 +66,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #define PIZ_CHANNEL_NONE                0
-#define PIZ_NOTE_FLAG_NONE              (0L)
-#define PIZ_NOTE_FLAG_LASSO             (1<<0)
 
 #define PIZ_DEFAULT_START               0
 #define PIZ_DEFAULT_END                 96
@@ -190,6 +188,11 @@ typedef enum _PIZAddFlag {
     PIZ_ADD_FLAG_UNSELECT   = 16,
     PIZ_ADD_FLAG_CLEAR      = 32,
     } PIZAddFlag;
+
+typedef enum _PIZNoteFlag {
+    PIZ_NOTE_FLAG_NONE      = 0,
+    PIZ_NOTE_FLAG_LASSO     = 1
+    } PIZNoteFlag;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

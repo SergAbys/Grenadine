@@ -42,6 +42,12 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+#define EXIT (x->flags & PIZ_FLAG_EXIT)
+#define INIT (x->flags & PIZ_FLAG_INIT)
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 PIZAgent *pizAgentNew (void)
@@ -69,7 +75,7 @@ PIZAgent *pizAgentNew (void)
     }
         
     if (!err && x->runQueue) {
-        x->flags     = PIZ_AGENT_FLAG_NONE;  
+        x->flags     = PIZ_FLAG_INIT;  
         x->tempo     = PIZ_DEFAULT_TEMPO;  
         x->grainSize = (PIZTime)(PIZ_BPM_CONSTANT / x->tempo);
     } else {
@@ -88,7 +94,7 @@ void pizAgentFree (PIZAgent *x)
     //
     if (!x->eventLoopErr) {
         PIZLOCKEVENT
-        x->flags |= PIZ_AGENT_FLAG_EXIT;
+        x->flags |= PIZ_FLAG_EXIT;
         PIZUNLOCKEVENT
     
         pthread_cond_signal (&x->eventCondition);
@@ -114,7 +120,8 @@ void *pizAgentEventLoop (void *agent)
     PIZLOCKEVENT
     
     while (!(pizLinklistCount (x->runQueue))) {
-        pthread_cond_wait (&x->eventCondition, &x->eventMutex); 
+        pthread_cond_wait (&x->eventCondition, &x->eventMutex);
+        x->flags |= PIZ_FLAG_INIT;
                 
         if (EXIT) {
             break;
@@ -122,18 +129,17 @@ void *pizAgentEventLoop (void *agent)
     }
     
     PIZUNLOCKEVENT
-    /*
-    if (!EXIT) {
+        
+    if (!EXIT && !pizAgentEventLoopInit (x)) {
+        /*
         PIZEvent *event = NULL;
                 
         PIZLOCKEVENT
         if (!pizLinklistPtrAtIndex (x->runQueue, 0, (void *)&event)) {
             pizLinklistRemoveByPtr (x->runQueue, event);
         }
-        PIZUNLOCKEVENT
-    }*/
-    
-    if (!EXIT) {
+        PIZUNLOCKEVENT*/
+        
         sleep (1);
     }
     //    
@@ -159,6 +165,24 @@ void pizAgentAppendEvent (PIZAgent *x, PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 
 #ifdef __MACH__
+
+PIZ_INLINE PIZError pizAgentEventLoopInit (PIZAgent *x)
+{
+    long err = PIZ_GOOD;
+    
+    if (INIT) {
+        err |= pizAgentGetTime (&x->grainStart);
+    } else {
+        x->grainStart = x->grainEnd;
+    }
+    
+    if (!err) {
+        x->grainEnd = x->grainStart + x->grainSize;
+        x->flags &= ~PIZ_FLAG_INIT;
+    }
+    
+    return err;
+}
 
 PIZ_INLINE PIZError pizAgentGetTime (PIZTime *t) 
 {
