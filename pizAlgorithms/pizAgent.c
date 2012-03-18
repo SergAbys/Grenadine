@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	March 16, 2012.
+ * \date	March 18, 2012.
  */
  
 /*
@@ -42,11 +42,6 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-#include <stdlib.h>
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 PIZAgent *pizAgentNew (void)
@@ -64,15 +59,19 @@ PIZAgent *pizAgentNew (void)
     err |= pthread_attr_init  (&x->attr);
     
     if (!err) {
-        pthread_attr_setdetachstate (&x->attr, PTHREAD_CREATE_JOINABLE);
+        pthread_attr_setscope        (&x->attr, PTHREAD_SCOPE_SYSTEM);
+        pthread_attr_setinheritsched (&x->attr, PTHREAD_EXPLICIT_SCHED);
+        pthread_attr_setdetachstate  (&x->attr, PTHREAD_CREATE_JOINABLE);
+        pthread_attr_setschedpolicy  (&x->attr, SCHED_OTHER);
+        
         x->eventLoopErr = pthread_create (&x->eventLoop, &x->attr, pizAgentEventLoop, (void *)x); 
         err |= x->eventLoopErr;
     }
         
     if (!err && x->runQueue) {
-        x->flags    = PIZ_AGENT_FLAG_NONE;  
-        x->tempo    = PIZ_DEFAULT_TEMPO;  
-        x->quantum  = PIZ_BPM_CONSTANT / (double)x->tempo;
+        x->flags     = PIZ_AGENT_FLAG_NONE;  
+        x->tempo     = PIZ_DEFAULT_TEMPO;  
+        x->grainSize = (PIZTime)(PIZ_BPM_CONSTANT / x->tempo);
     } else {
         pizAgentFree (x);
         x = NULL;
@@ -123,17 +122,16 @@ void *pizAgentEventLoop (void *agent)
     }
     
     PIZUNLOCKEVENT
-    
+    /*
     if (!EXIT) {
         PIZEvent *event = NULL;
-        
+                
         PIZLOCKEVENT
         if (!pizLinklistPtrAtIndex (x->runQueue, 0, (void *)&event)) {
-            post ("Dequeue / %s", __FUNCTION__);
             pizLinklistRemoveByPtr (x->runQueue, event);
         }
         PIZUNLOCKEVENT
-    }
+    }*/
     
     if (!EXIT) {
         sleep (1);
@@ -156,6 +154,41 @@ void pizAgentAppendEvent (PIZAgent *x, PIZEvent *event)
         pthread_cond_signal (&x->eventCondition);
     }
 }
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#ifdef __MACH__
+
+PIZ_INLINE PIZError pizAgentGetTime (PIZTime *t) 
+{
+    *t = mach_absolute_time ( );
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizAgentElapsedTime (PIZTime t0, PIZTime t1, PIZTime *result)
+{
+    long                                err = PIZ_ERROR;
+    uint64_t                            elapsed;
+    static mach_timebase_info_data_t    piz_timebaseInfo;
+
+    if (t1 > t0) {
+        err = PIZ_GOOD;
+        
+        elapsed = t1 - t0;
+
+        if (piz_timebaseInfo.denom == 0) {
+            mach_timebase_info (&piz_timebaseInfo);
+        }
+
+        *result = elapsed * piz_timebaseInfo.numer / piz_timebaseInfo.denom;
+    }
+
+    return err;
+}
+
+#endif // __MACH__
 
 // -------------------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------:x

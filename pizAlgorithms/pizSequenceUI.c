@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceUI.c
  * \author	Jean Sapristi
- * \date	March 11, 2012.
+ * \date	March 17, 2012.
  */
  
 /*
@@ -57,7 +57,7 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     if (x->changedZone) {
         PIZEvent *event = NULL;   
                                            
-        if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
+        if (PIZ_AGENT_EVENT_NEW(event)) {
             event->type = PIZ_GRAPHIC_EVENT;
             event->name = PIZ_ZONE_CHANGED;
             
@@ -74,7 +74,7 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     //
     if (pizItemset128IsSetAtIndex (&x->removedNotes, i)) {
         PIZEvent *event = NULL;                                      
-        if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
+        if (PIZ_AGENT_EVENT_NEW(event)) {
             event->type = PIZ_GRAPHIC_EVENT;
             event->name = PIZ_NOTE_REMOVED;
             event->tag  = i;
@@ -91,7 +91,7 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
         PIZNote  *note = NULL; 
         PIZEvent *event = NULL;  
         
-        if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
+        if (PIZ_AGENT_EVENT_NEW(event)) {
             event->type = PIZ_GRAPHIC_EVENT;
             event->name = PIZ_NOTE_ADDED;
             event->tag  = i;
@@ -122,7 +122,7 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
         PIZNote  *note = NULL; 
         PIZEvent *event = NULL; 
          
-        if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
+        if (PIZ_AGENT_EVENT_NEW(event)) {
             event->type = PIZ_GRAPHIC_EVENT;
             event->name = PIZ_NOTE_CHANGED;
             event->tag  = i;
