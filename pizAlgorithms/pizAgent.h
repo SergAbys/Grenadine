@@ -58,6 +58,8 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #define PIZ_BPM_CONSTANT        25.E8
+#define PIZ_WORK_TIME_RATIO     0.75
+
 #define PIZ_DEFAULT_TEMPO       120
 
 // -------------------------------------------------------------------------------------------------------------
@@ -80,7 +82,8 @@ typedef enum _PIZAgentFlag {
 typedef struct _PIZAgent {
     long                flags;
     long                tempo;
-    PIZTime             grainSize;
+    PIZNano             grainSize;
+    PIZNano             grainWorkSize;
     PIZTime             grainStart;
     PIZTime             grainEnd;
     PIZLinklist         *runQueue;
@@ -94,13 +97,19 @@ typedef struct _PIZAgent {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZAgent    *pizAgentNew            (void);
-void        pizAgentFree            (PIZAgent *x);
+PIZAgent            *pizAgentNew                    (void);
+void                pizAgentFree                    (PIZAgent *x);
 
-void        *pizAgentEventLoop      (void *agent);
-PIZError    pizAgentEventLoopInit   (PIZAgent *x);
+PIZ_LOCAL void      *pizAgentEventLoop              (void *agent);
 
-void        pizAgentAppendEvent     (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL PIZError  pizAgentEventLoopInit           (PIZAgent *x);
+PIZ_LOCAL bool      pizAgentEventLoopIsWorkTime     (PIZAgent *x);
+PIZ_LOCAL void      pizAgentEventLoopSleep          (PIZAgent *x);
+
+PIZ_LOCAL PIZError  pizAgentEventLoopDoRunEvent     (PIZAgent *x);
+//PIZ_LOCAL PIZError  pizAgentEventLoopDoGraphicEvent (PIZAgent *x);
+
+void                pizAgentAppendEvent             (PIZAgent *x, PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

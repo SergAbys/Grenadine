@@ -45,7 +45,7 @@
 
 #ifdef __MACH__
 
-PIZError pizTimeGet (PIZTime *t) 
+PIZError pizTimeSet (PIZTime *t) 
 {
     *t = mach_absolute_time ( );
     
@@ -57,7 +57,12 @@ void pizTimeCopy (PIZTime *t, PIZTime *toCopy)
     *t = *toCopy;
 }
 
-PIZError pizTimeElapsed (PIZTime *t0, PIZTime *t1, PIZTime *result)
+void pizTimeIncrement (PIZTime *t, PIZNano *ns)
+{
+    *t += *ns;
+}
+
+PIZError pizTimeElapsed (PIZTime *t0, PIZTime *t1, PIZNano *result)
 {
     long                                err = PIZ_ERROR;
     uint64_t                            elapsed;

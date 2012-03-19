@@ -54,15 +54,17 @@
 #include <mach/mach_time.h>
 
 typedef uint64_t PIZTime;
+typedef uint64_t PIZNano;
 
 #endif // __MACH__
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError    pizTimeGet      (PIZTime *t);
-void        pizTimeCopy     (PIZTime *t, PIZTime *toCopy);
-PIZError    pizTimeElapsed  (PIZTime *t0, PIZTime *t1, PIZTime *result);
+PIZError    pizTimeSet          (PIZTime *t);
+void        pizTimeCopy         (PIZTime *t, PIZTime *toCopy);
+void        pizTimeIncrement    (PIZTime *t, PIZNano *ns); 
+PIZError    pizTimeElapsed      (PIZTime *t0, PIZTime *t1, PIZNano *result);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -71,7 +73,7 @@ PIZError    pizTimeElapsed  (PIZTime *t0, PIZTime *t1, PIZTime *result);
 
 #ifdef __MACH__
 
-PIZ_EXTERN PIZError pizTimeGet (PIZTime *t) 
+PIZ_EXTERN PIZError pizTimeSet (PIZTime *t) 
 {
     *t = mach_absolute_time ( );
     
@@ -81,6 +83,11 @@ PIZ_EXTERN PIZError pizTimeGet (PIZTime *t)
 PIZ_EXTERN void pizTimeCopy (PIZTime *t, PIZTime *toCopy)
 {
     *t = *toCopy;
+}
+
+PIZ_EXTERN void pizTimeIncrement (PIZTime *t, PIZNano *ns)
+{
+    *t += *ns;
 }
 
 #endif // __MACH__
