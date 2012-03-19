@@ -1,5 +1,5 @@
 /**
- * \file	pizAgent.h
+ * \file	pizTime.h
  * \author	Jean Sapristi
  * \date	March 19, 2012.
  */
@@ -38,70 +38,55 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_AGENT_H
-#define PIZ_AGENT_H
+#ifndef PIZ_TIME_H
+#define PIZ_TIME_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizEvent.h"
+#include "pizDataStructures.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include <pthread.h>
-#include <stdlib.h>
-#include <time.h>
-#include <unistd.h>
+#ifdef __MACH__
+
+#include <mach/mach_time.h>
+
+typedef uint64_t PIZTime;
+
+#endif // __MACH__
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_BPM_CONSTANT        25.E8
-#define PIZ_DEFAULT_TEMPO       120
+PIZError    pizTimeGet      (PIZTime *t);
+void        pizTimeCopy     (PIZTime *t, PIZTime *toCopy);
+PIZError    pizTimeElapsed  (PIZTime *t0, PIZTime *t1, PIZTime *result);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZLOCKEVENT            pthread_mutex_lock   (&x->eventMutex);
-#define PIZUNLOCKEVENT          pthread_mutex_unlock (&x->eventMutex);
+#ifdef PIZ_EXTERN_INLINE
+
+#ifdef __MACH__
+
+PIZ_EXTERN PIZError pizTimeGet (PIZTime *t) 
+{
+    *t = mach_absolute_time ( );
+    
+    return PIZ_GOOD;
+}
+
+PIZ_EXTERN void pizTimeCopy (PIZTime *t, PIZTime *toCopy)
+{
+    *t = *toCopy;
+}
+
+#endif // __MACH__
+
+#endif // PIZ_EXTERN_INLINE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-typedef enum _PIZAgentFlag {
-    PIZ_FLAG_NONE = 0,
-    PIZ_FLAG_EXIT = 1,
-    PIZ_FLAG_INIT = 2,
-    PIZ_FLAG_PLAY = 4,
-    PIZ_FLAG_LOOP = 8
-    } PIZAgentFlag;
-
-typedef struct _PIZAgent {
-    long                flags;
-    long                tempo;
-    PIZTime             grainSize;
-    PIZTime             grainStart;
-    PIZTime             grainEnd;
-    PIZLinklist         *runQueue;
-    pthread_attr_t      attr;
-    pthread_cond_t      eventCondition;
-    pthread_mutex_t     eventMutex;
-    pthread_t           eventLoop;
-    long                eventLoopErr;
-    } PIZAgent;                            
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZAgent    *pizAgentNew            (void);
-void        pizAgentFree            (PIZAgent *x);
-
-void        *pizAgentEventLoop      (void *agent);
-PIZError    pizAgentEventLoopInit   (PIZAgent *x);
-
-void        pizAgentAppendEvent     (PIZAgent *x, PIZEvent *event);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_AGENT_H
+#endif // PIZ_TIME_H

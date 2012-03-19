@@ -148,6 +148,24 @@ void *pizAgentEventLoop (void *agent)
     pthread_exit (NULL);
 }
 
+PIZError pizAgentEventLoopInit (PIZAgent *x)
+{
+    long err = PIZ_GOOD;
+    
+    if (INIT) {
+        err |= pizTimeGet (&x->grainStart);
+    } else {
+        pizTimeCopy (&x->grainStart, &x->grainEnd);
+    }
+    
+    if (!err) {
+        //x->grainEnd = x->grainStart + x->grainSize;
+        x->flags &= ~PIZ_FLAG_INIT;
+    }
+    
+    return err;
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
@@ -160,59 +178,6 @@ void pizAgentAppendEvent (PIZAgent *x, PIZEvent *event)
         pthread_cond_signal (&x->eventCondition);
     }
 }
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#ifdef __MACH__
-
-PIZ_INLINE PIZError pizAgentEventLoopInit (PIZAgent *x)
-{
-    long err = PIZ_GOOD;
-    
-    if (INIT) {
-        err |= pizAgentGetTime (&x->grainStart);
-    } else {
-        x->grainStart = x->grainEnd;
-    }
-    
-    if (!err) {
-        x->grainEnd = x->grainStart + x->grainSize;
-        x->flags &= ~PIZ_FLAG_INIT;
-    }
-    
-    return err;
-}
-
-PIZ_INLINE PIZError pizAgentGetTime (PIZTime *t) 
-{
-    *t = mach_absolute_time ( );
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizAgentElapsedTime (PIZTime t0, PIZTime t1, PIZTime *result)
-{
-    long                                err = PIZ_ERROR;
-    uint64_t                            elapsed;
-    static mach_timebase_info_data_t    piz_timebaseInfo;
-
-    if (t1 > t0) {
-        err = PIZ_GOOD;
-        
-        elapsed = t1 - t0;
-
-        if (piz_timebaseInfo.denom == 0) {
-            mach_timebase_info (&piz_timebaseInfo);
-        }
-
-        *result = elapsed * piz_timebaseInfo.numer / piz_timebaseInfo.denom;
-    }
-
-    return err;
-}
-
-#endif // __MACH__
 
 // -------------------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------:x

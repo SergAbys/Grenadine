@@ -1,9 +1,9 @@
-/**
- * \file	pizSequenceUI.h
+/*
+ * \file	pizTime.c
  * \author	Jean Sapristi
  * \date	March 19, 2012.
  */
-
+ 
 /*
  *  Copyright (c) 2012, Jean Sapristi & Tom Javel, 
  *  "nicolas.danet@free.fr".
@@ -38,20 +38,47 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_SEQUENCE_UI_H
-#define PIZ_SEQUENCE_UI_H
+#include "pizTime.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizEvent.h"
-#include "pizSequence.h"
+#ifdef __MACH__
+
+PIZError pizTimeGet (PIZTime *t) 
+{
+    *t = mach_absolute_time ( );
+    
+    return PIZ_GOOD;
+}
+
+void pizTimeCopy (PIZTime *t, PIZTime *toCopy)
+{
+    *t = *toCopy;
+}
+
+PIZError pizTimeElapsed (PIZTime *t0, PIZTime *t1, PIZTime *result)
+{
+    long                                err = PIZ_ERROR;
+    uint64_t                            elapsed;
+    static mach_timebase_info_data_t    piz_timebaseInfo;
+
+    if (*t1 > *t0) {
+        err = PIZ_GOOD;
+        
+        elapsed = *t1 - *t0;
+
+        if (piz_timebaseInfo.denom == 0) {
+            mach_timebase_info (&piz_timebaseInfo);
+        }
+
+        *result = elapsed * piz_timebaseInfo.numer / piz_timebaseInfo.denom;
+    }
+
+    return err;
+}
+
+#endif // __MACH__
 
 // -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue, PIZTime *t);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_UI_H
+// -----------------------------------------------------------------------------------------------------------:x

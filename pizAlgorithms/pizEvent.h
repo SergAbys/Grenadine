@@ -1,5 +1,5 @@
 /**
- * \file	pizAgent.h
+ * \file	pizEvent.h
  * \author	Jean Sapristi
  * \date	March 19, 2012.
  */
@@ -38,70 +38,48 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_AGENT_H
-#define PIZ_AGENT_H
+#ifndef PIZ_EVENT_H
+#define PIZ_EVENT_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizEvent.h"
+#include "pizTime.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include <pthread.h>
-#include <stdlib.h>
-#include <time.h>
-#include <unistd.h>
+#define PIZ_EVENT_DATA_SIZE 7
+
+#define PIZ_EVENT_NEW(event)    ((event) = (PIZEvent *)calloc (1, sizeof(PIZEvent)))
+#define PIZ_EVENT_FREE(event)   if (event) {        \
+                                    free (event);   \
+                                }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_BPM_CONSTANT        25.E8
-#define PIZ_DEFAULT_TEMPO       120
+typedef enum _PIZEventType {
+    PIZ_RUN_EVENT = 1,
+    PIZ_GRAPHIC_EVENT,
+    PIZ_NOTIFY_EVENT
+    } PIZEventType;
 
+typedef enum _PIZEventName {
+    PIZ_NOTE_REMOVED = 1,
+    PIZ_NOTE_ADDED,
+    PIZ_NOTE_CHANGED,
+    PIZ_ZONE_CHANGED
+    } PIZEventName;
+    
+typedef struct _PIZEvent {
+    PIZTime         time;
+    PIZEventType    type;
+    PIZEventName    name;
+    long            tag;
+    long            data[PIZ_EVENT_DATA_SIZE];
+    } PIZEvent;
+    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-#define PIZLOCKEVENT            pthread_mutex_lock   (&x->eventMutex);
-#define PIZUNLOCKEVENT          pthread_mutex_unlock (&x->eventMutex);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-typedef enum _PIZAgentFlag {
-    PIZ_FLAG_NONE = 0,
-    PIZ_FLAG_EXIT = 1,
-    PIZ_FLAG_INIT = 2,
-    PIZ_FLAG_PLAY = 4,
-    PIZ_FLAG_LOOP = 8
-    } PIZAgentFlag;
-
-typedef struct _PIZAgent {
-    long                flags;
-    long                tempo;
-    PIZTime             grainSize;
-    PIZTime             grainStart;
-    PIZTime             grainEnd;
-    PIZLinklist         *runQueue;
-    pthread_attr_t      attr;
-    pthread_cond_t      eventCondition;
-    pthread_mutex_t     eventMutex;
-    pthread_t           eventLoop;
-    long                eventLoopErr;
-    } PIZAgent;                            
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZAgent    *pizAgentNew            (void);
-void        pizAgentFree            (PIZAgent *x);
-
-void        *pizAgentEventLoop      (void *agent);
-PIZError    pizAgentEventLoopInit   (PIZAgent *x);
-
-void        pizAgentAppendEvent     (PIZAgent *x, PIZEvent *event);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_AGENT_H
+#endif // PIZ_EVENT_H
