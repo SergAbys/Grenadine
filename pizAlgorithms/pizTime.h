@@ -61,10 +61,16 @@ typedef uint64_t PIZNano;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#define PIZ_NANO_PER_SECOND     1000000000ULL
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 PIZError    pizTimeSet          (PIZTime *t);
 void        pizTimeCopy         (PIZTime *t, PIZTime *toCopy);
 void        pizTimeAddNano      (PIZTime *t, PIZNano *ns); 
 PIZError    pizTimeElapsedNano  (PIZTime *t0, PIZTime *t1, PIZNano *result);
+void        pizTimespecWithNano (struct timespec *t, PIZNano *ns);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -83,6 +89,12 @@ PIZ_EXTERN PIZError pizTimeSet (PIZTime *t)
 PIZ_EXTERN void pizTimeCopy (PIZTime *t, PIZTime *toCopy)
 {
     (*t) = (*toCopy);
+}
+
+PIZ_EXTERN void pizTimespecWithNano (struct timespec *t, PIZNano *ns)
+{
+    t->tv_sec  = (time_t)(*ns / PIZ_NANO_PER_SECOND);
+    t->tv_nsec = (long)(*ns % PIZ_NANO_PER_SECOND);
 }
 
 #endif // __MACH__

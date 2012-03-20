@@ -88,6 +88,12 @@ PIZError pizTimeElapsedNano (PIZTime *t0, PIZTime *t1, PIZNano *result)
     return err;
 }
 
+void pizTimespecWithNano (struct timespec *t, PIZNano *ns)
+{
+    t->tv_sec  = (time_t)(*ns / PIZ_NANO_PER_SECOND);
+    t->tv_nsec = (long)(*ns % PIZ_NANO_PER_SECOND);
+}
+
 #endif // __MACH__
 
 // -------------------------------------------------------------------------------------------------------------

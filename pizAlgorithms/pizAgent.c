@@ -224,8 +224,7 @@ void pizAgentEventLoopSleep (PIZAgent *x)
         err = pizTimeElapsedNano (&now, &x->grainEnd, &ns);
     }
     
-    ptrA->tv_sec  = (time_t)(ns / 1000000000ULL);
-    ptrA->tv_nsec = (long)(ns % 1000000000ULL);
+    pizTimespecWithNano (ptrA, &ns);
     
     while ((nanosleep (ptrA, ptrB) == -1) && (errno == EINTR)) {
         temp = ptrA;
