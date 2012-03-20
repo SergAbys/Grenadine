@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	March 19, 2012.
+ * \date	March 20, 2012.
  */
 
 /*
@@ -53,6 +53,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <errno.h>
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -97,19 +98,19 @@ typedef struct _PIZAgent {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZAgent            *pizAgentNew                    (void);
-void                pizAgentFree                    (PIZAgent *x);
+PIZAgent            *pizAgentNew                            (void);
+void                pizAgentFree                            (PIZAgent *x);
 
-PIZ_LOCAL void      *pizAgentEventLoop              (void *agent);
+PIZ_LOCAL void      *pizAgentEventLoop                      (void *agent);
 
-PIZ_LOCAL PIZError  pizAgentEventLoopInit           (PIZAgent *x);
-PIZ_LOCAL bool      pizAgentEventLoopIsWorkTime     (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopSleep          (PIZAgent *x);
+PIZ_LOCAL PIZError  pizAgentEventLoopInit                   (PIZAgent *x);
+PIZ_LOCAL bool      pizAgentEventLoopIsWorkTime             (PIZAgent *x);
+PIZ_LOCAL void      pizAgentEventLoopSleep                  (PIZAgent *x);
 
-PIZ_LOCAL PIZError  pizAgentEventLoopDoRunEvent     (PIZAgent *x);
-//PIZ_LOCAL PIZError  pizAgentEventLoopDoGraphicEvent (PIZAgent *x);
+PIZ_LOCAL PIZError  pizAgentEventLoopProceedRunEvent        (PIZAgent *x);
+PIZ_LOCAL PIZError  pizAgentEventLoopProceedGraphicEvent    (PIZAgent *x);
 
-void                pizAgentAppendEvent             (PIZAgent *x, PIZEvent *event);
+void                pizAgentAppendEvent                     (PIZAgent *x, PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

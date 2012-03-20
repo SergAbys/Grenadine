@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceUI.c
  * \author	Jean Sapristi
- * \date	March 19, 2012.
+ * \date	March 20, 2012.
  */
  
 /*
@@ -48,7 +48,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue, PIZTime *t)
+void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
 {
     long i;
     
@@ -58,14 +58,13 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue, PIZTime
         PIZEvent *event = NULL;   
                                            
         if (PIZ_EVENT_NEW(event)) {
-            pizTimeCopy (&event->time, t);
             event->type = PIZ_GRAPHIC_EVENT;
             event->name = PIZ_ZONE_CHANGED;
             
-            event->data[PIZ_DATA_START]     = x->start;
-            event->data[PIZ_DATA_END]       = x->end;
-            event->data[PIZ_DATA_DOWN]      = x->down;
-            event->data[PIZ_DATA_UP]        = x->up;
+            event->data.values[PIZ_DATA_START] = x->start;
+            event->data.values[PIZ_DATA_END]   = x->end;
+            event->data.values[PIZ_DATA_DOWN]  = x->down;
+            event->data.values[PIZ_DATA_UP]    = x->up;
                 
             pizLinklistAppend (queue, event);
         }
@@ -76,7 +75,6 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue, PIZTime
     if (pizItemset128IsSetAtIndex (&x->removedNotes, i)) {
         PIZEvent *event = NULL;                                      
         if (PIZ_EVENT_NEW(event)) {
-            pizTimeCopy (&event->time, t);
             event->type = PIZ_GRAPHIC_EVENT;
             event->name = PIZ_NOTE_REMOVED;
             event->tag  = i;
@@ -94,7 +92,6 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue, PIZTime
         PIZEvent *event = NULL;  
         
         if (PIZ_EVENT_NEW(event)) {
-            pizTimeCopy (&event->time, t);
             event->type = PIZ_GRAPHIC_EVENT;
             event->name = PIZ_NOTE_ADDED;
             event->tag  = i;
@@ -102,13 +99,13 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue, PIZTime
             pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note);
             
             if (note) {
-                event->data[PIZ_DATA_POSITION]      = note->position;
-                event->data[PIZ_DATA_PITCH]         = note->data[PIZ_PITCH];
-                event->data[PIZ_DATA_VELOCITY]      = note->data[PIZ_VELOCITY];
-                event->data[PIZ_DATA_DURATION]      = note->data[PIZ_DURATION];
-                event->data[PIZ_DATA_CHANNEL]       = note->data[PIZ_CHANNEL];
-                event->data[PIZ_DATA_IS_SELECTED]   = note->isSelected;
-                event->data[PIZ_DATA_IS_MARKED]     = (note == x->markedNote);
+                event->data.values[PIZ_DATA_POSITION]    = note->position;
+                event->data.values[PIZ_DATA_PITCH]       = note->data[PIZ_PITCH];
+                event->data.values[PIZ_DATA_VELOCITY]    = note->data[PIZ_VELOCITY];
+                event->data.values[PIZ_DATA_DURATION]    = note->data[PIZ_DURATION];
+                event->data.values[PIZ_DATA_CHANNEL]     = note->data[PIZ_CHANNEL];
+                event->data.values[PIZ_DATA_IS_SELECTED] = note->isSelected;
+                event->data.values[PIZ_DATA_IS_MARKED]   = (note == x->markedNote);
             }
             
             pizLinklistAppend (queue, event);
@@ -126,7 +123,6 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue, PIZTime
         PIZEvent *event = NULL; 
          
         if (PIZ_EVENT_NEW(event)) {
-            pizTimeCopy (&event->time, t);
             event->type = PIZ_GRAPHIC_EVENT;
             event->name = PIZ_NOTE_CHANGED;
             event->tag  = i;
@@ -134,13 +130,13 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue, PIZTime
             pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note);
             
             if (note) {
-                event->data[PIZ_DATA_POSITION]      = note->position;
-                event->data[PIZ_DATA_PITCH]         = note->data[PIZ_PITCH];
-                event->data[PIZ_DATA_VELOCITY]      = note->data[PIZ_VELOCITY];
-                event->data[PIZ_DATA_DURATION]      = note->data[PIZ_DURATION];
-                event->data[PIZ_DATA_CHANNEL]       = note->data[PIZ_CHANNEL];
-                event->data[PIZ_DATA_IS_SELECTED]   = note->isSelected;
-                event->data[PIZ_DATA_IS_MARKED]     = (note == x->markedNote);
+                event->data.values[PIZ_DATA_POSITION]    = note->position;
+                event->data.values[PIZ_DATA_PITCH]       = note->data[PIZ_PITCH];
+                event->data.values[PIZ_DATA_VELOCITY]    = note->data[PIZ_VELOCITY];
+                event->data.values[PIZ_DATA_DURATION]    = note->data[PIZ_DURATION];
+                event->data.values[PIZ_DATA_CHANNEL]     = note->data[PIZ_CHANNEL];
+                event->data.values[PIZ_DATA_IS_SELECTED] = note->isSelected;
+                event->data.values[PIZ_DATA_IS_MARKED]   = (note == x->markedNote);
             }
             
             pizLinklistAppend (queue, event);

@@ -1,7 +1,7 @@
 /**
  * \file	pizTime.h
  * \author	Jean Sapristi
- * \date	March 19, 2012.
+ * \date	March 20, 2012.
  */
 
 /*
@@ -63,8 +63,8 @@ typedef uint64_t PIZNano;
 
 PIZError    pizTimeSet          (PIZTime *t);
 void        pizTimeCopy         (PIZTime *t, PIZTime *toCopy);
-void        pizTimeIncrement    (PIZTime *t, PIZNano *ns); 
-PIZError    pizTimeElapsed      (PIZTime *t0, PIZTime *t1, PIZNano *result);
+void        pizTimeAddNano      (PIZTime *t, PIZNano *ns); 
+PIZError    pizTimeElapsedNano  (PIZTime *t0, PIZTime *t1, PIZNano *result);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -75,19 +75,14 @@ PIZError    pizTimeElapsed      (PIZTime *t0, PIZTime *t1, PIZNano *result);
 
 PIZ_EXTERN PIZError pizTimeSet (PIZTime *t) 
 {
-    *t = mach_absolute_time ( );
+    (*t) = mach_absolute_time ( );
     
     return PIZ_GOOD;
 }
 
 PIZ_EXTERN void pizTimeCopy (PIZTime *t, PIZTime *toCopy)
 {
-    *t = *toCopy;
-}
-
-PIZ_EXTERN void pizTimeIncrement (PIZTime *t, PIZNano *ns)
-{
-    *t += *ns;
+    (*t) = (*toCopy);
 }
 
 #endif // __MACH__

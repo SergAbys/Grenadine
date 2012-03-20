@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	March 19, 2012.
+ * \date	March 20, 2012.
  */
  
 /*
@@ -105,6 +105,7 @@ void pizAgentFree (PIZAgent *x)
     
         pthread_cond_signal (&x->eventCondition);
         pthread_join (x->eventLoop, NULL); 
+        post ("Join");
     }
     
     pthread_attr_destroy  (&x->attr);
@@ -126,9 +127,12 @@ void *pizAgentEventLoop (void *agent)
     while (!EXIT) {
     //
     PIZLOCKEVENT
+    post ("####");
     while (!(pizLinklistCount (x->runQueue))) {
+        post ("Condition");
         pthread_cond_wait (&x->eventCondition, &x->eventMutex);
         x->flags |= PIZ_FLAG_INIT;
+        post ("Wake Up");
                 
         if (EXIT) {
             break;
@@ -140,14 +144,20 @@ void *pizAgentEventLoop (void *agent)
     if (!EXIT && !pizAgentEventLoopInit (x)) {
     //
     while (pizAgentEventLoopIsWorkTime (x)) {
-        if (pizAgentEventLoopDoRunEvent (x)) {
+        if (pizAgentEventLoopProceedRunEvent (x)) {
             break;
+            post ("Break Run Event");
+        } 
+    }
+    
+    while (pizAgentEventLoopIsWorkTime (x)) {
+        if (pizAgentEventLoopProceedGraphicEvent (x)) {
+            break;
+            post ("Break Graphic Event");
         } 
     }
     
     pizAgentEventLoopSleep (x);
-    
-    sleep (1);
     //
     }
     //    
@@ -171,7 +181,7 @@ PIZError pizAgentEventLoopInit (PIZAgent *x)
     
     if (!err) {
         pizTimeCopy (&x->grainEnd, &x->grainStart);
-        pizTimeIncrement (&x->grainEnd, &x->grainSize);
+        pizTimeAddNano (&x->grainEnd, &x->grainSize);
         x->flags &= ~PIZ_FLAG_INIT;
     }
     
@@ -186,7 +196,7 @@ bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
     
     pizTimeSet (&now);
     
-    if (!pizTimeElapsed (&x->grainStart, &now, &elapsed)) {
+    if (!pizTimeElapsedNano (&x->grainStart, &now, &elapsed)) {
         if (elapsed < x->grainWorkSize) {
             isWorkTime = true;
         }
@@ -197,22 +207,34 @@ bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
 
 void pizAgentEventLoopSleep (PIZAgent *x)
 {
-    PIZTime  now;
-    PIZNano  ns;
+    PIZTime             now;
+    PIZNano             ns;
+    struct timespec     t0, t1;
+    struct timespec*    ptrA = &t0;
+    struct timespec*    ptrB = &t1;
+    struct timespec*    temp = NULL;
+
     PIZError err = PIZ_GOOD;
     
     pizTimeSet (&now);
-    err = pizTimeElapsed (&now, &x->grainEnd, &ns);
+    err = pizTimeElapsedNano (&now, &x->grainEnd, &ns);
     
     while (err) {
-        pizTimeIncrement (&x->grainEnd, &x->grainSize); 
-        err = pizTimeElapsed (&now, &x->grainEnd, &ns);
+        pizTimeAddNano (&x->grainEnd, &x->grainSize); 
+        err = pizTimeElapsedNano (&now, &x->grainEnd, &ns);
     }
     
-    //############### nanosleep;
-}
+    ptrA->tv_sec  = (time_t)(ns / 1000000000ULL);
+    ptrA->tv_nsec = (long)(ns % 1000000000ULL);
+    
+    while ((nanosleep (ptrA, ptrB) == -1) && (errno == EINTR)) {
+        temp = ptrA;
+        ptrA = ptrB;
+        ptrB = temp;
+    }
+} 
 
-PIZError pizAgentEventLoopDoRunEvent (PIZAgent *x) 
+PIZError pizAgentEventLoopProceedRunEvent (PIZAgent *x) 
 {
     long     err = PIZ_ERROR;
     PIZEvent *event = NULL;
@@ -221,6 +243,7 @@ PIZError pizAgentEventLoopDoRunEvent (PIZAgent *x)
     
     if (!pizLinklistPtrAtIndex (x->runQueue, 0, (void *)&event)) {
         pizLinklistRemoveByPtr (x->runQueue, event);
+        post ("Remove Event");
     }
     
     if (pizLinklistCount (x->runQueue)) {
@@ -228,6 +251,13 @@ PIZError pizAgentEventLoopDoRunEvent (PIZAgent *x)
     }
     
     PIZUNLOCKEVENT
+    
+    return err;
+}
+
+PIZ_LOCAL PIZError pizAgentEventLoopProceedGraphicEvent (PIZAgent *x)
+{
+    long err = PIZ_ERROR;
     
     return err;
 }

@@ -1,7 +1,7 @@
 /*
  * \file	pizTime.c
  * \author	Jean Sapristi
- * \date	March 19, 2012.
+ * \date	March 20, 2012.
  */
  
 /*
@@ -45,39 +45,44 @@
 
 #ifdef __MACH__
 
+static mach_timebase_info_data_t piz_timebaseInfo;
+
 PIZError pizTimeSet (PIZTime *t) 
 {
-    *t = mach_absolute_time ( );
+    (*t) = mach_absolute_time ( );
     
     return PIZ_GOOD;
 }
 
 void pizTimeCopy (PIZTime *t, PIZTime *toCopy)
 {
-    *t = *toCopy;
+    (*t) = (*toCopy);
 }
 
-void pizTimeIncrement (PIZTime *t, PIZNano *ns)
+void pizTimeAddNano (PIZTime *t, PIZNano *ns)
 {
-    *t += *ns;
+    if (piz_timebaseInfo.denom == 0) {
+        mach_timebase_info (&piz_timebaseInfo);
+    } 
+        
+    (*t) += (*ns) * piz_timebaseInfo.denom / piz_timebaseInfo.numer;
 }
 
-PIZError pizTimeElapsed (PIZTime *t0, PIZTime *t1, PIZNano *result)
+PIZError pizTimeElapsedNano (PIZTime *t0, PIZTime *t1, PIZNano *result)
 {
-    long                                err = PIZ_ERROR;
-    uint64_t                            elapsed;
-    static mach_timebase_info_data_t    piz_timebaseInfo;
-
-    if (*t1 > *t0) {
+    long     err = PIZ_ERROR;
+    uint64_t elapsed;
+    
+    if ((*t1) > (*t0)) {
         err = PIZ_GOOD;
         
-        elapsed = *t1 - *t0;
+        elapsed = (*t1) - (*t0);
 
         if (piz_timebaseInfo.denom == 0) {
             mach_timebase_info (&piz_timebaseInfo);
-        }
+        } 
 
-        *result = elapsed * piz_timebaseInfo.numer / piz_timebaseInfo.denom;
+        (*result) = elapsed * piz_timebaseInfo.numer / piz_timebaseInfo.denom;
     }
 
     return err;

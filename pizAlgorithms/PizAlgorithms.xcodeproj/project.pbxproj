@@ -172,11 +172,9 @@
 				96A16F7E148CF856008268A6 /* pizSequence.h */,
 				96A16F7D148CF856008268A6 /* pizSequenceTransform.h */,
 				96D1ABEB150CB776000CD8FC /* pizSequenceUI.h */,
-				96A100A714E7F16A00D3ECB6 /* pizSequenceMaxMSP.h */,
 				96A16F78148CF839008268A6 /* pizSequence.c */,
 				96A16F77148CF839008268A6 /* pizSequenceTransform.c */,
 				96D1ABEC150CB776000CD8FC /* pizSequenceUI.c */,
-				96A100A614E7F16A00D3ECB6 /* pizSequenceMaxMSP.c */,
 			);
 			name = Sequence;
 			sourceTree = "<group>";
@@ -234,11 +232,13 @@
 			isa = PBXGroup;
 			children = (
 				96A05BF814E3FBF80028A323 /* pizAlgorithmsMaxMSP.h */,
+				96A100A714E7F16A00D3ECB6 /* pizSequenceMaxMSP.h */,
 				96E60FC11498993F00CE103D /* pizFactorOracleMaxMSP.c */,
 				96E60FEE14989B9500CE103D /* pizGaloisLatticeMaxMSP.c */,
 				969CFAAD14CC581900D52846 /* pizKohonenMapMaxMSP.c */,
 				96749BE614CC5AA200BA3990 /* pizNeuralGasMaxMSP.c */,
 				96749BF214CC5C3C00BA3990 /* pizMarkovModelMaxMSP.c */,
+				96A100A614E7F16A00D3ECB6 /* pizSequenceMaxMSP.c */,
 			);
 			name = MaxMSP;
 			sourceTree = "<group>";

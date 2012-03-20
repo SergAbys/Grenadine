@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	March 19, 2012.
+ * \date	March 20, 2012.
  */
 
 /*
@@ -49,12 +49,12 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_EVENT_DATA_SIZE 7
+#define PIZ_EVENT_DATA_VALUES_SIZE  7
 
-#define PIZ_EVENT_NEW(event)    ((event) = (PIZEvent *)calloc (1, sizeof(PIZEvent)))
-#define PIZ_EVENT_FREE(event)   if (event) {        \
-                                    free (event);   \
-                                }
+#define PIZ_EVENT_NEW(event)        ((event) = (PIZEvent *)calloc (1, sizeof(PIZEvent)))
+#define PIZ_EVENT_FREE(event)       if (event) {        \
+                                        free (event);   \
+                                    }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -72,12 +72,16 @@ typedef enum _PIZEventName {
     PIZ_ZONE_CHANGED
     } PIZEventName;
     
+typedef union _PIZEventData {
+    PIZTime time;
+    long    values[PIZ_EVENT_DATA_VALUES_SIZE];
+} PIZEventData;
+    
 typedef struct _PIZEvent {
-    PIZTime         time;
     PIZEventType    type;
     PIZEventName    name;
     long            tag;
-    long            data[PIZ_EVENT_DATA_SIZE];
+    PIZEventData    data; 
     } PIZEvent;
     
 // -------------------------------------------------------------------------------------------------------------
