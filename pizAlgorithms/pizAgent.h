@@ -83,8 +83,10 @@ typedef struct _PIZAgent {
     PIZNano             grainWorkSize;
     PIZTime             grainStart;
     PIZTime             grainEnd;
-    PIZLinklist         *runQueue;
-    PIZLinklist         *graphicQueue;
+    PIZLinklist         *runIn;
+    PIZLinklist         *runOut;
+    PIZLinklist         *graphicIn;
+    PIZLinklist         *graphicOut;
     pthread_attr_t      attr;
     pthread_cond_t      eventCondition;
     pthread_mutex_t     eventMutex;
@@ -92,7 +94,7 @@ typedef struct _PIZAgent {
     long                eventLoopErr;
     } PIZAgent;                            
 
-typedef PIZError    (*PIZAgentMethod)(PIZAgent *x, PIZEvent *event);
+typedef void        (*PIZAgentMethod)(PIZAgent *x, PIZEvent *event);
 typedef PIZError    (*PIZObserverMethod)(void *observerData, PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
@@ -104,6 +106,7 @@ void                pizAgentFree                            (PIZAgent *x);
 void                pizAgentAppendEvent                     (PIZAgent *x, PIZEvent *event);
 
 PIZ_LOCAL void      *pizAgentEventLoop                      (void *agent);
+
 PIZ_LOCAL bool      pizAgentEventLoopCondition              (PIZAgent *x);
 PIZ_LOCAL PIZError  pizAgentEventLoopInit                   (PIZAgent *x);
 PIZ_LOCAL bool      pizAgentEventLoopIsWorkTime             (PIZAgent *x);
@@ -111,8 +114,8 @@ PIZ_LOCAL void      pizAgentEventLoopSleep                  (PIZAgent *x);
 PIZ_LOCAL PIZError  pizAgentEventLoopProceedRunEvent        (PIZAgent *x);
 PIZ_LOCAL PIZError  pizAgentEventLoopProceedGraphicEvent    (PIZAgent *x);
 
-PIZ_LOCAL PIZError  pizAgentMethodPlay                      (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizAgentMethodStop                      (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL void      pizAgentMethodPlay                      (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL void      pizAgentMethodStop                      (PIZAgent *x, PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

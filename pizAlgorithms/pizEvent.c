@@ -45,8 +45,7 @@
 
 PIZEvent *pizEventNew (void)
 {
-    PIZEvent *event = NULL;
-    event = (PIZEvent *)calloc (1, sizeof(PIZEvent));
+    PIZEvent *event = (PIZEvent *)calloc (1, sizeof(PIZEvent));
     return event;
 }
 

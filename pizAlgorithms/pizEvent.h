@@ -62,7 +62,7 @@
 typedef enum _PIZEventType {
     PIZ_RUN_EVENT = 1,
     PIZ_GRAPHIC_EVENT,
-    PIZ_NOTIFY_EVENT
+    PIZ_NOTIFICATION
     } PIZEventType;
 
 typedef enum _PIZEventName {
@@ -99,8 +99,7 @@ void     pizEventFree (PIZEvent *x);
 
 PIZ_EXTERN PIZEvent *pizEventNew (void)
 {
-    PIZEvent *event = NULL;
-    event = (PIZEvent *)calloc (1, sizeof(PIZEvent));
+    PIZEvent *event = (PIZEvent *)calloc (1, sizeof(PIZEvent));
     return event;
 }
 

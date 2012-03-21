@@ -71,10 +71,12 @@ PIZAgent *pizAgentNew (void)
     x->grainSize     = (PIZNano)(PIZ_BPM_CONSTANT / x->tempo);
     x->grainWorkSize = (PIZNano)(PIZ_BPM_CONSTANT / x->tempo * PIZ_WORK_TIME_RATIO);
         
-    x->runQueue      = pizLinklistNew ( );
-    x->graphicQueue  = pizLinklistNew ( );
+    x->runIn      = pizLinklistNew ( );
+    x->runOut     = pizLinklistNew ( );
+    x->graphicIn  = pizLinklistNew ( );
+    x->graphicOut = pizLinklistNew ( );
     
-    if (!x->runQueue || !x->graphicQueue) {
+    if (!(x->runIn && x->runOut && x->graphicIn && x->graphicOut)) {
         err |= PIZ_MEMORY;
     }
     
@@ -119,14 +121,15 @@ void pizAgentFree (PIZAgent *x)
     pthread_mutex_destroy (&x->eventMutex);
     pthread_cond_destroy  (&x->eventCondition);
     
-    pizLinklistFree (x->runQueue);
-    pizLinklistFree (x->graphicQueue);
+    pizLinklistFree (x->runIn);
+    pizLinklistFree (x->graphicIn);
     //
     }
 }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void *pizAgentEventLoop (void *agent) 
 {
@@ -178,8 +181,8 @@ bool pizAgentEventLoopCondition (PIZAgent *x)
 {
     bool condition = false;
     
-    condition = pizLinklistCount (x->runQueue) ||
-                pizLinklistCount (x->graphicQueue) ||
+    condition = pizLinklistCount (x->runIn) ||
+                pizLinklistCount (x->graphicIn) ||
                 PLAY;
     
     return condition;
@@ -223,12 +226,12 @@ bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
 
 void pizAgentEventLoopSleep (PIZAgent *x)
 {
-    PIZTime             now;
-    PIZNano             ns;
-    struct timespec     t0, t1;
-    struct timespec*    ptrA = &t0;
-    struct timespec*    ptrB = &t1;
-    struct timespec*    temp = NULL;
+    PIZTime          now;
+    PIZNano          ns;
+    struct timespec  t0, t1;
+    struct timespec* ptrA = &t0;
+    struct timespec* ptrB = &t1;
+    struct timespec* temp = NULL;
 
     PIZError err = PIZ_GOOD;
     
@@ -257,25 +260,27 @@ PIZError pizAgentEventLoopProceedRunEvent (PIZAgent *x)
             
     PIZLOCKEVENT
     
-    if (!pizLinklistPtrAtIndex (x->runQueue, 0, (void *)&event)) {
-        pizLinklistChuckByPtr (x->runQueue, event);
+    if (!pizLinklistPtrAtIndex (x->runIn, 0, (void *)&event)) {
+        pizLinklistChuckByPtr (x->runIn, event);
         post ("Chuck Event");
+        
+        switch (event->name) {
+            case PIZ_PLAY : f = pizAgentMethodPlay; break;
+            case PIZ_STOP : f = pizAgentMethodStop; break;
+        }
     }
     
     PIZUNLOCKEVENT
-    
-    switch (event->name) {
-        case PIZ_PLAY : f = pizAgentMethodPlay; break;
-        case PIZ_STOP : f = pizAgentMethodStop; break;
-    }
     
     if (f) {
         (*f)(x, event);
     }
     
+    pizEventFree (event);
+    
     PIZLOCKEVENT
     
-    if (pizLinklistCount (x->runQueue)) {
+    if (pizLinklistCount (x->runIn)) {
         err = PIZ_GOOD;
     }
     
@@ -293,22 +298,37 @@ PIZError pizAgentEventLoopProceedGraphicEvent (PIZAgent *x)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void pizAgentAppendEvent (PIZAgent *x, PIZEvent *event)
 {
     if (event) {
         if (event->type == PIZ_RUN_EVENT) {
             PIZLOCKEVENT
-            pizLinklistAppend (x->runQueue, event);
+            pizLinklistAppend (x->runIn, event);
             PIZUNLOCKEVENT
         } else if (event->type == PIZ_GRAPHIC_EVENT) {
             PIZLOCKEVENT
-            pizLinklistAppend (x->graphicQueue, event);
+            pizLinklistAppend (x->graphicIn, event);
             PIZUNLOCKEVENT
         }
         
         pthread_cond_signal (&x->eventCondition);
     }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizAgentMethodPlay (PIZAgent *x, PIZEvent *event)
+{
+    x->flags |= PIZ_FLAG_PLAY; 
+}
+
+void pizAgentMethodStop (PIZAgent *x, PIZEvent *event)
+{
+    x->flags &= ~PIZ_FLAG_PLAY; 
 }
 
 // -------------------------------------------------------------------------------------------------------------

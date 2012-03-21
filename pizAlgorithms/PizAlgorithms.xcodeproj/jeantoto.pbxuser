@@ -11,8 +11,8 @@
 		breakpointsGroup = 9699A8E613D9A57300D9A0AD /* XCBreakpointsBucket */;
 		codeSenseManager = 96CFCDA713D7F01D004431BB /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 354026964;
-			PBXWorkspaceStateSaveDate = 354026964;
+			PBXPerProjectTemplateStateSaveDate = 354042272;
+			PBXWorkspaceStateSaveDate = 354042272;
 		};
 		sourceControlManager = 96CFCDA613D7F01D004431BB /* Source Control */;
 		userBuildSettings = {
@@ -286,33 +286,33 @@
 	};
 	96D796C5151716AC00109654 /* pizEvent.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 2950}}";
-			sepNavSelRange = "{3062, 0}";
-			sepNavVisRect = "{{0, 1473}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 2925}}";
+			sepNavSelRange = "{3076, 0}";
+			sepNavVisRect = "{{0, 1610}, {1235, 645}}";
 			sepNavWindowFrame = "{{0, 4}, {1280, 774}}";
 		};
 	};
 	96D796C6151716AC00109654 /* pizEvent.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 1650}}";
-			sepNavSelRange = "{2424, 0}";
-			sepNavVisRect = "{{0, 1096}, {1233, 404}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 1500}}";
+			sepNavSelRange = "{2233, 0}";
+			sepNavVisRect = "{{0, 852}, {1235, 645}}";
 			sepNavWindowFrame = "{{3, 4}, {1280, 774}}";
 		};
 	};
 	96D8682814FF5A8B00849A50 /* pizAgent.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 2950}}";
-			sepNavSelRange = "{3344, 0}";
-			sepNavVisRect = "{{0, 1562}, {1233, 404}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 3050}}";
+			sepNavSelRange = "{4792, 0}";
+			sepNavVisRect = "{{0, 2405}, {1235, 645}}";
 			sepNavWindowFrame = "{{2, 4}, {1280, 774}}";
 		};
 	};
 	96D8682914FF5A8B00849A50 /* pizAgent.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 7775}}";
-			sepNavSelRange = "{7927, 0}";
-			sepNavVisRect = "{{0, 6283}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 8375}}";
+			sepNavSelRange = "{7929, 0}";
+			sepNavVisRect = "{{0, 5615}, {1235, 645}}";
 			sepNavWindowFrame = "{{-1, 3}, {1280, 774}}";
 		};
 	};
