@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    March 11, 2012.
+ * \date    March 22, 2012.
  */
  
 /*
@@ -97,7 +97,7 @@ PIZSequence *pizSequenceNew (long size)
     if (size > 0) {
         x->timelineSize = size;
     } else {
-        x->timelineSize = PIZ_DEFAULT_TIMELINE_SIZE;
+        x->timelineSize = PIZ_SEQUENCE_DEFAULT_SIZE;
     }
     
     x->map           = pizGrowingArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
@@ -221,6 +221,17 @@ long pizSequenceCount (PIZSequence *x)
     
     return k;
 }   
+
+long pizSequenceChance (PIZSequence *x)
+{
+    long k;
+    
+    PIZLOCK
+    k = x->chance;
+    PIZUNLOCK
+    
+    return k;
+}
 
 long pizSequenceVelocity (PIZSequence *x)
 {

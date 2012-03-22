@@ -1,7 +1,7 @@
 /*
  * \file	pizTime.c
  * \author	Jean Sapristi
- * \date	March 21, 2012.
+ * \date	March 22, 2012.
  */
  
 /*
@@ -47,11 +47,9 @@
 
 static mach_timebase_info_data_t piz_timebaseInfo;
 
-PIZError pizTimeSet (PIZTime *t) 
+void pizTimeSet (PIZTime *t) 
 {
     (*t) = mach_absolute_time ( );
-    
-    return PIZ_GOOD;
 }
 
 void pizTimeCopy (PIZTime *t, PIZTime *toCopy)

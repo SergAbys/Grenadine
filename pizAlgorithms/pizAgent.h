@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	March 21, 2012.
+ * \date	March 22, 2012.
  */
 
 /*
@@ -45,6 +45,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizEvent.h"
+#include "pizSequence.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -62,18 +63,20 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZLOCKEVENT            pthread_mutex_lock   (&x->eventMutex);
-#define PIZUNLOCKEVENT          pthread_mutex_unlock (&x->eventMutex);
+#define PIZLOCKEVENT            pthread_mutex_lock      (&x->eventMutex);
+#define PIZUNLOCKEVENT          pthread_mutex_unlock    (&x->eventMutex);
+#define PIZTRYLOCKEVENT         pthread_mutex_trylock   (&x->eventMutex)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 typedef enum _PIZAgentFlag {
-    PIZ_FLAG_NONE = 0,
-    PIZ_FLAG_EXIT = 1,
-    PIZ_FLAG_INIT = 2,
-    PIZ_FLAG_PLAY = 4,
-    PIZ_FLAG_LOOP = 8
+    PIZ_FLAG_NONE    = 0,
+    PIZ_FLAG_EXIT    = 1,
+    PIZ_FLAG_PLAYED  = 2,
+    PIZ_FLAG_LOOPED  = 4,
+    PIZ_FLAG_WAKED   = 8,
+    PIZ_FLAG_CHANGED = 16
     } PIZAgentFlag;
 
 typedef struct _PIZAgent {
@@ -92,7 +95,11 @@ typedef struct _PIZAgent {
     pthread_mutex_t     eventMutex;
     pthread_t           eventLoop;
     long                eventLoopErr;
-    } PIZAgent;                            
+    PIZSequence         *sequence;
+    } PIZAgent;  
+                              
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
 typedef void        (*PIZAgentMethod)(PIZAgent *x, PIZEvent *event);
 typedef PIZError    (*PIZObserverMethod)(void *observerData, PIZEvent *event);
@@ -105,17 +112,24 @@ void                pizAgentFree                            (PIZAgent *x);
 
 void                pizAgentAppendEvent                     (PIZAgent *x, PIZEvent *event);
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 PIZ_LOCAL void      *pizAgentEventLoop                      (void *agent);
 
-PIZ_LOCAL bool      pizAgentEventLoopCondition              (PIZAgent *x);
-PIZ_LOCAL PIZError  pizAgentEventLoopInit                   (PIZAgent *x);
-PIZ_LOCAL bool      pizAgentEventLoopIsWorkTime             (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopSleep                  (PIZAgent *x);
 PIZ_LOCAL PIZError  pizAgentEventLoopProceedRunEvent        (PIZAgent *x);
 PIZ_LOCAL PIZError  pizAgentEventLoopProceedGraphicEvent    (PIZAgent *x);
 
 PIZ_LOCAL void      pizAgentMethodPlay                      (PIZAgent *x, PIZEvent *event);
 PIZ_LOCAL void      pizAgentMethodStop                      (PIZAgent *x, PIZEvent *event);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZ_LOCAL PIZ_INLINE bool pizAgentEventLoopCondition        (PIZAgent *x);
+PIZ_LOCAL PIZ_INLINE void pizAgentEventLoopInit             (PIZAgent *x);
+PIZ_LOCAL PIZ_INLINE bool pizAgentEventLoopIsWorkTime       (PIZAgent *x);
+PIZ_LOCAL PIZ_INLINE void pizAgentEventLoopSleep            (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

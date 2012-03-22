@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    March 18, 2012.
+ * \date    March 22, 2012.
  */
  
 /*
@@ -57,6 +57,8 @@
 #define PIZ_SEQUENCE_VERSION_MAJOR      1
 #define PIZ_SEQUENCE_VERSION_MINOR      0  
 
+#define PIZ_SEQUENCE_DEFAULT_SIZE       576 
+
 #define PIZ_SEQUENCE_MAXIMUM_NOTES      128   
 #define PIZ_SEQUENCE_MAXIMUM_DURATION   96
 //                                     ----- MAX 
@@ -74,7 +76,6 @@
 #define PIZ_DEFAULT_CHANCE              100
 #define PIZ_DEFAULT_CHANNEL             1
 #define PIZ_DEFAULT_VELOCITY            90
-#define PIZ_DEFAULT_TIMELINE_SIZE       576 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -249,11 +250,14 @@ void            pizSequenceFree                     (PIZSequence *x);
 // -------------------------------------------------------------------------------------------------------------
 
 long            pizSequenceCount                    (PIZSequence *x);
+
+long            pizSequenceChance                   (PIZSequence *x);
 long            pizSequenceVelocity                 (PIZSequence *x);
 long            pizSequenceChannel                  (PIZSequence *x);
 PIZNoteValue    pizSequenceCell                     (PIZSequence *x);
 PIZNoteValue    pizSequenceGrid                     (PIZSequence *x);
 PIZNoteValue    pizSequenceNoteValue                (PIZSequence *x);
+
 void            pizSequenceSetChance                (PIZSequence *x, long value);
 void            pizSequenceSetVelocity              (PIZSequence *x, long value);
 void            pizSequenceSetChannel               (PIZSequence *x, long channel);

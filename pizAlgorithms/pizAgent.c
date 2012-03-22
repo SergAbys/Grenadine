@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	March 21, 2012.
+ * \date	March 22, 2012.
  */
  
 /*
@@ -50,8 +50,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #define EXIT (x->flags & PIZ_FLAG_EXIT)
-#define INIT (x->flags & PIZ_FLAG_INIT)
-#define PLAY (x->flags & PIZ_FLAG_PLAY)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -64,19 +62,21 @@ PIZAgent *pizAgentNew (void)
     if (x = (PIZAgent *)malloc (sizeof(PIZAgent))) {
     //
     long err = PIZ_GOOD;
+    
+    x->flags        = PIZ_FLAG_WAKED | PIZ_FLAG_CHANGED;  
+    x->tempo        = PIZ_DEFAULT_TEMPO;  
+    x->runIn        = pizLinklistNew ( );
+    x->runOut       = pizLinklistNew ( );
+    x->graphicIn    = pizLinklistNew ( );
+    x->graphicOut   = pizLinklistNew ( );
+    x->sequence     = pizSequenceNew (0);
     x->eventLoopErr = PIZ_ERROR;
     
-    x->flags         = PIZ_FLAG_INIT;  
-    x->tempo         = PIZ_DEFAULT_TEMPO;  
-    x->grainSize     = (PIZNano)(PIZ_BPM_CONSTANT / x->tempo);
-    x->grainWorkSize = (PIZNano)(PIZ_BPM_CONSTANT / x->tempo * PIZ_WORK_TIME_RATIO);
-        
-    x->runIn      = pizLinklistNew ( );
-    x->runOut     = pizLinklistNew ( );
-    x->graphicIn  = pizLinklistNew ( );
-    x->graphicOut = pizLinklistNew ( );
-    
-    if (!(x->runIn && x->runOut && x->graphicIn && x->graphicOut)) {
+    if (!(x->runIn && 
+        x->runOut && 
+        x->graphicIn && 
+        x->graphicOut && 
+        x->sequence)) {
         err |= PIZ_MEMORY;
     }
     
@@ -123,6 +123,7 @@ void pizAgentFree (PIZAgent *x)
     
     pizLinklistFree (x->runIn);
     pizLinklistFree (x->graphicIn);
+    pizSequenceFree (x->sequence);
     //
     }
 }
@@ -133,16 +134,17 @@ void pizAgentFree (PIZAgent *x)
 
 void *pizAgentEventLoop (void *agent) 
 {
-    PIZAgent *x = agent;   
+    PIZAgent *x = agent;  
     
-    while (!EXIT) { post ("####");
+    while (!EXIT) { 
     //
+    
     PIZLOCKEVENT
     
     while (!pizAgentEventLoopCondition (x)) {
         pthread_cond_wait (&x->eventCondition, &x->eventMutex);
-        post ("Wake Up");
-        x->flags |= PIZ_FLAG_INIT;
+        post ("Waked");
+        x->flags |= PIZ_FLAG_WAKED;
                 
         if (EXIT) {
             break;
@@ -150,9 +152,11 @@ void *pizAgentEventLoop (void *agent)
     }
     
     PIZUNLOCKEVENT
-    
-    if (!EXIT && !pizAgentEventLoopInit (x)) {
+        
+    if (!EXIT) {
     //
+    pizAgentEventLoopInit (x);
+     
     while (pizAgentEventLoopIsWorkTime (x)) {
         if (pizAgentEventLoopProceedRunEvent (x)) {
             break;
@@ -165,7 +169,7 @@ void *pizAgentEventLoop (void *agent)
         } 
     }
     
-    pizAgentEventLoopSleep (x);
+    pizAgentEventLoopSleep (x); 
     //
     }
     //    
@@ -177,37 +181,37 @@ void *pizAgentEventLoop (void *agent)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-bool pizAgentEventLoopCondition (PIZAgent *x)
+PIZ_INLINE bool pizAgentEventLoopCondition (PIZAgent *x)
 {
     bool condition = false;
     
     condition = pizLinklistCount (x->runIn) ||
                 pizLinklistCount (x->graphicIn) ||
-                PLAY;
+                (x->flags & PIZ_FLAG_PLAYED);
     
     return condition;
 }
 
-PIZError pizAgentEventLoopInit (PIZAgent *x)
+PIZ_INLINE void pizAgentEventLoopInit (PIZAgent *x)
 {
-    long err = PIZ_GOOD;
-    
-    if (INIT) {
-        err |= pizTimeSet (&x->grainStart);
+    if (x->flags & PIZ_FLAG_WAKED) {
+        pizTimeSet (&x->grainStart);
     } else {
         pizTimeCopy (&x->grainStart, &x->grainEnd);
     }
     
-    if (!err) {
-        pizTimeCopy (&x->grainEnd, &x->grainStart);
-        pizTimeAddNano (&x->grainEnd, &x->grainSize);
-        x->flags &= ~PIZ_FLAG_INIT;
+    if (x->flags & PIZ_FLAG_CHANGED) {
+        x->grainSize     = (PIZNano)(PIZ_BPM_CONSTANT / x->tempo);
+        x->grainWorkSize = (PIZNano)(PIZ_BPM_CONSTANT * PIZ_WORK_TIME_RATIO / x->tempo);
+        x->flags &= ~PIZ_FLAG_CHANGED;
     }
     
-    return err;
+    pizTimeCopy (&x->grainEnd, &x->grainStart);
+    pizTimeAddNano (&x->grainEnd, &x->grainSize);
+    x->flags &= ~PIZ_FLAG_WAKED;
 }
 
-bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
+PIZ_INLINE bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
 {
     bool    isWorkTime = false;
     PIZTime now;
@@ -224,7 +228,7 @@ bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
     return isWorkTime;
 }
 
-void pizAgentEventLoopSleep (PIZAgent *x)
+PIZ_INLINE void pizAgentEventLoopSleep (PIZAgent *x)
 {
     PIZTime          now;
     PIZNano          ns;
@@ -249,8 +253,13 @@ void pizAgentEventLoopSleep (PIZAgent *x)
         temp = ptrA;
         ptrA = ptrB;
         ptrB = temp;
+        post ("Interrupted");
     }
 } 
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZError pizAgentEventLoopProceedRunEvent (PIZAgent *x) 
 {
@@ -262,7 +271,7 @@ PIZError pizAgentEventLoopProceedRunEvent (PIZAgent *x)
     
     if (!pizLinklistPtrAtIndex (x->runIn, 0, (void *)&event)) {
         pizLinklistChuckByPtr (x->runIn, event);
-        post ("Chuck Event");
+        post ("Chucked");
         
         switch (event->name) {
             case PIZ_PLAY : f = pizAgentMethodPlay; break;
@@ -323,12 +332,12 @@ void pizAgentAppendEvent (PIZAgent *x, PIZEvent *event)
 
 void pizAgentMethodPlay (PIZAgent *x, PIZEvent *event)
 {
-    x->flags |= PIZ_FLAG_PLAY; 
+    x->flags |= PIZ_FLAG_PLAYED; 
 }
 
 void pizAgentMethodStop (PIZAgent *x, PIZEvent *event)
 {
-    x->flags &= ~PIZ_FLAG_PLAY; 
+    x->flags &= ~PIZ_FLAG_PLAYED; 
 }
 
 // -------------------------------------------------------------------------------------------------------------

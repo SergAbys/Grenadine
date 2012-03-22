@@ -76,6 +76,7 @@ _pizSequenceAddNoteWithCoordinates
 _pizSequenceAddNotesWithArray
 _pizSequenceCell
 _pizSequenceCellularAutomata
+_pizSequenceChance
 _pizSequenceChange
 _pizSequenceChangeMarkedNoteValue
 _pizSequenceChannel
