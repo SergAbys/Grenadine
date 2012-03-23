@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	March 22, 2012.
+ * \date	March 23, 2012.
  */
  
 /*
@@ -63,25 +63,32 @@ PIZAgent *pizAgentNew (void)
     //
     long err = PIZ_GOOD;
     
-    x->flags        = PIZ_FLAG_WAKED | PIZ_FLAG_CHANGED;  
-    x->tempo        = PIZ_DEFAULT_TEMPO;  
-    x->runIn        = pizLinklistNew ( );
-    x->runOut       = pizLinklistNew ( );
-    x->graphicIn    = pizLinklistNew ( );
-    x->graphicOut   = pizLinklistNew ( );
-    x->sequence     = pizSequenceNew (0);
-    x->eventLoopErr = PIZ_ERROR;
+    x->flags                = PIZ_FLAG_WAKED | PIZ_FLAG_CHANGED;  
+    x->tempo                = PIZ_DEFAULT_TEMPO;  
+    x->runIn                = pizLinklistNew ( );
+    x->runOut               = pizLinklistNew ( );
+    x->graphicIn            = pizLinklistNew ( );
+    x->graphicOut           = pizLinklistNew ( );
+    x->notificationQueue    = pizLinklistNew ( );
+    x->sequence             = pizSequenceNew (0);
+    x->err1                 = PIZ_ERROR;
+    x->err2                 = PIZ_ERROR;
     
     if (!(x->runIn && 
         x->runOut && 
         x->graphicIn && 
-        x->graphicOut && 
+        x->graphicOut &&
+        x->notificationQueue && 
         x->sequence)) {
+        
         err |= PIZ_MEMORY;
     }
     
-    err |= pthread_mutex_init (&x->eventMutex, NULL);
+    err |= pthread_mutex_init (&x->eventLock, NULL);
+    err |= pthread_mutex_init (&x->notificationLock, NULL);
     err |= pthread_cond_init  (&x->eventCondition, NULL);
+    err |= pthread_cond_init  (&x->notificationCondition, NULL);
+    
     err |= pthread_attr_init  (&x->attr);
     
     if (!err) {
@@ -90,8 +97,11 @@ PIZAgent *pizAgentNew (void)
         pthread_attr_setdetachstate  (&x->attr, PTHREAD_CREATE_JOINABLE);
         pthread_attr_setschedpolicy  (&x->attr, SCHED_OTHER);
         
-        x->eventLoopErr = pthread_create (&x->eventLoop, &x->attr, pizAgentEventLoop, (void *)x); 
-        err |= x->eventLoopErr;
+        x->err1 = pthread_create (&x->eventLoop, &x->attr, pizAgentEventLoop, (void *)x); 
+        err |= x->err1;
+        
+        x->err2 = pthread_create (&x->notificationLoop, &x->attr, pizAgentNotificationLoop, (void *)x); 
+        err |= x->err2;
     }
         
     if (err) {
@@ -108,7 +118,7 @@ void pizAgentFree (PIZAgent *x)
 { 
     if (x) {
     //
-    if (!x->eventLoopErr) {
+    if (!x->err1) {
         PIZLOCKEVENT
         x->flags |= PIZ_FLAG_EXIT;
         PIZUNLOCKEVENT
@@ -117,14 +127,50 @@ void pizAgentFree (PIZAgent *x)
         pthread_join (x->eventLoop, NULL); 
     }
     
+    if (!x->err2) {
+        PIZLOCKNOTIFICATION
+        x->flags |= PIZ_FLAG_EXIT;
+        PIZUNLOCKNOTIFICATION
+    
+        pthread_cond_signal (&x->notificationCondition);
+        pthread_join (x->notificationLoop, NULL); 
+    }
+    
     pthread_attr_destroy  (&x->attr);
-    pthread_mutex_destroy (&x->eventMutex);
+    
+    pthread_mutex_destroy (&x->eventLock);
+    pthread_mutex_destroy (&x->notificationLock);
     pthread_cond_destroy  (&x->eventCondition);
+    pthread_cond_destroy  (&x->notificationCondition);
     
     pizLinklistFree (x->runIn);
+    pizLinklistFree (x->runOut);
     pizLinklistFree (x->graphicIn);
+    pizLinklistFree (x->graphicOut);
+    pizLinklistFree (x->notificationQueue);
     pizSequenceFree (x->sequence);
     //
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizAgentAppendEvent (PIZAgent *x, PIZEvent *event)
+{
+    if (event) {
+        if (event->type == PIZ_RUN_EVENT) {
+            PIZLOCKEVENT
+            pizLinklistAppend (x->runIn, event);
+            PIZUNLOCKEVENT
+        } else if (event->type == PIZ_GRAPHIC_EVENT) {
+            PIZLOCKEVENT
+            pizLinklistAppend (x->graphicIn, event);
+            PIZUNLOCKEVENT
+        }
+        
+        pthread_cond_signal (&x->eventCondition);
     }
 }
 
@@ -137,42 +183,39 @@ void *pizAgentEventLoop (void *agent)
     PIZAgent *x = agent;  
     
     while (!EXIT) { 
-    //
     
-    PIZLOCKEVENT
-    
-    while (!pizAgentEventLoopCondition (x)) {
-        pthread_cond_wait (&x->eventCondition, &x->eventMutex);
-        post ("Waked");
-        x->flags |= PIZ_FLAG_WAKED;
-                
-        if (EXIT) {
-            break;
-        } 
-    }
-    
-    PIZUNLOCKEVENT
+        PIZLOCKEVENT
         
-    if (!EXIT) {
-    //
-    pizAgentEventLoopInit (x);
-     
-    while (pizAgentEventLoopIsWorkTime (x)) {
-        if (pizAgentEventLoopProceedRunEvent (x)) {
-            break;
-        } 
-    }
-    
-    while (pizAgentEventLoopIsWorkTime (x)) {
-        if (pizAgentEventLoopProceedGraphicEvent (x)) {
-            break;
-        } 
-    }
-    
-    pizAgentEventLoopSleep (x); 
-    //
-    }
-    //    
+        while (!pizAgentEventLoopCondition (x)) {
+            pthread_cond_wait (&x->eventCondition, &x->eventLock);
+            post ("Waked eventLoop");
+            x->flags |= PIZ_FLAG_WAKED;
+                    
+            if (EXIT) {
+                break;
+            } 
+        }
+        
+        PIZUNLOCKEVENT
+            
+        if (!EXIT) {
+            pizAgentEventLoopInit (x);
+             
+            while (pizAgentEventLoopIsWorkTime (x)) {
+                if (pizAgentEventLoopProceedRunEvent (x)) {
+                    break;
+                } 
+            }
+            
+            while (pizAgentEventLoopIsWorkTime (x)) {
+                if (pizAgentEventLoopProceedGraphicEvent (x)) {
+                    break;
+                } 
+            }
+            
+            pizAgentEventLoopSleep (x); 
+        }
+        
     }
     
     pthread_exit (NULL);
@@ -253,7 +296,6 @@ PIZ_INLINE void pizAgentEventLoopSleep (PIZAgent *x)
         temp = ptrA;
         ptrA = ptrB;
         ptrB = temp;
-        post ("Interrupted");
     }
 } 
 
@@ -309,27 +351,6 @@ PIZError pizAgentEventLoopProceedGraphicEvent (PIZAgent *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizAgentAppendEvent (PIZAgent *x, PIZEvent *event)
-{
-    if (event) {
-        if (event->type == PIZ_RUN_EVENT) {
-            PIZLOCKEVENT
-            pizLinklistAppend (x->runIn, event);
-            PIZUNLOCKEVENT
-        } else if (event->type == PIZ_GRAPHIC_EVENT) {
-            PIZLOCKEVENT
-            pizLinklistAppend (x->graphicIn, event);
-            PIZUNLOCKEVENT
-        }
-        
-        pthread_cond_signal (&x->eventCondition);
-    }
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 void pizAgentMethodPlay (PIZAgent *x, PIZEvent *event)
 {
     x->flags |= PIZ_FLAG_PLAYED; 
@@ -338,6 +359,39 @@ void pizAgentMethodPlay (PIZAgent *x, PIZEvent *event)
 void pizAgentMethodStop (PIZAgent *x, PIZEvent *event)
 {
     x->flags &= ~PIZ_FLAG_PLAYED; 
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZ_LOCAL void *pizAgentNotificationLoop (void *agent)
+{
+    PIZAgent *x = agent;  
+    
+    while (!EXIT) { 
+    //
+    
+    PIZLOCKNOTIFICATION
+    
+    while (!(pizLinklistCount (x->notificationQueue))) {
+        pthread_cond_wait (&x->notificationCondition, &x->notificationLock);
+        post ("Waked notificationLoop");
+                
+        if (EXIT) {
+            break;
+        } 
+    }
+    
+    PIZUNLOCKNOTIFICATION
+        
+    if (!EXIT) {
+
+    }
+    //    
+    }
+    
+    pthread_exit (NULL);
 }
 
 // -------------------------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	March 22, 2012.
+ * \date	March 23, 2012.
  */
 
 /*
@@ -63,9 +63,12 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZLOCKEVENT            pthread_mutex_lock      (&x->eventMutex);
-#define PIZUNLOCKEVENT          pthread_mutex_unlock    (&x->eventMutex);
-#define PIZTRYLOCKEVENT         pthread_mutex_trylock   (&x->eventMutex)
+#define PIZLOCKEVENT            pthread_mutex_lock      (&x->eventLock);
+#define PIZUNLOCKEVENT          pthread_mutex_unlock    (&x->eventLock);
+#define PIZTRYLOCKEVENT         pthread_mutex_trylock   (&x->eventLock)
+
+#define PIZLOCKNOTIFICATION     pthread_mutex_lock      (&x->notificationLock);
+#define PIZUNLOCKNOTIFICATION   pthread_mutex_unlock    (&x->notificationLock);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -90,12 +93,17 @@ typedef struct _PIZAgent {
     PIZLinklist         *runOut;
     PIZLinklist         *graphicIn;
     PIZLinklist         *graphicOut;
+    PIZLinklist         *notificationQueue;
+    PIZSequence         *sequence;
     pthread_attr_t      attr;
     pthread_cond_t      eventCondition;
-    pthread_mutex_t     eventMutex;
+    pthread_cond_t      notificationCondition;
+    pthread_mutex_t     eventLock;
+    pthread_mutex_t     notificationLock;
     pthread_t           eventLoop;
-    long                eventLoopErr;
-    PIZSequence         *sequence;
+    pthread_t           notificationLoop;
+    long                err1;
+    long                err2;
     } PIZAgent;  
                               
 // -------------------------------------------------------------------------------------------------------------
@@ -116,6 +124,7 @@ void                pizAgentAppendEvent                     (PIZAgent *x, PIZEve
 // -------------------------------------------------------------------------------------------------------------
 
 PIZ_LOCAL void      *pizAgentEventLoop                      (void *agent);
+PIZ_LOCAL void      *pizAgentNotificationLoop               (void *agent);
 
 PIZ_LOCAL PIZError  pizAgentEventLoopProceedRunEvent        (PIZAgent *x);
 PIZ_LOCAL PIZError  pizAgentEventLoopProceedGraphicEvent    (PIZAgent *x);
