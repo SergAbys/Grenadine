@@ -49,9 +49,35 @@ void pizAgentMethodPlay (PIZAgent *x, PIZEvent *event)
     x->flags |= PIZ_FLAG_PLAYED; 
 }
 
+void pizAgentMethodLoop (PIZAgent *x, PIZEvent *event)
+{
+    x->flags |= PIZ_FLAG_PLAYED; 
+    x->flags |= PIZ_FLAG_LOOPED;
+}
+
+void pizAgentMethodUnloop (PIZAgent *x, PIZEvent *event)
+{
+    x->flags &= ~PIZ_FLAG_LOOPED;
+}
+
 void pizAgentMethodStop (PIZAgent *x, PIZEvent *event)
 {
     x->flags &= ~PIZ_FLAG_PLAYED; 
+    x->flags &= ~PIZ_FLAG_LOOPED;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizAgentMethodGraphicEnable (PIZAgent *x, PIZEvent *event)
+{
+    x->flags |= PIZ_FLAG_GUI;
+}
+
+void pizAgentMethodGraphicDisable (PIZAgent *x, PIZEvent *event)
+{
+    x->flags &= ~PIZ_FLAG_GUI;
 }
 
 // -------------------------------------------------------------------------------------------------------------

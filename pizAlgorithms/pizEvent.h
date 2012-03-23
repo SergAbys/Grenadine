@@ -60,18 +60,26 @@
 // -------------------------------------------------------------------------------------------------------------
 
 typedef enum _PIZEventType {
-    PIZ_RUN_EVENT = 1,
-    PIZ_GRAPHIC_EVENT,
+    PIZ_RUN = 1,
+    PIZ_GRAPHIC,
     PIZ_NOTIFICATION
     } PIZEventType;
 
 typedef enum _PIZEventName {
+// Run
     PIZ_PLAY = 1,
+    PIZ_LOOP,
+    PIZ_UNLOOP,
     PIZ_STOP,
+    PIZ_GRAPHIC_ENABLE,
+    PIZ_GRAPHIC_DISABLE,
+// Graphic
     PIZ_NOTE_REMOVED,
     PIZ_NOTE_ADDED,
     PIZ_NOTE_CHANGED,
-    PIZ_ZONE_CHANGED
+    PIZ_ZONE_CHANGED,
+// Notification
+    PIZ_END
     } PIZEventName;
     
 typedef union _PIZEventData {

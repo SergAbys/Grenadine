@@ -160,17 +160,22 @@ void pizAgentFree (PIZAgent *x)
 void pizAgentAppendEvent (PIZAgent *x, PIZEvent *event)
 {
     if (event) {
-        if (event->type == PIZ_RUN_EVENT) {
-            PIZLOCKEVENT
-            pizLinklistAppend (x->runIn, event);
-            PIZUNLOCKEVENT
-        } else if (GUI && (event->type == PIZ_GRAPHIC_EVENT)) {
-            PIZLOCKEVENT
-            pizLinklistAppend (x->graphicIn, event);
-            PIZUNLOCKEVENT
+        PIZLinklist *queue = NULL;
+        
+        if (event->type == PIZ_RUN) {
+            queue = x->runIn;
+        } else if (GUI && (event->type == PIZ_GRAPHIC)) {
+            queue = x->graphicIn;
         }
         
-        pthread_cond_signal (&x->eventCondition);
+        if (queue) {
+            PIZLOCKEVENT
+            if (pizLinklistAppend (queue, event)) {
+                pizEventFree (event);
+            }
+            PIZUNLOCKEVENT
+            pthread_cond_signal (&x->eventCondition);
+        }
     }
 }
 

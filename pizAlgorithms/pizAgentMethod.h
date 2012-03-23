@@ -49,8 +49,13 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void pizAgentMethodPlay  (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL void pizAgentMethodStop  (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL void pizAgentMethodPlay               (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL void pizAgentMethodLoop               (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL void pizAgentMethodUnloop             (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL void pizAgentMethodStop               (PIZAgent *x, PIZEvent *event);
+
+PIZ_LOCAL void pizAgentMethodGraphicEnable      (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL void pizAgentMethodGraphicDisable     (PIZAgent *x, PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

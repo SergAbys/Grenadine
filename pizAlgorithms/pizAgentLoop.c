@@ -55,46 +55,46 @@ void *pizAgentEventLoop (void *agent)
     PIZAgent *x = agent;  
     
     while (!EXIT) { 
+    //
+    PIZLOCKEVENT
     
-        PIZLOCKEVENT
+    while (!pizAgentEventLoopCondition (x)) {
+        pthread_cond_wait (&x->eventCondition, &x->eventLock);
+        post ("Waked / %s", __FUNCTION__);
+        x->flags |= PIZ_FLAG_WAKED;
+                
+        if (EXIT) {
+            break;
+        } 
+    }
+    
+    PIZUNLOCKEVENT
         
-        while (!pizAgentEventLoopCondition (x)) {
-            pthread_cond_wait (&x->eventCondition, &x->eventLock);
-            post ("Waked / %s", __FUNCTION__);
-            x->flags |= PIZ_FLAG_WAKED;
-                    
-            if (EXIT) {
+    if (!EXIT) {
+        pizAgentEventLoopInit (x);
+         
+        while (pizAgentEventLoopIsWorkTime (x)) {
+            if (pizAgentEventLoopProceedRunEvent (x)) {
                 break;
             } 
         }
         
-        PIZUNLOCKEVENT
-            
-        if (!EXIT) {
-            pizAgentEventLoopInit (x);
-             
+        if (x->flags & PIZ_FLAG_PLAYED) {
+            pizAgentEventLoopProceedRunStep (x);
+        }
+        
+        if (GUI) {
             while (pizAgentEventLoopIsWorkTime (x)) {
-                if (pizAgentEventLoopProceedRunEvent (x)) {
+                if (pizAgentEventLoopProceedGraphicEvent (x)) {
+                    pizAgentEventLoopProceedGraphicUpdate (x);
                     break;
                 } 
             }
-            
-            if (x->flags & PIZ_FLAG_PLAYED) {
-                pizAgentEventLoopProceedRunStep (x);
-            }
-            
-            if (GUI) {
-                while (pizAgentEventLoopIsWorkTime (x)) {
-                    if (pizAgentEventLoopProceedGraphicEvent (x)) {
-                        pizAgentEventLoopProceedGraphicUpdate (x);
-                        break;
-                    } 
-                }
-            }
-            
-            pizAgentEventLoopSleep (x); 
         }
         
+        pizAgentEventLoopSleep (x); 
+    }
+    //
     }
     
     pthread_exit (NULL);
@@ -172,21 +172,40 @@ PIZError pizAgentEventLoopProceedRunEvent (PIZAgent *x)
 
 void pizAgentEventLoopProceedRunStep (PIZAgent *x)
 {
-    long err = PIZ_GOOD; 
+    long     err = PIZ_GOOD; 
+    PIZEvent *event = NULL;
     
     pizGrowingArrayClear (x->tempArray);
     
     err = pizSequenceProceedStep (x->sequence, x->tempArray);
     
     if (err == PIZ_GOOD) {
-        if (!PIZTRYLOCKQUERY) {
-            PIZLOCKNOTIFICATION
-            PIZUNLOCKNOTIFICATION
-            PIZUNLOCKQUERY
-        }
+    //
+    if (!PIZTRYLOCKQUERY) {
+    
+        PIZLOCKNOTIFICATION
+        
+        PIZUNLOCKNOTIFICATION
+            
+        PIZUNLOCKQUERY
+    }
+    //
     } else if (err == PIZ_ERROR) {
-        post ("End / %s", __FUNCTION__);
+    //
+    if (event = pizEventNew ( )) {
+        event->type = PIZ_NOTIFICATION;
+        event->name = PIZ_END;
+        pizTimeCopy (&event->data.time, &x->grainStart);   
+        
+        PIZLOCKNOTIFICATION
+        
+        PIZUNLOCKNOTIFICATION
+    
+        pizEventFree (event); // ######
+        //pthread_cond_signal (&x->notificationCondition);
         x->flags &= ~PIZ_FLAG_PLAYED;
+    }
+    //
     }
 }
 

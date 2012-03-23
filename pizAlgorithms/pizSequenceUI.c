@@ -58,7 +58,7 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
         PIZEvent *event = NULL;   
                                            
         if (event = pizEventNew ( )) {
-            event->type = PIZ_GRAPHIC_EVENT;
+            event->type = PIZ_GRAPHIC;
             event->name = PIZ_ZONE_CHANGED;
             
             event->data.values[PIZ_DATA_START] = x->start;
@@ -75,7 +75,7 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     if (pizItemset128IsSetAtIndex (&x->removedNotes, i)) {
         PIZEvent *event = NULL;                                      
         if (event = pizEventNew ( )) {
-            event->type = PIZ_GRAPHIC_EVENT;
+            event->type = PIZ_GRAPHIC;
             event->name = PIZ_NOTE_REMOVED;
             event->tag  = i;
             
@@ -92,7 +92,7 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
         PIZEvent *event = NULL;  
         
         if (event = pizEventNew ( )) {
-            event->type = PIZ_GRAPHIC_EVENT;
+            event->type = PIZ_GRAPHIC;
             event->name = PIZ_NOTE_ADDED;
             event->tag  = i;
             
@@ -123,7 +123,7 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
         PIZEvent *event = NULL; 
          
         if (event = pizEventNew ( )) {
-            event->type = PIZ_GRAPHIC_EVENT;
+            event->type = PIZ_GRAPHIC;
             event->name = PIZ_NOTE_CHANGED;
             event->tag  = i;
             

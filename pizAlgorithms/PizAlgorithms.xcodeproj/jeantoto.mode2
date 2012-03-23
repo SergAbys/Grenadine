@@ -423,8 +423,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>967D6B53151CD84B0083A335</string>
-				<string>967D6B54151CD84B0083A335</string>
+				<string>967D6BAF151CE5670083A335</string>
+				<string>967D6BB0151CE5670083A335</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -621,7 +621,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>pizAgentLoop.c</string>
+								<string>pizSequenceUI.c</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -677,7 +677,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>967D6B51151CD8460083A335</string>
+				<string>967D6B83151CE0140083A335</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
