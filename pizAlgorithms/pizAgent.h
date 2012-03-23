@@ -104,6 +104,7 @@ typedef struct _PIZAgent {
     PIZLinklist         *graphicOut;
     PIZLinklist         *notificationQueue;
     PIZSequence         *sequence;
+    PIZGrowingArray     *tempArray;
     pthread_attr_t      attr;
     pthread_cond_t      eventCondition;
     pthread_cond_t      notificationCondition;

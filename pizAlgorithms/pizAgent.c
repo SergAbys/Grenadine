@@ -66,6 +66,7 @@ PIZAgent *pizAgentNew (void)
     x->graphicOut           = pizLinklistNew ( );
     x->notificationQueue    = pizLinklistNew ( );
     x->sequence             = pizSequenceNew (0);
+    x->tempArray            = pizGrowingArrayNew (0);
     x->err1                 = PIZ_ERROR;
     x->err2                 = PIZ_ERROR;
     
@@ -74,7 +75,8 @@ PIZAgent *pizAgentNew (void)
         x->graphicIn && 
         x->graphicOut &&
         x->notificationQueue && 
-        x->sequence)) {
+        x->sequence &&
+        x->tempArray)) {
         
         err |= PIZ_MEMORY;
     }
@@ -144,7 +146,9 @@ void pizAgentFree (PIZAgent *x)
     pizLinklistFree (x->graphicIn);
     pizLinklistFree (x->graphicOut);
     pizLinklistFree (x->notificationQueue);
-    pizSequenceFree (x->sequence);
+    
+    pizSequenceFree     (x->sequence);
+    pizGrowingArrayFree (x->tempArray);
     //
     }
 }

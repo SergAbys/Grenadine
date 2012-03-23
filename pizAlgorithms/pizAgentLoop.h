@@ -53,8 +53,8 @@ PIZ_LOCAL void      *pizAgentEventLoop                      (void *agent);
 PIZ_LOCAL void      *pizAgentNotificationLoop               (void *agent);
 
 PIZ_LOCAL PIZError  pizAgentEventLoopProceedRunEvent        (PIZAgent *x);
-PIZ_LOCAL PIZError  pizAgentEventLoopProceedGraphicEvent    (PIZAgent *x);
 PIZ_LOCAL void      pizAgentEventLoopProceedRunStep         (PIZAgent *x);
+PIZ_LOCAL PIZError  pizAgentEventLoopProceedGraphicEvent    (PIZAgent *x);
 PIZ_LOCAL void      pizAgentEventLoopProceedGraphicUpdate   (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------
