@@ -65,21 +65,30 @@
 
 #define PIZLOCKEVENT            pthread_mutex_lock      (&x->eventLock);
 #define PIZUNLOCKEVENT          pthread_mutex_unlock    (&x->eventLock);
-#define PIZTRYLOCKEVENT         pthread_mutex_trylock   (&x->eventLock)
-
 #define PIZLOCKNOTIFICATION     pthread_mutex_lock      (&x->notificationLock);
 #define PIZUNLOCKNOTIFICATION   pthread_mutex_unlock    (&x->notificationLock);
+#define PIZLOCKQUERY            pthread_mutex_lock      (&x->queryLock);
+#define PIZUNLOCKQUERY          pthread_mutex_unlock    (&x->queryLock);
+
+#define PIZTRYLOCKQUERY         pthread_mutex_trylock   (&x->queryLock)
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define GUI  (x->flags & PIZ_FLAG_GUI)
+#define EXIT (x->flags & PIZ_FLAG_EXIT)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 typedef enum _PIZAgentFlag {
-    PIZ_FLAG_NONE    = 0,
-    PIZ_FLAG_EXIT    = 1,
-    PIZ_FLAG_PLAYED  = 2,
-    PIZ_FLAG_LOOPED  = 4,
-    PIZ_FLAG_WAKED   = 8,
-    PIZ_FLAG_CHANGED = 16
+    PIZ_FLAG_NONE       = 0,
+    PIZ_FLAG_GUI        = 1,
+    PIZ_FLAG_EXIT       = 2,
+    PIZ_FLAG_PLAYED     = 4,
+    PIZ_FLAG_LOOPED     = 8,
+    PIZ_FLAG_WAKED      = 16,
+    PIZ_FLAG_CHANGED    = 32
     } PIZAgentFlag;
 
 typedef struct _PIZAgent {
@@ -100,6 +109,7 @@ typedef struct _PIZAgent {
     pthread_cond_t      notificationCondition;
     pthread_mutex_t     eventLock;
     pthread_mutex_t     notificationLock;
+    pthread_mutex_t     queryLock;
     pthread_t           eventLoop;
     pthread_t           notificationLoop;
     long                err1;
@@ -115,30 +125,13 @@ typedef PIZError    (*PIZObserverMethod)(void *observerData, PIZEvent *event);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZAgent            *pizAgentNew                            (void);
-void                pizAgentFree                            (PIZAgent *x);
-
-void                pizAgentAppendEvent                     (PIZAgent *x, PIZEvent *event);
+PIZAgent    *pizAgentNew        (void);
+void        pizAgentFree        (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void      *pizAgentEventLoop                      (void *agent);
-PIZ_LOCAL void      *pizAgentNotificationLoop               (void *agent);
-
-PIZ_LOCAL PIZError  pizAgentEventLoopProceedRunEvent        (PIZAgent *x);
-PIZ_LOCAL PIZError  pizAgentEventLoopProceedGraphicEvent    (PIZAgent *x);
-
-PIZ_LOCAL void      pizAgentMethodPlay                      (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL void      pizAgentMethodStop                      (PIZAgent *x, PIZEvent *event);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_LOCAL PIZ_INLINE bool pizAgentEventLoopCondition        (PIZAgent *x);
-PIZ_LOCAL PIZ_INLINE void pizAgentEventLoopInit             (PIZAgent *x);
-PIZ_LOCAL PIZ_INLINE bool pizAgentEventLoopIsWorkTime       (PIZAgent *x);
-PIZ_LOCAL PIZ_INLINE void pizAgentEventLoopSleep            (PIZAgent *x);
+void        pizAgentAppendEvent (PIZAgent *x, PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
