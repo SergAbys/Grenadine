@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	March 20, 2012.
+ * \date	March 24, 2012.
  */
 
 /*
@@ -54,7 +54,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_EVENT_DATA_VALUES_SIZE  7
+#define PIZ_VALUES_SIZE         7
+//      PIZ_DATA_NOTE_SIZE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -66,25 +67,27 @@ typedef enum _PIZEventType {
     } PIZEventType;
 
 typedef enum _PIZEventName {
-// Run
+    //
     PIZ_PLAY = 1,
     PIZ_LOOP,
     PIZ_UNLOOP,
     PIZ_STOP,
+    PIZ_NOTE_PLAYED,
     PIZ_GRAPHIC_ENABLE,
     PIZ_GRAPHIC_DISABLE,
-// Graphic
+    //
     PIZ_NOTE_REMOVED,
     PIZ_NOTE_ADDED,
     PIZ_NOTE_CHANGED,
     PIZ_ZONE_CHANGED,
-// Notification
-    PIZ_END
+    //
+    PIZ_END,
+    PIZ_NOTES_READY
     } PIZEventName;
     
 typedef union _PIZEventData {
     PIZTime time;
-    long    values[PIZ_EVENT_DATA_VALUES_SIZE];
+    long    values[PIZ_VALUES_SIZE];
 } PIZEventData;
     
 typedef struct _PIZEvent {
@@ -97,8 +100,14 @@ typedef struct _PIZEvent {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent *pizEventNew (void);
-void     pizEventFree (PIZEvent *x);
+PIZEvent *pizEventNew               (void);
+PIZEvent *pizEventNewWithArray      (PIZEventType type, PIZEventName name, long argc, long *argv, long tag);
+PIZEvent *pizEventNewNotification   (PIZEventName name, PIZTime *time);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+void     pizEventFree               (PIZEvent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -108,6 +117,40 @@ void     pizEventFree (PIZEvent *x);
 PIZ_EXTERN PIZEvent *pizEventNew (void)
 {
     PIZEvent *event = (PIZEvent *)calloc (1, sizeof(PIZEvent));
+    return event;
+}
+
+PIZ_EXTERN PIZEvent *pizEventNewWithArray (PIZEventType type, PIZEventName name, long argc, long *argv, long n) 
+{
+    PIZEvent *event = NULL; 
+    
+    if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
+        event->type = type;
+        event->name = name;
+        event->tag  = n;
+        
+        if (argv) {
+            long i;
+            
+            for (i = 0; i < argc; i++) {
+                event->data.values[i] = *(argv + i);
+            }
+        }
+    }
+    
+    return event;
+}
+
+PIZ_EXTERN PIZEvent *pizEventNewNotification (PIZEventName name, PIZTime *time)
+{
+    PIZEvent *event = NULL;
+    
+    if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
+        event->type = PIZ_NOTIFICATION;
+        event->name = name;
+        pizTimeCopy (&event->data.time, time);
+    }
+    
     return event;
 }
 

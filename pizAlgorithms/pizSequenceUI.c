@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceUI.c
  * \author	Jean Sapristi
- * \date	March 20, 2012.
+ * \date	March 24, 2012.
  */
  
 /*
@@ -48,38 +48,46 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#define ARGVWITHZONE    long argv[ ] = { x->start,                       \
+                                         x->end,                         \
+                                         x->down,                        \
+                                         x->up };  
+                                        
+#define ARGVWITHNOTE    long argv[ ] = { note->position,                 \
+                                         note->data[PIZ_PITCH],          \
+                                         note->data[PIZ_VELOCITY],       \
+                                         note->data[PIZ_DURATION],       \
+                                         note->data[PIZ_CHANNEL],        \
+                                         note->isSelected,               \
+                                         (note == x->markedNote) };      
+                                        
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
 {
-    long i;
+    long     i;
+    PIZNote  *note = NULL; 
+    PIZEvent *event = NULL;
     
     PIZLOCK
     
     if (x->changedZone) {
-        PIZEvent *event = NULL;   
-                                           
-        if (event = pizEventNew ( )) {
-            event->type = PIZ_GRAPHIC;
-            event->name = PIZ_ZONE_CHANGED;
-            
-            event->data.values[PIZ_DATA_START] = x->start;
-            event->data.values[PIZ_DATA_END]   = x->end;
-            event->data.values[PIZ_DATA_DOWN]  = x->down;
-            event->data.values[PIZ_DATA_UP]    = x->up;
-                
-            pizLinklistAppend (queue, event);
+        ARGVWITHZONE
+        if (event = pizEventNewWithArray (PIZ_GRAPHIC, PIZ_ZONE_CHANGED, PIZ_DATA_ZONE_SIZE, argv, 0)) {
+            if (pizLinklistAppend (queue, event)) {
+                pizEventFree (event);
+            }
         }
     }
     
     for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
     //
-    if (pizItemset128IsSetAtIndex (&x->removedNotes, i)) {
-        PIZEvent *event = NULL;                                      
-        if (event = pizEventNew ( )) {
-            event->type = PIZ_GRAPHIC;
-            event->name = PIZ_NOTE_REMOVED;
-            event->tag  = i;
-            
-            pizLinklistAppend (queue, event);
+    if (pizItemset128IsSetAtIndex (&x->removedNotes, i)) { 
+        if (event = pizEventNewWithArray (PIZ_GRAPHIC, PIZ_NOTE_REMOVED, 0, NULL, i)) {
+            if (pizLinklistAppend (queue, event)) {
+                pizEventFree (event);
+            }
         }
     }
     //    
@@ -88,30 +96,16 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
     //
     if (pizItemset128IsSetAtIndex (&x->addedNotes, i)) {
-        PIZNote  *note = NULL; 
-        PIZEvent *event = NULL;  
-        
-        if (event = pizEventNew ( )) {
-            event->type = PIZ_GRAPHIC;
-            event->name = PIZ_NOTE_ADDED;
-            event->tag  = i;
-            
-            pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note);
-            
-            if (note) {
-                event->data.values[PIZ_DATA_POSITION]    = note->position;
-                event->data.values[PIZ_DATA_PITCH]       = note->data[PIZ_PITCH];
-                event->data.values[PIZ_DATA_VELOCITY]    = note->data[PIZ_VELOCITY];
-                event->data.values[PIZ_DATA_DURATION]    = note->data[PIZ_DURATION];
-                event->data.values[PIZ_DATA_CHANNEL]     = note->data[PIZ_CHANNEL];
-                event->data.values[PIZ_DATA_IS_SELECTED] = note->isSelected;
-                event->data.values[PIZ_DATA_IS_MARKED]   = (note == x->markedNote);
+        if (!pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note)) {
+            ARGVWITHNOTE
+            if (event = pizEventNewWithArray (PIZ_GRAPHIC, PIZ_NOTE_ADDED, PIZ_DATA_NOTE_SIZE, argv, i)) {
+                if (pizLinklistAppend (queue, event)) {
+                    pizEventFree (event);
+                }
             }
-            
-            pizLinklistAppend (queue, event);
-            
-            pizItemset128UnsetAtIndex (&x->changedNotes, i);
         }
+        
+        pizItemset128UnsetAtIndex (&x->changedNotes, i);
     }
     //    
     }
@@ -119,27 +113,13 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
     //
     if (pizItemset128IsSetAtIndex (&x->changedNotes, i)) {
-        PIZNote  *note = NULL; 
-        PIZEvent *event = NULL; 
-         
-        if (event = pizEventNew ( )) {
-            event->type = PIZ_GRAPHIC;
-            event->name = PIZ_NOTE_CHANGED;
-            event->tag  = i;
-            
-            pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note);
-            
-            if (note) {
-                event->data.values[PIZ_DATA_POSITION]    = note->position;
-                event->data.values[PIZ_DATA_PITCH]       = note->data[PIZ_PITCH];
-                event->data.values[PIZ_DATA_VELOCITY]    = note->data[PIZ_VELOCITY];
-                event->data.values[PIZ_DATA_DURATION]    = note->data[PIZ_DURATION];
-                event->data.values[PIZ_DATA_CHANNEL]     = note->data[PIZ_CHANNEL];
-                event->data.values[PIZ_DATA_IS_SELECTED] = note->isSelected;
-                event->data.values[PIZ_DATA_IS_MARKED]   = (note == x->markedNote);
+        if (!pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note)) {
+            ARGVWITHNOTE
+            if (event = pizEventNewWithArray (PIZ_GRAPHIC, PIZ_NOTE_CHANGED, PIZ_DATA_NOTE_SIZE, argv, i)) {
+                if (pizLinklistAppend (queue, event)) {
+                    pizEventFree (event);
+                }
             }
-            
-            pizLinklistAppend (queue, event);
         }
     }
     //    

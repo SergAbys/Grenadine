@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	March 23, 2012.
+ * \date	March 24, 2012.
  */
 
 /*
@@ -65,8 +65,10 @@
 
 #define PIZLOCKEVENT            pthread_mutex_lock      (&x->eventLock);
 #define PIZUNLOCKEVENT          pthread_mutex_unlock    (&x->eventLock);
+
 #define PIZLOCKNOTIFICATION     pthread_mutex_lock      (&x->notificationLock);
 #define PIZUNLOCKNOTIFICATION   pthread_mutex_unlock    (&x->notificationLock);
+
 #define PIZLOCKQUERY            pthread_mutex_lock      (&x->queryLock);
 #define PIZUNLOCKQUERY          pthread_mutex_unlock    (&x->queryLock);
 
@@ -119,19 +121,18 @@ typedef struct _PIZAgent {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-typedef void        (*PIZAgentMethod)(PIZAgent *x, PIZEvent *event);
-typedef PIZError    (*PIZObserverMethod)(void *observerData, PIZEvent *event);
+typedef void (*PIZAgentMethod)(PIZAgent *x, PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZAgent    *pizAgentNew        (void);
-void        pizAgentFree        (PIZAgent *x);
+PIZAgent *pizAgentNew        (void);
+void     pizAgentFree        (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void        pizAgentAppendEvent (PIZAgent *x, PIZEvent *event);
+void     pizAgentAppendEvent (PIZAgent *x, PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

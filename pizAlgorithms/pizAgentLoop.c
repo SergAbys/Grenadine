@@ -75,23 +75,23 @@ void *pizAgentEventLoop (void *agent)
     pizAgentEventLoopInit (x);
      
     while (pizAgentEventLoopIsWorkTime (x)) {
-        if (pizAgentEventLoopProceedRun (x)) {
+        if (pizAgentEventLoopDoRun (x)) {
             break;
         } 
     }
     
     if (x->flags & PIZ_FLAG_PLAYED) {
         if (pizAgentEventLoopIsWorkTime (x)) {
-            pizAgentEventLoopProceedStep (x);
+            pizAgentEventLoopDoStep (x);
         } else {
-            pizAgentEventLoopProceedBlank (x);
+            pizAgentEventLoopDoBlank (x);
         }
     }
     
     if (x->flags & PIZ_FLAG_GUI) {
         while (pizAgentEventLoopIsWorkTime (x)) {
-            if (pizAgentEventLoopProceedGraphic (x)) {
-                pizAgentEventLoopProceedGraphicUpdate (x);
+            if (pizAgentEventLoopDoGraphic (x)) {
+                pizAgentEventLoopDoRefresh (x);
                 break;
             } 
         }
@@ -110,7 +110,7 @@ void *pizAgentEventLoop (void *agent)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizAgentEventLoopProceedRun (PIZAgent *x) 
+PIZError pizAgentEventLoopDoRun (PIZAgent *x) 
 {
     long            err = PIZ_ERROR;
     PIZEvent        *event = NULL;
@@ -147,7 +147,7 @@ PIZError pizAgentEventLoopProceedRun (PIZAgent *x)
     return err;
 }
 
-PIZError pizAgentEventLoopProceedGraphic (PIZAgent *x)
+PIZError pizAgentEventLoopDoGraphic (PIZAgent *x)
 {
     long err = PIZ_ERROR;
         
@@ -158,7 +158,7 @@ PIZError pizAgentEventLoopProceedGraphic (PIZAgent *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizAgentEventLoopProceedGraphicUpdate (PIZAgent *x)
+void pizAgentEventLoopDoRefresh (PIZAgent *x)
 {
     ;
 }
@@ -167,7 +167,7 @@ void pizAgentEventLoopProceedGraphicUpdate (PIZAgent *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizAgentEventLoopProceedStep (PIZAgent *x)
+void pizAgentEventLoopDoStep (PIZAgent *x)
 {
     long err = PIZ_GOOD; 
 
@@ -175,47 +175,59 @@ void pizAgentEventLoopProceedStep (PIZAgent *x)
     err = pizSequenceProceedStep (x->sequence, x->tempArray);
     
     if (err == PIZ_GOOD) {
-        if (!PIZTRYLOCKQUERY) {
-            pizLinklistClear (x->runOut);
-            
-            /*for (i = 0; i < pizGrowingArrayCount (x->tempArray); i += PIZ_DATA_NOTE_SIZE) {
-            
-            }*/
-            
-            if (pizLinklistCount (x->runOut)) {
-                PIZLOCKNOTIFICATION
-            
-                PIZUNLOCKNOTIFICATION
+    //
+    if (!PIZTRYLOCKQUERY) {
+        long     i;
+        long     *ptr = NULL;
+        PIZEvent *event = NULL;
+        
+        pizLinklistClear (x->runOut);
+        ptr = pizGrowingArrayPtr (x->tempArray);
+        
+        for (i = 0; i < pizGrowingArrayCount (x->tempArray); i += PIZ_DATA_NOTE_SIZE) {
+            if (event = pizEventNewWithArray (PIZ_RUN, PIZ_NOTE_PLAYED, PIZ_DATA_NOTE_SIZE, (ptr + i), 0)) {
+                if (pizLinklistAppend (x->runOut, event)) {
+                    pizEventFree (event);
+                }
             }
-                
-            PIZUNLOCKQUERY
         }
+        
+        if (pizLinklistCount (x->runOut)) {
+            if (event = pizEventNewNotification (PIZ_NOTES_READY, &x->grainStart)) {
+                PIZLOCKNOTIFICATION
+                if (pizLinklistAppend (x->notificationQueue, event)) {
+                    pizEventFree (event);
+                }
+                PIZUNLOCKNOTIFICATION
+                pthread_cond_signal (&x->notificationCondition);
+            }
+        }
+            
+        PIZUNLOCKQUERY
+    }
+    //    
     } else if (err == PIZ_ERROR) {
-        pizAgentEventLoopProceedEnd (x);
+        pizAgentEventLoopNotifyEnd (x);
     }
 }
 
-void pizAgentEventLoopProceedBlank (PIZAgent *x)
+void pizAgentEventLoopDoBlank (PIZAgent *x)
 {
     long err = pizSequenceProceedStep (x->sequence, NULL);
     
     if (err == PIZ_ERROR) {
-        pizAgentEventLoopProceedEnd (x);
+        pizAgentEventLoopNotifyEnd (x);
     }
 }
 
-void pizAgentEventLoopProceedEnd (PIZAgent *x)
+void pizAgentEventLoopNotifyEnd (PIZAgent *x)
 {
-    PIZEvent *notification = NULL;
+    PIZEvent *event = NULL;
         
-    if (notification = pizEventNew ( )) {
-        notification->type = PIZ_NOTIFICATION;
-        notification->name = PIZ_END;
-        pizTimeCopy (&notification->data.time, &x->grainStart);   
-        
+    if (event = pizEventNewNotification (PIZ_END, &x->grainStart)) {
         PIZLOCKNOTIFICATION
-        if (pizLinklistAppend (x->notificationQueue, notification)) {
-            pizEventFree (notification);
+        if (pizLinklistAppend (x->notificationQueue, event)) {
+            pizEventFree (event);
         }
         PIZUNLOCKNOTIFICATION
         pthread_cond_signal (&x->notificationCondition);
@@ -294,7 +306,7 @@ PIZ_INLINE void pizAgentEventLoopSleep (PIZAgent *x)
         pizTimeAddNano (&x->grainEnd, &x->grainSize); 
         
         if (x->flags & PIZ_FLAG_PLAYED) {
-            pizAgentEventLoopProceedBlank (x);
+            pizAgentEventLoopDoBlank (x);
         }
         
         err = pizTimeElapsedNano (&now, &x->grainEnd, &ns);

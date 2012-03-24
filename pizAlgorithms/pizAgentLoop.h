@@ -49,25 +49,26 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void      *pizAgentEventLoop                          (void *agent);
-PIZ_LOCAL void      *pizAgentNotificationLoop                   (void *agent);
+PIZ_LOCAL void      *pizAgentEventLoop                  (void *agent);
+PIZ_LOCAL void      *pizAgentNotificationLoop           (void *agent);
 
-PIZ_LOCAL PIZError  pizAgentEventLoopProceedRun                 (PIZAgent *x);
-PIZ_LOCAL PIZError  pizAgentEventLoopProceedGraphic             (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopProceedGraphicUpdate       (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopProceedStep                (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopProceedBlank               (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopProceedEnd                 (PIZAgent *x);
+PIZ_LOCAL PIZError  pizAgentEventLoopDoRun              (PIZAgent *x);
+PIZ_LOCAL PIZError  pizAgentEventLoopDoGraphic          (PIZAgent *x);
+PIZ_LOCAL void      pizAgentEventLoopDoRefresh          (PIZAgent *x);
+PIZ_LOCAL void      pizAgentEventLoopDoStep             (PIZAgent *x);
+PIZ_LOCAL void      pizAgentEventLoopDoBlank            (PIZAgent *x);
 
-PIZ_LOCAL void      pizAgentNotificationLoopProceed             (PIZAgent *x);
+PIZ_LOCAL void      pizAgentEventLoopNotifyEnd          (PIZAgent *x);
+
+PIZ_LOCAL void      pizAgentNotificationLoopProceed     (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZ_INLINE bool pizAgentEventLoopCondition            (PIZAgent *x);
-PIZ_LOCAL PIZ_INLINE void pizAgentEventLoopInit                 (PIZAgent *x);
-PIZ_LOCAL PIZ_INLINE bool pizAgentEventLoopIsWorkTime           (PIZAgent *x);
-PIZ_LOCAL PIZ_INLINE void pizAgentEventLoopSleep                (PIZAgent *x);
+PIZ_LOCAL PIZ_INLINE bool pizAgentEventLoopCondition    (PIZAgent *x);
+PIZ_LOCAL PIZ_INLINE void pizAgentEventLoopInit         (PIZAgent *x);
+PIZ_LOCAL PIZ_INLINE bool pizAgentEventLoopIsWorkTime   (PIZAgent *x);
+PIZ_LOCAL PIZ_INLINE void pizAgentEventLoopSleep        (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
