@@ -164,7 +164,7 @@ void pizAgentAppendEvent (PIZAgent *x, PIZEvent *event)
         
         if (event->type == PIZ_RUN) {
             queue = x->runIn;
-        } else if (GUI && (event->type == PIZ_GRAPHIC)) {
+        } else if ((x->flags & PIZ_FLAG_GUI) && (event->type == PIZ_GRAPHIC)) {
             queue = x->graphicIn;
         }
         

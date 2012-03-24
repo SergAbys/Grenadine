@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    March 22, 2012.
+ * \date    March 24, 2012.
  */
  
 /*
@@ -814,56 +814,57 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a)
         x->index = x->start;
     }
         
-    if (a && (x->index < x->end)) {
-    
-        err = PIZ_GOOD;
-                    
-        if ((x->timeline[x->index]) && (pizLinklistCount (x->timeline[x->index]))) {
-            long    scale;
-            PIZNote *note       = NULL;
-            PIZNote *nextNote   = NULL;
-            
-            scale = pizGrowingArrayCount (x->scale);
-            
-            pizLinklistPtrAtIndex (x->timeline[x->index], 0, (void **)&note);
-            
-            while (note) {
-                long pitch;
+    if (x->index < x->end) {
+    //
+    err = PIZ_GOOD;
                 
-                pizLinklistNextByPtr (x->timeline[x->index], (void *)note, (void **)&nextNote);
-                
-                pitch = note->data[PIZ_PITCH];
-                
-                if (scale) {
-                    pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
-                }
-                
-                if ((pitch >= x->down) && (pitch <= x->up)) {
-                    long velocity       = note->data[PIZ_VELOCITY];
-                    long noteChannel    = note->data[PIZ_CHANNEL];
-                            
-                    if (velocity) {
-                        velocity += x->velocity;
-                    } 
-                    
-                    if (noteChannel == PIZ_CHANNEL_NONE) {
-                        noteChannel = x->channel;
-                    }
-                      
-                    err |= pizGrowingArrayAppend (a, note->position);      
-                    err |= pizGrowingArrayAppend (a, CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
-                    err |= pizGrowingArrayAppend (a, CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY));
-                    err |= pizGrowingArrayAppend (a, note->data[PIZ_DURATION]);
-                    err |= pizGrowingArrayAppend (a, noteChannel);
-                    err |= pizGrowingArrayAppend (a, note->isSelected);
-                    err |= pizGrowingArrayAppend (a, (note == x->markedNote));
-                }
-                
-                note = nextNote;
-            }
-        }
+    if (a && (x->timeline[x->index]) && (pizLinklistCount (x->timeline[x->index]))) {
+        long    scale;
+        PIZNote *note       = NULL;
+        PIZNote *nextNote   = NULL;
         
-        x->index ++;
+        scale = pizGrowingArrayCount (x->scale);
+        
+        pizLinklistPtrAtIndex (x->timeline[x->index], 0, (void **)&note);
+        
+        while (note) {
+            long pitch;
+            
+            pizLinklistNextByPtr (x->timeline[x->index], (void *)note, (void **)&nextNote);
+            
+            pitch = note->data[PIZ_PITCH];
+            
+            if (scale) {
+                pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
+            }
+            
+            if ((pitch >= x->down) && (pitch <= x->up)) {
+                long velocity       = note->data[PIZ_VELOCITY];
+                long noteChannel    = note->data[PIZ_CHANNEL];
+                        
+                if (velocity) {
+                    velocity += x->velocity;
+                } 
+                
+                if (noteChannel == PIZ_CHANNEL_NONE) {
+                    noteChannel = x->channel;
+                }
+                  
+                err |= pizGrowingArrayAppend (a, note->position);      
+                err |= pizGrowingArrayAppend (a, CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
+                err |= pizGrowingArrayAppend (a, CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY));
+                err |= pizGrowingArrayAppend (a, note->data[PIZ_DURATION]);
+                err |= pizGrowingArrayAppend (a, noteChannel);
+                err |= pizGrowingArrayAppend (a, note->isSelected);
+                err |= pizGrowingArrayAppend (a, (note == x->markedNote));
+            }
+            
+            note = nextNote;
+        }
+    }
+    
+    x->index ++;
+    //    
     }
     
     PIZUNLOCK

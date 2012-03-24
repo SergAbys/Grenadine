@@ -250,14 +250,15 @@
 									<array>
 										<string>08FB7794FE84155DC02AAC07</string>
 										<string>08FB7795FE84155DC02AAC07</string>
+										<string>96AF1B7E148CFBF7001358AB</string>
 										<string>96D8682714FF5A4B00849A50</string>
 										<string>C6A0FF2B0290797F04C91782</string>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>16</integer>
-											<integer>7</integer>
+											<integer>17</integer>
+											<integer>13</integer>
 											<integer>2</integer>
 											<integer>0</integer>
 										</array>
@@ -286,7 +287,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>211 175 608 560 0 0 1280 778 </string>
+								<string>184 206 608 560 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -423,8 +424,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>967D6BAF151CE5670083A335</string>
-				<string>967D6BB0151CE5670083A335</string>
+				<string>96D6724B151E026A00CEFD65</string>
+				<string>96D6724C151E026A00CEFD65</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -457,11 +458,13 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D54069F1CE1000CFCEE</string>
+		<string>96D67254151E026A00CEFD65</string>
 		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/pizAlgorithms/PizAlgorithms.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>211 175 608 560 0 0 1280 778 </string>
+	<string>184 206 608 560 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -614,14 +617,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>pizSequenceUI.c</string>
+								<string></string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -677,7 +678,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>967D6B83151CE0140083A335</string>
+				<string>96D6724D151E026A00CEFD65</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -719,8 +720,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {322, 208}}</string>
-											<string>{{322, 0}, {395, 208}}</string>
+											<string>{{0, 0}, {321, 208}}</string>
+											<string>{{321, 0}, {396, 208}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -783,14 +784,14 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D54069F1CE1000CFCEE</string>
-				<string>96D6E1CD14FD0E4900372989</string>
+				<string>96D6724E151E026A00CEFD65</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>96D6E1CE14FD0E4900372989</string>
-				<string>96D6E1CF14FD0E4900372989</string>
-				<string>96D6E1D014FD0E4900372989</string>
-				<string>96D6E1D114FD0E4900372989</string>
-				<string>96D6E1D214FD0E4900372989</string>
-				<string>96D6E1D314FD0E4900372989</string>
+				<string>96D6724F151E026A00CEFD65</string>
+				<string>96D67250151E026A00CEFD65</string>
+				<string>96D67251151E026A00CEFD65</string>
+				<string>96D67252151E026A00CEFD65</string>
+				<string>96D67253151E026A00CEFD65</string>
+				<string>96D67254151E026A00CEFD65</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debug</string>
