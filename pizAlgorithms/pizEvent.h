@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	March 24, 2012.
+ * \date	March 25, 2012.
  */
 
 /*
@@ -61,20 +61,20 @@
 // -------------------------------------------------------------------------------------------------------------
 
 typedef enum _PIZEventType {
-    PIZ_RUN = 1,
+    PIZ_RUN             = 1,
     PIZ_GRAPHIC,
     PIZ_NOTIFICATION
     } PIZEventType;
 
 typedef enum _PIZEventName {
     //
-    PIZ_PLAY = 1,
+    PIZ_PLAY            = 1,
+    PIZ_STOP,
     PIZ_LOOP,
     PIZ_UNLOOP,
-    PIZ_STOP,
+    PIZ_ENABLE_GUI,
+    PIZ_DISABLE_GUI,
     PIZ_NOTE_PLAYED,
-    PIZ_GRAPHIC_ENABLE,
-    PIZ_GRAPHIC_DISABLE,
     //
     PIZ_NOTE_REMOVED,
     PIZ_NOTE_ADDED,
@@ -82,7 +82,9 @@ typedef enum _PIZEventName {
     PIZ_ZONE_CHANGED,
     //
     PIZ_END,
-    PIZ_NOTES_READY
+    PIZ_RUN_READY,
+    PIZ_GRAPHIC_READY,
+    //
     } PIZEventName;
     
 typedef union _PIZEventData {
@@ -101,7 +103,7 @@ typedef struct _PIZEvent {
 // -------------------------------------------------------------------------------------------------------------
 
 PIZEvent *pizEventNew               (void);
-PIZEvent *pizEventNewWithArray      (PIZEventType type, PIZEventName name, long argc, long *argv, long tag);
+PIZEvent *pizEventNewWithArray      (PIZEventType t, PIZEventName name, long argc, long *argv, long tag);
 PIZEvent *pizEventNewNotification   (PIZEventName name, PIZTime *time);
 
 // -------------------------------------------------------------------------------------------------------------
@@ -120,14 +122,14 @@ PIZ_EXTERN PIZEvent *pizEventNew (void)
     return event;
 }
 
-PIZ_EXTERN PIZEvent *pizEventNewWithArray (PIZEventType type, PIZEventName name, long argc, long *argv, long n) 
+PIZ_EXTERN PIZEvent *pizEventNewWithArray (PIZEventType t, PIZEventName name, long argc, long *argv, long tag) 
 {
     PIZEvent *event = NULL; 
     
     if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        event->type = type;
+        event->type = t;
         event->name = name;
-        event->tag  = n;
+        event->tag  = tag;
         
         if (argv) {
             long i;

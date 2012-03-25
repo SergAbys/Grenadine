@@ -101,7 +101,7 @@ PIZAgent *pizAgentNew (void)
         x->err2 = pthread_create (&x->notificationLoop, &x->attr, pizAgentNotificationLoop, (void *)x); 
         err |= x->err2;
     }
-        
+    
     if (err) {
         pizAgentFree (x);
         x = NULL;
