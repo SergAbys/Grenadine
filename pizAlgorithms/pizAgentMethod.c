@@ -48,7 +48,7 @@ void pizAgentMethodPlay (PIZAgent *x, PIZEvent *event)
 {
     if (!(x->flags & PIZ_FLAG_PLAYED)) {
         pizSequenceGoToStart (x->sequence);
-        x->flags |= PIZ_FLAG_PLAYED; 
+        x->flags |= PIZ_FLAG_PLAYED;
     }
 }
 

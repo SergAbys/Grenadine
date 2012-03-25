@@ -55,9 +55,10 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_BPM_CONSTANT        25.E8
-#define PIZ_WORK_TIME_RATIO     0.75
-#define PIZ_DEFAULT_TEMPO       120
+#define PIZ_CONSTANT_BPM            25.E8
+#define PIZ_CONSTANT_WORK_RATIO     25.E8 * 0.75
+
+#define PIZ_DEFAULT_BPM             120
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -68,10 +69,8 @@
 #define PIZLOCKNOTIFICATION     pthread_mutex_lock      (&x->notificationLock);
 #define PIZUNLOCKNOTIFICATION   pthread_mutex_unlock    (&x->notificationLock);
 
-#define PIZLOCKQUERY            pthread_mutex_lock      (&x->queryLock);
-#define PIZUNLOCKQUERY          pthread_mutex_unlock    (&x->queryLock);
-
-#define PIZTRYLOCKQUERY         pthread_mutex_trylock   (&x->queryLock)
+#define PIZLOCKGETTER           pthread_mutex_lock      (&x->getterLock);
+#define PIZUNLOCKGETTER         pthread_mutex_unlock    (&x->getterLock);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -85,15 +84,14 @@ typedef enum _PIZAgentFlag {
     PIZ_FLAG_NONE       = 0,
     PIZ_FLAG_GUI        = 1,
     PIZ_FLAG_EXIT       = 2,
-    PIZ_FLAG_PLAYED     = 4,
-    PIZ_FLAG_LOOPED     = 8,
-    PIZ_FLAG_WAKED      = 16,
-    PIZ_FLAG_CHANGED    = 32
+    PIZ_FLAG_WAKED      = 4,
+    PIZ_FLAG_PLAYED     = 8,
+    PIZ_FLAG_LOOPED     = 16
     } PIZAgentFlag;
 
 typedef struct _PIZAgent {
     long                flags;
-    long                tempo;
+    long                bpm;
     PIZNano             grainSize;
     PIZNano             grainWorkSize;
     PIZTime             grainStart;
@@ -110,7 +108,7 @@ typedef struct _PIZAgent {
     pthread_cond_t      notificationCondition;
     pthread_mutex_t     eventLock;
     pthread_mutex_t     notificationLock;
-    pthread_mutex_t     queryLock;
+    pthread_mutex_t     getterLock;
     pthread_t           eventLoop;
     pthread_t           notificationLoop;
     long                err1;
@@ -131,7 +129,8 @@ void     pizAgentFree        (PIZAgent *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void     pizAgentAppendEvent (PIZAgent *x, PIZEvent *event);
+void     pizAgentAppendEvent    (PIZAgent *x, PIZEvent *event);
+PIZError pizAgentGetEvent       (PIZAgent *x, PIZEventType, PIZEvent **eventPtr);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

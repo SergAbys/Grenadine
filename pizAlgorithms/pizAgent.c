@@ -59,8 +59,8 @@ PIZAgent *pizAgentNew (void)
     long     err = PIZ_GOOD;
     PIZEvent *event = NULL;
     
-    x->flags                = PIZ_FLAG_GUI | PIZ_FLAG_CHANGED;  
-    x->tempo                = PIZ_DEFAULT_TEMPO;  
+    x->flags                = PIZ_FLAG_GUI;  
+    x->bpm                  = PIZ_DEFAULT_BPM;  
     x->runIn                = pizLinklistNew ( );
     x->runOut               = pizLinklistNew ( );
     x->graphicIn            = pizLinklistNew ( );
@@ -84,7 +84,8 @@ PIZAgent *pizAgentNew (void)
     
     err |= pthread_mutex_init (&x->eventLock, NULL);
     err |= pthread_mutex_init (&x->notificationLock, NULL);
-    err |= pthread_mutex_init (&x->queryLock, NULL);
+    err |= pthread_mutex_init (&x->getterLock, NULL);
+    
     err |= pthread_cond_init  (&x->eventCondition, NULL);
     err |= pthread_cond_init  (&x->notificationCondition, NULL);
     
@@ -141,6 +142,8 @@ void pizAgentFree (PIZAgent *x)
     
     pthread_mutex_destroy (&x->eventLock);
     pthread_mutex_destroy (&x->notificationLock);
+    pthread_mutex_destroy (&x->getterLock);
+    
     pthread_cond_destroy  (&x->eventCondition);
     pthread_cond_destroy  (&x->notificationCondition);
     

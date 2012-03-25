@@ -159,25 +159,25 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
 
 void pizAgentEventLoopDoRefresh (PIZAgent *x)
 {
-    if (!PIZTRYLOCKQUERY) {
-        pizLinklistClear (x->graphicOut);
-        pizSequenceAppendGraphicEvents (x->sequence, x->graphicOut);
-        
-        if (pizLinklistCount (x->graphicOut)) {
-            PIZEvent *event = NULL;
-            
-            if (event = pizEventNewWithTime (PIZ_NOTIFICATION, PIZ_GRAPHIC_READY, &x->grainStart)) {
-                PIZLOCKNOTIFICATION
-                if (pizLinklistAppend (x->notificationQueue, event)) {
-                    pizEventFree (event);
-                }
-                PIZUNLOCKNOTIFICATION
-                pthread_cond_signal (&x->notificationCondition);
+    PIZEvent *event = NULL;
+    
+    PIZLOCKGETTER
+    
+    pizLinklistClear (x->graphicOut);
+    pizSequenceAppendGraphicEvents (x->sequence, x->graphicOut);
+    
+    if (pizLinklistCount (x->graphicOut)) {
+        if (event = pizEventNewWithTime (PIZ_NOTIFICATION, PIZ_GRAPHIC_READY, &x->grainStart)) {
+            PIZLOCKNOTIFICATION
+            if (pizLinklistAppend (x->notificationQueue, event)) {
+                pizEventFree (event);
             }
+            PIZUNLOCKNOTIFICATION
+            pthread_cond_signal (&x->notificationCondition);
         }
-        
-        PIZUNLOCKQUERY
     }
+    
+    PIZUNLOCKGETTER
 }
 
 void pizAgentEventLoopDoStep (PIZAgent *x)
@@ -189,35 +189,35 @@ void pizAgentEventLoopDoStep (PIZAgent *x)
     
     if (err == PIZ_GOOD) {
     //
-    if (!PIZTRYLOCKQUERY) {
-        long     i;
-        long     *ptr = NULL;
-        PIZEvent *event = NULL;
+    long     i;
+    long     *ptr = NULL;
+    PIZEvent *event = NULL;
         
-        pizLinklistClear (x->runOut);
-        ptr = pizGrowingArrayPtr (x->tempArray);
+    PIZLOCKGETTER 
         
-        for (i = 0; i < pizGrowingArrayCount (x->tempArray); i += PIZ_DATA_NOTE_SIZE) {
-            if (event = pizEventNewWithArray (PIZ_RUN, PIZ_NOTE_PLAYED, PIZ_DATA_NOTE_SIZE, (ptr + i), 0)) {
-                if (pizLinklistAppend (x->runOut, event)) {
-                    pizEventFree (event);
-                }
+    pizLinklistClear (x->runOut);
+    ptr = pizGrowingArrayPtr (x->tempArray);
+    
+    for (i = 0; i < pizGrowingArrayCount (x->tempArray); i += PIZ_DATA_NOTE_SIZE) {
+        if (event = pizEventNewWithArray (PIZ_RUN, PIZ_NOTE_PLAYED, PIZ_DATA_NOTE_SIZE, (ptr + i), 0)) {
+            if (pizLinklistAppend (x->runOut, event)) {
+                pizEventFree (event);
             }
         }
-        
-        if (pizLinklistCount (x->runOut)) {
-            if (event = pizEventNewWithTime (PIZ_NOTIFICATION, PIZ_RUN_READY, &x->grainStart)) {
-                PIZLOCKNOTIFICATION
-                if (pizLinklistAppend (x->notificationQueue, event)) {
-                    pizEventFree (event);
-                }
-                PIZUNLOCKNOTIFICATION
-                pthread_cond_signal (&x->notificationCondition);
-            }
-        }
-            
-        PIZUNLOCKQUERY
     }
+    
+    if (pizLinklistCount (x->runOut)) {
+        if (event = pizEventNewWithTime (PIZ_NOTIFICATION, PIZ_RUN_READY, &x->grainStart)) {
+            PIZLOCKNOTIFICATION
+            if (pizLinklistAppend (x->notificationQueue, event)) {
+                pizEventFree (event);
+            }
+            PIZUNLOCKNOTIFICATION
+            pthread_cond_signal (&x->notificationCondition);
+        }
+    }
+        
+    PIZUNLOCKGETTER
     //    
     } else if (err == PIZ_ERROR) {
         pizAgentEventLoopNotifyEnd (x);
@@ -270,19 +270,16 @@ PIZ_INLINE void pizAgentEventLoopInit (PIZAgent *x)
 {
     if (x->flags & PIZ_FLAG_WAKED) {
         pizTimeSet (&x->grainStart);
+        x->flags &= ~PIZ_FLAG_WAKED;
     } else {
         pizTimeCopy (&x->grainStart, &x->grainEnd);
     }
     
-    if (x->flags & PIZ_FLAG_CHANGED) {
-        x->grainSize     = (PIZNano)(PIZ_BPM_CONSTANT / x->tempo);
-        x->grainWorkSize = (PIZNano)(PIZ_BPM_CONSTANT * PIZ_WORK_TIME_RATIO / x->tempo);
-        x->flags &= ~PIZ_FLAG_CHANGED;
-    }
+    pizTimeSetNano (&x->grainSize, PIZ_CONSTANT_BPM / x->bpm);
+    pizTimeSetNano (&x->grainWorkSize, PIZ_CONSTANT_WORK_RATIO / x->bpm);
     
-    pizTimeCopy (&x->grainEnd, &x->grainStart);
+    pizTimeCopy    (&x->grainEnd, &x->grainStart);
     pizTimeAddNano (&x->grainEnd, &x->grainSize);
-    x->flags &= ~PIZ_FLAG_WAKED;
 }
 
 PIZ_INLINE bool pizAgentEventLoopIsWorkTime (PIZAgent *x)

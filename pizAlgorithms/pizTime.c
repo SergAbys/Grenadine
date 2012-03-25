@@ -1,7 +1,7 @@
 /*
  * \file	pizTime.c
  * \author	Jean Sapristi
- * \date	March 22, 2012.
+ * \date	March 25, 2012.
  */
  
 /*
@@ -92,14 +92,14 @@ void pizTimespecWithNano (struct timespec *t, PIZNano *ns)
     t->tv_nsec = (long)(*ns % PIZ_TIME_NANO_PER_SECOND);
 }
 
-void pizTimeSetZero (PIZTime *t)
-{
-    (*t) = PIZ_TIME_ZERO;
-}
-
 bool pizTimeIsZero (PIZTime *t)
 {
     return ((*t) == PIZ_TIME_ZERO);
+}
+
+void pizTimeSetNano (PIZNano *ns, double f)
+{
+    (*ns) = (PIZNano)f;
 }
 
 #endif // __MACH__
