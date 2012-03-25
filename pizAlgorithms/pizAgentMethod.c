@@ -61,13 +61,23 @@ void pizAgentMethodStop (PIZAgent *x, PIZEvent *event)
 void pizAgentMethodLoop (PIZAgent *x, PIZEvent *event)
 {
     x->flags |= PIZ_FLAG_LOOPED;
-    
     pizAgentMethodPlay (x, event);
 }
 
 void pizAgentMethodUnloop (PIZAgent *x, PIZEvent *event)
 {
     x->flags &= ~PIZ_FLAG_LOOPED;
+}
+
+void pizAgentMethodBPM (PIZAgent *x, PIZEvent *event)
+{
+    x->bpm = CLAMP (event->data.values[0], PIZ_MINIMUM_BPM, PIZ_MAXIMUM_BPM);
+    
+    pizTimeSetNano (&x->grainSize, PIZ_CONSTANT_BPM / x->bpm);
+    pizTimeSetNano (&x->grainWorkSize, PIZ_CONSTANT_WORK_RATIO / x->bpm);
+    
+    pizTimeCopy    (&x->grainEnd, &x->grainStart);
+    pizTimeAddNano (&x->grainEnd, &x->grainSize);
 }
 
 // -------------------------------------------------------------------------------------------------------------

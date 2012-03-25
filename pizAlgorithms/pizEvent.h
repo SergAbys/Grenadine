@@ -73,6 +73,7 @@ typedef enum _PIZEventName {
     PIZ_STOP,
     PIZ_LOOP,
     PIZ_UNLOOP,
+    PIZ_BPM,
     PIZ_ENABLE_GUI,
     PIZ_DISABLE_GUI,
     PIZ_NOTE_PLAYED,

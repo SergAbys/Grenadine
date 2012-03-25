@@ -57,6 +57,8 @@
 
 #define PIZ_CONSTANT_BPM            25.E8
 #define PIZ_CONSTANT_WORK_RATIO     25.E8 * 0.75
+#define PIZ_MAXIMUM_BPM             300
+#define PIZ_MINIMUM_BPM             40
 
 #define PIZ_DEFAULT_BPM             120
 

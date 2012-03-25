@@ -53,6 +53,7 @@ PIZ_LOCAL void pizAgentMethodPlay               (PIZAgent *x, PIZEvent *event);
 PIZ_LOCAL void pizAgentMethodStop               (PIZAgent *x, PIZEvent *event);
 PIZ_LOCAL void pizAgentMethodLoop               (PIZAgent *x, PIZEvent *event);
 PIZ_LOCAL void pizAgentMethodUnloop             (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL void pizAgentMethodBPM                (PIZAgent *x, PIZEvent *event);
 
 PIZ_LOCAL void pizAgentMethodEnableGUI          (PIZAgent *x, PIZEvent *event);
 PIZ_LOCAL void pizAgentMethodDisableGUI         (PIZAgent *x, PIZEvent *event);

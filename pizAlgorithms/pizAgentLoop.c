@@ -60,7 +60,6 @@ void *pizAgentEventLoop (void *agent)
     
     while (!pizAgentEventLoopCondition (x)) {
         pthread_cond_wait (&x->eventCondition, &x->eventLock);
-        post ("Waked / %s", __FUNCTION__);
         x->flags |= PIZ_FLAG_WAKED;
                 
         if (EXIT) {
@@ -120,19 +119,19 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
     
     if (!pizLinklistPtrAtIndex (queue, 0, (void *)&event)) {
         pizLinklistChuckByPtr (queue, event);
-        post ("Chucked / %s", __FUNCTION__);
     }
     
     PIZUNLOCKEVENT
     
     if (event) {
         switch (event->name) {
-            case PIZ_PLAY           : f = pizAgentMethodPlay; break;
-            case PIZ_STOP           : f = pizAgentMethodStop; break;
-            case PIZ_LOOP           : break;
-            case PIZ_UNLOOP         : break;  
-            case PIZ_ENABLE_GUI     : break;
-            case PIZ_DISABLE_GUI    : break;
+            case PIZ_PLAY           : f = pizAgentMethodPlay;       break;
+            case PIZ_STOP           : f = pizAgentMethodStop;       break;
+            case PIZ_LOOP           : f = pizAgentMethodLoop;       break;
+            case PIZ_UNLOOP         : f = pizAgentMethodUnloop;     break; 
+            case PIZ_BPM            : f = pizAgentMethodBPM;        break;
+            case PIZ_ENABLE_GUI     : f = pizAgentMethodEnableGUI;  break;
+            case PIZ_DISABLE_GUI    : f = pizAgentMethodDisableGUI; break;
         }
     }
     
@@ -348,8 +347,7 @@ PIZ_LOCAL void *pizAgentNotificationLoop (void *agent)
     
     while (!(pizLinklistCount (x->notificationQueue))) {
         pthread_cond_wait (&x->notificationCondition, &x->notificationLock);
-        post ("Waked / %s", __FUNCTION__);
-                
+                        
         if (EXIT) {
             break;
         } 
@@ -378,10 +376,11 @@ void pizAgentNotificationLoopProceed (PIZAgent *x)
     
     if (!pizLinklistPtrAtIndex (x->notificationQueue, 0, (void *)&event)) {
         pizLinklistChuckByPtr (x->notificationQueue, event);
-        post ("Chucked / %s", __FUNCTION__);
     }
     
     PIZUNLOCKNOTIFICATION
+    
+    // 
     
     pizEventFree (event);
 } 
