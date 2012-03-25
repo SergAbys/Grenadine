@@ -60,7 +60,7 @@ void *pizAgentEventLoop (void *agent)
     
     while (!pizAgentEventLoopCondition (x)) {
         pthread_cond_wait (&x->eventCondition, &x->eventLock);
-        post ("Waked            / %s", __FUNCTION__);
+        post ("Waked / %s", __FUNCTION__);
         x->flags |= PIZ_FLAG_WAKED;
                 
         if (EXIT) {
@@ -120,7 +120,7 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
     
     if (!pizLinklistPtrAtIndex (queue, 0, (void *)&event)) {
         pizLinklistChuckByPtr (queue, event);
-        post ("Chucked : %ld    / %s", event->name, __FUNCTION__);
+        post ("Chucked / %s", __FUNCTION__);
     }
     
     PIZUNLOCKEVENT
@@ -166,7 +166,7 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
         if (pizLinklistCount (x->graphicOut)) {
             PIZEvent *event = NULL;
             
-            if (event = pizEventNewNotification (PIZ_GRAPHIC_READY, &x->grainStart)) {
+            if (event = pizEventNewWithTime (PIZ_NOTIFICATION, PIZ_GRAPHIC_READY, &x->grainStart)) {
                 PIZLOCKNOTIFICATION
                 if (pizLinklistAppend (x->notificationQueue, event)) {
                     pizEventFree (event);
@@ -206,7 +206,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x)
         }
         
         if (pizLinklistCount (x->runOut)) {
-            if (event = pizEventNewNotification (PIZ_RUN_READY, &x->grainStart)) {
+            if (event = pizEventNewWithTime (PIZ_NOTIFICATION, PIZ_RUN_READY, &x->grainStart)) {
                 PIZLOCKNOTIFICATION
                 if (pizLinklistAppend (x->notificationQueue, event)) {
                     pizEventFree (event);
@@ -237,7 +237,7 @@ void pizAgentEventLoopNotifyEnd (PIZAgent *x)
 {
     PIZEvent *event = NULL;
         
-    if (event = pizEventNewNotification (PIZ_END, &x->grainStart)) {
+    if (event = pizEventNewWithTime (PIZ_NOTIFICATION, PIZ_END, &x->grainStart)) {
         PIZLOCKNOTIFICATION
         if (pizLinklistAppend (x->notificationQueue, event)) {
             pizEventFree (event);
@@ -257,9 +257,11 @@ PIZ_INLINE bool pizAgentEventLoopCondition (PIZAgent *x)
 {
     bool condition = false;
     
-    condition = pizLinklistCount (x->runIn) ||
-                pizLinklistCount (x->graphicIn) ||
-                (x->flags & PIZ_FLAG_PLAYED);
+    if ((x->flags & PIZ_FLAG_PLAYED) ||
+        pizLinklistCount (x->runIn) ||
+        pizLinklistCount (x->graphicIn)) {
+        condition = true;
+    }
     
     return condition;
 }
@@ -349,7 +351,7 @@ PIZ_LOCAL void *pizAgentNotificationLoop (void *agent)
     
     while (!(pizLinklistCount (x->notificationQueue))) {
         pthread_cond_wait (&x->notificationCondition, &x->notificationLock);
-        post ("Waked            / %s", __FUNCTION__);
+        post ("Waked / %s", __FUNCTION__);
                 
         if (EXIT) {
             break;
@@ -379,7 +381,7 @@ void pizAgentNotificationLoopProceed (PIZAgent *x)
     
     if (!pizLinklistPtrAtIndex (x->notificationQueue, 0, (void *)&event)) {
         pizLinklistChuckByPtr (x->notificationQueue, event);
-        post ("Chucked : %ld    / %s", event->name, __FUNCTION__);
+        post ("Chucked / %s", __FUNCTION__);
     }
     
     PIZUNLOCKNOTIFICATION

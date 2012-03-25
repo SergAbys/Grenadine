@@ -56,9 +56,10 @@ PIZAgent *pizAgentNew (void)
     
     if (x = (PIZAgent *)malloc (sizeof(PIZAgent))) {
     //
-    long err = PIZ_GOOD;
+    long     err = PIZ_GOOD;
+    PIZEvent *event = NULL;
     
-    x->flags                = PIZ_FLAG_GUI | PIZ_FLAG_WAKED | PIZ_FLAG_CHANGED;  
+    x->flags                = PIZ_FLAG_GUI | PIZ_FLAG_CHANGED;  
     x->tempo                = PIZ_DEFAULT_TEMPO;  
     x->runIn                = pizLinklistNew ( );
     x->runOut               = pizLinklistNew ( );
@@ -105,6 +106,8 @@ PIZAgent *pizAgentNew (void)
     if (err) {
         pizAgentFree (x);
         x = NULL;
+    } else if (event = pizEventNew (PIZ_RUN, PIZ_INIT)) {
+        pizAgentAppendEvent (x, event);
     }
     //
     }

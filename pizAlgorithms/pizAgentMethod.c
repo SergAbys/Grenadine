@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentMethod.c
  * \author	Jean Sapristi
- * \date	March 24, 2012.
+ * \date	March 25, 2012.
  */
  
 /*
@@ -62,10 +62,7 @@ void pizAgentMethodLoop (PIZAgent *x, PIZEvent *event)
 {
     x->flags |= PIZ_FLAG_LOOPED;
     
-    if (!(x->flags & PIZ_FLAG_PLAYED)) {
-        pizSequenceGoToStart (x->sequence);
-        x->flags |= PIZ_FLAG_PLAYED; 
-    }
+    pizAgentMethodPlay (x, event);
 }
 
 void pizAgentMethodUnloop (PIZAgent *x, PIZEvent *event)

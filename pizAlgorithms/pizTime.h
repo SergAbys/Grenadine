@@ -1,7 +1,7 @@
 /**
  * \file	pizTime.h
  * \author	Jean Sapristi
- * \date	March 22, 2012.
+ * \date	March 25, 2012.
  */
 
 /*
@@ -61,7 +61,8 @@ typedef uint64_t PIZNano;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_NANO_PER_SECOND     1000000000ULL
+#define PIZ_TIME_ZERO                0ULL
+#define PIZ_TIME_NANO_PER_SECOND     1000000000ULL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -71,6 +72,8 @@ void        pizTimeCopy         (PIZTime *t, PIZTime *toCopy);
 void        pizTimeAddNano      (PIZTime *t, PIZNano *ns); 
 PIZError    pizTimeElapsedNano  (PIZTime *t0, PIZTime *t1, PIZNano *result);
 void        pizTimespecWithNano (struct timespec *t, PIZNano *ns);
+void        pizTimeSetZero      (PIZTime *t);
+bool        pizTimeIsZero       (PIZTime *t);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -91,8 +94,18 @@ PIZ_EXTERN void pizTimeCopy (PIZTime *t, PIZTime *toCopy)
 
 PIZ_EXTERN void pizTimespecWithNano (struct timespec *t, PIZNano *ns)
 {
-    t->tv_sec  = (time_t)(*ns / PIZ_NANO_PER_SECOND);
-    t->tv_nsec = (long)(*ns % PIZ_NANO_PER_SECOND);
+    t->tv_sec  = (time_t)(*ns / PIZ_TIME_NANO_PER_SECOND);
+    t->tv_nsec = (long)(*ns % PIZ_TIME_NANO_PER_SECOND);
+}
+
+PIZ_EXTERN void pizTimeSetZero (PIZTime *t)
+{
+    (*t) = PIZ_TIME_ZERO;
+}
+
+PIZ_EXTERN bool pizTimeIsZero (PIZTime *t)
+{
+    return ((*t) == PIZ_TIME_ZERO);
 }
 
 #endif // __MACH__

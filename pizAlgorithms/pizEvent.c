@@ -43,18 +43,40 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent *pizEventNew (void)
+PIZEvent *pizEventNew (PIZEventType type, PIZEventName name)
 {
-    PIZEvent *event = (PIZEvent *)calloc (1, sizeof(PIZEvent));
+    PIZEvent *event = NULL;
+    
+    if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
+        event->type = type;
+        event->name = name;
+    }
+    
     return event;
 }
 
-PIZEvent *pizEventNewWithArray (PIZEventType t, PIZEventName name, long argc, long *argv, long tag) 
+PIZEvent *pizEventNewWithTime (PIZEventType type, PIZEventName name, PIZTime *time)
+{
+    PIZEvent *event = NULL;
+    
+    if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
+        event->type = type;
+        event->name = name;
+        
+        if (time) {
+            pizTimeCopy (&event->data.time, time);
+        }
+    }
+    
+    return event;
+}
+
+PIZEvent *pizEventNewWithArray (PIZEventType type, PIZEventName name, long argc, long *argv, long tag) 
 {
     PIZEvent *event = NULL; 
     
     if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        event->type = t;
+        event->type = type;
         event->name = name;
         event->tag  = tag;
         
@@ -65,19 +87,6 @@ PIZEvent *pizEventNewWithArray (PIZEventType t, PIZEventName name, long argc, lo
                 event->data.values[i] = *(argv + i);
             }
         }
-    }
-    
-    return event;
-}
-
-PIZEvent *pizEventNewNotification (PIZEventName name, PIZTime *time)
-{
-    PIZEvent *event = NULL;
-    
-    if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        event->type = PIZ_NOTIFICATION;
-        event->name = name;
-        pizTimeCopy (&event->data.time, time);
     }
     
     return event;

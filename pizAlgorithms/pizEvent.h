@@ -68,6 +68,7 @@ typedef enum _PIZEventType {
 
 typedef enum _PIZEventName {
     //
+    PIZ_INIT            = 0,
     PIZ_PLAY            = 1,
     PIZ_STOP,
     PIZ_LOOP,
@@ -102,9 +103,9 @@ typedef struct _PIZEvent {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent *pizEventNew               (void);
-PIZEvent *pizEventNewWithArray      (PIZEventType t, PIZEventName name, long argc, long *argv, long tag);
-PIZEvent *pizEventNewNotification   (PIZEventName name, PIZTime *time);
+PIZEvent *pizEventNew               (PIZEventType type, PIZEventName name);
+PIZEvent *pizEventNewWithTime       (PIZEventType type, PIZEventName name, PIZTime *t);
+PIZEvent *pizEventNewWithArray      (PIZEventType type, PIZEventName name, long argc, long *argv, long tag);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -115,46 +116,6 @@ void     pizEventFree               (PIZEvent *x);
 // -------------------------------------------------------------------------------------------------------------
 
 #ifdef PIZ_EXTERN_INLINE
-
-PIZ_EXTERN PIZEvent *pizEventNew (void)
-{
-    PIZEvent *event = (PIZEvent *)calloc (1, sizeof(PIZEvent));
-    return event;
-}
-
-PIZ_EXTERN PIZEvent *pizEventNewWithArray (PIZEventType t, PIZEventName name, long argc, long *argv, long tag) 
-{
-    PIZEvent *event = NULL; 
-    
-    if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        event->type = t;
-        event->name = name;
-        event->tag  = tag;
-        
-        if (argv) {
-            long i;
-            
-            for (i = 0; i < argc; i++) {
-                event->data.values[i] = *(argv + i);
-            }
-        }
-    }
-    
-    return event;
-}
-
-PIZ_EXTERN PIZEvent *pizEventNewNotification (PIZEventName name, PIZTime *time)
-{
-    PIZEvent *event = NULL;
-    
-    if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        event->type = PIZ_NOTIFICATION;
-        event->name = name;
-        pizTimeCopy (&event->data.time, time);
-    }
-    
-    return event;
-}
 
 PIZ_EXTERN void pizEventFree (PIZEvent *x)
 {
