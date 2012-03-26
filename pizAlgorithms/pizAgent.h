@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	March 25, 2012.
+ * \date	March 26, 2012.
  */
 
 /*
@@ -99,10 +99,11 @@ typedef struct _PIZAgent {
     PIZTime             grainStart;
     PIZTime             grainEnd;
     PIZLinklist         *runIn;
-    PIZLinklist         *runOut;
     PIZLinklist         *graphicIn;
+    PIZLinklist         *transformIn;
+    PIZLinklist         *runOut;
     PIZLinklist         *graphicOut;
-    PIZLinklist         *notificationQueue;
+    PIZLinklist         *notificationOut;
     PIZSequence         *sequence;
     PIZGrowingArray     *tempArray;
     pthread_attr_t      attr;

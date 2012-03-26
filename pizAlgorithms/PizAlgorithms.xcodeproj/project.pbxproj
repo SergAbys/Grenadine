@@ -421,6 +421,8 @@
 				);
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = "";
 				GCC_OPTIMIZATION_LEVEL = s;
@@ -438,6 +440,7 @@
 				HEADER_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"/users/jeantoto/maxsdk-5.1.7/c74support/max-includes\"";
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				PREBINDING = NO;
 				PRODUCT_NAME = PizAlgorithms;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
 			};

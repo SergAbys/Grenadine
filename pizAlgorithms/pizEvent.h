@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	March 25, 2012.
+ * \date	March 26, 2012.
  */
 
 /*
@@ -63,6 +63,7 @@
 typedef enum _PIZEventType {
     PIZ_RUN             = 1,
     PIZ_GRAPHIC,
+    PIZ_TRANSFORM,
     PIZ_NOTIFICATION
     } PIZEventType;
 
@@ -74,9 +75,8 @@ typedef enum _PIZEventName {
     PIZ_LOOP,
     PIZ_UNLOOP,
     PIZ_BPM,
-    PIZ_ENABLE_GUI,
-    PIZ_DISABLE_GUI,
     PIZ_NOTE_PLAYED,
+    //
     //
     PIZ_NOTE_REMOVED,
     PIZ_NOTE_ADDED,

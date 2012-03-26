@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	March 23, 2012.
+ * \date	March 26, 2012.
  */
  
 /*
@@ -62,20 +62,22 @@ PIZAgent *pizAgentNew (void)
     x->flags                = PIZ_FLAG_GUI;  
     x->bpm                  = PIZ_DEFAULT_BPM;  
     x->runIn                = pizLinklistNew ( );
-    x->runOut               = pizLinklistNew ( );
     x->graphicIn            = pizLinklistNew ( );
+    x->transformIn          = pizLinklistNew ( );
+    x->runOut               = pizLinklistNew ( );
     x->graphicOut           = pizLinklistNew ( );
-    x->notificationQueue    = pizLinklistNew ( );
+    x->notificationOut      = pizLinklistNew ( );
     x->sequence             = pizSequenceNew (0);
     x->tempArray            = pizGrowingArrayNew (0);
     x->err1                 = PIZ_ERROR;
     x->err2                 = PIZ_ERROR;
     
-    if (!(x->runIn && 
+    if (!(x->runIn &&  
+        x->graphicIn &&
+        x->transformIn &&
         x->runOut && 
-        x->graphicIn && 
         x->graphicOut &&
-        x->notificationQueue && 
+        x->notificationOut && 
         x->sequence &&
         x->tempArray)) {
         
@@ -148,10 +150,11 @@ void pizAgentFree (PIZAgent *x)
     pthread_cond_destroy  (&x->notificationCondition);
     
     pizLinklistFree (x->runIn);
-    pizLinklistFree (x->runOut);
     pizLinklistFree (x->graphicIn);
+    pizLinklistFree (x->transformIn);
+    pizLinklistFree (x->runOut);
     pizLinklistFree (x->graphicOut);
-    pizLinklistFree (x->notificationQueue);
+    pizLinklistFree (x->notificationOut);
     
     pizSequenceFree     (x->sequence);
     pizGrowingArrayFree (x->tempArray);
@@ -168,10 +171,10 @@ void pizAgentAppendEvent (PIZAgent *x, PIZEvent *event)
     if (event) {
         PIZLinklist *queue = NULL;
         
-        if (event->type == PIZ_RUN) {
-            queue = x->runIn;
-        } else if ((x->flags & PIZ_FLAG_GUI) && (event->type == PIZ_GRAPHIC)) {
-            queue = x->graphicIn;
+        switch (event->type) {
+            case PIZ_RUN        : queue = x->runIn; break;
+            case PIZ_GRAPHIC    : if (x->flags & PIZ_FLAG_GUI) { queue = x->graphicIn; } break;
+            case PIZ_TRANSFORM  : queue = x->transformIn; break;
         }
         
         if (queue) {
