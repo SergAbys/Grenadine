@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 16/03/12.
+ *  Last modified : 26/03/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -829,6 +829,8 @@ void tralala_dataToDictionary (t_tralala *x, t_dictionary *d)
     //
     if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
     //
+    long PIZ_SEQUENCE_VERSION_MAJOR  = 1;
+    
     dictionary_appendlong   (d, tll_sym_sequenceMode, x->sequenceMode);
     dictionary_appendlong   (d, tll_sym_zoomMode, x->zoomMode);
     dictionary_appendfloat  (d, tll_sym_windowOffsetX, x->offsetX);

@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentMethod.c
  * \author	Jean Sapristi
- * \date	March 25, 2012.
+ * \date	March 26, 2012.
  */
  
 /*
@@ -42,6 +42,12 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+#define PIZ_MAXIMUM_BPM   300
+#define PIZ_MINIMUM_BPM   40
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 void pizAgentMethodPlay (PIZAgent *x, PIZEvent *event)
@@ -73,8 +79,8 @@ void pizAgentMethodBPM (PIZAgent *x, PIZEvent *event)
 {
     x->bpm = CLAMP (event->data.values[0], PIZ_MINIMUM_BPM, PIZ_MAXIMUM_BPM);
     
-    pizTimeSetNano (&x->grainSize, PIZ_CONSTANT_BPM / x->bpm);
-    pizTimeSetNano (&x->grainWorkSize, PIZ_CONSTANT_WORK_RATIO / x->bpm);
+    pizTimeSetNano (&x->grainSize, PIZ_AGENT_CONSTANT_BPM / x->bpm);
+    pizTimeSetNano (&x->grainWorkSize, PIZ_AGENT_CONSTANT_WORK_RATIO / x->bpm);
     
     pizTimeCopy    (&x->grainEnd, &x->grainStart);
     pizTimeAddNano (&x->grainEnd, &x->grainSize);

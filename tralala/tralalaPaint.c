@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 22/03/12.
+ *  Last modified : 26/03/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -515,7 +515,7 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
         case MODE_ZOOM_C : f = 2.;   break;
     }
     
-    gridWidth   = f * (PIZ_SEQUENCE_DEFAULT_SIZE * GUI_PIXELS_PER_STEP);
+    gridWidth   = f * (PIZ_SEQUENCE_DEFAULT_TIMELINE * GUI_PIXELS_PER_STEP);
     gridHeight  = f * ((PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE);
 
     if (g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_gridLayer, gridWidth, gridHeight)) {
@@ -562,7 +562,7 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
         srcRect.height  = imageHeight;
         
         for (i = 0; i < ((PIZ_MAGIC_PITCH + 1) / GUI_JSURFACE_SEMITONES); i ++) {
-            for (j = 0; j < (PIZ_SEQUENCE_DEFAULT_SIZE / GUI_JSURFACE_STEPS); j++) {
+            for (j = 0; j < (PIZ_SEQUENCE_DEFAULT_TIMELINE / GUI_JSURFACE_STEPS); j++) {
                 destRect.x      = j * imageWidth;
                 destRect.y      = i * imageHeight;
                 destRect.width  = imageWidth;
@@ -593,7 +593,7 @@ void tralala_paintNotes (t_tralala *x, t_object *patcherview)
         case MODE_ZOOM_C : f = 2.;   break;
     }
     
-    gridWidth   = f * (PIZ_SEQUENCE_DEFAULT_SIZE * GUI_PIXELS_PER_STEP);
+    gridWidth   = f * (PIZ_SEQUENCE_DEFAULT_TIMELINE * GUI_PIXELS_PER_STEP);
     gridHeight  = f * ((PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE);
     
     if (g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_notesLayer, gridWidth, gridHeight)) {
@@ -684,7 +684,7 @@ void tralala_paintPlayed (t_tralala *x, t_object *patcherview)
         case MODE_ZOOM_C : f = 2.;   break;
     }
     
-    gridWidth   = f * (PIZ_SEQUENCE_DEFAULT_SIZE * GUI_PIXELS_PER_STEP);
+    gridWidth   = f * (PIZ_SEQUENCE_DEFAULT_TIMELINE * GUI_PIXELS_PER_STEP);
     gridHeight  = f * ((PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE);
 
     if (g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_playedNotesLayer, gridWidth, gridHeight)) {
@@ -725,7 +725,7 @@ void tralala_paintZone (t_tralala *x, t_object *patcherview)
         case MODE_ZOOM_C : f = 2.;   break;
     }
     
-    gridWidth   = f * (PIZ_SEQUENCE_DEFAULT_SIZE * GUI_PIXELS_PER_STEP);
+    gridWidth   = f * (PIZ_SEQUENCE_DEFAULT_TIMELINE * GUI_PIXELS_PER_STEP);
     gridHeight  = f * ((PIZ_MAGIC_PITCH + 1) * GUI_PIXELS_PER_SEMITONE);
     
     if (g = jbox_start_layer ((t_object *)x, patcherview, tll_sym_zoneLayer, gridWidth, gridHeight)) {

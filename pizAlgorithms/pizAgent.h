@@ -55,29 +55,20 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_CONSTANT_BPM            25.E8
-#define PIZ_CONSTANT_WORK_RATIO     25.E8 * 0.75
-#define PIZ_MAXIMUM_BPM             300
-#define PIZ_MINIMUM_BPM             40
-
-#define PIZ_DEFAULT_BPM             120
+#define PIZ_AGENT_CONSTANT_BPM          25.E8
+#define PIZ_AGENT_CONSTANT_WORK_RATIO   25.E8 * 0.75
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZLOCKEVENT            pthread_mutex_lock      (&x->eventLock);
-#define PIZUNLOCKEVENT          pthread_mutex_unlock    (&x->eventLock);
+#define PIZAGENTLOCKEVENT               pthread_mutex_lock      (&x->eventLock);
+#define PIZAGENTUNLOCKEVENT             pthread_mutex_unlock    (&x->eventLock);
 
-#define PIZLOCKNOTIFICATION     pthread_mutex_lock      (&x->notificationLock);
-#define PIZUNLOCKNOTIFICATION   pthread_mutex_unlock    (&x->notificationLock);
+#define PIZAGENTLOCKNOTIFICATION        pthread_mutex_lock      (&x->notificationLock);
+#define PIZAGENTUNLOCKNOTIFICATION      pthread_mutex_unlock    (&x->notificationLock);
 
-#define PIZLOCKGETTER           pthread_mutex_lock      (&x->getterLock);
-#define PIZUNLOCKGETTER         pthread_mutex_unlock    (&x->getterLock);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define EXIT                    (x->flags & PIZ_FLAG_EXIT)
+#define PIZAGENTLOCKGETTER              pthread_mutex_lock      (&x->getterLock);
+#define PIZAGENTUNLOCKGETTER            pthread_mutex_unlock    (&x->getterLock);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -126,8 +117,8 @@ typedef void (*PIZAgentMethod)(PIZAgent *x, PIZEvent *event);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZAgent *pizAgentNew        (void);
-void     pizAgentFree        (PIZAgent *x);
+PIZAgent *pizAgentNew           (void);
+void     pizAgentFree           (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /*
  * \file	pizTime.c
  * \author	Jean Sapristi
- * \date	March 25, 2012.
+ * \date	March 26, 2012.
  */
  
 /*

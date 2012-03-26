@@ -1,7 +1,7 @@
 /**
  * \file    pizAlgorithmsMaxMSP.h
  * \author  Jean Sapristi
- * \date    February 28, 2012.
+ * \date    March 26, 2012.
  */
 
 /*
@@ -54,20 +54,18 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_FACTOR_ORACLE_REFER         0
-#define PIZ_FACTOR_ORACLE_LRS           1
-#define PIZ_FACTOR_ORACLE_ARCS          2
-#define PIZ_FACTOR_ORACLE_DATA          3
+#define PIZ_FACTOR_ORACLE_REFER             0
+#define PIZ_FACTOR_ORACLE_LRS               1
+#define PIZ_FACTOR_ORACLE_ARCS              2
+#define PIZ_FACTOR_ORACLE_DATA              3
 
-#define PIZ_GALOIS_LATTICE_CONCEPTS     0
-#define PIZ_GALOIS_LATTICE_DATA         1
+#define PIZ_GALOIS_LATTICE_CONCEPTS         0
+#define PIZ_GALOIS_LATTICE_DATA             1
 
-#define PIZ_MARKOV_MODEL_START          0
-#define PIZ_MARKOV_MODEL_TRANSITIONS    1
-#define PIZ_MARKOV_MODEL_EMISSIONS      2
-#define PIZ_MARKOV_MODEL_DATA           3
-
-#define PIZ_ALPHABET_SIZE               128
+#define PIZ_MARKOV_MODEL_START              0
+#define PIZ_MARKOV_MODEL_TRANSITIONS        1
+#define PIZ_MARKOV_MODEL_EMISSIONS          2
+#define PIZ_MARKOV_MODEL_DATA               3
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

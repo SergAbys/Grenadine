@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 22/03/12.
+ *  Last modified : 26/03/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitc
         
         position = MAX ((long)((position / (double)grid) + 0.5) * grid, 0);
         
-        position = CLAMP (position, 0, PIZ_SEQUENCE_DEFAULT_SIZE - duration);
+        position = CLAMP (position, 0, PIZ_SEQUENCE_DEFAULT_TIMELINE - duration);
         pitch    = CLAMP (pitch, 0, PIZ_MAGIC_PITCH);
         
         pizGrowingArraySetValueAtIndex (x->selected, i + PIZ_DATA_POSITION, position);
@@ -100,7 +100,7 @@ bool tralala_changeSelectedNotesDuration (t_tralala *x, long deltaPosition)
         long position = pizGrowingArrayValueAtIndex (x->origin,   i + PIZ_DATA_POSITION);
         long temp     = pizGrowingArrayValueAtIndex (x->selected, i + PIZ_DATA_DURATION);
         
-        maximum  = MIN (PIZ_SEQUENCE_MAXIMUM_DURATION, (PIZ_SEQUENCE_DEFAULT_SIZE - position));
+        maximum  = MIN (PIZ_SEQUENCE_MAXIMUM_DURATION, (PIZ_SEQUENCE_DEFAULT_TIMELINE - position));
                                     
         duration += deltaPosition;
         
@@ -309,7 +309,7 @@ bool tralala_pasteFromClipboard (t_tralala *x)
 {
     bool haveChanged = false;
     long count, i, offsetPosition, offsetPitch;
-    long w = (PIZ_SEQUENCE_DEFAULT_SIZE / 2);
+    long w = (PIZ_SEQUENCE_DEFAULT_TIMELINE / 2);
     long h = (PIZ_MAGIC_PITCH / 2);
         
     if (count = pizGrowingArrayCount (tll_clipboard)) {

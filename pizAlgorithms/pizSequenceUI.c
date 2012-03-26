@@ -70,7 +70,7 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     PIZNote  *note = NULL; 
     PIZEvent *event = NULL;
     
-    PIZLOCK
+    PIZSEQUENCELOCK
     
     if (x->changedZone) {
         ARGVWITHZONE
@@ -131,7 +131,7 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     
     x->changedZone = false;
     
-    PIZUNLOCK
+    PIZSEQUENCEUNLOCK
 }
     
 // -------------------------------------------------------------------------------------------------------------

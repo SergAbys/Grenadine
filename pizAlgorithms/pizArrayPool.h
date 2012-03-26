@@ -1,7 +1,7 @@
 /**
  * \file    pizArrayPool.h
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    March 26, 2012.
  */
  
 /*
@@ -69,10 +69,11 @@ typedef struct _PIZArrayPool {
 
 PIZ_START_C_LINKAGE
 
-PIZArrayPool            *pizArrayPoolNew (long argc, long *argv);
-void pizArrayPoolFree   (PIZArrayPool *x);
-PIZGrowingArray         *pizArrayPoolGetArray (PIZArrayPool *x);
-PIZError                pizArrayPoolReleaseArray (PIZArrayPool *x, PIZGrowingArray *a);
+PIZArrayPool            *pizArrayPoolNew            (long argc, long *argv);
+void                    pizArrayPoolFree            (PIZArrayPool *x);
+
+PIZGrowingArray         *pizArrayPoolGetArray       (PIZArrayPool *x);
+PIZError                pizArrayPoolReleaseArray    (PIZArrayPool *x, PIZGrowingArray *a);
 
 PIZ_END_C_LINKAGE
 

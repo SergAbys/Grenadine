@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceMaxMSP.h
  * \author  Jean Sapristi
- * \date    March 11, 2012.
+ * \date    March 26, 2012.
  */
  
 /*

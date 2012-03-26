@@ -48,6 +48,11 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+#define PIZ_DEFAULT_BPM     120
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 PIZAgent *pizAgentNew (void)
@@ -123,18 +128,18 @@ void pizAgentFree (PIZAgent *x)
     if (x) {
     //
     if (!x->err1) {
-        PIZLOCKEVENT
+        PIZAGENTLOCKEVENT
         x->flags |= PIZ_FLAG_EXIT;
-        PIZUNLOCKEVENT
+        PIZAGENTUNLOCKEVENT
     
         pthread_cond_signal (&x->eventCondition);
         pthread_join (x->eventLoop, NULL); 
     }
     
     if (!x->err2) {
-        PIZLOCKNOTIFICATION
+        PIZAGENTLOCKNOTIFICATION
         x->flags |= PIZ_FLAG_EXIT;
-        PIZUNLOCKNOTIFICATION
+        PIZAGENTUNLOCKNOTIFICATION
     
         pthread_cond_signal (&x->notificationCondition);
         pthread_join (x->notificationLoop, NULL); 
@@ -178,11 +183,11 @@ void pizAgentAppendEvent (PIZAgent *x, PIZEvent *event)
         }
         
         if (queue) {
-            PIZLOCKEVENT
+            PIZAGENTLOCKEVENT
             if (pizLinklistAppend (queue, event)) {
                 pizEventFree (event);
             }
-            PIZUNLOCKEVENT
+            PIZAGENTUNLOCKEVENT
             pthread_cond_signal (&x->eventCondition);
         }
     }

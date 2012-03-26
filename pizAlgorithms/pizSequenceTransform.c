@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceTransform.c
  * \author  Jean Sapristi
- * \date    March 7, 2012.
+ * \date    March 26, 2012.
  */
  
 /*
@@ -88,7 +88,7 @@ bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm select, void *alg
     long err = PIZ_ERROR;
     bool haveChanged = false;
     
-    PIZLOCK
+    PIZSEQUENCELOCK
     
     k = pizSequencePickUpNotes (x);
     
@@ -117,7 +117,7 @@ bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm select, void *alg
         haveChanged = pizSequenceFillValues (x, PIZ_PITCH, k, 0);
     }
     
-    PIZUNLOCK
+    PIZSEQUENCEUNLOCK
     
     return haveChanged;
 }
@@ -126,7 +126,7 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
 {
     bool haveChanged = false;
                                                 
-    PIZLOCK
+    PIZSEQUENCELOCK
     
     if (x->cell != PIZ_NOTE_NONE) {
     //
@@ -377,7 +377,7 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
     //
     }
         
-    PIZUNLOCK
+    PIZSEQUENCEUNLOCK
     
     return haveChanged;
 }
@@ -386,7 +386,7 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
 {
     bool haveChanged = false;
 
-    PIZLOCK
+    PIZSEQUENCELOCK
     
     if (x->cell != PIZ_NOTE_NONE) {
     //
@@ -541,7 +541,7 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
     //
     }
                     
-    PIZUNLOCK
+    PIZSEQUENCEUNLOCK
     
     return haveChanged;
 }
@@ -555,7 +555,7 @@ bool pizSequenceRotate (PIZSequence *x, PIZSelector selector, long shift)
     long i, k = 0;
     bool haveChanged;
     
-    PIZLOCK
+    PIZSEQUENCELOCK
     
     k = pizSequencePickUpNotes (x);
     
@@ -569,7 +569,7 @@ bool pizSequenceRotate (PIZSequence *x, PIZSelector selector, long shift)
                 
     haveChanged = pizSequenceFillValues (x, selector, k, 0);
     
-    PIZUNLOCK
+    PIZSEQUENCEUNLOCK
     
     return haveChanged;
 }
@@ -579,7 +579,7 @@ bool pizSequenceScramble (PIZSequence *x, PIZSelector selector)
     long i, k = 0;
     bool haveChanged;
     
-    PIZLOCK
+    PIZSEQUENCELOCK
     
     k = pizSequencePickUpNotes (x);
     
@@ -598,7 +598,7 @@ bool pizSequenceScramble (PIZSequence *x, PIZSelector selector)
             
     haveChanged = pizSequenceFillValues (x, selector, k, 0);
     
-    PIZUNLOCK
+    PIZSEQUENCEUNLOCK
     
     return haveChanged;
 }
@@ -609,12 +609,12 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, bool down)
     long k = 0;
     bool haveChanged;
     
-    PIZLOCK
+    PIZSEQUENCELOCK
     
     k = pizSequencePickUpNotes (x);
     scale = pizGrowingArrayCount (x->scale);
     
-    for (i = 0; i < PIZ_TEMP_SIZE; i++) {
+    for (i = 0; i < PIZ_SEQUENCE_TEMP_SIZE; i++) {
         x->values1[i] = 0;
     }
     
@@ -634,7 +634,7 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, bool down)
         }   
     }
         
-    for (i = 1; i < PIZ_TEMP_SIZE; i++) {
+    for (i = 1; i < PIZ_SEQUENCE_TEMP_SIZE; i++) {
         x->values1[i] += x->values1[i - 1];
     }
                 
@@ -662,7 +662,7 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, bool down)
                 
     haveChanged = pizSequenceFillValues (x, selector, k, down);
     
-    PIZUNLOCK
+    PIZSEQUENCEUNLOCK
     
     return haveChanged;
 }
@@ -676,7 +676,7 @@ bool pizSequenceChange (PIZSequence *x, PIZSelector selector, long value)
     long i;
     bool haveChanged = false;
     
-    PIZLOCK
+    PIZSEQUENCELOCK
         
     for (i = 0; i < pizGrowingArrayCount (x->map); i++) {  
     // 
@@ -706,7 +706,7 @@ bool pizSequenceChange (PIZSequence *x, PIZSelector selector, long value)
             
             if (note->data[selector] != temp) {
                 note->data[selector] = temp;
-                PIZ_TAG (note->tag);
+                PIZ_SEQUENCE_TAG (note->tag);
                 haveChanged = true;
             }
         }
@@ -716,7 +716,7 @@ bool pizSequenceChange (PIZSequence *x, PIZSelector selector, long value)
     //
     }
     
-    PIZUNLOCK
+    PIZSEQUENCEUNLOCK
     
     return haveChanged;
 }
@@ -726,7 +726,7 @@ bool pizSequenceSet (PIZSequence *x, PIZSelector selector, long value)
     long i;
     bool haveChanged = false;
         
-    PIZLOCK
+    PIZSEQUENCELOCK
     
     for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
         PIZNote *note       = NULL;
@@ -754,7 +754,7 @@ bool pizSequenceSet (PIZSequence *x, PIZSelector selector, long value)
                 
                 if (note->data[selector] != temp) {
                     note->data[selector] = temp;
-                    PIZ_TAG (note->tag);
+                    PIZ_SEQUENCE_TAG (note->tag);
                     haveChanged = true;
                 }
             }
@@ -763,7 +763,7 @@ bool pizSequenceSet (PIZSequence *x, PIZSelector selector, long value)
         }
     }
     
-    PIZUNLOCK
+    PIZSEQUENCEUNLOCK
     
     return haveChanged;
 }
@@ -773,7 +773,7 @@ bool pizSequenceRandom (PIZSequence *x, PIZSelector selector, long minValue, lon
     long i, range;
     bool haveChanged = false;
     
-    PIZLOCK
+    PIZSEQUENCELOCK
     
     if (minValue > maxValue) {
         long temp = minValue;
@@ -813,7 +813,7 @@ bool pizSequenceRandom (PIZSequence *x, PIZSelector selector, long minValue, lon
             
             if (note->data[selector] != temp) {
                 note->data[selector] = temp;
-                PIZ_TAG (note->tag);
+                PIZ_SEQUENCE_TAG (note->tag);
                 haveChanged = true;
             }
         }
@@ -823,7 +823,7 @@ bool pizSequenceRandom (PIZSequence *x, PIZSelector selector, long minValue, lon
     //
     }
     
-    PIZUNLOCK
+    PIZSEQUENCEUNLOCK
     
     return haveChanged;
 }
@@ -833,7 +833,7 @@ bool pizSequenceKillNotes (PIZSequence *x)
     long i;
     bool haveChanged = false;
     
-    PIZLOCK
+    PIZSEQUENCELOCK
     
     for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
         PIZNote *note       = NULL;
@@ -859,7 +859,7 @@ bool pizSequenceKillNotes (PIZSequence *x)
         pizSequenceMakeMap (x);
     }
     
-    PIZUNLOCK
+    PIZSEQUENCEUNLOCK
     
     return haveChanged;
 }
@@ -868,7 +868,7 @@ bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a
 {
     bool haveChanged = false;
 
-    PIZLOCK
+    PIZSEQUENCELOCK
     
     if (a) {
     //
@@ -926,7 +926,7 @@ bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a
         
                 if (pitch != (note->data[PIZ_PITCH] + offset)) {
                     note->data[PIZ_PITCH] = CLAMP (pitch, 0, PIZ_MAGIC_PITCH);
-                    PIZ_TAG (note->tag);
+                    PIZ_SEQUENCE_TAG (note->tag);
                     haveChanged = true;
                 }
             }
@@ -939,7 +939,7 @@ bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a
     //    
     }
     
-    PIZUNLOCK
+    PIZSEQUENCEUNLOCK
     
     return haveChanged;
 }
@@ -988,7 +988,7 @@ bool pizSequenceFillValues (PIZSequence *x, PIZSelector selector, long k, bool r
             
             if (x->notes1[i]->data[PIZ_DURATION] != temp) {
                 x->notes1[i]->data[PIZ_DURATION] = temp;
-                PIZ_TAG (x->notes1[i]->tag);
+                PIZ_SEQUENCE_TAG (x->notes1[i]->tag);
                 haveChanged = true;
             }
         }
@@ -1002,7 +1002,7 @@ bool pizSequenceFillValues (PIZSequence *x, PIZSelector selector, long k, bool r
             
             if (x->notes1[i]->data[selector] != temp) {
                 x->notes1[i]->data[selector] = temp;
-                PIZ_TAG (x->notes1[i]->tag);
+                PIZ_SEQUENCE_TAG (x->notes1[i]->tag);
                 haveChanged = true;
             }
         }
