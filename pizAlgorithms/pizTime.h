@@ -1,7 +1,7 @@
 /**
  * \file	pizTime.h
  * \author	Jean Sapristi
- * \date	March 26, 2012.
+ * \date	March 27, 2012.
  */
 
 /*
@@ -61,19 +61,19 @@ typedef uint64_t PIZNano;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_TIME_ZERO                0ULL
-#define PIZ_TIME_NANO_PER_SECOND     1000000000ULL
+#define PIZ_TIME_ZERO               0ULL
+#define PIZ_TIME_NANO_PER_SECOND    1000000000ULL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void        pizTimeSet          (PIZTime *t);
-void        pizTimeCopy         (PIZTime *t, PIZTime *toCopy);
-void        pizTimeAddNano      (PIZTime *t, PIZNano *ns); 
-PIZError    pizTimeElapsedNano  (PIZTime *t0, PIZTime *t1, PIZNano *result);
-void        pizTimespecWithNano (struct timespec *t, PIZNano *ns);
-bool        pizTimeIsZero       (PIZTime *t);
-void        pizTimeSetNano      (PIZNano *ns, double f);
+void        pizTimeSet              (PIZTime *t);
+void        pizTimeCopy             (PIZTime *t, PIZTime *toCopy);
+void        pizTimeAddNano          (PIZTime *t, PIZNano *ns); 
+PIZError    pizTimeElapsedNano      (PIZTime *t0, PIZTime *t1, PIZNano *result);
+void        pizTimespecWithNano     (struct timespec *t, PIZNano *ns);
+bool        pizTimeIsZero           (PIZTime *t);
+void        pizTimeSetNano          (PIZNano *ns, double f);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

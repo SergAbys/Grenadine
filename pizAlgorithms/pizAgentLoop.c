@@ -130,7 +130,6 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
     
     if (!pizLinklistPtrAtIndex (queue, 0, (void *)&event)) {
         pizLinklistChuckByPtr (queue, event);
-        post ("Chucked / %s", __FUNCTION__);
     }
     
     PIZAGENTUNLOCKEVENT
@@ -212,14 +211,18 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     PIZAGENTUNLOCKGETTER
     //
     }
+    
+    k = false;
+    
     //    
     } else if (err == PIZ_ERROR) {
         if (x->flags & PIZ_FLAG_LOOPED) {
-            pizSequenceGoToStart (x->sequence);
             k = true;
         } else {
+            k = false;
             x->flags &= ~PIZ_FLAG_PLAYED;
         }
+        pizSequenceGoToStart (x->sequence);
         pizAgentEventLoopNotifyEnd (x);
     }
     //
@@ -392,12 +395,11 @@ void pizAgentNotificationLoopDoEvent (PIZAgent *x)
     
     if (!pizLinklistPtrAtIndex (x->notificationOut, 0, (void *)&event)) {
         pizLinklistChuckByPtr (x->notificationOut, event);
-        post ("Chucked / %s", __FUNCTION__);
     }
     
     PIZAGENTUNLOCKNOTIFICATION
     
-    // 
+    //
     
     pizEventFree (event);
 } 
