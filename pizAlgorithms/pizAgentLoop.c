@@ -142,6 +142,8 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
             case PIZ_UNLOOP         : f = pizAgentMethodUnloop;     break; 
             case PIZ_BPM            : f = pizAgentMethodBPM;        break;
         }
+        
+        post ("%s / %s", pizEventNameAsString (event), __FUNCTION__);
     }
     
     if (f) {
@@ -239,7 +241,7 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     pizSequenceAppendGraphicEvents (x->sequence, x->graphicOut);
     
     if (pizLinklistCount (x->graphicOut)) {
-        if (event = pizEventNewWithTime (PIZ_NOTIFICATION, PIZ_GRAPHIC_READY, &x->grainStart)) {
+        if (event = pizEventNewWithTime (PIZ_NOTIFICATION, PIZ_GUI_READY, &x->grainStart)) {
             PIZAGENTLOCKNOTIFICATION
             if (pizLinklistAppend (x->notificationOut, event)) {
                 pizEventFree (event);
@@ -399,7 +401,7 @@ void pizAgentNotificationLoopDoEvent (PIZAgent *x)
     
     PIZAGENTUNLOCKNOTIFICATION
     
-    //
+    post ("%s / %s", pizEventNameAsString (event), __FUNCTION__);
     
     pizEventFree (event);
 } 

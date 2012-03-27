@@ -84,7 +84,7 @@ typedef enum _PIZEventName {
     //
     PIZ_END,
     PIZ_RUN_READY,
-    PIZ_GRAPHIC_READY,
+    PIZ_GUI_READY,
     //
     } PIZEventName;
     
@@ -103,14 +103,15 @@ typedef struct _PIZEvent {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent *pizEventNew               (PIZEventType type, PIZEventName name);
-PIZEvent *pizEventNewWithTime       (PIZEventType type, PIZEventName name, PIZTime *t);
-PIZEvent *pizEventNewWithArray      (PIZEventType type, PIZEventName name, long argc, long *argv, long tag);
+PIZEvent    *pizEventNew            (PIZEventType type, PIZEventName name);
+PIZEvent    *pizEventNewWithTime    (PIZEventType type, PIZEventName name, PIZTime *t);
+PIZEvent    *pizEventNewWithArray   (PIZEventType type, PIZEventName name, long argc, long *argv, long tag);
+char        *pizEventNameAsString   (PIZEvent *x);  
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void     pizEventFree               (PIZEvent *x);
+void        pizEventFree            (PIZEvent *x);     
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

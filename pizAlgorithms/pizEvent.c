@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	March 25, 2012.
+ * \date	March 26, 2012.
  */
  
 /*
@@ -40,6 +40,24 @@
 
 #include "pizEvent.h"
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+static char *piz_eventNames[ ] = {  "Init",
+                                    "Play",
+                                    "Stop",
+                                    "Loop",
+                                    "Unloop",
+                                    "Bpm",
+                                    "Note Played",
+                                    "Note Removed",
+                                    "Note Added",
+                                    "Note Changed",
+                                    "Zone Changed",
+                                    "End",
+                                    "Run Ready",
+                                    "GUI Ready"     };
+    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
@@ -90,6 +108,11 @@ PIZEvent *pizEventNewWithArray (PIZEventType type, PIZEventName name, long argc,
     }
     
     return event;
+}
+
+char *pizEventNameAsString (PIZEvent *x)
+{
+    return piz_eventNames[x->name];
 }
 
 // -------------------------------------------------------------------------------------------------------------
