@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	March 26, 2012.
+ * \date	March 29, 2012.
  */
  
 /*
@@ -66,7 +66,7 @@ void *pizAgentEventLoop (void *agent)
     while (!pizAgentEventLoopCondition (x)) {
         pthread_cond_wait (&x->eventCondition, &x->eventLock);
         x->flags |= PIZ_FLAG_WAKED;
-                
+        
         if (EXIT) {
             break;
         } 
@@ -142,8 +142,6 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
             case PIZ_UNLOOP         : f = pizAgentMethodUnloop;     break; 
             case PIZ_BPM            : f = pizAgentMethodBPM;        break;
         }
-        
-        post ("%s / %s", pizEventNameAsString (event), __FUNCTION__);
     }
     
     if (f) {
@@ -215,7 +213,6 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     }
     
     k = false;
-    
     //    
     } else if (err == PIZ_ERROR) {
         if (x->flags & PIZ_FLAG_LOOPED) {
@@ -400,9 +397,7 @@ void pizAgentNotificationLoopDoEvent (PIZAgent *x)
     }
     
     PIZAGENTUNLOCKNOTIFICATION
-    
-    post ("%s / %s", pizEventNameAsString (event), __FUNCTION__);
-    
+            
     pizEventFree (event);
 } 
 

@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	March 26, 2012.
+ * \date	March 29, 2012.
  */
 
 /*
@@ -69,6 +69,14 @@
 
 #define PIZAGENTLOCKGETTER              pthread_mutex_lock      (&x->getterLock);
 #define PIZAGENTUNLOCKGETTER            pthread_mutex_unlock    (&x->getterLock);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define DEBUGEVENT                      post ("%s / %s", pizEventNameAsString (event), __FUNCTION__);
+#define DEBUGTIME                       PIZTime ttt;                              \
+                                        pizTimeSet (&ttt);                        \
+                                        post ("%llu / %s", ttt, __FUNCTION__);    \
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
