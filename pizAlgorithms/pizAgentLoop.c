@@ -240,7 +240,7 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     PIZAGENTLOCKGETTER
     
     pizLinklistClear (x->graphicOut);
-    pizSequenceAppendGraphicEvents (x->sequence, x->graphicOut);
+    pizSequenceGetGraphicEvents (x->sequence, x->graphicOut);
     
     if (pizLinklistCount (x->graphicOut)) {
         event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_GUI_READY, &x->grainStart);

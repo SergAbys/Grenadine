@@ -305,7 +305,7 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
         }
 
         if (x->flags & FLAG_ZONE_IS_SELECTED) {
-            pizSequencePutTempZone (x->user);
+            pizSequencePushTempZone (x->user);
             x->flags &= ~FLAG_ZONE_IS_SELECTED;
             
             DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_SEQUENCE);

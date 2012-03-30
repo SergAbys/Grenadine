@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceMaxMSP.c
  * \author  Jean Sapristi
- * \date    March 26, 2012.
+ * \date    March 30, 2012.
  */
  
 /*
@@ -87,7 +87,7 @@ void pizSequenceInitTempZone (PIZSequence *x)
     PIZSEQUENCEUNLOCK
 }
 
-void pizSequencePutTempZone (PIZSequence *x)
+void pizSequencePushTempZone (PIZSequence *x)
 {
     PIZSEQUENCELOCK
     

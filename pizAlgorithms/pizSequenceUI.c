@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceUI.c
  * \author	Jean Sapristi
- * \date	March 25, 2012.
+ * \date	March 30, 2012.
  */
  
 /*
@@ -64,7 +64,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
+void pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
 {
     long     i;
     PIZNote  *note = NULL; 

@@ -116,6 +116,19 @@ PIZEvent *pizEventNewWithTime (PIZEventType type, PIZEventName name, PIZTime *ti
     return event;
 }
 
+PIZEvent *pizEventNewWithLong (PIZEventType type, PIZEventName name, long n)
+{
+    PIZEvent *event = NULL;
+    
+    if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
+        event->type = type;
+        event->name = name;
+        event->data.values[0] = n;
+    }
+    
+    return event;
+}
+
 PIZEvent *pizEventNewWithArray (PIZEventType type, PIZEventName name, long argc, long *argv, long tag) 
 {
     PIZEvent *event = NULL; 

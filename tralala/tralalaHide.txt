@@ -105,7 +105,7 @@ _pizSequenceNoteValue
 _pizSequenceNotesToArray
 _pizSequenceProceedAlgorithm
 _pizSequenceProceedStep
-_pizSequencePutTempZone
+_pizSequencePushTempZone
 _pizSequenceRandom
 _pizSequenceRemoveSelectedNotes
 _pizSequenceResizeTempZone

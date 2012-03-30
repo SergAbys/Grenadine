@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceMaxMSP.h
  * \author  Jean Sapristi
- * \date    March 26, 2012.
+ * \date    March 30, 2012.
  */
  
 /*
@@ -58,7 +58,7 @@ typedef struct  _PIZCoordinates {
 // -------------------------------------------------------------------------------------------------------------
 
 void        pizSequenceInitTempZone                 (PIZSequence *x);
-void        pizSequencePutTempZone                  (PIZSequence *x);
+void        pizSequencePushTempZone                 (PIZSequence *x);
 
 bool        pizSequenceResizeTempZone               (PIZSequence *x, 
                                                     const PIZCoordinates *c, 

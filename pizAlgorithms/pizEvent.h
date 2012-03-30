@@ -129,6 +129,7 @@ typedef struct _PIZEvent {
 
 PIZEvent    *pizEventNew            (PIZEventType type, PIZEventName name);
 PIZEvent    *pizEventNewWithTime    (PIZEventType type, PIZEventName name, PIZTime *t);
+PIZEvent    *pizEventNewWithLong    (PIZEventType type, PIZEventName name, long n);
 PIZEvent    *pizEventNewWithArray   (PIZEventType type, PIZEventName name, long argc, long *argv, long tag);
 char        *pizEventNameAsString   (PIZEvent *x);  
 
