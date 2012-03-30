@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	March 29, 2012.
+ * \date	March 30, 2012.
  */
  
 /*
@@ -49,14 +49,14 @@ static char *piz_eventNames[ ] = {  "Init",
                                     "Loop",
                                     "Unloop",
                                     "Bpm",
+                                    "Zone Changed",
                                     "Note Played",
                                     "Note Removed",
                                     "Note Added",
                                     "Note Changed",
-                                    "Zone Changed",
                                     "End",
                                     "Run Ready",
-                                    "GUI Ready"         };
+                                    "GUI Ready"     };
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

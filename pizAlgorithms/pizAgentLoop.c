@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	March 29, 2012.
+ * \date	March 30, 2012.
  */
  
 /*
@@ -76,6 +76,7 @@ void *pizAgentEventLoop (void *agent)
         
     if (!EXIT) {
     //
+    
     pizAgentEventLoopInit (x);
      
     while (pizAgentEventLoopIsWorkTime (x)) {
@@ -147,6 +148,8 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
     if (f) {
         (*f)(x, event);
     }
+    
+    DEBUGEVENT
     
     pizEventFree (event);
     
@@ -269,7 +272,7 @@ void pizAgentEventLoopNotifyEnd (PIZAgent *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_INLINE bool pizAgentEventLoopCondition (PIZAgent *x)
+bool pizAgentEventLoopCondition (PIZAgent *x)
 {
     bool condition = false;
     
@@ -283,7 +286,7 @@ PIZ_INLINE bool pizAgentEventLoopCondition (PIZAgent *x)
     return condition;
 }
 
-PIZ_INLINE void pizAgentEventLoopInit (PIZAgent *x)
+void pizAgentEventLoopInit (PIZAgent *x)
 {
     if (x->flags & PIZ_FLAG_WAKED) {
         pizTimeSet (&x->grainStart);
@@ -299,7 +302,7 @@ PIZ_INLINE void pizAgentEventLoopInit (PIZAgent *x)
     pizTimeAddNano (&x->grainEnd, &x->grainSize);
 }
 
-PIZ_INLINE bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
+bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
 {
     bool    isWorkTime = false;
     PIZTime now;
@@ -316,7 +319,7 @@ PIZ_INLINE bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
     return isWorkTime;
 }
 
-PIZ_INLINE void pizAgentEventLoopSleep (PIZAgent *x)
+void pizAgentEventLoopSleep (PIZAgent *x)
 {
     PIZTime          now;
     PIZNano          ns;
@@ -336,7 +339,7 @@ PIZ_INLINE void pizAgentEventLoopSleep (PIZAgent *x)
         
         if (x->flags & PIZ_FLAG_PLAYED) {
             pizAgentEventLoopDoStep (x, 1);
-        }
+        } 
         
         err = pizTimeElapsedNano (&now, &x->grainEnd, &ns);
     }
@@ -354,7 +357,7 @@ PIZ_INLINE void pizAgentEventLoopSleep (PIZAgent *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL void *pizAgentNotificationLoop (void *agent)
+void *pizAgentNotificationLoop (void *agent)
 {
     PIZAgent *x = agent;  
     
@@ -396,8 +399,10 @@ void pizAgentNotificationLoopDoEvent (PIZAgent *x)
         pizLinklistChuckByPtr (x->notificationOut, event);
     }
     
-    PIZAGENTUNLOCKNOTIFICATION
-            
+    PIZAGENTUNLOCKNOTIFICATION   
+           
+    DEBUGEVENT    
+        
     pizEventFree (event);
 } 
 
