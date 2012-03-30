@@ -137,11 +137,11 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
     
     if (event) {
         switch (event->name) {
-            case PIZ_PLAY           : f = pizAgentMethodPlay;       break;
-            case PIZ_STOP           : f = pizAgentMethodStop;       break;
-            case PIZ_LOOP           : f = pizAgentMethodLoop;       break;
-            case PIZ_UNLOOP         : f = pizAgentMethodUnloop;     break; 
-            case PIZ_BPM            : f = pizAgentMethodBPM;        break;
+            case PIZ_EVENT_PLAY           : f = pizAgentMethodPlay;       break;
+            case PIZ_EVENT_STOP           : f = pizAgentMethodStop;       break;
+            case PIZ_EVENT_LOOP           : f = pizAgentMethodLoop;       break;
+            case PIZ_EVENT_UNLOOP         : f = pizAgentMethodUnloop;     break; 
+            case PIZ_EVENT_BPM            : f = pizAgentMethodBPM;        break;
         }
     }
     
@@ -193,7 +193,8 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     ptr = pizGrowingArrayPtr (x->tempArray);
     
     for (i = 0; i < pizGrowingArrayCount (x->tempArray); i += PIZ_DATA_NOTE_SIZE) {
-        if (event = pizEventNewWithArray (PIZ_RUN, PIZ_NOTE_PLAYED, PIZ_DATA_NOTE_SIZE, (ptr + i), 0)) {
+        event = pizEventNewWithArray (PIZ_EVENT_RUN, PIZ_EVENT_NOTE_PLAYED, PIZ_DATA_NOTE_SIZE, (ptr + i), 0);
+        if (event) {
             if (pizLinklistAppend (x->runOut, event)) {
                 pizEventFree (event);
             }
@@ -201,7 +202,8 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     }
     
     if (pizLinklistCount (x->runOut)) {
-        if (event = pizEventNewWithTime (PIZ_NOTIFICATION, PIZ_RUN_READY, &x->grainStart)) {
+        event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_RUN_READY, &x->grainStart);
+        if (event) {
             PIZAGENTLOCKNOTIFICATION
             if (pizLinklistAppend (x->notificationOut, event)) {
                 pizEventFree (event);
@@ -241,7 +243,8 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     pizSequenceAppendGraphicEvents (x->sequence, x->graphicOut);
     
     if (pizLinklistCount (x->graphicOut)) {
-        if (event = pizEventNewWithTime (PIZ_NOTIFICATION, PIZ_GUI_READY, &x->grainStart)) {
+        event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_GUI_READY, &x->grainStart);
+        if (event) {
             PIZAGENTLOCKNOTIFICATION
             if (pizLinklistAppend (x->notificationOut, event)) {
                 pizEventFree (event);
@@ -257,8 +260,9 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
 void pizAgentEventLoopNotifyEnd (PIZAgent *x)
 {
     PIZEvent *event = NULL;
-        
-    if (event = pizEventNewWithTime (PIZ_NOTIFICATION, PIZ_END, &x->grainStart)) {
+    
+    event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_END, &x->grainStart);
+    if (event) {
         PIZAGENTLOCKNOTIFICATION
         if (pizLinklistAppend (x->notificationOut, event)) {
             pizEventFree (event);

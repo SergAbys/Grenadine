@@ -74,7 +74,8 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     
     if (x->changedZone) {
         ARGVWITHZONE
-        if (event = pizEventNewWithArray (PIZ_GRAPHIC, PIZ_ZONE_CHANGED, PIZ_DATA_ZONE_SIZE, argv, 0)) {
+        event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_ZONE_CHANGED, PIZ_DATA_ZONE_SIZE, argv, 0);
+        if (event) {
             if (pizLinklistAppend (queue, event)) {
                 pizEventFree (event);
             }
@@ -84,7 +85,8 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
     //
     if (pizItemset128IsSetAtIndex (&x->removedNotes, i)) { 
-        if (event = pizEventNewWithArray (PIZ_GRAPHIC, PIZ_NOTE_REMOVED, 0, NULL, i)) {
+        event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_NOTE_REMOVED, 0, NULL, i);
+        if (event) {
             if (pizLinklistAppend (queue, event)) {
                 pizEventFree (event);
             }
@@ -96,16 +98,18 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
     //
     if (pizItemset128IsSetAtIndex (&x->addedNotes, i)) {
-        if (!pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note)) {
-            ARGVWITHNOTE
-            if (event = pizEventNewWithArray (PIZ_GRAPHIC, PIZ_NOTE_ADDED, PIZ_DATA_NOTE_SIZE, argv, i)) {
-                if (pizLinklistAppend (queue, event)) {
-                    pizEventFree (event);
-                }
+    //
+    if (!pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note)) {
+        ARGVWITHNOTE
+        event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_NOTE_ADDED, PIZ_DATA_NOTE_SIZE, argv, i);
+        if (event) {
+            if (pizLinklistAppend (queue, event)) {
+                pizEventFree (event);
             }
         }
-        
-        pizItemset128UnsetAtIndex (&x->changedNotes, i);
+    }
+    pizItemset128UnsetAtIndex (&x->changedNotes, i);
+    //    
     }
     //    
     }
@@ -113,14 +117,17 @@ void pizSequenceAppendGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
     //
     if (pizItemset128IsSetAtIndex (&x->changedNotes, i)) {
-        if (!pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note)) {
-            ARGVWITHNOTE
-            if (event = pizEventNewWithArray (PIZ_GRAPHIC, PIZ_NOTE_CHANGED, PIZ_DATA_NOTE_SIZE, argv, i)) {
-                if (pizLinklistAppend (queue, event)) {
-                    pizEventFree (event);
-                }
+    //
+    if (!pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note)) {
+        ARGVWITHNOTE
+        event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_NOTE_CHANGED, PIZ_DATA_NOTE_SIZE, argv, i);
+        if (event) {
+            if (pizLinklistAppend (queue, event)) {
+                pizEventFree (event);
             }
         }
+    }
+    //
     }
     //    
     }

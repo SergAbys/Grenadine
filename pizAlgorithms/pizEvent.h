@@ -54,37 +54,61 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_EVENT_VALUES_SIZE   7   // PIZ_DATA_NOTE_SIZE
+#define PIZ_EVENT_VALUES_SIZE   12
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 typedef enum _PIZEventType {
-    PIZ_RUN             = 1,
-    PIZ_GRAPHIC,
-    PIZ_TRANSFORM,
-    PIZ_NOTIFICATION
+    PIZ_EVENT_RUN             = 1,
+    PIZ_EVENT_GRAPHIC,
+    PIZ_EVENT_TRANSFORM,
+    PIZ_EVENT_NOTIFICATION
     } PIZEventType;
 
 typedef enum _PIZEventName {
     //
-    PIZ_INIT            = 0,
-    PIZ_PLAY            = 1,
-    PIZ_STOP,
-    PIZ_LOOP,
-    PIZ_UNLOOP,
-    PIZ_BPM,
-    PIZ_NOTE_PLAYED,
+    PIZ_EVENT_INIT            = 0,
+    PIZ_EVENT_PLAY            = 1,
+    PIZ_EVENT_STOP,
+    PIZ_EVENT_LOOP,
+    PIZ_EVENT_UNLOOP,
+    PIZ_EVENT_BPM,
+    PIZ_EVENT_CHANCE,
+    PIZ_EVENT_VELOCITY,
+    PIZ_EVENT_CHANNEL,
+    PIZ_EVENT_CELL,
+    PIZ_EVENT_SCALE,
+    PIZ_EVENT_PATTERN,
+    PIZ_EVENT_NOTE_PLAYED,
     //
+    PIZ_EVENT_LEARN,
+    PIZ_EVENT_TRANSPOSE,
+    PIZ_EVENT_CLEAN,
+    PIZ_EVENT_ZOULOU,
+    PIZ_EVENT_ROMEO,
+    PIZ_EVENT_UNIFORN,
+    PIZ_EVENT_NOVEMBER,
+    PIZ_EVENT_JULIET,
+    PIZ_EVENT_ROTATE,
+    PIZ_EVENT_SCRAMBLE,
+    PIZ_EVENT_SORT,
+    PIZ_EVENT_CHANGE,
+    PIZ_EVENT_SET,
+    PIZ_EVENT_RANDOM,
+    PIZ_EVENT_KILL,
+    PIZ_EVENT_CYCLE,
     //
-    PIZ_ZONE_CHANGED,
-    PIZ_NOTE_REMOVED,
-    PIZ_NOTE_ADDED,
-    PIZ_NOTE_CHANGED,
+    PIZ_EVENT_GRID,
+    PIZ_EVENT_NOTE_VALUE,
+    PIZ_EVENT_ZONE_CHANGED,
+    PIZ_EVENT_NOTE_REMOVED,
+    PIZ_EVENT_NOTE_ADDED,
+    PIZ_EVENT_NOTE_CHANGED,
     //
-    PIZ_END,
-    PIZ_RUN_READY,
-    PIZ_GUI_READY,
+    PIZ_EVENT_END,
+    PIZ_EVENT_RUN_READY,
+    PIZ_EVENT_GUI_READY,
     //
     } PIZEventName;
     

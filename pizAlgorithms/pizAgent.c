@@ -114,7 +114,7 @@ PIZAgent *pizAgentNew (void)
     if (err) {
         pizAgentFree (x);
         x = NULL;
-    } else if (event = pizEventNew (PIZ_RUN, PIZ_INIT)) {
+    } else if (event = pizEventNew (PIZ_EVENT_RUN, PIZ_EVENT_INIT)) {
         pizAgentAppendEvent (x, event);
     }
     //
@@ -177,9 +177,9 @@ void pizAgentAppendEvent (PIZAgent *x, PIZEvent *event)
         PIZLinklist *queue = NULL;
         
         switch (event->type) {
-            case PIZ_RUN        : queue = x->runIn; break;
-            case PIZ_GRAPHIC    : if (x->flags & PIZ_FLAG_GUI) { queue = x->graphicIn; } break;
-            case PIZ_TRANSFORM  : queue = x->transformIn; break;
+            case PIZ_EVENT_RUN        : queue = x->runIn; break;
+            case PIZ_EVENT_GRAPHIC    : if (x->flags & PIZ_FLAG_GUI) { queue = x->graphicIn; } break;
+            case PIZ_EVENT_TRANSFORM  : queue = x->transformIn; break;
         }
         
         if (queue) {
