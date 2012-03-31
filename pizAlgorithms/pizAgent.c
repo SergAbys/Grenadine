@@ -115,7 +115,7 @@ PIZAgent *pizAgentNew (void)
         pizAgentFree (x);
         x = NULL;
     } else if (event = pizEventNew (PIZ_EVENT_RUN, PIZ_EVENT_INIT)) {
-        pizAgentAppendEvent (x, event);
+        pizAgentAddEvent (x, event);
     }
     //
     }
@@ -171,7 +171,7 @@ void pizAgentFree (PIZAgent *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizAgentAppendEvent (PIZAgent *x, PIZEvent *event)
+void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
 {
     if (event) {
         PIZLinklist *queue = NULL;

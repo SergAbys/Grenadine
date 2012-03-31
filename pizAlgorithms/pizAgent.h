@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	March 30, 2012.
+ * \date	March 31, 2012.
  */
 
 /*
@@ -128,14 +128,14 @@ typedef void (*PIZAgentMethod)(PIZAgent *x, PIZEvent *event);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZAgent *pizAgentNew           (void);
-void     pizAgentFree           (PIZAgent *x);
+PIZAgent *pizAgentNew       (void);
+void     pizAgentFree       (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void     pizAgentAppendEvent    (PIZAgent *x, PIZEvent *event);
-PIZError pizAgentGetEvent       (PIZAgent *x, PIZEventType, PIZEvent **eventPtr);
+void     pizAgentAddEvent   (PIZAgent *x, PIZEvent *event);
+PIZError pizAgentGetEvent   (PIZAgent *x, PIZEventType, PIZEvent **eventPtr);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

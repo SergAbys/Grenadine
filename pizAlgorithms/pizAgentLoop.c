@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	March 30, 2012.
+ * \date	March 31, 2012.
  */
  
 /*
@@ -117,10 +117,6 @@ void *pizAgentEventLoop (void *agent)
     pthread_exit (NULL);
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue) 
 {
     long            err = PIZ_ERROR;
@@ -227,7 +223,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
             x->flags &= ~PIZ_FLAG_PLAYED;
         }
         pizSequenceGoToStart (x->sequence);
-        pizAgentEventLoopNotifyEnd (x);
+        pizAgentEventLoopDoEnd (x);
     }
     //
     } while (k);
@@ -257,7 +253,7 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     PIZAGENTUNLOCKGETTER
 }
 
-void pizAgentEventLoopNotifyEnd (PIZAgent *x)
+void pizAgentEventLoopDoEnd (PIZAgent *x)
 {
     PIZEvent *event = NULL;
     
@@ -388,10 +384,6 @@ void *pizAgentNotificationLoop (void *agent)
     
     pthread_exit (NULL);
 }
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
 void pizAgentNotificationLoopDoEvent (PIZAgent *x)
 {
