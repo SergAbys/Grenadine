@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	March 30, 2012.
+ * \date	March 31, 2012.
  */
  
 /*
@@ -66,23 +66,25 @@ PIZAgent *pizAgentNew (void)
     
     x->flags                = PIZ_FLAG_GUI;  
     x->bpm                  = PIZ_DEFAULT_BPM;  
-    x->runIn                = pizLinklistNew ( );
-    x->graphicIn            = pizLinklistNew ( );
-    x->transformIn          = pizLinklistNew ( );
-    x->runOut               = pizLinklistNew ( );
-    x->graphicOut           = pizLinklistNew ( );
-    x->notificationOut      = pizLinklistNew ( );
+    x->runInQueue           = pizLinklistNew ( );
+    x->runOutQueue          = pizLinklistNew ( );
+    x->graphicInQueue       = pizLinklistNew ( );
+    x->graphicOutQueue      = pizLinklistNew ( );
+    x->mainQueue            = pizLinklistNew ( );
+    x->endQueue             = pizLinklistNew ( );
+    x->notifyQueue          = pizLinklistNew ( );
     x->sequence             = pizSequenceNew (0);
     x->tempArray            = pizGrowingArrayNew (0);
     x->err1                 = PIZ_ERROR;
     x->err2                 = PIZ_ERROR;
     
-    if (!(x->runIn &&  
-        x->graphicIn &&
-        x->transformIn &&
-        x->runOut && 
-        x->graphicOut &&
-        x->notificationOut && 
+    if (!(x->runInQueue &&  
+        x->runOutQueue && 
+        x->graphicInQueue &&
+        x->graphicOutQueue &&
+        x->mainQueue &&
+        x->endQueue &&
+        x->notifyQueue && 
         x->sequence &&
         x->tempArray)) {
         
@@ -154,12 +156,13 @@ void pizAgentFree (PIZAgent *x)
     pthread_cond_destroy  (&x->eventCondition);
     pthread_cond_destroy  (&x->notificationCondition);
     
-    pizLinklistFree (x->runIn);
-    pizLinklistFree (x->graphicIn);
-    pizLinklistFree (x->transformIn);
-    pizLinklistFree (x->runOut);
-    pizLinklistFree (x->graphicOut);
-    pizLinklistFree (x->notificationOut);
+    pizLinklistFree (x->runInQueue);
+    pizLinklistFree (x->runOutQueue);
+    pizLinklistFree (x->graphicInQueue);
+    pizLinklistFree (x->graphicOutQueue);
+    pizLinklistFree (x->mainQueue);
+    pizLinklistFree (x->endQueue);
+    pizLinklistFree (x->notifyQueue);
     
     pizSequenceFree     (x->sequence);
     pizGrowingArrayFree (x->tempArray);
@@ -177,9 +180,9 @@ void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
         PIZLinklist *queue = NULL;
         
         switch (event->type) {
-            case PIZ_EVENT_RUN        : queue = x->runIn; break;
-            case PIZ_EVENT_GRAPHIC    : if (x->flags & PIZ_FLAG_GUI) { queue = x->graphicIn; } break;
-            case PIZ_EVENT_TRANSFORM  : queue = x->transformIn; break;
+            case PIZ_EVENT_RUN            : queue = x->runInQueue; break;
+            case PIZ_EVENT_TRANSFORMATION : queue = x->mainQueue; break;
+            case PIZ_EVENT_GRAPHIC        : if (x->flags & PIZ_FLAG_GUI) { queue = x->graphicInQueue; } break;
         }
         
         if (queue) {

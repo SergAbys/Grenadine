@@ -422,8 +422,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D66C0415260D74005410C8</string>
-				<string>96D66C0515260D74005410C8</string>
+				<string>96DE13DB1526DFF000CD2A2F</string>
+				<string>96DE13DC1526DFF000CD2A2F</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -635,8 +635,6 @@
 							<string>418pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
@@ -678,7 +676,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D66BFB15260D40005410C8</string>
+				<string>96DE13DD1526DFF000CD2A2F</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

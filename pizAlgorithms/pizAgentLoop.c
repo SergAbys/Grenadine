@@ -80,13 +80,13 @@ void *pizAgentEventLoop (void *agent)
     pizAgentEventLoopInit (x);
      
     while (pizAgentEventLoopIsWorkTime (x)) {
-        if (pizAgentEventLoopDoEvent (x, x->runIn)) {
+        if (pizAgentEventLoopDoEvent (x, x->runInQueue)) {
             break;
         } 
     }
     
     while (pizAgentEventLoopIsWorkTime (x)) {
-        if (pizAgentEventLoopDoEvent (x, x->transformIn)) {
+        if (pizAgentEventLoopDoEvent (x, x->mainQueue)) {
             break;
         } 
     }
@@ -101,7 +101,7 @@ void *pizAgentEventLoop (void *agent)
     
     if (x->flags & PIZ_FLAG_GUI) {
         while (pizAgentEventLoopIsWorkTime (x)) {
-            if (pizAgentEventLoopDoEvent (x, x->graphicIn)) {
+            if (pizAgentEventLoopDoEvent (x, x->graphicInQueue)) {
                 pizAgentEventLoopDoRefresh (x);
                 break;
             } 
@@ -185,23 +185,23 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         
     PIZAGENTLOCKGETTER 
         
-    pizLinklistClear (x->runOut);
+    pizLinklistClear (x->runOutQueue);
     ptr = pizGrowingArrayPtr (x->tempArray);
     
     for (i = 0; i < pizGrowingArrayCount (x->tempArray); i += PIZ_DATA_NOTE_SIZE) {
         event = pizEventNewWithArray (PIZ_EVENT_RUN, PIZ_EVENT_NOTE_PLAYED, PIZ_DATA_NOTE_SIZE, (ptr + i), 0);
         if (event) {
-            if (pizLinklistAppend (x->runOut, event)) {
+            if (pizLinklistAppend (x->runOutQueue, event)) {
                 pizEventFree (event);
             }
         }
     }
     
-    if (pizLinklistCount (x->runOut)) {
+    if (pizLinklistCount (x->runOutQueue)) {
         event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_RUN_READY, &x->grainStart);
         if (event) {
             PIZAGENTLOCKNOTIFICATION
-            if (pizLinklistAppend (x->notificationOut, event)) {
+            if (pizLinklistAppend (x->notifyQueue, event)) {
                 pizEventFree (event);
             }
             PIZAGENTUNLOCKNOTIFICATION
@@ -235,14 +235,14 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     
     PIZAGENTLOCKGETTER
     
-    pizLinklistClear (x->graphicOut);
-    pizSequenceGetGraphicEvents (x->sequence, x->graphicOut);
+    pizLinklistClear (x->graphicOutQueue);
+    pizSequenceGetGraphicEvents (x->sequence, x->graphicOutQueue);
     
-    if (pizLinklistCount (x->graphicOut)) {
+    if (pizLinklistCount (x->graphicOutQueue)) {
         event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_GUI_READY, &x->grainStart);
         if (event) {
             PIZAGENTLOCKNOTIFICATION
-            if (pizLinklistAppend (x->notificationOut, event)) {
+            if (pizLinklistAppend (x->notifyQueue, event)) {
                 pizEventFree (event);
             }
             PIZAGENTUNLOCKNOTIFICATION
@@ -260,7 +260,7 @@ void pizAgentEventLoopDoEnd (PIZAgent *x)
     event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_END, &x->grainStart);
     if (event) {
         PIZAGENTLOCKNOTIFICATION
-        if (pizLinklistAppend (x->notificationOut, event)) {
+        if (pizLinklistAppend (x->notifyQueue, event)) {
             pizEventFree (event);
         }
         PIZAGENTUNLOCKNOTIFICATION
@@ -277,9 +277,9 @@ bool pizAgentEventLoopCondition (PIZAgent *x)
     bool condition = false;
     
     if ((x->flags & PIZ_FLAG_PLAYED) ||
-        pizLinklistCount (x->runIn) ||
-        pizLinklistCount (x->graphicIn) ||
-        pizLinklistCount (x->transformIn)) {
+        pizLinklistCount (x->runInQueue) ||
+        pizLinklistCount (x->graphicInQueue) ||
+        pizLinklistCount (x->mainQueue)) {
         condition = true;
     }
     
@@ -296,8 +296,6 @@ void pizAgentEventLoopInit (PIZAgent *x)
     }
     
     pizTimeSetNano (&x->grainSize, PIZ_AGENT_CONSTANT_BPM / x->bpm);
-    pizTimeSetNano (&x->grainWorkSize, PIZ_AGENT_CONSTANT_WORK_RATIO / x->bpm);
-    
     pizTimeCopy    (&x->grainEnd, &x->grainStart);
     pizTimeAddNano (&x->grainEnd, &x->grainSize);
 }
@@ -307,11 +305,13 @@ bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
     bool    isWorkTime = false;
     PIZTime now;
     PIZNano elapsed;
+    PIZNano timeOut;
     
-    pizTimeSet (&now);
+    pizTimeSet     (&now);
+    pizTimeSetNano (&timeOut, PIZ_AGENT_CONSTANT_WORK_RATIO / x->bpm);
     
     if (!pizTimeElapsedNano (&x->grainStart, &now, &elapsed)) {
-        if (elapsed < x->grainWorkSize) {
+        if (elapsed < timeOut) {
             isWorkTime = true;
         }
     }
@@ -366,7 +366,7 @@ void *pizAgentNotificationLoop (void *agent)
     
     PIZAGENTLOCKNOTIFICATION
     
-    while (!(pizLinklistCount (x->notificationOut))) {
+    while (!(pizLinklistCount (x->notifyQueue))) {
         pthread_cond_wait (&x->notificationCondition, &x->notificationLock);
                         
         if (EXIT) {
@@ -391,8 +391,8 @@ void pizAgentNotificationLoopDoEvent (PIZAgent *x)
             
     PIZAGENTLOCKNOTIFICATION
     
-    if (!pizLinklistPtrAtIndex (x->notificationOut, 0, (void *)&event)) {
-        pizLinklistChuckByPtr (x->notificationOut, event);
+    if (!pizLinklistPtrAtIndex (x->notifyQueue, 0, (void *)&event)) {
+        pizLinklistChuckByPtr (x->notifyQueue, event);
     }
     
     PIZAGENTUNLOCKNOTIFICATION   
