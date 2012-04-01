@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentMethod.c
  * \author	Jean Sapristi
- * \date	March 30, 2012.
+ * \date	April 1, 2012.
  */
  
 /*

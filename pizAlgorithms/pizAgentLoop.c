@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	March 31, 2012.
+ * \date	April 1, 2012.
  */
  
 /*
@@ -131,23 +131,17 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
     
     PIZAGENTUNLOCKEVENT
     
-    if (event) {
-        switch (event->name) {
-            case PIZ_EVENT_PLAY           : f = pizAgentMethodPlay;       break;
-            case PIZ_EVENT_STOP           : f = pizAgentMethodStop;       break;
-            case PIZ_EVENT_LOOP           : f = pizAgentMethodLoop;       break;
-            case PIZ_EVENT_UNLOOP         : f = pizAgentMethodUnloop;     break; 
-            case PIZ_EVENT_BPM            : f = pizAgentMethodBPM;        break;
-        }
-    }
-    
-    if (f) {
-        (*f)(x, event);
-    }
-    
     DEBUGEVENT
     
-    pizEventFree (event);
+    if (event) {
+        pizAgentEventLoopGetMethod (event, &f);
+    
+        if (f) {
+            (*f)(x, event);
+        }
+    
+        pizEventFree (event);
+    }
     
     PIZAGENTLOCKEVENT
     
@@ -255,7 +249,25 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
 
 void pizAgentEventLoopDoEnd (PIZAgent *x)
 {
-    PIZEvent *event = NULL;
+    PIZEvent        *event = NULL;
+    PIZEvent        *nextEvent = NULL;
+    PIZAgentMethod  f = NULL;
+    
+    if (pizLinklistCount (x->endQueue)) {
+        pizLinklistPtrAtIndex (x->endQueue, 0, (void **)&event);
+        
+        while (event) {
+            pizLinklistNextByPtr (x->endQueue, (void *)event, (void **)&nextEvent);
+            DEBUGEVENT
+            pizAgentEventLoopGetMethod (event, &f);
+    
+            if (f) {
+                (*f)(x, event);
+            }
+            
+            event = nextEvent;
+        }
+    }
     
     event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_END, &x->grainStart);
     if (event) {
@@ -350,6 +362,17 @@ void pizAgentEventLoopSleep (PIZAgent *x)
         temp = ptrA;
         ptrA = ptrB;
         ptrB = temp;
+    }
+}
+
+void pizAgentEventLoopGetMethod (PIZEvent *event, PIZAgentMethod *f)
+{
+    switch (event->name) {
+        case PIZ_EVENT_PLAY           : *f = pizAgentMethodPlay;       break;
+        case PIZ_EVENT_STOP           : *f = pizAgentMethodStop;       break;
+        case PIZ_EVENT_LOOP           : *f = pizAgentMethodLoop;       break;
+        case PIZ_EVENT_UNLOOP         : *f = pizAgentMethodUnloop;     break; 
+        case PIZ_EVENT_BPM            : *f = pizAgentMethodBPM;        break;
     }
 }
 
