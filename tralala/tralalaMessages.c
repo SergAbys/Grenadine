@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 07/03/12.
+ *  Last modified : 01/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ void tralala_copy (t_tralala *x)
             }
         }
         
-        pizSequenceAddNotesWithArray (x->live, tempArrayB, PIZ_ADD_FLAG_PATTERN);
+        pizSequenceAddNotesWithArray (x->live, tempArrayB, PIZ_SEQUENCE_ADD_FLAG_PATTERN);
     }
     
     ARRAY_RELEASE (tempArrayA);
@@ -84,7 +84,7 @@ void tralala_setLiveByUser (t_tralala *x)
     }
     
     if (!err) {
-        long addFlags = PIZ_ADD_FLAG_PATTERN | PIZ_ADD_FLAG_CLEAR;
+        long addFlags = PIZ_SEQUENCE_ADD_FLAG_PATTERN | PIZ_SEQUENCE_ADD_FLAG_CLEAR;
         
         pizSequenceAddNotesWithArray (x->live, tempArrayA, addFlags);
         pizSequenceSetZoneWithArray  (x->live, tempArrayB);
@@ -434,7 +434,7 @@ void tralala_sequenceNote (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         ARRAY_GET (tempArray);
         
         if (tempArray) {
-            long mode = PIZ_ADD_FLAG_SNAP; 
+            long mode = PIZ_SEQUENCE_ADD_FLAG_SNAP; 
             
             pizGrowingArrayAppend (tempArray, (long)(data.values[0] / TIME_TICKS_PER_STEP)); 
             pizGrowingArrayAppend (tempArray, data.values[1]);
@@ -451,9 +451,9 @@ void tralala_sequenceNote (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
             pizGrowingArrayAppend (tempArray, false);
             
             if (data.sequence == x->live) {
-                mode = PIZ_ADD_FLAG_PATTERN;
+                mode = PIZ_SEQUENCE_ADD_FLAG_PATTERN;
             } else if (data.sequence == x->listen) {
-                mode = PIZ_ADD_FLAG_AMBITUS;
+                mode = PIZ_SEQUENCE_ADD_FLAG_AMBITUS;
             }
             
             data.draw &= !(pizSequenceAddNotesWithArray (data.sequence, tempArray, mode)); 

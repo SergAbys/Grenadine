@@ -52,9 +52,9 @@
 
 void pizAgentMethodPlay (PIZAgent *x, PIZEvent *event)
 {
-    if (!(x->flags & PIZ_FLAG_PLAYED)) {
+    if (!(x->flags & PIZ_AGENT_FLAG_PLAYED)) {
         pizSequenceGoToStart (x->sequence);
-        x->flags |= PIZ_FLAG_PLAYED; 
+        x->flags |= PIZ_AGENT_FLAG_PLAYED; 
         
         if (event->data.time) {
             pizTimeCopy    (&x->grainStart, &event->data.time);
@@ -66,19 +66,19 @@ void pizAgentMethodPlay (PIZAgent *x, PIZEvent *event)
 
 void pizAgentMethodStop (PIZAgent *x, PIZEvent *event)
 {
-    x->flags &= ~PIZ_FLAG_PLAYED; 
-    x->flags &= ~PIZ_FLAG_LOOPED;
+    x->flags &= ~PIZ_AGENT_FLAG_PLAYED; 
+    x->flags &= ~PIZ_AGENT_FLAG_LOOPED;
 }
 
 void pizAgentMethodLoop (PIZAgent *x, PIZEvent *event)
 {
-    x->flags |= PIZ_FLAG_LOOPED;
+    x->flags |= PIZ_AGENT_FLAG_LOOPED;
     pizAgentMethodPlay (x, event);
 }
 
 void pizAgentMethodUnloop (PIZAgent *x, PIZEvent *event)
 {
-    x->flags &= ~PIZ_FLAG_LOOPED;
+    x->flags &= ~PIZ_AGENT_FLAG_LOOPED;
 }
 
 void pizAgentMethodBPM (PIZAgent *x, PIZEvent *event)

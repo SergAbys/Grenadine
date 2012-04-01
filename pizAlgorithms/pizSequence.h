@@ -54,25 +54,34 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_DEFAULT_TIMELINE        576 
-#define PIZ_SEQUENCE_MAXIMUM_NOTES           128   
-#define PIZ_SEQUENCE_MAXIMUM_DURATION        96
-//                                         -------
-#define PIZ_SEQUENCE_TEMP_SIZE               128
+#define PIZ_SEQUENCE_DEFAULT_TIMELINE       576 
+#define PIZ_SEQUENCE_LOOKUP_SIZE            19
+#define PIZ_SEQUENCE_CHANNEL_NONE           0
 
-#define PIZ_SEQUENCE_LOOKUP_SIZE             19
-#define PIZ_SEQUENCE_CHANNEL_NONE            0
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZSEQUENCELOCK         pthread_mutex_lock (&x->lock);
-#define PIZSEQUENCEUNLOCK       pthread_mutex_unlock (&x->lock);
+#define PIZ_SEQUENCE_MAXIMUM_NOTES          128   
+#define PIZ_SEQUENCE_MAXIMUM_DURATION       96
+//                                        -------
+#define PIZ_SEQUENCE_TEMP_SIZE              128
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_TAG(n)     pizItemset128SetAtIndex (&x->changedNotes, (n))     
+#define PIZ_SEQUENCE_ADD_FLAG_NONE          0L
+#define PIZ_SEQUENCE_ADD_FLAG_SNAP          1L
+#define PIZ_SEQUENCE_ADD_FLAG_PATTERN       2L
+#define PIZ_SEQUENCE_ADD_FLAG_AMBITUS       4L
+#define PIZ_SEQUENCE_ADD_FLAG_CLIP          8L
+#define PIZ_SEQUENCE_ADD_FLAG_UNSELECT      16L
+#define PIZ_SEQUENCE_ADD_FLAG_CLEAR         32L
+
+#define PIZ_SEQUENCE_NOTE_FLAG_NONE         0L
+#define PIZ_SEQUENCE_NOTE_FLAG_LASSO        1L
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define PIZSEQUENCELOCK     pthread_mutex_lock (&x->lock);
+#define PIZSEQUENCEUNLOCK   pthread_mutex_unlock (&x->lock);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -163,23 +172,8 @@ typedef enum _PIZDataIndex {
     PIZ_DATA_END,
     PIZ_DATA_DOWN,
     PIZ_DATA_UP,
-    PIZ_DATA_ZONE_SIZE
+    PIZ_DATA_ZONE_SIZE      = 4
     } PIZDataIndex;
- 
-typedef enum _PIZAddFlag {
-    PIZ_ADD_FLAG_NONE       = 0,
-    PIZ_ADD_FLAG_SNAP       = 1,
-    PIZ_ADD_FLAG_PATTERN    = 2,
-    PIZ_ADD_FLAG_AMBITUS    = 4,
-    PIZ_ADD_FLAG_CLIP       = 8,
-    PIZ_ADD_FLAG_UNSELECT   = 16,
-    PIZ_ADD_FLAG_CLEAR      = 32,
-    } PIZAddFlag;
-
-typedef enum _PIZNoteFlag {
-    PIZ_NOTE_FLAG_NONE      = 0,
-    PIZ_NOTE_FLAG_LASSO     = 1
-    } PIZNoteFlag;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

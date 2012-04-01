@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 26/03/12.
+ *  Last modified : 01/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -123,43 +123,43 @@
 #pragma mark -
 
 #define DIRTY_NONE                          (0L)
-#define DIRTY_REFRESH                       (1<<0)
-#define DIRTY_GRID                          (1<<1)
-#define DIRTY_ZONE                          (1<<2)  
-#define DIRTY_NOTES                         (1<<3)
-#define DIRTY_PLAYED                        (1<<4)
-#define DIRTY_SEQUENCE                      (1<<5)                      
-#define DIRTY_LOCATE_LEFT                   (1<<6)
-#define DIRTY_LOCATE_RIGHT                  (1<<7)
-#define DIRTY_LOCATE_DOWN                   (1<<8)
-#define DIRTY_LOCATE_UP                     (1<<9)
+#define DIRTY_REFRESH                       (1L<<0)
+#define DIRTY_GRID                          (1L<<1)
+#define DIRTY_ZONE                          (1L<<2)  
+#define DIRTY_NOTES                         (1L<<3)
+#define DIRTY_PLAYED                        (1L<<4)
+#define DIRTY_SEQUENCE                      (1L<<5)                      
+#define DIRTY_LOCATE_LEFT                   (1L<<6)
+#define DIRTY_LOCATE_RIGHT                  (1L<<7)
+#define DIRTY_LOCATE_DOWN                   (1L<<8)
+#define DIRTY_LOCATE_UP                     (1L<<9)
 
 #define FLAG_NONE                           (0L)
-#define FLAG_FOCUS                          (1<<0)
-#define FLAG_HAVE_MOVED                     (1<<1)
-#define FLAG_HAVE_CHANGED                   (1<<2)
-#define FLAG_HAVE_BEEN_DUPLICATED           (1<<3)
-#define FLAG_ZONE_IS_SELECTED               (1<<4)
-#define FLAG_ORIGIN_IS_SET                  (1<<5)
-#define FLAG_INHIBIT_START                  (1<<6)
-#define FLAG_INHIBIT_BANG                   (1<<7)
-#define FLAG_IS_LASSO                       (1<<8)
-#define FLAG_IS_LOOPED                      (1<<9)
-#define FLAG_IS_RUNNING                     (1<<10)
-#define FLAG_IS_PAUSED                      (1<<11)
-#define FLAG_IS_MUTED                       (1<<12)
-#define FLAG_INIT_PAINT_CLOCK               (1<<13)
-#define FLAG_ORIGIN_HAD_SHIFT_KEY           (1<<14)
+#define FLAG_FOCUS                          (1L<<0)
+#define FLAG_HAVE_MOVED                     (1L<<1)
+#define FLAG_HAVE_CHANGED                   (1L<<2)
+#define FLAG_HAVE_BEEN_DUPLICATED           (1L<<3)
+#define FLAG_ZONE_IS_SELECTED               (1L<<4)
+#define FLAG_ORIGIN_IS_SET                  (1L<<5)
+#define FLAG_INHIBIT_START                  (1L<<6)
+#define FLAG_INHIBIT_BANG                   (1L<<7)
+#define FLAG_IS_LASSO                       (1L<<8)
+#define FLAG_IS_LOOPED                      (1L<<9)
+#define FLAG_IS_RUNNING                     (1L<<10)
+#define FLAG_IS_PAUSED                      (1L<<11)
+#define FLAG_IS_MUTED                       (1L<<12)
+#define FLAG_INIT_PAINT_CLOCK               (1L<<13)
+#define FLAG_ORIGIN_HAD_SHIFT_KEY           (1L<<14)
 
 #define HIT_NOTHING                         0
 #define HIT_NOTE                            1
-#define HIT_START                           (1<<1)
-#define HIT_END                             (1<<2)
-#define HIT_DOWN                            (1<<3)
-#define HIT_UP                              (1<<4)
-#define HIT_ZONE                            (1<<5)
-#define HIT_TEXT                            (1<<6)
-#define HIT_LOCKED                          (1<<7)
+#define HIT_START                           (1L<<1)
+#define HIT_END                             (1L<<2)
+#define HIT_DOWN                            (1L<<3)
+#define HIT_UP                              (1L<<4)
+#define HIT_ZONE                            (1L<<5)
+#define HIT_TEXT                            (1L<<6)
+#define HIT_LOCKED                          (1L<<7)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -451,7 +451,7 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
             
             if (!err) {
                 x->markedNote->data[PIZ_DURATION] = temp;
-                PIZ_SEQUENCE_TAG (x->markedNote->tag);
+                pizItemset128SetAtIndex (&x->changedNotes, (x->markedNote->tag));
             }
         } else {
             temp = x->markedNote->data[selector];
@@ -465,7 +465,7 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZSelector selector, lon
             
             if (x->markedNote->data[selector] != temp) {
                 x->markedNote->data[selector] = temp;
-                PIZ_SEQUENCE_TAG (x->markedNote->tag);
+                pizItemset128SetAtIndex (&x->changedNotes, (x->markedNote->tag));
             }
         }
     }
@@ -552,7 +552,7 @@ PIZError pizSequenceAddNotesWithArray (PIZSequence *x, const PIZGrowingArray *a,
     
     PIZSEQUENCELOCK
     
-    if (flags & PIZ_ADD_FLAG_CLEAR) {
+    if (flags & PIZ_SEQUENCE_ADD_FLAG_CLEAR) {
         pizSequenceRemoveAllNotes (x);
     }
         
@@ -776,22 +776,22 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
     long    isSelected  = values[PIZ_DATA_IS_SELECTED];
     long    isMarked    = values[PIZ_DATA_IS_MARKED];
     
-    if (flags & PIZ_ADD_FLAG_SNAP) {
+    if (flags & PIZ_SEQUENCE_ADD_FLAG_SNAP) {
         position = MAX (((long)(position / (double)x->grid)) * x->grid, 0);
     }
     
-    if (flags & PIZ_ADD_FLAG_PATTERN) {
+    if (flags & PIZ_SEQUENCE_ADD_FLAG_PATTERN) {
         long patternSize = pizGrowingArrayCount (x->pattern);  
         if (patternSize) {
             position = pizSequenceSnapPositionToPattern (x, position, patternSize);
         }
     } 
     
-    if (flags & PIZ_ADD_FLAG_AMBITUS) {
+    if (flags & PIZ_SEQUENCE_ADD_FLAG_AMBITUS) {
         pitch = pizSequenceMovePitchToAmbitus (x, pitch);
     }
         
-    if (flags & PIZ_ADD_FLAG_UNSELECT) {
+    if (flags & PIZ_SEQUENCE_ADD_FLAG_UNSELECT) {
         isSelected = false;
         isMarked = false;
     }
@@ -800,7 +800,7 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
     err |= (position > (x->timelineSize - MAX (duration, 1)));
     err |= (x->count >= PIZ_SEQUENCE_MAXIMUM_NOTES);
     
-    if (flags & PIZ_ADD_FLAG_CLIP) {
+    if (flags & PIZ_SEQUENCE_ADD_FLAG_CLIP) {
         err |= (position < x->start);
         err |= (position >= x->end);
         err |= (pitch < x->down);
@@ -812,7 +812,7 @@ PIZNote *pizSequenceAddNote (PIZSequence *x, long *values, long flags)
     err |= pizBoundedStackPop (x->ticketMachine);
     
     if (!err && (newNote = (PIZNote *)malloc (sizeof(PIZNote)))) {
-        newNote->flags              = PIZ_NOTE_FLAG_NONE;
+        newNote->flags              = PIZ_SEQUENCE_NOTE_FLAG_NONE;
         newNote->data[PIZ_PITCH]    = pitch;
         newNote->data[PIZ_VELOCITY] = velocity;
         newNote->data[PIZ_DURATION] = duration;
@@ -912,7 +912,7 @@ void pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
         if (!pizLinklistChuckByPtr (x->timeline[position], (void *)note)) {            
             if (!pizLinklistInsert (x->timeline[newPosition], (void *)note)) {
                 note->position = newPosition;
-                PIZ_SEQUENCE_TAG (note->tag);
+                pizItemset128SetAtIndex (&x->changedNotes, (note->tag));
             }
         } 
     }

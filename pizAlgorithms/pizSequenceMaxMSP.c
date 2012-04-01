@@ -215,7 +215,7 @@ void pizSequenceSelectAllNotes (PIZSequence *x)
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             if (!note->isSelected) {
                 note->isSelected = true;
-                PIZ_SEQUENCE_TAG (note->tag);
+                pizItemset128SetAtIndex (&x->changedNotes, (note->tag));
             }
             note = nextNote;
         }
@@ -265,7 +265,7 @@ long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, const PIZCoordinates 
                     pizSequenceUnselectNotes (x);
                     if (!note->isSelected) {
                         note->isSelected = true;
-                        PIZ_SEQUENCE_TAG (note->tag);
+                        pizItemset128SetAtIndex (&x->changedNotes, (note->tag));
                     }
                     x->markedNote = note;
                 }
@@ -324,7 +324,7 @@ long pizSequenceInvertNoteWithCoordinates (PIZSequence *x, const PIZCoordinates 
                     note->isSelected = true;
                     k = 1;
                 }
-                PIZ_SEQUENCE_TAG (note->tag);
+                pizItemset128SetAtIndex (&x->changedNotes, (note->tag));
                 break;
             }
             
@@ -361,7 +361,7 @@ void pizSequenceInitLasso (PIZSequence *x)
         
         while (note) {
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-            note->flags &= ~PIZ_NOTE_FLAG_LASSO;
+            note->flags &= ~PIZ_SEQUENCE_NOTE_FLAG_LASSO;
             note = nextNote;
         }
     }
@@ -403,10 +403,10 @@ long pizSequenceDragLasso (PIZSequence *x, const PIZCoordinates *m, const PIZCoo
                 
             if (!err) {
                 if (reverse) {
-                    if (!(note->flags & PIZ_NOTE_FLAG_LASSO)) {
+                    if (!(note->flags & PIZ_SEQUENCE_NOTE_FLAG_LASSO)) {
                         note->isSelected = !note->isSelected;
-                        PIZ_SEQUENCE_TAG (note->tag);
-                        note->flags |= PIZ_NOTE_FLAG_LASSO;
+                        pizItemset128SetAtIndex (&x->changedNotes, (note->tag));
+                        note->flags |= PIZ_SEQUENCE_NOTE_FLAG_LASSO;
                         k = 1;
                             
                         if (note == x->markedNote) {
@@ -415,20 +415,20 @@ long pizSequenceDragLasso (PIZSequence *x, const PIZCoordinates *m, const PIZCoo
                     }
                 } else if (!note->isSelected) {
                     note->isSelected = true;
-                    PIZ_SEQUENCE_TAG (note->tag);
+                    pizItemset128SetAtIndex (&x->changedNotes, (note->tag));
                     k = 1;
                 }
             } else {
                 if (reverse) {
-                    if (note->flags & PIZ_NOTE_FLAG_LASSO) {
+                    if (note->flags & PIZ_SEQUENCE_NOTE_FLAG_LASSO) {
                         note->isSelected = !note->isSelected;
-                        PIZ_SEQUENCE_TAG (note->tag);
-                        note->flags &= ~PIZ_NOTE_FLAG_LASSO;
+                        pizItemset128SetAtIndex (&x->changedNotes, (note->tag));
+                        note->flags &= ~PIZ_SEQUENCE_NOTE_FLAG_LASSO;
                         k = 1;
                     }
                 } else if (note->isSelected)  {
                     note->isSelected = false;
-                    PIZ_SEQUENCE_TAG (note->tag);
+                    pizItemset128SetAtIndex (&x->changedNotes, (note->tag));
                     k = 1;
                 }
             }
@@ -575,7 +575,7 @@ PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a)
     if (t = pizGrowingArrayCount (a)) {
     //
     long k, version, count, grid, noteValue;
-    long modeFlags = PIZ_ADD_FLAG_UNSELECT;
+    long modeFlags = PIZ_SEQUENCE_ADD_FLAG_UNSELECT;
     long *ptr = pizGrowingArrayPtr (a);
     
     version     = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_VERSION);
@@ -671,7 +671,7 @@ PIZ_INLINE void pizSequenceUnselectNotes (PIZSequence *x)
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             if (note->isSelected) {
                 note->isSelected = false;
-                PIZ_SEQUENCE_TAG (note->tag);
+                pizItemset128SetAtIndex (&x->changedNotes, (note->tag));
             }
             note = nextNote;
         }

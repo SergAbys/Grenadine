@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 26/02/12.
+ *  Last modified : 01/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
     tralala_setCoordinates (x, &x->coordinates, pt);
             
     if (USER && CMD && !RIGHT && !MAJ) {
-        pizSequenceAddNoteWithCoordinates (x->user, &x->coordinates, PIZ_ADD_FLAG_SNAP); 
+        pizSequenceAddNoteWithCoordinates (x->user, &x->coordinates, PIZ_SEQUENCE_ADD_FLAG_SNAP); 
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE); 
         DIRTYPATTR DIRTYSLOTS 
         
@@ -317,7 +317,7 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
             ARRAYSLOCK
             
             pizSequenceRemoveSelectedNotes (x->user);
-            pizSequenceAddNotesWithArray   (x->user, x->selected, PIZ_ADD_FLAG_NONE);
+            pizSequenceAddNotesWithArray   (x->user, x->selected, PIZ_SEQUENCE_ADD_FLAG_NONE);
             
             ARRAYSUNLOCK
             
@@ -899,7 +899,7 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
         ARRAYSLOCK
         
         pizSequenceRemoveSelectedNotes  (x->user);
-        pizSequenceAddNotesWithArray    (x->user, x->selected, PIZ_ADD_FLAG_NONE);
+        pizSequenceAddNotesWithArray    (x->user, x->selected, PIZ_SEQUENCE_ADD_FLAG_NONE);
         
         ARRAYSUNLOCK
             

@@ -49,7 +49,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define EXIT (x->flags & PIZ_FLAG_EXIT)
+#define EXIT (x->flags & PIZ_AGENT_FLAG_EXIT)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -65,7 +65,7 @@ void *pizAgentEventLoop (void *agent)
     
     while (!pizAgentEventLoopCondition (x)) {
         pthread_cond_wait (&x->eventCondition, &x->eventLock);
-        x->flags |= PIZ_FLAG_WAKED;
+        x->flags |= PIZ_AGENT_FLAG_WAKED;
         
         if (EXIT) {
             break;
@@ -91,7 +91,7 @@ void *pizAgentEventLoop (void *agent)
         } 
     }
     
-    if (x->flags & PIZ_FLAG_PLAYED) {
+    if (x->flags & PIZ_AGENT_FLAG_PLAYED) {
         if (pizAgentEventLoopIsWorkTime (x)) {
             pizAgentEventLoopDoStep (x, 0);
         } else {
@@ -99,7 +99,7 @@ void *pizAgentEventLoop (void *agent)
         }
     }
     
-    if (x->flags & PIZ_FLAG_GUI) {
+    if (x->flags & PIZ_AGENT_FLAG_GUI) {
         while (pizAgentEventLoopIsWorkTime (x)) {
             if (pizAgentEventLoopDoEvent (x, x->graphicInQueue)) {
                 pizAgentEventLoopDoRefresh (x);
@@ -210,11 +210,11 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     k = false;
     //    
     } else if (err == PIZ_ERROR) {
-        if (x->flags & PIZ_FLAG_LOOPED) {
+        if (x->flags & PIZ_AGENT_FLAG_LOOPED) {
             k = true;
         } else {
             k = false;
-            x->flags &= ~PIZ_FLAG_PLAYED;
+            x->flags &= ~PIZ_AGENT_FLAG_PLAYED;
         }
         pizSequenceGoToStart (x->sequence);
         pizAgentEventLoopNotifyEnd (x);
@@ -270,7 +270,7 @@ bool pizAgentEventLoopCondition (PIZAgent *x)
 {
     bool condition = false;
     
-    if ((x->flags & PIZ_FLAG_PLAYED) ||
+    if ((x->flags & PIZ_AGENT_FLAG_PLAYED) ||
         pizLinklistCount (x->runInQueue) ||
         pizLinklistCount (x->graphicInQueue) ||
         pizLinklistCount (x->mainQueue)) {
@@ -282,9 +282,9 @@ bool pizAgentEventLoopCondition (PIZAgent *x)
 
 void pizAgentEventLoopInit (PIZAgent *x)
 {
-    if (x->flags & PIZ_FLAG_WAKED) {
+    if (x->flags & PIZ_AGENT_FLAG_WAKED) {
         pizTimeSet (&x->grainStart);
-        x->flags &= ~PIZ_FLAG_WAKED;
+        x->flags &= ~PIZ_AGENT_FLAG_WAKED;
     } else {
         pizTimeCopy (&x->grainStart, &x->grainEnd);
     }
@@ -331,7 +331,7 @@ void pizAgentEventLoopSleep (PIZAgent *x)
         pizTimeAddNano (&x->grainStart, &x->grainSize);
         pizTimeAddNano (&x->grainEnd, &x->grainSize); 
         
-        if (x->flags & PIZ_FLAG_PLAYED) {
+        if (x->flags & PIZ_AGENT_FLAG_PLAYED) {
             pizAgentEventLoopDoStep (x, 1);
         } 
         

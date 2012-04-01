@@ -64,7 +64,7 @@ PIZAgent *pizAgentNew (void)
     long     err = PIZ_GOOD;
     PIZEvent *event = NULL;
     
-    x->flags                = PIZ_FLAG_GUI;  
+    x->flags                = PIZ_AGENT_FLAG_GUI;  
     x->bpm                  = PIZ_DEFAULT_BPM;  
     x->runInQueue           = pizLinklistNew ( );
     x->runOutQueue          = pizLinklistNew ( );
@@ -129,7 +129,7 @@ void pizAgentFree (PIZAgent *x)
     //
     if (!x->err1) {
         PIZAGENTLOCKEVENT
-        x->flags |= PIZ_FLAG_EXIT;
+        x->flags |= PIZ_AGENT_FLAG_EXIT;
         PIZAGENTUNLOCKEVENT
     
         pthread_cond_signal (&x->eventCondition);
@@ -138,7 +138,7 @@ void pizAgentFree (PIZAgent *x)
     
     if (!x->err2) {
         PIZAGENTLOCKNOTIFICATION
-        x->flags |= PIZ_FLAG_EXIT;
+        x->flags |= PIZ_AGENT_FLAG_EXIT;
         PIZAGENTUNLOCKNOTIFICATION
     
         pthread_cond_signal (&x->notificationCondition);
@@ -179,7 +179,9 @@ void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
         switch (event->type) {
             case PIZ_EVENT_RUN            : queue = x->runInQueue; break;
             case PIZ_EVENT_TRANSFORMATION : queue = x->mainQueue; break;
-            case PIZ_EVENT_GRAPHIC        : if (x->flags & PIZ_FLAG_GUI) { queue = x->graphicInQueue; } break;
+            case PIZ_EVENT_GRAPHIC        : if (x->flags & PIZ_AGENT_FLAG_GUI) { 
+                                                queue = x->graphicInQueue; 
+                                            } break;
         }
         
         if (queue) {

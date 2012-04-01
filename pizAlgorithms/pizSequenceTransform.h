@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceTransform.h
  * \author  Jean Sapristi
- * \date    March 2, 2012.
+ * \date    April 1, 2012.
  */
  
 /*

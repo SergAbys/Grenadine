@@ -61,6 +61,16 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#define PIZ_AGENT_FLAG_NONE             0L
+#define PIZ_AGENT_FLAG_GUI              1L
+#define PIZ_AGENT_FLAG_EXIT             2L
+#define PIZ_AGENT_FLAG_WAKED            4L
+#define PIZ_AGENT_FLAG_PLAYED           8L
+#define PIZ_AGENT_FLAG_LOOPED           16L
+    
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 #define PIZAGENTLOCKEVENT               pthread_mutex_lock      (&x->eventLock);
 #define PIZAGENTUNLOCKEVENT             pthread_mutex_unlock    (&x->eventLock);
 
@@ -73,6 +83,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#include "ext.h"
 #define DEBUGEVENT                      if (event) {                                                        \
                                             post ("%s / %s", pizEventNameAsString (event), __FUNCTION__);   \
                                         }
@@ -83,15 +94,6 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-typedef enum _PIZAgentFlag {
-    PIZ_FLAG_NONE       = 0,
-    PIZ_FLAG_GUI        = 1,
-    PIZ_FLAG_EXIT       = 2,
-    PIZ_FLAG_WAKED      = 4,
-    PIZ_FLAG_PLAYED     = 8,
-    PIZ_FLAG_LOOPED     = 16
-    } PIZAgentFlag;
 
 typedef struct _PIZAgent {
     long                flags;
@@ -123,18 +125,19 @@ typedef struct _PIZAgent {
 // -------------------------------------------------------------------------------------------------------------
 
 typedef void (*PIZAgentMethod)(PIZAgent *x, PIZEvent *event);
+typedef void (*PIZObserverMethod)(void *clientData, PIZEvent event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZAgent *pizAgentNew       (void);
-void     pizAgentFree       (PIZAgent *x);
+PIZAgent *pizAgentNew     (void);
+void     pizAgentFree     (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void     pizAgentAddEvent   (PIZAgent *x, PIZEvent *event);
-PIZError pizAgentGetEvent   (PIZAgent *x, PIZEventType, PIZEvent **eventPtr);
+void     pizAgentAddEvent (PIZAgent *x, PIZEvent *event);
+PIZError pizAgentGetEvent (PIZAgent *x, PIZEventType, PIZEvent **eventPtr);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
