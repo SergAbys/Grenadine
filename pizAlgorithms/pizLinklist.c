@@ -1,7 +1,7 @@
 /*
  * \file    pizLinklist.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -90,7 +90,7 @@ void pizLinklistClear (PIZLinklist *x)
         if (x->flags & PIZ_LINKLIST_FLAG_FREE_MEMORY) {
             free (elementToBeRemoved->ptr);
         } else if (x->flags & PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY) {
-            pizGrowingArrayFree (elementToBeRemoved->ptr);
+            pizGrowingArrayFree ((PIZGrowingArray *)elementToBeRemoved->ptr);
         }
             
         free (elementToBeRemoved);
@@ -292,7 +292,7 @@ PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr)
         if (x->flags & PIZ_LINKLIST_FLAG_FREE_MEMORY) {
             free (elementToBeRemoved->ptr);
         } else if (x->flags & PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY) {
-            pizGrowingArrayFree (elementToBeRemoved->ptr);
+            pizGrowingArrayFree ((PIZGrowingArray *)elementToBeRemoved->ptr);
         }
             
         free (elementToBeRemoved);
@@ -358,7 +358,7 @@ PIZError pizLinklistChuckByPtr (PIZLinklist *x, void *ptr)
 PIZError pizLinklistSwapByIndexes (PIZLinklist *x, long m, long n)
 {
     long a, b;
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     a = MIN (m, n);
     b = MAX (m, n);

@@ -1,7 +1,7 @@
 /*
  * \file    pizMarkovModel.c
  * \author  Jean Sapristi
- * \date    March 7, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -186,7 +186,7 @@ void pizMarkovModelClear (PIZMarkovModel *x)
 
 PIZError pizMarkovModelAdd (PIZMarkovModel *x, long argc, long *argv)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (argc && argv) {
         long t;
@@ -208,7 +208,7 @@ PIZError pizMarkovModelAdd (PIZMarkovModel *x, long argc, long *argv)
 
 PIZError pizMarkovModelProceed (PIZMarkovModel *x, long argc, long *argv)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (argc && argv) {
         long    i, j = 1;

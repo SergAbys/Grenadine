@@ -1,7 +1,7 @@
 /*
  * \file    pizKohonenMap.c
  * \author  Jean Sapristi
- * \date    March 7, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -118,7 +118,7 @@ void pizKohonenMapFree (PIZKohonenMap *x)
 
 PIZError pizKohonenMapAdd (PIZKohonenMap *x, long argc, long *argv)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (argc && argv) {
     //
@@ -190,7 +190,7 @@ void pizKohonenMapClear (PIZKohonenMap *x)
 
 PIZError pizKohonenMapProceed (PIZKohonenMap *x, long argc, long *argv)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (argc && argv) {
         long    i;

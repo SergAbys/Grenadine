@@ -1,7 +1,7 @@
 /*
  * \file    pizHashTable.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -132,7 +132,7 @@ void pizHashTableClear (PIZHashTable *x)
 
 PIZError pizHashTableAdd (PIZHashTable *x, long key, void *ptr)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (ptr && (key >= 0)) {
         long                p = key % x->size;
@@ -170,7 +170,7 @@ PIZError pizHashTableAdd (PIZHashTable *x, long key, void *ptr)
 
 PIZError pizHashTableRemoveByKeyAndPtr (PIZHashTable *x, long key, void *ptr)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (ptr && (key >= 0)) {
         long p = key % x->size;
@@ -206,7 +206,7 @@ PIZError pizHashTableRemoveByKeyAndPtr (PIZHashTable *x, long key, void *ptr)
 
 PIZError pizHashTablePtrByKey (const PIZHashTable *x, long key, void **ptr)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (*ptr) {
         (*ptr) = NULL;

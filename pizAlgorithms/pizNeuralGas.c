@@ -1,7 +1,7 @@
 /*
  * \file    pizNeuralGas.c
  * \author  Jean Sapristi
- * \date    March 7, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -71,7 +71,7 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
 
     if (x = (PIZNeuralGas *)malloc (sizeof(PIZNeuralGas))) {
     //
-    long err = PIZ_GOOD;
+    PIZError err = PIZ_GOOD;
     
     if (x->headStock = (PIZNeuralGasHead *)malloc (PIZ_ITEMSET128_SIZE * sizeof(PIZNeuralGasHead))) {
         long k, i;
@@ -170,7 +170,7 @@ void pizNeuralGasFree (PIZNeuralGas *x)
 
 PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (argc && argv) {
     //
@@ -369,7 +369,7 @@ void pizNeuralGasClear (PIZNeuralGas *x)
 
 PIZError pizNeuralGasProceed (PIZNeuralGas *x, long argc, long *argv)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (argc && argv) {
     //

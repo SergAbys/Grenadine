@@ -1,7 +1,7 @@
 /*
  * \file    pizFiniteState.c
  * \author  Jean Sapristi
- * \date    March 7, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -150,8 +150,8 @@ void pizFiniteStateFree (PIZFiniteState *x)
 
 PIZError pizFiniteStateAdd (PIZFiniteState *x, long argc, long *argv)
 {
-    long err1 = PIZ_ERROR;
-    long err2 = PIZ_GOOD;
+    PIZError err1 = PIZ_ERROR;
+    PIZError err2 = PIZ_GOOD;
     
     if (argv && argc > 0) {
     //
@@ -234,7 +234,7 @@ void pizFiniteStateClear (PIZFiniteState *x)
 
 PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (((argc > 0) && argv) && (x->count > 0)) {
     //
@@ -314,7 +314,7 @@ long pizFiniteStateCount (const PIZFiniteState *x)
 PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x)
 {
     long i;
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     x->lotteryIndex = 0;
     

@@ -1,7 +1,7 @@
 /*
  * \file    pizKohonenMapExtended.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -80,7 +80,7 @@ double pizKohonenMapStep (const PIZKohonenMap *x)
 
 PIZError pizKohonenMapEncodeToArray (const PIZKohonenMap *x, long n, PIZGrowingArray *a)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if ((n >= 0) && (n < x->mapSize) && a) {
         long i;

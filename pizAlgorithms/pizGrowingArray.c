@@ -1,7 +1,7 @@
 /*
  * \file    pizGrowingArray.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -92,7 +92,7 @@ void pizGrowingArrayClear (PIZGrowingArray *x)
 
 PIZError pizGrowingArrayAppend (PIZGrowingArray *x, long value)
 {   
-    long err = PIZ_GOOD;
+    PIZError err = PIZ_GOOD;
         
     if (x->index == x->size) {   
         long *newValues = NULL;

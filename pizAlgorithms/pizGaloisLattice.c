@@ -1,7 +1,7 @@
 /*
  * \file    pizGaloisLattice.c
  * \author  Jean Sapristi
- * \date    March 7, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -65,7 +65,7 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
 
     if (x = (PIZGaloisLattice *)calloc (1, sizeof(PIZGaloisLattice))) {
     //
-    long err = PIZ_GOOD;
+    PIZError err = PIZ_GOOD;
     
     if (x->stock = (PIZGaloisLatticeConcept *)calloc (PIZ_ITEMSET128_SIZE, sizeof(PIZGaloisLatticeConcept))) {
     //
@@ -181,7 +181,7 @@ void pizGaloisLatticeFree (PIZGaloisLattice *x)
 PIZError pizGaloisLatticeAdd (PIZGaloisLattice *x, long argc, long *argv)
 {
     long i;
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     pizItemset128Clear (&(x->toBeAdded));
     
@@ -336,7 +336,7 @@ void pizGaloisLatticeClear (PIZGaloisLattice *x)
 
 PIZError pizGaloisLatticeProceed (PIZGaloisLattice *x, long argc, long *argv)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if ((argc > 0 && argv) && (x->count > 0)) {
     //
@@ -439,9 +439,9 @@ PIZ_INLINE void pizGaloisLatticeReconnect (PIZGaloisLattice *x, long g, long n)
 
 PIZError pizGaloisLatticeMakeMap (PIZGaloisLattice *x)
 {
-    long i, j = 0;
-    long err = PIZ_GOOD;
-    long k = -1;
+    long     k = -1;
+    long     i, j = 0;
+    PIZError err = PIZ_GOOD;
     
     x->targetedConcept = -1;
     

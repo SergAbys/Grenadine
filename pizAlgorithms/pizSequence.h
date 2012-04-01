@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    March 26, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -68,6 +68,9 @@
 
 #define PIZSEQUENCELOCK         pthread_mutex_lock (&x->lock);
 #define PIZSEQUENCEUNLOCK       pthread_mutex_unlock (&x->lock);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
 #define PIZ_SEQUENCE_TAG(n)     pizItemset128SetAtIndex (&x->changedNotes, (n))     
 
@@ -273,12 +276,6 @@ PIZError        pizSequenceNotesToArray             (PIZSequence *x,
 PIZError        pizSequenceAddNotesWithArray        (PIZSequence *x, const PIZGrowingArray *a, long flags);
 PIZError        pizSequenceZoneToArray              (PIZSequence *x, PIZGrowingArray *a);
 PIZError        pizSequenceSetZoneWithArray         (PIZSequence *x, const PIZGrowingArray *a);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void            pizSequenceTranspose                (PIZSequence *x, long n);
-bool            pizSequenceClean                    (PIZSequence *x, long value);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

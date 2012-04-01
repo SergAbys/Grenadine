@@ -1,7 +1,7 @@
 /*
  * \file    pizFactorOracle.c
  * \author  Jean Sapristi
- * \date    March 7, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -130,7 +130,7 @@ void pizFactorOracleFree (PIZFactorOracle *x)
 PIZError pizFactorOracleAdd (PIZFactorOracle *x, long argc, long *argv)
 {
     long i;
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if ((argc > 0) && argv) {
     //
@@ -141,11 +141,11 @@ PIZError pizFactorOracleAdd (PIZFactorOracle *x, long argc, long *argv)
     long p = x->index;
     
     if (p == x->size && !err) {
-        PIZFactorOracleNode *new = x->nodes;
+        PIZFactorOracleNode *temp = x->nodes;
     
-        if (new = (PIZFactorOracleNode *)realloc (x->nodes, (x->size * 2) * sizeof(PIZFactorOracleNode))) {
+        if (temp = (PIZFactorOracleNode *)realloc (x->nodes, (x->size * 2) * sizeof(PIZFactorOracleNode))) {
             x->size *= 2;
-            x->nodes = new;
+            x->nodes = temp;
         } else {
             err |= PIZ_MEMORY;
         }
@@ -245,7 +245,7 @@ void pizFactorOracleClear (PIZFactorOracle *x)
 
 PIZError pizFactorOracleProceed (PIZFactorOracle *x, long argc, long *argv)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (((argc > 0) && argv) && (x->index > 1)) {
     //

@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceMaxMSP.c
  * \author  Jean Sapristi
- * \date    March 30, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -251,7 +251,7 @@ long pizSequenceSelectNoteWithCoordinates (PIZSequence *x, const PIZCoordinates 
         pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
         
         while (note && !k) {
-            long err = PIZ_GOOD;
+            PIZError err = PIZ_GOOD;
             
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
@@ -304,7 +304,7 @@ long pizSequenceInvertNoteWithCoordinates (PIZSequence *x, const PIZCoordinates 
         pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
         
         while (note) {
-            long err = PIZ_GOOD;
+            PIZError err = PIZ_GOOD;
             
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
@@ -390,7 +390,8 @@ long pizSequenceDragLasso (PIZSequence *x, const PIZCoordinates *m, const PIZCoo
         pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
         
         while (note) {
-            long err, end;
+            long     end;
+            PIZError err;
             
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
@@ -511,7 +512,7 @@ void pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c,
 
 PIZError pizSequenceEncodeToArray (PIZSequence *x, PIZGrowingArray *a)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     long PIZ_SEQUENCE_VERSION_MAJOR = 1;
     
     PIZSEQUENCELOCK
@@ -560,7 +561,7 @@ PIZError pizSequenceEncodeToArray (PIZSequence *x, PIZGrowingArray *a)
 
 PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     PIZSEQUENCELOCK
     

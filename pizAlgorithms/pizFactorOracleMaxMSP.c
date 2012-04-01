@@ -1,7 +1,7 @@
 /*
  * \file    pizFactorOracleExtended.c
  * \author  Jean Sapristi
- * \date    February 28, 2012.
+ * \date    April 1, 2012.
  */
 
 /*
@@ -72,7 +72,7 @@ double pizFactorOracleStraightRatio (const PIZFactorOracle *x)
 
 PIZError pizFactorOracleEncodeToArray (const PIZFactorOracle *x, long node, PIZGrowingArray *a)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if ((node < x->index) && a) {
             err = PIZ_GOOD;

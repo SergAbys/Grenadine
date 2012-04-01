@@ -1,7 +1,7 @@
 /*
  * \file    pizNeuralGas.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -118,7 +118,7 @@ double pizNeuralGasKappa (const PIZNeuralGas *x)
 
 PIZError pizNeuralGasEncodeToArray (const PIZNeuralGas *x, long n, PIZGrowingArray *a)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if ((n >= 0) && (n < x->mapSize) && a) {
         long i, j, t, k = 0;

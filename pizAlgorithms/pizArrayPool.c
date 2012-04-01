@@ -1,7 +1,7 @@
 /*
  * \file    pizArrayPool.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -144,7 +144,7 @@ PIZGrowingArray *pizArrayPoolGetArray (PIZArrayPool *x)
 
 PIZError pizArrayPoolReleaseArray (PIZArrayPool *x, PIZGrowingArray *a)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     PIZLOCK
     

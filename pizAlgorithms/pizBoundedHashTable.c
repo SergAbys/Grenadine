@@ -1,7 +1,7 @@
 /*
  * \file    pizBoundedHashTable.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -146,7 +146,7 @@ void pizBoundedHashTableClear (PIZBoundedHashTable *x)
 
 PIZError pizBoundedHashTableAdd (PIZBoundedHashTable *x, long key, void *ptr)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (ptr && (key >= 0)) {
         long p = key % x->hashSize;
@@ -181,7 +181,7 @@ PIZError pizBoundedHashTableAdd (PIZBoundedHashTable *x, long key, void *ptr)
 
 PIZError pizBoundedHashTableRemoveByKeyAndPtr (PIZBoundedHashTable *x, long key, void *ptr)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (ptr && (key >= 0)) {
         long p = key % x->hashSize;
@@ -216,7 +216,7 @@ long pizBoundedHashTableCount (const PIZBoundedHashTable *x)
 
 PIZError pizBoundedHashTablePtrByKey (const PIZBoundedHashTable *x, long key, void **ptr)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (*ptr) {
         (*ptr) = NULL;

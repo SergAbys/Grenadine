@@ -1,7 +1,7 @@
 /*
  * \file    pizMarkovModelExtended.c
  * \author  Jean Sapristi
- * \date    March 26, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -60,7 +60,7 @@ void pizMarkovModelSetPersistence (PIZMarkovModel *x, double f)
 
 PIZError pizMarkovModelEncodeToArray (const PIZMarkovModel *x, long n, PIZGrowingArray *a)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if ((n >= 0) && (n < x->graphSize) && a) {
         long i;

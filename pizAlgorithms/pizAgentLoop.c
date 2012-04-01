@@ -57,7 +57,7 @@
 
 void *pizAgentEventLoop (void *agent) 
 {
-    PIZAgent *x = agent;  
+    PIZAgent *x = (PIZAgent *)agent;  
     
     while (!EXIT) { 
     //
@@ -125,7 +125,7 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
             
     PIZAGENTLOCKEVENT
     
-    if (!pizLinklistPtrAtIndex (queue, 0, (void *)&event)) {
+    if (!pizLinklistPtrAtIndex (queue, 0, (void **)&event)) {
         pizLinklistChuckByPtr (queue, event);
     }
     
@@ -156,8 +156,8 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
 
 void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
 {
-    bool k = false;
-    long err = PIZ_GOOD; 
+    bool     k = false;
+    PIZError err = PIZ_GOOD; 
 
     do {
     //
@@ -364,7 +364,7 @@ void pizAgentEventLoopGetMethod (PIZEvent *event, PIZAgentMethod *f)
 
 void *pizAgentNotificationLoop (void *agent)
 {
-    PIZAgent *x = agent;  
+    PIZAgent *x = (PIZAgent *)agent;  
     
     while (!EXIT) { 
     //
@@ -396,7 +396,7 @@ void pizAgentNotificationLoopDoEvent (PIZAgent *x)
             
     PIZAGENTLOCKNOTIFICATION
     
-    if (!pizLinklistPtrAtIndex (x->notifyQueue, 0, (void *)&event)) {
+    if (!pizLinklistPtrAtIndex (x->notifyQueue, 0, (void **)&event)) {
         pizLinklistChuckByPtr (x->notifyQueue, event);
     }
     

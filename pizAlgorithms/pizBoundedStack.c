@@ -1,7 +1,7 @@
 /*
  * \file    pizBoundedStack.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -84,7 +84,7 @@ void pizBoundedStackClear (PIZBoundedStack *x)
 
 PIZError pizBoundedStackPush (PIZBoundedStack *x, long value) 
 {   
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (x->stack < x->bound)  {
         err = PIZ_GOOD;
@@ -98,7 +98,7 @@ PIZError pizBoundedStackPush (PIZBoundedStack *x, long value)
 
 PIZError pizBoundedStackPop (PIZBoundedStack *x)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (x->stack) {
         err = PIZ_GOOD;

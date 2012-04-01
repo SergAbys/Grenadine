@@ -1,7 +1,7 @@
 /*
  * \file    pizBoundedQueue.c
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -88,7 +88,7 @@ void pizBoundedQueueClear (PIZBoundedQueue *x)
 
 PIZError pizBoundedQueueAppend (PIZBoundedQueue *x, long value) 
 {   
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (((x->tail + 1) != x->head) && !((x->tail == x->bound) && (x->head == 0))) {
         err = PIZ_GOOD;
@@ -109,7 +109,7 @@ PIZError pizBoundedQueueAppend (PIZBoundedQueue *x, long value)
 
 PIZError pizBoundedQueuePop (PIZBoundedQueue *x)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (x->head != x->tail) {
         err = PIZ_GOOD;
@@ -130,7 +130,7 @@ PIZError pizBoundedQueuePop (PIZBoundedQueue *x)
 
 PIZError pizBoundedQueuePopLastValue (PIZBoundedQueue *x)
 {
-    long err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     
     if (x->tail != x->head) {
         err = PIZ_GOOD;

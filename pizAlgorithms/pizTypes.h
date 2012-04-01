@@ -1,7 +1,7 @@
 /**
  * \file    pizTypes.h
  * \author  Jean Sapristi
- * \date    March 18, 2012.
+ * \date    April 1, 2012.
  */
  
 /*
@@ -44,11 +44,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-typedef enum {
-    PIZ_GOOD    =  0,
-    PIZ_ERROR   =  1, 
-    PIZ_MEMORY  =  2
-    }PIZError;
+#define PIZ_GOOD    0UL
+#define PIZ_ERROR   1UL
+#define PIZ_MEMORY  2UL
+
+typedef unsigned long PIZError;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -102,13 +102,17 @@ typedef enum {
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
- 
-#ifdef __MACH__
-    #define PIZ_EXTERN_INLINE
-    #define PIZ_INLINE inline
-    #define PIZ_EXTERN extern inline
+
+#ifndef __cplusplus
+    #ifdef __MACH__
+        #define PIZ_EXTERN_INLINE
+        #define PIZ_INLINE inline
+        #define PIZ_EXTERN extern inline
+    #else
+        #define PIZ_INLINE 
+    #endif
 #else
-    #define PIZ_INLINE 
+    #define PIZ_INLINE
 #endif
 
 // -------------------------------------------------------------------------------------------------------------
