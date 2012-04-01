@@ -104,7 +104,6 @@ typedef struct _PIZAgent {
     PIZLinklist         *graphicInQueue;
     PIZLinklist         *graphicOutQueue;
     PIZLinklist         *mainQueue;
-    PIZLinklist         *endQueue;
     PIZLinklist         *notifyQueue;
     PIZSequence         *sequence;
     PIZGrowingArray     *tempArray;

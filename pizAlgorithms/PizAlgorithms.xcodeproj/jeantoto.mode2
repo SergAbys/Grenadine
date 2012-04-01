@@ -256,7 +256,7 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>16</integer>
+											<integer>20</integer>
 											<integer>13</integer>
 											<integer>2</integer>
 											<integer>0</integer>
@@ -423,8 +423,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D9C1C415283272001E4C8D</string>
-				<string>96D9C1C515283272001E4C8D</string>
+				<string>96D41522152850EE0076D58F</string>
+				<string>96D41523152850EE0076D58F</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -614,12 +614,14 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string></string>
+								<string>pizAgentLoop.c</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -675,7 +677,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D9C1C615283272001E4C8D</string>
+				<string>96D4150F152850570076D58F</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

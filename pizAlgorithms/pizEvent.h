@@ -107,6 +107,7 @@ typedef enum _PIZEventName {
     PIZ_EVENT_NOTE_CHANGED,
     //
     PIZ_EVENT_END,
+    PIZ_EVENT_LAST,
     PIZ_EVENT_RUN_READY,
     PIZ_EVENT_GUI_READY,
     //

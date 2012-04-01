@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	March 31, 2012.
+ * \date	April 1, 2012.
  */
  
 /*
@@ -71,7 +71,6 @@ PIZAgent *pizAgentNew (void)
     x->graphicInQueue       = pizLinklistNew ( );
     x->graphicOutQueue      = pizLinklistNew ( );
     x->mainQueue            = pizLinklistNew ( );
-    x->endQueue             = pizLinklistNew ( );
     x->notifyQueue          = pizLinklistNew ( );
     x->sequence             = pizSequenceNew (0);
     x->tempArray            = pizGrowingArrayNew (0);
@@ -83,7 +82,6 @@ PIZAgent *pizAgentNew (void)
         x->graphicInQueue &&
         x->graphicOutQueue &&
         x->mainQueue &&
-        x->endQueue &&
         x->notifyQueue && 
         x->sequence &&
         x->tempArray)) {
@@ -161,7 +159,6 @@ void pizAgentFree (PIZAgent *x)
     pizLinklistFree (x->graphicInQueue);
     pizLinklistFree (x->graphicOutQueue);
     pizLinklistFree (x->mainQueue);
-    pizLinklistFree (x->endQueue);
     pizLinklistFree (x->notifyQueue);
     
     pizSequenceFree     (x->sequence);

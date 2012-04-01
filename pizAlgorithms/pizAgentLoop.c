@@ -217,7 +217,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
             x->flags &= ~PIZ_FLAG_PLAYED;
         }
         pizSequenceGoToStart (x->sequence);
-        pizAgentEventLoopDoEnd (x);
+        pizAgentEventLoopNotifyEnd (x);
     }
     //
     } while (k);
@@ -247,27 +247,9 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     PIZAGENTUNLOCKGETTER
 }
 
-void pizAgentEventLoopDoEnd (PIZAgent *x)
+void pizAgentEventLoopNotifyEnd (PIZAgent *x)
 {
-    PIZEvent        *event = NULL;
-    PIZEvent        *nextEvent = NULL;
-    PIZAgentMethod  f = NULL;
-    
-    if (pizLinklistCount (x->endQueue)) {
-        pizLinklistPtrAtIndex (x->endQueue, 0, (void **)&event);
-        
-        while (event) {
-            pizLinklistNextByPtr (x->endQueue, (void *)event, (void **)&nextEvent);
-            DEBUGEVENT
-            pizAgentEventLoopGetMethod (event, &f);
-    
-            if (f) {
-                (*f)(x, event);
-            }
-            
-            event = nextEvent;
-        }
-    }
+    PIZEvent *event = NULL;
     
     event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_END, &x->grainStart);
     if (event) {
