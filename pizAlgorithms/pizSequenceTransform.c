@@ -689,10 +689,6 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
     return haveChanged;
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 bool pizSequenceRotate (PIZSequence *x, PIZSelector selector, long shift)
 {
     long i, k = 0;
@@ -809,10 +805,6 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, bool down)
     
     return haveChanged;
 }
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
 bool pizSequenceChange (PIZSequence *x, PIZSelector selector, long value)
 {

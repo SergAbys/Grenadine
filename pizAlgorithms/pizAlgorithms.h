@@ -1,9 +1,9 @@
 /**
- * \file    pizSequenceTransform.h
+ * \file    pizAlgorithms.h
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 2, 2012.
  */
- 
+
 /*
  *  Copyright (c) 2011, Jean Sapristi & Tom Javel, 
  *  "nicolas.danet@free.fr".
@@ -34,41 +34,36 @@
  *  The fact that you are presently reading this means that you have had
  *  knowledge of the CeCILL-C license and that you accept its terms.
  */
+ 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#ifndef PIZ_ALGORITHMS_H
+#define PIZ_ALGORITHMS_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_SEQUENCE_TRANSFORM_H
-#define PIZ_SEQUENCE_TRANSFORM_H
+#include "pizFactorOracle.h"
+#include "pizGaloisLattice.h"
+#include "pizFiniteState.h"
+#include "pizKohonenMap.h"
+#include "pizNeuralGas.h"
+#include "pizMarkovModel.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizSequence.h"
-#include "pizAlgorithms.h"
-
+typedef enum _PIZAlgorithm {
+    PIZ_ALGORITHM_NONE = 0,
+    PIZ_FACTOR_ORACLE,
+    PIZ_GALOIS_LATTICE,
+    PIZ_FINITE_STATE,
+    PIZ_KOHONEN_MAP,
+    PIZ_NEURAL_GAS,
+    PIZ_MARKOV_MODEL
+    } PIZAlgorithm;
+    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-void pizSequenceClear                   (PIZSequence *x);
-void pizSequenceTranspose               (PIZSequence *x, long n);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-bool pizSequenceClean                   (PIZSequence *x, long value);
-bool pizSequenceProceedAlgorithm        (PIZSequence *x, PIZAlgorithm select, void *algorithm);
-bool pizSequenceCellularAutomata        (PIZSequence *x, long iterate);
-bool pizSequenceGenerator               (PIZSequence *x, long iterate, long division);
-bool pizSequenceRotate                  (PIZSequence *x, PIZSelector selector, long shift);
-bool pizSequenceScramble                (PIZSequence *x, PIZSelector selector);
-bool pizSequenceSort                    (PIZSequence *x, PIZSelector selector, bool down);
-bool pizSequenceChange                  (PIZSequence *x, PIZSelector selector, long value);
-bool pizSequenceSet                     (PIZSequence *x, PIZSelector selector, long value);
-bool pizSequenceRandom                  (PIZSequence *x, PIZSelector selector, long minValue, long maxValue);
-bool pizSequenceKillNotes               (PIZSequence *x);
-bool pizSequenceCycle                   (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_TRANSFORM_H
+#endif  // PIZ_ALGORITHMS_H
