@@ -29,10 +29,6 @@
 #include "ext_atomic.h"
 
 #include "tralalaSymbols.h"
-
-#include "pizSequence.h"
-#include "pizSequenceTransform.h"
-#include "pizSequenceLibrary.h"
 #include "pizSequenceMaxMSP.h"
 
 // -------------------------------------------------------------------------------------------------------------
