@@ -20,6 +20,8 @@ _pizMarkovModelFree
 _pizMarkovModelNew
 _pizMarkovModelProceed
 _pizMarkovModelSetPersistence
+_pizMarkovModelBaumWelch
+_pizMarkovModelFillStochastically
 _foxtrot_assist
 _foxtrot_clear
 _foxtrot_dump

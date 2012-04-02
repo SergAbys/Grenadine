@@ -1,7 +1,7 @@
 /**
  * \file	pizAgentLoop.h
  * \author	Jean Sapristi
- * \date	April 1, 2012.
+ * \date	April 2, 2012.
  */
 
 /*
@@ -50,24 +50,24 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void      *pizAgentEventLoop                  (void *agent);
-PIZ_LOCAL void      *pizAgentNotificationLoop           (void *agent);
+void      *pizAgentEventLoop                  (void *agent);
+void      *pizAgentNotificationLoop           (void *agent);
 
-PIZ_LOCAL PIZError  pizAgentEventLoopDoEvent            (PIZAgent *x, PIZLinklist *queue);
-PIZ_LOCAL void      pizAgentEventLoopDoStep             (PIZAgent *x, bool blank);
-PIZ_LOCAL void      pizAgentEventLoopDoRefresh          (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopNotifyEnd          (PIZAgent *x);
+PIZError  pizAgentEventLoopDoEvent            (PIZAgent *x, PIZLinklist *queue);
+void      pizAgentEventLoopDoStep             (PIZAgent *x, bool blank);
+void      pizAgentEventLoopDoRefresh          (PIZAgent *x);
+void      pizAgentEventLoopNotifyEnd          (PIZAgent *x);
 
-PIZ_LOCAL void      pizAgentNotificationLoopDoEvent     (PIZAgent *x);
+void      pizAgentNotificationLoopDoEvent     (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL bool      pizAgentEventLoopCondition          (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopInit               (PIZAgent *x);
-PIZ_LOCAL bool      pizAgentEventLoopIsWorkTime         (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopSleep              (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopGetMethod          (PIZEvent *event, PIZAgentMethod *f);
+bool      pizAgentEventLoopCondition          (PIZAgent *x);
+void      pizAgentEventLoopInit               (PIZAgent *x);
+bool      pizAgentEventLoopIsWorkTime         (PIZAgent *x);
+void      pizAgentEventLoopSleep              (PIZAgent *x);
+void      pizAgentEventLoopGetMethod          (PIZEvent *event, PIZAgentMethod *f);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

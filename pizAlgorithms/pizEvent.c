@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	April 1, 2012.
+ * \date	April 2, 2012.
  */
  
 /*
@@ -89,25 +89,25 @@ static char *piz_eventNames[ ] = {  "Init",
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent *pizEventNew (PIZEventType type, PIZEventName name)
+PIZEvent *pizEventNew (PIZEventType type, PIZEventIdentifier ie)
 {
     PIZEvent *event = NULL;
     
     if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        event->type = type;
-        event->name = name;
+        event->type       = type;
+        event->identifier = ie;
     }
     
     return event;
 }
 
-PIZEvent *pizEventNewWithTime (PIZEventType type, PIZEventName name, PIZTime *time)
+PIZEvent *pizEventNewWithTime (PIZEventType type, PIZEventIdentifier ie, PIZTime *time)
 {
     PIZEvent *event = NULL;
     
     if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        event->type = type;
-        event->name = name;
+        event->type       = type;
+        event->identifier = ie;
         
         if (time) {
             pizTimeCopy (&event->data.time, time);
@@ -117,27 +117,27 @@ PIZEvent *pizEventNewWithTime (PIZEventType type, PIZEventName name, PIZTime *ti
     return event;
 }
 
-PIZEvent *pizEventNewWithLong (PIZEventType type, PIZEventName name, long n)
+PIZEvent *pizEventNewWithLong (PIZEventType type, PIZEventIdentifier ie, long n)
 {
     PIZEvent *event = NULL;
     
     if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        event->type = type;
-        event->name = name;
+        event->type       = type;
+        event->identifier = ie;
         event->data.values[0] = n;
     }
     
     return event;
 }
 
-PIZEvent *pizEventNewWithArray (PIZEventType type, PIZEventName name, long argc, long *argv, long tag) 
+PIZEvent *pizEventNewWithArray (PIZEventType type, PIZEventIdentifier ie, long argc, long *argv, long tag) 
 {
     PIZEvent *event = NULL; 
     
     if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        event->type = type;
-        event->name = name;
-        event->tag  = tag;
+        event->type       = type;
+        event->identifier = ie;
+        event->tag        = tag;
         
         if (argv) {
             long i;
@@ -151,9 +151,9 @@ PIZEvent *pizEventNewWithArray (PIZEventType type, PIZEventName name, long argc,
     return event;
 }
 
-char *pizEventNameAsString (PIZEvent *x)
+char *pizEventName (PIZEvent *x)
 {
-    return piz_eventNames[x->name];
+    return piz_eventNames[x->identifier];
 }
 
 // -------------------------------------------------------------------------------------------------------------

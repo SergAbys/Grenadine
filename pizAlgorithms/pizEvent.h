@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	April 1, 2012.
+ * \date	April 2, 2012.
  */
 
 /*
@@ -66,7 +66,7 @@ typedef enum _PIZEventType {
     PIZ_EVENT_NOTIFICATION
     } PIZEventType;
 
-typedef enum _PIZEventName {
+typedef enum _PIZEventIdentifier {
     //
     PIZ_EVENT_INIT            = 0,
     PIZ_EVENT_PLAY            = 1,
@@ -111,7 +111,7 @@ typedef enum _PIZEventName {
     PIZ_EVENT_RUN_READY,
     PIZ_EVENT_GUI_READY,
     //
-    } PIZEventName;
+    } PIZEventIdentifier;
     
 typedef struct _PIZEventData {
     PIZTime time;
@@ -119,20 +119,20 @@ typedef struct _PIZEventData {
 } PIZEventData;
     
 typedef struct _PIZEvent {
-    PIZEventType    type;
-    PIZEventName    name;
-    long            tag;
-    PIZEventData    data; 
+    PIZEventType        type;
+    PIZEventIdentifier  identifier;
+    long                tag;
+    PIZEventData        data; 
     } PIZEvent;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent    *pizEventNew            (PIZEventType type, PIZEventName name);
-PIZEvent    *pizEventNewWithTime    (PIZEventType type, PIZEventName name, PIZTime *t);
-PIZEvent    *pizEventNewWithLong    (PIZEventType type, PIZEventName name, long n);
-PIZEvent    *pizEventNewWithArray   (PIZEventType type, PIZEventName name, long argc, long *argv, long tag);
-char        *pizEventNameAsString   (PIZEvent *x);  
+PIZEvent    *pizEventNew            (PIZEventType type, PIZEventIdentifier ie);
+PIZEvent    *pizEventNewWithTime    (PIZEventType type, PIZEventIdentifier ie, PIZTime *t);
+PIZEvent    *pizEventNewWithLong    (PIZEventType type, PIZEventIdentifier ie, long n);
+PIZEvent    *pizEventNewWithArray   (PIZEventType type, PIZEventIdentifier ie, long argc, long *argv, long tag);
+char        *pizEventName           (PIZEvent *x);  
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 /**
- * \file	pizSequencePrivate.h
+ * \file	pizSequenceLibrary.h
  * \author	Jean Sapristi
  * \date	April 2, 2012.
  */
@@ -38,8 +38,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_SEQUENCE_PRIVATE_H
-#define PIZ_SEQUENCE_PRIVATE_H
+#ifndef PIZ_SEQUENCE_LIBRARY_H
+#define PIZ_SEQUENCE_LIBRARY_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -49,28 +49,28 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError            pizSequenceSetZoneWithArray         (PIZSequence *x, const PIZGrowingArray *a);
-PIZError            pizSequenceAddNotesWithArray        (PIZSequence *x, const PIZGrowingArray *a, long flags);
+PIZError    pizSequenceSetZoneWithArray         (PIZSequence *x, const PIZGrowingArray *a);
+PIZError    pizSequenceAddNotesWithArray        (PIZSequence *x, const PIZGrowingArray *a, long flags);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZNote   *pizSequenceAddNote                 (PIZSequence *x, long *values, long flags);
+PIZNote     *pizSequenceAddNote                 (PIZSequence *x, long *values, long flags);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void      pizSequenceRemoveNote               (PIZSequence *x, PIZNote *note);
-PIZ_LOCAL void      pizSequenceRemoveAllNotes           (PIZSequence *x);
-PIZ_LOCAL void      pizSequenceMoveNote                 (PIZSequence *x, PIZNote *note, long newPosition);
-PIZ_LOCAL void      pizSequenceMakeMap                  (PIZSequence *x);
+void        pizSequenceRemoveNote               (PIZSequence *x, PIZNote *note);
+void        pizSequenceRemoveAllNotes           (PIZSequence *x);
+void        pizSequenceMoveNote                 (PIZSequence *x, PIZNote *note, long newPosition);
+void        pizSequenceMakeMap                  (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL long      pizSequenceMovePitchToAmbitus       (PIZSequence *x, long pitch);
-PIZ_LOCAL long      pizSequenceSnapPositionToPattern    (PIZSequence *x, long toSnapped, long patternSize);
+long        pizSequenceMovePitchToAmbitus       (PIZSequence *x, long pitch);
+long        pizSequenceSnapPositionToPattern    (PIZSequence *x, long toSnapped, long patternSize);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_PRIVATE_H
+#endif // PIZ_SEQUENCE_LIBRARY_H

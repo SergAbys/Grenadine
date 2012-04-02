@@ -33,8 +33,8 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 353227351;
-			PBXWorkspaceStateSaveDate = 353227351;
+			PBXPerProjectTemplateStateSaveDate = 355063947;
+			PBXWorkspaceStateSaveDate = 355063947;
 		};
 		sourceControlManager = 96A18AD610AF052E007228CF /* Source Control */;
 		userBuildSettings = {
@@ -63,8 +63,8 @@
 	};
 	96D0C5F1141933080099A43A /* foxtrotHide.txt */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1234, 750}}";
-			sepNavSelRange = "{444, 0}";
+			sepNavIntBoundsRect = "{{0, 0}, {1234, 800}}";
+			sepNavSelRange = "{569, 0}";
 			sepNavVisRect = "{{0, 105}, {1234, 645}}";
 			sepNavWindowFrame = "{{15, -1}, {1279, 774}}";
 		};

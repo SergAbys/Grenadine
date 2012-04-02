@@ -1,7 +1,7 @@
 /**
  * \file    pizMarkovModel.h
  * \author  Jean Sapristi
- * \date    March 7, 2012.
+ * \date    April 2, 2012.
  */
 
 /*
@@ -75,18 +75,18 @@ PIZ_START_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZMarkovModel  *pizMarkovModelNew      (long argc, long *argv);
-void            pizMarkovModelFree      (PIZMarkovModel *x);
-PIZError        pizMarkovModelAdd       (PIZMarkovModel *x, long argc, long *argv);
-void            pizMarkovModelClear     (PIZMarkovModel *x);
-PIZError        pizMarkovModelProceed   (PIZMarkovModel *x, long argc, long *argv);
-long            pizMarkovModelCount     (const PIZMarkovModel *x);
+PIZMarkovModel      *pizMarkovModelNew                  (long argc, long *argv);
+void                pizMarkovModelFree                  (PIZMarkovModel *x);
+PIZError            pizMarkovModelAdd                   (PIZMarkovModel *x, long argc, long *argv);
+void                pizMarkovModelClear                 (PIZMarkovModel *x);
+PIZError            pizMarkovModelProceed               (PIZMarkovModel *x, long argc, long *argv);
+long                pizMarkovModelCount                 (const PIZMarkovModel *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZ_INLINE void   pizMarkovModelBaumWelch             (PIZMarkovModel *x, long argc, long *argv);
-PIZ_LOCAL void              pizMarkovModelFillStochastically    (PIZMarkovModel *x, long argc, double *argv);
+PIZ_INLINE void     pizMarkovModelBaumWelch             (PIZMarkovModel *x, long argc, long *argv);
+void                pizMarkovModelFillStochastically    (PIZMarkovModel *x, long argc, double *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

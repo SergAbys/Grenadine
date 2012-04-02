@@ -46,7 +46,7 @@
 
 #include "pizSequence.h"
 #include "pizSequenceTransform.h"
-#include "pizSequencePrivate.h"
+#include "pizSequenceLibrary.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -59,59 +59,59 @@ typedef struct  _PIZCoordinates {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-bool        pizSequenceHasMarkedNote                (PIZSequence *x);
-long        pizSequenceMarkedNoteValue              (PIZSequence *x, PIZSelector selector);
-void        pizSequenceChangeMarkedNoteValue        (PIZSequence *x, PIZSelector selector, long value);
+bool            pizSequenceHasMarkedNote                (PIZSequence *x);
+long            pizSequenceMarkedNoteValue              (PIZSequence *x, PIZSelector selector);
+void            pizSequenceChangeMarkedNoteValue        (PIZSequence *x, PIZSelector selector, long value);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError    pizSequenceZoneToArray                  (PIZSequence *x, PIZGrowingArray *a);
-PIZError    pizSequenceNotesToArray                 (PIZSequence *x, 
-                                                    PIZGrowingArray *unselected, 
-                                                    PIZGrowingArray *selected);
+PIZError        pizSequenceZoneToArray                  (PIZSequence *x, PIZGrowingArray *a);
+PIZError        pizSequenceNotesToArray                 (PIZSequence *x, 
+                                                        PIZGrowingArray *unselected, 
+                                                        PIZGrowingArray *selected);
                                                     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void        pizSequenceInitTempZone                 (PIZSequence *x);
-void        pizSequencePushTempZone                 (PIZSequence *x);
+void            pizSequenceInitTempZone                 (PIZSequence *x);
+void            pizSequencePushTempZone                 (PIZSequence *x);
 
-bool        pizSequenceResizeTempZone               (PIZSequence *x, 
-                                                    const PIZCoordinates *c, 
-                                                    PIZDataIndex side);
+bool            pizSequenceResizeTempZone               (PIZSequence *x, 
+                                                        const PIZCoordinates *c, 
+                                                        PIZDataIndex side);
                                                     
-bool        pizSequenceMoveTempZone                 (PIZSequence *x, long deltaPitch, long deltaPosition);
-void        pizSequenceTempZoneToArray              (PIZSequence *x, PIZGrowingArray *a);
+bool            pizSequenceMoveTempZone                 (PIZSequence *x, long deltaPitch, long deltaPosition);
+void            pizSequenceTempZoneToArray              (PIZSequence *x, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void        pizSequenceSelectAllNotes               (PIZSequence *x);
-void        pizSequenceUnselectAllNotes             (PIZSequence *x);
-long        pizSequenceSelectNoteWithCoordinates    (PIZSequence *x, const PIZCoordinates *c);
-long        pizSequenceInvertNoteWithCoordinates    (PIZSequence *x, const PIZCoordinates *c);
+void            pizSequenceSelectAllNotes               (PIZSequence *x);
+void            pizSequenceUnselectAllNotes             (PIZSequence *x);
+long            pizSequenceSelectNoteWithCoordinates    (PIZSequence *x, const PIZCoordinates *c);
+long            pizSequenceInvertNoteWithCoordinates    (PIZSequence *x, const PIZCoordinates *c);
 
-void        pizSequenceInitLasso                    (PIZSequence *x);
-long        pizSequenceDragLasso                    (PIZSequence *x, 
-                                                    const PIZCoordinates *m, 
-                                                    const PIZCoordinates *n, 
-                                                    bool reverse);
+void            pizSequenceInitLasso                    (PIZSequence *x);
+long            pizSequenceDragLasso                    (PIZSequence *x, 
+                                                        const PIZCoordinates *m, 
+                                                        const PIZCoordinates *n, 
+                                                        bool reverse);
                                                     
-void        pizSequenceRemoveSelectedNotes          (PIZSequence *x);
-void        pizSequenceAddNoteWithCoordinates       (PIZSequence *x, const PIZCoordinates *c, long flags);
+void            pizSequenceRemoveSelectedNotes          (PIZSequence *x);
+void            pizSequenceAddNoteWithCoordinates       (PIZSequence *x, const PIZCoordinates *c, long flags);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError    pizSequenceEncodeToArray                (PIZSequence *x, PIZGrowingArray *a);
-PIZError    pizSequenceDecodeWithArray              (PIZSequence *x, const PIZGrowingArray *a);
+PIZError        pizSequenceEncodeToArray                (PIZSequence *x, PIZGrowingArray *a);
+PIZError        pizSequenceDecodeWithArray              (PIZSequence *x, const PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZ_INLINE void pizSequenceUnselectNotes  (PIZSequence *x);
-PIZ_LOCAL PIZ_INLINE long pizSequenceSnapRound      (PIZSequence *x, long toSnapped);
+PIZ_INLINE void pizSequenceUnselectNotes                (PIZSequence *x);
+PIZ_INLINE long pizSequenceSnapRound                    (PIZSequence *x, long toSnapped);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

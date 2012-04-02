@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	April 1, 2012.
+ * \date	April 2, 2012.
  */
 
 /*
@@ -84,13 +84,13 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "ext.h"
-#define DEBUGEVENT                      if (event) {                                                        \
-                                            post ("%s / %s", pizEventNameAsString (event), __FUNCTION__);   \
+#define DEBUGEVENT                      if (event) {                                                \
+                                            post ("%s / %s", pizEventName (event), __FUNCTION__);   \
                                         }
                                         
-#define DEBUGTIME                       PIZTime ttt;                                                        \
-                                        pizTimeSet (&ttt);                                                  \
-                                        post ("%llu / %s", ttt, __FUNCTION__);                              \
+#define DEBUGTIME                       PIZTime ttt;                                                \
+                                        pizTimeSet (&ttt);                                          \
+                                        post ("%llu / %s", ttt, __FUNCTION__);                      \
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -23,6 +23,7 @@ _pizGrowingArrayRemoveIndex
 _pizGrowingArrayRemoveLastValue
 _pizGrowingArraySetValueAtIndex
 _pizGrowingArrayValueAtIndex
+_pizGrowingArrayAppendPtr
 _zoulou_assist
 _zoulou_clear
 _zoulou_dump

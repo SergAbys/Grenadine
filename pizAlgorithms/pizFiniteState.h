@@ -1,7 +1,7 @@
 /**
  * \file    pizFiniteState.h
  * \author  Jean Sapristi
- * \date    March 7, 2012.
+ * \date    April 2, 2012.
  */
 
 /*
@@ -77,17 +77,17 @@ PIZ_START_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZFiniteState  *pizFiniteStateNew      (long argc, long *argv);
-void            pizFiniteStateFree      (PIZFiniteState *x);
-PIZError        pizFiniteStateAdd       (PIZFiniteState *x, long argc, long *argv);
-void            pizFiniteStateClear     (PIZFiniteState *x);
-PIZError        pizFiniteStateProceed   (PIZFiniteState *x, long argc, long *argv);
-long            pizFiniteStateCount     (const PIZFiniteState *x);
+PIZFiniteState          *pizFiniteStateNew      (long argc, long *argv);
+void                    pizFiniteStateFree      (PIZFiniteState *x);
+PIZError                pizFiniteStateAdd       (PIZFiniteState *x, long argc, long *argv);
+void                    pizFiniteStateClear     (PIZFiniteState *x);
+PIZError                pizFiniteStateProceed   (PIZFiniteState *x, long argc, long *argv);
+long                    pizFiniteStateCount     (const PIZFiniteState *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x);
+PIZ_INLINE PIZError     pizFiniteStateMergeNodes (PIZFiniteState *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

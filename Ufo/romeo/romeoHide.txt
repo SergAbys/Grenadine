@@ -12,6 +12,9 @@ _pizGaloisLatticeEncodeToArray
 _pizGaloisLatticeFree
 _pizGaloisLatticeNew
 _pizGaloisLatticeProceed
+_pizGaloisLatticeKillConcept
+_pizGaloisLatticeMakeMap
+_pizGaloisLatticeReconnect
 _pizGrowingArrayAppend
 _pizGrowingArrayAppendArray
 _pizGrowingArrayClear

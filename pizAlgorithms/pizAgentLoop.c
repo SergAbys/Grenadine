@@ -349,7 +349,7 @@ void pizAgentEventLoopSleep (PIZAgent *x)
 
 void pizAgentEventLoopGetMethod (PIZEvent *event, PIZAgentMethod *f)
 {
-    switch (event->name) {
+    switch (event->identifier) {
         case PIZ_EVENT_PLAY     : *f = pizAgentMethodPlay;       break;
         case PIZ_EVENT_STOP     : *f = pizAgentMethodStop;       break;
         case PIZ_EVENT_LOOP     : *f = pizAgentMethodLoop;       break;

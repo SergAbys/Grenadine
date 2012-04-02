@@ -49,11 +49,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void pizAgentMethodPlay       (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL void pizAgentMethodStop       (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL void pizAgentMethodLoop       (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL void pizAgentMethodUnloop     (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL void pizAgentMethodBPM        (PIZAgent *x, PIZEvent *event);
+void pizAgentMethodPlay       (PIZAgent *x, PIZEvent *event);
+void pizAgentMethodStop       (PIZAgent *x, PIZEvent *event);
+void pizAgentMethodLoop       (PIZAgent *x, PIZEvent *event);
+void pizAgentMethodUnloop     (PIZAgent *x, PIZEvent *event);
+void pizAgentMethodBPM        (PIZAgent *x, PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

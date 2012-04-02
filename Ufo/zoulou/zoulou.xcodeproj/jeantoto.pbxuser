@@ -11,8 +11,8 @@
 		breakpointsGroup = 96D9BA9D14E0225800245697 /* XCBreakpointsBucket */;
 		codeSenseManager = 968B637510BAC78D00DEB777 /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 355051473;
-			PBXWorkspaceStateSaveDate = 355051473;
+			PBXPerProjectTemplateStateSaveDate = 355064443;
+			PBXWorkspaceStateSaveDate = 355064443;
 		};
 		sourceControlManager = 968B637410BAC78D00DEB777 /* Source Control */;
 		userBuildSettings = {
@@ -43,9 +43,9 @@
 	};
 	96CB70DF1407C35500601EBA /* zoulouHide.txt */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1234, 850}}";
-			sepNavSelRange = "{120, 0}";
-			sepNavVisRect = "{{0, 0}, {1234, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1234, 875}}";
+			sepNavSelRange = "{655, 0}";
+			sepNavVisRect = "{{0, 101}, {1234, 645}}";
 			sepNavWindowFrame = "{{15, -1}, {1279, 774}}";
 		};
 	};

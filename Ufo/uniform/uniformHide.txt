@@ -19,6 +19,7 @@ _pizFiniteStateCount
 _pizFiniteStateFree
 _pizFiniteStateNew
 _pizFiniteStateProceed
+_pizFiniteStateMergeNodes
 _uniform_assist
 _uniform_clear
 _uniform_free
