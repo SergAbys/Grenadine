@@ -68,11 +68,11 @@ typedef uint64_t PIZNano;
 // -------------------------------------------------------------------------------------------------------------
 
 void        pizTimeSet              (PIZTime *t);
-void        pizTimeCopy             (PIZTime *t, PIZTime *toCopy);
-void        pizTimeAddNano          (PIZTime *t, PIZNano *ns); 
-PIZError    pizTimeElapsedNano      (PIZTime *t0, PIZTime *t1, PIZNano *result);
-void        pizTimespecWithNano     (struct timespec *t, PIZNano *ns);
-bool        pizTimeIsZero           (PIZTime *t);
+void        pizTimeCopy             (PIZTime *t, const PIZTime *toCopy);
+void        pizTimeAddNano          (PIZTime *t, const PIZNano *ns); 
+PIZError    pizTimeElapsedNano      (const PIZTime *t0, const PIZTime *t1, PIZNano *result);
+void        pizTimespecWithNano     (struct timespec *t, const PIZNano *ns);
+bool        pizTimeIsZero           (const PIZTime *t);
 void        pizTimeSetNano          (PIZNano *ns, double f);
 
 // -------------------------------------------------------------------------------------------------------------
@@ -87,18 +87,18 @@ PIZ_EXTERN void pizTimeSet (PIZTime *t)
     (*t) = mach_absolute_time ( );
 }
 
-PIZ_EXTERN void pizTimeCopy (PIZTime *t, PIZTime *toCopy)
+PIZ_EXTERN void pizTimeCopy (PIZTime *t, const PIZTime *toCopy)
 {
     (*t) = (*toCopy);
 }
 
-PIZ_EXTERN void pizTimespecWithNano (struct timespec *t, PIZNano *ns)
+PIZ_EXTERN void pizTimespecWithNano (struct timespec *t, const PIZNano *ns)
 {
     t->tv_sec  = (time_t)(*ns / PIZ_TIME_NANO_PER_SECOND);
     t->tv_nsec = (long)(*ns % PIZ_TIME_NANO_PER_SECOND);
 }
 
-PIZ_EXTERN bool pizTimeIsZero (PIZTime *t)
+PIZ_EXTERN bool pizTimeIsZero (const PIZTime *t)
 {
     return ((*t) == PIZ_TIME_ZERO);
 }

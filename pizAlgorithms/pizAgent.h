@@ -84,13 +84,14 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "ext.h"
-#define DEBUGEVENT                      if (event) {                                                \
-                                            post ("%s / %s", pizEventName (event), __FUNCTION__);   \
+
+#define DEBUGEVENT                      if (event) {                                                    \
+                                            post ("%s / %s", pizEventGetName (event), __FUNCTION__);    \
                                         }
-                                        
-#define DEBUGTIME                       PIZTime ttt;                                                \
-                                        pizTimeSet (&ttt);                                          \
-                                        post ("%llu / %s", ttt, __FUNCTION__);                      \
+                                            
+#define DEBUGTIME                       PIZTime ttt;                                                    \
+                                        pizTimeSet (&ttt);                                              \
+                                        post ("%llu / %s", ttt, __FUNCTION__);                          \
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -120,7 +121,7 @@ typedef struct _PIZAgent {
     long                err1;
     long                err2;
     } PIZAgent;  
-                              
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
@@ -137,7 +138,7 @@ void     pizAgentFree     (PIZAgent *x);
 // -------------------------------------------------------------------------------------------------------------
 
 void     pizAgentAddEvent (PIZAgent *x, PIZEvent *event);
-PIZError pizAgentGetEvent (PIZAgent *x, PIZEventType, PIZEvent **eventPtr);
+PIZError pizAgentGetEvent (PIZAgent *x, PIZEventType type, PIZEvent **eventPtr);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

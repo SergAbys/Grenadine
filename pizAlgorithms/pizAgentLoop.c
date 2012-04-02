@@ -217,7 +217,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
             x->flags &= ~PIZ_AGENT_FLAG_PLAYED;
         }
         pizSequenceGoToStart (x->sequence);
-        pizAgentEventLoopNotifyEnd (x);
+        pizAgentEventLoopDoEnd (x);
     }
     //
     } while (k);
@@ -247,7 +247,7 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     PIZAGENTUNLOCKGETTER
 }
 
-void pizAgentEventLoopNotifyEnd (PIZAgent *x)
+void pizAgentEventLoopDoEnd (PIZAgent *x)
 {
     PIZEvent *event = NULL;
     
@@ -347,9 +347,9 @@ void pizAgentEventLoopSleep (PIZAgent *x)
     }
 }
 
-void pizAgentEventLoopGetMethod (PIZEvent *event, PIZAgentMethod *f)
+void pizAgentEventLoopGetMethod (const PIZEvent *x, PIZAgentMethod *f)
 {
-    switch (event->identifier) {
+    switch (x->identifier) {
         case PIZ_EVENT_PLAY     : *f = pizAgentMethodPlay;       break;
         case PIZ_EVENT_STOP     : *f = pizAgentMethodStop;       break;
         case PIZ_EVENT_LOOP     : *f = pizAgentMethodLoop;       break;
@@ -382,7 +382,7 @@ void *pizAgentNotificationLoop (void *agent)
     PIZAGENTUNLOCKNOTIFICATION
         
     if (!EXIT) {
-        pizAgentNotificationLoopDoEvent (x);
+        pizAgentNotificationLoopNotify (x);
     }
     //    
     }
@@ -390,7 +390,7 @@ void *pizAgentNotificationLoop (void *agent)
     pthread_exit (NULL);
 }
 
-void pizAgentNotificationLoopDoEvent (PIZAgent *x)
+void pizAgentNotificationLoopNotify (PIZAgent *x)
 {
     PIZEvent *event = NULL;
             

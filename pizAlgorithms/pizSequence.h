@@ -255,6 +255,12 @@ PIZError        pizSequenceSetPattern               (PIZSequence *x, const PIZGr
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+PIZError        pizSequenceSetZone                  (PIZSequence *x, const PIZGrowingArray *a);
+PIZError        pizSequenceAddNotes                 (PIZSequence *x, const PIZGrowingArray *a, long flags);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 long            pizSequenceIndex                    (PIZSequence *x);
 bool            pizSequenceIsAtEnd                  (PIZSequence *x);
 void            pizSequenceGoToStart                (PIZSequence *x);

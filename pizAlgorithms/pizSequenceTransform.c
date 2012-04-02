@@ -487,7 +487,7 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                 values[PIZ_DATA_IS_SELECTED] = false;
                 values[PIZ_DATA_IS_MARKED]   = false;
                 
-                newNote = pizSequenceAddNote (x, values, PIZ_SEQUENCE_ADD_FLAG_CLIP);
+                newNote = pizSequenceNewNote (x, values, PIZ_SEQUENCE_ADD_FLAG_CLIP);
                 
                 if (newNote) {
                     pizBoundedHashTableAdd (x->hashTable, hPat[j], (void *)newNote);
@@ -656,7 +656,7 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
         values[PIZ_DATA_IS_SELECTED]    = false;
         values[PIZ_DATA_IS_MARKED]      = false;
 
-        note2 = pizSequenceAddNote (x, values, PIZ_SEQUENCE_ADD_FLAG_CLIP);
+        note2 = pizSequenceNewNote (x, values, PIZ_SEQUENCE_ADD_FLAG_CLIP);
         
         if (note2) {
             pizBoundedHashTableAdd (x->hashTable, newKey, (void *)note2);
@@ -1083,73 +1083,6 @@ bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a
     }
     
     PIZSEQUENCEUNLOCK
-    
-    return haveChanged;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-long pizSequencePickUpNotes (PIZSequence *x)
-{
-    long i, k = 0;
-    
-    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
-        PIZNote *note       = NULL;
-        PIZNote *nextNote   = NULL;
-        
-        long p = pizGrowingArrayValueAtIndex (x->map, i);
-        
-        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-        
-        while (note) {
-            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-                
-            x->notes1[k] = note;
-            k ++;
-                
-            note = nextNote;
-        }
-    }
-    
-    return k;
-}
-
-bool pizSequenceFillValues (PIZSequence *x, PIZSelector selector, long k, bool reverse)
-{
-    long i, temp;
-    bool haveChanged = false;
-    
-    if (selector == PIZ_DURATION) {
-        for (i = 0; i < k; i++) {
-            if (!reverse) {
-                temp = MIN (x->values1[i], (x->timelineSize - x->notes1[i]->position));
-            } else {
-                temp = MIN (x->values1[(k - 1) - i], (x->timelineSize - x->notes1[i]->position));
-            }
-            
-            if (x->notes1[i]->data[PIZ_DURATION] != temp) {
-                x->notes1[i]->data[PIZ_DURATION] = temp;
-                pizItemset128SetAtIndex (&x->changedNotes, x->notes1[i]->tag);
-                haveChanged = true;
-            }
-        }
-    } else {
-        for (i = 0; i < k; i++) {
-            if (!reverse) {
-                temp = x->values1[i];
-            } else {
-                temp = x->values1[(k - 1) - i];
-            }
-            
-            if (x->notes1[i]->data[selector] != temp) {
-                x->notes1[i]->data[selector] = temp;
-                pizItemset128SetAtIndex (&x->changedNotes, x->notes1[i]->tag);
-                haveChanged = true;
-            }
-        }
-    }
     
     return haveChanged;
 }

@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 01/04/12.
+ *  Last modified : 02/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -317,7 +317,7 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
             ARRAYSLOCK
             
             pizSequenceRemoveSelectedNotes (x->user);
-            pizSequenceAddNotesWithArray   (x->user, x->selected, PIZ_SEQUENCE_ADD_FLAG_NONE);
+            pizSequenceAddNotes   (x->user, x->selected, PIZ_SEQUENCE_ADD_FLAG_NONE);
             
             ARRAYSUNLOCK
             
@@ -898,8 +898,8 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
        
         ARRAYSLOCK
         
-        pizSequenceRemoveSelectedNotes  (x->user);
-        pizSequenceAddNotesWithArray    (x->user, x->selected, PIZ_SEQUENCE_ADD_FLAG_NONE);
+        pizSequenceRemoveSelectedNotes (x->user);
+        pizSequenceAddNotes (x->user, x->selected, PIZ_SEQUENCE_ADD_FLAG_NONE);
         
         ARRAYSUNLOCK
             

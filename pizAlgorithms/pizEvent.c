@@ -101,7 +101,7 @@ PIZEvent *pizEventNew (PIZEventType type, PIZEventIdentifier ie)
     return event;
 }
 
-PIZEvent *pizEventNewWithTime (PIZEventType type, PIZEventIdentifier ie, PIZTime *time)
+PIZEvent *pizEventNewWithTime (PIZEventType type, PIZEventIdentifier ie, const PIZTime *time)
 {
     PIZEvent *event = NULL;
     
@@ -151,7 +151,7 @@ PIZEvent *pizEventNewWithArray (PIZEventType type, PIZEventIdentifier ie, long a
     return event;
 }
 
-char *pizEventName (PIZEvent *x)
+char *pizEventGetName (const PIZEvent *x)
 {
     return piz_eventNames[x->identifier];
 }

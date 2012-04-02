@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 01/04/12.
+ *  Last modified : 02/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ void tralala_copy (t_tralala *x)
             }
         }
         
-        pizSequenceAddNotesWithArray (x->live, tempArrayB, PIZ_SEQUENCE_ADD_FLAG_PATTERN);
+        pizSequenceAddNotes (x->live, tempArrayB, PIZ_SEQUENCE_ADD_FLAG_PATTERN);
     }
     
     ARRAY_RELEASE (tempArrayA);
@@ -86,9 +86,9 @@ void tralala_setLiveByUser (t_tralala *x)
     if (!err) {
         long addFlags = PIZ_SEQUENCE_ADD_FLAG_PATTERN | PIZ_SEQUENCE_ADD_FLAG_CLEAR;
         
-        pizSequenceAddNotesWithArray (x->live, tempArrayA, addFlags);
-        pizSequenceSetZoneWithArray  (x->live, tempArrayB);
-        pizSequenceSetZoneWithArray  (x->listen, tempArrayB);
+        pizSequenceAddNotes (x->live, tempArrayA, addFlags);
+        pizSequenceSetZone  (x->live, tempArrayB);
+        pizSequenceSetZone  (x->listen, tempArrayB);
     }
     
     ARRAY_RELEASE (tempArrayA);
@@ -456,7 +456,7 @@ void tralala_sequenceNote (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
                 mode = PIZ_SEQUENCE_ADD_FLAG_AMBITUS;
             }
             
-            data.draw &= !(pizSequenceAddNotesWithArray (data.sequence, tempArray, mode)); 
+            data.draw &= !(pizSequenceAddNotes (data.sequence, tempArray, mode)); 
         }
         
         ARRAY_RELEASE (tempArray);
@@ -481,10 +481,10 @@ void tralala_sequenceZone (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
             pizGrowingArrayAppend (tempArray, data.values[2]);
             pizGrowingArrayAppend (tempArray, data.values[3]);
 
-            data.draw &= !(pizSequenceSetZoneWithArray (data.sequence, tempArray));
+            data.draw &= !(pizSequenceSetZone (data.sequence, tempArray));
             
             if (data.sequence == x->live) {
-                pizSequenceSetZoneWithArray (x->listen, tempArray);
+                pizSequenceSetZone (x->listen, tempArray);
             }
         }
         

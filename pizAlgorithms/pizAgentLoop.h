@@ -56,9 +56,9 @@ void      *pizAgentNotificationLoop           (void *agent);
 PIZError  pizAgentEventLoopDoEvent            (PIZAgent *x, PIZLinklist *queue);
 void      pizAgentEventLoopDoStep             (PIZAgent *x, bool blank);
 void      pizAgentEventLoopDoRefresh          (PIZAgent *x);
-void      pizAgentEventLoopNotifyEnd          (PIZAgent *x);
+void      pizAgentEventLoopDoEnd              (PIZAgent *x);
 
-void      pizAgentNotificationLoopDoEvent     (PIZAgent *x);
+void      pizAgentNotificationLoopNotify      (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ bool      pizAgentEventLoopCondition          (PIZAgent *x);
 void      pizAgentEventLoopInit               (PIZAgent *x);
 bool      pizAgentEventLoopIsWorkTime         (PIZAgent *x);
 void      pizAgentEventLoopSleep              (PIZAgent *x);
-void      pizAgentEventLoopGetMethod          (PIZEvent *event, PIZAgentMethod *f);
+void      pizAgentEventLoopGetMethod          (const PIZEvent *x, PIZAgentMethod *f);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

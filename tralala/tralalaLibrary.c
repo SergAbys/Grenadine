@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 01/04/12.
+ *  Last modified : 02/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -338,7 +338,7 @@ bool tralala_pasteFromClipboard (t_tralala *x)
             pizGrowingArraySetValueAtIndex (tll_clipboard, i + PIZ_DATA_PITCH, pitch);
         }
         
-        pizSequenceAddNotesWithArray (x->user, tll_clipboard, PIZ_SEQUENCE_ADD_FLAG_SNAP);
+        pizSequenceAddNotes (x->user, tll_clipboard, PIZ_SEQUENCE_ADD_FLAG_SNAP);
         haveChanged = true;
     }
     

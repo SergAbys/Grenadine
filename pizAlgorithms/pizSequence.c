@@ -393,6 +393,94 @@ PIZError pizSequenceSetPattern (PIZSequence *x, const PIZGrowingArray *a)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+PIZError pizSequenceSetZone (PIZSequence *x, const PIZGrowingArray *a)
+{
+    PIZError err = PIZ_ERROR;
+    
+    PIZSEQUENCELOCK
+    
+    if (a && (pizGrowingArrayCount (a) == PIZ_DATA_ZONE_SIZE)) {
+        long tempStart  = pizGrowingArrayValueAtIndex (a, PIZ_DATA_START);
+        long tempEnd    = pizGrowingArrayValueAtIndex (a, PIZ_DATA_END);
+        long tempDown   = pizGrowingArrayValueAtIndex (a, PIZ_DATA_DOWN);
+        long tempUp     = pizGrowingArrayValueAtIndex (a, PIZ_DATA_UP);
+        
+        tempStart   = CLAMP (tempStart, 0, x->timelineSize);
+        tempEnd     = CLAMP (tempEnd,   0, x->timelineSize);
+        tempDown    = CLAMP (tempDown,  0, PIZ_MAGIC_PITCH);
+        tempUp      = CLAMP (tempUp,    0, PIZ_MAGIC_PITCH);
+
+        if (tempStart != tempEnd) {
+            if (tempEnd < tempStart) {
+                long k    = tempEnd;
+                tempEnd   = tempStart;
+                tempStart = k;
+            }
+            
+            if (tempUp < tempDown) {
+                long k   = tempUp;
+                tempUp   = tempDown;
+                tempDown = k;
+            }
+            
+            x->start = tempStart;
+            x->end   = tempEnd;
+            x->down  = tempDown;
+            x->up    = tempUp;
+            
+            x->changedZone = true;
+            
+            err = PIZ_GOOD;
+        } 
+    }
+    
+    PIZSEQUENCEUNLOCK
+    
+    return err;
+}
+
+PIZError pizSequenceAddNotes (PIZSequence *x, const PIZGrowingArray *a, long flags)
+{
+    bool     haveChanged = false;
+    PIZError err = PIZ_ERROR;
+    
+    PIZSEQUENCELOCK
+    
+    if (flags & PIZ_SEQUENCE_ADD_FLAG_CLEAR) {
+        pizSequenceRemoveAllNotes (x);
+    }
+        
+    if (a) {
+        long i, count;
+        long *ptr = NULL;
+        
+        err = PIZ_GOOD;
+        
+        count   = pizGrowingArrayCount (a) / PIZ_DATA_NOTE_SIZE;
+        ptr     = pizGrowingArrayPtr (a);
+        
+        for (i = (count - 1); i >= 0; i--) {
+            if (!(pizSequenceNewNote (x, ptr + (i * PIZ_DATA_NOTE_SIZE), flags))) {
+                err |= PIZ_ERROR;
+            } else {
+                haveChanged = true;
+            }
+        }
+        
+        if (haveChanged) {
+            pizSequenceMakeMap (x);
+        }
+    }
+    
+    PIZSEQUENCEUNLOCK
+    
+    return err;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 long pizSequenceIndex (PIZSequence *x)
 {
     long k;

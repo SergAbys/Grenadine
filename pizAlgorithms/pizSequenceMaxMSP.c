@@ -662,7 +662,7 @@ void pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c,
         values[PIZ_DATA_DURATION] = x->grid;
     }
     
-    if (pizSequenceAddNote (x, values, flags)) {
+    if (pizSequenceNewNote (x, values, flags)) {
         pizSequenceMakeMap (x);
     }
                     
@@ -796,7 +796,7 @@ PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a)
     k = PIZ_SLOT_DATA;
     
     for (i = 0; i < count; i++) {
-        if (!(pizSequenceAddNote (x, ptr + (i * PIZ_DATA_NOTE_SIZE) + k, modeFlags))) {
+        if (!(pizSequenceNewNote (x, ptr + (i * PIZ_DATA_NOTE_SIZE) + k, modeFlags))) {
             err |= PIZ_ERROR;
         }
     }

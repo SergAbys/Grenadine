@@ -49,27 +49,27 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError    pizSequenceSetZoneWithArray         (PIZSequence *x, const PIZGrowingArray *a);
-PIZError    pizSequenceAddNotesWithArray        (PIZSequence *x, const PIZGrowingArray *a, long flags);
+PIZNote *pizSequenceNewNote                 (PIZSequence *x, long *values, long flags);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZNote     *pizSequenceAddNote                 (PIZSequence *x, long *values, long flags);
+void    pizSequenceRemoveNote               (PIZSequence *x, PIZNote *note);
+void    pizSequenceRemoveAllNotes           (PIZSequence *x);
+void    pizSequenceMoveNote                 (PIZSequence *x, PIZNote *note, long newPosition);
+void    pizSequenceMakeMap                  (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void        pizSequenceRemoveNote               (PIZSequence *x, PIZNote *note);
-void        pizSequenceRemoveAllNotes           (PIZSequence *x);
-void        pizSequenceMoveNote                 (PIZSequence *x, PIZNote *note, long newPosition);
-void        pizSequenceMakeMap                  (PIZSequence *x);
+long    pizSequenceMovePitchToAmbitus       (PIZSequence *x, long pitch);
+long    pizSequenceSnapPositionToPattern    (PIZSequence *x, long toSnapped, long patternSize);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-long        pizSequenceMovePitchToAmbitus       (PIZSequence *x, long pitch);
-long        pizSequenceSnapPositionToPattern    (PIZSequence *x, long toSnapped, long patternSize);
+long    pizSequencePickUpNotes              (PIZSequence *x);
+bool    pizSequenceFillValues               (PIZSequence *x, PIZSelector selector, long k, bool reverse);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

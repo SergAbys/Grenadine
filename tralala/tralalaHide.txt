@@ -73,7 +73,7 @@ _pizLinklistRemoveByPtr
 _pizLinklistSetFlags
 _pizLinklistSwapByIndexes
 _pizSequenceAddNoteWithCoordinates
-_pizSequenceAddNotesWithArray
+_pizSequenceAddNotes
 _pizSequenceCell
 _pizSequenceCellularAutomata
 _pizSequenceChance
@@ -122,7 +122,7 @@ _pizSequenceSetNoteValue
 _pizSequenceSetPattern
 _pizSequenceSetScale
 _pizSequenceSetVelocity
-_pizSequenceSetZoneWithArray
+_pizSequenceSetZone
 _pizSequenceSort
 _pizSequenceTempZoneToArray
 _pizSequenceTranspose
@@ -133,7 +133,7 @@ _pizFiniteStateMergeNodes
 _pizGaloisLatticeKillConcept
 _pizGaloisLatticeMakeMap
 _pizGaloisLatticeReconnect
-_pizSequenceAddNote
+_pizSequenceNewNote
 _pizSequenceFillValues
 _pizSequenceMakeMap
 _pizSequenceMoveNote
