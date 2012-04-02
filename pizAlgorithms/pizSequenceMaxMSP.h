@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceMaxMSP.h
  * \author  Jean Sapristi
- * \date    March 30, 2012.
+ * \date    April 2, 2012.
  */
  
 /*
@@ -57,6 +57,21 @@ typedef struct  _PIZCoordinates {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+bool        pizSequenceHasMarkedNote                (PIZSequence *x);
+long        pizSequenceMarkedNoteValue              (PIZSequence *x, PIZSelector selector);
+void        pizSequenceChangeMarkedNoteValue        (PIZSequence *x, PIZSelector selector, long value);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZError    pizSequenceZoneToArray                  (PIZSequence *x, PIZGrowingArray *a);
+PIZError    pizSequenceNotesToArray                 (PIZSequence *x, 
+                                                    PIZGrowingArray *unselected, 
+                                                    PIZGrowingArray *selected);
+                                                    
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 void        pizSequenceInitTempZone                 (PIZSequence *x);
 void        pizSequencePushTempZone                 (PIZSequence *x);
 
@@ -64,7 +79,7 @@ bool        pizSequenceResizeTempZone               (PIZSequence *x,
                                                     const PIZCoordinates *c, 
                                                     PIZDataIndex side);
                                                     
-bool        pizSequenceMoveTempZone                 (PIZSequence *x, long pitch, long position);
+bool        pizSequenceMoveTempZone                 (PIZSequence *x, long deltaPitch, long deltaPosition);
 void        pizSequenceTempZoneToArray              (PIZSequence *x, PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------

@@ -255,44 +255,10 @@ PIZError        pizSequenceSetPattern               (PIZSequence *x, const PIZGr
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-bool            pizSequenceHasMarkedNote            (PIZSequence *x);
-long            pizSequenceMarkedNoteValue          (PIZSequence *x, PIZSelector selector);
-void            pizSequenceChangeMarkedNoteValue    (PIZSequence *x, PIZSelector selector, long value);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void            pizSequenceClear                    (PIZSequence *x);
-PIZError        pizSequenceNotesToArray             (PIZSequence *x, 
-                                                    PIZGrowingArray *unselected, 
-                                                    PIZGrowingArray *selected);
-                                                
-PIZError        pizSequenceAddNotesWithArray        (PIZSequence *x, const PIZGrowingArray *a, long flags);
-PIZError        pizSequenceZoneToArray              (PIZSequence *x, PIZGrowingArray *a);
-PIZError        pizSequenceSetZoneWithArray         (PIZSequence *x, const PIZGrowingArray *a);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 long            pizSequenceIndex                    (PIZSequence *x);
 bool            pizSequenceIsAtEnd                  (PIZSequence *x);
 void            pizSequenceGoToStart                (PIZSequence *x);
 PIZError        pizSequenceProceedStep              (PIZSequence *x, PIZGrowingArray *a);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_LOCAL PIZNote   *pizSequenceAddNote                 (PIZSequence *x, long *values, long flags);
-PIZ_LOCAL void      pizSequenceRemoveNote               (PIZSequence *x, PIZNote *note);
-PIZ_LOCAL void      pizSequenceRemoveAllNotes           (PIZSequence *x);
-PIZ_LOCAL void      pizSequenceMoveNote                 (PIZSequence *x, PIZNote *note, long newPosition);
-PIZ_LOCAL void      pizSequenceMakeMap                  (PIZSequence *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_LOCAL long      pizSequenceMovePitchToAmbitus       (PIZSequence *x, long pitch);
-PIZ_LOCAL long      pizSequenceSnapPositionToPattern    (PIZSequence *x, long toSnapped, long patternSize);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 01/04/12.
+ *  Last modified : 02/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -31,9 +31,9 @@
 #include "tralalaSymbols.h"
 
 #include "pizSequence.h"
-#include "pizSequenceMaxMSP.h"
 #include "pizSequenceTransform.h"
-#include "pizSequenceUI.h"
+#include "pizSequenceLibrary.h"
+#include "pizSequenceMaxMSP.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

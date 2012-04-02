@@ -39,6 +39,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizSequenceTransform.h"
+#include "pizSequenceLibrary.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -97,6 +98,15 @@ static double   piz_distribution11[ ] = { 0.54, 0.59, 0.63, 0.68, 0.72, 0.77, 0.
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+void pizSequenceClear (PIZSequence *x)
+{
+    PIZSEQUENCELOCK
+    
+    pizSequenceRemoveAllNotes (x);
+    
+    PIZSEQUENCEUNLOCK
+}
+
 void pizSequenceTranspose (PIZSequence *x, long n)
 {
     long i, a, b;
@@ -130,7 +140,7 @@ void pizSequenceTranspose (PIZSequence *x, long n)
             temp = CLAMP (note->data[PIZ_PITCH] + n, 0, PIZ_MAGIC_PITCH);
             if (note->data[PIZ_PITCH] != temp) {
                 note->data[PIZ_PITCH] = temp;
-                pizItemset128SetAtIndex (&x->changedNotes, (note->tag));
+                pizItemset128SetAtIndex (&x->changedNotes, note->tag);
             }
             
             note = nextNote;
@@ -139,6 +149,10 @@ void pizSequenceTranspose (PIZSequence *x, long n)
     
     PIZSEQUENCEUNLOCK
 }
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 bool pizSequenceClean (PIZSequence *x, long value)
 {
@@ -210,10 +224,6 @@ bool pizSequenceClean (PIZSequence *x, long value)
     
     return haveChanged;
 }
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
 bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm select, void *algorithm)
 {
@@ -839,7 +849,7 @@ bool pizSequenceChange (PIZSequence *x, PIZSelector selector, long value)
             
             if (note->data[selector] != temp) {
                 note->data[selector] = temp;
-                pizItemset128SetAtIndex (&x->changedNotes, (note->tag));
+                pizItemset128SetAtIndex (&x->changedNotes, note->tag);
                 haveChanged = true;
             }
         }
@@ -887,7 +897,7 @@ bool pizSequenceSet (PIZSequence *x, PIZSelector selector, long value)
                 
                 if (note->data[selector] != temp) {
                     note->data[selector] = temp;
-                    pizItemset128SetAtIndex (&x->changedNotes, (note->tag));
+                    pizItemset128SetAtIndex (&x->changedNotes, note->tag);
                     haveChanged = true;
                 }
             }
@@ -946,7 +956,7 @@ bool pizSequenceRandom (PIZSequence *x, PIZSelector selector, long minValue, lon
             
             if (note->data[selector] != temp) {
                 note->data[selector] = temp;
-                pizItemset128SetAtIndex (&x->changedNotes, (note->tag));
+                pizItemset128SetAtIndex (&x->changedNotes, note->tag);
                 haveChanged = true;
             }
         }
@@ -1059,7 +1069,7 @@ bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a
         
                 if (pitch != (note->data[PIZ_PITCH] + offset)) {
                     note->data[PIZ_PITCH] = CLAMP (pitch, 0, PIZ_MAGIC_PITCH);
-                    pizItemset128SetAtIndex (&x->changedNotes, (note->tag));
+                    pizItemset128SetAtIndex (&x->changedNotes, note->tag);
                     haveChanged = true;
                 }
             }
@@ -1121,7 +1131,7 @@ bool pizSequenceFillValues (PIZSequence *x, PIZSelector selector, long k, bool r
             
             if (x->notes1[i]->data[PIZ_DURATION] != temp) {
                 x->notes1[i]->data[PIZ_DURATION] = temp;
-                pizItemset128SetAtIndex (&x->changedNotes, (x->notes1[i]->tag));
+                pizItemset128SetAtIndex (&x->changedNotes, x->notes1[i]->tag);
                 haveChanged = true;
             }
         }
@@ -1135,7 +1145,7 @@ bool pizSequenceFillValues (PIZSequence *x, PIZSelector selector, long k, bool r
             
             if (x->notes1[i]->data[selector] != temp) {
                 x->notes1[i]->data[selector] = temp;
-                pizItemset128SetAtIndex (&x->changedNotes, (x->notes1[i]->tag));
+                pizItemset128SetAtIndex (&x->changedNotes, x->notes1[i]->tag);
                 haveChanged = true;
             }
         }
