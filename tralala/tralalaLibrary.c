@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 02/04/12.
+ *  Last modified : 03/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-extern PIZGrowingArray      *tll_clipboard;
+extern PIZGrowingArray *tll_clipboard;
 extern tralalaSymbolsTableB tll_symbolsB;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -40,7 +40,11 @@ void tralala_willChange (t_tralala *x)
     x->mouseVelocityValue = 0;
     
     tralala_unselectAllText (x);
+    
+    USERLOCK
     pizSequenceInitLasso (x->user);
+    USERUNLOCK
+    
     tralala_stopAutoscroll (x);
 }
 
@@ -50,9 +54,13 @@ void tralala_willChange (t_tralala *x)
 
 bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitch)
 {
-    long i, count, grid = pizSequenceGrid (x->user);
+    long i, count, grid; 
     bool haveChanged = false;
 
+    USERLOCK
+    grid = pizSequenceGrid (x->user);
+    USERUNLOCK
+    
     ARRAYSLOCK
     
     count = pizGrowingArrayCount (x->selected);
@@ -87,9 +95,13 @@ bool tralala_moveSelectedNotes (t_tralala *x, long deltaPosition, long deltaPitc
 
 bool tralala_changeSelectedNotesDuration (t_tralala *x, long deltaPosition)
 {
-    long i, count, grid = pizSequenceGrid (x->user);
+    long i, count, grid ; 
     bool haveChanged = false;
-                
+      
+    USERLOCK
+    grid = pizSequenceGrid (x->user);
+    USERUNLOCK
+    
     ARRAYSLOCK
 
     count = pizGrowingArrayCount (x->selected);
@@ -173,12 +185,13 @@ bool tralala_changeSelectedNotesVelocity (t_tralala *x, bool decrement)
 void tralala_duplicateSelectedNotes (t_tralala *x)
 {
     ARRAYSLOCK
-    
     pizGrowingArrayAppendArray (x->unselected, x->selected);
-    
     ARRAYSUNLOCK
     
+    USERLOCK
     pizSequenceUnselectAllNotes (x->user);
+    USERUNLOCK
+    
     x->flags |= FLAG_HAVE_BEEN_DUPLICATED;
 }
 
@@ -219,6 +232,17 @@ void tralala_setSelectedNotesChannel (t_tralala *x, long channel)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+
+long tralala_hitTest (t_tralala *x)
+{
+    long k;
+    
+    USERLOCK
+    k = pizSequenceSelectNoteWithCoordinates (x->user, &x->coordinates);
+    USERUNLOCK
+    
+    return k; 
+}
 
 long tralala_hitZone (t_tralala *x, t_pt pt)
 {
@@ -275,6 +299,7 @@ long tralala_hitText (t_tralala *x, t_object *patcherview, t_pt pt)
     double  textWidth, textHeight, fontSize, h1, h2, end; 
     t_rect  rect;
     long    isHit = HIT_NOTHING;
+    bool    isMarkedNote = false;
             
     jbox_get_rect_for_view ((t_object *)x, patcherview, &rect);
     fontSize = jbox_get_fontsize ((t_object *)x);
@@ -284,8 +309,12 @@ long tralala_hitText (t_tralala *x, t_object *patcherview, t_pt pt)
     h2  = h1 + textHeight;
     end = (x->textPosition[TEXT_CELL_COUNT - 1] + x->textWidth[TEXT_CELL_COUNT - 1] + GUI_TEXT_SPACE);
     
+    USERLOCK
+    isMarkedNote = pizSequenceHasMarkedNote (x->user);
+    USERUNLOCK
+    
     if ((pt.y > h1) && (pt.y < h2)) {
-        if (pizSequenceHasMarkedNote (x->user)) {
+        if (isMarkedNote) {
             if ((pt.x > 0) && (pt.x < end)) {
                 isHit = HIT_LOCKED;
             }
@@ -313,7 +342,9 @@ bool tralala_pasteFromClipboard (t_tralala *x)
     long h = (PIZ_MAGIC_PITCH / 2);
         
     if (count = pizGrowingArrayCount (tll_clipboard)) {
+        USERLOCK
         pizSequenceUnselectAllNotes (x->user);
+        USERUNLOCK
         
         if (pizGrowingArrayValueAtIndex (tll_clipboard, PIZ_DATA_POSITION) < w) {
             offsetPosition = x->grid;
@@ -338,7 +369,10 @@ bool tralala_pasteFromClipboard (t_tralala *x)
             pizGrowingArraySetValueAtIndex (tll_clipboard, i + PIZ_DATA_PITCH, pitch);
         }
         
+        USERLOCK
         pizSequenceAddNotes (x->user, tll_clipboard, PIZ_SEQUENCE_ADD_FLAG_SNAP);
+        USERUNLOCK
+        
         haveChanged = true;
     }
     
@@ -497,7 +531,7 @@ void tralala_setString (char *string, long value, long formatMode)
             case PIZ_SIXTEENTH_NOTE_TRIPLET     : s = tll_sym_sixteenthTriplet->s_name;     break;
             case PIZ_THIRTY_SECOND_NOTE         : s = tll_sym_thirtySecond->s_name;         break;
             case PIZ_THIRTY_SECOND_NOTE_TRIPLET : s = tll_sym_thirtySecondTriplet->s_name;  break;
-            case PIZ_NOTE_NONE                  : s = tll_sym_none->s_name;                 break;
+            case PIZ_NOTE_VALUE_NONE            : s = tll_sym_none->s_name;                 break;
         }  
         
         snprintf (string, SIZE_STRING_MAX, "%s", s); 

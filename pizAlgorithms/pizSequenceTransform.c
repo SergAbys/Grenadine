@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceTransform.c
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 3, 2012.
  */
  
 /*
@@ -61,7 +61,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_CEIL(a,b)   (((a)%(b))==0?(a)/(b):(a)/(b)+1)
+#define PIZ_CEIL(a,b) (((a)%(b))==0?(a)/(b):(a)/(b)+1)
  
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ static long piz_neighbors[ ]          = {   -256,
                                               -2, 
                                               -1, 
                                                1, 
-                                               2     };
+                                               2    };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -100,19 +100,13 @@ static double   piz_distribution11[ ] = { 0.54, 0.59, 0.63, 0.68, 0.72, 0.77, 0.
 
 void pizSequenceClear (PIZSequence *x)
 {
-    PIZSEQUENCELOCK
-    
     pizSequenceRemoveAllNotes (x);
-    
-    PIZSEQUENCEUNLOCK
 }
 
 void pizSequenceTranspose (PIZSequence *x, long n)
 {
     long i, a, b;
         
-    PIZSEQUENCELOCK
-    
     a = CLAMP (x->down + n, 0, PIZ_MAGIC_PITCH);
     b = CLAMP (x->up + n, 0, PIZ_MAGIC_PITCH);
     
@@ -137,17 +131,15 @@ void pizSequenceTranspose (PIZSequence *x, long n)
         while (note) {
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
-            temp = CLAMP (note->data[PIZ_PITCH] + n, 0, PIZ_MAGIC_PITCH);
-            if (note->data[PIZ_PITCH] != temp) {
-                note->data[PIZ_PITCH] = temp;
+            temp = CLAMP (note->data[PIZ_NOTE_PITCH] + n, 0, PIZ_MAGIC_PITCH);
+            if (note->data[PIZ_NOTE_PITCH] != temp) {
+                note->data[PIZ_NOTE_PITCH] = temp;
                 pizItemset128SetAtIndex (&x->changedNotes, note->tag);
             }
             
             note = nextNote;
         }
     }
-    
-    PIZSEQUENCEUNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -159,8 +151,6 @@ bool pizSequenceClean (PIZSequence *x, long value)
     long i, scale, v;
     long index = 0;
     bool haveChanged = false;
-
-    PIZSEQUENCELOCK
         
     scale = pizGrowingArrayCount (x->scale);
     v = CLAMP (value, 0, PIZ_MAGIC_PITCH);
@@ -183,7 +173,7 @@ bool pizSequenceClean (PIZSequence *x, long value)
             
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
-            pitch = note->data[PIZ_PITCH];
+            pitch = note->data[PIZ_NOTE_PITCH];
                     
             if (scale) {
                 pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
@@ -220,27 +210,29 @@ bool pizSequenceClean (PIZSequence *x, long value)
         haveChanged = true;
     }
     
-    PIZSEQUENCEUNLOCK
-    
     return haveChanged;
 }
 
-bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm select, void *algorithm)
+bool pizSequenceAlgorithm (PIZSequence *x, PIZAlgorithm flag, void *algorithm)
 {
     long     k;
     bool     haveChanged = false;
     PIZError err = PIZ_ERROR;
-    
-    PIZSEQUENCELOCK
-    
+        
     k = pizSequencePickUpNotes (x);
-    
-    if ((select == PIZ_FACTOR_ORACLE) && pizFactorOracleCount ((PIZFactorOracle *)algorithm)) {
-        err = pizFactorOracleProceed ((PIZFactorOracle *)algorithm, k, x->values1);
-    } else if ((select == PIZ_GALOIS_LATTICE) && pizGaloisLatticeCount ((PIZGaloisLattice *)algorithm)) {
-        err = pizGaloisLatticeProceed ((PIZGaloisLattice *)algorithm, k, x->values1);
-    } else if ((select == PIZ_FINITE_STATE) && pizFiniteStateCount ((PIZFiniteState *)algorithm)) {
-        err = pizFiniteStateProceed ((PIZFiniteState *)algorithm, k, x->values1);
+
+    if (flag & PIZ_ALGORITHM_FACTOR_ORACLE) {
+        if (pizFactorOracleCount ((PIZFactorOracle *)algorithm)) {
+            err = pizFactorOracleProceed ((PIZFactorOracle *)algorithm, k, x->values1);
+        }
+    } else if (flag & PIZ_ALGORITHM_GALOIS_LATTICE) {
+        if (pizGaloisLatticeCount ((PIZGaloisLattice *)algorithm)) {
+            err = pizGaloisLatticeProceed ((PIZGaloisLattice *)algorithm, k, x->values1);
+        }
+    } else if (flag & PIZ_ALGORITHM_FINITE_STATE) {
+        if (pizFiniteStateCount ((PIZFiniteState *)algorithm)) {
+            err = pizFiniteStateProceed ((PIZFiniteState *)algorithm, k, x->values1);
+        }
     }
     
     if (!err) {
@@ -253,25 +245,21 @@ bool pizSequenceProceedAlgorithm (PIZSequence *x, PIZAlgorithm select, void *alg
         for (i = 0; i < k; i++) {        
             h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
             if (h >= x->chance) {
-                x->values1[i] = x->notes1[i]->data[PIZ_PITCH];
+                x->values1[i] = x->notes1[i]->data[PIZ_NOTE_PITCH];
             } 
         }
         
-        haveChanged = pizSequenceFillValues (x, PIZ_PITCH, k, 0);
+        haveChanged = pizSequenceFillValues (x, PIZ_NOTE_PITCH, k, 0);
     }
-    
-    PIZSEQUENCEUNLOCK
     
     return haveChanged;
 }
 
-bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
+bool pizSequenceNovember (PIZSequence *x, long iterate)
 {
     bool haveChanged = false;
-                                                
-    PIZSEQUENCELOCK
-    
-    if (x->cell != PIZ_NOTE_NONE) {
+                                                    
+    if (x->cell != PIZ_NOTE_VALUE_NONE) {
     //
     long i, start, end, mapCount, scale;
     long k = 0;
@@ -298,11 +286,11 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
             if (scale) {
-                offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_PITCH] % scale);
+                offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_NOTE_PITCH] % scale);
             }
             
             key = ((long)(note->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1));
-            key += note->data[PIZ_PITCH] + offset;
+            key += note->data[PIZ_NOTE_PITCH] + offset;
             
             pizBoundedHashTableAdd (x->hashTable, key, (void *)note);
             
@@ -334,13 +322,13 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
         pizLinklistPtrAtIndex (x->timeline[p], q, (void **)&note);
         
         if (scale) {
-            offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_PITCH] % scale);
+            offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_NOTE_PITCH] % scale);
         }
         
-        pitch = note->data[PIZ_PITCH] + offset;
+        pitch = note->data[PIZ_NOTE_PITCH] + offset;
         
         hCenter = ((long)(note->position / (double)x->cell)) * (PIZ_MAGIC_PITCH + 1);
-        hCenter += note->data[PIZ_PITCH] + offset;
+        hCenter += note->data[PIZ_NOTE_PITCH] + offset;
         
         err |= (note->position < x->start);
         err |= (note->position >= x->end);
@@ -481,9 +469,9 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
                 
                 values[PIZ_DATA_POSITION]    = ((long)(hPat[j] / (double)(PIZ_MAGIC_PITCH + 1))) * x->cell;
                 values[PIZ_DATA_PITCH]       = hPat[j] % (PIZ_MAGIC_PITCH + 1);
-                values[PIZ_DATA_VELOCITY]    = noteToCopy->data[PIZ_VELOCITY];
-                values[PIZ_DATA_DURATION]    = noteToCopy->data[PIZ_DURATION];
-                values[PIZ_DATA_CHANNEL]     = noteToCopy->data[PIZ_CHANNEL];
+                values[PIZ_DATA_VELOCITY]    = noteToCopy->data[PIZ_NOTE_VELOCITY];
+                values[PIZ_DATA_DURATION]    = noteToCopy->data[PIZ_NOTE_DURATION];
+                values[PIZ_DATA_CHANNEL]     = noteToCopy->data[PIZ_NOTE_CHANNEL];
                 values[PIZ_DATA_IS_SELECTED] = false;
                 values[PIZ_DATA_IS_MARKED]   = false;
                 
@@ -519,19 +507,15 @@ bool pizSequenceCellularAutomata (PIZSequence *x, long iterate)
     }
     //
     }
-        
-    PIZSEQUENCEUNLOCK
-    
+            
     return haveChanged;
 }
 
-bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
+bool pizSequenceJuliet (PIZSequence *x, long iterate, long division)
 {
     bool haveChanged = false;
-
-    PIZSEQUENCELOCK
     
-    if (x->cell != PIZ_NOTE_NONE) {
+    if (x->cell != PIZ_NOTE_VALUE_NONE) {
     //
     long i, start, end, size;
     long b = 0;
@@ -575,11 +559,11 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
             if (scale) {
-                offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_PITCH] % scale);
+                offset = pizGrowingArrayValueAtIndex (x->scale, note->data[PIZ_NOTE_PITCH] % scale);
             }
             
             key = (long)(note->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1);
-            key += note->data[PIZ_PITCH] + offset;
+            key += note->data[PIZ_NOTE_PITCH] + offset;
             
             pizBoundedHashTableAdd (x->hashTable, key, (void *)note);
             
@@ -640,19 +624,19 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
     }
     
     if (scale) {
-        offset = pizGrowingArrayValueAtIndex (x->scale, note1->data[PIZ_PITCH] % scale);
+        offset = pizGrowingArrayValueAtIndex (x->scale, note1->data[PIZ_NOTE_PITCH] % scale);
     }
                 
-    newKey = (newPosition * (PIZ_MAGIC_PITCH + 1)) + note1->data[PIZ_PITCH] + offset;
+    newKey = (newPosition * (PIZ_MAGIC_PITCH + 1)) + note1->data[PIZ_NOTE_PITCH] + offset;
     
     if (!pizBoundedHashTableContainsKey (x->hashTable, newKey)) {
         long values[PIZ_DATA_NOTE_SIZE];
         
         values[PIZ_DATA_POSITION]       = newPosition * x->cell;
-        values[PIZ_DATA_PITCH]          = note1->data[PIZ_PITCH] + offset;
-        values[PIZ_DATA_VELOCITY]       = note1->data[PIZ_VELOCITY];
-        values[PIZ_DATA_DURATION]       = note1->data[PIZ_DURATION];
-        values[PIZ_DATA_CHANNEL]        = note1->data[PIZ_CHANNEL];
+        values[PIZ_DATA_PITCH]          = note1->data[PIZ_NOTE_PITCH] + offset;
+        values[PIZ_DATA_VELOCITY]       = note1->data[PIZ_NOTE_VELOCITY];
+        values[PIZ_DATA_DURATION]       = note1->data[PIZ_NOTE_DURATION];
+        values[PIZ_DATA_CHANNEL]        = note1->data[PIZ_NOTE_CHANNEL];
         values[PIZ_DATA_IS_SELECTED]    = false;
         values[PIZ_DATA_IS_MARKED]      = false;
 
@@ -683,19 +667,15 @@ bool pizSequenceGenerator (PIZSequence *x, long iterate, long division)
     }
     //
     }
-                    
-    PIZSEQUENCEUNLOCK
-    
+                        
     return haveChanged;
 }
 
-bool pizSequenceRotate (PIZSequence *x, PIZSelector selector, long shift)
+bool pizSequenceRotate (PIZSequence *x, PIZNoteSelector selector, long shift)
 {
     long i, k = 0;
     bool haveChanged;
-    
-    PIZSEQUENCELOCK
-    
+        
     k = pizSequencePickUpNotes (x);
     
     if (k && shift < 0) {
@@ -707,19 +687,15 @@ bool pizSequenceRotate (PIZSequence *x, PIZSelector selector, long shift)
     }
                 
     haveChanged = pizSequenceFillValues (x, selector, k, 0);
-    
-    PIZSEQUENCEUNLOCK
-    
+        
     return haveChanged;
 }
 
-bool pizSequenceScramble (PIZSequence *x, PIZSelector selector)
+bool pizSequenceScramble (PIZSequence *x, PIZNoteSelector selector)
 {
     long i, k = 0;
     bool haveChanged;
-    
-    PIZSEQUENCELOCK
-    
+        
     k = pizSequencePickUpNotes (x);
     
     for (i = 0; i < k; i++) {
@@ -736,30 +712,26 @@ bool pizSequenceScramble (PIZSequence *x, PIZSelector selector)
     }
             
     haveChanged = pizSequenceFillValues (x, selector, k, 0);
-    
-    PIZSEQUENCEUNLOCK
-    
+        
     return haveChanged;
 }
 
-bool pizSequenceSort (PIZSequence *x, PIZSelector selector, bool down)
+bool pizSequenceSort (PIZSequence *x, PIZNoteSelector selector, bool down)
 {
     long i, scale;
     long k = 0;
     bool haveChanged;
-    
-    PIZSEQUENCELOCK
-    
+        
     k = pizSequencePickUpNotes (x);
     scale = pizGrowingArrayCount (x->scale);
     
-    for (i = 0; i < PIZ_SEQUENCE_TEMP_SIZE; i++) {
+    for (i = 0; i < PIZ_SEQUENCE_TEMP_ARRAY_SIZE; i++) {
         x->values1[i] = 0;
     }
     
-    if (selector == PIZ_PITCH) {
+    if (selector == PIZ_NOTE_PITCH) {
         for (i = 0; i < k; i++) { 
-            long pitch = x->notes1[i]->data[PIZ_PITCH];
+            long pitch = x->notes1[i]->data[PIZ_NOTE_PITCH];
                             
             if (scale) {
                 pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
@@ -773,13 +745,13 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, bool down)
         }   
     }
         
-    for (i = 1; i < PIZ_SEQUENCE_TEMP_SIZE; i++) {
+    for (i = 1; i < PIZ_SEQUENCE_TEMP_ARRAY_SIZE; i++) {
         x->values1[i] += x->values1[i - 1];
     }
                 
-    if (selector == PIZ_PITCH) {
+    if (selector == PIZ_NOTE_PITCH) {
         for (i = (k - 1); i >= 0; i--) {
-            long pitch = x->notes1[i]->data[PIZ_PITCH];
+            long pitch = x->notes1[i]->data[PIZ_NOTE_PITCH];
                                 
             if (scale) {
                 pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
@@ -800,19 +772,15 @@ bool pizSequenceSort (PIZSequence *x, PIZSelector selector, bool down)
     }
                 
     haveChanged = pizSequenceFillValues (x, selector, k, down);
-    
-    PIZSEQUENCEUNLOCK
-    
+        
     return haveChanged;
 }
 
-bool pizSequenceChange (PIZSequence *x, PIZSelector selector, long value)
+bool pizSequenceChange (PIZSequence *x, PIZNoteSelector selector, long value)
 {
     long i;
     bool haveChanged = false;
-    
-    PIZSEQUENCELOCK
-        
+            
     for (i = 0; i < pizGrowingArrayCount (x->map); i++) {  
     // 
     PIZNote *note       = NULL;
@@ -823,46 +791,49 @@ bool pizSequenceChange (PIZSequence *x, PIZSelector selector, long value)
     pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
     
     while (note) {
-        long max, temp;
-        long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
-        
-        pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-        
-        if (h < x->chance) {
-            switch (selector) {
-                case PIZ_PITCH    : temp = CLAMP (note->data[PIZ_PITCH] + value, 0, PIZ_MAGIC_PITCH); break;
-                case PIZ_VELOCITY : temp = CLAMP (note->data[PIZ_VELOCITY] + value, 0, PIZ_MAGIC_VELOCITY); 
-                                    break;
-                case PIZ_DURATION : max = x->timelineSize - note->position;
-                                    max = MIN (max, PIZ_SEQUENCE_MAXIMUM_DURATION);
-                                    temp = CLAMP (note->data[PIZ_DURATION] + value, 1, max); break;
-                case PIZ_CHANNEL  : temp = CLAMP (note->data[PIZ_CHANNEL] + value, 0, PIZ_MAGIC_CHANNEL); break;
-            }
-            
-            if (note->data[selector] != temp) {
-                note->data[selector] = temp;
-                pizItemset128SetAtIndex (&x->changedNotes, note->tag);
-                haveChanged = true;
-            }
-        }
-        
-        note = nextNote;
+    //
+    long max, temp;
+    long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+    
+    pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+    
+    if (h < x->chance) {
+    //
+    switch (selector) {
+        case PIZ_NOTE_PITCH    : temp = CLAMP (note->data[PIZ_NOTE_PITCH] + value, 0, PIZ_MAGIC_PITCH); 
+                                 break;
+        case PIZ_NOTE_VELOCITY : temp = CLAMP (note->data[PIZ_NOTE_VELOCITY] + value, 0, PIZ_MAGIC_VELOCITY); 
+                                 break;
+        case PIZ_NOTE_DURATION : max = x->timelineSize - note->position;
+                                 max = MIN (max, PIZ_SEQUENCE_MAXIMUM_DURATION);
+                                 temp = CLAMP (note->data[PIZ_NOTE_DURATION] + value, 1, max); 
+                                 break;
+        case PIZ_NOTE_CHANNEL  : temp = CLAMP (note->data[PIZ_NOTE_CHANNEL] + value, 0, PIZ_MAGIC_CHANNEL);
+                                 break;
+    }
+    
+    if (note->data[selector] != temp) {
+        note->data[selector] = temp;
+        pizItemset128SetAtIndex (&x->changedNotes, note->tag);
+        haveChanged = true;
     }
     //
     }
     
-    PIZSEQUENCEUNLOCK
-    
+    note = nextNote;
+    //
+    }
+    //
+    }
+        
     return haveChanged;
 }
 
-bool pizSequenceSet (PIZSequence *x, PIZSelector selector, long value)
+bool pizSequenceSet (PIZSequence *x, PIZNoteSelector selector, long value)
 {
     long i;
     bool haveChanged = false;
-        
-    PIZSEQUENCELOCK
-    
+            
     for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
         PIZNote *note       = NULL;
         PIZNote *nextNote   = NULL;
@@ -879,12 +850,12 @@ bool pizSequenceSet (PIZSequence *x, PIZSelector selector, long value)
             
             if (h < x->chance) {
                 switch (selector) {
-                    case PIZ_PITCH    : temp = CLAMP (value, 0, PIZ_MAGIC_PITCH); break;
-                    case PIZ_VELOCITY : temp = CLAMP (value, 0, PIZ_MAGIC_VELOCITY); break;
-                    case PIZ_DURATION : max = x->timelineSize - note->position;
-                                        max = MIN (max, PIZ_SEQUENCE_MAXIMUM_DURATION);
-                                        temp = CLAMP (value, 1, max); break;
-                    case PIZ_CHANNEL  : temp = CLAMP (value, 0, PIZ_MAGIC_CHANNEL); break;
+                    case PIZ_NOTE_PITCH    : temp = CLAMP (value, 0, PIZ_MAGIC_PITCH); break;
+                    case PIZ_NOTE_VELOCITY : temp = CLAMP (value, 0, PIZ_MAGIC_VELOCITY); break;
+                    case PIZ_NOTE_DURATION : max = x->timelineSize - note->position;
+                                             max = MIN (max, PIZ_SEQUENCE_MAXIMUM_DURATION);
+                                             temp = CLAMP (value, 1, max); break;
+                    case PIZ_NOTE_CHANNEL  : temp = CLAMP (value, 0, PIZ_MAGIC_CHANNEL); break;
                 }
                 
                 if (note->data[selector] != temp) {
@@ -897,19 +868,15 @@ bool pizSequenceSet (PIZSequence *x, PIZSelector selector, long value)
             note = nextNote;
         }
     }
-    
-    PIZSEQUENCEUNLOCK
-    
+        
     return haveChanged;
 }
 
-bool pizSequenceRandom (PIZSequence *x, PIZSelector selector, long minValue, long maxValue)
+bool pizSequenceRandom (PIZSequence *x, PIZNoteSelector selector, long minValue, long maxValue)
 {
     long i, range;
     bool haveChanged = false;
-    
-    PIZSEQUENCELOCK
-    
+        
     if (minValue > maxValue) {
         long temp = minValue;
         minValue = maxValue;
@@ -928,48 +895,49 @@ bool pizSequenceRandom (PIZSequence *x, PIZSelector selector, long minValue, lon
     pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
     
     while (note) {
-        long max, temp;
-        long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+    //
+    long max, temp;
+    long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+    
+    pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+    
+    if (h < x->chance) {
+        long value = minValue + (long)(range * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
         
-        pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-        
-        if (h < x->chance) {
-            long value = minValue + (long)(range * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
-            
-            switch (selector) {
-                case PIZ_PITCH    : temp = CLAMP (note->data[PIZ_PITCH] + value, 0, PIZ_MAGIC_PITCH); break;
-                case PIZ_VELOCITY : temp = CLAMP (note->data[PIZ_VELOCITY] + value, 0, PIZ_MAGIC_VELOCITY); 
-                                    break;
-                case PIZ_DURATION : max = x->timelineSize - note->position;
-                                    max = MIN (max, PIZ_SEQUENCE_MAXIMUM_DURATION);
-                                    temp = CLAMP (note->data[PIZ_DURATION] + value, 1, max); break;
-                case PIZ_CHANNEL  : temp = CLAMP (note->data[PIZ_CHANNEL] + value, 0, PIZ_MAGIC_CHANNEL); break;
-            }
-            
-            if (note->data[selector] != temp) {
-                note->data[selector] = temp;
-                pizItemset128SetAtIndex (&x->changedNotes, note->tag);
-                haveChanged = true;
-            }
+        switch (selector) {
+        case PIZ_NOTE_PITCH    : temp = CLAMP (note->data[PIZ_NOTE_PITCH] + value, 0, PIZ_MAGIC_PITCH); 
+                                 break;
+        case PIZ_NOTE_VELOCITY : temp = CLAMP (note->data[PIZ_NOTE_VELOCITY] + value, 0, PIZ_MAGIC_VELOCITY); 
+                                 break;
+        case PIZ_NOTE_DURATION : max = x->timelineSize - note->position;
+                                 max = MIN (max, PIZ_SEQUENCE_MAXIMUM_DURATION);
+                                 temp = CLAMP (note->data[PIZ_NOTE_DURATION] + value, 1, max); 
+                                 break;
+        case PIZ_NOTE_CHANNEL  : temp = CLAMP (note->data[PIZ_NOTE_CHANNEL] + value, 0, PIZ_MAGIC_CHANNEL); 
+                                 break;
         }
         
-        note = nextNote;
+        if (note->data[selector] != temp) {
+            note->data[selector] = temp;
+            pizItemset128SetAtIndex (&x->changedNotes, note->tag);
+            haveChanged = true;
+        }
+    }
+    
+    note = nextNote;
+    //
     }
     //
     }
-    
-    PIZSEQUENCEUNLOCK
-    
+        
     return haveChanged;
 }
 
-bool pizSequenceKillNotes (PIZSequence *x)
+bool pizSequenceKill (PIZSequence *x)
 {
     long i;
     bool haveChanged = false;
-    
-    PIZSEQUENCELOCK
-    
+        
     for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
         PIZNote *note       = NULL;
         PIZNote *nextNote   = NULL;
@@ -993,17 +961,13 @@ bool pizSequenceKillNotes (PIZSequence *x)
     if (haveChanged) {
         pizSequenceMakeMap (x);
     }
-    
-    PIZSEQUENCEUNLOCK
-    
+        
     return haveChanged;
 }
 
 bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a)
 {
     bool haveChanged = false;
-
-    PIZSEQUENCELOCK
     
     if (a) {
     //
@@ -1050,7 +1014,7 @@ bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a
             if (h < x->chance) {
                 long pitch, offset = 0;
                 
-                pitch = note->data[PIZ_PITCH];
+                pitch = note->data[PIZ_NOTE_PITCH];
                 
                 if (scale) {
                     offset += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
@@ -1059,8 +1023,8 @@ bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a
                 pitch = CLAMP (pitch + offset, 0, PIZ_MAGIC_PITCH);
                 pitch += s[pitch % PIZ_MAGIC_SCALE];
         
-                if (pitch != (note->data[PIZ_PITCH] + offset)) {
-                    note->data[PIZ_PITCH] = CLAMP (pitch, 0, PIZ_MAGIC_PITCH);
+                if (pitch != (note->data[PIZ_NOTE_PITCH] + offset)) {
+                    note->data[PIZ_NOTE_PITCH] = CLAMP (pitch, 0, PIZ_MAGIC_PITCH);
                     pizItemset128SetAtIndex (&x->changedNotes, note->tag);
                     haveChanged = true;
                 }
@@ -1073,9 +1037,7 @@ bool pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a
     }
     //    
     }
-    
-    PIZSEQUENCEUNLOCK
-    
+        
     return haveChanged;
 }
 

@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceLibrary.c
  * \author	Jean Sapristi
- * \date	April 2, 2012.
+ * \date	April 3, 2012.
  */
  
 /*
@@ -97,14 +97,14 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *values, long flags)
     err |= pizBoundedStackPop (x->ticketMachine);
     
     if (!err && (newNote = (PIZNote *)malloc (sizeof(PIZNote)))) {
-        newNote->flags              = PIZ_SEQUENCE_NOTE_FLAG_NONE;
-        newNote->data[PIZ_PITCH]    = pitch;
-        newNote->data[PIZ_VELOCITY] = velocity;
-        newNote->data[PIZ_DURATION] = duration;
-        newNote->data[PIZ_CHANNEL]  = channel;
-        newNote->isSelected         = isSelected;
-        newNote->position           = position;
-        newNote->tag                = pizBoundedStackPoppedValue (x->ticketMachine);
+        newNote->flags                   = PIZ_SEQUENCE_NOTE_FLAG_NONE;
+        newNote->data[PIZ_NOTE_PITCH]    = pitch;
+        newNote->data[PIZ_NOTE_VELOCITY] = velocity;
+        newNote->data[PIZ_NOTE_DURATION] = duration;
+        newNote->data[PIZ_NOTE_CHANNEL]  = channel;
+        newNote->isSelected              = isSelected;
+        newNote->position                = position;
+        newNote->tag                     = pizBoundedStackPoppedValue (x->ticketMachine);
     
         if (!x->timeline[newNote->position]) {
             if (!(x->timeline[newNote->position] = pizLinklistNew ( ))) {
@@ -253,7 +253,7 @@ long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
 
 long pizSequenceSnapPositionToPattern (PIZSequence *x, long toSnapped, long patternSize)
 {
-    if (x->cell != PIZ_NOTE_NONE) {
+    if (x->cell != PIZ_NOTE_VALUE_NONE) {
         long j = MAX ((long)(toSnapped / (double)x->cell), 0);
         long k = j % patternSize;
     
@@ -293,12 +293,12 @@ long pizSequencePickUpNotes (PIZSequence *x)
     return k;
 }
 
-bool pizSequenceFillValues (PIZSequence *x, PIZSelector selector, long k, bool reverse)
+bool pizSequenceFillValues (PIZSequence *x, PIZNoteSelector selector, long k, bool reverse)
 {
     long i, temp;
     bool haveChanged = false;
     
-    if (selector == PIZ_DURATION) {
+    if (selector == PIZ_NOTE_DURATION) {
         for (i = 0; i < k; i++) {
             if (!reverse) {
                 temp = MIN (x->values1[i], (x->timelineSize - x->notes1[i]->position));
@@ -306,8 +306,8 @@ bool pizSequenceFillValues (PIZSequence *x, PIZSelector selector, long k, bool r
                 temp = MIN (x->values1[(k - 1) - i], (x->timelineSize - x->notes1[i]->position));
             }
             
-            if (x->notes1[i]->data[PIZ_DURATION] != temp) {
-                x->notes1[i]->data[PIZ_DURATION] = temp;
+            if (x->notes1[i]->data[PIZ_NOTE_DURATION] != temp) {
+                x->notes1[i]->data[PIZ_NOTE_DURATION] = temp;
                 pizItemset128SetAtIndex (&x->changedNotes, x->notes1[i]->tag);
                 haveChanged = true;
             }

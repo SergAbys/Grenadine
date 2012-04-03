@@ -77,13 +77,13 @@ PIZAgent *pizAgentNew (void)
     x->err1                 = PIZ_ERROR;
     x->err2                 = PIZ_ERROR;
     
-    if (!(x->runInQueue &&  
-        x->runOutQueue && 
-        x->graphicInQueue &&
-        x->graphicOutQueue &&
-        x->mainQueue &&
-        x->notifyQueue && 
-        x->sequence &&
+    if (!(x->runInQueue     &&  
+        x->runOutQueue      && 
+        x->graphicInQueue   &&
+        x->graphicOutQueue  &&
+        x->mainQueue        &&
+        x->notifyQueue      && 
+        x->sequence         &&
         x->tempArray)) {
         
         err |= PIZ_MEMORY;

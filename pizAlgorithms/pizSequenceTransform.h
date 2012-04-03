@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceTransform.h
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 3, 2012.
  */
  
 /*
@@ -50,24 +50,24 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void pizSequenceClear                   (PIZSequence *x);
-void pizSequenceTranspose               (PIZSequence *x, long n);
+void pizSequenceClear       (PIZSequence *x);
+void pizSequenceTranspose   (PIZSequence *x, long n);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-bool pizSequenceClean                   (PIZSequence *x, long value);
-bool pizSequenceProceedAlgorithm        (PIZSequence *x, PIZAlgorithm select, void *algorithm);
-bool pizSequenceCellularAutomata        (PIZSequence *x, long iterate);
-bool pizSequenceGenerator               (PIZSequence *x, long iterate, long division);
-bool pizSequenceRotate                  (PIZSequence *x, PIZSelector selector, long shift);
-bool pizSequenceScramble                (PIZSequence *x, PIZSelector selector);
-bool pizSequenceSort                    (PIZSequence *x, PIZSelector selector, bool down);
-bool pizSequenceChange                  (PIZSequence *x, PIZSelector selector, long value);
-bool pizSequenceSet                     (PIZSequence *x, PIZSelector selector, long value);
-bool pizSequenceRandom                  (PIZSequence *x, PIZSelector selector, long minValue, long maxValue);
-bool pizSequenceKillNotes               (PIZSequence *x);
-bool pizSequenceCycle                   (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a);
+bool pizSequenceClean       (PIZSequence *x, long value);
+bool pizSequenceAlgorithm   (PIZSequence *x, PIZAlgorithm flag, void *algorithm);
+bool pizSequenceNovember    (PIZSequence *x, long iterate);
+bool pizSequenceJuliet      (PIZSequence *x, long iterate, long division);
+bool pizSequenceRotate      (PIZSequence *x, PIZNoteSelector selector, long shift);
+bool pizSequenceScramble    (PIZSequence *x, PIZNoteSelector selector);
+bool pizSequenceSort        (PIZSequence *x, PIZNoteSelector selector, bool down);
+bool pizSequenceChange      (PIZSequence *x, PIZNoteSelector selector, long value);
+bool pizSequenceSet         (PIZSequence *x, PIZNoteSelector selector, long value);
+bool pizSequenceRandom      (PIZSequence *x, PIZNoteSelector selector, long minValue, long maxValue);
+bool pizSequenceKill        (PIZSequence *x);
+bool pizSequenceCycle       (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

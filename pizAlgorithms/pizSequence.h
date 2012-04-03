@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 3, 2012.
  */
  
 /*
@@ -49,11 +49,6 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include <pthread.h>
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 #define PIZ_SEQUENCE_DEFAULT_TIMELINE       576 
 #define PIZ_SEQUENCE_LOOKUP_SIZE            19
 #define PIZ_SEQUENCE_CHANNEL_NONE           0
@@ -61,7 +56,7 @@
 #define PIZ_SEQUENCE_MAXIMUM_NOTES          128   
 #define PIZ_SEQUENCE_MAXIMUM_DURATION       96
 //                                        -------
-#define PIZ_SEQUENCE_TEMP_SIZE              128
+#define PIZ_SEQUENCE_TEMP_ARRAY_SIZE        128
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -76,12 +71,6 @@
 
 #define PIZ_SEQUENCE_NOTE_FLAG_NONE         0L
 #define PIZ_SEQUENCE_NOTE_FLAG_LASSO        1L
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZSEQUENCELOCK     pthread_mutex_lock (&x->lock);
-#define PIZSEQUENCEUNLOCK   pthread_mutex_unlock (&x->lock);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -104,7 +93,7 @@ typedef enum _PIZNoteValue {
     PIZ_SIXTEENTH_NOTE_TRIPLET      = 4,
     PIZ_THIRTY_SECOND_NOTE          = 3,
     PIZ_THIRTY_SECOND_NOTE_TRIPLET  = 2,
-    PIZ_NOTE_NONE                   = 1
+    PIZ_NOTE_VALUE_NONE             = 1
     } PIZNoteValue;
 
 typedef enum _PIZScaleType {
@@ -152,13 +141,9 @@ typedef enum _PIZScaleKey {
     PIZ_KEY_B
     } PIZScaleKey;
 
-typedef enum _PIZSelector {
-    PIZ_PITCH       = 0,
-    PIZ_VELOCITY    = 1,
-    PIZ_DURATION    = 2,
-    PIZ_CHANNEL     = 3
-    } PIZSelector;
- 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 typedef enum _PIZDataIndex {
     PIZ_DATA_POSITION       = 0,
     PIZ_DATA_PITCH,
@@ -175,6 +160,13 @@ typedef enum _PIZDataIndex {
     PIZ_DATA_ZONE_SIZE      = 4
     } PIZDataIndex;
 
+typedef enum _PIZNoteSelector {
+    PIZ_NOTE_PITCH          = 0,
+    PIZ_NOTE_VELOCITY       = 1,
+    PIZ_NOTE_DURATION       = 2,
+    PIZ_NOTE_CHANNEL        = 3
+    } PIZNoteSelector;
+    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
  
@@ -187,37 +179,36 @@ typedef struct _PIZNote {
     } PIZNote;
 
 typedef struct _PIZSequence {
-    pthread_mutex_t     lock;
-    long                *values1;
-    long                *values2;
-    PIZNote             **notes1;
-    PIZNote             **notes2;
-    PIZBoundedHashTable *hashTable;
-    PIZBoundedHashTable *lookup;
-    PIZLinklist         **timeline;
-    PIZGrowingArray     *scale;
-    PIZGrowingArray     *pattern;
-    PIZNote             *markedNote;
-    PIZGrowingArray     *map;
-    PIZBoundedStack     *ticketMachine;
-    PIZItemset128       addedNotes;
-    PIZItemset128       removedNotes;
-    PIZItemset128       changedNotes;
-    long                changedZone;
-    long                timelineSize;
-    long                start;
-    long                end;
-    long                down;
-    long                up;
-    long                count;
-    long                index;
-    long                chance;
-    long                channel;
-    long                velocity;
-    PIZNoteValue        cell;
-    PIZNoteValue        grid;
-    PIZNoteValue        noteValue;
-    unsigned int        seed;
+    long                    *values1;
+    long                    *values2;
+    PIZNote                 **notes1;
+    PIZNote                 **notes2;
+    PIZBoundedHashTable     *hashTable;
+    PIZBoundedHashTable     *lookup;
+    PIZLinklist             **timeline;
+    PIZGrowingArray         *scale;
+    PIZGrowingArray         *pattern;
+    PIZNote                 *markedNote;
+    PIZGrowingArray         *map;
+    PIZBoundedStack         *ticketMachine;
+    PIZItemset128           addedNotes;
+    PIZItemset128           removedNotes;
+    PIZItemset128           changedNotes;
+    long                    changedZone;
+    long                    timelineSize;
+    long                    start;
+    long                    end;
+    long                    down;
+    long                    up;
+    long                    count;
+    long                    index;
+    long                    chance;
+    long                    channel;
+    long                    velocity;
+    PIZNoteValue            cell;
+    PIZNoteValue            grid;
+    PIZNoteValue            noteValue;
+    unsigned int            seed;
     } PIZSequence;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -255,16 +246,103 @@ PIZError        pizSequenceSetPattern               (PIZSequence *x, const PIZGr
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+long            pizSequenceIndex                    (PIZSequence *x);
+bool            pizSequenceIsAtEnd                  (PIZSequence *x);
+void            pizSequenceGoToStart                (PIZSequence *x);
+PIZError        pizSequenceProceedStep              (PIZSequence *x, PIZGrowingArray *a);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 PIZError        pizSequenceSetZone                  (PIZSequence *x, const PIZGrowingArray *a);
 PIZError        pizSequenceAddNotes                 (PIZSequence *x, const PIZGrowingArray *a, long flags);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-long            pizSequenceIndex                    (PIZSequence *x);
-bool            pizSequenceIsAtEnd                  (PIZSequence *x);
-void            pizSequenceGoToStart                (PIZSequence *x);
-PIZError        pizSequenceProceedStep              (PIZSequence *x, PIZGrowingArray *a);
+#ifdef PIZ_EXTERN_INLINE
+
+PIZ_EXTERN long pizSequenceCount (PIZSequence *x)
+{   
+    return x->count;
+}   
+
+PIZ_EXTERN long pizSequenceChance (PIZSequence *x)
+{
+    return x->chance;
+}
+
+PIZ_EXTERN long pizSequenceVelocity (PIZSequence *x)
+{
+    return x->velocity;
+}
+
+PIZ_EXTERN long pizSequenceChannel (PIZSequence *x)
+{
+    return x->channel;
+}
+
+PIZ_EXTERN PIZNoteValue pizSequenceCell (PIZSequence *x)
+{
+    return x->cell;
+}
+
+PIZ_EXTERN PIZNoteValue pizSequenceGrid (PIZSequence *x)
+{
+    return x->grid;
+}
+
+PIZ_EXTERN PIZNoteValue pizSequenceNoteValue (PIZSequence *x)
+{
+    return x->noteValue;
+}
+
+PIZ_EXTERN void pizSequenceSetChance (PIZSequence *x, long value)
+{
+    x->chance = CLAMP (value, 0, 100);
+}
+
+PIZ_EXTERN void pizSequenceSetVelocity (PIZSequence *x, long value)
+{
+    x->velocity = value;
+}
+
+PIZ_EXTERN void pizSequenceSetChannel (PIZSequence *x, long channel)
+{
+    x->channel = CLAMP (channel, 1, PIZ_MAGIC_CHANNEL);
+}
+
+PIZ_EXTERN void pizSequenceSetCell (PIZSequence *x, PIZNoteValue snapValue)
+{
+    x->cell = snapValue;
+}
+
+PIZ_EXTERN void pizSequenceSetGrid (PIZSequence *x, PIZNoteValue snapValue)
+{
+    x->grid = snapValue;
+}
+
+PIZ_EXTERN void pizSequenceSetNoteValue (PIZSequence *x, PIZNoteValue noteValue)
+{
+    x->noteValue = noteValue;
+}
+
+PIZ_EXTERN long pizSequenceIndex (PIZSequence *x)
+{
+    return x->index;
+}
+
+PIZ_EXTERN bool pizSequenceIsAtEnd (PIZSequence *x)
+{
+    return (x->index >= x->end);
+}
+
+PIZ_EXTERN void pizSequenceGoToStart (PIZSequence *x)
+{
+    x->index = x->start;
+}
+
+#endif // PIZ_EXTERN_INLINE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

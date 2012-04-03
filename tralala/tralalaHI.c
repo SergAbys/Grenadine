@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 02/04/12.
+ *  Last modified : 03/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -74,7 +74,9 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
     tralala_setCoordinates (x, &x->coordinates, pt);
             
     if (USER && CMD && !RIGHT && !MAJ) {
+        USERLOCK
         pizSequenceAddNoteWithCoordinates (x->user, &x->coordinates, PIZ_SEQUENCE_ADD_FLAG_SNAP); 
+        USERUNLOCK
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE); 
         DIRTYPATTR DIRTYSLOTS 
         
@@ -86,17 +88,22 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
         
     } else if (USER && !CTRL && !RIGHT && MAJ && (x->hitTest = tralala_hitZone (x, pt))) {
         x->flags |= FLAG_ZONE_IS_SELECTED;
+        USERLOCK
         pizSequenceInitTempZone (x->user);
+        USERUNLOCK
         DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_SEQUENCE);
         
     } else if (USER && SHIFT && !RIGHT && !MAJ) {
-        long k = pizSequenceInvertNoteWithCoordinates (x->user, &x->coordinates);
+        long k;
+        USERLOCK
+        k = pizSequenceInvertNoteWithCoordinates (x->user, &x->coordinates);
+        USERUNLOCK
         if (k != -1) {
             x->hitTest = k;
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
         }
         
-    } else if (USER && !MAJ && (x->hitTest = pizSequenceSelectNoteWithCoordinates (x->user, &x->coordinates))) {
+    } else if (USER && !MAJ && (x->hitTest = tralala_hitTest(x))) {
         if (RIGHT) {
             tralala_popupRightClickMenu (x, pt, MODE_MENU_NOTE);
         }
@@ -107,7 +114,9 @@ void tralala_mousedown (t_tralala *x, t_object *patcherview, t_pt pt, long modif
         tralala_popupRightClickMenu (x, pt, MODE_MENU_SEQUENCE);
         
     } else if (USER) {
+        USERLOCK
         pizSequenceUnselectAllNotes (x->user);
+        USERUNLOCK
         tralala_unselectAllText (x);
         DIRTYLAYER_SET (DIRTY_REFRESH | DIRTY_NOTES | DIRTY_SEQUENCE);
     }
@@ -155,26 +164,29 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
     deltaPitch    = x->coordinates.pitch    - x->originCoordinates.pitch;
         
     if (VIEWTEXT && tralala_hasSelectedText (x, &selectedText)) {
-        long k = (long)(ABS (pt.y - x->previousPoint.y));
-        
-        if ((pt.y - x->previousPoint.y) < -DELTA) {
-            switch (selectedText) {
-                case TEXT_CELL_VELOCITY : pizSequenceChangeMarkedNoteValue (x->user, PIZ_VELOCITY, k); break;
-                case TEXT_CELL_DURATION : pizSequenceChangeMarkedNoteValue (x->user, PIZ_DURATION, 1); break;
-                case TEXT_CELL_CHANNEL  : pizSequenceChangeMarkedNoteValue (x->user, PIZ_CHANNEL, 1);  break;
-                case TEXT_CELL_PITCH    : pizSequenceChangeMarkedNoteValue (x->user, PIZ_PITCH, 1);    break;
-            }
-        } else if ((pt.y - x->previousPoint.y) > DELTA) {
-            switch (selectedText) {
-                case TEXT_CELL_VELOCITY : pizSequenceChangeMarkedNoteValue (x->user, PIZ_VELOCITY, -k); break;
-                case TEXT_CELL_DURATION : pizSequenceChangeMarkedNoteValue (x->user, PIZ_DURATION, -1); break;
-                case TEXT_CELL_CHANNEL  : pizSequenceChangeMarkedNoteValue (x->user, PIZ_CHANNEL, -1);  break;
-                case TEXT_CELL_PITCH    : pizSequenceChangeMarkedNoteValue (x->user, PIZ_PITCH, -1);    break;
-            }
+    //
+    long k = (long)(ABS (pt.y - x->previousPoint.y));
+    
+    USERLOCK
+    if ((pt.y - x->previousPoint.y) < -DELTA) {
+        switch (selectedText) {
+            case TEXT_CELL_VELOCITY : pizSequenceChangeMarkedNoteValue (x->user, PIZ_NOTE_VELOCITY, k); break;
+            case TEXT_CELL_DURATION : pizSequenceChangeMarkedNoteValue (x->user, PIZ_NOTE_DURATION, 1); break;
+            case TEXT_CELL_CHANNEL  : pizSequenceChangeMarkedNoteValue (x->user, PIZ_NOTE_CHANNEL, 1);  break;
+            case TEXT_CELL_PITCH    : pizSequenceChangeMarkedNoteValue (x->user, PIZ_NOTE_PITCH, 1);    break;
         }
-        
-        DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
-        
+    } else if ((pt.y - x->previousPoint.y) > DELTA) {
+        switch (selectedText) {
+            case TEXT_CELL_VELOCITY : pizSequenceChangeMarkedNoteValue (x->user, PIZ_NOTE_VELOCITY, -k); break;
+            case TEXT_CELL_DURATION : pizSequenceChangeMarkedNoteValue (x->user, PIZ_NOTE_DURATION, -1); break;
+            case TEXT_CELL_CHANNEL  : pizSequenceChangeMarkedNoteValue (x->user, PIZ_NOTE_CHANNEL, -1);  break;
+            case TEXT_CELL_PITCH    : pizSequenceChangeMarkedNoteValue (x->user, PIZ_NOTE_PITCH, -1);    break;
+        }
+    }
+    USERUNLOCK
+    
+    DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
+    //
     } else if (x->hitTest & HIT_LOCKED) {
         ;
         
@@ -224,9 +236,12 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
         
     } else if (x->hitTest == HIT_ZONE) {
         tralala_testAutoscroll (x, patcherview, pt);
+        
+        USERLOCK
         if (pizSequenceMoveTempZone (x->user, deltaPitch, deltaPosition)) {
             DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_SEQUENCE);
         }
+        USERUNLOCK
         
     } else if (x->hitTest) {
         PIZCoordinates  c1, c2;
@@ -246,7 +261,8 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
         c2.position = (long)((x->offsetX + pt.x) / (GUI_PIXELS_PER_STEP * f));
         c1.pitch    = PIZ_MAGIC_PITCH - MAX (((long)((x->offsetY + pt.y - a) / b)), 0);
         c2.pitch    = PIZ_MAGIC_PITCH - MAX (((long)((x->offsetY + pt.y + a) / b)), 0);
-                    
+        
+        USERLOCK            
         switch (x->hitTest) {
         case HIT_START  : draw = pizSequenceResizeTempZone (x->user, &x->coordinates, PIZ_DATA_START);  break;
         case HIT_END    : draw = pizSequenceResizeTempZone (x->user, &x->coordinates, PIZ_DATA_END);    break;
@@ -254,6 +270,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
         case HIT_UP     : draw = pizSequenceResizeTempZone (x->user, &c2, PIZ_DATA_UP);                 break;
         case HIT_BOTH   : draw = pizSequenceResizeTempZone (x->user, &x->coordinates, PIZ_DATA_END);    break;
         }
+        USERUNLOCK
     
         tralala_testAutoscroll (x, patcherview, pt);
 
@@ -271,6 +288,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
     } else if (!CMD)  {
         x->flags |= FLAG_IS_LASSO;
         
+        USERLOCK
         if (x->flags & FLAG_ORIGIN_HAD_SHIFT_KEY) {
             if (pizSequenceDragLasso (x->user, &x->originCoordinates, &x->coordinates, INVERT)) {
                 DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
@@ -278,6 +296,7 @@ void tralala_mousedrag (t_tralala *x, t_object *patcherview, t_pt pt, long modif
         } else if (pizSequenceDragLasso (x->user, &x->originCoordinates, &x->coordinates, SELECT)) {
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
         }
+        USERUNLOCK
         
         tralala_testAutoscroll (x, patcherview, pt);
         tralala_setCursorType (x, patcherview, JMOUSE_CURSOR_ARROW);
@@ -305,7 +324,9 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
         }
 
         if (x->flags & FLAG_ZONE_IS_SELECTED) {
+            USERLOCK
             pizSequencePushTempZone (x->user);
+            USERUNLOCK
             x->flags &= ~FLAG_ZONE_IS_SELECTED;
             
             DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_SEQUENCE);
@@ -315,10 +336,10 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
         if (x->flags & (FLAG_HAVE_CHANGED | FLAG_HAVE_MOVED | FLAG_HAVE_BEEN_DUPLICATED)) {
             
             ARRAYSLOCK
-            
+            USERLOCK
             pizSequenceRemoveSelectedNotes (x->user);
-            pizSequenceAddNotes   (x->user, x->selected, PIZ_SEQUENCE_ADD_FLAG_NONE);
-            
+            pizSequenceAddNotes (x->user, x->selected, PIZ_SEQUENCE_ADD_FLAG_NONE);
+            USERUNLOCK
             ARRAYSUNLOCK
             
             x->textMode = MODE_TEXT_NOTE;
@@ -330,7 +351,9 @@ void tralala_mouseup (t_tralala *x, t_object *patcherview, t_pt pt, long modifie
         
         if (x->flags & FLAG_IS_LASSO) {
             x->flags &= ~FLAG_IS_LASSO;
+            USERLOCK
             pizSequenceInitLasso (x->user);
+            USERUNLOCK
             
             DIRTYLAYER_SET (DIRTY_REFRESH);
         }
@@ -461,12 +484,16 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
         }
         
     } else if (keycode == JKEY_UPARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
+        USERLOCK
         pizSequenceTranspose (x->user, PIZ_MAGIC_SCALE);
+        USERUNLOCK
         DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_SEQUENCE);
         dirty = true;
         
     } else if (keycode == JKEY_DOWNARROW && USER && !(x->flags & FLAG_ZONE_IS_SELECTED)) {
+        USERLOCK
         pizSequenceTranspose (x->user, -PIZ_MAGIC_SCALE);
+        USERUNLOCK
         DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_NOTES | DIRTY_SEQUENCE);
         dirty = true;
         
@@ -488,24 +515,32 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
         } ATOMIC_DECREMENT (&x->popupLock);
         
     } else if (USER && ((keycode == JKEY_DELETE) || (keycode == JKEY_BACKSPACE))) {
+        USERLOCK
         pizSequenceRemoveSelectedNotes (x->user);
+        USERUNLOCK
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
         dirty = true;
         
     } else if (USER && CMD && !(x->flags & (FLAG_HAVE_MOVED | FLAG_HAVE_CHANGED | FLAG_HAVE_BEEN_DUPLICATED))) {
         if (ALL) {
+            USERLOCK
             pizSequenceSelectAllNotes (x->user);
+            USERUNLOCK
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
             
         } else if (COPY)  {
             pizGrowingArrayClear (tll_clipboard);
+            USERLOCK
             tll_clipboardError = pizSequenceNotesToArray (x->user, NULL, tll_clipboard);
+            USERUNLOCK
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
             
         } else if (CUT)  {
             pizGrowingArrayClear (tll_clipboard);
+            USERLOCK
             tll_clipboardError = pizSequenceNotesToArray (x->user, NULL, tll_clipboard);
             pizSequenceRemoveSelectedNotes (x->user);
+            USERUNLOCK
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
             dirty = true;
             
@@ -519,10 +554,10 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
     } else if (keycode >= 49 && keycode <= 55) {
     //
     if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
-        PIZNoteValue k = PIZ_NOTE_NONE;
+        PIZNoteValue k = PIZ_NOTE_VALUE_NONE;
         
         switch (keycode) {
-            case 55 : k = PIZ_NOTE_NONE;            break;
+            case 55 : k = PIZ_NOTE_VALUE_NONE;      break;
             case 54 : k = PIZ_WHOLE_NOTE;           break;
             case 53 : k = PIZ_HALF_NOTE;            break;
             case 52 : k = PIZ_QUARTER_NOTE;         break;
@@ -533,14 +568,18 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
         
         if (SHIFT) {
             if (x->noteValue != k) {
+                USERLOCK
                 pizSequenceSetNoteValue (x->user, x->noteValue = k); 
+                USERUNLOCK
                 dirty = true;
                 DIRTYLAYER_SET (DIRTY_REFRESH);
             }
         } else {
             if (x->grid != k) {
+                USERLOCK
                 pizSequenceSetGrid (x->user, x->grid = k); 
                 pizSequenceSetCell (x->user, k);
+                USERUNLOCK
                 dirty = true;
                 DIRTYLAYER_SET (DIRTY_GRID);
             }
@@ -552,7 +591,7 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
     //
     if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
     
-        PIZNoteValue old, new = PIZ_NOTE_NONE;
+        PIZNoteValue old, new = PIZ_NOTE_VALUE_NONE;
         
         if (!SHIFT) {
             old = x->grid;
@@ -579,7 +618,7 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
                 case PIZ_SIXTEENTH_NOTE_TRIPLET     :   new = PIZ_SIXTEENTH_NOTE;               break;
                 case PIZ_THIRTY_SECOND_NOTE         :   new = PIZ_THIRTY_SECOND_NOTE_TRIPLET;   break;
                 case PIZ_THIRTY_SECOND_NOTE_TRIPLET :   new = PIZ_THIRTY_SECOND_NOTE;           break;
-                case PIZ_NOTE_NONE                  :   new = PIZ_NOTE_NONE;                    break;
+                case PIZ_NOTE_VALUE_NONE            :   new = PIZ_NOTE_VALUE_NONE;              break;
             }
         } else {
             switch (old) {
@@ -600,17 +639,21 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
                 case PIZ_SIXTEENTH_NOTE_TRIPLET     :   new = PIZ_SIXTEENTH_NOTE_DOTTED;        break;
                 case PIZ_THIRTY_SECOND_NOTE         :   new = PIZ_THIRTY_SECOND_NOTE;           break;
                 case PIZ_THIRTY_SECOND_NOTE_TRIPLET :   new = PIZ_THIRTY_SECOND_NOTE_TRIPLET;   break;
-                case PIZ_NOTE_NONE                  :   new = PIZ_NOTE_NONE;                    break;
+                case PIZ_NOTE_VALUE_NONE            :   new = PIZ_NOTE_VALUE_NONE;              break;
             }
         }
         
         if (!SHIFT) {
+            USERLOCK
             pizSequenceSetGrid (x->user, x->grid = new);
             pizSequenceSetCell (x->user, new);
+            USERUNLOCK
             dirty = true;
             DIRTYLAYER_SET (DIRTY_GRID);
         } else {
+            USERLOCK
             pizSequenceSetNoteValue (x->user, x->noteValue = new);
+            USERUNLOCK
             dirty = true;
             DIRTYLAYER_SET (DIRTY_REFRESH);
         }
@@ -686,7 +729,7 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
     jpopupmenu_addsubmenu   (pop[SNAP],     "Triplet",       pop[SNAP_T], 0);
     jpopupmenu_addsubmenu   (pop[SNAP],     "Dotted ",       pop[SNAP_D], 0);
     jpopupmenu_addseperator (pop[SNAP]);
-    jpopupmenu_additem      (pop[SNAP], 10, "None",          NULL, (t == PIZ_NOTE_NONE), 0, NULL);
+    jpopupmenu_additem      (pop[SNAP], 10, "None",          NULL, (t == PIZ_NOTE_VALUE_NONE), 0, NULL);
     
     t = x->channel;
     
@@ -752,7 +795,7 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
     jpopupmenu_addsubmenu   (pop[NOTE],     "Triplet ",      pop[NOTE_T], 0);
     jpopupmenu_addsubmenu   (pop[NOTE],     "Dotted ",       pop[NOTE_D], 0);
     jpopupmenu_addseperator (pop[NOTE]);
-    jpopupmenu_additem      (pop[NOTE], 80, "Automatic",     NULL, (t == PIZ_NOTE_NONE), 0, NULL);
+    jpopupmenu_additem      (pop[NOTE], 80, "Automatic",     NULL, (t == PIZ_NOTE_VALUE_NONE), 0, NULL);
 
     //
     }
@@ -850,10 +893,15 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
     } else if ((popup >= 50) && (popup <= 66)) {
         tralala_setSelectedNotesVelocity (x, CLAMP (((popup - 50) * 8), 0, PIZ_MAGIC_VELOCITY));    
         x->flags |= FLAG_HAVE_CHANGED; 
+    } else if (popup == 100) {
+        object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_USER); 
+    } else if (popup == 101) {
+        object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_LIVE); 
     } else {
     //
+    USERLOCK
     switch (popup) {
-        case 10     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_NOTE_NONE);                    break;
+        case 10     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_NOTE_VALUE_NONE);               break;
         case 11     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_WHOLE_NOTE);                   break;
         case 12     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_HALF_NOTE);                    break;
         case 13     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_QUARTER_NOTE);                 break;
@@ -871,7 +919,7 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
         case 25     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_QUARTER_NOTE_DOTTED);          break;
         case 26     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_EIGHTH_NOTE_DOTTED);           break;
         case 27     :   pizSequenceSetGrid  (x->user, x->grid = PIZ_SIXTEENTH_NOTE_DOTTED);        break;
-        case 80     :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_NOTE_NONE);                  break;
+        case 80     :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_NOTE_VALUE_NONE);            break;
         case 81     :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_WHOLE_NOTE);                 break;
         case 82     :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_HALF_NOTE);                  break;
         case 83     :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_QUARTER_NOTE);               break;
@@ -889,18 +937,17 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
         case 95     :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_QUARTER_NOTE_DOTTED);        break;
         case 96     :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_EIGHTH_NOTE_DOTTED);         break;
         case 97     :   pizSequenceSetNoteValue (x->user, x->noteValue = PIZ_SIXTEENTH_NOTE_DOTTED);      break;
-        case 100    :   object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_USER); break;
-        case 101    :   object_attr_setlong (x, tll_sym_sequenceMode, MODE_SEQUENCE_LIVE); break;
     }
+    USERUNLOCK
     //
     }
+    
     if (x->flags & FLAG_HAVE_CHANGED) {
-       
         ARRAYSLOCK
-        
+        USERLOCK
         pizSequenceRemoveSelectedNotes (x->user);
         pizSequenceAddNotes (x->user, x->selected, PIZ_SEQUENCE_ADD_FLAG_NONE);
-        
+        USERUNLOCK
         ARRAYSUNLOCK
             
         x->flags &= ~FLAG_HAVE_CHANGED;
@@ -909,7 +956,9 @@ void tralala_popupRightClickMenu (t_tralala *x, t_pt pt, long menuMode)
     }
     
     if (popup >= 10 && popup <= 27) {
+        USERLOCK
         pizSequenceSetCell (x->user, x->grid);
+        USERUNLOCK
         dirty = true;
         DIRTYLAYER_SET (DIRTY_GRID);
     }

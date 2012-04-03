@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceMaxMSP.h
  * \author  Jean Sapristi
- * \date    April 2, 2012.
+ * \date    April 3, 2012.
  */
  
 /*
@@ -60,8 +60,8 @@ typedef struct  _PIZCoordinates {
 // -------------------------------------------------------------------------------------------------------------
 
 bool            pizSequenceHasMarkedNote                (PIZSequence *x);
-long            pizSequenceMarkedNoteValue              (PIZSequence *x, PIZSelector selector);
-void            pizSequenceChangeMarkedNoteValue        (PIZSequence *x, PIZSelector selector, long value);
+long            pizSequenceMarkedNoteValue              (PIZSequence *x, PIZNoteSelector selector);
+void            pizSequenceChangeMarkedNoteValue        (PIZSequence *x, PIZNoteSelector selector, long value);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

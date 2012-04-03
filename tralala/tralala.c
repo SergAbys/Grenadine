@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 26/03/12.
+ *  Last modified : 03/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -128,7 +128,7 @@ CLASS_ATTR_DEFAULT   (c, "fontface",         0, DEFAULT_FONTFACE);
 CLASS_ATTR_MIN       (c, "patching_size",    0, SIZE_PATCH_MIN);
 CLASS_ATTR_INVISIBLE (c, "textcolor", 0);
 
-CLASS_STICKY_ATTR       (c, "category", 0, "Hint");
+CLASS_STICKY_ATTR          (c, "category", 0, "Hint");
 
 CLASS_ATTR_LONG            (c, "embedslots",       0, t_tralala, saveSlotsWithPatcher);
 CLASS_ATTR_STYLE_LABEL     (c, "embedslots",       0, "onoff", "Save Slots With Patcher");
@@ -149,8 +149,8 @@ CLASS_ATTR_ORDER           (c, "embedslots",       0, "1");
 CLASS_ATTR_ORDER           (c, "embedvalues",      0, "2");
 CLASS_ATTR_ORDER           (c, "embedchannel",     0, "3");
 
-CLASS_STICKY_ATTR_CLEAR (c, "category");
-CLASS_STICKY_ATTR       (c, "category", 0, "Midi");
+CLASS_STICKY_ATTR_CLEAR    (c, "category");
+CLASS_STICKY_ATTR          (c, "category", 0, "Midi");
 
 CLASS_ATTR_LONG            (c, "channel",          0, t_tralala, channel);
 CLASS_ATTR_DEFAULT         (c, "channel",          0, DEFAULT_CHANNEL);
@@ -158,17 +158,17 @@ CLASS_ATTR_LABEL           (c, "channel",          0, "Channel");
 CLASS_ATTR_FILTER_CLIP     (c, "channel",          1, PIZ_MAGIC_CHANNEL);
 CLASS_ATTR_ACCESSORS       (c, "channel",          NULL, tralala_setChannel);
 
-CLASS_STICKY_ATTR_CLEAR (c, "category");
-CLASS_STICKY_ATTR       (c, "category", 0, "Appearance");
+CLASS_STICKY_ATTR_CLEAR    (c, "category");
+CLASS_STICKY_ATTR          (c, "category", 0, "Appearance");
 
-CLASS_ATTR_LONG             (c, "viewtext",         0, t_tralala, viewText);
-CLASS_ATTR_DEFAULT_SAVE     (c, "viewtext",         0, DEFAULT_VIEW_TEXT);
-CLASS_ATTR_LABEL            (c, "viewtext",         0, "View Text");
-CLASS_ATTR_STYLE            (c, "viewtext",         0, "onoff");
-CLASS_ATTR_FILTER_CLIP      (c, "viewtext",         0, 1);
+CLASS_ATTR_LONG            (c, "viewtext",         0, t_tralala, viewText);
+CLASS_ATTR_DEFAULT_SAVE    (c, "viewtext",         0, DEFAULT_VIEW_TEXT);
+CLASS_ATTR_LABEL           (c, "viewtext",         0, "View Text");
+CLASS_ATTR_STYLE           (c, "viewtext",         0, "onoff");
+CLASS_ATTR_FILTER_CLIP     (c, "viewtext",         0, 1);
 
-CLASS_STICKY_ATTR_CLEAR (c, "category");
-CLASS_STICKY_ATTR       (c, "category", 0, "Value");
+CLASS_STICKY_ATTR_CLEAR    (c, "category");
+CLASS_STICKY_ATTR          (c, "category", 0, "Value");
 
 CLASS_ATTR_LONG            (c, "tempo",             0, t_tralala, tempo);
 CLASS_ATTR_DEFAULT         (c, "tempo",             0, DEFAULT_TEMPO);
@@ -214,44 +214,44 @@ CLASS_ATTR_LABEL           (c, "chance",            0, "Chance");
 CLASS_ATTR_FILTER_CLIP     (c, "chance",            0, 100);
 CLASS_ATTR_ACCESSORS       (c, "chance",            NULL, tralala_setChance);
 
-CLASS_ATTR_ORDER            (c, "tempo",            0, "201");
-CLASS_ATTR_ORDER            (c, "chance",           0, "202");
-CLASS_ATTR_ORDER            (c, "velocity",         0, "203");
-CLASS_ATTR_ORDER            (c, "scalekey",         0, "204");
-CLASS_ATTR_ORDER            (c, "scaletype",        0, "205");
-CLASS_ATTR_ORDER            (c, "scalecustom",      0, "206");
-CLASS_ATTR_ORDER            (c, "patterncell",      0, "207");
-CLASS_ATTR_ORDER            (c, "patterncustom",    0, "208");
+CLASS_ATTR_ORDER           (c, "tempo",            0, "201");
+CLASS_ATTR_ORDER           (c, "chance",           0, "202");
+CLASS_ATTR_ORDER           (c, "velocity",         0, "203");
+CLASS_ATTR_ORDER           (c, "scalekey",         0, "204");
+CLASS_ATTR_ORDER           (c, "scaletype",        0, "205");
+CLASS_ATTR_ORDER           (c, "scalecustom",      0, "206");
+CLASS_ATTR_ORDER           (c, "patterncell",      0, "207");
+CLASS_ATTR_ORDER           (c, "patterncustom",    0, "208");
 
-CLASS_STICKY_ATTR_CLEAR (c, "category");
-CLASS_STICKY_ATTR       (c, "category", 0, "Window");
+CLASS_STICKY_ATTR_CLEAR    (c, "category");
+CLASS_STICKY_ATTR          (c, "category", 0, "Window");
 
-CLASS_ATTR_DOUBLE           (c, "windowoffsetx",    0, t_tralala, offsetX);
-CLASS_ATTR_DEFAULT          (c, "windowoffsetx",    0, DEFAULT_WINDOW_OFFSET_X);
-CLASS_ATTR_LABEL            (c, "windowoffsetx",    0, "Window X Offset");
+CLASS_ATTR_DOUBLE          (c, "windowoffsetx",    0, t_tralala, offsetX);
+CLASS_ATTR_DEFAULT         (c, "windowoffsetx",    0, DEFAULT_WINDOW_OFFSET_X);
+CLASS_ATTR_LABEL           (c, "windowoffsetx",    0, "Window X Offset");
 
-CLASS_ATTR_DOUBLE           (c, "windowoffsety",    0, t_tralala, offsetY);
-CLASS_ATTR_DEFAULT          (c, "windowoffsety",    0, DEFAULT_WINDOW_OFFSET_Y);
-CLASS_ATTR_LABEL            (c, "windowoffsety",    0, "Window Y Offset");
+CLASS_ATTR_DOUBLE          (c, "windowoffsety",    0, t_tralala, offsetY);
+CLASS_ATTR_DEFAULT         (c, "windowoffsety",    0, DEFAULT_WINDOW_OFFSET_Y);
+CLASS_ATTR_LABEL           (c, "windowoffsety",    0, "Window Y Offset");
 
-CLASS_ATTR_LONG             (c, "sequencemode",     0, t_tralala, sequenceMode);
-CLASS_ATTR_DEFAULT          (c, "sequencemode",     0, DEFAULT_MODE_SEQUENCE);
-CLASS_ATTR_ENUMINDEX        (c, "sequencemode",     0, "user live");
-CLASS_ATTR_LABEL            (c, "sequencemode",     0, "Sequence Mode");
-CLASS_ATTR_ACCESSORS        (c, "sequencemode",     NULL, tralala_setSequenceMode);
+CLASS_ATTR_LONG            (c, "sequencemode",     0, t_tralala, sequenceMode);
+CLASS_ATTR_DEFAULT         (c, "sequencemode",     0, DEFAULT_MODE_SEQUENCE);
+CLASS_ATTR_ENUMINDEX       (c, "sequencemode",     0, "user live");
+CLASS_ATTR_LABEL           (c, "sequencemode",     0, "Sequence Mode");
+CLASS_ATTR_ACCESSORS       (c, "sequencemode",     NULL, tralala_setSequenceMode);
 
-CLASS_ATTR_LONG             (c, "zoommode",         0, t_tralala, zoomMode);
-CLASS_ATTR_DEFAULT          (c, "zoommode",         0, DEFAULT_MODE_ZOOM);
-CLASS_ATTR_LABEL            (c, "zoommode",         0, "Zoom Mode");
-CLASS_ATTR_FILTER_CLIP      (c, "zoommode",         0, 2);
+CLASS_ATTR_LONG            (c, "zoommode",         0, t_tralala, zoomMode);
+CLASS_ATTR_DEFAULT         (c, "zoommode",         0, DEFAULT_MODE_ZOOM);
+CLASS_ATTR_LABEL           (c, "zoommode",         0, "Zoom Mode");
+CLASS_ATTR_FILTER_CLIP     (c, "zoommode",         0, 2);
 
-CLASS_ATTR_ORDER            (c, "sequencemode",     0, "101");
-CLASS_ATTR_ORDER            (c, "zoommode",         0, "102");
-CLASS_ATTR_ORDER            (c, "windowoffsetx",    0, "103");
-CLASS_ATTR_ORDER            (c, "windowoffsety",    0, "104");
+CLASS_ATTR_ORDER           (c, "sequencemode",     0, "101");
+CLASS_ATTR_ORDER           (c, "zoommode",         0, "102");
+CLASS_ATTR_ORDER           (c, "windowoffsetx",    0, "103");
+CLASS_ATTR_ORDER           (c, "windowoffsety",    0, "104");
 
-CLASS_STICKY_ATTR_CLEAR (c, "category");
-CLASS_STICKY_ATTR       (c, "category", 0, "Color");
+CLASS_STICKY_ATTR_CLEAR     (c, "category");
+CLASS_STICKY_ATTR           (c, "category", 0, "Color");
 
 CLASS_ATTR_RGBA             (c, "backgroundcolor",      0, t_tralala, backgroundColor);
 CLASS_ATTR_DEFAULTNAME_SAVE (c, "backgroundcolor",      0, DEFAULT_BACKGROUND_COLOR);
@@ -392,8 +392,8 @@ CLASS_ATTR_ORDER            (c, "popubgcolor",                      0, "20");
 CLASS_ATTR_ORDER            (c, "popuphlttextcolor",                0, "21");
 CLASS_ATTR_ORDER            (c, "popuhltbgcolor",                   0, "22");
 
-CLASS_STICKY_ATTR_CLEAR (c, "category");
-CLASS_STICKY_ATTR       (c, "category", 0, "Font");
+CLASS_STICKY_ATTR_CLEAR     (c, "category");
+CLASS_STICKY_ATTR           (c, "category", 0, "Font");
 
 CLASS_ATTR_SYM              (c, "popupfontname",    0, t_tralala, popupFontName);
 CLASS_ATTR_DEFAULTNAME_SAVE (c, "popupfontname",    0, DEFAULT_POPUP_FONTNAME);
@@ -407,7 +407,7 @@ CLASS_ATTR_DEFAULTNAME_SAVE (c, "popupfontface",    0, DEFAULT_POPUP_FONTFACE);
 CLASS_ATTR_ENUMINDEX        (c, "popupfontface",    0, LIST_FONTSTYLE);
 CLASS_ATTR_LABEL            (c, "popupfontface",    0, "Popup Font Style");
 
-CLASS_STICKY_ATTR_CLEAR (c, "category");
+CLASS_STICKY_ATTR_CLEAR     (c, "category");
 
 tll_thirtySecond        [0] = jgraphics_image_surface_create_from_resource (moduleRef, "16A");
 tll_thirtySecond        [1] = jgraphics_image_surface_create_from_resource (moduleRef, "32B");
@@ -475,7 +475,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 {
     t_tralala       *x = NULL;
     t_dictionary    *d = NULL;
-
+    
     if (d = object_dictionaryarg (argc, argv)) {
         if (x = (t_tralala *)object_alloc (tll_class)) {
             long i, k, boxflags;
@@ -512,6 +512,8 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
             systhread_mutex_new (&x->algorithmsMutex,   SYSTHREAD_MUTEX_NORMAL);
             systhread_mutex_new (&x->learnMutex,        SYSTHREAD_MUTEX_NORMAL);
             systhread_mutex_new (&x->arraysMutex,       SYSTHREAD_MUTEX_NORMAL);
+            systhread_mutex_new (&x->userMutex,         SYSTHREAD_MUTEX_NORMAL);
+            systhread_mutex_new (&x->liveMutex,         SYSTHREAD_MUTEX_NORMAL);
             
             for (i = 0; i < TEXT_CELL_COUNT; i++) {
                 x->textLayers[i]     = jtextlayout_create ( );
@@ -545,34 +547,34 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
             x->learnQueue           = pizBoundedQueueNew    (SIZE_LEARN_QUEUE);
             x->slots                = pizLinklistNew        ( );
     
-            if (x->user && 
-                x->live && 
-                x->listen && 
-                x->arrayPool &&
-                x->factorOracle &&
-                x->galoisLattice &&
-                x->finiteState &&
-                x->unselected && 
-                x->selected && 
-                x->played &&
-                x->zone && 
-                x->unselectedTemp && 
-                x->selectedTemp && 
-                x->playedTemp &&
-                x->zoneTemp && 
-                x->unselectedPaint && 
-                x->selectedPaint && 
-                x->playedPaint &&
-                x->zonePaint &&
-                x->origin &&
-                x->result &&
+            if (x->user              && 
+                x->live              && 
+                x->listen            && 
+                x->arrayPool         &&
+                x->factorOracle      &&
+                x->galoisLattice     &&
+                x->finiteState       &&
+                x->unselected        && 
+                x->selected          && 
+                x->played            &&
+                x->zone              && 
+                x->unselectedTemp    && 
+                x->selectedTemp      && 
+                x->playedTemp        &&
+                x->zoneTemp          && 
+                x->unselectedPaint   && 
+                x->selectedPaint     && 
+                x->playedPaint       &&
+                x->zonePaint         &&
+                x->origin            &&
+                x->result            &&
                 x->valuesToBeLearned &&
-                x->learnQueue &&
+                x->learnQueue        &&
                 x->slots) {
                 
                 t_dictionary    *dictionary = NULL;
                 PIZGrowingArray *firstSlot = NULL;
-                
+
                 attr_dictionary_process (x, d);
 
                 x->flags            = FLAG_INIT_PAINT_CLOCK;
@@ -581,8 +583,8 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                 x->cursorType       = JMOUSE_CURSOR_ARROW;
                 x->learnCycle       = PIZ_ALGORITHM_NONE;
                 x->learnThreshold   = SIZE_LEARN_MIN;
-                x->cell             = PIZ_NOTE_NONE;
-                x->noteValue        = PIZ_NOTE_NONE;
+                x->cell             = PIZ_NOTE_VALUE_NONE;
+                x->noteValue        = PIZ_NOTE_VALUE_NONE;
                 x->dirtyLayer       = (DIRTY_ZONE | DIRTY_NOTES | DIRTY_GRID | DIRTY_SEQUENCE);
                 
                 pizSequenceSetGrid  (x->user, x->grid = PIZ_EIGHTH_NOTE);
@@ -671,6 +673,12 @@ void tralala_free (t_tralala *x)
     if (x->algorithmsMutex) {
         systhread_mutex_free (x->algorithmsMutex);
     }
+    if (x->userMutex) {
+        systhread_mutex_free (x->userMutex);
+    }
+    if (x->liveMutex) {
+        systhread_mutex_free (x->liveMutex);
+    }
     
     for (i = 0; i < TEXT_CELL_COUNT; i++) {
         if (x->textLayers[i]) {
@@ -754,7 +762,10 @@ t_max_err tralala_setvalueof (t_tralala *x, long argc, t_atom *argv)
             }
             
             if (!err) {
+                USERLOCK
                 pizSequenceDecodeWithArray (x->user, tempArray);
+                USERUNLOCK
+                
                 DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_ZONE | DIRTY_SEQUENCE);
                 DIRTYSLOTS
             }
@@ -772,21 +783,29 @@ t_max_err tralala_getvalueof (t_tralala *x, long *argc, t_atom **argv)
         ARRAY_GET (tempArray);
         
         if (tempArray) {
-            if (!pizSequenceEncodeToArray (x->user, tempArray)) {
-                long size = pizGrowingArrayCount (tempArray);
-                
-                if (*argc && *argv) {
-                    ;
-                } else {
-                    *argc = size;
-                    *argv = (t_atom *)getbytes(sizeof(t_atom) * size);
-                }
+        //
+        PIZError err = PIZ_GOOD;
         
-                if (*argv && (*argc >= size)) {
-                    long *ptr = pizGrowingArrayPtr (tempArray);
-                    atom_setlong_array (*argc, *argv, size, ptr);
-                }
+        USERLOCK
+        err = pizSequenceEncodeToArray (x->user, tempArray);
+        USERUNLOCK
+        
+        if (!err) {
+            long size = pizGrowingArrayCount (tempArray);
+            
+            if (*argc && *argv) {
+                ;
+            } else {
+                *argc = size;
+                *argv = (t_atom *)getbytes(sizeof(t_atom) * size);
             }
+    
+            if (*argv && (*argc >= size)) {
+                long *ptr = pizGrowingArrayPtr (tempArray);
+                atom_setlong_array (*argc, *argv, size, ptr);
+            }
+        }
+        //
         }
         
         ARRAY_RELEASE (tempArray);
@@ -1023,9 +1042,14 @@ t_max_err tralala_setChannel (t_tralala *x, t_object *attr, long argc, t_atom *a
         if (ATOMIC_INCREMENT (&x->popupLock) == 1) {
             x->channel = atom_getlong (argv);
             
-            pizSequenceSetChannel (x->user,   x->channel);
+            USERLOCK
+            pizSequenceSetChannel (x->user, x->channel);
+            USERUNLOCK
+            
+            LIVELOCK
             pizSequenceSetChannel (x->live,   x->channel);
             pizSequenceSetChannel (x->listen, x->channel);
+            LIVEUNLOCK
             
             DIRTYCHANNEL
         } 
@@ -1039,7 +1063,9 @@ t_max_err tralala_setChannel (t_tralala *x, t_object *attr, long argc, t_atom *a
 t_max_err tralala_setVelocity (t_tralala *x, t_object *attr, long argc, t_atom *argv)
 {
     if (argc && argv) {
+        LIVELOCK
         pizSequenceSetVelocity (x->live, atom_getlong (argv));
+        LIVEUNLOCK
     }
 
     return MAX_ERR_NONE;
@@ -1050,9 +1076,14 @@ t_max_err tralala_setChance (t_tralala *x, t_object *attr, long argc, t_atom *ar
     if (argc && argv) {
         x->chance = atom_getlong (argv);
         
-        pizSequenceSetChance (x->user,   x->chance);
+        USERLOCK
+        pizSequenceSetChance (x->user, x->chance);
+        USERUNLOCK
+        
+        LIVELOCK
         pizSequenceSetChance (x->live,   x->chance);
         pizSequenceSetChance (x->listen, x->chance);
+        LIVEUNLOCK
     }
 
     return MAX_ERR_NONE;
@@ -1092,13 +1123,17 @@ t_max_err tralala_setScaleKey (t_tralala *x, t_object *attr, long argc, t_atom *
                     for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
                         pizGrowingArrayAppend (tempArray, x->scaleCustom[i]);
                     }
-                    pizSequenceSetScale (x->live, x->key, x->type, tempArray);                        
+                    LIVELOCK
+                    pizSequenceSetScale (x->live, x->key, x->type, tempArray);  
+                    LIVEUNLOCK                      
                 }
                 
                 ARRAY_RELEASE (tempArray);
                 
             } else {
+                LIVELOCK
                 pizSequenceSetScale (x->live, x->key, x->type, NULL);
+                LIVEUNLOCK
             }
             
             if (LIVE) {
@@ -1160,7 +1195,9 @@ t_max_err tralala_setScaleType (t_tralala *x, t_object *attr, long argc, t_atom 
                 x->scaleType = s;
                 
                 if (x->type != PIZ_SCALE_CUSTOM)  {
+                    LIVELOCK
                     pizSequenceSetScale (x->live, x->key, x->type, NULL);
+                    LIVEUNLOCK
                 } else {
                     ARRAY_GET (tempArray);
                     
@@ -1170,8 +1207,9 @@ t_max_err tralala_setScaleType (t_tralala *x, t_object *attr, long argc, t_atom 
                         for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
                             pizGrowingArrayAppend (tempArray, x->scaleCustom[i]);
                         }
-                        
+                        LIVELOCK
                         pizSequenceSetScale (x->live, x->key, x->type, tempArray);
+                        LIVEUNLOCK
                     }
                     
                     ARRAY_RELEASE (tempArray);
@@ -1205,8 +1243,9 @@ t_max_err tralala_setScaleCustom (t_tralala *x, t_object *attr, long argc, t_ato
                 for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
                     pizGrowingArrayAppend (tempArray, x->scaleCustom[i]);
                 }
-                    
+                LIVELOCK
                 pizSequenceSetScale (x->live, x->key, x->type, tempArray);
+                LIVEUNLOCK
             }
             ARRAY_RELEASE (tempArray);
             
@@ -1234,7 +1273,7 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
     
             if (s != x->patternCell) {
             //
-            if (s == tll_sym_none)                      { x->cell = PIZ_NOTE_NONE; } 
+            if (s == tll_sym_none)                      { x->cell = PIZ_NOTE_VALUE_NONE; } 
             else if (s == tll_sym_whole)                { x->cell = PIZ_WHOLE_NOTE; } 
             else if (s == tll_sym_half)                 { x->cell = PIZ_HALF_NOTE; } 
             else if (s == tll_sym_quarter)              { x->cell = PIZ_QUARTER_NOTE; } 
@@ -1255,10 +1294,12 @@ t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_ato
             else { err = PIZ_ERROR; }
                 
             if (!err) {
+                LIVELOCK
                 pizSequenceSetGrid (x->live,    x->cell);
                 pizSequenceSetCell (x->live,    x->cell);
                 pizSequenceSetGrid (x->listen,  x->cell);
                 pizSequenceSetCell (x->listen,  x->cell);
+                LIVEUNLOCK
                 
                 x->patternCell = s;
                 
@@ -1290,8 +1331,9 @@ t_max_err tralala_setPatternCustom (t_tralala *x, t_object *attr, long argc, t_a
             for (i = 0; i < x->patternSize; i++) {
                 pizGrowingArrayAppend (tempArray, x->patternCustom[i]);
             }
-                
+            LIVELOCK    
             pizSequenceSetPattern (x->live, tempArray);
+            LIVEUNLOCK
         }
         
         ARRAY_RELEASE (tempArray);
@@ -1306,14 +1348,23 @@ t_max_err tralala_setPatternCustom (t_tralala *x, t_object *attr, long argc, t_a
 
 void tralala_play (t_tralala *x)
 {   
+    bool isAtEnd = false;
+    
     METHODSLOCK
     
     x->flags &= ~FLAG_INHIBIT_START;
     clock_unset (x->goToStartClock);
     
-    if (pizSequenceIsAtEnd (x->live) && !(x->flags & FLAG_IS_LOOPED)) {
+    LIVELOCK
+    isAtEnd = pizSequenceIsAtEnd (x->live);
+    LIVEUNLOCK
+    
+    if (isAtEnd && !(x->flags & FLAG_IS_LOOPED)) {
         x->flags &= ~FLAG_IS_RUNNING;
+        
+        LIVELOCK
         pizSequenceGoToStart (x->live);
+        LIVEUNLOCK
         
         if (!(x->flags & FLAG_INHIBIT_BANG)) {
             outlet_bang (x->middleRightOutlet);
@@ -1321,8 +1372,10 @@ void tralala_play (t_tralala *x)
     }
         
     if (!(x->flags & FLAG_IS_RUNNING) && !(x->flags & FLAG_INHIBIT_START)) {
+        LIVELOCK
         pizSequenceGoToStart (x->live);
         x->runIndex = pizSequenceIndex (x->live);
+        LIVEUNLOCK
         
         x->flags |= FLAG_IS_RUNNING;
         x->flags &= ~(FLAG_IS_LOOPED | FLAG_IS_PAUSED);
@@ -1335,13 +1388,19 @@ void tralala_play (t_tralala *x)
 
 void tralala_stop (t_tralala *x)
 {   
+    bool isAtEnd = false;
+    
     METHODSLOCK
     
     clock_unset (x->runClock);
     x->flags &= ~(FLAG_IS_LOOPED | FLAG_IS_RUNNING | FLAG_IS_PAUSED);
     x->runIndex = -1;
     
-    if (pizSequenceIsAtEnd (x->live)) {
+    LIVELOCK
+    isAtEnd = pizSequenceIsAtEnd (x->live);
+    LIVEUNLOCK
+    
+    if (isAtEnd) {
         clock_fdelay (x->goToStartClock, CLOCK_DEFER_INTERVAL);
     }
     
@@ -1357,9 +1416,11 @@ void tralala_loop (t_tralala *x)
     
     if (!(x->flags & FLAG_IS_RUNNING)) {
         clock_unset (x->goToStartClock);
-            
+        
+        LIVELOCK
         pizSequenceGoToStart (x->live);
         x->runIndex = pizSequenceIndex (x->live);
+        LIVEUNLOCK
         
         x->flags |= (FLAG_IS_LOOPED | FLAG_IS_RUNNING);
         x->flags &= ~FLAG_IS_PAUSED;
@@ -1410,14 +1471,23 @@ void tralala_runTask (t_tralala *x)
 {
     PIZError err;
     long     temp;
+    bool     isAtEnd = false;
 
-    if ((pizSequenceIsAtEnd (x->live)) && (x->flags & FLAG_IS_LOOPED)) {
+    LIVELOCK
+    isAtEnd = pizSequenceIsAtEnd (x->live);
+    LIVEUNLOCK
+    
+    if (isAtEnd && (x->flags & FLAG_IS_LOOPED)) {
         outlet_bang (x->middleRightOutlet);
+        LIVELOCK
         pizSequenceGoToStart (x->live);
+        LIVEUNLOCK
     }
-        
+    
+    LIVELOCK        
     temp = pizSequenceIndex (x->live);
     err  = pizSequenceProceedStep (x->live, x->result);
+    LIVEUNLOCK
     
     if (!err) {
         double  k;
@@ -1466,7 +1536,9 @@ void tralala_runTask (t_tralala *x)
 
 void tralala_goToStartTask (t_tralala *x)
 {
+    LIVELOCK
     pizSequenceGoToStart (x->live);
+    LIVEUNLOCK
 }
 
 void tralala_inhibitStartTask (t_tralala *x)

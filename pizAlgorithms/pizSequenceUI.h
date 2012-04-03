@@ -1,7 +1,7 @@
 /**
  * \file	pizSequenceUI.h
  * \author	Jean Sapristi
- * \date	March 30, 2012.
+ * \date	April 3, 2012.
  */
 
 /*

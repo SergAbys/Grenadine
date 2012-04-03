@@ -1,7 +1,7 @@
 /**
  * \file    pizAlgorithms.h
  * \author  Jean Sapristi
- * \date    April 2, 2012.
+ * \date    April 3, 2012.
  */
 
 /*
@@ -54,15 +54,15 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-typedef enum _PIZAlgorithm {
-    PIZ_ALGORITHM_NONE = 0,
-    PIZ_FACTOR_ORACLE,
-    PIZ_GALOIS_LATTICE,
-    PIZ_FINITE_STATE,
-    PIZ_KOHONEN_MAP,
-    PIZ_NEURAL_GAS,
-    PIZ_MARKOV_MODEL
-    } PIZAlgorithm;
+typedef long PIZAlgorithm;
+
+#define PIZ_ALGORITHM_NONE              0L
+#define PIZ_ALGORITHM_FACTOR_ORACLE     1L
+#define PIZ_ALGORITHM_GALOIS_LATTICE    2L
+#define PIZ_ALGORITHM_FINITE_STATE      4L
+#define PIZ_ALGORITHM_KOHONEN_MAP       8L
+#define PIZ_ALGORITHM_NEURAL_GAS        16L
+#define PIZ_ALGORITHM_MARKOV_MODEL      32L
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

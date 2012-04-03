@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 26/03/12.
+ *  Last modified : 03/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define STRINGSAFE  textCell[SIZE_STRING_MAX - 1] = 0;
+#define STRINGSAFE textCell[SIZE_STRING_MAX - 1] = 0;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -48,9 +48,10 @@ extern t_jsurface *tll_whole              [3];
 
 void tralala_paintTask (t_tralala *x) 
 {       
-    PIZError    err = PIZ_GOOD;
-    PIZSequence *sequence = NULL;
-    ulong       dirty;
+    ulong               dirty;
+    PIZError            err = PIZ_GOOD;
+    PIZSequence         *sequence = NULL;
+    t_systhread_mutex   *mutex = NULL;
     
     if (ATOMIC_INCREMENT (&x->paintLock) == 1) { 
     //
@@ -59,11 +60,9 @@ void tralala_paintTask (t_tralala *x)
         
     if (LIVE && !(dirty & DIRTY_SEQUENCE) && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1))) {
         ARRAYSLOCK
-
         if (tralala_hitNotesByRunIndex (x)) {           
             dirty |= DIRTY_PLAYED;
         }
-        
         ARRAYSUNLOCK
     }
     
@@ -72,8 +71,10 @@ void tralala_paintTask (t_tralala *x)
     ARRAYSLOCK
     
     if (USER) {
+        mutex = &x->userMutex;
         sequence = x->user;
     } else {
+        mutex = &x->liveMutex;
         sequence = x->live;
     }
     
@@ -86,11 +87,13 @@ void tralala_paintTask (t_tralala *x)
         
             pizGrowingArrayClear (x->zone);
             
+            LOCK
             if (x->flags & FLAG_ZONE_IS_SELECTED) {
                 pizSequenceTempZoneToArray (sequence, x->zone);
             } else {
                 pizSequenceZoneToArray (sequence, x->zone);
             }
+            UNLOCK
         }
         
         jbox_invalidate_layer ((t_object*)x, NULL, tll_sym_zoneLayer);
@@ -100,22 +103,26 @@ void tralala_paintTask (t_tralala *x)
         if (dirty & DIRTY_SEQUENCE) {
         
             if (USER) {  
+                USERLOCK
                 if (x->isMarkedNote = pizSequenceHasMarkedNote (x->user)) {
-                    x->markedPitch      = pizSequenceMarkedNoteValue (x->user, PIZ_PITCH);
-                    x->markedVelocity   = pizSequenceMarkedNoteValue (x->user, PIZ_VELOCITY);
-                    x->markedDuration   = pizSequenceMarkedNoteValue (x->user, PIZ_DURATION);
-                    x->markedChannel    = pizSequenceMarkedNoteValue (x->user, PIZ_CHANNEL);
+                    x->markedPitch      = pizSequenceMarkedNoteValue (x->user, PIZ_NOTE_PITCH);
+                    x->markedVelocity   = pizSequenceMarkedNoteValue (x->user, PIZ_NOTE_VELOCITY);
+                    x->markedDuration   = pizSequenceMarkedNoteValue (x->user, PIZ_NOTE_DURATION);
+                    x->markedChannel    = pizSequenceMarkedNoteValue (x->user, PIZ_NOTE_CHANNEL);
                 }
+                USERUNLOCK
             }
         
             pizGrowingArrayClear (x->selected);
             pizGrowingArrayClear (x->unselected);
             
+            LOCK
             if (USER) {
                 err = pizSequenceNotesToArray (sequence, x->unselected, x->selected);
             } else {
                 err = pizSequenceNotesToArray (sequence, x->unselected, x->unselected);
             }
+            UNLOCK
             
             if (LIVE && ((x->flags & FLAG_IS_RUNNING) || (x->runIndex == -1))) {    
                 tralala_hitNotesByRunIndex (x);
@@ -422,7 +429,7 @@ void tralala_paintText (t_tralala *x, t_object *patcherview)
         snprintf (textCell, SIZE_STRING_MAX, "Slot %ld", x->slotIndex); STRINGSAFE
         snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, temp); STRINGSAFE
         
-        if (x->noteValue != PIZ_NOTE_NONE) {
+        if (x->noteValue != PIZ_NOTE_VALUE_NONE) {
             tralala_setString (temp, x->noteValue, MODE_FORMAT_GRID);
             snprintf (textCell, SIZE_STRING_MAX, "%s / %s", textCell, temp); STRINGSAFE
         }
@@ -550,7 +557,7 @@ void tralala_paintGrid (t_tralala *x, t_object *patcherview)
             case PIZ_SIXTEENTH_NOTE_TRIPLET     :   background = tll_sixteenthTriplet       [z]; break;
             case PIZ_THIRTY_SECOND_NOTE         :   background = tll_thirtySecond           [z]; break;
             case PIZ_THIRTY_SECOND_NOTE_TRIPLET :   background = tll_sixteenthTriplet       [z]; break;
-            case PIZ_NOTE_NONE                  :   background = tll_eighth                 [z]; break;
+            case PIZ_NOTE_VALUE_NONE            :   background = tll_eighth                 [z]; break;
         }
             
         imageWidth  = jgraphics_image_surface_get_width (background);

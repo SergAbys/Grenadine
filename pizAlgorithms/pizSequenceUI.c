@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceUI.c
  * \author	Jean Sapristi
- * \date	March 30, 2012.
+ * \date	April 3, 2012.
  */
  
 /*
@@ -48,17 +48,17 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define ARGVWITHZONE    long argv[ ] = { x->start,                       \
-                                         x->end,                         \
-                                         x->down,                        \
+#define ARGVWITHZONE    long argv[ ] = { x->start,                              \
+                                         x->end,                                \
+                                         x->down,                               \
                                          x->up };  
                                         
-#define ARGVWITHNOTE    long argv[ ] = { note->position,                 \
-                                         note->data[PIZ_PITCH],          \
-                                         note->data[PIZ_VELOCITY],       \
-                                         note->data[PIZ_DURATION],       \
-                                         note->data[PIZ_CHANNEL],        \
-                                         note->isSelected,               \
+#define ARGVWITHNOTE    long argv[ ] = { note->position,                        \
+                                         note->data[PIZ_NOTE_PITCH],            \
+                                         note->data[PIZ_NOTE_VELOCITY],         \
+                                         note->data[PIZ_NOTE_DURATION],         \
+                                         note->data[PIZ_NOTE_CHANNEL],          \
+                                         note->isSelected,                      \
                                          (note == x->markedNote) };      
                                         
 // -------------------------------------------------------------------------------------------------------------
@@ -70,11 +70,11 @@ void pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     long     i;
     PIZNote  *note = NULL; 
     PIZEvent *event = NULL;
-    
-    PIZSEQUENCELOCK
-    
+        
     if (x->changedZone) {
+    
         ARGVWITHZONE
+        
         event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_ZONE_CHANGED, PIZ_DATA_ZONE_SIZE, argv, 0);
         if (event) {
             if (pizLinklistAppend (queue, event)) {
@@ -101,7 +101,9 @@ void pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     if (pizItemset128IsSetAtIndex (&x->addedNotes, i)) {
     //
     if (!pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note)) {
+    
         ARGVWITHNOTE
+        
         event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_NOTE_ADDED, PIZ_DATA_NOTE_SIZE, argv, i);
         if (event) {
             if (pizLinklistAppend (queue, event)) {
@@ -120,7 +122,9 @@ void pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     if (pizItemset128IsSetAtIndex (&x->changedNotes, i)) {
     //
     if (!pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note)) {
+    
         ARGVWITHNOTE
+        
         event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_NOTE_CHANGED, PIZ_DATA_NOTE_SIZE, argv, i);
         if (event) {
             if (pizLinklistAppend (queue, event)) {
@@ -138,8 +142,6 @@ void pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     pizItemset128Clear (&x->changedNotes);
     
     x->changedZone = false;
-    
-    PIZSEQUENCEUNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------

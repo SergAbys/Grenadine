@@ -1,7 +1,7 @@
 /*
  * \file    pizMarkovModel.c
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 3, 2012.
  */
  
 /*
@@ -90,15 +90,15 @@ PIZMarkovModel *pizMarkovModelNew (long argc, long *argv)
     x->beta             = (double *)malloc (x->vectorSize * x->graphSize * sizeof(double));
     x->coefficient      = (double *)malloc (x->vectorSize * sizeof(double));
     
-    if (x->start &&
-        x->transition &&
-        x->emission &&
-        x->tempStart &&
-        x->tempTransition &&
-        x->tempEmission &&
-        x->alpha &&
-        x->beta &&
-        x->coefficient &&
+    if (x->start            &&
+        x->transition       &&
+        x->emission         &&
+        x->tempStart        &&
+        x->tempTransition   &&
+        x->tempEmission     &&
+        x->alpha            &&
+        x->beta             &&
+        x->coefficient      &&
         x->tempAlpha) {
         long i;
         

@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 02/04/12.
+ *  Last modified : 03/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -33,7 +33,9 @@ void tralala_copy (t_tralala *x)
     ARRAY_GET (tempArrayB);
     
     if (tempArrayA && tempArrayB)  {
+        LIVELOCK
         err |= pizSequenceNotesToArray (x->listen, tempArrayA, tempArrayA);
+        LIVEUNLOCK
     } else {
         err |= PIZ_MEMORY;
     }
@@ -49,7 +51,9 @@ void tralala_copy (t_tralala *x)
             }
         }
         
+        LIVELOCK
         pizSequenceAddNotes (x->live, tempArrayB, PIZ_SEQUENCE_ADD_FLAG_PATTERN);
+        LIVEUNLOCK
     }
     
     ARRAY_RELEASE (tempArrayA);
@@ -77,8 +81,10 @@ void tralala_setLiveByUser (t_tralala *x)
     ARRAY_GET (tempArrayB);
     
     if (tempArrayA && tempArrayB)  {
+        USERLOCK
         err |= pizSequenceNotesToArray (x->user, tempArrayA, tempArrayA);
         pizSequenceZoneToArray (x->user, tempArrayB);
+        USERUNLOCK
     } else {
         err |= PIZ_MEMORY;
     }
@@ -86,9 +92,11 @@ void tralala_setLiveByUser (t_tralala *x)
     if (!err) {
         long addFlags = PIZ_SEQUENCE_ADD_FLAG_PATTERN | PIZ_SEQUENCE_ADD_FLAG_CLEAR;
         
+        LIVELOCK
         pizSequenceAddNotes (x->live, tempArrayA, addFlags);
         pizSequenceSetZone  (x->live, tempArrayB);
         pizSequenceSetZone  (x->listen, tempArrayB);
+        LIVEUNLOCK
     }
     
     ARRAY_RELEASE (tempArrayA);
@@ -162,7 +170,7 @@ void tralala_learnTask (t_tralala *x)
                 i --;
             }
             
-            x->learnCycle       = PIZ_FACTOR_ORACLE;
+            x->learnCycle       = PIZ_ALGORITHM_FACTOR_ORACLE;
             x->learnThreshold   = SIZE_LEARN_MIN + (SIZE_LEARN_RANGE + 1) * RANDOM;
         }
             
@@ -175,12 +183,12 @@ void tralala_learnTask (t_tralala *x)
         ALGORITHMSLOCK
         
         switch (x->learnCycle) {
-            case PIZ_FACTOR_ORACLE  :   pizFactorOracleAdd (x->factorOracle, k, values);
-                                        x->learnCycle = PIZ_GALOIS_LATTICE; break;
-            case PIZ_GALOIS_LATTICE :   pizGaloisLatticeAdd (x->galoisLattice, k, values);
-                                        x->learnCycle = PIZ_FINITE_STATE; break;
-            case PIZ_FINITE_STATE   :   pizFiniteStateAdd (x->finiteState, k, values);
-                                        x->learnCycle = PIZ_ALGORITHM_NONE; break;
+            case PIZ_ALGORITHM_FACTOR_ORACLE  :     pizFactorOracleAdd (x->factorOracle, k, values);
+                                                    x->learnCycle = PIZ_ALGORITHM_GALOIS_LATTICE; break;
+            case PIZ_ALGORITHM_GALOIS_LATTICE :     pizGaloisLatticeAdd (x->galoisLattice, k, values);
+                                                    x->learnCycle = PIZ_ALGORITHM_FINITE_STATE; break;
+            case PIZ_ALGORITHM_FINITE_STATE   :     pizFiniteStateAdd (x->finiteState, k, values);
+                                                    x->learnCycle = PIZ_ALGORITHM_NONE; break;
         }
         
         ALGORITHMSUNLOCK
@@ -272,56 +280,62 @@ void tralala_slot (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     ATOMIC_DECREMENT (&x->popupLock);
 }
 
-void tralala_parseArguments (t_tralala *x, t_tralalaData *data, long argc, t_atom *argv)
+void tralala_parseArguments (t_tralala *x, t_tralalaData *d, long argc, t_atom *argv)
 {
-    data->draw      = LIVE;
-    data->count     = 0;
-    data->option    = OPTION_NONE;
-    data->selector  = PIZ_PITCH;
-    data->sequence  = x->live;
+    d->draw      = LIVE;
+    d->count     = 0;
+    d->option    = OPTION_NONE;
+    d->selector  = PIZ_NOTE_PITCH;
+    d->sequence  = x->live;
+    d->mutex     = &x->liveMutex;
         
-    if (argc && argv && data) {
-        long i;
+    if (argc && argv && d) {
+    //
+    long i;
+    
+    for (i = 0; i < argc; i++) {
+    //
+    long t = atom_gettype (argv + i);
+    
+    if (t == A_SYM) {
+
+        t_symbol *s = atom_getsym (argv + i);
         
-        for (i = 0; i < argc; i++) {
-            long t = atom_gettype (argv + i);
-            
-            if (t == A_SYM) {
-                t_symbol *s = atom_getsym (argv + i);
-                
-                if (s == tll_sym_live)          { data->draw = LIVE; data->sequence  = x->live; }
-                else if (s == tll_sym_user)     { data->draw = USER; data->sequence = x->user; } 
-                else if (s == tll_sym_listen)   { data->draw = 0; data->sequence = x->listen; } 
-                else if (s == tll_sym_pitch)    { data->selector = PIZ_PITCH; } 
-                else if (s == tll_sym_velocity) { data->selector = PIZ_VELOCITY; } 
-                else if (s == tll_sym_duration) { data->selector = PIZ_DURATION; } 
-                else if (s == tll_sym_channel)  { data->selector = PIZ_CHANNEL; }
-                else if (s == tll_sym_notes)    { data->option = OPTION_NOTES; } 
-                else if (s == tll_sym_zone)     { data->option = OPTION_ZONE; } 
-                else if (s == tll_sym_count)    { data->option = OPTION_COUNT; } 
-                else if (s == tll_sym_down)     { data->option = OPTION_DOWN; } 
-                else if (s == tll_sym_duple)    { data->option = OPTION_DUPLE; } 
-                else if (s == tll_sym_triple)   { data->option = OPTION_TRIPLE; }
-                else if (s == tll_sym_recall )  { data->option = OPTION_RECALL; }
-                else if (s == tll_sym_store )   { data->option = OPTION_STORE; }
-                else if (s == tll_sym_new)      { data->option = OPTION_NEW; }
-                else if (s == tll_sym_newCopy)  { data->option = OPTION_NEWCOPY; }
-                else if (s == tll_sym_remove )  { data->option = OPTION_REMOVE; }
-                else if (s == tll_sym_swap)     { data->option = OPTION_SWAP; }
-                else if (s == tll_sym_copy)     { data->option = OPTION_COPY; }
-                else if (s == tll_sym_next)     { data->option = OPTION_NEXT; }
-                else if (s == tll_sym_previous) { data->option = OPTION_PREVIOUS; }
-                
-            } else if (t == A_LONG) {
-                if (data->count < PIZ_MAGIC_SCALE) {
-                    data->values[data->count] = atom_getlong (argv + i);
-                    data->count ++;
-                }
-            }
+        if (s == tll_sym_live)          { d->draw = LIVE; d->sequence = x->live; d->mutex = &x->liveMutex; }
+        else if (s == tll_sym_user)     { d->draw = USER; d->sequence = x->user; d->mutex = &x->userMutex; } 
+        else if (s == tll_sym_listen)   { d->draw = 0; d->sequence = x->listen; d->mutex = &x->liveMutex; } 
+        else if (s == tll_sym_pitch)    { d->selector = PIZ_NOTE_PITCH; } 
+        else if (s == tll_sym_velocity) { d->selector = PIZ_NOTE_VELOCITY; } 
+        else if (s == tll_sym_duration) { d->selector = PIZ_NOTE_DURATION; } 
+        else if (s == tll_sym_channel)  { d->selector = PIZ_NOTE_CHANNEL; }
+        else if (s == tll_sym_notes)    { d->option = OPTION_NOTES; } 
+        else if (s == tll_sym_zone)     { d->option = OPTION_ZONE; } 
+        else if (s == tll_sym_count)    { d->option = OPTION_COUNT; } 
+        else if (s == tll_sym_down)     { d->option = OPTION_DOWN; } 
+        else if (s == tll_sym_duple)    { d->option = OPTION_DUPLE; } 
+        else if (s == tll_sym_triple)   { d->option = OPTION_TRIPLE; }
+        else if (s == tll_sym_recall )  { d->option = OPTION_RECALL; }
+        else if (s == tll_sym_store )   { d->option = OPTION_STORE; }
+        else if (s == tll_sym_new)      { d->option = OPTION_NEW; }
+        else if (s == tll_sym_newCopy)  { d->option = OPTION_NEWCOPY; }
+        else if (s == tll_sym_remove )  { d->option = OPTION_REMOVE; }
+        else if (s == tll_sym_swap)     { d->option = OPTION_SWAP; }
+        else if (s == tll_sym_copy)     { d->option = OPTION_COPY; }
+        else if (s == tll_sym_next)     { d->option = OPTION_NEXT; }
+        else if (s == tll_sym_previous) { d->option = OPTION_PREVIOUS; }
+
+    } else if (t == A_LONG) {
+        if (d->count < PIZ_MAGIC_SCALE) {
+            d->values[d->count] = atom_getlong (argv + i);
+            d->count ++;
         }
     }
+    //
+    }
+    //
+    }
     
-    if ((data->sequence == x->user)) {
+    if ((d->sequence == x->user)) {
         if (USER) {
             tralala_willChange (x);
             DIRTYLAYER_SET (DIRTY_ZONE | DIRTY_SEQUENCE);
@@ -340,8 +354,10 @@ void tralala_sequenceClear (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     t_tralalaData data;
     tralala_parseArguments (x, &data, argc, argv);
     
+    DATALOCK
     data.draw &= (pizSequenceCount (data.sequence) > 0);
-    pizSequenceClear (data.sequence); 
+    pizSequenceClear (data.sequence);
+    DATAUNLOCK 
     
     if (data.draw) {
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
@@ -353,7 +369,9 @@ void tralala_sequenceKill (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     t_tralalaData data;
     tralala_parseArguments (x, &data, argc, argv);
     
-    data.draw &= pizSequenceKillNotes (data.sequence);
+    DATALOCK
+    data.draw &= pizSequenceKill (data.sequence);
+    DATAUNLOCK
     
     if (data.draw) {
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
@@ -362,13 +380,14 @@ void tralala_sequenceKill (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_sequenceZoulou (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
+    long t = PIZ_ALGORITHM_FACTOR_ORACLE;
     t_tralalaData data;
     tralala_parseArguments (x, &data, argc, argv);
     
     ALGORITHMSLOCK
-    
-    data.draw &= pizSequenceProceedAlgorithm (data.sequence, PIZ_FACTOR_ORACLE, (void *)x->factorOracle);
-    
+    DATALOCK
+    data.draw &= pizSequenceAlgorithm (data.sequence, t, (void *)x->factorOracle);
+    DATAUNLOCK
     ALGORITHMSUNLOCK
     
     if (data.draw) {
@@ -378,13 +397,14 @@ void tralala_sequenceZoulou (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_sequenceRomeo (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
+    long t = PIZ_ALGORITHM_GALOIS_LATTICE;
     t_tralalaData data;
     tralala_parseArguments (x, &data, argc, argv);
     
     ALGORITHMSLOCK
-    
-    data.draw &= pizSequenceProceedAlgorithm (data.sequence, PIZ_GALOIS_LATTICE, (void *)x->galoisLattice);
-    
+    DATALOCK
+    data.draw &= pizSequenceAlgorithm (data.sequence, t, (void *)x->galoisLattice);
+    DATAUNLOCK
     ALGORITHMSUNLOCK
     
     if (data.draw) {
@@ -394,13 +414,14 @@ void tralala_sequenceRomeo (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_sequenceUniform (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
+    long t = PIZ_ALGORITHM_FINITE_STATE;
     t_tralalaData data;
     tralala_parseArguments (x, &data, argc, argv);
     
     ALGORITHMSLOCK
-    
-    data.draw &= pizSequenceProceedAlgorithm (data.sequence, PIZ_FINITE_STATE, (void *)x->finiteState);
-    
+    DATALOCK
+    data.draw &= pizSequenceAlgorithm (data.sequence, t, (void *)x->finiteState);
+    DATAUNLOCK
     ALGORITHMSUNLOCK
     
     if (data.draw) {
@@ -418,8 +439,10 @@ void tralala_sequenceClean (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         value = data.values[0];
     }
     
+    DATALOCK
     data.draw &= pizSequenceClean (data.sequence, value);
-        
+    DATAUNLOCK
+    
     if (data.draw) {
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
     }
@@ -456,7 +479,9 @@ void tralala_sequenceNote (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
                 mode = PIZ_SEQUENCE_ADD_FLAG_AMBITUS;
             }
             
+            DATALOCK
             data.draw &= !(pizSequenceAddNotes (data.sequence, tempArray, mode)); 
+            DATAUNLOCK
         }
         
         ARRAY_RELEASE (tempArray);
@@ -480,11 +505,15 @@ void tralala_sequenceZone (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
             pizGrowingArrayAppend (tempArray, (long)(data.values[1] / TIME_TICKS_PER_STEP));
             pizGrowingArrayAppend (tempArray, data.values[2]);
             pizGrowingArrayAppend (tempArray, data.values[3]);
-
+            
+            DATALOCK
             data.draw &= !(pizSequenceSetZone (data.sequence, tempArray));
+            DATAUNLOCK
             
             if (data.sequence == x->live) {
+                LIVELOCK
                 pizSequenceSetZone (x->listen, tempArray);
+                LIVEUNLOCK
             }
         }
         
@@ -509,7 +538,10 @@ void tralala_sequenceDump (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     if (tempArray) {
         long i, count, position, pitch, velocity, duration, channel;
         
+        DATALOCK
         pizSequenceNotesToArray (data.sequence, tempArray, tempArray);
+        DATAUNLOCK
+        
         count = pizGrowingArrayCount (tempArray);
         outlet_anything  (x->rightOutlet, tll_sym_start, 0, NULL);
         
@@ -542,7 +574,9 @@ void tralala_sequenceDump (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         t_atom  zone[4];
         long    start, end, down, up;
     
+        DATALOCK
         pizSequenceZoneToArray (data.sequence, tempArray);
+        DATAUNLOCK
     
         start   = pizGrowingArrayValueAtIndex (tempArray, PIZ_DATA_START) * TIME_TICKS_PER_STEP;
         end     = pizGrowingArrayValueAtIndex (tempArray, PIZ_DATA_END) * TIME_TICKS_PER_STEP;
@@ -561,8 +595,12 @@ void tralala_sequenceDump (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     //    
     } else if (data.option == OPTION_COUNT) {
         t_atom  a;
-        long    count = pizSequenceCount (data.sequence);
+        long    count;
         
+        DATALOCK
+        count = pizSequenceCount (data.sequence);
+        DATAUNLOCK
+                
         atom_setlong (&a, count);
         outlet_anything  (x->rightOutlet, tll_sym_count, 1, &a);
     }
@@ -578,8 +616,10 @@ void tralala_sequenceRotate (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         value = data.values[0];
     }
     
+    DATALOCK
     data.draw &= pizSequenceRotate (data.sequence, data.selector, value);
-    
+    DATAUNLOCK
+        
     if (data.draw) {
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
     }
@@ -590,8 +630,10 @@ void tralala_sequenceScramble (t_tralala *x, t_symbol *s, long argc, t_atom *arg
     t_tralalaData data;
     tralala_parseArguments (x, &data, argc, argv);
     
+    DATALOCK
     data.draw &= pizSequenceScramble (data.sequence, data.selector);
-    
+    DATAUNLOCK
+        
     if (data.draw) {
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
     }
@@ -602,7 +644,9 @@ void tralala_sequenceSort (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     t_tralalaData data;
     tralala_parseArguments (x, &data, argc, argv);
     
+    DATALOCK
     data.draw &= pizSequenceSort (data.sequence, data.selector, (data.option == OPTION_DOWN));
+    DATAUNLOCK
     
     if (data.draw) {
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
@@ -615,23 +659,27 @@ void tralala_sequenceChange (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     tralala_parseArguments (x, &data, argc, argv);
     
     if (data.count == 1) {
-        if (data.selector == PIZ_DURATION) {
+        if (data.selector == PIZ_NOTE_DURATION) {
             data.values[0] = (long)(data.values[0] / TIME_TICKS_PER_STEP);
         }
 
+        DATALOCK
         data.draw &= pizSequenceChange (data.sequence, data.selector, data.values[0]);
+        DATAUNLOCK
         
         if (data.draw) {
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
         }
         
     } else if (data.count == 2) {
-        if (data.selector == PIZ_DURATION) {
+        if (data.selector == PIZ_NOTE_DURATION) {
             data.values[0] = (long)(data.values[0] / TIME_TICKS_PER_STEP);
             data.values[1] = (long)(data.values[1] / TIME_TICKS_PER_STEP);
         }
         
+        DATALOCK
         data.draw &= pizSequenceRandom (data.sequence, data.selector, data.values[0], data.values[1]);
+        DATAUNLOCK
         
         if (data.draw) {
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
@@ -645,11 +693,13 @@ void tralala_sequenceSet (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     tralala_parseArguments (x, &data, argc, argv);
     
     if (data.count == 1) {
-        if (data.selector == PIZ_DURATION) {
+        if (data.selector == PIZ_NOTE_DURATION) {
             data.values[0] = (long)(data.values[0] / TIME_TICKS_PER_STEP);
         }
 
+        DATALOCK
         data.draw &= pizSequenceSet (data.sequence, data.selector, data.values[0]);
+        DATAUNLOCK
         
         if (data.draw) {
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
@@ -667,7 +717,9 @@ void tralala_sequenceNovember (t_tralala *x, t_symbol *s, long argc, t_atom *arg
         value = CLAMP (data.values[0], 1, SIZE_NOVEMBER_MAX);
     }
     
-    data.draw &= pizSequenceCellularAutomata (data.sequence, value);
+    DATALOCK
+    data.draw &= pizSequenceNovember (data.sequence, value);
+    DATAUNLOCK
     
     if (data.draw) {
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
@@ -691,7 +743,9 @@ void tralala_sequenceJuliet (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         division = 3;
     }
     
-    data.draw &= pizSequenceGenerator (data.sequence, value, division);
+    DATALOCK
+    data.draw &= pizSequenceJuliet (data.sequence, value, division);
+    DATAUNLOCK
     
     if (data.draw) {
         DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
@@ -708,7 +762,10 @@ void tralala_sequenceCycle (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
             
         if (tempArray) {
             pizGrowingArrayAppendPtr (tempArray, data.count, data.values);
+            
+            DATALOCK
             data.draw = pizSequenceCycle (data.sequence, x->key, tempArray);
+            DATAUNLOCK
             
             if (data.draw) {
                 DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
@@ -763,11 +820,12 @@ void tralala_slotRecall (t_tralala *x, long n)
             x->slotIndex = n;
         }
         
+        USERLOCK
         pizSequenceDecodeWithArray (x->user, slot);
-        
-        x->cell      = pizSequenceCell (x->user);
-        x->grid      = pizSequenceGrid (x->user);
+        x->cell = pizSequenceCell (x->user);
+        x->grid = pizSequenceGrid (x->user);
         x->noteValue = pizSequenceNoteValue (x->user);
+        USERUNLOCK
         
         DIRTYPATTR
         
@@ -783,7 +841,10 @@ void tralala_slotStore (t_tralala *x)
     
     if (!pizLinklistPtrAtIndex (x->slots, x->slotIndex, (void **)&slot)) {
         pizGrowingArrayClear (slot);
+        
+        USERLOCK
         pizSequenceEncodeToArray (x->user, slot);
+        USERUNLOCK
     }
 }
 

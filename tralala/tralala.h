@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 02/04/12.
+ *  Last modified : 03/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -242,17 +242,35 @@
 
 #define RANDOM              (rand_r (&x->seed) / (RAND_MAX + 1.0))
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 #define ARRAYSLOCK          systhread_mutex_lock (&x->arraysMutex); 
 #define ARRAYSUNLOCK        systhread_mutex_unlock (&x->arraysMutex);
 
-#define METHODSLOCK         systhread_mutex_lock (&x->methodsMutex); 
-#define METHODSUNLOCK       systhread_mutex_unlock (&x->methodsMutex); 
+#define METHODSLOCK         systhread_mutex_lock (&x->methodsMutex);
+#define METHODSUNLOCK       systhread_mutex_unlock (&x->methodsMutex);
 
 #define LEARNLOCK           systhread_mutex_lock (&x->learnMutex);
 #define LEARNUNLOCK         systhread_mutex_unlock (&x->learnMutex);
 
 #define ALGORITHMSLOCK      systhread_mutex_lock (&x->algorithmsMutex);
 #define ALGORITHMSUNLOCK    systhread_mutex_unlock (&x->algorithmsMutex);
+
+#define USERLOCK            systhread_mutex_lock (&x->userMutex);
+#define USERUNLOCK          systhread_mutex_unlock (&x->userMutex);
+
+#define LIVELOCK            systhread_mutex_lock (&x->liveMutex);
+#define LIVEUNLOCK          systhread_mutex_unlock (&x->liveMutex);
+
+#define DATALOCK            systhread_mutex_lock (data.mutex);
+#define DATAUNLOCK          systhread_mutex_unlock (data.mutex);
+
+#define LOCK                systhread_mutex_lock (mutex); 
+#define UNLOCK              systhread_mutex_unlock (mutex);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
 #define DIRTYPATTR          clock_fdelay (x->notifyClock, CLOCK_NOTIFY_INTERVAL); 
 #define DIRTYSLOTS          if (x->saveSlotsWithPatcher) {                                  \
@@ -321,6 +339,8 @@ typedef struct _tralala {
     t_systhread_mutex   arraysMutex;
     t_systhread_mutex   methodsMutex;
     t_systhread_mutex   algorithmsMutex;
+    t_systhread_mutex   userMutex;
+    t_systhread_mutex   liveMutex;
     void                *runClock;
     void                *paintClock;
     void                *learnClock;
@@ -429,12 +449,13 @@ typedef struct _tralala {
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _tralalaData {
-    long        draw;
-    long        values[PIZ_MAGIC_SCALE];
-    long        count;
-    long        option;
-    PIZSelector selector;
-    PIZSequence *sequence;
+    long                draw;
+    long                values[PIZ_MAGIC_SCALE];
+    long                count;
+    long                option;
+    PIZNoteSelector     selector;
+    PIZSequence         *sequence;
+    t_systhread_mutex   *mutex;
 } t_tralalaData;
 
 enum {
@@ -510,7 +531,7 @@ void        tralala_handle                  (t_tralala *x, t_symbol *s, long arg
 void        tralala_anything                (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void        tralala_slot                    (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 
-void        tralala_parseArguments          (t_tralala *x, t_tralalaData *data, long argc, t_atom *argv);
+void        tralala_parseArguments          (t_tralala *x, t_tralalaData *d, long argc, t_atom *argv);
 
 void        tralala_sequenceClear           (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void        tralala_sequenceKill            (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
@@ -610,6 +631,7 @@ void        tralala_duplicateSelectedNotes              (t_tralala *x);
 void        tralala_setSelectedNotesVelocity            (t_tralala *x, long velocity);
 void        tralala_setSelectedNotesChannel             (t_tralala *x, long channel);
 
+long        tralala_hitTest                             (t_tralala *x);
 long        tralala_hitZone                             (t_tralala *x, t_pt pt);
 long        tralala_hitText                             (t_tralala *x, t_object *patcherview, t_pt pt);
 bool        tralala_pasteFromClipboard                  (t_tralala *x);
