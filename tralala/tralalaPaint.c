@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 03/04/12.
+ *  Last modified : 04/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -118,9 +118,9 @@ void tralala_paintTask (t_tralala *x)
             
             LOCK
             if (USER) {
-                err = pizSequenceNotesToArray (sequence, x->unselected, x->selected);
+                err = pizSequenceNotesToArrays (sequence, x->unselected, x->selected);
             } else {
-                err = pizSequenceNotesToArray (sequence, x->unselected, x->unselected);
+                err = pizSequenceNotesToArrays (sequence, x->unselected, x->unselected);
             }
             UNLOCK
             

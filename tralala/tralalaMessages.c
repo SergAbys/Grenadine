@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 03/04/12.
+ *  Last modified : 04/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ void tralala_copy (t_tralala *x)
     
     if (tempArrayA && tempArrayB)  {
         LIVELOCK
-        err |= pizSequenceNotesToArray (x->listen, tempArrayA, tempArrayA);
+        err |= pizSequenceNotesToArrays (x->listen, tempArrayA, tempArrayA);
         LIVEUNLOCK
     } else {
         err |= PIZ_MEMORY;
@@ -82,7 +82,7 @@ void tralala_setLiveByUser (t_tralala *x)
     
     if (tempArrayA && tempArrayB)  {
         USERLOCK
-        err |= pizSequenceNotesToArray (x->user, tempArrayA, tempArrayA);
+        err |= pizSequenceNotesToArrays (x->user, tempArrayA, tempArrayA);
         pizSequenceZoneToArray (x->user, tempArrayB);
         USERUNLOCK
     } else {
@@ -539,7 +539,7 @@ void tralala_sequenceDump (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         long i, count, position, pitch, velocity, duration, channel;
         
         DATALOCK
-        pizSequenceNotesToArray (data.sequence, tempArray, tempArray);
+        pizSequenceNotesToArrays (data.sequence, tempArray, tempArray);
         DATAUNLOCK
         
         count = pizGrowingArrayCount (tempArray);

@@ -163,12 +163,12 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				96CE23E4152A139F00DB2875 /* maxMSP */,
+				96D75283152C4CF8008278C4 /* MaxMSP */,
 				96AF1B80148CFC39001358AB /* Structures */,
 				96AF1B7F148CFC19001358AB /* Algorithms */,
-				96AF1B7E148CFBF7001358AB /* Sequence */,
 				96D189B41529A9CB00DD5DE0 /* Time */,
 				96D425811529D3170055F6A9 /* Event */,
+				96AF1B7E148CFBF7001358AB /* Sequence */,
 				96D8682714FF5A4B00849A50 /* Agent */,
 			);
 			name = Source;
@@ -189,10 +189,12 @@
 				96A16F7D148CF856008268A6 /* pizSequenceTransform.h */,
 				96D1ABEB150CB776000CD8FC /* pizSequenceUI.h */,
 				968C6BBE1528B80E00AB45D3 /* pizSequenceLibrary.h */,
+				96A100A714E7F16A00D3ECB6 /* pizSequenceMaxMSP.h */,
 				96A16F78148CF839008268A6 /* pizSequence.c */,
 				96A16F77148CF839008268A6 /* pizSequenceTransform.c */,
 				96D1ABEC150CB776000CD8FC /* pizSequenceUI.c */,
 				968C6BBF1528B80E00AB45D3 /* pizSequenceLibrary.c */,
+				96A100A614E7F16A00D3ECB6 /* pizSequenceMaxMSP.c */,
 			);
 			name = Sequence;
 			sourceTree = "<group>";
@@ -247,21 +249,6 @@
 			name = Structures;
 			sourceTree = "<group>";
 		};
-		96CE23E4152A139F00DB2875 /* maxMSP */ = {
-			isa = PBXGroup;
-			children = (
-				96A05BF814E3FBF80028A323 /* pizAlgorithmsMaxMSP.h */,
-				96A100A714E7F16A00D3ECB6 /* pizSequenceMaxMSP.h */,
-				96E60FC11498993F00CE103D /* pizFactorOracleMaxMSP.c */,
-				96E60FEE14989B9500CE103D /* pizGaloisLatticeMaxMSP.c */,
-				969CFAAD14CC581900D52846 /* pizKohonenMapMaxMSP.c */,
-				96749BE614CC5AA200BA3990 /* pizNeuralGasMaxMSP.c */,
-				96749BF214CC5C3C00BA3990 /* pizMarkovModelMaxMSP.c */,
-				96A100A614E7F16A00D3ECB6 /* pizSequenceMaxMSP.c */,
-			);
-			name = maxMSP;
-			sourceTree = "<group>";
-		};
 		96D189B41529A9CB00DD5DE0 /* Time */ = {
 			isa = PBXGroup;
 			children = (
@@ -278,6 +265,19 @@
 				96D796C6151716AC00109654 /* pizEvent.c */,
 			);
 			name = Event;
+			sourceTree = "<group>";
+		};
+		96D75283152C4CF8008278C4 /* MaxMSP */ = {
+			isa = PBXGroup;
+			children = (
+				96A05BF814E3FBF80028A323 /* pizAlgorithmsMaxMSP.h */,
+				96E60FC11498993F00CE103D /* pizFactorOracleMaxMSP.c */,
+				96E60FEE14989B9500CE103D /* pizGaloisLatticeMaxMSP.c */,
+				969CFAAD14CC581900D52846 /* pizKohonenMapMaxMSP.c */,
+				96749BE614CC5AA200BA3990 /* pizNeuralGasMaxMSP.c */,
+				96749BF214CC5C3C00BA3990 /* pizMarkovModelMaxMSP.c */,
+			);
+			name = MaxMSP;
 			sourceTree = "<group>";
 		};
 		96D8682714FF5A4B00849A50 /* Agent */ = {

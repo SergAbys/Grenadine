@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceMaxMSP.h
  * \author  Jean Sapristi
- * \date    April 3, 2012.
+ * \date    April 4, 2012.
  */
  
 /*
@@ -66,8 +66,7 @@ void            pizSequenceChangeMarkedNoteValue        (PIZSequence *x, PIZNote
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError        pizSequenceZoneToArray                  (PIZSequence *x, PIZGrowingArray *a);
-PIZError        pizSequenceNotesToArray                 (PIZSequence *x, 
+PIZError        pizSequenceNotesToArrays                (PIZSequence *x, 
                                                         PIZGrowingArray *unselected, 
                                                         PIZGrowingArray *selected);
                                                     

@@ -531,14 +531,14 @@ void tralala_key (t_tralala *x, t_object *patcherview, long keycode, long modifi
         } else if (COPY)  {
             pizGrowingArrayClear (tll_clipboard);
             USERLOCK
-            tll_clipboardError = pizSequenceNotesToArray (x->user, NULL, tll_clipboard);
+            tll_clipboardError = pizSequenceNotesToArrays (x->user, NULL, tll_clipboard);
             USERUNLOCK
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
             
         } else if (CUT)  {
             pizGrowingArrayClear (tll_clipboard);
             USERLOCK
-            tll_clipboardError = pizSequenceNotesToArray (x->user, NULL, tll_clipboard);
+            tll_clipboardError = pizSequenceNotesToArrays (x->user, NULL, tll_clipboard);
             pizSequenceRemoveSelectedNotes (x->user);
             USERUNLOCK
             DIRTYLAYER_SET (DIRTY_NOTES | DIRTY_SEQUENCE);
