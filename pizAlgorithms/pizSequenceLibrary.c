@@ -66,10 +66,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *values, long flags)
     }
     
     if (flags & PIZ_SEQUENCE_ADD_FLAG_PATTERN) {
-        long patternSize = pizGrowingArrayCount (x->pattern);  
-        if (patternSize) {
-            position = pizSequenceSnapPositionToPattern (x, position, patternSize);
-        }
+        position = pizSequenceSnapPositionToPattern (x, position);
     } 
     
     if (flags & PIZ_SEQUENCE_ADD_FLAG_AMBITUS) {
@@ -251,17 +248,21 @@ long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
     return (CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
 }
 
-long pizSequenceSnapPositionToPattern (PIZSequence *x, long toSnapped, long patternSize)
+long pizSequenceSnapPositionToPattern (PIZSequence *x, long position)
 {
-    if (x->cell != PIZ_NOTE_VALUE_NONE) {
-        long j = MAX ((long)(toSnapped / (double)x->cell), 0);
-        long k = j % patternSize;
-    
-        toSnapped = j * x->cell;
-        toSnapped += pizGrowingArrayValueAtIndex (x->pattern, k) * x->cell;
+    long patternSize = pizGrowingArrayCount (x->pattern);  
+        
+    if (patternSize) {
+        if (x->cell != PIZ_NOTE_VALUE_NONE) {
+            long j = MAX ((long)(position / (double)x->cell), 0);
+            long k = j % patternSize;
+        
+            position = j * x->cell;
+            position += pizGrowingArrayValueAtIndex (x->pattern, k) * x->cell;
+        }
     }
 
-    return toSnapped;
+    return position;
 }
 
 // -------------------------------------------------------------------------------------------------------------

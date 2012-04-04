@@ -1,7 +1,7 @@
 /*
  * \file    pizFactorOracle.c
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 4, 2012.
  */
  
 /*
@@ -70,14 +70,20 @@ PIZFactorOracle *pizFactorOracleNew (long argc, long *argv)
         x->nodes[0].arcDestinations = pizGrowingArrayNew (PIZ_ARRAY_INIT_SIZE);
         
         if (x->nodes[0].arcValues && x->nodes[0].arcDestinations) {
-            x->size                 = PIZ_ORACLE_INIT_SIZE;
-            x->peak                 = 1;
-            x->index                = 1;
-            x->shuttle              = 0;
-            x->backwardThreshold    = PIZ_DEFAULT_BACKWARD_THRESHOLD;
-            x->straightRatio        = PIZ_DEFAULT_STRAIGHT_RATIO;
-            x->seed                 = (unsigned int)time(NULL);
-    
+            x->size                     = PIZ_ORACLE_INIT_SIZE;
+            x->peak                     = 1;
+            x->index                    = 1;
+            x->shuttle                  = 0;
+            x->backwardThreshold        = PIZ_DEFAULT_BACKWARD_THRESHOLD;
+            x->straightRatio            = PIZ_DEFAULT_STRAIGHT_RATIO;
+            x->seed                     = (unsigned int)time(NULL);
+            
+            x->algorithm.type           = PIZ_ALGORITHM_TYPE_FACTOR_ORACLE;
+            x->algorithm.addMethod      = pizFactorOracleAdd;
+            x->algorithm.clearMethod    = pizFactorOracleClear;
+            x->algorithm.proceedMethod  = pizFactorOracleProceed;
+            x->algorithm.countMethod    = pizFactorOracleCount;
+            
             x->nodes[0].referTo              = -1;
             x->nodes[0].lengthRepeatedSuffix = 0;
             
@@ -231,7 +237,7 @@ PIZError pizFactorOracleAdd (PIZFactorOracle *x, long argc, long *argv)
     return err;
 }
 
-void pizFactorOracleClear (PIZFactorOracle *x)
+PIZError pizFactorOracleClear (PIZFactorOracle *x)
 {
     x->index    = 1;
     x->shuttle  = 0;
@@ -241,6 +247,8 @@ void pizFactorOracleClear (PIZFactorOracle *x)
     
     pizGrowingArrayClear (x->nodes[0].arcValues);
     pizGrowingArrayClear (x->nodes[0].arcDestinations);
+    
+    return PIZ_GOOD;
 }
 
 PIZError pizFactorOracleProceed (PIZFactorOracle *x, long argc, long *argv)

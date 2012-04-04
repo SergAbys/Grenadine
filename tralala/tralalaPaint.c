@@ -118,9 +118,9 @@ void tralala_paintTask (t_tralala *x)
             
             LOCK
             if (USER) {
-                err = pizSequenceNotesToArrays (sequence, x->unselected, x->selected);
+                err = pizSequenceNotesToArray (sequence, x->unselected, x->selected);
             } else {
-                err = pizSequenceNotesToArrays (sequence, x->unselected, x->unselected);
+                err = pizSequenceNotesToArray (sequence, x->unselected, x->unselected);
             }
             UNLOCK
             

@@ -221,11 +221,10 @@ void            pizSequenceFree                     (PIZSequence *x);
 // -------------------------------------------------------------------------------------------------------------
 
 long            pizSequenceCount                    (PIZSequence *x);
-
+long            pizSequenceIndex                    (PIZSequence *x);
 long            pizSequenceChance                   (PIZSequence *x);
 long            pizSequenceVelocity                 (PIZSequence *x);
 long            pizSequenceChannel                  (PIZSequence *x);
-long            pizSequenceIndex                    (PIZSequence *x);
 PIZNoteValue    pizSequenceCell                     (PIZSequence *x);
 PIZNoteValue    pizSequenceGrid                     (PIZSequence *x);
 PIZNoteValue    pizSequenceNoteValue                (PIZSequence *x);
@@ -247,15 +246,6 @@ PIZError        pizSequenceSetPattern               (PIZSequence *x, const PIZGr
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError        pizSequenceZoneToArray              (PIZSequence *x, PIZGrowingArray *a);
-PIZError        pizSequenceNotesToArray             (PIZSequence *x, PIZGrowingArray *a);
-
-PIZError        pizSequenceSetZone                  (PIZSequence *x, const PIZGrowingArray *a);
-PIZError        pizSequenceAddNotes                 (PIZSequence *x, const PIZGrowingArray *a, long flags);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 bool            pizSequenceIsAtEnd                  (PIZSequence *x);
 void            pizSequenceGoToStart                (PIZSequence *x);
 PIZError        pizSequenceProceedStep              (PIZSequence *x, PIZGrowingArray *a);
@@ -270,6 +260,11 @@ PIZ_EXTERN long pizSequenceCount (PIZSequence *x)
     return x->count;
 }   
 
+PIZ_EXTERN long pizSequenceIndex (PIZSequence *x)
+{
+    return x->index;
+}
+
 PIZ_EXTERN long pizSequenceChance (PIZSequence *x)
 {
     return x->chance;
@@ -283,11 +278,6 @@ PIZ_EXTERN long pizSequenceVelocity (PIZSequence *x)
 PIZ_EXTERN long pizSequenceChannel (PIZSequence *x)
 {
     return x->channel;
-}
-
-PIZ_EXTERN long pizSequenceIndex (PIZSequence *x)
-{
-    return x->index;
 }
 
 PIZ_EXTERN PIZNoteValue pizSequenceCell (PIZSequence *x)

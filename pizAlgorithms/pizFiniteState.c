@@ -1,7 +1,7 @@
 /*
  * \file    pizFiniteState.c
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 4, 2012.
  */
  
 /*
@@ -73,6 +73,12 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
             x->shuttle                  = -1;
             x->jumpChance               = 0;
             x->thresholdToMergeNodes    = PIZ_DEFAULT_THRESHOLD_TO_MERGE_NODES;
+            
+            x->algorithm.type           = PIZ_ALGORITHM_TYPE_FINITE_STATE;
+            x->algorithm.addMethod      = pizFiniteStateAdd;
+            x->algorithm.clearMethod    = pizFiniteStateClear;
+            x->algorithm.proceedMethod  = pizFiniteStateProceed;
+            x->algorithm.countMethod    = pizFiniteStateCount;
             
             x->seed = (unsigned int)time(NULL);
                 
@@ -213,7 +219,7 @@ PIZError pizFiniteStateAdd (PIZFiniteState *x, long argc, long *argv)
     return err1;
 }
 
-void pizFiniteStateClear (PIZFiniteState *x)
+PIZError pizFiniteStateClear (PIZFiniteState *x)
 {
     long i;
     
@@ -230,6 +236,8 @@ void pizFiniteStateClear (PIZFiniteState *x)
     for (i = (PIZ_ITEMSET128_SIZE - 1); i >= 0; i--) {
         pizBoundedStackPush (x->ticketMachine, i);
     }
+    
+    return PIZ_GOOD;
 }
 
 PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)

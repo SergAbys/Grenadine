@@ -217,6 +217,11 @@ long pizSequenceCount (PIZSequence *x)
     return x->count;
 }   
 
+long pizSequenceIndex (PIZSequence *x)
+{
+    return x->index;
+}
+
 long pizSequenceChance (PIZSequence *x)
 {
     return x->chance;
@@ -230,11 +235,6 @@ long pizSequenceVelocity (PIZSequence *x)
 long pizSequenceChannel (PIZSequence *x)
 {
     return x->channel;
-}
-
-long pizSequenceIndex (PIZSequence *x)
-{
-    return x->index;
 }
 
 PIZNoteValue pizSequenceCell (PIZSequence *x)
@@ -318,135 +318,6 @@ PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type
 PIZError pizSequenceSetPattern (PIZSequence *x, const PIZGrowingArray *a)
 {
     return pizGrowingArrayCopy (x->pattern, a);
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-PIZError pizSequenceZoneToArray (PIZSequence *x, PIZGrowingArray *a)
-{
-    PIZError err = PIZ_GOOD;
-
-    err |= pizGrowingArrayAppend (a, x->start);
-    err |= pizGrowingArrayAppend (a, x->end);
-    err |= pizGrowingArrayAppend (a, x->down);
-    err |= pizGrowingArrayAppend (a, x->up);
-        
-    return err;
-}
-
-PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *a)
-{
-    long     i, scale;
-    PIZError err = PIZ_GOOD;
-    
-    scale = pizGrowingArrayCount (x->scale);
-    
-    for (i = 0; i < pizGrowingArrayCount (x->map); i++) {   
-        PIZNote *note       = NULL;
-        PIZNote *nextNote   = NULL;
-        
-        long p = pizGrowingArrayValueAtIndex (x->map, i);
-        
-        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-        
-        while (note) {
-            long pitch;
-            
-            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-            
-            pitch = note->data[PIZ_NOTE_PITCH];
-            
-            if (scale) {
-                pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
-            }
-                        
-            err |= pizGrowingArrayAppend (a, note->position);
-            err |= pizGrowingArrayAppend (a, CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
-            err |= pizGrowingArrayAppend (a, note->data[PIZ_NOTE_VELOCITY]);
-            err |= pizGrowingArrayAppend (a, note->data[PIZ_NOTE_DURATION]);
-            err |= pizGrowingArrayAppend (a, note->data[PIZ_NOTE_CHANNEL]);
-            err |= pizGrowingArrayAppend (a, note->isSelected);
-            err |= pizGrowingArrayAppend (a, (note == x->markedNote));
-
-            note = nextNote;
-        }
-    }
-
-    return err;
-}
-
-PIZError pizSequenceSetZone (PIZSequence *x, const PIZGrowingArray *a)
-{
-    PIZError err = PIZ_ERROR;
-        
-    if (pizGrowingArrayCount (a) == PIZ_DATA_ZONE_SIZE) {
-    //
-    long start, end, down, up, k;
-
-    start = CLAMP (pizGrowingArrayValueAtIndex (a, PIZ_DATA_START), 0, x->timelineSize);
-    end   = CLAMP (pizGrowingArrayValueAtIndex (a, PIZ_DATA_END),   0, x->timelineSize);
-    down  = CLAMP (pizGrowingArrayValueAtIndex (a, PIZ_DATA_DOWN),  0, PIZ_MAGIC_PITCH);
-    up    = CLAMP (pizGrowingArrayValueAtIndex (a, PIZ_DATA_UP),    0, PIZ_MAGIC_PITCH);
-
-    if (start != end) {
-    //
-    if (end < start) {
-        k     = end;
-        end   = start;
-        start = k;
-    }
-    
-    if (up < down) {
-        k    = up;
-        up   = down;
-        down = k;
-    }
-    
-    x->start = start;
-    x->end   = end;
-    x->down  = down;
-    x->up    = up;
-    
-    x->changedZone = true;
-    
-    err = PIZ_GOOD;
-    //
-    } 
-    //
-    }
-        
-    return err;
-}
-
-PIZError pizSequenceAddNotes (PIZSequence *x, const PIZGrowingArray *a, long flags)
-{
-    long     i, count;
-    long     *ptr = NULL;
-    bool     haveChanged = false;
-    PIZError err = PIZ_GOOD;
-    
-    if (flags & PIZ_SEQUENCE_ADD_FLAG_CLEAR) {
-        pizSequenceRemoveAllNotes (x);
-    }
-    
-    count   = pizGrowingArrayCount (a) / PIZ_DATA_NOTE_SIZE;
-    ptr     = pizGrowingArrayPtr (a);
-    
-    for (i = (count - 1); i >= 0; i--) {
-        if (!(pizSequenceNewNote (x, ptr + (i * PIZ_DATA_NOTE_SIZE), flags))) {
-            err |= PIZ_ERROR;
-        } else {
-            haveChanged = true;
-        }
-    }
-    
-    if (haveChanged) {
-        pizSequenceMakeMap (x);
-    }
-        
-    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------

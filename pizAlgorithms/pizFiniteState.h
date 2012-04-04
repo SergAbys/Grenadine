@@ -1,7 +1,7 @@
 /**
  * \file    pizFiniteState.h
  * \author  Jean Sapristi
- * \date    April 2, 2012.
+ * \date    April 4, 2012.
  */
 
 /*
@@ -45,6 +45,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizDataStructures.h"
+#include "pizAlgorithms.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -57,6 +58,7 @@ typedef struct _PIZFiniteStateNode {
     } PIZFiniteStateNode;
 
 typedef struct _PIZFiniteState {
+    PIZAlgorithm        algorithm;
     long                count;
     long                shuttle;
     long                lotteryIndex;
@@ -80,7 +82,7 @@ PIZ_START_C_LINKAGE
 PIZFiniteState          *pizFiniteStateNew      (long argc, long *argv);
 void                    pizFiniteStateFree      (PIZFiniteState *x);
 PIZError                pizFiniteStateAdd       (PIZFiniteState *x, long argc, long *argv);
-void                    pizFiniteStateClear     (PIZFiniteState *x);
+PIZError                pizFiniteStateClear     (PIZFiniteState *x);
 PIZError                pizFiniteStateProceed   (PIZFiniteState *x, long argc, long *argv);
 long                    pizFiniteStateCount     (const PIZFiniteState *x);
 

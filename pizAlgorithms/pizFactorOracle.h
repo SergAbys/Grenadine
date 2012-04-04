@@ -1,7 +1,7 @@
 /**
  * \file    pizFactorOracle.h
  * \author  Jean Sapristi
- * \date    March 7, 2012.
+ * \date    April 4, 2012.
  */
 
 /*
@@ -45,6 +45,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizDataStructures.h"
+#include "pizAlgorithms.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -57,6 +58,7 @@ typedef struct _PIZFactorOracleNode {
     } PIZFactorOracleNode;
        
 typedef struct _PIZFactorOracle {
+    PIZAlgorithm        algorithm;
     long                size;
     long                peak;
     long                index;
@@ -64,7 +66,7 @@ typedef struct _PIZFactorOracle {
     long                backwardThreshold;
     double              straightRatio;
     unsigned int        seed;
-    PIZFactorOracleNode *nodes;
+    PIZFactorOracleNode *nodes;            
     } PIZFactorOracle;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -78,7 +80,7 @@ PIZ_START_C_LINKAGE
 PIZFactorOracle     *pizFactorOracleNew     (long argc, long *argv);
 void                pizFactorOracleFree     (PIZFactorOracle *x);
 PIZError            pizFactorOracleAdd      (PIZFactorOracle *x, long argc, long *argv);
-void                pizFactorOracleClear    (PIZFactorOracle *x);
+PIZError            pizFactorOracleClear    (PIZFactorOracle *x);
 PIZError            pizFactorOracleProceed  (PIZFactorOracle *x, long argc, long *argv);
 long                pizFactorOracleCount    (const PIZFactorOracle *x);
 

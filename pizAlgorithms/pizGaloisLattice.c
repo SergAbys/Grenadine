@@ -1,7 +1,7 @@
 /*
  * \file    pizGaloisLattice.c
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 4, 2012.
  */
  
 /*
@@ -75,6 +75,12 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
     x->targetedConcept          = -1;
     x->shuttle                  = -1;
     x->previousShuttle          = -1;
+    
+    x->algorithm.type           = PIZ_ALGORITHM_TYPE_GALOIS_LATTICE;
+    x->algorithm.addMethod      = pizGaloisLatticeAdd;
+    x->algorithm.clearMethod    = pizGaloisLatticeClear;
+    x->algorithm.proceedMethod  = pizGaloisLatticeProceed;
+    x->algorithm.countMethod    = pizGaloisLatticeCount;
     
     x->seed = (unsigned int)time(NULL);
         
@@ -298,7 +304,7 @@ end:
     return err;
 }
 
-void pizGaloisLatticeClear (PIZGaloisLattice *x)
+PIZError pizGaloisLatticeClear (PIZGaloisLattice *x)
 {
     long i;
     
@@ -332,6 +338,8 @@ void pizGaloisLatticeClear (PIZGaloisLattice *x)
     x->count            = 0;
     x->shuttle          = -1;
     x->previousShuttle  = -1;
+    
+    return PIZ_GOOD;
 }
 
 PIZError pizGaloisLatticeProceed (PIZGaloisLattice *x, long argc, long *argv)

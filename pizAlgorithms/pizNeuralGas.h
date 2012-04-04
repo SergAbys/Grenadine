@@ -1,7 +1,7 @@
 /**
  * \file    pizNeuralGas.h
  * \author  Jean Sapristi
- * \date    March 7, 2012.
+ * \date    April 4, 2012.
  */
  
 /*
@@ -45,6 +45,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizDataStructures.h"
+#include "pizAlgorithms.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -59,6 +60,7 @@ typedef struct _PIZNeuralGasHead {
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZNeuralGas {
+    PIZAlgorithm        algorithm;
     PIZItemset128       map;
     long                count;
     long                vectorSize;
@@ -87,7 +89,7 @@ PIZ_START_C_LINKAGE
 PIZNeuralGas    *pizNeuralGasNew    (long argc, long *argv);
 void            pizNeuralGasFree    (PIZNeuralGas *x);
 PIZError        pizNeuralGasAdd     (PIZNeuralGas *x, long argc, long *argv);
-void            pizNeuralGasClear   (PIZNeuralGas *x);
+PIZError        pizNeuralGasClear   (PIZNeuralGas *x);
 PIZError        pizNeuralGasProceed (PIZNeuralGas *x, long argc, long *argv);
 long            pizNeuralGasCount   (const PIZNeuralGas *x);
 

@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	April 2, 2012.
+ * \date	April 4, 2012.
  */
 
 /*
@@ -113,7 +113,7 @@ typedef enum _PIZEventIdentifier {
     //
     } PIZEventIdentifier;
     
-typedef struct _PIZEventData {
+typedef union _PIZEventData {
     PIZTime time;
     long    values[PIZ_EVENT_VALUES_SIZE];
 } PIZEventData;

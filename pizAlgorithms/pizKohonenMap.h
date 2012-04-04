@@ -1,7 +1,7 @@
 /**
  * \file    pizKohonenMap.h
  * \author  Jean Sapristi
- * \date    March 7, 2012.
+ * \date    April 4, 2012.
  */
  
 /*
@@ -45,11 +45,13 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizDataStructures.h"
+#include "pizAlgorithms.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZKohonenMap {
+    PIZAlgorithm    algorithm;
     long            mapSize;
     long            vectorSize;
     long            count;
@@ -71,7 +73,7 @@ PIZ_START_C_LINKAGE
 PIZKohonenMap   *pizKohonenMapNew       (long argc, long *argv);
 void            pizKohonenMapFree       (PIZKohonenMap *x);
 PIZError        pizKohonenMapAdd        (PIZKohonenMap *x, long argc, long *argv);
-void            pizKohonenMapClear      (PIZKohonenMap *x);
+PIZError        pizKohonenMapClear      (PIZKohonenMap *x);
 PIZError        pizKohonenMapProceed    (PIZKohonenMap *x, long argc, long *argv);
 long            pizKohonenMapCount      (const PIZKohonenMap *x);
 

@@ -1,7 +1,7 @@
 /*
  * \file    pizKohonenMap.c
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 4, 2012.
  */
  
 /*
@@ -68,11 +68,17 @@ PIZKohonenMap *pizKohonenMapNew (long argc, long *argv)
     PIZKohonenMap *x = NULL;
 
     if (x = (PIZKohonenMap *)calloc (1, sizeof(PIZKohonenMap))) {
-        x->mapSize      = PIZ_DEFAULT_MAP_SIZE;
-        x->vectorSize   = PIZ_DEFAULT_VECTOR_SIZE;
-        x->range        = PIZ_DEFAULT_RANGE;
-        x->training     = PIZ_DEFAULT_TRAINING;
-        x->step         = PIZ_DEFAULT_STEP;
+        x->mapSize       = PIZ_DEFAULT_MAP_SIZE;
+        x->vectorSize    = PIZ_DEFAULT_VECTOR_SIZE;
+        x->range         = PIZ_DEFAULT_RANGE;
+        x->training      = PIZ_DEFAULT_TRAINING;
+        x->step          = PIZ_DEFAULT_STEP;
+        
+        x->algorithm.type          = PIZ_ALGORITHM_TYPE_KOHONEN_MAP;
+        x->algorithm.addMethod     = pizKohonenMapAdd;
+        x->algorithm.clearMethod   = pizKohonenMapClear;
+        x->algorithm.proceedMethod = pizKohonenMapProceed;
+        x->algorithm.countMethod   = pizKohonenMapCount;
         
         if (argc && ((argv[0] > 0) && (argv[0] <= PIZ_MAXIMUM_MAP_SIZE))) {
             x->mapSize  = argv[0];
@@ -177,7 +183,7 @@ PIZError pizKohonenMapAdd (PIZKohonenMap *x, long argc, long *argv)
     return err;
 }
 
-void pizKohonenMapClear (PIZKohonenMap *x)
+PIZError pizKohonenMapClear (PIZKohonenMap *x)
 {
     long i;
     
@@ -186,6 +192,8 @@ void pizKohonenMapClear (PIZKohonenMap *x)
     for (i = 0; i < (x->mapSize * x->vectorSize); i++) {
         x->map[i] = PIZ_ALPHABET_SIZE * (rand_r (&x->seed) / (RAND_MAX + 1.0));
     }
+    
+    return PIZ_GOOD;
 }
 
 PIZError pizKohonenMapProceed (PIZKohonenMap *x, long argc, long *argv)

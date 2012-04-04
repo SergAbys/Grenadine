@@ -111,7 +111,7 @@ _pizSequenceMoveTempZone
 _pizSequenceNew
 _pizSequenceNewNote
 _pizSequenceNoteValue
-_pizSequenceNotesToArrays
+_pizSequenceNotesToArray
 _pizSequenceNovember
 _pizSequencePickUpNotes
 _pizSequenceProceedStep

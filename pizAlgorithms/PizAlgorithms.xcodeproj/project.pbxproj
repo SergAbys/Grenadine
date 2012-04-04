@@ -186,13 +186,13 @@
 			isa = PBXGroup;
 			children = (
 				96A16F7E148CF856008268A6 /* pizSequence.h */,
-				96A16F7D148CF856008268A6 /* pizSequenceTransform.h */,
 				96D1ABEB150CB776000CD8FC /* pizSequenceUI.h */,
+				96A16F7D148CF856008268A6 /* pizSequenceTransform.h */,
 				968C6BBE1528B80E00AB45D3 /* pizSequenceLibrary.h */,
 				96A100A714E7F16A00D3ECB6 /* pizSequenceMaxMSP.h */,
 				96A16F78148CF839008268A6 /* pizSequence.c */,
-				96A16F77148CF839008268A6 /* pizSequenceTransform.c */,
 				96D1ABEC150CB776000CD8FC /* pizSequenceUI.c */,
+				96A16F77148CF839008268A6 /* pizSequenceTransform.c */,
 				968C6BBF1528B80E00AB45D3 /* pizSequenceLibrary.c */,
 				96A100A614E7F16A00D3ECB6 /* pizSequenceMaxMSP.c */,
 			);

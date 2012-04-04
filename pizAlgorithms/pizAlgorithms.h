@@ -1,7 +1,7 @@
 /**
  * \file    pizAlgorithms.h
  * \author  Jean Sapristi
- * \date    April 3, 2012.
+ * \date    April 4, 2012.
  */
 
 /*
@@ -44,26 +44,31 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizFactorOracle.h"
-#include "pizGaloisLattice.h"
-#include "pizFiniteState.h"
-#include "pizKohonenMap.h"
-#include "pizNeuralGas.h"
-#include "pizMarkovModel.h"
+#define PIZ_ALGORITHM_TYPE_NONE              0L
+#define PIZ_ALGORITHM_TYPE_FACTOR_ORACLE     1L
+#define PIZ_ALGORITHM_TYPE_GALOIS_LATTICE    2L
+#define PIZ_ALGORITHM_TYPE_FINITE_STATE      4L
+#define PIZ_ALGORITHM_TYPE_KOHONEN_MAP       8L
+#define PIZ_ALGORITHM_TYPE_NEURAL_GAS        16L
+#define PIZ_ALGORITHM_TYPE_MARKOV_MODEL      32L
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-typedef long PIZAlgorithm;
+typedef long PIZAlgorithmType;
+typedef long (*PIZAlgorithmMethod)( );
 
-#define PIZ_ALGORITHM_NONE              0L
-#define PIZ_ALGORITHM_FACTOR_ORACLE     1L
-#define PIZ_ALGORITHM_GALOIS_LATTICE    2L
-#define PIZ_ALGORITHM_FINITE_STATE      4L
-#define PIZ_ALGORITHM_KOHONEN_MAP       8L
-#define PIZ_ALGORITHM_NEURAL_GAS        16L
-#define PIZ_ALGORITHM_MARKOV_MODEL      32L
-    
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+typedef struct _PIZAlgorithm {
+    PIZAlgorithmType   type;
+    PIZAlgorithmMethod addMethod;
+    PIZAlgorithmMethod clearMethod;
+    PIZAlgorithmMethod proceedMethod;
+    PIZAlgorithmMethod countMethod;
+    } PIZAlgorithm;
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif  // PIZ_ALGORITHMS_H

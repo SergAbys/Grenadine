@@ -145,7 +145,19 @@ void pizSequenceChangeMarkedNoteValue (PIZSequence *x, PIZNoteSelector selector,
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizSequenceNotesToArrays (PIZSequence *x, PIZGrowingArray *a, PIZGrowingArray *b)
+PIZError pizSequenceZoneToArray (PIZSequence *x, PIZGrowingArray *a)
+{
+    PIZError err = PIZ_GOOD;
+
+    err |= pizGrowingArrayAppend (a, x->start);
+    err |= pizGrowingArrayAppend (a, x->end);
+    err |= pizGrowingArrayAppend (a, x->down);
+    err |= pizGrowingArrayAppend (a, x->up);
+        
+    return err;
+}
+
+PIZError pizSequenceNotesToArray (PIZSequence *x, PIZGrowingArray *a, PIZGrowingArray *b)
 {
     long     i, scale;
     PIZError err = PIZ_GOOD;
@@ -191,6 +203,78 @@ PIZError pizSequenceNotesToArrays (PIZSequence *x, PIZGrowingArray *a, PIZGrowin
 
             note = nextNote;
         }
+    }
+        
+    return err;
+}
+
+PIZError pizSequenceSetZone (PIZSequence *x, const PIZGrowingArray *a)
+{
+    PIZError err = PIZ_ERROR;
+        
+    if (pizGrowingArrayCount (a) == PIZ_DATA_ZONE_SIZE) {
+    //
+    long start, end, down, up, k;
+
+    start = CLAMP (pizGrowingArrayValueAtIndex (a, PIZ_DATA_START), 0, x->timelineSize);
+    end   = CLAMP (pizGrowingArrayValueAtIndex (a, PIZ_DATA_END),   0, x->timelineSize);
+    down  = CLAMP (pizGrowingArrayValueAtIndex (a, PIZ_DATA_DOWN),  0, PIZ_MAGIC_PITCH);
+    up    = CLAMP (pizGrowingArrayValueAtIndex (a, PIZ_DATA_UP),    0, PIZ_MAGIC_PITCH);
+
+    if (start != end) {
+    //
+    if (end < start) {
+        k     = end;
+        end   = start;
+        start = k;
+    }
+    
+    if (up < down) {
+        k    = up;
+        up   = down;
+        down = k;
+    }
+    
+    x->start = start;
+    x->end   = end;
+    x->down  = down;
+    x->up    = up;
+    
+    x->changedZone = true;
+    
+    err = PIZ_GOOD;
+    //
+    } 
+    //
+    }
+        
+    return err;
+}
+
+PIZError pizSequenceAddNotes (PIZSequence *x, const PIZGrowingArray *a, long flags)
+{
+    long     i, count;
+    long     *ptr = NULL;
+    bool     haveChanged = false;
+    PIZError err = PIZ_GOOD;
+    
+    if (flags & PIZ_SEQUENCE_ADD_FLAG_CLEAR) {
+        pizSequenceRemoveAllNotes (x);
+    }
+    
+    count   = pizGrowingArrayCount (a) / PIZ_DATA_NOTE_SIZE;
+    ptr     = pizGrowingArrayPtr (a);
+    
+    for (i = (count - 1); i >= 0; i--) {
+        if (!(pizSequenceNewNote (x, ptr + (i * PIZ_DATA_NOTE_SIZE), flags))) {
+            err |= PIZ_ERROR;
+        } else {
+            haveChanged = true;
+        }
+    }
+    
+    if (haveChanged) {
+        pizSequenceMakeMap (x);
     }
         
     return err;

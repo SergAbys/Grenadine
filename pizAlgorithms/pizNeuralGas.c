@@ -1,7 +1,7 @@
 /*
  * \file    pizNeuralGas.c
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 4, 2012.
  */
  
 /*
@@ -76,15 +76,21 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
     if (x->headStock = (PIZNeuralGasHead *)malloc (PIZ_ITEMSET128_SIZE * sizeof(PIZNeuralGasHead))) {
         long k, i;
         
-        x->count        = 0;
-        x->vectorSize   = PIZ_DEFAULT_VECTOR_SIZE;
-        x->maximumSize  = PIZ_DEFAULT_MAXIMUM_SIZE;
-        x->lambda       = PIZ_DEFAULT_LAMBDA;
-        x->epsilon1     = PIZ_DEFAULT_EPSILON1;
-        x->epsilon2     = PIZ_DEFAULT_EPSILON2;
-        x->alpha        = PIZ_DEFAULT_ALPHA;
-        x->beta         = PIZ_DEFAULT_BETA;
-        x->kappa        = PIZ_DEFAULT_KAPPA;
+        x->count         = 0;
+        x->vectorSize    = PIZ_DEFAULT_VECTOR_SIZE;
+        x->maximumSize   = PIZ_DEFAULT_MAXIMUM_SIZE;
+        x->lambda        = PIZ_DEFAULT_LAMBDA;
+        x->epsilon1      = PIZ_DEFAULT_EPSILON1;
+        x->epsilon2      = PIZ_DEFAULT_EPSILON2;
+        x->alpha         = PIZ_DEFAULT_ALPHA;
+        x->beta          = PIZ_DEFAULT_BETA;
+        x->kappa         = PIZ_DEFAULT_KAPPA;
+        
+        x->algorithm.type          = PIZ_ALGORITHM_TYPE_NEURAL_GAS;
+        x->algorithm.addMethod     = pizNeuralGasAdd;
+        x->algorithm.clearMethod   = pizNeuralGasClear;
+        x->algorithm.proceedMethod = pizNeuralGasProceed;
+        x->algorithm.countMethod   = pizNeuralGasCount;
         
         x->seed = (unsigned int)time(NULL);
         
@@ -332,7 +338,7 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
     return err;
 }
 
-void pizNeuralGasClear (PIZNeuralGas *x)
+PIZError pizNeuralGasClear (PIZNeuralGas *x)
 {
     long i;
     
@@ -365,6 +371,8 @@ void pizNeuralGasClear (PIZNeuralGas *x)
     }
     
     x->mapSize = 2;
+    
+    return PIZ_GOOD;
 }
 
 PIZError pizNeuralGasProceed (PIZNeuralGas *x, long argc, long *argv)

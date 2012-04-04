@@ -213,26 +213,22 @@ bool pizSequenceClean (PIZSequence *x, long value)
     return haveChanged;
 }
 
-bool pizSequenceAlgorithm (PIZSequence *x, PIZAlgorithm flag, void *algorithm)
+bool pizSequenceAlgorithm (PIZSequence *x, void *algorithm)
 {
-    long     k;
-    bool     haveChanged = false;
-    PIZError err = PIZ_ERROR;
-        
+    long                k;
+    bool                haveChanged = false;
+    PIZError            err = PIZ_ERROR;
+    PIZAlgorithmMethod  count = NULL;
+    PIZAlgorithmMethod  proceed = NULL;
+    PIZAlgorithm        *ptr = (PIZAlgorithm *)algorithm;
+    
     k = pizSequencePickUpNotes (x);
 
-    if (flag & PIZ_ALGORITHM_FACTOR_ORACLE) {
-        if (pizFactorOracleCount ((PIZFactorOracle *)algorithm)) {
-            err = pizFactorOracleProceed ((PIZFactorOracle *)algorithm, k, x->values1);
-        }
-    } else if (flag & PIZ_ALGORITHM_GALOIS_LATTICE) {
-        if (pizGaloisLatticeCount ((PIZGaloisLattice *)algorithm)) {
-            err = pizGaloisLatticeProceed ((PIZGaloisLattice *)algorithm, k, x->values1);
-        }
-    } else if (flag & PIZ_ALGORITHM_FINITE_STATE) {
-        if (pizFiniteStateCount ((PIZFiniteState *)algorithm)) {
-            err = pizFiniteStateProceed ((PIZFiniteState *)algorithm, k, x->values1);
-        }
+    count = ptr->countMethod;
+    proceed = ptr->proceedMethod;
+    
+    if ((*count)(algorithm)) {
+        err = (*proceed)(algorithm, k, x->values1);
     }
     
     if (!err) {

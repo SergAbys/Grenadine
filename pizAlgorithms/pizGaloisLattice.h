@@ -1,7 +1,7 @@
 /**
  * \file    pizGaloisLattice.h
  * \author  Jean Sapristi
- * \date    April 2, 2012.
+ * \date    April 4, 2012.
  */
 
 /*
@@ -45,6 +45,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizDataStructures.h"
+#include "pizAlgorithms.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -57,6 +58,7 @@ typedef struct _PIZGaloisLatticeConcept {
     } PIZGaloisLatticeConcept;
 
 typedef struct _PIZGaloisLattice {
+    PIZAlgorithm            algorithm;
     PIZItemset128           toBeAdded;
     PIZItemset128           intersection;
     long                    count;
@@ -86,7 +88,7 @@ PIZ_START_C_LINKAGE
 PIZGaloisLattice    *pizGaloisLatticeNew            (long argc, long *argv);
 void                pizGaloisLatticeFree            (PIZGaloisLattice *x);
 PIZError            pizGaloisLatticeAdd             (PIZGaloisLattice *x, long argc, long *argv);
-void                pizGaloisLatticeClear           (PIZGaloisLattice *x);
+PIZError            pizGaloisLatticeClear           (PIZGaloisLattice *x);
 PIZError            pizGaloisLatticeProceed         (PIZGaloisLattice *x, long argc, long *argv);
 long                pizGaloisLatticeCount           (const PIZGaloisLattice *x);
 

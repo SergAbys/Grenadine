@@ -1,7 +1,7 @@
 /**
  * \file	pizSequenceLibrary.h
  * \author	Jean Sapristi
- * \date	April 3, 2012.
+ * \date	April 4, 2012.
  */
 
 /*
@@ -63,7 +63,7 @@ void    pizSequenceMakeMap                  (PIZSequence *x);
 // -------------------------------------------------------------------------------------------------------------
 
 long    pizSequenceMovePitchToAmbitus       (PIZSequence *x, long pitch);
-long    pizSequenceSnapPositionToPattern    (PIZSequence *x, long toSnapped, long patternSize);
+long    pizSequenceSnapPositionToPattern    (PIZSequence *x, long position);
 long    pizSequencePickUpNotes              (PIZSequence *x);
 bool    pizSequenceFillValues               (PIZSequence *x, PIZNoteSelector selector, long k, bool reverse);
 

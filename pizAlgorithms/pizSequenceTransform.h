@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceTransform.h
  * \author  Jean Sapristi
- * \date    April 3, 2012.
+ * \date    April 4, 2012.
  */
  
 /*
@@ -45,7 +45,9 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizSequence.h"
-#include "pizAlgorithms.h"
+#include "pizFactorOracle.h"
+#include "pizFiniteState.h"
+#include "pizGaloisLattice.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -57,7 +59,7 @@ void pizSequenceTranspose   (PIZSequence *x, long n);
 // -------------------------------------------------------------------------------------------------------------
 
 bool pizSequenceClean       (PIZSequence *x, long value);
-bool pizSequenceAlgorithm   (PIZSequence *x, PIZAlgorithm flag, void *algorithm);
+bool pizSequenceAlgorithm   (PIZSequence *x, void *algorithm);
 bool pizSequenceNovember    (PIZSequence *x, long iterate);
 bool pizSequenceJuliet      (PIZSequence *x, long iterate, long division);
 bool pizSequenceRotate      (PIZSequence *x, PIZNoteSelector selector, long shift);

@@ -34,7 +34,7 @@ void tralala_copy (t_tralala *x)
     
     if (tempArrayA && tempArrayB)  {
         LIVELOCK
-        err |= pizSequenceNotesToArrays (x->listen, tempArrayA, tempArrayA);
+        err |= pizSequenceNotesToArray (x->listen, tempArrayA, tempArrayA);
         LIVEUNLOCK
     } else {
         err |= PIZ_MEMORY;
@@ -82,7 +82,7 @@ void tralala_setLiveByUser (t_tralala *x)
     
     if (tempArrayA && tempArrayB)  {
         USERLOCK
-        err |= pizSequenceNotesToArrays (x->user, tempArrayA, tempArrayA);
+        err |= pizSequenceNotesToArray (x->user, tempArrayA, tempArrayA);
         pizSequenceZoneToArray (x->user, tempArrayB);
         USERUNLOCK
     } else {
@@ -153,7 +153,7 @@ void tralala_forget (t_tralala *x)
 
 void tralala_learnTask (t_tralala *x)
 {
-    if (x->learnCycle == PIZ_ALGORITHM_NONE) {
+    if (x->learnCycle == PIZ_ALGORITHM_TYPE_NONE) {
         long i = x->learnThreshold;
         
         LEARNLOCK
@@ -170,7 +170,7 @@ void tralala_learnTask (t_tralala *x)
                 i --;
             }
             
-            x->learnCycle       = PIZ_ALGORITHM_FACTOR_ORACLE;
+            x->learnCycle       = PIZ_ALGORITHM_TYPE_FACTOR_ORACLE;
             x->learnThreshold   = SIZE_LEARN_MIN + (SIZE_LEARN_RANGE + 1) * RANDOM;
         }
             
@@ -183,12 +183,12 @@ void tralala_learnTask (t_tralala *x)
         ALGORITHMSLOCK
         
         switch (x->learnCycle) {
-            case PIZ_ALGORITHM_FACTOR_ORACLE  :     pizFactorOracleAdd (x->factorOracle, k, values);
-                                                    x->learnCycle = PIZ_ALGORITHM_GALOIS_LATTICE; break;
-            case PIZ_ALGORITHM_GALOIS_LATTICE :     pizGaloisLatticeAdd (x->galoisLattice, k, values);
-                                                    x->learnCycle = PIZ_ALGORITHM_FINITE_STATE; break;
-            case PIZ_ALGORITHM_FINITE_STATE   :     pizFiniteStateAdd (x->finiteState, k, values);
-                                                    x->learnCycle = PIZ_ALGORITHM_NONE; break;
+            case PIZ_ALGORITHM_TYPE_FACTOR_ORACLE  : pizFactorOracleAdd (x->factorOracle, k, values);
+                                                     x->learnCycle = PIZ_ALGORITHM_TYPE_GALOIS_LATTICE; break;
+            case PIZ_ALGORITHM_TYPE_GALOIS_LATTICE : pizGaloisLatticeAdd (x->galoisLattice, k, values);
+                                                     x->learnCycle = PIZ_ALGORITHM_TYPE_FINITE_STATE; break;
+            case PIZ_ALGORITHM_TYPE_FINITE_STATE   : pizFiniteStateAdd (x->finiteState, k, values);
+                                                     x->learnCycle = PIZ_ALGORITHM_TYPE_NONE; break;
         }
         
         ALGORITHMSUNLOCK
@@ -380,13 +380,12 @@ void tralala_sequenceKill (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_sequenceZoulou (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    long t = PIZ_ALGORITHM_FACTOR_ORACLE;
     t_tralalaData data;
     tralala_parseArguments (x, &data, argc, argv);
     
     ALGORITHMSLOCK
     DATALOCK
-    data.draw &= pizSequenceAlgorithm (data.sequence, t, (void *)x->factorOracle);
+    data.draw &= pizSequenceAlgorithm (data.sequence, (void *)x->factorOracle);
     DATAUNLOCK
     ALGORITHMSUNLOCK
     
@@ -397,13 +396,12 @@ void tralala_sequenceZoulou (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_sequenceRomeo (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    long t = PIZ_ALGORITHM_GALOIS_LATTICE;
     t_tralalaData data;
     tralala_parseArguments (x, &data, argc, argv);
     
     ALGORITHMSLOCK
     DATALOCK
-    data.draw &= pizSequenceAlgorithm (data.sequence, t, (void *)x->galoisLattice);
+    data.draw &= pizSequenceAlgorithm (data.sequence, (void *)x->galoisLattice);
     DATAUNLOCK
     ALGORITHMSUNLOCK
     
@@ -414,13 +412,12 @@ void tralala_sequenceRomeo (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_sequenceUniform (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    long t = PIZ_ALGORITHM_FINITE_STATE;
     t_tralalaData data;
     tralala_parseArguments (x, &data, argc, argv);
     
     ALGORITHMSLOCK
     DATALOCK
-    data.draw &= pizSequenceAlgorithm (data.sequence, t, (void *)x->finiteState);
+    data.draw &= pizSequenceAlgorithm (data.sequence, (void *)x->finiteState);
     DATAUNLOCK
     ALGORITHMSUNLOCK
     
@@ -539,7 +536,7 @@ void tralala_sequenceDump (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         long i, count, position, pitch, velocity, duration, channel;
         
         DATALOCK
-        pizSequenceNotesToArrays (data.sequence, tempArray, tempArray);
+        pizSequenceNotesToArray (data.sequence, tempArray, tempArray);
         DATAUNLOCK
         
         count = pizGrowingArrayCount (tempArray);

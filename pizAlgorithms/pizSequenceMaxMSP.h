@@ -66,10 +66,14 @@ void            pizSequenceChangeMarkedNoteValue        (PIZSequence *x, PIZNote
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError        pizSequenceNotesToArrays                (PIZSequence *x, 
+PIZError        pizSequenceZoneToArray                  (PIZSequence *x, PIZGrowingArray *a);
+PIZError        pizSequenceNotesToArray                 (PIZSequence *x, 
                                                         PIZGrowingArray *unselected, 
                                                         PIZGrowingArray *selected);
-                                                    
+                                                
+PIZError        pizSequenceSetZone                      (PIZSequence *x, const PIZGrowingArray *a);
+PIZError        pizSequenceAddNotes                     (PIZSequence *x, const PIZGrowingArray *a, long flags);
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 

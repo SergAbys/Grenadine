@@ -117,6 +117,38 @@ void *pizAgentEventLoop (void *agent)
     pthread_exit (NULL);
 }
 
+void *pizAgentNotificationLoop (void *agent)
+{
+    PIZAgent *x = (PIZAgent *)agent;  
+    
+    while (!EXIT) { 
+    //
+    
+    PIZAGENTLOCKNOTIFICATION
+    
+    while (!(pizLinklistCount (x->notifyQueue))) {
+        pthread_cond_wait (&x->notificationCondition, &x->notificationLock);
+                        
+        if (EXIT) {
+            break;
+        } 
+    }
+    
+    PIZAGENTUNLOCKNOTIFICATION
+        
+    if (!EXIT) {
+        pizAgentNotificationLoopNotify (x);
+    }
+    //    
+    }
+    
+    pthread_exit (NULL);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue) 
 {
     long            err = PIZ_ERROR;
@@ -361,34 +393,6 @@ void pizAgentEventLoopGetMethod (const PIZEvent *x, PIZAgentMethod *f)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-
-void *pizAgentNotificationLoop (void *agent)
-{
-    PIZAgent *x = (PIZAgent *)agent;  
-    
-    while (!EXIT) { 
-    //
-    
-    PIZAGENTLOCKNOTIFICATION
-    
-    while (!(pizLinklistCount (x->notifyQueue))) {
-        pthread_cond_wait (&x->notificationCondition, &x->notificationLock);
-                        
-        if (EXIT) {
-            break;
-        } 
-    }
-    
-    PIZAGENTUNLOCKNOTIFICATION
-        
-    if (!EXIT) {
-        pizAgentNotificationLoopNotify (x);
-    }
-    //    
-    }
-    
-    pthread_exit (NULL);
-}
 
 void pizAgentNotificationLoopNotify (PIZAgent *x)
 {

@@ -1,7 +1,7 @@
 /*
  * \file    pizMarkovModel.c
  * \author  Jean Sapristi
- * \date    April 3, 2012.
+ * \date    April 4, 2012.
  */
  
 /*
@@ -67,9 +67,15 @@ PIZMarkovModel *pizMarkovModelNew (long argc, long *argv)
 
     if (x = (PIZMarkovModel *)malloc (sizeof(PIZMarkovModel))) {
     //
-    x->vectorSize   = PIZ_DEFAULT_VECTOR_SIZE;
-    x->graphSize    = PIZ_DEFAULT_GRAPH_SIZE;
-    x->persistence  = PIZ_DEFAULT_PERSISTENCE;
+    x->vectorSize    = PIZ_DEFAULT_VECTOR_SIZE;
+    x->graphSize     = PIZ_DEFAULT_GRAPH_SIZE;
+    x->persistence   = PIZ_DEFAULT_PERSISTENCE;
+    
+    x->algorithm.type          = PIZ_ALGORITHM_TYPE_MARKOV_MODEL;
+    x->algorithm.addMethod     = pizMarkovModelAdd;
+    x->algorithm.clearMethod   = pizMarkovModelClear;
+    x->algorithm.proceedMethod = pizMarkovModelProceed;
+    x->algorithm.countMethod   = pizMarkovModelCount;
     
     if (argc && ((argv[0] > 0)  && (argv[0] <= PIZ_MAXIMUM_GRAPH_SIZE))) {
         x->graphSize = argv[0];
@@ -167,7 +173,7 @@ void pizMarkovModelFree (PIZMarkovModel *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void pizMarkovModelClear (PIZMarkovModel *x)
+PIZError pizMarkovModelClear (PIZMarkovModel *x)
 {
     long i;
                     
@@ -182,6 +188,8 @@ void pizMarkovModelClear (PIZMarkovModel *x)
     for (i = 0; i < x->graphSize; i++) {
         pizMarkovModelFillStochastically (x, PIZ_ALPHABET_SIZE, x->emission + (i * PIZ_ALPHABET_SIZE));
     }
+    
+    return PIZ_GOOD;
 }
 
 PIZError pizMarkovModelAdd (PIZMarkovModel *x, long argc, long *argv)

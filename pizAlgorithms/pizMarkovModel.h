@@ -1,7 +1,7 @@
 /**
  * \file    pizMarkovModel.h
  * \author  Jean Sapristi
- * \date    April 2, 2012.
+ * \date    April 4, 2012.
  */
 
 /*
@@ -45,11 +45,13 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizDataStructures.h"
+#include "pizAlgorithms.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
  
 typedef struct _PIZMarkovModel {
+    PIZAlgorithm    algorithm;
     long            count;
     long            vectorSize;
     long            graphSize;
@@ -78,7 +80,7 @@ PIZ_START_C_LINKAGE
 PIZMarkovModel      *pizMarkovModelNew                  (long argc, long *argv);
 void                pizMarkovModelFree                  (PIZMarkovModel *x);
 PIZError            pizMarkovModelAdd                   (PIZMarkovModel *x, long argc, long *argv);
-void                pizMarkovModelClear                 (PIZMarkovModel *x);
+PIZError            pizMarkovModelClear                 (PIZMarkovModel *x);
 PIZError            pizMarkovModelProceed               (PIZMarkovModel *x, long argc, long *argv);
 long                pizMarkovModelCount                 (const PIZMarkovModel *x);
 
