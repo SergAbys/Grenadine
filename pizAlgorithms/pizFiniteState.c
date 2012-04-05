@@ -1,7 +1,7 @@
 /*
  * \file    pizFiniteState.c
  * \author  Jean Sapristi
- * \date    April 4, 2012.
+ * \date    April 5, 2012.
  */
  
 /*
@@ -74,7 +74,7 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
             x->jumpChance               = 0;
             x->thresholdToMergeNodes    = PIZ_DEFAULT_THRESHOLD_TO_MERGE_NODES;
             
-            x->algorithm.type           = PIZ_ALGORITHM_TYPE_FINITE_STATE;
+            x->algorithm.type           = PIZ_ALGORITHM_FLAG_FINITE_STATE;
             x->algorithm.addMethod      = pizFiniteStateAdd;
             x->algorithm.clearMethod    = pizFiniteStateClear;
             x->algorithm.proceedMethod  = pizFiniteStateProceed;

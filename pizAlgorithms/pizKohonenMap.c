@@ -1,7 +1,7 @@
 /*
  * \file    pizKohonenMap.c
  * \author  Jean Sapristi
- * \date    April 4, 2012.
+ * \date    April 5, 2012.
  */
  
 /*
@@ -74,7 +74,7 @@ PIZKohonenMap *pizKohonenMapNew (long argc, long *argv)
         x->training      = PIZ_DEFAULT_TRAINING;
         x->step          = PIZ_DEFAULT_STEP;
         
-        x->algorithm.type          = PIZ_ALGORITHM_TYPE_KOHONEN_MAP;
+        x->algorithm.type          = PIZ_ALGORITHM_FLAG_KOHONEN_MAP;
         x->algorithm.addMethod     = pizKohonenMapAdd;
         x->algorithm.clearMethod   = pizKohonenMapClear;
         x->algorithm.proceedMethod = pizKohonenMapProceed;

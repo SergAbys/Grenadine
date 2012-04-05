@@ -1,7 +1,7 @@
 /**
  * \file    pizLinklist.h
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 5, 2012.
  */
 
 /*
@@ -49,9 +49,9 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
  
-#define PIZ_LINKLIST_FLAG_NONE                  0L
-#define PIZ_LINKLIST_FLAG_FREE_MEMORY           1L
-#define PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY    2L
+#define PIZ_LINKLIST_FLAG_NONE                  0UL
+#define PIZ_LINKLIST_FLAG_FREE_MEMORY           1UL
+#define PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY    2UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -63,7 +63,7 @@ typedef struct _PIZLinklistElement {
     } PIZLinklistElement;
  
 typedef struct _PIZLinklist {
-    long                flags;
+    PIZFlags            flags;
     long                count;
     PIZLinklistElement  *head;
     PIZLinklistElement  *tail;
@@ -76,7 +76,7 @@ typedef struct _PIZLinklist {
 PIZ_START_C_LINKAGE
 
 PIZLinklist *pizLinklistNew             (void);
-void        pizLinklistSetFlags         (PIZLinklist *x, long flags);
+void        pizLinklistSetFlags         (PIZLinklist *x, PIZFlags flags);
 void        pizLinklistFree             (PIZLinklist *x);
 void        pizLinklistClear            (PIZLinklist *x);
 PIZError    pizLinklistAppend           (PIZLinklist *x, void *ptr);
@@ -95,7 +95,7 @@ PIZ_END_C_LINKAGE
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN void pizLinklistSetFlags (PIZLinklist *x, long flags)
+PIZ_EXTERN void pizLinklistSetFlags (PIZLinklist *x, PIZFlags flags)
 {
     x->flags = flags;
 }

@@ -1,7 +1,7 @@
 /*
  * \file    pizArrayPool.c
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 5, 2012.
  */
  
 /*

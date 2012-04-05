@@ -1,7 +1,7 @@
 /**
  * \file    pizHashTable.h
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 5, 2012.
  */
  
 /*
@@ -50,8 +50,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_HASHTABLE_FLAG_NONE             0L
-#define PIZ_HASHTABLE_FLAG_FREE_MEMORY      1L
+#define PIZ_HASHTABLE_FLAG_NONE             0UL
+#define PIZ_HASHTABLE_FLAG_FREE_MEMORY      1UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ typedef struct _PIZHashTableElement {
     } PIZHashTableElement;
  
 typedef struct _PIZHashTable {
-    long            flags;
+    PIZFlags        flags;
     long            count;
     long            size;
     PIZLinklist     **hashTable;
@@ -74,7 +74,7 @@ typedef struct _PIZHashTable {
 PIZ_START_C_LINKAGE
 
 PIZHashTable    *pizHashTableNew                (long size);
-void            pizHashTableSetFlags            (PIZHashTable *x, long flags);
+void            pizHashTableSetFlags            (PIZHashTable *x, PIZFlags flags);
 void            pizHashTableFree                (PIZHashTable *x);
 void            pizHashTableClear               (PIZHashTable *x);
 PIZError        pizHashTableAdd                 (PIZHashTable *x, long key, void *ptr);
@@ -90,7 +90,7 @@ PIZ_END_C_LINKAGE
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN void pizHashTableSetFlags (PIZHashTable *x, long flags)
+PIZ_EXTERN void pizHashTableSetFlags (PIZHashTable *x, PIZFlags flags)
 {
     x->flags = flags;
 }

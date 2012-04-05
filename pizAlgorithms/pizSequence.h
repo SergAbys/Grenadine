@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    April 4, 2012.
+ * \date    April 5, 2012.
  */
  
 /*
@@ -61,16 +61,16 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_ADD_FLAG_NONE          0L
-#define PIZ_SEQUENCE_ADD_FLAG_SNAP          1L
-#define PIZ_SEQUENCE_ADD_FLAG_PATTERN       2L
-#define PIZ_SEQUENCE_ADD_FLAG_AMBITUS       4L
-#define PIZ_SEQUENCE_ADD_FLAG_CLIP          8L
-#define PIZ_SEQUENCE_ADD_FLAG_UNSELECT      16L
-#define PIZ_SEQUENCE_ADD_FLAG_CLEAR         32L
+#define PIZ_SEQUENCE_ADD_FLAG_NONE          0UL
+#define PIZ_SEQUENCE_ADD_FLAG_SNAP          1UL
+#define PIZ_SEQUENCE_ADD_FLAG_PATTERN       2UL
+#define PIZ_SEQUENCE_ADD_FLAG_AMBITUS       4UL
+#define PIZ_SEQUENCE_ADD_FLAG_CLIP          8UL
+#define PIZ_SEQUENCE_ADD_FLAG_UNSELECT      16UL
+#define PIZ_SEQUENCE_ADD_FLAG_CLEAR         32UL
 
-#define PIZ_SEQUENCE_NOTE_FLAG_NONE         0L
-#define PIZ_SEQUENCE_NOTE_FLAG_LASSO        1L
+#define PIZ_SEQUENCE_NOTE_FLAG_NONE         0UL
+#define PIZ_SEQUENCE_NOTE_FLAG_LASSO        1UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -171,11 +171,11 @@ typedef enum _PIZNoteSelector {
 // -------------------------------------------------------------------------------------------------------------
  
 typedef struct _PIZNote {
-    long    flags;
-    long    data[4];
-    long    isSelected;
-    long    position;
-    long    tag;
+    PIZFlags flags;
+    long     data[4];
+    long     isSelected;
+    long     position;
+    long     tag;
     } PIZNote;
 
 typedef struct _PIZSequence {

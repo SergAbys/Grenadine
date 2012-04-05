@@ -1,7 +1,7 @@
 /**
  * \file	pizAgentLoop.h
  * \author	Jean Sapristi
- * \date	April 4, 2012.
+ * \date	April 5, 2012.
  */
 
 /*
@@ -59,7 +59,9 @@ void        *pizAgentNotificationLoop           (void *agent);
 PIZError    pizAgentEventLoopDoEvent            (PIZAgent *x, PIZLinklist *queue);
 void        pizAgentEventLoopDoStep             (PIZAgent *x, bool blank);
 void        pizAgentEventLoopDoRefresh          (PIZAgent *x);
-void        pizAgentEventLoopDoEnd              (PIZAgent *x);
+
+void        pizAgentEventLoopDoStepEnd          (PIZAgent *x);
+void        pizAgentEventLoopDoStepLast         (PIZAgent *x);
 
 bool        pizAgentEventLoopCondition          (PIZAgent *x);
 void        pizAgentEventLoopInit               (PIZAgent *x);

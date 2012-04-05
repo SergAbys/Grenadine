@@ -1,7 +1,7 @@
 /*
  * \file    pizGaloisLattice.c
  * \author  Jean Sapristi
- * \date    April 4, 2012.
+ * \date    April 5, 2012.
  */
  
 /*
@@ -76,7 +76,7 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
     x->shuttle                  = -1;
     x->previousShuttle          = -1;
     
-    x->algorithm.type           = PIZ_ALGORITHM_TYPE_GALOIS_LATTICE;
+    x->algorithm.type           = PIZ_ALGORITHM_FLAG_GALOIS_LATTICE;
     x->algorithm.addMethod      = pizGaloisLatticeAdd;
     x->algorithm.clearMethod    = pizGaloisLatticeClear;
     x->algorithm.proceedMethod  = pizGaloisLatticeProceed;

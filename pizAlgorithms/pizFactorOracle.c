@@ -1,7 +1,7 @@
 /*
  * \file    pizFactorOracle.c
  * \author  Jean Sapristi
- * \date    April 4, 2012.
+ * \date    April 5, 2012.
  */
  
 /*
@@ -78,7 +78,7 @@ PIZFactorOracle *pizFactorOracleNew (long argc, long *argv)
             x->straightRatio            = PIZ_DEFAULT_STRAIGHT_RATIO;
             x->seed                     = (unsigned int)time(NULL);
             
-            x->algorithm.type           = PIZ_ALGORITHM_TYPE_FACTOR_ORACLE;
+            x->algorithm.type           = PIZ_ALGORITHM_FLAG_FACTOR_ORACLE;
             x->algorithm.addMethod      = pizFactorOracleAdd;
             x->algorithm.clearMethod    = pizFactorOracleClear;
             x->algorithm.proceedMethod  = pizFactorOracleProceed;

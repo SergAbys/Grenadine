@@ -1,7 +1,7 @@
 /*
  * \file    pizBoundedHashTable.c
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 5, 2012.
  */
  
 /*
@@ -92,7 +92,7 @@ PIZBoundedHashTable *pizBoundedHashTableNew (long argc, long *argv)
     return x;
 }
 
-void pizBoundedHashTableSetFlags (PIZBoundedHashTable *x, long flags)
+void pizBoundedHashTableSetFlags (PIZBoundedHashTable *x, PIZFlags flags)
 {
     x->flags = flags;
 }

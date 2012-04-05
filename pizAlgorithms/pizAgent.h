@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	April 2, 2012.
+ * \date	April 5, 2012.
  */
 
 /*
@@ -61,12 +61,12 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_AGENT_FLAG_NONE             0L
-#define PIZ_AGENT_FLAG_GUI              1L
-#define PIZ_AGENT_FLAG_EXIT             2L
-#define PIZ_AGENT_FLAG_WAKED            4L
-#define PIZ_AGENT_FLAG_PLAYED           8L
-#define PIZ_AGENT_FLAG_LOOPED           16L
+#define PIZ_AGENT_FLAG_NONE             0UL
+#define PIZ_AGENT_FLAG_GUI              1UL
+#define PIZ_AGENT_FLAG_EXIT             2UL
+#define PIZ_AGENT_FLAG_WAKED            4UL
+#define PIZ_AGENT_FLAG_PLAYED           8UL
+#define PIZ_AGENT_FLAG_LOOPED           16UL
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -80,6 +80,13 @@
 #define PIZAGENTLOCKGETTER              pthread_mutex_lock      (&x->getterLock);
 #define PIZAGENTUNLOCKGETTER            pthread_mutex_unlock    (&x->getterLock);
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define PIZAGENTQUEUE(queue, event)     if (pizLinklistAppend ((queue), (event))) {         \
+                                            pizEventFree (event);                           \
+                                        }
+            
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
@@ -97,7 +104,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZAgent {
-    long                flags;
+    PIZFlags            flags;
     long                bpm;
     PIZNano             grainSize;
     PIZTime             grainStart;

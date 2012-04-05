@@ -1,7 +1,7 @@
 /*
  * \file    pizHashTable.c
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 5, 2012.
  */
  
 /*
@@ -75,7 +75,7 @@ PIZHashTable *pizHashTableNew (long size)
     return x;
 }
 
-void pizHashTableSetFlags (PIZHashTable *x, long flags)
+void pizHashTableSetFlags (PIZHashTable *x, PIZFlags flags)
 {
     x->flags = flags;
 }

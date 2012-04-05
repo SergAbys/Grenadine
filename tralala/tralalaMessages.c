@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 04/04/12.
+ *  Last modified : 05/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -90,7 +90,7 @@ void tralala_setLiveByUser (t_tralala *x)
     }
     
     if (!err) {
-        long addFlags = PIZ_SEQUENCE_ADD_FLAG_PATTERN | PIZ_SEQUENCE_ADD_FLAG_CLEAR;
+        PIZFlags addFlags = PIZ_SEQUENCE_ADD_FLAG_PATTERN | PIZ_SEQUENCE_ADD_FLAG_CLEAR;
         
         LIVELOCK
         pizSequenceAddNotes (x->live, tempArrayA, addFlags);
@@ -153,7 +153,7 @@ void tralala_forget (t_tralala *x)
 
 void tralala_learnTask (t_tralala *x)
 {
-    if (x->learnCycle == PIZ_ALGORITHM_TYPE_NONE) {
+    if (x->learnCycle == PIZ_ALGORITHM_FLAG_NONE) {
         long i = x->learnThreshold;
         
         LEARNLOCK
@@ -170,7 +170,7 @@ void tralala_learnTask (t_tralala *x)
                 i --;
             }
             
-            x->learnCycle       = PIZ_ALGORITHM_TYPE_FACTOR_ORACLE;
+            x->learnCycle       = PIZ_ALGORITHM_FLAG_FACTOR_ORACLE;
             x->learnThreshold   = SIZE_LEARN_MIN + (SIZE_LEARN_RANGE + 1) * RANDOM;
         }
             
@@ -183,12 +183,12 @@ void tralala_learnTask (t_tralala *x)
         ALGORITHMSLOCK
         
         switch (x->learnCycle) {
-            case PIZ_ALGORITHM_TYPE_FACTOR_ORACLE  : pizFactorOracleAdd (x->factorOracle, k, values);
-                                                     x->learnCycle = PIZ_ALGORITHM_TYPE_GALOIS_LATTICE; break;
-            case PIZ_ALGORITHM_TYPE_GALOIS_LATTICE : pizGaloisLatticeAdd (x->galoisLattice, k, values);
-                                                     x->learnCycle = PIZ_ALGORITHM_TYPE_FINITE_STATE; break;
-            case PIZ_ALGORITHM_TYPE_FINITE_STATE   : pizFiniteStateAdd (x->finiteState, k, values);
-                                                     x->learnCycle = PIZ_ALGORITHM_TYPE_NONE; break;
+            case PIZ_ALGORITHM_FLAG_FACTOR_ORACLE  : pizFactorOracleAdd (x->factorOracle, k, values);
+                                                     x->learnCycle = PIZ_ALGORITHM_FLAG_GALOIS_LATTICE; break;
+            case PIZ_ALGORITHM_FLAG_GALOIS_LATTICE : pizGaloisLatticeAdd (x->galoisLattice, k, values);
+                                                     x->learnCycle = PIZ_ALGORITHM_FLAG_FINITE_STATE; break;
+            case PIZ_ALGORITHM_FLAG_FINITE_STATE   : pizFiniteStateAdd (x->finiteState, k, values);
+                                                     x->learnCycle = PIZ_ALGORITHM_FLAG_NONE; break;
         }
         
         ALGORITHMSUNLOCK
@@ -454,7 +454,7 @@ void tralala_sequenceNote (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         ARRAY_GET (tempArray);
         
         if (tempArray) {
-            long mode = PIZ_SEQUENCE_ADD_FLAG_SNAP; 
+            PIZFlags mode = PIZ_SEQUENCE_ADD_FLAG_SNAP; 
             
             pizGrowingArrayAppend (tempArray, (long)(data.values[0] / TIME_TICKS_PER_STEP)); 
             pizGrowingArrayAppend (tempArray, data.values[1]);

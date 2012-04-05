@@ -1,7 +1,7 @@
 /**
  * \file    pizBoundedHashTable.h
  * \author  Jean Sapristi
- * \date    February 28, 2012.
+ * \date    April 5, 2012.
  */
  
 /*
@@ -51,7 +51,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_BOUNDED_HASHTABLE_FLAG_NONE     0L
+#define PIZ_BOUNDED_HASHTABLE_FLAG_NONE     0UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ typedef struct _PIZBoundedHashTableElement {
     } PIZBoundedHashTableElement;
     
 typedef struct _PIZBoundedHashTable {
-    long                        flags;
+    PIZFlags                    flags;
     long                        count;
     long                        hashSize;
     long                        poolSize;
@@ -77,7 +77,7 @@ typedef struct _PIZBoundedHashTable {
 PIZ_START_C_LINKAGE
 
 PIZBoundedHashTable *pizBoundedHashTableNew               (long argc, long *argv);
-void                pizBoundedHashTableSetFlags           (PIZBoundedHashTable *x, long flags);
+void                pizBoundedHashTableSetFlags           (PIZBoundedHashTable *x, PIZFlags flags);
 void                pizBoundedHashTableFree               (PIZBoundedHashTable *x);
 void                pizBoundedHashTableClear              (PIZBoundedHashTable *x);
 PIZError            pizBoundedHashTableAdd                (PIZBoundedHashTable *x, long key, void *ptr);
@@ -93,7 +93,7 @@ PIZ_END_C_LINKAGE
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN void pizBoundedHashTableSetFlags (PIZBoundedHashTable *x, long flags)
+PIZ_EXTERN void pizBoundedHashTableSetFlags (PIZBoundedHashTable *x, PIZFlags flags)
 {
     x->flags = flags;
 }

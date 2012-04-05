@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceMaxMSP.c
  * \author  Jean Sapristi
- * \date    April 4, 2012.
+ * \date    April 5, 2012.
  */
  
 /*
@@ -251,7 +251,7 @@ PIZError pizSequenceSetZone (PIZSequence *x, const PIZGrowingArray *a)
     return err;
 }
 
-PIZError pizSequenceAddNotes (PIZSequence *x, const PIZGrowingArray *a, long flags)
+PIZError pizSequenceAddNotes (PIZSequence *x, const PIZGrowingArray *a, PIZFlags flags)
 {
     long     i, count;
     long     *ptr = NULL;
@@ -645,7 +645,7 @@ void pizSequenceRemoveSelectedNotes (PIZSequence *x)
     }
 }
 
-void pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c, long flags)
+void pizSequenceAddNoteWithCoordinates (PIZSequence *x, const PIZCoordinates *c, PIZFlags flags)
 {
     long values[PIZ_DATA_NOTE_SIZE];
         
@@ -720,9 +720,9 @@ PIZError pizSequenceDecodeWithArray (PIZSequence *x, const PIZGrowingArray *a)
 
     if (t = pizGrowingArrayCount (a)) {
     //
-    long k, version, count, grid, noteValue;
-    long flags = PIZ_SEQUENCE_ADD_FLAG_UNSELECT;
-    long *ptr = pizGrowingArrayPtr (a);
+    long     k, version, count, grid, noteValue;
+    PIZFlags flags = PIZ_SEQUENCE_ADD_FLAG_UNSELECT;
+    long     *ptr = pizGrowingArrayPtr (a);
     
     version     = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_VERSION);
     grid        = pizGrowingArrayValueAtIndex (a, PIZ_SLOT_GRID);

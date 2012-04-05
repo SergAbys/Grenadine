@@ -64,7 +64,7 @@ PIZLinklist *pizLinklistNew (void)
     return x;
 }
 
-void pizLinklistSetFlags (PIZLinklist *x, long flags)
+void pizLinklistSetFlags (PIZLinklist *x, PIZFlags flags)
 {
     x->flags = flags;
 }

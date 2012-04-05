@@ -581,7 +581,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                 x->textMode         = MODE_TEXT_NOTE;
                 x->hitTest          = HIT_NOTHING;
                 x->cursorType       = JMOUSE_CURSOR_ARROW;
-                x->learnCycle       = PIZ_ALGORITHM_TYPE_NONE;
+                x->learnCycle       = PIZ_ALGORITHM_FLAG_NONE;
                 x->learnThreshold   = SIZE_LEARN_MIN;
                 x->cell             = PIZ_NOTE_VALUE_NONE;
                 x->noteValue        = PIZ_NOTE_VALUE_NONE;

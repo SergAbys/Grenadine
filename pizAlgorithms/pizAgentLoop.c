@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	April 1, 2012.
+ * \date	April 5, 2012.
  */
  
 /*
@@ -239,6 +239,10 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     //
     }
     
+    if (pizSequenceIsAtEnd (x->sequence)) {
+        pizAgentEventLoopDoStepLast (x);
+    }
+    
     k = false;
     //    
     } else if (err == PIZ_ERROR) {
@@ -249,7 +253,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
             x->flags &= ~PIZ_AGENT_FLAG_PLAYED;
         }
         pizSequenceGoToStart (x->sequence);
-        pizAgentEventLoopDoEnd (x);
+        pizAgentEventLoopDoStepEnd (x);
     }
     //
     } while (k);
@@ -279,11 +283,30 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     PIZAGENTUNLOCKGETTER
 }
 
-void pizAgentEventLoopDoEnd (PIZAgent *x)
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizAgentEventLoopDoStepEnd (PIZAgent *x)
 {
     PIZEvent *event = NULL;
     
     event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_END, &x->grainStart);
+    if (event) {
+        PIZAGENTLOCKNOTIFICATION
+        if (pizLinklistAppend (x->notifyQueue, event)) {
+            pizEventFree (event);
+        }
+        PIZAGENTUNLOCKNOTIFICATION
+        pthread_cond_signal (&x->notificationCondition);
+    }
+}
+
+void pizAgentEventLoopDoStepLast (PIZAgent *x)
+{
+    PIZEvent *event = NULL;
+    
+    event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_LAST, &x->grainStart);
     if (event) {
         PIZAGENTLOCKNOTIFICATION
         if (pizLinklistAppend (x->notifyQueue, event)) {
@@ -303,9 +326,9 @@ bool pizAgentEventLoopCondition (PIZAgent *x)
     bool condition = false;
     
     if ((x->flags & PIZ_AGENT_FLAG_PLAYED) ||
-        pizLinklistCount (x->runInQueue) ||
-        pizLinklistCount (x->graphicInQueue) ||
-        pizLinklistCount (x->mainQueue)) {
+        pizLinklistCount (x->mainQueue)    ||
+        pizLinklistCount (x->runInQueue)   ||
+        pizLinklistCount (x->graphicInQueue)) {
         condition = true;
     }
     

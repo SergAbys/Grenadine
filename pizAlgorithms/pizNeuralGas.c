@@ -1,7 +1,7 @@
 /*
  * \file    pizNeuralGas.c
  * \author  Jean Sapristi
- * \date    April 4, 2012.
+ * \date    April 5, 2012.
  */
  
 /*
@@ -86,7 +86,7 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
         x->beta          = PIZ_DEFAULT_BETA;
         x->kappa         = PIZ_DEFAULT_KAPPA;
         
-        x->algorithm.type          = PIZ_ALGORITHM_TYPE_NEURAL_GAS;
+        x->algorithm.type          = PIZ_ALGORITHM_FLAG_NEURAL_GAS;
         x->algorithm.addMethod     = pizNeuralGasAdd;
         x->algorithm.clearMethod   = pizNeuralGasClear;
         x->algorithm.proceedMethod = pizNeuralGasProceed;

@@ -1,7 +1,7 @@
 /*
  * \file    pizMarkovModel.c
  * \author  Jean Sapristi
- * \date    April 4, 2012.
+ * \date    April 5, 2012.
  */
  
 /*
@@ -71,7 +71,7 @@ PIZMarkovModel *pizMarkovModelNew (long argc, long *argv)
     x->graphSize     = PIZ_DEFAULT_GRAPH_SIZE;
     x->persistence   = PIZ_DEFAULT_PERSISTENCE;
     
-    x->algorithm.type          = PIZ_ALGORITHM_TYPE_MARKOV_MODEL;
+    x->algorithm.type          = PIZ_ALGORITHM_FLAG_MARKOV_MODEL;
     x->algorithm.addMethod     = pizMarkovModelAdd;
     x->algorithm.clearMethod   = pizMarkovModelClear;
     x->algorithm.proceedMethod = pizMarkovModelProceed;

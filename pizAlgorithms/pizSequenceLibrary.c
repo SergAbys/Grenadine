@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceLibrary.c
  * \author	Jean Sapristi
- * \date	April 3, 2012.
+ * \date	April 5, 2012.
  */
  
 /*
@@ -49,7 +49,7 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZNote *pizSequenceNewNote (PIZSequence *x, long *values, long flags)
+PIZNote *pizSequenceNewNote (PIZSequence *x, long *values, PIZFlags flags)
 {
     PIZNote *newNote    = NULL;
     long    err         = PIZ_GOOD;
