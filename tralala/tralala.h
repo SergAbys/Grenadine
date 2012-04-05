@@ -484,6 +484,7 @@ enum {
 void        *tralala_new                    (t_symbol *s, long argc, t_atom *argv);
 void        tralala_free                    (t_tralala *x);
 void        tralala_assist                  (t_tralala *x, void *b, long m, long a, char *s);
+
 void        tralala_jsave                   (t_tralala *x, t_dictionary *d);
 t_max_err   tralala_setvalueof              (t_tralala *x, long argc, t_atom *argv);
 t_max_err   tralala_getvalueof              (t_tralala *x, long *argc, t_atom **argv);

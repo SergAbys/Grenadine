@@ -736,6 +736,34 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
     }
 }
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+t_max_err jbox_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, void *data)
+{
+    if (msg == tll_sym_attr_modified) {  
+        t_tralala *myObject = NULL;
+        t_symbol *attr_name = NULL;
+        
+        attr_name = (t_symbol *)object_method (data, tll_sym_getname);
+                    
+        if (attr_name) {                   
+            if ((attr_name != tll_sym_patching_rect) && object_attr_usercanset (x, attr_name)) {
+                if (myObject = (t_tralala *)(jbox_get_object ((t_object *)x))) {
+                    myObject->dirtyLayer |= (DIRTY_ZONE | DIRTY_NOTES);
+                }
+            }
+        }           
+    }
+    
+    return MAX_ERR_NONE;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 void tralala_jsave (t_tralala *x, t_dictionary *d)
 {
     t_dictionary *dictionary = NULL;
@@ -811,30 +839,6 @@ t_max_err tralala_getvalueof (t_tralala *x, long *argc, t_atom **argv)
         ARRAY_RELEASE (tempArray);
     }
 
-    return MAX_ERR_NONE;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-t_max_err jbox_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, void *data)
-{
-    if (msg == tll_sym_attr_modified) {  
-        t_tralala *myObject = NULL;
-        t_symbol *attr_name = NULL;
-        
-        attr_name = (t_symbol *)object_method (data, tll_sym_getname);
-                    
-        if (attr_name) {                   
-            if ((attr_name != tll_sym_patching_rect) && object_attr_usercanset (x, attr_name)) {
-                if (myObject = (t_tralala *)(jbox_get_object ((t_object *)x))) {
-                    myObject->dirtyLayer |= (DIRTY_ZONE | DIRTY_NOTES);
-                }
-            }
-        }           
-    }
-    
     return MAX_ERR_NONE;
 }
 
