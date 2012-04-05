@@ -51,7 +51,7 @@ static char *piz_eventNames[ ] = {  "Init",
                                     "Bpm",
                                     "Note Played",
                                     //
-                                    "Chance",
+                                 /*   "Chance",
                                     "Velocity",
                                     "Channel",
                                     "Cell",
@@ -75,7 +75,7 @@ static char *piz_eventNames[ ] = {  "Init",
                                     "Cycle",
                                     //
                                     "Grid",
-                                    "Note Value",
+                                    "Note Value",*/
                                     "Zone Changed",
                                     "Note Removed",
                                     "Note Added",

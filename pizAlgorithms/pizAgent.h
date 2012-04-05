@@ -46,6 +46,9 @@
 
 #include "pizEvent.h"
 #include "pizSequence.h"
+#include "pizFactorOracle.h"
+#include "pizFiniteState.h"
+#include "pizGaloisLattice.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -83,22 +86,17 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZAGENTQUEUE(queue, event)     if (pizLinklistAppend ((queue), (event))) {         \
-                                            pizEventFree (event);                           \
+#define PIZAGENTQUEUE(queue)            if (pizLinklistAppend ((queue), event)) {       \
+                                            pizEventFree (event);                       \
                                         }
             
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #include "ext.h"
-
 #define DEBUGEVENT                      if (event) {                                                    \
                                             post ("%s / %s", pizEventGetName (event), __FUNCTION__);    \
                                         }
-                                            
-#define DEBUGTIME                       PIZTime ttt;                                                    \
-                                        pizTimeSet (&ttt);                                              \
-                                        post ("%llu / %s", ttt, __FUNCTION__);                          \
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -117,6 +115,9 @@ typedef struct _PIZAgent {
     PIZLinklist         *notifyQueue;
     PIZSequence         *sequence;
     PIZGrowingArray     *tempArray;
+    PIZFactorOracle     *factorOracle;
+    PIZFiniteState      *finiteState;
+    PIZGaloisLattice    *galoisLattice;
     pthread_attr_t      attr;
     pthread_cond_t      eventCondition;
     pthread_cond_t      notificationCondition;

@@ -215,24 +215,22 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     ptr = pizGrowingArrayPtr (x->tempArray);
     
     for (i = 0; i < pizGrowingArrayCount (x->tempArray); i += PIZ_DATA_NOTE_SIZE) {
-        event = pizEventNewWithArray (PIZ_EVENT_RUN, PIZ_EVENT_NOTE_PLAYED, PIZ_DATA_NOTE_SIZE, (ptr + i), 0);
-        if (event) {
-            if (pizLinklistAppend (x->runOutQueue, event)) {
-                pizEventFree (event);
-            }
-        }
+    //
+    if (event = pizEventNewWithArray (PIZ_EVENT_RUN, PIZ_EVENT_NOTE_PLAYED, PIZ_DATA_NOTE_SIZE, (ptr + i), 0)) {
+        PIZAGENTQUEUE(x->runOutQueue)
+    }
+    //
     }
     
     if (pizLinklistCount (x->runOutQueue)) {
-        event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_RUN_READY, &x->grainStart);
-        if (event) {
-            PIZAGENTLOCKNOTIFICATION
-            if (pizLinklistAppend (x->notifyQueue, event)) {
-                pizEventFree (event);
-            }
-            PIZAGENTUNLOCKNOTIFICATION
-            pthread_cond_signal (&x->notificationCondition);
-        }
+    //
+    if (event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_RUN_READY, &x->grainStart)) {
+        PIZAGENTLOCKNOTIFICATION
+        PIZAGENTQUEUE(x->notifyQueue)
+        PIZAGENTUNLOCKNOTIFICATION
+        pthread_cond_signal (&x->notificationCondition);
+    }
+    //
     }
         
     PIZAGENTUNLOCKGETTER
@@ -269,15 +267,14 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     pizSequenceGetGraphicEvents (x->sequence, x->graphicOutQueue);
     
     if (pizLinklistCount (x->graphicOutQueue)) {
-        event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_GUI_READY, &x->grainStart);
-        if (event) {
-            PIZAGENTLOCKNOTIFICATION
-            if (pizLinklistAppend (x->notifyQueue, event)) {
-                pizEventFree (event);
-            }
-            PIZAGENTUNLOCKNOTIFICATION
-            pthread_cond_signal (&x->notificationCondition);
-        }
+    //
+    if (event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_GUI_READY, &x->grainStart)) {
+        PIZAGENTLOCKNOTIFICATION
+        PIZAGENTQUEUE(x->notifyQueue)
+        PIZAGENTUNLOCKNOTIFICATION
+        pthread_cond_signal (&x->notificationCondition);
+    }
+    //
     }
     
     PIZAGENTUNLOCKGETTER
@@ -290,13 +287,10 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
 void pizAgentEventLoopDoStepEnd (PIZAgent *x)
 {
     PIZEvent *event = NULL;
-    
-    event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_END, &x->grainStart);
-    if (event) {
+
+    if (event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_END, &x->grainStart)) {
         PIZAGENTLOCKNOTIFICATION
-        if (pizLinklistAppend (x->notifyQueue, event)) {
-            pizEventFree (event);
-        }
+        PIZAGENTQUEUE(x->notifyQueue)
         PIZAGENTUNLOCKNOTIFICATION
         pthread_cond_signal (&x->notificationCondition);
     }
@@ -306,12 +300,9 @@ void pizAgentEventLoopDoStepLast (PIZAgent *x)
 {
     PIZEvent *event = NULL;
     
-    event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_LAST, &x->grainStart);
-    if (event) {
+    if (event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_LAST, &x->grainStart)) {
         PIZAGENTLOCKNOTIFICATION
-        if (pizLinklistAppend (x->notifyQueue, event)) {
-            pizEventFree (event);
-        }
+        PIZAGENTQUEUE(x->notifyQueue)
         PIZAGENTUNLOCKNOTIFICATION
         pthread_cond_signal (&x->notificationCondition);
     }

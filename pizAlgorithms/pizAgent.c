@@ -72,8 +72,11 @@ PIZAgent *pizAgentNew (void)
     x->graphicOutQueue      = pizLinklistNew ( );
     x->mainQueue            = pizLinklistNew ( );
     x->notifyQueue          = pizLinklistNew ( );
-    x->sequence             = pizSequenceNew (0);
-    x->tempArray            = pizGrowingArrayNew (0);
+    x->sequence             = pizSequenceNew      (0);
+    x->tempArray            = pizGrowingArrayNew  (0);
+    x->factorOracle         = pizFactorOracleNew  (0, NULL);
+    x->finiteState          = pizFiniteStateNew   (0, NULL);
+    x->galoisLattice        = pizGaloisLatticeNew (0, NULL);
     x->err1                 = PIZ_ERROR;
     x->err2                 = PIZ_ERROR;
     
@@ -84,7 +87,10 @@ PIZAgent *pizAgentNew (void)
         x->mainQueue        &&
         x->notifyQueue      && 
         x->sequence         &&
-        x->tempArray)) {
+        x->tempArray        &&
+        x->factorOracle     &&
+        x->finiteState      &&
+        x->galoisLattice)) {
         
         err |= PIZ_MEMORY;
     }
@@ -154,15 +160,19 @@ void pizAgentFree (PIZAgent *x)
     pthread_cond_destroy  (&x->eventCondition);
     pthread_cond_destroy  (&x->notificationCondition);
     
-    pizLinklistFree (x->runInQueue);
-    pizLinklistFree (x->runOutQueue);
-    pizLinklistFree (x->graphicInQueue);
-    pizLinklistFree (x->graphicOutQueue);
-    pizLinklistFree (x->mainQueue);
-    pizLinklistFree (x->notifyQueue);
+    pizLinklistFree       (x->runInQueue);
+    pizLinklistFree       (x->runOutQueue);
+    pizLinklistFree       (x->graphicInQueue);
+    pizLinklistFree       (x->graphicOutQueue);
+    pizLinklistFree       (x->mainQueue);
+    pizLinklistFree       (x->notifyQueue);
     
-    pizSequenceFree     (x->sequence);
-    pizGrowingArrayFree (x->tempArray);
+    pizSequenceFree       (x->sequence);
+    pizGrowingArrayFree   (x->tempArray);
+    
+    pizFactorOracleFree   (x->factorOracle);
+    pizFiniteStateFree    (x->finiteState);
+    pizGaloisLatticeFree  (x->galoisLattice);
     //
     }
 }
@@ -173,26 +183,45 @@ void pizAgentFree (PIZAgent *x)
 
 void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
 {
-    if (event) {
-        PIZLinklist *queue = NULL;
-        
-        switch (event->type) {
-            case PIZ_EVENT_RUN            : queue = x->runInQueue; break;
-            case PIZ_EVENT_TRANSFORMATION : queue = x->mainQueue; break;
-            case PIZ_EVENT_GRAPHIC        : if (x->flags & PIZ_AGENT_FLAG_GUI) { 
-                                                queue = x->graphicInQueue; 
-                                            } break;
-        }
-        
-        if (queue) {
-            PIZAGENTLOCKEVENT
-            if (pizLinklistAppend (queue, event)) {
-                pizEventFree (event);
-            }
-            PIZAGENTUNLOCKEVENT
-            pthread_cond_signal (&x->eventCondition);
-        }
+    PIZLinklist *queue = NULL;
+    
+    switch (event->type) {
+        case PIZ_EVENT_RUN            : queue = x->runInQueue; break;
+        case PIZ_EVENT_TRANSFORMATION : queue = x->mainQueue; break;
+        case PIZ_EVENT_GRAPHIC        : if (x->flags & PIZ_AGENT_FLAG_GUI) { queue = x->graphicInQueue; } break;
     }
+    
+    if (queue) {
+        PIZAGENTLOCKEVENT
+        PIZAGENTQUEUE(queue)
+        PIZAGENTUNLOCKEVENT
+        pthread_cond_signal (&x->eventCondition);
+    }
+}
+
+PIZError pizAgentGetEvent (PIZAgent *x, PIZEventType type, PIZEvent **eventPtr)
+{
+    PIZError err = PIZ_ERROR;
+    PIZLinklist *queue = NULL;
+        
+    switch (type) {
+        case PIZ_EVENT_RUN     : queue = x->runOutQueue; break;
+        case PIZ_EVENT_GRAPHIC : if (x->flags & PIZ_AGENT_FLAG_GUI) { queue = x->graphicOutQueue; } break;
+    }
+    
+    if (queue) {
+        err = PIZ_GOOD;
+        
+        PIZAGENTLOCKGETTER
+    
+        if (!(err |= pizLinklistPtrAtIndex (queue, 0, (void **)eventPtr))) {
+            pizLinklistChuckByPtr (queue, (*eventPtr));
+        }
+    
+        PIZAGENTUNLOCKGETTER
+    }
+    
+    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------
