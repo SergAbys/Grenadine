@@ -15,18 +15,12 @@
 		961EB1D913D7F15700BD76B1 /* pizGaloisLattice.c in Sources */ = {isa = PBXBuildFile; fileRef = 961EB1D313D7F15700BD76B1 /* pizGaloisLattice.c */; };
 		963192101482169D00E63964 /* pizBoundedHashTable.c in Sources */ = {isa = PBXBuildFile; fileRef = 9631920E1482169D00E63964 /* pizBoundedHashTable.c */; };
 		963192111482169D00E63964 /* pizBoundedHashTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 9631920F1482169D00E63964 /* pizBoundedHashTable.h */; };
-		96749BE714CC5AA200BA3990 /* pizNeuralGasMaxMSP.c in Sources */ = {isa = PBXBuildFile; fileRef = 96749BE614CC5AA200BA3990 /* pizNeuralGasMaxMSP.c */; };
-		96749BF314CC5C3C00BA3990 /* pizMarkovModelMaxMSP.c in Sources */ = {isa = PBXBuildFile; fileRef = 96749BF214CC5C3C00BA3990 /* pizMarkovModelMaxMSP.c */; };
 		968C6BC01528B80E00AB45D3 /* pizSequenceLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = 968C6BBE1528B80E00AB45D3 /* pizSequenceLibrary.h */; };
 		968C6BC11528B80E00AB45D3 /* pizSequenceLibrary.c in Sources */ = {isa = PBXBuildFile; fileRef = 968C6BBF1528B80E00AB45D3 /* pizSequenceLibrary.c */; };
 		9699D9E01413A0F900F86BD8 /* pizMarkovModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 9699D9DE1413A0F900F86BD8 /* pizMarkovModel.h */; };
 		9699D9E11413A0F900F86BD8 /* pizMarkovModel.c in Sources */ = {isa = PBXBuildFile; fileRef = 9699D9DF1413A0F900F86BD8 /* pizMarkovModel.c */; };
 		969BA88614AF6780006B9729 /* pizArrayPool.c in Sources */ = {isa = PBXBuildFile; fileRef = 969BA88414AF6780006B9729 /* pizArrayPool.c */; };
 		969BA88714AF6780006B9729 /* pizArrayPool.h in Headers */ = {isa = PBXBuildFile; fileRef = 969BA88514AF6780006B9729 /* pizArrayPool.h */; };
-		969CFAAE14CC581900D52846 /* pizKohonenMapMaxMSP.c in Sources */ = {isa = PBXBuildFile; fileRef = 969CFAAD14CC581900D52846 /* pizKohonenMapMaxMSP.c */; };
-		96A05BF914E3FBF80028A323 /* pizAlgorithmsMaxMSP.h in Headers */ = {isa = PBXBuildFile; fileRef = 96A05BF814E3FBF80028A323 /* pizAlgorithmsMaxMSP.h */; };
-		96A100A814E7F16A00D3ECB6 /* pizSequenceMaxMSP.c in Sources */ = {isa = PBXBuildFile; fileRef = 96A100A614E7F16A00D3ECB6 /* pizSequenceMaxMSP.c */; };
-		96A100A914E7F16A00D3ECB6 /* pizSequenceMaxMSP.h in Headers */ = {isa = PBXBuildFile; fileRef = 96A100A714E7F16A00D3ECB6 /* pizSequenceMaxMSP.h */; };
 		96A16F79148CF839008268A6 /* pizSequenceTransform.c in Sources */ = {isa = PBXBuildFile; fileRef = 96A16F77148CF839008268A6 /* pizSequenceTransform.c */; };
 		96A16F7A148CF839008268A6 /* pizSequence.c in Sources */ = {isa = PBXBuildFile; fileRef = 96A16F78148CF839008268A6 /* pizSequence.c */; };
 		96A16F7F148CF856008268A6 /* pizSequenceTransform.h in Headers */ = {isa = PBXBuildFile; fileRef = 96A16F7D148CF856008268A6 /* pizSequenceTransform.h */; };
@@ -66,8 +60,6 @@
 		96DD192D144AB05400F914AE /* pizItemset1024.c in Sources */ = {isa = PBXBuildFile; fileRef = 96DD192A144AB05400F914AE /* pizItemset1024.c */; };
 		96DD192F144AB05B00F914AE /* pizLinklist.c in Sources */ = {isa = PBXBuildFile; fileRef = 96DD192E144AB05B00F914AE /* pizLinklist.c */; };
 		96DD1931144AB06000F914AE /* pizQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = 96DD1930144AB06000F914AE /* pizQueue.c */; };
-		96E60FC21498993F00CE103D /* pizFactorOracleMaxMSP.c in Sources */ = {isa = PBXBuildFile; fileRef = 96E60FC11498993F00CE103D /* pizFactorOracleMaxMSP.c */; };
-		96E60FEF14989B9500CE103D /* pizGaloisLatticeMaxMSP.c in Sources */ = {isa = PBXBuildFile; fileRef = 96E60FEE14989B9500CE103D /* pizGaloisLatticeMaxMSP.c */; };
 		96E6103114989E6300CE103D /* pizGrowingArrayExtended.c in Sources */ = {isa = PBXBuildFile; fileRef = 96E6103014989E6300CE103D /* pizGrowingArrayExtended.c */; };
 /* End PBXBuildFile section */
 
@@ -80,8 +72,6 @@
 		961EB1D313D7F15700BD76B1 /* pizGaloisLattice.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizGaloisLattice.c; sourceTree = "<group>"; };
 		9631920E1482169D00E63964 /* pizBoundedHashTable.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizBoundedHashTable.c; sourceTree = "<group>"; };
 		9631920F1482169D00E63964 /* pizBoundedHashTable.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizBoundedHashTable.h; sourceTree = "<group>"; };
-		96749BE614CC5AA200BA3990 /* pizNeuralGasMaxMSP.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizNeuralGasMaxMSP.c; sourceTree = "<group>"; };
-		96749BF214CC5C3C00BA3990 /* pizMarkovModelMaxMSP.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizMarkovModelMaxMSP.c; sourceTree = "<group>"; };
 		968C6BBE1528B80E00AB45D3 /* pizSequenceLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pizSequenceLibrary.h; sourceTree = "<group>"; };
 		968C6BBF1528B80E00AB45D3 /* pizSequenceLibrary.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pizSequenceLibrary.c; sourceTree = "<group>"; };
 		9699D9DE1413A0F900F86BD8 /* pizMarkovModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pizMarkovModel.h; sourceTree = "<group>"; };
@@ -89,10 +79,6 @@
 		969BA88414AF6780006B9729 /* pizArrayPool.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizArrayPool.c; sourceTree = "<group>"; };
 		969BA88514AF6780006B9729 /* pizArrayPool.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizArrayPool.h; sourceTree = "<group>"; };
 		969C044714EFB66200FD2D11 /* pizAlgorithms.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; path = pizAlgorithms.xcconfig; sourceTree = "<group>"; };
-		969CFAAD14CC581900D52846 /* pizKohonenMapMaxMSP.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizKohonenMapMaxMSP.c; sourceTree = "<group>"; };
-		96A05BF814E3FBF80028A323 /* pizAlgorithmsMaxMSP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pizAlgorithmsMaxMSP.h; sourceTree = "<group>"; };
-		96A100A614E7F16A00D3ECB6 /* pizSequenceMaxMSP.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizSequenceMaxMSP.c; sourceTree = "<group>"; };
-		96A100A714E7F16A00D3ECB6 /* pizSequenceMaxMSP.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizSequenceMaxMSP.h; sourceTree = "<group>"; };
 		96A16F77148CF839008268A6 /* pizSequenceTransform.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizSequenceTransform.c; sourceTree = "<group>"; };
 		96A16F78148CF839008268A6 /* pizSequence.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizSequence.c; sourceTree = "<group>"; };
 		96A16F7D148CF856008268A6 /* pizSequenceTransform.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizSequenceTransform.h; sourceTree = "<group>"; };
@@ -132,8 +118,6 @@
 		96DD192A144AB05400F914AE /* pizItemset1024.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizItemset1024.c; sourceTree = "<group>"; };
 		96DD192E144AB05B00F914AE /* pizLinklist.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizLinklist.c; sourceTree = "<group>"; };
 		96DD1930144AB06000F914AE /* pizQueue.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizQueue.c; sourceTree = "<group>"; };
-		96E60FC11498993F00CE103D /* pizFactorOracleMaxMSP.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizFactorOracleMaxMSP.c; sourceTree = "<group>"; };
-		96E60FEE14989B9500CE103D /* pizGaloisLatticeMaxMSP.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizGaloisLatticeMaxMSP.c; sourceTree = "<group>"; };
 		96E6103014989E6300CE103D /* pizGrowingArrayExtended.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizGrowingArrayExtended.c; sourceTree = "<group>"; };
 		D2AAC046055464E500DB518D /* libPizAlgorithms.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPizAlgorithms.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -163,7 +147,6 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				96D75283152C4CF8008278C4 /* MaxMSP */,
 				96AF1B80148CFC39001358AB /* Structures */,
 				96AF1B7F148CFC19001358AB /* Algorithms */,
 				96D189B41529A9CB00DD5DE0 /* Time */,
@@ -265,21 +248,6 @@
 			name = Event;
 			sourceTree = "<group>";
 		};
-		96D75283152C4CF8008278C4 /* MaxMSP */ = {
-			isa = PBXGroup;
-			children = (
-				96A100A714E7F16A00D3ECB6 /* pizSequenceMaxMSP.h */,
-				96A05BF814E3FBF80028A323 /* pizAlgorithmsMaxMSP.h */,
-				96A100A614E7F16A00D3ECB6 /* pizSequenceMaxMSP.c */,
-				96E60FC11498993F00CE103D /* pizFactorOracleMaxMSP.c */,
-				96E60FEE14989B9500CE103D /* pizGaloisLatticeMaxMSP.c */,
-				969CFAAD14CC581900D52846 /* pizKohonenMapMaxMSP.c */,
-				96749BE614CC5AA200BA3990 /* pizNeuralGasMaxMSP.c */,
-				96749BF214CC5C3C00BA3990 /* pizMarkovModelMaxMSP.c */,
-			);
-			name = MaxMSP;
-			sourceTree = "<group>";
-		};
 		96D8682714FF5A4B00849A50 /* Agent */ = {
 			isa = PBXGroup;
 			children = (
@@ -327,8 +295,6 @@
 				96A16F7F148CF856008268A6 /* pizSequenceTransform.h in Headers */,
 				96A16F80148CF856008268A6 /* pizSequence.h in Headers */,
 				969BA88714AF6780006B9729 /* pizArrayPool.h in Headers */,
-				96A05BF914E3FBF80028A323 /* pizAlgorithmsMaxMSP.h in Headers */,
-				96A100A914E7F16A00D3ECB6 /* pizSequenceMaxMSP.h in Headers */,
 				96D8682A14FF5A8B00849A50 /* pizAgent.h in Headers */,
 				96D1ABED150CB776000CD8FC /* pizSequenceUI.h in Headers */,
 				96D7965B15170FD800109654 /* pizTime.h in Headers */,
@@ -397,14 +363,8 @@
 				963192101482169D00E63964 /* pizBoundedHashTable.c in Sources */,
 				96A16F79148CF839008268A6 /* pizSequenceTransform.c in Sources */,
 				96A16F7A148CF839008268A6 /* pizSequence.c in Sources */,
-				96E60FC21498993F00CE103D /* pizFactorOracleMaxMSP.c in Sources */,
-				96E60FEF14989B9500CE103D /* pizGaloisLatticeMaxMSP.c in Sources */,
 				96E6103114989E6300CE103D /* pizGrowingArrayExtended.c in Sources */,
 				969BA88614AF6780006B9729 /* pizArrayPool.c in Sources */,
-				969CFAAE14CC581900D52846 /* pizKohonenMapMaxMSP.c in Sources */,
-				96749BE714CC5AA200BA3990 /* pizNeuralGasMaxMSP.c in Sources */,
-				96749BF314CC5C3C00BA3990 /* pizMarkovModelMaxMSP.c in Sources */,
-				96A100A814E7F16A00D3ECB6 /* pizSequenceMaxMSP.c in Sources */,
 				96D8682B14FF5A8B00849A50 /* pizAgent.c in Sources */,
 				96D1ABEE150CB776000CD8FC /* pizSequenceUI.c in Sources */,
 				96D7965C15170FD800109654 /* pizTime.c in Sources */,
