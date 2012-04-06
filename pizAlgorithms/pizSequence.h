@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    April 5, 2012.
+ * \date    April 6, 2012.
  */
  
 /*
@@ -221,7 +221,7 @@ void            pizSequenceFree                     (PIZSequence *x);
 // -------------------------------------------------------------------------------------------------------------
 
 long            pizSequenceCount                    (PIZSequence *x);
-long            pizSequenceIndex                    (PIZSequence *x);
+
 long            pizSequenceChance                   (PIZSequence *x);
 long            pizSequenceVelocity                 (PIZSequence *x);
 long            pizSequenceChannel                  (PIZSequence *x);
@@ -259,11 +259,6 @@ PIZ_EXTERN long pizSequenceCount (PIZSequence *x)
 {   
     return x->count;
 }   
-
-PIZ_EXTERN long pizSequenceIndex (PIZSequence *x)
-{
-    return x->index;
-}
 
 PIZ_EXTERN long pizSequenceChance (PIZSequence *x)
 {

@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    April 4, 2012.
+ * \date    April 6, 2012.
  */
  
 /*
@@ -216,11 +216,6 @@ long pizSequenceCount (PIZSequence *x)
 {   
     return x->count;
 }   
-
-long pizSequenceIndex (PIZSequence *x)
-{
-    return x->index;
-}
 
 long pizSequenceChance (PIZSequence *x)
 {

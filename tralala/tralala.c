@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 03/04/12.
+ *  Last modified : 06/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -296,15 +296,9 @@ CLASS_ATTR_STYLE_LABEL      (c, "focusedusersilentnotecolor",    0, "rgba", "Foc
 CLASS_ATTR_RGBA             (c, "unfocusedlivenotecolor",        0, t_tralala, unfocusedLiveNoteColor);
 CLASS_ATTR_DEFAULTNAME_SAVE (c, "unfocusedlivenotecolor",        0, DEFAULT_UNFOCUSED_LIVE_NOTE_COLOR);
 CLASS_ATTR_STYLE_LABEL      (c, "unfocusedlivenotecolor",        0, "rgba", "Unfocused Live Note");
-CLASS_ATTR_RGBA             (c, "unfocusedliveplayednotecolor",  0, t_tralala, unfocusedLivePlayedNoteColor);
-CLASS_ATTR_DEFAULTNAME_SAVE (c, "unfocusedliveplayednotecolor",  0, DEFAULT_UNFOCUSED_LIVE_PLAYED_NOTE_COLOR);
-CLASS_ATTR_STYLE_LABEL      (c, "unfocusedliveplayednotecolor",  0, "rgba", "Unfocused Live Played Note");
 CLASS_ATTR_RGBA             (c, "focusedlivenotecolor",          0, t_tralala, focusedLiveNoteColor);
 CLASS_ATTR_DEFAULTNAME_SAVE (c, "focusedlivenotecolor",          0, DEFAULT_FOCUSED_LIVE_NOTE_COLOR);
 CLASS_ATTR_STYLE_LABEL      (c, "focusedlivenotecolor",          0, "rgba", "Focused Live Note");
-CLASS_ATTR_RGBA             (c, "focusedliveplayednotecolor",    0, t_tralala, focusedLivePlayedNoteColor);
-CLASS_ATTR_DEFAULTNAME_SAVE (c, "focusedliveplayednotecolor",    0, DEFAULT_FOCUSED_LIVE_PLAYED_NOTE_COLOR);
-CLASS_ATTR_STYLE_LABEL      (c, "focusedliveplayednotecolor",    0, "rgba", "Focused Live Played Note");
 
 CLASS_ATTR_RGBA             (c, "popuptextcolor",           0, t_tralala, popupTextColor);
 CLASS_ATTR_DEFAULTNAME_SAVE (c, "popuptextcolor",           0, DEFAULT_POPUP_TEXT_COLOR);
@@ -375,22 +369,20 @@ CLASS_ATTR_ORDER            (c, "focuseduserselectednotecolor",     0, "3");
 CLASS_ATTR_ORDER            (c, "focusedusermarkednotecolor",       0, "4");
 CLASS_ATTR_ORDER            (c, "focusedusersilentnotecolor",       0, "5");
 CLASS_ATTR_ORDER            (c, "focusedlivenotecolor",             0, "6");
-CLASS_ATTR_ORDER            (c, "focusedliveplayednotecolor",       0, "7");
-CLASS_ATTR_ORDER            (c, "focuseduserzonecolor",             0, "8");
-CLASS_ATTR_ORDER            (c, "focusedlivezonecolor",             0, "9");
-CLASS_ATTR_ORDER            (c, "focusedselectedzonecolor",         0, "10");
-CLASS_ATTR_ORDER            (c, "unfocusedtextcolor",               0, "11");
-CLASS_ATTR_ORDER            (c, "unfocusedbordercolor",             0, "12");
-CLASS_ATTR_ORDER            (c, "unfocusedusernotecolor",           0, "13");
-CLASS_ATTR_ORDER            (c, "unfocuseduserselectednotecolor",   0, "14");
-CLASS_ATTR_ORDER            (c, "unfocusedlivenotecolor",           0, "15");
-CLASS_ATTR_ORDER            (c, "unfocusedliveplayednotecolor",     0, "16");
-CLASS_ATTR_ORDER            (c, "unfocusedzonecolor",               0, "17");
-CLASS_ATTR_ORDER            (c, "selectedtextcolor",                0, "18");
-CLASS_ATTR_ORDER            (c, "popuptextcolor",                   0, "19");
-CLASS_ATTR_ORDER            (c, "popubgcolor",                      0, "20");
-CLASS_ATTR_ORDER            (c, "popuphlttextcolor",                0, "21");
-CLASS_ATTR_ORDER            (c, "popuhltbgcolor",                   0, "22");
+CLASS_ATTR_ORDER            (c, "focuseduserzonecolor",             0, "7");
+CLASS_ATTR_ORDER            (c, "focusedlivezonecolor",             0, "8");
+CLASS_ATTR_ORDER            (c, "focusedselectedzonecolor",         0, "9");
+CLASS_ATTR_ORDER            (c, "unfocusedtextcolor",               0, "10");
+CLASS_ATTR_ORDER            (c, "unfocusedbordercolor",             0, "11");
+CLASS_ATTR_ORDER            (c, "unfocusedusernotecolor",           0, "12");
+CLASS_ATTR_ORDER            (c, "unfocuseduserselectednotecolor",   0, "13");
+CLASS_ATTR_ORDER            (c, "unfocusedlivenotecolor",           0, "14");
+CLASS_ATTR_ORDER            (c, "unfocusedzonecolor",               0, "15");
+CLASS_ATTR_ORDER            (c, "selectedtextcolor",                0, "16");
+CLASS_ATTR_ORDER            (c, "popuptextcolor",                   0, "17");
+CLASS_ATTR_ORDER            (c, "popubgcolor",                      0, "18");
+CLASS_ATTR_ORDER            (c, "popuphlttextcolor",                0, "19");
+CLASS_ATTR_ORDER            (c, "popuhltbgcolor",                   0, "20");
 
 CLASS_STICKY_ATTR_CLEAR     (c, "category");
 CLASS_STICKY_ATTR           (c, "category", 0, "Font");
@@ -531,15 +523,12 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
             x->finiteState          = pizFiniteStateNew     (0, NULL);
             x->unselected           = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->selected             = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->played               = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->zone                 = pizGrowingArrayNew    (PIZ_DATA_ZONE_SIZE);
             x->unselectedTemp       = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->selectedTemp         = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->playedTemp           = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->zoneTemp             = pizGrowingArrayNew    (PIZ_DATA_ZONE_SIZE);
             x->unselectedPaint      = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->selectedPaint        = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
-            x->playedPaint          = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->zonePaint            = pizGrowingArrayNew    (PIZ_DATA_ZONE_SIZE);
             x->origin               = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
             x->result               = pizGrowingArrayNew    (SIZE_GROWING_ARRAY);
@@ -556,15 +545,12 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
                 x->finiteState       &&
                 x->unselected        && 
                 x->selected          && 
-                x->played            &&
                 x->zone              && 
                 x->unselectedTemp    && 
                 x->selectedTemp      && 
-                x->playedTemp        &&
                 x->zoneTemp          && 
                 x->unselectedPaint   && 
                 x->selectedPaint     && 
-                x->playedPaint       &&
                 x->zonePaint         &&
                 x->origin            &&
                 x->result            &&
@@ -687,15 +673,12 @@ void tralala_free (t_tralala *x)
     }
     
     pizGrowingArrayFree  (x->zone);
-    pizGrowingArrayFree  (x->played);
     pizGrowingArrayFree  (x->selected);
     pizGrowingArrayFree  (x->unselected);
     pizGrowingArrayFree  (x->zoneTemp);
-    pizGrowingArrayFree  (x->playedTemp);
     pizGrowingArrayFree  (x->selectedTemp);
     pizGrowingArrayFree  (x->unselectedTemp);
     pizGrowingArrayFree  (x->zonePaint);
-    pizGrowingArrayFree  (x->playedPaint);
     pizGrowingArrayFree  (x->selectedPaint);
     pizGrowingArrayFree  (x->unselectedPaint);
     
@@ -1378,7 +1361,6 @@ void tralala_play (t_tralala *x)
     if (!(x->flags & FLAG_IS_RUNNING) && !(x->flags & FLAG_INHIBIT_START)) {
         LIVELOCK
         pizSequenceGoToStart (x->live);
-        x->runIndex = pizSequenceIndex (x->live);
         LIVEUNLOCK
         
         x->flags |= FLAG_IS_RUNNING;
@@ -1398,7 +1380,6 @@ void tralala_stop (t_tralala *x)
     
     clock_unset (x->runClock);
     x->flags &= ~(FLAG_IS_LOOPED | FLAG_IS_RUNNING | FLAG_IS_PAUSED);
-    x->runIndex = -1;
     
     LIVELOCK
     isAtEnd = pizSequenceIsAtEnd (x->live);
@@ -1423,7 +1404,6 @@ void tralala_loop (t_tralala *x)
         
         LIVELOCK
         pizSequenceGoToStart (x->live);
-        x->runIndex = pizSequenceIndex (x->live);
         LIVEUNLOCK
         
         x->flags |= (FLAG_IS_LOOPED | FLAG_IS_RUNNING);
@@ -1474,7 +1454,6 @@ void tralala_pause (t_tralala *x)
 void tralala_runTask (t_tralala *x)
 {
     PIZError err;
-    long     temp;
     bool     isAtEnd = false;
 
     LIVELOCK
@@ -1489,7 +1468,6 @@ void tralala_runTask (t_tralala *x)
     }
     
     LIVELOCK        
-    temp = pizSequenceIndex (x->live);
     err  = pizSequenceProceedStep (x->live, x->result);
     LIVEUNLOCK
     
@@ -1522,8 +1500,6 @@ void tralala_runTask (t_tralala *x)
         }
         
     } else {
-        temp = -1;
-        
         x->flags &= ~FLAG_IS_RUNNING;
         x->flags |= FLAG_INHIBIT_BANG;
         
@@ -1534,8 +1510,6 @@ void tralala_runTask (t_tralala *x)
     }
     
     pizGrowingArrayClear (x->result);
-
-    x->runIndex = temp;
 }
 
 void tralala_goToStartTask (t_tralala *x)

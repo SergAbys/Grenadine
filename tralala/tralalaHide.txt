@@ -96,7 +96,6 @@ _pizSequenceFree
 _pizSequenceGoToStart
 _pizSequenceGrid
 _pizSequenceHasMarkedNote
-_pizSequenceIndex
 _pizSequenceInitLasso
 _pizSequenceInitTempZone
 _pizSequenceInvertNoteWithCoordinates

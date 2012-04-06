@@ -8,7 +8,7 @@
  */
 
 /*
- *  Last modified : 05/04/12.
+ *  Last modified : 06/04/12.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -123,12 +123,11 @@
 #define DIRTY_GRID                          (1UL<<1)
 #define DIRTY_ZONE                          (1UL<<2)  
 #define DIRTY_NOTES                         (1UL<<3)
-#define DIRTY_PLAYED                        (1UL<<4)
-#define DIRTY_SEQUENCE                      (1UL<<5)                      
-#define DIRTY_LOCATE_LEFT                   (1UL<<6)
-#define DIRTY_LOCATE_RIGHT                  (1UL<<7)
-#define DIRTY_LOCATE_DOWN                   (1UL<<8)
-#define DIRTY_LOCATE_UP                     (1UL<<9)
+#define DIRTY_SEQUENCE                      (1UL<<4)                      
+#define DIRTY_LOCATE_LEFT                   (1UL<<5)
+#define DIRTY_LOCATE_RIGHT                  (1UL<<6)
+#define DIRTY_LOCATE_DOWN                   (1UL<<7)
+#define DIRTY_LOCATE_UP                     (1UL<<8)
 
 #define FLAG_NONE                           (0UL)
 #define FLAG_FOCUS                          (1UL<<0)
@@ -224,9 +223,8 @@
 #define DEFAULT_FOCUSED_USER_SILENT_NOTE_COLOR          "0.40 0.40 0.40 0.1"
 
 #define DEFAULT_UNFOCUSED_LIVE_NOTE_COLOR               "0.69 0.55 0.71 1."
-#define DEFAULT_UNFOCUSED_LIVE_PLAYED_NOTE_COLOR        "0.49 0.42 0.51 1."
 #define DEFAULT_FOCUSED_LIVE_NOTE_COLOR                 "0.42 0.44 0.52 1."
-#define DEFAULT_FOCUSED_LIVE_PLAYED_NOTE_COLOR          "1.00 0.60 0.00 1."
+
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -246,28 +244,28 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #define ARRAYSLOCK          systhread_mutex_lock (&x->arraysMutex); 
-#define ARRAYSUNLOCK        systhread_mutex_unlock (&x->arraysMutex);
+#define ARRAYSUNLOCK        systhread_mutex_unlock (&x->arraysMutex); 
 
-#define METHODSLOCK         systhread_mutex_lock (&x->methodsMutex);
-#define METHODSUNLOCK       systhread_mutex_unlock (&x->methodsMutex);
+#define METHODSLOCK         systhread_mutex_lock (&x->methodsMutex); 
+#define METHODSUNLOCK       systhread_mutex_unlock (&x->methodsMutex); 
 
-#define LEARNLOCK           systhread_mutex_lock (&x->learnMutex);
+#define LEARNLOCK           systhread_mutex_lock (&x->learnMutex); 
 #define LEARNUNLOCK         systhread_mutex_unlock (&x->learnMutex);
 
 #define ALGORITHMSLOCK      systhread_mutex_lock (&x->algorithmsMutex);
 #define ALGORITHMSUNLOCK    systhread_mutex_unlock (&x->algorithmsMutex);
 
-#define USERLOCK            systhread_mutex_lock (&x->userMutex);
-#define USERUNLOCK          systhread_mutex_unlock (&x->userMutex);
+#define USERLOCK            systhread_mutex_lock (&x->userMutex); 
+#define USERUNLOCK          systhread_mutex_unlock (&x->userMutex); 
 
-#define LIVELOCK            systhread_mutex_lock (&x->liveMutex);
-#define LIVEUNLOCK          systhread_mutex_unlock (&x->liveMutex);
+#define LIVELOCK            systhread_mutex_lock (&x->liveMutex); 
+#define LIVEUNLOCK          systhread_mutex_unlock (&x->liveMutex); 
 
-#define DATALOCK            systhread_mutex_lock (data.mutex);
-#define DATAUNLOCK          systhread_mutex_unlock (data.mutex);
+#define DATALOCK            systhread_mutex_lock (data.mutex); 
+#define DATAUNLOCK          systhread_mutex_unlock (data.mutex); 
 
 #define LOCK                systhread_mutex_lock (mutex); 
-#define UNLOCK              systhread_mutex_unlock (mutex);
+#define UNLOCK              systhread_mutex_unlock (mutex); 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -318,7 +316,6 @@ typedef struct _tralala {
     PIZArrayPool        *arrayPool;
     PIZFlags            flags;
     PIZFlags            learnCycle;
-    long                runIndex;
     long                tempo;
     long                chance;
     long                velocity;
@@ -374,15 +371,12 @@ typedef struct _tralala {
     long                saveValuesWithPatcher;
     PIZGrowingArray     *origin;  
     PIZGrowingArray     *zone;
-    PIZGrowingArray     *played;
     PIZGrowingArray     *selected;
     PIZGrowingArray     *unselected;
     PIZGrowingArray     *zoneTemp;
-    PIZGrowingArray     *playedTemp;
     PIZGrowingArray     *selectedTemp;
     PIZGrowingArray     *unselectedTemp; 
     PIZGrowingArray     *zonePaint;
-    PIZGrowingArray     *playedPaint;
     PIZGrowingArray     *selectedPaint;
     PIZGrowingArray     *unselectedPaint; 
     long                isMarkedNote;
@@ -440,9 +434,7 @@ typedef struct _tralala {
     t_jrgba             focusedUserMarkedNoteColor;
     t_jrgba             focusedUserSilentNoteColor;
     t_jrgba             unfocusedLiveNoteColor;
-    t_jrgba             unfocusedLivePlayedNoteColor;
     t_jrgba             focusedLiveNoteColor;
-    t_jrgba             focusedLivePlayedNoteColor;
     } t_tralala;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -485,12 +477,18 @@ void        *tralala_new                    (t_symbol *s, long argc, t_atom *arg
 void        tralala_free                    (t_tralala *x);
 void        tralala_assist                  (t_tralala *x, void *b, long m, long a, char *s);
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 void        tralala_jsave                   (t_tralala *x, t_dictionary *d);
 t_max_err   tralala_setvalueof              (t_tralala *x, long argc, t_atom *argv);
 t_max_err   tralala_getvalueof              (t_tralala *x, long *argc, t_atom **argv);
 
 void        tralala_dataToDictionary        (t_tralala *x, t_dictionary *d);
 void        tralala_dataWithDictionary      (t_tralala *x, t_dictionary *d);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
 t_max_err   tralala_setSequenceMode         (t_tralala *x, t_object *attr, long argc, t_atom *argv);
 t_max_err   tralala_setChannel              (t_tralala *x, t_object *attr, long argc, t_atom *argv);
@@ -593,7 +591,6 @@ void        tralala_popupRightClickMenu     (t_tralala *x, t_pt pt, long menuMod
 // -------------------------------------------------------------------------------------------------------------
 
 void        tralala_paintTask               (t_tralala *x);
-bool        tralala_hitNotesByRunIndex      (t_tralala *x);
 void        tralala_focusTask               (t_tralala *x);
 
 void        tralala_paint                   (t_tralala *x, t_object *patcherview);
@@ -607,7 +604,6 @@ void        tralala_patcherview_invis       (t_tralala *x, t_object *patcherview
 void        tralala_paintText               (t_tralala *x, t_object *patcherview);
 void        tralala_paintGrid               (t_tralala *x, t_object *patcherview);
 void        tralala_paintNotes              (t_tralala *x, t_object *patcherview);
-void        tralala_paintPlayed             (t_tralala *x, t_object *patcherview);
 void        tralala_paintZone               (t_tralala *x, t_object *patcherview);
 void        tralala_paintLasso              (t_tralala *x, t_object *patcherview);
 

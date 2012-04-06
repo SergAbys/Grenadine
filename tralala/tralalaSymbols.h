@@ -8,7 +8,7 @@
  */
  
 /*
- *  Last modified : 07/01/12.
+ *  Last modified : 06/04/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -76,7 +76,6 @@ typedef struct _tralalaSymbolsTableA {
     t_symbol *sym_gridLayer;
     t_symbol *sym_zoneLayer;
     t_symbol *sym_notesLayer;
-    t_symbol *sym_playedNotesLayer;
     t_symbol *sym_user;
     t_symbol *sym_live;
     t_symbol *sym_listen;
@@ -204,7 +203,6 @@ typedef struct _tralalaSymbolsTableB {
 #define tll_sym_gridLayer               (tll_symbolsA.sym_gridLayer)
 #define tll_sym_zoneLayer               (tll_symbolsA.sym_zoneLayer)
 #define tll_sym_notesLayer              (tll_symbolsA.sym_notesLayer)
-#define tll_sym_playedNotesLayer        (tll_symbolsA.sym_playedNotesLayer)
 #define tll_sym_user                    (tll_symbolsA.sym_user)
 #define tll_sym_live                    (tll_symbolsA.sym_live)
 #define tll_sym_listen                  (tll_symbolsA.sym_listen)
