@@ -1,7 +1,7 @@
 /*
  * \file    pizMarkovModel.c
  * \author  Jean Sapristi
- * \date    April 5, 2012.
+ * \date    April 6, 2012.
  */
  
 /*
@@ -53,10 +53,15 @@
 #define PIZ_ALPHABET_SIZE           128
 #define PIZ_MAXIMUM_GRAPH_SIZE      32
 #define PIZ_MAXIMUM_VECTOR_SIZE     32
-
 #define PIZ_DEFAULT_GRAPH_SIZE      6
 #define PIZ_DEFAULT_VECTOR_SIZE     6
 #define PIZ_DEFAULT_PERSISTENCE     0.5
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZ_INLINE void pizMarkovModelBaumWelch             (PIZMarkovModel *x, long argc, long *argv);
+void            pizMarkovModelFillStochastically    (PIZMarkovModel *x, long argc, double *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -71,7 +76,7 @@ PIZMarkovModel *pizMarkovModelNew (long argc, long *argv)
     x->graphSize     = PIZ_DEFAULT_GRAPH_SIZE;
     x->persistence   = PIZ_DEFAULT_PERSISTENCE;
     
-    x->algorithm.type          = PIZ_ALGORITHM_FLAG_MARKOV_MODEL;
+    x->algorithm.type          = PIZ_ALGORITHM_TYPE_MARKOV_MODEL;
     x->algorithm.addMethod     = pizMarkovModelAdd;
     x->algorithm.clearMethod   = pizMarkovModelClear;
     x->algorithm.proceedMethod = pizMarkovModelProceed;

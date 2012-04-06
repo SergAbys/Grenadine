@@ -1,7 +1,7 @@
 /**
  * \file    pizFactorOracle.h
  * \author  Jean Sapristi
- * \date    April 4, 2012.
+ * \date    April 6, 2012.
  */
 
 /*
@@ -44,17 +44,17 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizDataStructures.h"
 #include "pizAlgorithms.h"
+#include "pizDataStructures.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZFactorOracleNode {
-    long                referTo;
-    long                lengthRepeatedSuffix;
-    PIZGrowingArray     *arcDestinations;
-    PIZGrowingArray     *arcValues;
+    long         referTo;
+    long         lengthRepeatedSuffix;
+    PIZArray     *arcDestinations;
+    PIZArray     *arcValues;
     } PIZFactorOracleNode;
        
 typedef struct _PIZFactorOracle {
@@ -72,22 +72,12 @@ typedef struct _PIZFactorOracle {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_START_C_LINKAGE
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZFactorOracle     *pizFactorOracleNew     (long argc, long *argv);
-void                pizFactorOracleFree     (PIZFactorOracle *x);
-PIZError            pizFactorOracleAdd      (PIZFactorOracle *x, long argc, long *argv);
-PIZError            pizFactorOracleClear    (PIZFactorOracle *x);
-PIZError            pizFactorOracleProceed  (PIZFactorOracle *x, long argc, long *argv);
-long                pizFactorOracleCount    (const PIZFactorOracle *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_END_C_LINKAGE
+PIZFactorOracle     *pizFactorOracleNew         (long argc, long *argv);
+void                pizFactorOracleFree         (PIZFactorOracle *x);
+PIZError            pizFactorOracleAdd          (PIZFactorOracle *x, long argc, long *argv);
+PIZError            pizFactorOracleClear        (PIZFactorOracle *x);
+PIZError            pizFactorOracleProceed      (PIZFactorOracle *x, long argc, long *argv);
+long                pizFactorOracleCount        (const PIZFactorOracle *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

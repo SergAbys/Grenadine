@@ -1,7 +1,7 @@
 /**
  * \file    pizNeuralGas.h
  * \author  Jean Sapristi
- * \date    April 4, 2012.
+ * \date    April 6, 2012.
  */
  
 /*
@@ -44,8 +44,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizDataStructures.h"
 #include "pizAlgorithms.h"
+#include "pizDataStructures.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -81,22 +81,12 @@ typedef struct _PIZNeuralGas {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_START_C_LINKAGE
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZNeuralGas    *pizNeuralGasNew    (long argc, long *argv);
-void            pizNeuralGasFree    (PIZNeuralGas *x);
-PIZError        pizNeuralGasAdd     (PIZNeuralGas *x, long argc, long *argv);
-PIZError        pizNeuralGasClear   (PIZNeuralGas *x);
-PIZError        pizNeuralGasProceed (PIZNeuralGas *x, long argc, long *argv);
-long            pizNeuralGasCount   (const PIZNeuralGas *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_END_C_LINKAGE
+PIZNeuralGas    *pizNeuralGasNew        (long argc, long *argv);
+void            pizNeuralGasFree        (PIZNeuralGas *x);
+PIZError        pizNeuralGasAdd         (PIZNeuralGas *x, long argc, long *argv);
+PIZError        pizNeuralGasClear       (PIZNeuralGas *x);
+PIZError        pizNeuralGasProceed     (PIZNeuralGas *x, long argc, long *argv);
+long            pizNeuralGasCount       (const PIZNeuralGas *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

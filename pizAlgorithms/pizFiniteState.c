@@ -1,7 +1,7 @@
 /*
  * \file    pizFiniteState.c
  * \author  Jean Sapristi
- * \date    April 5, 2012.
+ * \date    April 6, 2012.
  */
  
 /*
@@ -48,7 +48,6 @@
 #define PIZ_INCREMENT_JUMP_CHANCE               1   
 #define PIZ_INCREMENT_FINAL_JUMP_CHANCE         5 
 #define PIZ_MAXIMUM_THRESHOLD_TO_MERGE_NODES    100
-
 #define PIZ_DEFAULT_THRESHOLD_TO_MERGE_NODES    35
 
 // -------------------------------------------------------------------------------------------------------------
@@ -57,6 +56,11 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -74,7 +78,7 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
             x->jumpChance               = 0;
             x->thresholdToMergeNodes    = PIZ_DEFAULT_THRESHOLD_TO_MERGE_NODES;
             
-            x->algorithm.type           = PIZ_ALGORITHM_FLAG_FINITE_STATE;
+            x->algorithm.type           = PIZ_ALGORITHM_TYPE_FINITE_STATE;
             x->algorithm.addMethod      = pizFiniteStateAdd;
             x->algorithm.clearMethod    = pizFiniteStateClear;
             x->algorithm.proceedMethod  = pizFiniteStateProceed;

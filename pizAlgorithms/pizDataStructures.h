@@ -1,7 +1,7 @@
 /**
  * \file    pizDataStructures.h
  * \author  Jean Sapristi
- * \date    February 29, 2012.
+ * \date    April 6, 2012.
  */
 
 /*
@@ -38,24 +38,20 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_DATA_H
-#define PIZ_DATA_H
+#ifndef PIZ_DATA_STRUCTURES_H
+#define PIZ_DATA_STRUCTURES_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizTypes.h"
-#include "pizItemset128.h"
-#include "pizItemset1024.h"
-#include "pizBoundedStack.h"
-#include "pizQueue.h"
-#include "pizBoundedQueue.h"
-#include "pizGrowingArray.h"
-#include "pizHashTable.h"
+#include "pizArray.h"
 #include "pizLinklist.h"
+#include "pizItemset128.h"
+#include "pizBoundedStack.h"
+#include "pizBoundedQueue.h"
 #include "pizBoundedHashTable.h"
-#include "pizArrayPool.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif  // PIZ_DATA_H
+#endif  // PIZ_DATA_STRUCTURES_H

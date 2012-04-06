@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	April 5, 2012.
+ * \date	April 6, 2012.
  */
  
 /*
@@ -73,7 +73,7 @@ PIZAgent *pizAgentNew (void)
     x->mainQueue            = pizLinklistNew ( );
     x->notifyQueue          = pizLinklistNew ( );
     x->sequence             = pizSequenceNew      (0);
-    x->tempArray            = pizGrowingArrayNew  (0);
+    x->tempArray            = pizArrayNew         (0);
     x->factorOracle         = pizFactorOracleNew  (0, NULL);
     x->finiteState          = pizFiniteStateNew   (0, NULL);
     x->galoisLattice        = pizGaloisLatticeNew (0, NULL);
@@ -168,7 +168,7 @@ void pizAgentFree (PIZAgent *x)
     pizLinklistFree       (x->notifyQueue);
     
     pizSequenceFree       (x->sequence);
-    pizGrowingArrayFree   (x->tempArray);
+    pizArrayFree          (x->tempArray);
     
     pizFactorOracleFree   (x->factorOracle);
     pizFiniteStateFree    (x->finiteState);

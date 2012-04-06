@@ -195,7 +195,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     //
     
     if (!blank) {
-        pizGrowingArrayClear (x->tempArray);
+        pizArrayClear (x->tempArray);
         err = pizSequenceProceedStep (x->sequence, x->tempArray);
     } else {
         err = pizSequenceProceedStep (x->sequence, NULL);
@@ -212,9 +212,9 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     PIZAGENTLOCKGETTER 
         
     pizLinklistClear (x->runOutQueue);
-    ptr = pizGrowingArrayPtr (x->tempArray);
+    ptr = pizArrayPtr (x->tempArray);
     
-    for (i = 0; i < pizGrowingArrayCount (x->tempArray); i += PIZ_DATA_NOTE_SIZE) {
+    for (i = 0; i < pizArrayCount (x->tempArray); i += PIZ_DATA_NOTE_SIZE) {
     //
     if (event = pizEventNewWithArray (PIZ_EVENT_RUN, PIZ_EVENT_NOTE_PLAYED, PIZ_DATA_NOTE_SIZE, (ptr + i), 0)) {
         PIZAGENTQUEUE(x->runOutQueue)

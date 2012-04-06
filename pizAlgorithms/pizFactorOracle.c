@@ -1,7 +1,7 @@
 /*
  * \file    pizFactorOracle.c
  * \author  Jean Sapristi
- * \date    April 5, 2012.
+ * \date    April 6, 2012.
  */
  
 /*
@@ -52,7 +52,6 @@
 
 #define PIZ_ARRAY_INIT_SIZE                 4
 #define PIZ_ORACLE_INIT_SIZE                32
-
 #define PIZ_DEFAULT_STRAIGHT_RATIO          0.25
 #define PIZ_DEFAULT_BACKWARD_THRESHOLD      2
 
@@ -66,8 +65,8 @@ PIZFactorOracle *pizFactorOracleNew (long argc, long *argv)
     if (x = (PIZFactorOracle *)malloc (sizeof(PIZFactorOracle))) {
     //
     if (x->nodes = (PIZFactorOracleNode *)malloc (PIZ_ORACLE_INIT_SIZE * sizeof(PIZFactorOracleNode))) {
-        x->nodes[0].arcValues = pizGrowingArrayNew (PIZ_ARRAY_INIT_SIZE);
-        x->nodes[0].arcDestinations = pizGrowingArrayNew (PIZ_ARRAY_INIT_SIZE);
+        x->nodes[0].arcValues = pizArrayNew (PIZ_ARRAY_INIT_SIZE);
+        x->nodes[0].arcDestinations = pizArrayNew (PIZ_ARRAY_INIT_SIZE);
         
         if (x->nodes[0].arcValues && x->nodes[0].arcDestinations) {
             x->size                     = PIZ_ORACLE_INIT_SIZE;
@@ -78,7 +77,7 @@ PIZFactorOracle *pizFactorOracleNew (long argc, long *argv)
             x->straightRatio            = PIZ_DEFAULT_STRAIGHT_RATIO;
             x->seed                     = (unsigned int)time(NULL);
             
-            x->algorithm.type           = PIZ_ALGORITHM_FLAG_FACTOR_ORACLE;
+            x->algorithm.type           = PIZ_ALGORITHM_TYPE_FACTOR_ORACLE;
             x->algorithm.addMethod      = pizFactorOracleAdd;
             x->algorithm.clearMethod    = pizFactorOracleClear;
             x->algorithm.proceedMethod  = pizFactorOracleProceed;
@@ -88,8 +87,8 @@ PIZFactorOracle *pizFactorOracleNew (long argc, long *argv)
             x->nodes[0].lengthRepeatedSuffix = 0;
             
         } else {
-            pizGrowingArrayFree (x->nodes[0].arcValues);
-            pizGrowingArrayFree (x->nodes[0].arcDestinations);
+            pizArrayFree (x->nodes[0].arcValues);
+            pizArrayFree (x->nodes[0].arcDestinations);
             
             x->nodes[0].arcValues       = NULL;
             x->nodes[0].arcDestinations = NULL;
@@ -116,8 +115,8 @@ void pizFactorOracleFree (PIZFactorOracle *x)
         long i;
         
         for (i = 0; i < x->peak; i++) {
-            pizGrowingArrayFree (x->nodes[i].arcValues);
-            pizGrowingArrayFree (x->nodes[i].arcDestinations);
+            pizArrayFree (x->nodes[i].arcValues);
+            pizArrayFree (x->nodes[i].arcDestinations);
             
             x->nodes[i].arcValues       = NULL;
             x->nodes[i].arcDestinations = NULL;
@@ -162,8 +161,8 @@ PIZError pizFactorOracleAdd (PIZFactorOracle *x, long argc, long *argv)
         x->nodes[p].lengthRepeatedSuffix =  0;
         
         if (p == x->peak) {
-            if (x->nodes[p].arcValues = pizGrowingArrayNew (PIZ_ARRAY_INIT_SIZE)) {
-                if (x->nodes[p].arcDestinations = pizGrowingArrayNew (PIZ_ARRAY_INIT_SIZE)) {
+            if (x->nodes[p].arcValues = pizArrayNew (PIZ_ARRAY_INIT_SIZE)) {
+                if (x->nodes[p].arcDestinations = pizArrayNew (PIZ_ARRAY_INIT_SIZE)) {
                     x->peak ++;
                 } else {
                     free (x->nodes[p].arcValues);
@@ -173,8 +172,8 @@ PIZError pizFactorOracleAdd (PIZFactorOracle *x, long argc, long *argv)
                 err = PIZ_MEMORY;
             }
         } else {
-            pizGrowingArrayClear (x->nodes[p].arcValues);
-            pizGrowingArrayClear (x->nodes[p].arcDestinations);
+            pizArrayClear (x->nodes[p].arcValues);
+            pizArrayClear (x->nodes[p].arcDestinations);
         }
     }
                 
@@ -183,16 +182,16 @@ PIZError pizFactorOracleAdd (PIZFactorOracle *x, long argc, long *argv)
         long w = 0;
         long repeatedSuffix = 0;
 
-        pizGrowingArrayAppend (x->nodes[(p - 1)].arcValues, argv[i]);
-        pizGrowingArrayAppend (x->nodes[(p - 1)].arcDestinations, p);
+        pizArrayAppend (x->nodes[(p - 1)].arcValues, argv[i]);
+        pizArrayAppend (x->nodes[(p - 1)].arcDestinations, p);
         
         t = p - 1;
         j = x->nodes[(p - 1)].referTo;
         
-        while ((j > -1) && !pizGrowingArrayContainsValue (x->nodes[j].arcValues, argv[i])) {
-            if (!pizGrowingArrayAppend (x->nodes[j].arcValues, argv[i])) {
-                if (pizGrowingArrayAppend (x->nodes[j].arcDestinations, p)) {
-                    pizGrowingArrayRemoveLastValue (x->nodes[j].arcValues);
+        while ((j > -1) && !pizArrayContainsValue (x->nodes[j].arcValues, argv[i])) {
+            if (!pizArrayAppend (x->nodes[j].arcValues, argv[i])) {
+                if (pizArrayAppend (x->nodes[j].arcDestinations, p)) {
+                    pizArrayRemoveLastValue (x->nodes[j].arcValues);
                     err = PIZ_MEMORY;
                 }
             } else {
@@ -204,8 +203,8 @@ PIZError pizFactorOracleAdd (PIZFactorOracle *x, long argc, long *argv)
         }
         
         if (j != -1) {   
-            long destinationIndex = pizGrowingArrayFirstIndexOfValue (x->nodes[j].arcValues, argv[i]);
-            w = pizGrowingArrayValueAtIndex (x->nodes[j].arcDestinations, destinationIndex);
+            long destinationIndex = pizArrayFirstIndexOfValue (x->nodes[j].arcValues, argv[i]);
+            w = pizArrayValueAtIndex (x->nodes[j].arcDestinations, destinationIndex);
         }
             
         x->nodes[p].referTo = w;
@@ -245,8 +244,8 @@ PIZError pizFactorOracleClear (PIZFactorOracle *x)
     x->nodes[0].referTo              = -1;
     x->nodes[0].lengthRepeatedSuffix = 0;
     
-    pizGrowingArrayClear (x->nodes[0].arcValues);
-    pizGrowingArrayClear (x->nodes[0].arcDestinations);
+    pizArrayClear (x->nodes[0].arcValues);
+    pizArrayClear (x->nodes[0].arcDestinations);
     
     return PIZ_GOOD;
 }
@@ -275,16 +274,16 @@ PIZError pizFactorOracleProceed (PIZFactorOracle *x, long argc, long *argv)
             if ((h > ((x->straightRatio + 1.) / 2.)) && (p->lengthRepeatedSuffix > x->backwardThreshold)) {
                 x->shuttle = p->referTo;
                 p = x->nodes + x->shuttle;
-            } else if (pizGrowingArrayCount (p->arcValues) > 1) {
-                long i = (pizGrowingArrayCount (p->arcValues) - 1) * (rand_r (&x->seed) / (RAND_MAX + 1.0));
-                argv[k]     = pizGrowingArrayValueAtIndex (p->arcValues, (i + 1));
-                x->shuttle  = pizGrowingArrayValueAtIndex (p->arcDestinations, (i + 1));
+            } else if (pizArrayCount (p->arcValues) > 1) {
+                long i = (pizArrayCount (p->arcValues) - 1) * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+                argv[k]     = pizArrayValueAtIndex (p->arcValues, (i + 1));
+                x->shuttle  = pizArrayValueAtIndex (p->arcDestinations, (i + 1));
                 t = true;
             }
         }
         
         if (!t) {
-            argv[k] = pizGrowingArrayValueAtIndex (p->arcValues, 0);
+            argv[k] = pizArrayValueAtIndex (p->arcValues, 0);
             x->shuttle ++;
         }
         

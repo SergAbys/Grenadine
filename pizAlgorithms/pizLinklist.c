@@ -39,7 +39,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizLinklist.h"
-#include "pizGrowingArray.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -89,9 +88,7 @@ void pizLinklistClear (PIZLinklist *x)
 
         if (x->flags & PIZ_LINKLIST_FLAG_FREE_MEMORY) {
             free (elementToBeRemoved->ptr);
-        } else if (x->flags & PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY) {
-            pizGrowingArrayFree ((PIZGrowingArray *)elementToBeRemoved->ptr);
-        }
+        } 
             
         free (elementToBeRemoved);
         elementToBeRemoved = NULL;
@@ -291,8 +288,6 @@ PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr)
         
         if (x->flags & PIZ_LINKLIST_FLAG_FREE_MEMORY) {
             free (elementToBeRemoved->ptr);
-        } else if (x->flags & PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY) {
-            pizGrowingArrayFree ((PIZGrowingArray *)elementToBeRemoved->ptr);
         }
             
         free (elementToBeRemoved);

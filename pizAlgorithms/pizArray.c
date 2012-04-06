@@ -1,7 +1,7 @@
 /*
- * \file    pizGrowingArray.c
+ * \file    pizArray.c
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 6, 2012.
  */
  
 /*
@@ -38,26 +38,27 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizGrowingArray.h"
+#include "pizArray.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #include <stdlib.h>
+#include <string.h>
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_DEFAULT_SIZE    4
+#define PIZ_DEFAULT_SIZE 4
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZGrowingArray *pizGrowingArrayNew (long size)
+PIZArray *pizArrayNew (long size)
 {
-    PIZGrowingArray *x = NULL;
+    PIZArray *x = NULL;
 
-    if (x = (PIZGrowingArray *)malloc (sizeof(PIZGrowingArray))) {       
+    if (x = (PIZArray *)malloc (sizeof(PIZArray))) {       
         x->size = PIZ_DEFAULT_SIZE;
         
         if (size > 0) {
@@ -75,7 +76,7 @@ PIZGrowingArray *pizGrowingArrayNew (long size)
     return x;
 }
 
-void pizGrowingArrayFree (PIZGrowingArray *x)
+void pizArrayFree (PIZArray *x)
 {
     if (x) {
         free (x->values);
@@ -85,12 +86,12 @@ void pizGrowingArrayFree (PIZGrowingArray *x)
     }
 }
 
-void pizGrowingArrayClear (PIZGrowingArray *x)
+void pizArrayClear (PIZArray *x)
 {
     x->index = 0;
 }
 
-PIZError pizGrowingArrayAppend (PIZGrowingArray *x, long value)
+PIZError pizArrayAppend (PIZArray *x, long value)
 {   
     PIZError err = PIZ_GOOD;
         
@@ -113,24 +114,167 @@ PIZError pizGrowingArrayAppend (PIZGrowingArray *x, long value)
     return err;
 }
 
-void pizGrowingArraySetValueAtIndex (PIZGrowingArray *x, long index, long value)
+void pizArraySetValueAtIndex (PIZArray *x, long index, long value)
 {
     x->values[index] = value;
 }
 
-long pizGrowingArrayCount (const PIZGrowingArray *x)
-{
-    return (x->index);
-}
-
-long pizGrowingArrayValueAtIndex (const PIZGrowingArray *x, long index)
+long pizArrayValueAtIndex (const PIZArray *x, long index)
 {   
     return (x->values[index]);
 }
 
-long *pizGrowingArrayPtr (const PIZGrowingArray *array)
+long pizArrayCount (const PIZArray *x)
+{
+    return (x->index);
+}
+
+long *pizArrayPtr (const PIZArray *array)
 {
     return (array->values);
+}
+
+void pizArrayRemoveIndex (PIZArray *array, long index)
+{
+    if (index >= 0 && index < array->index) {
+        long i;
+        
+        for (i = index; i < (array->index - 1); i++) {
+            array->values[i] = array->values[i + 1];
+        }
+        
+        array->index --;
+    }
+}
+
+PIZError pizArrayRemoveLastValue (PIZArray *x)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if (x->index) {
+        x->index --;
+        err = PIZ_GOOD;
+    }
+        
+    return err;
+}
+
+long pizArrayFirstIndexOfValue (const PIZArray *x, long value)
+{
+    long i, k = -1;
+    
+    for (i = 0; i < x->index; i++) {
+        if (x->values[i] == value) {
+            k = i;
+            break;
+        }
+    }
+    
+    return k;
+}
+
+bool pizArrayContainsValue (const PIZArray *x, long value)
+{
+    long i, k = false;
+    
+    for (i = 0; i < x->index; i++) {
+        if (x->values[i] == value) {
+            k = true;
+            break;
+        }
+    }
+        
+    return k;
+}
+
+PIZError pizArrayCopy (PIZArray *x, const PIZArray *toCopy)
+{
+    PIZError err = PIZ_GOOD;
+    
+    if (toCopy->index > x->size) {
+        long *newValues = NULL;
+        
+        if (newValues = (long *)realloc (x->values, toCopy->size * sizeof(long))) {
+            x->size = toCopy->size;
+            x->values = newValues;
+        } else {
+            err = PIZ_MEMORY;
+        }
+    }
+    
+    if (!err)  {
+        long i;
+        
+        for (i = 0; i < toCopy->index; i++) {
+            x->values[i] = toCopy->values[i];
+        }
+            
+        x->index = toCopy->index;
+    }
+    
+    return err;
+}
+
+PIZError pizArrayAppendArray (PIZArray *x, const PIZArray *toAppend)
+{
+    PIZError err = PIZ_GOOD;
+    
+    if ((toAppend->index + x->index) > x->size) {
+        long *newValues = NULL;
+        long newSize = toAppend->size + x->size;
+
+        if (newValues = (long *)realloc (x->values, newSize * sizeof(long))) {
+            x->size = newSize;
+            x->values = newValues;
+        } else {
+            err = PIZ_MEMORY;
+        }
+    }
+    
+    if (!err)  {
+        long i;
+    
+        for (i = 0; i < toAppend->index; i++) {
+            x->values[x->index + i] = toAppend->values[i];
+        }
+        
+        x->index += toAppend->index;
+    }
+    
+    return err;
+}
+
+PIZError pizArrayAppendPtr (PIZArray *x, long argc, long *argv)
+{
+    PIZError err = PIZ_GOOD;
+    
+    if ((argc + x->index) > x->size) {
+        long *newValues = NULL;
+        long newSize = x->size * 2;
+        
+        while (newSize < (argc + x->index)) {
+            newSize = newSize * 2;
+        }
+
+        if (newValues = (long *)realloc (x->values, newSize * sizeof(long))) {
+            x->size = newSize;
+            x->values = newValues;
+        } else {
+            err = PIZ_MEMORY;
+        }
+    }
+    
+    if (!err) {
+        long i;
+        
+        for (i = 0; i < argc; i++) {
+            x->values[x->index + i] = argv[i];
+        }
+            
+        x->index += argc;
+    }
+    
+    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------

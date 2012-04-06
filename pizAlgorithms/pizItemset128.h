@@ -1,7 +1,7 @@
 /**
  * \file    pizItemset128.h
  * \author  Jean Sapristi
- * \date    March 14, 2012.
+ * \date    April 6, 2012.
  */
  
 /*
@@ -49,11 +49,6 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include <string.h>
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 #define PIZ_ITEMSET128_SIZE                 128
 #define PIZ_ITEMSET128_SIZE_OF_ULONG        32
 #define PIZ_ITEMSET128_NUMBER_OF_ULONGS     4
@@ -68,8 +63,6 @@ typedef struct _PIZItemset128 {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_START_C_LINKAGE
-
 void pizItemset128SetAtIndex    (PIZItemset128 *itemset, long index);
 void pizItemset128UnsetAtIndex  (PIZItemset128 *itemset, long index);
 void pizItemset128Clear         (PIZItemset128 *itemset);
@@ -79,8 +72,6 @@ void pizItemset128Union         (const PIZItemset128 *a, const PIZItemset128 *b,
 void pizItemset128Intersection  (const PIZItemset128 *a, const PIZItemset128 *b, PIZItemset128 *r);
 bool pizItemset128IsIncluded    (const PIZItemset128 *a, const PIZItemset128 *b);
 bool pizItemset128IsEqual       (const PIZItemset128 *a, const PIZItemset128 *b);
-
-PIZ_END_C_LINKAGE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

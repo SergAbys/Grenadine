@@ -103,12 +103,12 @@ PIZSequence *pizSequenceNew (long size)
     if (size > 0) {
         x->timelineSize = size;
     } else {
-        x->timelineSize = PIZ_SEQUENCE_DEFAULT_TIMELINE;
+        x->timelineSize = PIZ_SEQUENCE_DEFAULT_TIMELINE_SIZE;
     }
     
-    x->map           = pizGrowingArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
-    x->scale         = pizGrowingArrayNew (PIZ_MAGIC_SCALE);
-    x->pattern       = pizGrowingArrayNew (0);
+    x->map           = pizArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
+    x->scale         = pizArrayNew (PIZ_MAGIC_SCALE);
+    x->pattern       = pizArrayNew (0);
     x->values1       = (long *)malloc (sizeof(long) * PIZ_SEQUENCE_TEMP_ARRAY_SIZE);
     x->values2       = (long *)malloc (sizeof(long) * PIZ_SEQUENCE_TEMP_ARRAY_SIZE);
     x->notes1        = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_TEMP_ARRAY_SIZE);
@@ -133,8 +133,6 @@ PIZSequence *pizSequenceNew (long size)
         for (i = (PIZ_SEQUENCE_MAXIMUM_NOTES - 1); i >= 0; i--) {
             pizBoundedStackPush (x->ticketMachine, i);
         }
-        
-        x->markedNote = NULL;
         
         pizItemset128Clear (&x->addedNotes);
         pizItemset128Clear (&x->removedNotes);
@@ -182,9 +180,9 @@ void pizSequenceFree (PIZSequence *x)
         x->timeline = NULL;
     }
     
-    pizGrowingArrayFree (x->map);
-    pizGrowingArrayFree (x->scale);
-    pizGrowingArrayFree (x->pattern);
+    pizArrayFree (x->map);
+    pizArrayFree (x->scale);
+    pizArrayFree (x->pattern);
     
     pizBoundedHashTableFree (x->hashTable);
     pizBoundedHashTableFree (x->lookup);
@@ -283,16 +281,16 @@ void pizSequenceSetNoteValue (PIZSequence *x, PIZNoteValue noteValue)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type, const PIZGrowingArray *a)
+PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type, const PIZArray *a)
 {
     long     *ptr = NULL;
     PIZError err = PIZ_GOOD;
 
-    pizGrowingArrayClear (x->scale);
+    pizArrayClear (x->scale);
     
     if (type == PIZ_SCALE_CUSTOM) {
-        if (pizGrowingArrayCount (a) == PIZ_MAGIC_SCALE) { 
-            ptr = pizGrowingArrayPtr (a);
+        if (pizArrayCount (a) == PIZ_MAGIC_SCALE) { 
+            ptr = pizArrayPtr (a);
         } else {
             err = PIZ_ERROR;
         }
@@ -303,16 +301,16 @@ PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type
     if (ptr) {
         long i;
         for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
-            pizGrowingArrayAppend (x->scale, *(ptr + ((PIZ_MAGIC_SCALE - key + i) % PIZ_MAGIC_SCALE)));
+            pizArrayAppend (x->scale, *(ptr + ((PIZ_MAGIC_SCALE - key + i) % PIZ_MAGIC_SCALE)));
         }
     }
     
     return err;
 }   
 
-PIZError pizSequenceSetPattern (PIZSequence *x, const PIZGrowingArray *a)
+PIZError pizSequenceSetPattern (PIZSequence *x, const PIZArray *a)
 {
-    return pizGrowingArrayCopy (x->pattern, a);
+    return pizArrayCopy (x->pattern, a);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -329,7 +327,7 @@ void pizSequenceGoToStart (PIZSequence *x)
     x->index = x->start;
 }
 
-PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a)
+PIZError pizSequenceProceedStep (PIZSequence *x, PIZArray *a)
 {
     PIZError err = PIZ_ERROR;
     
@@ -346,7 +344,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a)
         PIZNote *note       = NULL;
         PIZNote *nextNote   = NULL;
         
-        scale = pizGrowingArrayCount (x->scale);
+        scale = pizArrayCount (x->scale);
         
         pizLinklistPtrAtIndex (x->timeline[x->index], 0, (void **)&note);
         
@@ -358,7 +356,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a)
             pitch = note->data[PIZ_NOTE_PITCH];
             
             if (scale) {
-                pitch += pizGrowingArrayValueAtIndex (x->scale, pitch % scale);
+                pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
             }
             
             if ((pitch >= x->down) && (pitch <= x->up)) {
@@ -373,13 +371,12 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZGrowingArray *a)
                     noteChannel = x->channel;
                 }
                   
-                err |= pizGrowingArrayAppend (a, note->position);      
-                err |= pizGrowingArrayAppend (a, CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
-                err |= pizGrowingArrayAppend (a, CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY));
-                err |= pizGrowingArrayAppend (a, note->data[PIZ_NOTE_DURATION]);
-                err |= pizGrowingArrayAppend (a, noteChannel);
-                err |= pizGrowingArrayAppend (a, note->isSelected);
-                err |= pizGrowingArrayAppend (a, (note == x->markedNote));
+                err |= pizArrayAppend (a, note->position);      
+                err |= pizArrayAppend (a, CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
+                err |= pizArrayAppend (a, CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY));
+                err |= pizArrayAppend (a, note->data[PIZ_NOTE_DURATION]);
+                err |= pizArrayAppend (a, noteChannel);
+                err |= pizArrayAppend (a, note->isSelected);
             }
             
             note = nextNote;

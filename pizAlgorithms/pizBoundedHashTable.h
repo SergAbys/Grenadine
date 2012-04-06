@@ -1,7 +1,7 @@
 /**
  * \file    pizBoundedHashTable.h
  * \author  Jean Sapristi
- * \date    April 5, 2012.
+ * \date    April 6, 2012.
  */
  
 /*
@@ -46,7 +46,7 @@
 
 #include "pizTypes.h"
 #include "pizBoundedStack.h"
-#include "pizGrowingArray.h"
+#include "pizArray.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -68,13 +68,11 @@ typedef struct _PIZBoundedHashTable {
     long                        poolSize;
     PIZBoundedStack             *ticketMachine;
     PIZBoundedHashTableElement  *pool;
-    PIZGrowingArray             **hashTable;
+    PIZArray                    **hashTable;
     } PIZBoundedHashTable;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-PIZ_START_C_LINKAGE
 
 PIZBoundedHashTable *pizBoundedHashTableNew               (long argc, long *argv);
 void                pizBoundedHashTableSetFlags           (PIZBoundedHashTable *x, PIZFlags flags);
@@ -85,8 +83,6 @@ PIZError            pizBoundedHashTableRemoveByKeyAndPtr  (PIZBoundedHashTable *
 PIZError            pizBoundedHashTablePtrByKey           (const PIZBoundedHashTable *x, long key, void **ptr);
 bool                pizBoundedHashTableContainsKey        (const PIZBoundedHashTable *x, long key);
 long                pizBoundedHashTableCount              (const PIZBoundedHashTable *x);
-
-PIZ_END_C_LINKAGE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

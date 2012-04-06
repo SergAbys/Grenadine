@@ -1,7 +1,7 @@
 /**
  * \file    pizBoundedQueue.h
  * \author  Jean Sapristi
- * \date    February 28, 2012.
+ * \date    April 6, 2012.
  */
  
 /*
@@ -61,8 +61,6 @@ typedef struct _PIZBoundedQueue {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_START_C_LINKAGE
-
 PIZBoundedQueue     *pizBoundedQueueNew         (long size);
 void                pizBoundedQueueFree         (PIZBoundedQueue *x);
 void                pizBoundedQueueClear        (PIZBoundedQueue *x);
@@ -71,8 +69,6 @@ PIZError            pizBoundedQueuePop          (PIZBoundedQueue *x);
 PIZError            pizBoundedQueuePopLastValue (PIZBoundedQueue *x);
 long                pizBoundedQueueCount        (const PIZBoundedQueue *x);
 long                pizBoundedQueuePoppedValue  (const PIZBoundedQueue *x);
-
-PIZ_END_C_LINKAGE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

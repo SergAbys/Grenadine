@@ -1,7 +1,7 @@
 /**
  * \file    pizTypes.h
  * \author  Jean Sapristi
- * \date    April 5, 2012.
+ * \date    April 6, 2012.
  */
  
 /*
@@ -87,46 +87,23 @@ typedef enum {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef __cplusplus
-    #ifndef __bool_true_false_are_defined
-        #define true                            1
-        #define false                           0
-        #define bool                            long
-        #define __bool_true_false_are_defined   1
-    #endif
+#ifndef __bool_true_false_are_defined
+    #define true                            1
+    #define false                           0
+    #define bool                            long
+    #define __bool_true_false_are_defined   1
 #endif
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef __cplusplus
-    #ifdef __MACH__
-        #define PIZ_EXTERN_INLINE
-        #define PIZ_INLINE inline
-        #define PIZ_EXTERN extern inline
-    #else
-        #define PIZ_INLINE 
-    #endif
-#else
+#ifdef __MACH__
+    #define PIZ_EXTERN_INLINE
     #define PIZ_INLINE inline
+    #define PIZ_EXTERN extern inline
+#else
+    #define PIZ_INLINE 
 #endif
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#ifdef __cplusplus
-    #define PIZ_START_C_LINKAGE \
-        extern "C" {
-#else
-    #define PIZ_START_C_LINKAGE //
-#endif 
-
-#ifdef __cplusplus
-    #define PIZ_END_C_LINKAGE \
-        }
-#else
-    #define PIZ_END_C_LINKAGE //
-#endif 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

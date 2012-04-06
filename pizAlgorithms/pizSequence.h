@@ -49,28 +49,25 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_DEFAULT_TIMELINE       576 
-#define PIZ_SEQUENCE_LOOKUP_SIZE            19
-#define PIZ_SEQUENCE_CHANNEL_NONE           0
+#define PIZ_SEQUENCE_CHANNEL_NONE               0
+#define PIZ_SEQUENCE_LOOKUP_SIZE                19
+#define PIZ_SEQUENCE_DEFAULT_TIMELINE_SIZE      576 
 
-#define PIZ_SEQUENCE_MAXIMUM_NOTES          128   
-#define PIZ_SEQUENCE_MAXIMUM_DURATION       96
-//                                        -------
-#define PIZ_SEQUENCE_TEMP_ARRAY_SIZE        128
+#define PIZ_SEQUENCE_MAXIMUM_NOTES              128   
+#define PIZ_SEQUENCE_MAXIMUM_DURATION           96
+//                                            -------
+#define PIZ_SEQUENCE_TEMP_ARRAY_SIZE            128
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_ADD_FLAG_NONE          0UL
-#define PIZ_SEQUENCE_ADD_FLAG_SNAP          1UL
-#define PIZ_SEQUENCE_ADD_FLAG_PATTERN       2UL
-#define PIZ_SEQUENCE_ADD_FLAG_AMBITUS       4UL
-#define PIZ_SEQUENCE_ADD_FLAG_CLIP          8UL
-#define PIZ_SEQUENCE_ADD_FLAG_UNSELECT      16UL
-#define PIZ_SEQUENCE_ADD_FLAG_CLEAR         32UL
-
-#define PIZ_SEQUENCE_NOTE_FLAG_NONE         0UL
-#define PIZ_SEQUENCE_NOTE_FLAG_LASSO        1UL
+#define PIZ_SEQUENCE_ADD_FLAG_NONE              0UL
+#define PIZ_SEQUENCE_ADD_FLAG_SNAP              1UL
+#define PIZ_SEQUENCE_ADD_FLAG_PATTERN           2UL
+#define PIZ_SEQUENCE_ADD_FLAG_AMBITUS           4UL
+#define PIZ_SEQUENCE_ADD_FLAG_CLIP              8UL
+#define PIZ_SEQUENCE_ADD_FLAG_UNSELECT          16UL
+#define PIZ_SEQUENCE_ADD_FLAG_CLEAR             32UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -151,8 +148,7 @@ typedef enum _PIZDataIndex {
     PIZ_DATA_DURATION,
     PIZ_DATA_CHANNEL,
     PIZ_DATA_IS_SELECTED,
-    PIZ_DATA_IS_MARKED,
-    PIZ_DATA_NOTE_SIZE      = 7,
+    PIZ_DATA_NOTE_SIZE      = 6,
     PIZ_DATA_START          = 0,
     PIZ_DATA_END,
     PIZ_DATA_DOWN,
@@ -171,7 +167,6 @@ typedef enum _PIZNoteSelector {
 // -------------------------------------------------------------------------------------------------------------
  
 typedef struct _PIZNote {
-    PIZFlags flags;
     long     data[4];
     long     isSelected;
     long     position;
@@ -185,12 +180,11 @@ typedef struct _PIZSequence {
     PIZNote                 **notes2;
     PIZBoundedHashTable     *hashTable;
     PIZBoundedHashTable     *lookup;
-    PIZLinklist             **timeline;
-    PIZGrowingArray         *scale;
-    PIZGrowingArray         *pattern;
-    PIZNote                 *markedNote;
-    PIZGrowingArray         *map;
     PIZBoundedStack         *ticketMachine;
+    PIZLinklist             **timeline;
+    PIZArray                *map;
+    PIZArray                *scale;
+    PIZArray                *pattern;
     PIZItemset128           addedNotes;
     PIZItemset128           removedNotes;
     PIZItemset128           changedNotes;
@@ -239,16 +233,16 @@ void            pizSequenceSetNoteValue             (PIZSequence *x, PIZNoteValu
 PIZError        pizSequenceSetScale                 (PIZSequence *x, 
                                                     PIZScaleKey key, 
                                                     PIZScaleType type, 
-                                                    const PIZGrowingArray *a);
+                                                    const PIZArray *a);
                                         
-PIZError        pizSequenceSetPattern               (PIZSequence *x, const PIZGrowingArray *a);
+PIZError        pizSequenceSetPattern               (PIZSequence *x, const PIZArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 bool            pizSequenceIsAtEnd                  (PIZSequence *x);
 void            pizSequenceGoToStart                (PIZSequence *x);
-PIZError        pizSequenceProceedStep              (PIZSequence *x, PIZGrowingArray *a);
+PIZError        pizSequenceProceedStep              (PIZSequence *x, PIZArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /*
  * \file    pizKohonenMap.c
  * \author  Jean Sapristi
- * \date    April 5, 2012.
+ * \date    April 6, 2012.
  */
  
 /*
@@ -53,7 +53,6 @@
 #define PIZ_ALPHABET_SIZE               128
 #define PIZ_MAXIMUM_MAP_SIZE            100
 #define PIZ_MAXIMUM_VECTOR_SIZE         256
-
 #define PIZ_DEFAULT_MAP_SIZE            20
 #define PIZ_DEFAULT_VECTOR_SIZE         4
 #define PIZ_DEFAULT_RANGE               10
@@ -74,7 +73,7 @@ PIZKohonenMap *pizKohonenMapNew (long argc, long *argv)
         x->training      = PIZ_DEFAULT_TRAINING;
         x->step          = PIZ_DEFAULT_STEP;
         
-        x->algorithm.type          = PIZ_ALGORITHM_FLAG_KOHONEN_MAP;
+        x->algorithm.type          = PIZ_ALGORITHM_TYPE_KOHONEN_MAP;
         x->algorithm.addMethod     = pizKohonenMapAdd;
         x->algorithm.clearMethod   = pizKohonenMapClear;
         x->algorithm.proceedMethod = pizKohonenMapProceed;

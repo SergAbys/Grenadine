@@ -1,7 +1,7 @@
 /**
  * \file    pizMarkovModel.h
  * \author  Jean Sapristi
- * \date    April 4, 2012.
+ * \date    April 6, 2012.
  */
 
 /*
@@ -44,8 +44,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizDataStructures.h"
 #include "pizAlgorithms.h"
+#include "pizDataStructures.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -72,28 +72,12 @@ typedef struct _PIZMarkovModel {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_START_C_LINKAGE
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZMarkovModel      *pizMarkovModelNew                  (long argc, long *argv);
-void                pizMarkovModelFree                  (PIZMarkovModel *x);
-PIZError            pizMarkovModelAdd                   (PIZMarkovModel *x, long argc, long *argv);
-PIZError            pizMarkovModelClear                 (PIZMarkovModel *x);
-PIZError            pizMarkovModelProceed               (PIZMarkovModel *x, long argc, long *argv);
-long                pizMarkovModelCount                 (const PIZMarkovModel *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_INLINE void     pizMarkovModelBaumWelch             (PIZMarkovModel *x, long argc, long *argv);
-void                pizMarkovModelFillStochastically    (PIZMarkovModel *x, long argc, double *argv);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_END_C_LINKAGE
+PIZMarkovModel      *pizMarkovModelNew          (long argc, long *argv);
+void                pizMarkovModelFree          (PIZMarkovModel *x);
+PIZError            pizMarkovModelAdd           (PIZMarkovModel *x, long argc, long *argv);
+PIZError            pizMarkovModelClear         (PIZMarkovModel *x);
+PIZError            pizMarkovModelProceed       (PIZMarkovModel *x, long argc, long *argv);
+long                pizMarkovModelCount         (const PIZMarkovModel *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

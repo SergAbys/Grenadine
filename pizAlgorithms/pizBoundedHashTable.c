@@ -1,7 +1,7 @@
 /*
  * \file    pizBoundedHashTable.c
  * \author  Jean Sapristi
- * \date    April 5, 2012.
+ * \date    April 6, 2012.
  */
  
 /*
@@ -75,7 +75,7 @@ PIZBoundedHashTable *pizBoundedHashTableNew (long argc, long *argv)
         x->ticketMachine = pizBoundedStackNew (x->poolSize);
         
         x->pool = (PIZBoundedHashTableElement *)malloc (x->poolSize * sizeof(PIZBoundedHashTableElement));
-        x->hashTable = (PIZGrowingArray **)calloc (x->hashSize, sizeof(PIZGrowingArray *));
+        x->hashTable = (PIZArray **)calloc (x->hashSize, sizeof(PIZArray *));
         
         if (x->ticketMachine && x->pool && x->hashTable) {
             long j;
@@ -111,7 +111,7 @@ void pizBoundedHashTableFree (PIZBoundedHashTable *x)
             long i;
     
             for (i = 0; i < x->hashSize; i++) {
-                pizGrowingArrayFree (x->hashTable[i]);
+                pizArrayFree (x->hashTable[i]);
             }
     
             free (x->hashTable);
@@ -137,7 +137,7 @@ void pizBoundedHashTableClear (PIZBoundedHashTable *x)
     
     for (i = 0; i < x->hashSize; i++) {
         if (x->hashTable[i]) {
-            pizGrowingArrayClear (x->hashTable[i]);
+            pizArrayClear (x->hashTable[i]);
         }
     }
     
@@ -152,7 +152,7 @@ PIZError pizBoundedHashTableAdd (PIZBoundedHashTable *x, long key, void *ptr)
         long p = key % x->hashSize;
                     
         if (!x->hashTable[p]) {
-            x->hashTable[p] = pizGrowingArrayNew (0);
+            x->hashTable[p] = pizArrayNew (0);
         }
         
         if (x->hashTable[p]) {
@@ -160,7 +160,7 @@ PIZError pizBoundedHashTableAdd (PIZBoundedHashTable *x, long key, void *ptr)
                 long index = pizBoundedStackPoppedValue (x->ticketMachine);
 
                 err = PIZ_GOOD;
-                err |= pizGrowingArrayAppend (x->hashTable[p], index);
+                err |= pizArrayAppend (x->hashTable[p], index);
             
                 if (!err) {                           
                     x->pool[index].key = key;
@@ -189,14 +189,14 @@ PIZError pizBoundedHashTableRemoveByKeyAndPtr (PIZBoundedHashTable *x, long key,
         if (x->hashTable[p]) {   
             long count, i, index;
             
-            if (count = pizGrowingArrayCount (x->hashTable[p])) {
+            if (count = pizArrayCount (x->hashTable[p])) {
                 for (i = 0; i < count; i++) {
-                    index = pizGrowingArrayValueAtIndex (x->hashTable[p], i);
+                    index = pizArrayValueAtIndex (x->hashTable[p], i);
                     
                     if ((x->pool[index].key == key) && (x->pool[index].ptr == ptr)) {
                         err = PIZ_GOOD;
                         
-                        pizGrowingArrayRemoveIndex (x->hashTable[p], i);
+                        pizArrayRemoveIndex (x->hashTable[p], i);
                         pizBoundedStackPush (x->ticketMachine, index);
                             
                         break;
@@ -228,9 +228,9 @@ PIZError pizBoundedHashTablePtrByKey (const PIZBoundedHashTable *x, long key, vo
         if (x->hashTable[p]) {   
             long count, i, index;
             
-            if (count = pizGrowingArrayCount (x->hashTable[p])) {
+            if (count = pizArrayCount (x->hashTable[p])) {
                 for (i = 0; i < count; i++) {
-                    index = pizGrowingArrayValueAtIndex (x->hashTable[p], i);
+                    index = pizArrayValueAtIndex (x->hashTable[p], i);
                     
                     if (x->pool[index].key == key) {
                         (*ptr) = x->pool[index].ptr;
@@ -255,9 +255,9 @@ bool pizBoundedHashTableContainsKey (const PIZBoundedHashTable *x, long key)
         if (x->hashTable[p]) {
             long count, i, index;
             
-            if (count = pizGrowingArrayCount (x->hashTable[p])) {
+            if (count = pizArrayCount (x->hashTable[p])) {
                 for (i = 0; i < count; i++) {
-                    index = pizGrowingArrayValueAtIndex (x->hashTable[p], i);
+                    index = pizArrayValueAtIndex (x->hashTable[p], i);
                     
                     if (x->pool[index].key == key) {
                         k = true;

@@ -114,7 +114,7 @@ typedef struct _PIZAgent {
     PIZLinklist         *mainQueue;
     PIZLinklist         *notifyQueue;
     PIZSequence         *sequence;
-    PIZGrowingArray     *tempArray;
+    PIZArray            *tempArray;
     PIZFactorOracle     *factorOracle;
     PIZFiniteState      *finiteState;
     PIZGaloisLattice    *galoisLattice;

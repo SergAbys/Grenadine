@@ -1,9 +1,9 @@
 /**
- * \file    pizQueue.h
+ * \file    pizArray.h
  * \author  Jean Sapristi
- * \date    February 28, 2012.
+ * \date    April 6, 2012.
  */
-
+ 
 /*
  *  Copyright (c) 2011, Jean Sapristi & Tom Javel, 
  *  "nicolas.danet@free.fr".
@@ -38,8 +38,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_QUEUE_H
-#define PIZ_QUEUE_H
+#ifndef PIZ_ARRAY_H
+#define PIZ_ARRAY_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -49,52 +49,63 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-typedef struct _PIZQueueElement {
-    long                    value;
-    struct _PIZQueueElement *next;
-    struct _PIZQueueElement *previous;
-    } PIZQueueElement;
-
-typedef struct _PIZQueue {
-    long            count;
-    long            poppedValue;
-    PIZQueueElement *head;
-    PIZQueueElement *tail;
-    } PIZQueue;
+typedef struct _PIZArray {
+    long size;
+    long index;
+    long *values;
+    } PIZArray;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_START_C_LINKAGE
+PIZArray    *pizArrayNew                 (long size);
+void        pizArrayFree                 (PIZArray *x);
+void        pizArrayClear                (PIZArray *x);
+PIZError    pizArrayAppend               (PIZArray *x, long value);
+void        pizArraySetValueAtIndex      (PIZArray *x, long index, long value);
+long        pizArrayValueAtIndex         (const PIZArray *x, long index);
+long        pizArrayCount                (const PIZArray *x);
+long        *pizArrayPtr                 (const PIZArray *x); 
+void        pizArrayRemoveIndex          (PIZArray *x, long index);
+PIZError    pizArrayRemoveLastValue      (PIZArray *x);
+long        pizArrayFirstIndexOfValue    (const PIZArray *x, long value);
+bool        pizArrayContainsValue        (const PIZArray *x, long value);
+PIZError    pizArrayCopy                 (PIZArray *x, const PIZArray *toCopy);
+PIZError    pizArrayAppendArray          (PIZArray *x, const PIZArray *toAppend);
+PIZError    pizArrayAppendPtr            (PIZArray *x, long argc, long *argv);
 
-PIZQueue    *pizQueueNew            (void); 
-void        pizQueueFree            (PIZQueue *x);
-void        pizQueueClear           (PIZQueue *x);
-PIZError    pizQueueAppend          (PIZQueue *x, long value);
-PIZError    pizQueuePop             (PIZQueue *x);
-PIZError    pizQueuePopLastValue    (PIZQueue *x);
-long        pizQueueCount           (const PIZQueue *x);
-long        pizQueuePoppedValue     (const PIZQueue *x);
-
-PIZ_END_C_LINKAGE
- 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN long pizQueueCount (const PIZQueue *x)
+PIZ_EXTERN void pizArrayClear (PIZArray *x)
 {
-    return (x->count);
+    x->index = 0;
 }
 
-PIZ_EXTERN long pizQueuePoppedValue (const PIZQueue *x)
+PIZ_EXTERN void pizArraySetValueAtIndex (PIZArray *x, long index, long value)
 {
-    return (x->poppedValue);
+    x->values[index] = value;
+}
+
+PIZ_EXTERN long pizArrayValueAtIndex (const PIZArray *x, long index)
+{   
+    return (x->values[index]);
+}
+
+PIZ_EXTERN long pizArrayCount (const PIZArray *x)
+{
+    return (x->index);
+}
+
+PIZ_EXTERN long *pizArrayPtr (const PIZArray *x)
+{
+    return (x->values);
 }
 
 #endif // PIZ_EXTERN_INLINE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_QUEUE_H
+#endif // PIZ_ARRAY_H

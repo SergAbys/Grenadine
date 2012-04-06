@@ -1,7 +1,7 @@
 /**
  * \file    pizFiniteState.h
  * \author  Jean Sapristi
- * \date    April 4, 2012.
+ * \date    April 6, 2012.
  */
 
 /*
@@ -44,8 +44,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizDataStructures.h"
 #include "pizAlgorithms.h"
+#include "pizDataStructures.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -74,27 +74,12 @@ typedef struct _PIZFiniteState {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_START_C_LINKAGE
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZFiniteState          *pizFiniteStateNew      (long argc, long *argv);
-void                    pizFiniteStateFree      (PIZFiniteState *x);
-PIZError                pizFiniteStateAdd       (PIZFiniteState *x, long argc, long *argv);
-PIZError                pizFiniteStateClear     (PIZFiniteState *x);
-PIZError                pizFiniteStateProceed   (PIZFiniteState *x, long argc, long *argv);
-long                    pizFiniteStateCount     (const PIZFiniteState *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_INLINE PIZError     pizFiniteStateMergeNodes (PIZFiniteState *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_END_C_LINKAGE
+PIZFiniteState  *pizFiniteStateNew      (long argc, long *argv);
+void            pizFiniteStateFree      (PIZFiniteState *x);
+PIZError        pizFiniteStateAdd       (PIZFiniteState *x, long argc, long *argv);
+PIZError        pizFiniteStateClear     (PIZFiniteState *x);
+PIZError        pizFiniteStateProceed   (PIZFiniteState *x, long argc, long *argv);
+long            pizFiniteStateCount     (const PIZFiniteState *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -59,7 +59,7 @@ void pizSequenceTranspose   (PIZSequence *x, long n);
 // -------------------------------------------------------------------------------------------------------------
 
 bool pizSequenceClean       (PIZSequence *x, long value);
-bool pizSequenceAlgorithm   (PIZSequence *x, void *algorithm);
+bool pizSequenceAlgorithm   (PIZSequence *x, PIZAlgorithm *algorithm);
 bool pizSequenceNovember    (PIZSequence *x, long iterate);
 bool pizSequenceJuliet      (PIZSequence *x, long iterate, long division);
 bool pizSequenceRotate      (PIZSequence *x, PIZNoteSelector selector, long shift);
@@ -69,7 +69,7 @@ bool pizSequenceChange      (PIZSequence *x, PIZNoteSelector selector, long valu
 bool pizSequenceSet         (PIZSequence *x, PIZNoteSelector selector, long value);
 bool pizSequenceRandom      (PIZSequence *x, PIZNoteSelector selector, long minValue, long maxValue);
 bool pizSequenceKill        (PIZSequence *x);
-bool pizSequenceCycle       (PIZSequence *x, PIZScaleKey key, const PIZGrowingArray *a);
+bool pizSequenceCycle       (PIZSequence *x, PIZScaleKey key, const PIZArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

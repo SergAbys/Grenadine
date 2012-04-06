@@ -1,7 +1,7 @@
 /**
  * \file    pizBoundedStack.h
  * \author  Jean Sapristi
- * \date    February 28, 2012.
+ * \date    April 6, 2012.
  */
  
 /*
@@ -59,8 +59,6 @@ typedef struct _PIZBoundedStack {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_START_C_LINKAGE
-
 PIZBoundedStack     *pizBoundedStackNew         (long size);
 void                pizBoundedStackFree         (PIZBoundedStack *x);
 void                pizBoundedStackClear        (PIZBoundedStack *x);
@@ -68,8 +66,6 @@ PIZError            pizBoundedStackPush         (PIZBoundedStack *x, long value)
 PIZError            pizBoundedStackPop          (PIZBoundedStack *x);
 long                pizBoundedStackCount        (const PIZBoundedStack *x);
 long                pizBoundedStackPoppedValue  (const PIZBoundedStack *x);
-
-PIZ_END_C_LINKAGE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

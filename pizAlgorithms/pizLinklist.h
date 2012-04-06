@@ -1,7 +1,7 @@
 /**
  * \file    pizLinklist.h
  * \author  Jean Sapristi
- * \date    April 5, 2012.
+ * \date    April 6, 2012.
  */
 
 /*
@@ -49,9 +49,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
  
-#define PIZ_LINKLIST_FLAG_NONE                  0UL
-#define PIZ_LINKLIST_FLAG_FREE_MEMORY           1UL
-#define PIZ_LINKLIST_FLAG_FREE_GROWING_ARRAY    2UL
+#define PIZ_LINKLIST_FLAG_NONE              0UL
+#define PIZ_LINKLIST_FLAG_FREE_MEMORY       1UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -73,8 +72,6 @@ typedef struct _PIZLinklist {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_START_C_LINKAGE
-
 PIZLinklist *pizLinklistNew             (void);
 void        pizLinklistSetFlags         (PIZLinklist *x, PIZFlags flags);
 void        pizLinklistFree             (PIZLinklist *x);
@@ -87,8 +84,6 @@ PIZError    pizLinklistRemoveByPtr      (PIZLinklist *x, void *ptr);
 PIZError    pizLinklistChuckByPtr       (PIZLinklist *x, void *ptr);
 PIZError    pizLinklistSwapByIndexes    (PIZLinklist *x, long m, long n);
 long        pizLinklistCount            (const PIZLinklist *x);
-
-PIZ_END_C_LINKAGE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

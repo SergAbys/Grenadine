@@ -1,7 +1,7 @@
 /**
  * \file    pizGaloisLattice.h
  * \author  Jean Sapristi
- * \date    April 4, 2012.
+ * \date    April 6, 2012.
  */
 
 /*
@@ -44,8 +44,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizDataStructures.h"
 #include "pizAlgorithms.h"
+#include "pizDataStructures.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -71,8 +71,8 @@ typedef struct _PIZGaloisLattice {
     long                    tempMapPeak;
     bool                    needToMakeMap;
     unsigned int            seed;
-    PIZGrowingArray         **map;
-    PIZGrowingArray         **tempMap;
+    PIZArray                **map;
+    PIZArray                **tempMap;
     PIZBoundedStack         *ticketMachine;
     PIZGaloisLatticeConcept *stock;
     } PIZGaloisLattice;
@@ -80,29 +80,12 @@ typedef struct _PIZGaloisLattice {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_START_C_LINKAGE
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZGaloisLattice    *pizGaloisLatticeNew            (long argc, long *argv);
-void                pizGaloisLatticeFree            (PIZGaloisLattice *x);
-PIZError            pizGaloisLatticeAdd             (PIZGaloisLattice *x, long argc, long *argv);
-PIZError            pizGaloisLatticeClear           (PIZGaloisLattice *x);
-PIZError            pizGaloisLatticeProceed         (PIZGaloisLattice *x, long argc, long *argv);
-long                pizGaloisLatticeCount           (const PIZGaloisLattice *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_INLINE void     pizGaloisLatticeReconnect       (PIZGaloisLattice *x, long g, long n);
-PIZError            pizGaloisLatticeMakeMap         (PIZGaloisLattice *x);
-void                pizGaloisLatticeKillConcept     (PIZGaloisLattice *x, long n);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_END_C_LINKAGE
+PIZGaloisLattice    *pizGaloisLatticeNew        (long argc, long *argv);
+void                pizGaloisLatticeFree        (PIZGaloisLattice *x);
+PIZError            pizGaloisLatticeAdd         (PIZGaloisLattice *x, long argc, long *argv);
+PIZError            pizGaloisLatticeClear       (PIZGaloisLattice *x);
+PIZError            pizGaloisLatticeProceed     (PIZGaloisLattice *x, long argc, long *argv);
+long                pizGaloisLatticeCount       (const PIZGaloisLattice *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

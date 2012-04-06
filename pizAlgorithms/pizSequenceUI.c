@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceUI.c
  * \author	Jean Sapristi
- * \date	April 3, 2012.
+ * \date	April 6, 2012.
  */
  
 /*
@@ -58,8 +58,7 @@
                                          note->data[PIZ_NOTE_VELOCITY],         \
                                          note->data[PIZ_NOTE_DURATION],         \
                                          note->data[PIZ_NOTE_CHANNEL],          \
-                                         note->isSelected,                      \
-                                         (note == x->markedNote) };      
+                                         note->isSelected };      
                                         
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

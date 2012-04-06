@@ -1,7 +1,7 @@
 /**
  * \file    pizHashTable.h
  * \author  Jean Sapristi
- * \date    April 5, 2012.
+ * \date    April 6, 2012.
  */
  
 /*
@@ -71,8 +71,6 @@ typedef struct _PIZHashTable {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_START_C_LINKAGE
-
 PIZHashTable    *pizHashTableNew                (long size);
 void            pizHashTableSetFlags            (PIZHashTable *x, PIZFlags flags);
 void            pizHashTableFree                (PIZHashTable *x);
@@ -82,8 +80,6 @@ PIZError        pizHashTableRemoveByKeyAndPtr   (PIZHashTable *x, long key, void
 PIZError        pizHashTablePtrByKey            (const PIZHashTable *x, long key, void **ptr);
 bool            pizHashTableContainsKey         (const PIZHashTable *x, long key);
 long            pizHashTableCount               (const PIZHashTable *x);
-
-PIZ_END_C_LINKAGE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
