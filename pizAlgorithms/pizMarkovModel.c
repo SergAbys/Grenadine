@@ -53,6 +53,7 @@
 #define PIZ_ALPHABET_SIZE           128
 #define PIZ_MAXIMUM_GRAPH_SIZE      32
 #define PIZ_MAXIMUM_VECTOR_SIZE     32
+
 #define PIZ_DEFAULT_GRAPH_SIZE      6
 #define PIZ_DEFAULT_VECTOR_SIZE     6
 #define PIZ_DEFAULT_PERSISTENCE     0.5
@@ -76,11 +77,11 @@ PIZMarkovModel *pizMarkovModelNew (long argc, long *argv)
     x->graphSize     = PIZ_DEFAULT_GRAPH_SIZE;
     x->persistence   = PIZ_DEFAULT_PERSISTENCE;
     
-    x->algorithm.type          = PIZ_ALGORITHM_TYPE_MARKOV_MODEL;
-    x->algorithm.addMethod     = pizMarkovModelAdd;
-    x->algorithm.clearMethod   = pizMarkovModelClear;
-    x->algorithm.proceedMethod = pizMarkovModelProceed;
-    x->algorithm.countMethod   = pizMarkovModelCount;
+    x->algorithm.type       = PIZ_ALGORITHM_TYPE_MARKOV_MODEL;
+    x->algorithm.add        = pizMarkovModelAdd;
+    x->algorithm.clear      = pizMarkovModelClear;
+    x->algorithm.proceed    = pizMarkovModelProceed;
+    x->algorithm.count      = pizMarkovModelCount;
     
     if (argc && ((argv[0] > 0)  && (argv[0] <= PIZ_MAXIMUM_GRAPH_SIZE))) {
         x->graphSize = argv[0];
@@ -293,7 +294,7 @@ PIZError pizMarkovModelProceed (PIZMarkovModel *x, long argc, long *argv)
 
 long pizMarkovModelCount (const PIZMarkovModel *x)
 {
-    return (x->count);
+    return x->count;
 }
 
 // -------------------------------------------------------------------------------------------------------------

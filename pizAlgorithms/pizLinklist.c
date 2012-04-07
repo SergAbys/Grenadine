@@ -1,7 +1,7 @@
 /*
  * \file    pizLinklist.c
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 8, 2012.
  */
  
 /*
@@ -47,6 +47,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZLinklist *pizLinklistNew (void)
 {
@@ -63,11 +64,6 @@ PIZLinklist *pizLinklistNew (void)
     return x;
 }
 
-void pizLinklistSetFlags (PIZLinklist *x, PIZFlags flags)
-{
-    x->flags = flags;
-}
-
 void pizLinklistFree (PIZLinklist *x)
 {
     if (x) {
@@ -76,29 +72,9 @@ void pizLinklistFree (PIZLinklist *x)
     }
 }
 
-void pizLinklistClear (PIZLinklist *x)
-{
-    PIZLinklistElement *theElement = x->head;
-    
-    while (theElement) {
-        PIZLinklistElement *elementToBeRemoved = NULL;
-
-        elementToBeRemoved  = theElement;
-        theElement          = elementToBeRemoved->next;
-
-        if (x->flags & PIZ_LINKLIST_FLAG_FREE_MEMORY) {
-            free (elementToBeRemoved->ptr);
-        } 
-            
-        free (elementToBeRemoved);
-        elementToBeRemoved = NULL;
-    }
-    
-    x->count    = 0;
-    x->head     = NULL;
-    x->tail     = NULL;
-    x->cache    = NULL;
-}
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZError pizLinklistAppend (PIZLinklist *x, void *ptr)
 {
@@ -174,6 +150,39 @@ PIZError pizLinklistInsert (PIZLinklist *x, void *ptr)
     }
     
     return err;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizLinklistSetFlags (PIZLinklist *x, ulong flags)
+{
+    x->flags = flags;
+}
+
+void pizLinklistClear (PIZLinklist *x)
+{
+    PIZLinklistElement *theElement = x->head;
+    
+    while (theElement) {
+        PIZLinklistElement *elementToBeRemoved = NULL;
+
+        elementToBeRemoved  = theElement;
+        theElement          = elementToBeRemoved->next;
+
+        if (x->flags & PIZ_LINKLIST_FLAG_FREE_MEMORY) {
+            free (elementToBeRemoved->ptr);
+        } 
+            
+        free (elementToBeRemoved);
+        elementToBeRemoved = NULL;
+    }
+    
+    x->count = 0;
+    x->head  = NULL;
+    x->tail  = NULL;
+    x->cache = NULL;
 }
 
 PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr)
@@ -396,7 +405,7 @@ PIZError pizLinklistSwapByIndexes (PIZLinklist *x, long m, long n)
 
 long pizLinklistCount (const PIZLinklist *x)
 {
-    return (x->count);
+    return x->count;
 }
 
 // -------------------------------------------------------------------------------------------------------------

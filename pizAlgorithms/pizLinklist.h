@@ -1,7 +1,7 @@
 /**
  * \file    pizLinklist.h
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    April 8, 2012.
  */
 
 /*
@@ -62,7 +62,7 @@ typedef struct _PIZLinklistElement {
     } PIZLinklistElement;
  
 typedef struct _PIZLinklist {
-    PIZFlags            flags;
+    ulong               flags;
     long                count;
     PIZLinklistElement  *head;
     PIZLinklistElement  *tail;
@@ -73,11 +73,13 @@ typedef struct _PIZLinklist {
 // -------------------------------------------------------------------------------------------------------------
 
 PIZLinklist *pizLinklistNew             (void);
-void        pizLinklistSetFlags         (PIZLinklist *x, PIZFlags flags);
 void        pizLinklistFree             (PIZLinklist *x);
+
+PIZMemory   pizLinklistAppend           (PIZLinklist *x, void *ptr);
+PIZMemory   pizLinklistInsert           (PIZLinklist *x, void *ptr);
+
+void        pizLinklistSetFlags         (PIZLinklist *x, ulong flags);
 void        pizLinklistClear            (PIZLinklist *x);
-PIZError    pizLinklistAppend           (PIZLinklist *x, void *ptr);
-PIZError    pizLinklistInsert           (PIZLinklist *x, void *ptr);
 PIZError    pizLinklistPtrAtIndex       (PIZLinklist *x, long index, void **ptr);
 PIZError    pizLinklistNextByPtr        (PIZLinklist *x, void *ptr, void **nextPtr);
 PIZError    pizLinklistRemoveByPtr      (PIZLinklist *x, void *ptr);
@@ -90,14 +92,14 @@ long        pizLinklistCount            (const PIZLinklist *x);
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN void pizLinklistSetFlags (PIZLinklist *x, PIZFlags flags)
+PIZ_EXTERN void pizLinklistSetFlags (PIZLinklist *x, ulong flags)
 {
     x->flags = flags;
 }
 
 PIZ_EXTERN long pizLinklistCount (const PIZLinklist *x)
 {
-    return (x->count);
+    return x->count;
 }
 
 #endif // PIZ_EXTERN_INLINE

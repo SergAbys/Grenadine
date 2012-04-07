@@ -1,7 +1,7 @@
 /**
  * \file    pizBoundedHashTable.h
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    April 8, 2012.
  */
  
 /*
@@ -45,8 +45,8 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizTypes.h"
-#include "pizBoundedStack.h"
 #include "pizArray.h"
+#include "pizBoundedStack.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -57,12 +57,12 @@
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZBoundedHashTableElement {
-    long    key;
-    void    *ptr;
+    long key;
+    void *ptr;
     } PIZBoundedHashTableElement;
     
 typedef struct _PIZBoundedHashTable {
-    PIZFlags                    flags;
+    ulong                       flags;
     long                        count;
     long                        hashSize;
     long                        poolSize;
@@ -74,29 +74,31 @@ typedef struct _PIZBoundedHashTable {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZBoundedHashTable *pizBoundedHashTableNew               (long argc, long *argv);
-void                pizBoundedHashTableSetFlags           (PIZBoundedHashTable *x, PIZFlags flags);
-void                pizBoundedHashTableFree               (PIZBoundedHashTable *x);
-void                pizBoundedHashTableClear              (PIZBoundedHashTable *x);
-PIZError            pizBoundedHashTableAdd                (PIZBoundedHashTable *x, long key, void *ptr);
-PIZError            pizBoundedHashTableRemoveByKeyAndPtr  (PIZBoundedHashTable *x, long key, void *ptr);
-PIZError            pizBoundedHashTablePtrByKey           (const PIZBoundedHashTable *x, long key, void **ptr);
-bool                pizBoundedHashTableContainsKey        (const PIZBoundedHashTable *x, long key);
-long                pizBoundedHashTableCount              (const PIZBoundedHashTable *x);
+PIZBoundedHashTable *pizBoundedHashTableNew        (long argc, long *argv);
+void                pizBoundedHashTableFree        (PIZBoundedHashTable *x);
+
+PIZMemory           pizBoundedHashTableAdd         (PIZBoundedHashTable *x, long key, void *ptr);
+
+void                pizBoundedHashTableSetFlags    (PIZBoundedHashTable *x, ulong flags);
+void                pizBoundedHashTableClear       (PIZBoundedHashTable *x);
+PIZError            pizBoundedHashTableRemoveByKey (PIZBoundedHashTable *x, long key, void *ptr);
+PIZError            pizBoundedHashTablePtrByKey    (const PIZBoundedHashTable *x, long key, void **ptr);
+bool                pizBoundedHashTableContainsKey (const PIZBoundedHashTable *x, long key);
+long                pizBoundedHashTableCount       (const PIZBoundedHashTable *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN void pizBoundedHashTableSetFlags (PIZBoundedHashTable *x, PIZFlags flags)
+PIZ_EXTERN void pizBoundedHashTableSetFlags (PIZBoundedHashTable *x, ulong flags)
 {
     x->flags = flags;
 }
 
 PIZ_EXTERN long pizBoundedHashTableCount (const PIZBoundedHashTable *x)
 {
-    return (x->count);
+    return x->count;
 }
 
 #endif // PIZ_EXTERN_INLINE

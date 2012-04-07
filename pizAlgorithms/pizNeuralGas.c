@@ -52,6 +52,7 @@
 
 #define PIZ_ALPHABET_SIZE               128
 #define PIZ_MAXIMUM_VECTOR_SIZE         256
+
 #define PIZ_DEFAULT_VECTOR_SIZE         4
 #define PIZ_DEFAULT_MAXIMUM_SIZE        20
 #define PIZ_DEFAULT_LAMBDA              2
@@ -85,11 +86,11 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
         x->beta          = PIZ_DEFAULT_BETA;
         x->kappa         = PIZ_DEFAULT_KAPPA;
         
-        x->algorithm.type          = PIZ_ALGORITHM_TYPE_NEURAL_GAS;
-        x->algorithm.addMethod     = pizNeuralGasAdd;
-        x->algorithm.clearMethod   = pizNeuralGasClear;
-        x->algorithm.proceedMethod = pizNeuralGasProceed;
-        x->algorithm.countMethod   = pizNeuralGasCount;
+        x->algorithm.type       = PIZ_ALGORITHM_TYPE_NEURAL_GAS;
+        x->algorithm.add        = pizNeuralGasAdd;
+        x->algorithm.clear      = pizNeuralGasClear;
+        x->algorithm.proceed    = pizNeuralGasProceed;
+        x->algorithm.count      = pizNeuralGasCount;
         
         x->seed = (unsigned int)time(NULL);
         

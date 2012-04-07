@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	April 2, 2012.
+ * \date	April 8, 2012.
  */
  
 /*
@@ -43,13 +43,13 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static char *piz_eventNames[ ] = {  "Init",
-                                    "Play",
-                                    "Stop",
-                                    "Loop",
-                                    "Unloop",
-                                    "Bpm",
-                                    "Note Played",
+static const char *piz_eventNames[ ] = {    "Init",
+                                            "Play",
+                                            "Stop",
+                                            "Loop",
+                                            "Unloop",
+                                            "Bpm",
+                                            "Note Played",
                                     //
                                  /*   "Chance",
                                     "Velocity",
@@ -76,15 +76,15 @@ static char *piz_eventNames[ ] = {  "Init",
                                     //
                                     "Grid",
                                     "Note Value",*/
-                                    "Zone Changed",
-                                    "Note Removed",
-                                    "Note Added",
-                                    "Note Changed",
-                                    //
-                                    "End",
-                                    "Last",
-                                    "Run Ready",
-                                    "GUI Ready"     };
+                                            "Zone Changed",
+                                            "Note Removed",
+                                            "Note Added",
+                                            "Note Changed",
+                                            //
+                                            "End",
+                                            "Last",
+                                            "Run Ready",
+                                            "GUI Ready"     };
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ PIZEvent *pizEventNewWithArray (PIZEventType type, PIZEventIdentifier ie, long a
     return event;
 }
 
-char *pizEventGetName (const PIZEvent *x)
+const char *pizEventGetName (const PIZEvent *x)
 {
     return piz_eventNames[x->identifier];
 }

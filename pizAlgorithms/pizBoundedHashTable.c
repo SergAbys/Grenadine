@@ -53,6 +53,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZBoundedHashTable *pizBoundedHashTableNew (long argc, long *argv)
 {
@@ -92,11 +93,6 @@ PIZBoundedHashTable *pizBoundedHashTableNew (long argc, long *argv)
     return x;
 }
 
-void pizBoundedHashTableSetFlags (PIZBoundedHashTable *x, PIZFlags flags)
-{
-    x->flags = flags;
-}
-
 void pizBoundedHashTableFree (PIZBoundedHashTable *x)
 {
     if (x) {
@@ -124,25 +120,7 @@ void pizBoundedHashTableFree (PIZBoundedHashTable *x)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-void pizBoundedHashTableClear (PIZBoundedHashTable *x)
-{
-    long i;
-    
-    pizBoundedStackClear (x->ticketMachine);
-    
-    for (i = (x->poolSize - 1); i >= 0; i--) {
-        pizBoundedStackPush (x->ticketMachine, i);
-    }
-    
-    for (i = 0; i < x->hashSize; i++) {
-        if (x->hashTable[i]) {
-            pizArrayClear (x->hashTable[i]);
-        }
-    }
-    
-    x->count = 0;
-}
+#pragma mark -
 
 PIZError pizBoundedHashTableAdd (PIZBoundedHashTable *x, long key, void *ptr)
 {
@@ -171,6 +149,7 @@ PIZError pizBoundedHashTableAdd (PIZBoundedHashTable *x, long key, void *ptr)
                     pizBoundedStackPush (x->ticketMachine, index);
                 }
             }
+            
         } else {
             err |= PIZ_MEMORY;
         }
@@ -179,7 +158,35 @@ PIZError pizBoundedHashTableAdd (PIZBoundedHashTable *x, long key, void *ptr)
     return err;
 }
 
-PIZError pizBoundedHashTableRemoveByKeyAndPtr (PIZBoundedHashTable *x, long key, void *ptr)
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizBoundedHashTableSetFlags (PIZBoundedHashTable *x, ulong flags)
+{
+    x->flags = flags;
+}
+
+void pizBoundedHashTableClear (PIZBoundedHashTable *x)
+{
+    long i;
+    
+    pizBoundedStackClear (x->ticketMachine);
+    
+    for (i = (x->poolSize - 1); i >= 0; i--) {
+        pizBoundedStackPush (x->ticketMachine, i);
+    }
+    
+    for (i = 0; i < x->hashSize; i++) {
+        if (x->hashTable[i]) {
+            pizArrayClear (x->hashTable[i]);
+        }
+    }
+    
+    x->count = 0;
+}
+
+PIZError pizBoundedHashTableRemoveByKey (PIZBoundedHashTable *x, long key, void *ptr)
 {
     PIZError err = PIZ_ERROR;
     
@@ -211,7 +218,7 @@ PIZError pizBoundedHashTableRemoveByKeyAndPtr (PIZBoundedHashTable *x, long key,
 
 long pizBoundedHashTableCount (const PIZBoundedHashTable *x)
 {
-    return (x->count);
+    return x->count;
 }
 
 PIZError pizBoundedHashTablePtrByKey (const PIZBoundedHashTable *x, long key, void **ptr)

@@ -252,6 +252,9 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         }
         pizSequenceGoToStart (x->sequence);
         pizAgentEventLoopDoStepEnd (x);
+        
+    } else {
+        MEMORY_ERROR;
     }
     //
     } while (k);
@@ -260,11 +263,15 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
 void pizAgentEventLoopDoRefresh (PIZAgent *x)
 {
     PIZEvent *event = NULL;
+    PIZError err = PIZ_GOOD;
     
     PIZAGENTLOCKGETTER
     
     pizLinklistClear (x->graphicOutQueue);
-    pizSequenceGetGraphicEvents (x->sequence, x->graphicOutQueue);
+    
+    if (err = pizSequenceGetGraphicEvents (x->sequence, x->graphicOutQueue)) {
+        MEMORY_ERROR
+    }
     
     if (pizLinklistCount (x->graphicOutQueue)) {
     //

@@ -49,23 +49,23 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZNote *pizSequenceNewNote                 (PIZSequence *x, long *values, PIZFlags flags);
+PIZNote     *pizSequenceNewNote              (PIZSequence *x, long *values, ulong flags);
+PIZMemory   pizSequenceMoveNote              (PIZSequence *x, PIZNote *note, long newPosition);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void    pizSequenceRemoveNote               (PIZSequence *x, PIZNote *note);
-void    pizSequenceRemoveAllNotes           (PIZSequence *x);
-void    pizSequenceMoveNote                 (PIZSequence *x, PIZNote *note, long newPosition);
-void    pizSequenceMakeMap                  (PIZSequence *x);
+void        pizSequenceRemoveNote            (PIZSequence *x, PIZNote *note);
+void        pizSequenceRemoveAllNotes        (PIZSequence *x);
+void        pizSequenceMakeMap               (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-long    pizSequenceMovePitchToAmbitus       (PIZSequence *x, long pitch);
-long    pizSequenceSnapPositionToPattern    (PIZSequence *x, long position);
-long    pizSequencePickUpNotes              (PIZSequence *x);
-bool    pizSequenceFillValues               (PIZSequence *x, PIZNoteSelector selector, long k, bool reverse);
+long        pizSequenceMovePitchToAmbitus    (PIZSequence *x, long pitch);
+long        pizSequenceSnapPositionToPattern (PIZSequence *x, long position);
+long        pizSequencePickUpNotes           (PIZSequence *x);
+bool        pizSequenceFillValues            (PIZSequence *x, PIZNoteSelector selector, long k, bool reverse);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

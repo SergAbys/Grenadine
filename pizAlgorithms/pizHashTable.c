@@ -1,7 +1,7 @@
 /*
  * \file    pizHashTable.c
  * \author  Jean Sapristi
- * \date    April 5, 2012.
+ * \date    April 8, 2012.
  */
  
 /*
@@ -48,10 +48,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_DEFAULT_SIZE 157
+#define PIZ_DEFAULT_HASH_SIZE   157
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZHashTable *pizHashTableNew (long size)
 {
@@ -60,7 +61,7 @@ PIZHashTable *pizHashTableNew (long size)
     if (x = (PIZHashTable *)malloc (sizeof(PIZHashTable))) {
         x->flags = PIZ_HASHTABLE_FLAG_NONE;
         x->count = 0;
-        x->size  = PIZ_DEFAULT_SIZE;
+        x->size  = PIZ_DEFAULT_HASH_SIZE;
         
         if (size > 0) {
             x->size = size;
@@ -73,11 +74,6 @@ PIZHashTable *pizHashTableNew (long size)
     }
     
     return x;
-}
-
-void pizHashTableSetFlags (PIZHashTable *x, PIZFlags flags)
-{
-    x->flags = flags;
 }
 
 void pizHashTableFree (PIZHashTable *x)
@@ -102,33 +98,7 @@ void pizHashTableFree (PIZHashTable *x)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-void pizHashTableClear (PIZHashTable *x)
-{
-    long i;
-    
-    for (i = 0; i < x->size; i++) {
-        if (x->hashTable[i]) {
-            if (x->flags & PIZ_HASHTABLE_FLAG_FREE_MEMORY) {
-                PIZHashTableElement *element = NULL;
-                PIZHashTableElement *nextElement = NULL;
-                
-                pizLinklistPtrAtIndex (x->hashTable[i], 0, (void **)&element);
-                
-                while (element) {
-                    pizLinklistNextByPtr (x->hashTable[i], (void *)element, (void **)&nextElement);
-                    free (element->ptr);
-                    element->ptr = NULL;
-                    element = nextElement;
-                }
-            }
-
-            pizLinklistClear (x->hashTable[i]);
-        }
-    }
-    
-    x->count = 0;
-}
+#pragma mark -
 
 PIZError pizHashTableAdd (PIZHashTable *x, long key, void *ptr)
 {
@@ -160,6 +130,7 @@ PIZError pizHashTableAdd (PIZHashTable *x, long key, void *ptr)
             } else {
                 err |= PIZ_MEMORY;
             }
+            
         } else {
             err |= PIZ_MEMORY;
         }
@@ -168,7 +139,43 @@ PIZError pizHashTableAdd (PIZHashTable *x, long key, void *ptr)
     return err;
 }
 
-PIZError pizHashTableRemoveByKeyAndPtr (PIZHashTable *x, long key, void *ptr)
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizHashTableSetFlags (PIZHashTable *x, ulong flags)
+{
+    x->flags = flags;
+}
+
+void pizHashTableClear (PIZHashTable *x)
+{
+    long i;
+    
+    for (i = 0; i < x->size; i++) {
+        if (x->hashTable[i]) {
+            if (x->flags & PIZ_HASHTABLE_FLAG_FREE_MEMORY) {
+                PIZHashTableElement *element = NULL;
+                PIZHashTableElement *nextElement = NULL;
+                
+                pizLinklistPtrAtIndex (x->hashTable[i], 0, (void **)&element);
+                
+                while (element) {
+                    pizLinklistNextByPtr (x->hashTable[i], (void *)element, (void **)&nextElement);
+                    free (element->ptr);
+                    element->ptr = NULL;
+                    element = nextElement;
+                }
+            }
+
+            pizLinklistClear (x->hashTable[i]);
+        }
+    }
+    
+    x->count = 0;
+}
+
+PIZError pizHashTableRemoveByKey (PIZHashTable *x, long key, void *ptr)
 {
     PIZError err = PIZ_ERROR;
     
@@ -269,7 +276,7 @@ bool pizHashTableContainsKey (const PIZHashTable *x, long key)
 
 long pizHashTableCount (const PIZHashTable *x)
 {
-    return (x->count);
+    return x->count;
 }
 
 // -------------------------------------------------------------------------------------------------------------

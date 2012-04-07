@@ -60,7 +60,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static long piz_modes[ ] = 
+static const long piz_modes[ ] = 
 {   0,-1, 0, 1, 0, 0, 1, 0,-1, 0, 1, 0,     // Ionian
     0,-1, 0, 0,-1, 0, 1, 0,-1, 0, 0,-1,     // Dorian
     0, 0,-1, 0,-1, 0, 1, 0, 0,-1, 0,-1,     // Phrygian
@@ -283,8 +283,8 @@ void pizSequenceSetNoteValue (PIZSequence *x, PIZNoteValue noteValue)
 
 PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type, const PIZArray *a)
 {
-    long     *ptr = NULL;
-    PIZError err = PIZ_GOOD;
+    const long  *ptr = NULL;
+    PIZError    err = PIZ_GOOD;
 
     pizArrayClear (x->scale);
     

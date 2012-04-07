@@ -1,7 +1,7 @@
 /*
  * \file    pizGaloisLattice.c
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    April 8, 2012.
  */
  
 /*
@@ -50,10 +50,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_ALPHABET_SIZE               128
-#define PIZ_ARRAY_INIT_SIZE             4
-#define PIZ_MAXIMUM_TO_KILL_CONCEPTS    100
-#define PIZ_DEFAULT_TO_KILL_CONCEPTS    50
+#define PIZ_ALPHABET_SIZE       128
+#define PIZ_MAXIMUM_THRESHOLD   100
+
+#define PIZ_INIT_ARRAY_SIZE     4
+#define PIZ_DEFAULT_THRESHOLD   50
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -77,21 +78,21 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
     //
     long i;
     
-    x->thresholdToKillConcepts  = PIZ_DEFAULT_TO_KILL_CONCEPTS;
-    x->targetedConcept          = -1;
-    x->shuttle                  = -1;
-    x->previousShuttle          = -1;
+    x->threshold            = PIZ_DEFAULT_THRESHOLD;
+    x->targetedConcept      = -1;
+    x->shuttle              = -1;
+    x->previousShuttle      = -1;
     
-    x->algorithm.type           = PIZ_ALGORITHM_TYPE_GALOIS_LATTICE;
-    x->algorithm.addMethod      = pizGaloisLatticeAdd;
-    x->algorithm.clearMethod    = pizGaloisLatticeClear;
-    x->algorithm.proceedMethod  = pizGaloisLatticeProceed;
-    x->algorithm.countMethod    = pizGaloisLatticeCount;
+    x->algorithm.type       = PIZ_ALGORITHM_TYPE_GALOIS_LATTICE;
+    x->algorithm.add        = pizGaloisLatticeAdd;
+    x->algorithm.clear      = pizGaloisLatticeClear;
+    x->algorithm.proceed    = pizGaloisLatticeProceed;
+    x->algorithm.count      = pizGaloisLatticeCount;
     
     x->seed = (unsigned int)time(NULL);
         
-    if (argc && ((argv[0] > 0)  && (argv[0] <= PIZ_MAXIMUM_TO_KILL_CONCEPTS))) {
-        x->thresholdToKillConcepts = argv[0];
+    if (argc && ((argv[0] > 0)  && (argv[0] <= PIZ_MAXIMUM_THRESHOLD))) {
+        x->threshold = argv[0];
     }
     
     for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
@@ -114,7 +115,7 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
         
     if (x->map = (PIZArray **)malloc ((PIZ_ITEMSET128_SIZE + 1) * sizeof(PIZArray *))) {
         for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
-            if (!(x->map[i] = pizArrayNew (PIZ_ARRAY_INIT_SIZE))) {
+            if (!(x->map[i] = pizArrayNew (PIZ_INIT_ARRAY_SIZE))) {
                 err = PIZ_MEMORY;
             }
         }
@@ -124,7 +125,7 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
     
     if (x->tempMap = (PIZArray **)malloc ((PIZ_ITEMSET128_SIZE + 1) * sizeof(PIZArray *))) {
         for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
-            if (!(x->tempMap[i] = pizArrayNew (PIZ_ARRAY_INIT_SIZE))) {
+            if (!(x->tempMap[i] = pizArrayNew (PIZ_INIT_ARRAY_SIZE))) {
                 err = PIZ_MEMORY;
             }
         }
@@ -155,35 +156,37 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
 void pizGaloisLatticeFree (PIZGaloisLattice *x)
 {
     if (x) {
-        long i;
-        
-        if (x->map) {
-            for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
-                pizArrayFree (x->map[i]);
-                x->map[i] = NULL;
-            }
-            
-            free (x->map);
-            x->map = NULL;
+    //
+    long i;
+    
+    if (x->map) {
+        for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
+            pizArrayFree (x->map[i]);
+            x->map[i] = NULL;
         }
         
-        if (x->tempMap) {
-            for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
-                pizArrayFree (x->tempMap[i]);
-                x->tempMap[i] = NULL;
-            }
-            
-            free (x->tempMap);
-            x->tempMap = NULL;
+        free (x->map);
+        x->map = NULL;
+    }
+    
+    if (x->tempMap) {
+        for (i = 0; i < (PIZ_ITEMSET128_SIZE + 1); i++) {
+            pizArrayFree (x->tempMap[i]);
+            x->tempMap[i] = NULL;
         }
+        
+        free (x->tempMap);
+        x->tempMap = NULL;
+    }
 
-        pizBoundedStackFree (x->ticketMachine);
-        x->ticketMachine = NULL;
-        
-        free (x->stock);
-        x->stock = NULL;
-        
-        free (x);
+    pizBoundedStackFree (x->ticketMachine);
+    x->ticketMachine = NULL;
+    
+    free (x->stock);
+    x->stock = NULL;
+    
+    free (x);
+    //
     }
 }
 
@@ -294,7 +297,7 @@ end:
     if (x->needToMakeMap) {
         err |= pizGaloisLatticeMakeMap (x);
         
-        while (x->count > x->thresholdToKillConcepts) {
+        while (x->count > x->threshold) {
             pizGaloisLatticeKillConcept (x, x->targetedConcept);
             pizGaloisLatticeMakeMap (x);
         }
@@ -413,7 +416,7 @@ PIZError pizGaloisLatticeProceed (PIZGaloisLattice *x, long argc, long *argv)
 
 long pizGaloisLatticeCount (const PIZGaloisLattice *x)
 {
-    return (x->count);
+    return x->count;
 }
 
 // -------------------------------------------------------------------------------------------------------------

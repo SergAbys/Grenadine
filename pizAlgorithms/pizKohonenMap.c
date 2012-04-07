@@ -53,6 +53,7 @@
 #define PIZ_ALPHABET_SIZE               128
 #define PIZ_MAXIMUM_MAP_SIZE            100
 #define PIZ_MAXIMUM_VECTOR_SIZE         256
+
 #define PIZ_DEFAULT_MAP_SIZE            20
 #define PIZ_DEFAULT_VECTOR_SIZE         4
 #define PIZ_DEFAULT_RANGE               10
@@ -73,11 +74,11 @@ PIZKohonenMap *pizKohonenMapNew (long argc, long *argv)
         x->training      = PIZ_DEFAULT_TRAINING;
         x->step          = PIZ_DEFAULT_STEP;
         
-        x->algorithm.type          = PIZ_ALGORITHM_TYPE_KOHONEN_MAP;
-        x->algorithm.addMethod     = pizKohonenMapAdd;
-        x->algorithm.clearMethod   = pizKohonenMapClear;
-        x->algorithm.proceedMethod = pizKohonenMapProceed;
-        x->algorithm.countMethod   = pizKohonenMapCount;
+        x->algorithm.type       = PIZ_ALGORITHM_TYPE_KOHONEN_MAP;
+        x->algorithm.add        = pizKohonenMapAdd;
+        x->algorithm.clear      = pizKohonenMapClear;
+        x->algorithm.proceed    = pizKohonenMapProceed;
+        x->algorithm.count      = pizKohonenMapCount;
         
         if (argc && ((argv[0] > 0) && (argv[0] <= PIZ_MAXIMUM_MAP_SIZE))) {
             x->mapSize  = argv[0];
@@ -219,7 +220,7 @@ PIZError pizKohonenMapProceed (PIZKohonenMap *x, long argc, long *argv)
 
 long pizKohonenMapCount (const PIZKohonenMap *x)
 {
-    return (x->count);
+    return x->count;
 }
 
 // -------------------------------------------------------------------------------------------------------------

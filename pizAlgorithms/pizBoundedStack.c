@@ -1,7 +1,7 @@
 /*
  * \file    pizBoundedStack.c
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 8, 2012.
  */
  
 /*
@@ -47,6 +47,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZBoundedStack *pizBoundedStackNew (long size)
 {
@@ -76,10 +77,14 @@ void pizBoundedStackFree (PIZBoundedStack *x)
     }
 }
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 void pizBoundedStackClear (PIZBoundedStack *x)
 {
-    x->stack        = 0;
-    x->poppedValue  = -1;
+    x->stack       = 0;
+    x->poppedValue = -1;
 }
 
 PIZError pizBoundedStackPush (PIZBoundedStack *x, long value) 
@@ -104,7 +109,6 @@ PIZError pizBoundedStackPop (PIZBoundedStack *x)
         err = PIZ_GOOD;
         
         x->poppedValue = x->values[x->stack - 1];
-        
         x->stack --;
     }
     
@@ -113,12 +117,12 @@ PIZError pizBoundedStackPop (PIZBoundedStack *x)
 
 long pizBoundedStackCount (const PIZBoundedStack *x)
 {
-    return (x->stack);
+    return x->stack;
 }
 
 long pizBoundedStackPoppedValue (const PIZBoundedStack *x)
 {
-    return (x->poppedValue);
+    return x->poppedValue;
 }   
 
 // -------------------------------------------------------------------------------------------------------------

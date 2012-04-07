@@ -1,7 +1,7 @@
 /*
  * \file    pizBoundedQueue.c
  * \author  Jean Sapristi
- * \date    April 1, 2012.
+ * \date    April 8, 2012.
  */
  
 /*
@@ -47,6 +47,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZBoundedQueue *pizBoundedQueueNew (long size)
 {
@@ -78,12 +79,16 @@ void pizBoundedQueueFree (PIZBoundedQueue *x)
     }
 }
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 void pizBoundedQueueClear (PIZBoundedQueue *x)
 {
-    x->count        = 0;
-    x->head         = 0;
-    x->tail         = 0;
-    x->poppedValue  = -1;
+    x->count       = 0;
+    x->head        = 0;
+    x->tail        = 0;
+    x->poppedValue = -1;
 }
 
 PIZError pizBoundedQueueAppend (PIZBoundedQueue *x, long value) 
@@ -151,12 +156,12 @@ PIZError pizBoundedQueuePopLastValue (PIZBoundedQueue *x)
 
 long pizBoundedQueueCount (const PIZBoundedQueue *x)
 {
-    return (x->count);
+    return x->count;
 }
 
 long pizBoundedQueuePoppedValue (const PIZBoundedQueue *x)
 {
-    return (x->poppedValue);
+    return x->poppedValue;
 }
 
 // -------------------------------------------------------------------------------------------------------------

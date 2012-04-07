@@ -62,7 +62,7 @@ typedef struct _PIZGaloisLattice {
     PIZItemset128           toBeAdded;
     PIZItemset128           intersection;
     long                    count;
-    long                    thresholdToKillConcepts;
+    long                    threshold;
     long                    targetedConcept;
     long                    shuttle;
     long                    previousShuttle;
@@ -82,7 +82,7 @@ typedef struct _PIZGaloisLattice {
 
 PIZGaloisLattice    *pizGaloisLatticeNew        (long argc, long *argv);
 void                pizGaloisLatticeFree        (PIZGaloisLattice *x);
-PIZError            pizGaloisLatticeAdd         (PIZGaloisLattice *x, long argc, long *argv);
+PIZMemory           pizGaloisLatticeAdd         (PIZGaloisLattice *x, long argc, long *argv);
 PIZError            pizGaloisLatticeClear       (PIZGaloisLattice *x);
 PIZError            pizGaloisLatticeProceed     (PIZGaloisLattice *x, long argc, long *argv);
 long                pizGaloisLatticeCount       (const PIZGaloisLattice *x);

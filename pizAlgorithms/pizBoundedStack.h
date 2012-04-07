@@ -61,6 +61,7 @@ typedef struct _PIZBoundedStack {
 
 PIZBoundedStack     *pizBoundedStackNew         (long size);
 void                pizBoundedStackFree         (PIZBoundedStack *x);
+
 void                pizBoundedStackClear        (PIZBoundedStack *x);
 PIZError            pizBoundedStackPush         (PIZBoundedStack *x, long value);
 PIZError            pizBoundedStackPop          (PIZBoundedStack *x);
@@ -74,18 +75,18 @@ long                pizBoundedStackPoppedValue  (const PIZBoundedStack *x);
 
 PIZ_EXTERN void pizBoundedStackClear (PIZBoundedStack *x)
 {
-    x->stack        = 0;
-    x->poppedValue  = -1;
+    x->stack       = 0;
+    x->poppedValue = -1;
 }
 
 PIZ_EXTERN long pizBoundedStackCount (const PIZBoundedStack *x)
 {
-    return (x->stack);
+    return x->stack;
 }
 
 PIZ_EXTERN long pizBoundedStackPoppedValue (const PIZBoundedStack *x)
 {
-    return (x->poppedValue);
+    return x->poppedValue;
 }
 
 #endif // PIZ_EXTERN_INLINE

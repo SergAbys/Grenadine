@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceTransform.c
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    April 8, 2012.
  */
  
 /*
@@ -66,7 +66,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static long piz_neighbors[ ]          = {   -256, 
+static const long piz_neighbors[ ]    = {   -256, 
                                             -130, 
                                             -129, 
                                             -128, 
@@ -86,13 +86,13 @@ static long piz_neighbors[ ]          = {   -256,
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static long     piz_divisions[ ]      = { 2, 3, 4, 5, 7, 11 };
-static double   piz_distribution2[ ]  = { 0.75, 1. };
-static double   piz_distribution3[ ]  = { 0.68, 0.85, 1. };
-static double   piz_distribution4[ ]  = { 0.63, 0.75, 0.87, 1. };
-static double   piz_distribution5[ ]  = { 0.60, 0.70, 0.80, 0.90, 1. };
-static double   piz_distribution7[ ]  = { 0.56, 0.63, 0.70, 0.77, 0.84, 0.91, 1. };
-static double   piz_distribution11[ ] = { 0.54, 0.59, 0.63, 0.68, 0.72, 0.77, 0.81, 0.86, 0.9, 0.95, 1. };
+static const long   piz_divisions[ ]      = { 2, 3, 4, 5, 7, 11 };
+static const double piz_distribution2[ ]  = { 0.75, 1. };
+static const double piz_distribution3[ ]  = { 0.68, 0.85, 1. };
+static const double piz_distribution4[ ]  = { 0.63, 0.75, 0.87, 1. };
+static const double piz_distribution5[ ]  = { 0.60, 0.70, 0.80, 0.90, 1. };
+static const double piz_distribution7[ ]  = { 0.56, 0.63, 0.70, 0.77, 0.84, 0.91, 1. };
+static const double piz_distribution11[ ] = { 0.54, 0.59, 0.63, 0.68, 0.72, 0.77, 0.81, 0.86, 0.9, 0.95, 1. };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -223,8 +223,8 @@ bool pizSequenceAlgorithm (PIZSequence *x, PIZAlgorithm *algorithm)
     
     k = pizSequencePickUpNotes (x);
 
-    count = algorithm->countMethod;
-    proceed = algorithm->proceedMethod;
+    count = algorithm->count;
+    proceed = algorithm->proceed;
     
     if ((*count)(algorithm)) {
         err = (*proceed)(algorithm, k, x->values1);
@@ -484,7 +484,7 @@ bool pizSequenceNovember (PIZSequence *x, long iterate)
         }
             
         if (death) {
-            pizBoundedHashTableRemoveByKeyAndPtr (x->hashTable, hCenter, (void *)note);
+            pizBoundedHashTableRemoveByKey (x->hashTable, hCenter, (void *)note);
             pizSequenceRemoveNote (x, note);
             haveChanged = true;
         }
@@ -572,10 +572,11 @@ bool pizSequenceJuliet (PIZSequence *x, long iterate, long division)
     long    p = -1;
     long    offset = 0;
     double  h = rand_r (&x->seed) / (RAND_MAX + 1.0);
-    double  *distribution = NULL;
     PIZNote *note1 = NULL;
     PIZNote *note2 = NULL;
     
+    const double  *distribution = NULL;
+
     mapCount = pizArrayCount (x->map);
 
     while (q == -1) {
@@ -642,7 +643,7 @@ bool pizSequenceJuliet (PIZSequence *x, long iterate, long division)
         }
     } else if (!(pizBoundedHashTablePtrByKey (x->hashTable, newKey, (void **)&note2))) {
         if (note2 != note1) {
-            pizBoundedHashTableRemoveByKeyAndPtr (x->hashTable, newKey, (void *)note2);
+            pizBoundedHashTableRemoveByKey (x->hashTable, newKey, (void *)note2);
             pizSequenceRemoveNote (x, note2);
             haveChanged = true;
             k ++;

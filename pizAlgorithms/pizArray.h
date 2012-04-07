@@ -1,7 +1,7 @@
 /**
  * \file    pizArray.h
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    April 7, 2012.
  */
  
 /*
@@ -60,19 +60,20 @@ typedef struct _PIZArray {
 
 PIZArray    *pizArrayNew                 (long size);
 void        pizArrayFree                 (PIZArray *x);
+
+PIZMemory   pizArrayAppend               (PIZArray *x, long value);
+PIZMemory   pizArrayCopy                 (PIZArray *x, const PIZArray *toCopy);
+
 void        pizArrayClear                (PIZArray *x);
-PIZError    pizArrayAppend               (PIZArray *x, long value);
 void        pizArraySetValueAtIndex      (PIZArray *x, long index, long value);
 long        pizArrayValueAtIndex         (const PIZArray *x, long index);
 long        pizArrayCount                (const PIZArray *x);
 long        *pizArrayPtr                 (const PIZArray *x); 
+
 void        pizArrayRemoveIndex          (PIZArray *x, long index);
-PIZError    pizArrayRemoveLastValue      (PIZArray *x);
+void        pizArrayRemoveLastValue      (PIZArray *x);
 long        pizArrayFirstIndexOfValue    (const PIZArray *x, long value);
 bool        pizArrayContainsValue        (const PIZArray *x, long value);
-PIZError    pizArrayCopy                 (PIZArray *x, const PIZArray *toCopy);
-PIZError    pizArrayAppendArray          (PIZArray *x, const PIZArray *toAppend);
-PIZError    pizArrayAppendPtr            (PIZArray *x, long argc, long *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -91,17 +92,22 @@ PIZ_EXTERN void pizArraySetValueAtIndex (PIZArray *x, long index, long value)
 
 PIZ_EXTERN long pizArrayValueAtIndex (const PIZArray *x, long index)
 {   
-    return (x->values[index]);
+    return x->values[index];
 }
 
 PIZ_EXTERN long pizArrayCount (const PIZArray *x)
 {
-    return (x->index);
+    return x->index;
 }
 
 PIZ_EXTERN long *pizArrayPtr (const PIZArray *x)
 {
-    return (x->values);
+    return x->values;
+}
+
+PIZ_EXTERN void pizArrayRemoveLastValue (PIZArray *x)
+{
+    x->index --;
 }
 
 #endif // PIZ_EXTERN_INLINE

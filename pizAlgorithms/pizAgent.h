@@ -88,6 +88,7 @@
 
 #define PIZAGENTQUEUE(queue)            if (pizLinklistAppend ((queue), event)) {       \
                                             pizEventFree (event);                       \
+                                            MEMORY_ERROR                                \
                                         }
             
 // -------------------------------------------------------------------------------------------------------------
@@ -102,7 +103,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZAgent {
-    PIZFlags            flags;
+    ulong               flags;
     long                bpm;
     PIZNano             grainSize;
     PIZTime             grainStart;

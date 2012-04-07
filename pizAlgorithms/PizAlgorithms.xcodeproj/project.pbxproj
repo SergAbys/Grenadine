@@ -201,8 +201,8 @@
 				96DD1926144AB04C00F914AE /* pizArray.c */,
 				96DD192E144AB05B00F914AE /* pizLinklist.c */,
 				96DD1928144AB05400F914AE /* pizItemset128.c */,
-				96DD1923144AB04600F914AE /* pizBoundedQueue.c */,
 				96DD1922144AB04600F914AE /* pizBoundedStack.c */,
+				96DD1923144AB04600F914AE /* pizBoundedQueue.c */,
 				9631920E1482169D00E63964 /* pizBoundedHashTable.c */,
 				96DD1929144AB05400F914AE /* pizHashTable.c */,
 			);

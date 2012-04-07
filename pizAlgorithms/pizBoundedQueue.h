@@ -1,7 +1,7 @@
 /**
  * \file    pizBoundedQueue.h
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    April 8, 2012.
  */
  
 /*
@@ -61,14 +61,15 @@ typedef struct _PIZBoundedQueue {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZBoundedQueue     *pizBoundedQueueNew         (long size);
-void                pizBoundedQueueFree         (PIZBoundedQueue *x);
-void                pizBoundedQueueClear        (PIZBoundedQueue *x);
-PIZError            pizBoundedQueueAppend       (PIZBoundedQueue *x, long value);
-PIZError            pizBoundedQueuePop          (PIZBoundedQueue *x);
-PIZError            pizBoundedQueuePopLastValue (PIZBoundedQueue *x);
-long                pizBoundedQueueCount        (const PIZBoundedQueue *x);
-long                pizBoundedQueuePoppedValue  (const PIZBoundedQueue *x);
+PIZBoundedQueue     *pizBoundedQueueNew             (long size);
+void                pizBoundedQueueFree             (PIZBoundedQueue *x);
+
+void                pizBoundedQueueClear            (PIZBoundedQueue *x);
+PIZError            pizBoundedQueueAppend           (PIZBoundedQueue *x, long value);
+PIZError            pizBoundedQueuePop              (PIZBoundedQueue *x);
+PIZError            pizBoundedQueuePopLastValue     (PIZBoundedQueue *x);
+long                pizBoundedQueueCount            (const PIZBoundedQueue *x);
+long                pizBoundedQueuePoppedValue      (const PIZBoundedQueue *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -77,21 +78,21 @@ long                pizBoundedQueuePoppedValue  (const PIZBoundedQueue *x);
 
 PIZ_EXTERN void pizBoundedQueueClear (PIZBoundedQueue *x)
 {
-    x->head         = 0;
-    x->tail         = 0;
-    x->count        = 0;
-    x->poppedValue  = -1;
+    x->head        = 0;
+    x->tail        = 0;
+    x->count       = 0;
+    x->poppedValue = -1;
 }
 
 PIZ_EXTERN long pizBoundedQueueCount (const PIZBoundedQueue *x)
 {
-    return (x->count);
+    return x->count;
 }
 
 
 PIZ_EXTERN long pizBoundedQueuePoppedValue (const PIZBoundedQueue *x)
 {
-    return (x->poppedValue);
+    return x->poppedValue;
 }
 
 #endif // PIZ_EXTERN_INLINE

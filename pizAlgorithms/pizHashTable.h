@@ -57,12 +57,12 @@
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZHashTableElement {
-    long    key;
-    void    *ptr;
+    long key;
+    void *ptr;
     } PIZHashTableElement;
  
 typedef struct _PIZHashTable {
-    PIZFlags        flags;
+    ulong           flags;
     long            count;
     long            size;
     PIZLinklist     **hashTable;
@@ -72,11 +72,13 @@ typedef struct _PIZHashTable {
 // -------------------------------------------------------------------------------------------------------------
 
 PIZHashTable    *pizHashTableNew                (long size);
-void            pizHashTableSetFlags            (PIZHashTable *x, PIZFlags flags);
 void            pizHashTableFree                (PIZHashTable *x);
-void            pizHashTableClear               (PIZHashTable *x);
+
 PIZError        pizHashTableAdd                 (PIZHashTable *x, long key, void *ptr);
-PIZError        pizHashTableRemoveByKeyAndPtr   (PIZHashTable *x, long key, void *ptr);
+
+void            pizHashTableSetFlags            (PIZHashTable *x, ulong flags);
+void            pizHashTableClear               (PIZHashTable *x);
+PIZError        pizHashTableRemoveByKey         (PIZHashTable *x, long key, void *ptr);
 PIZError        pizHashTablePtrByKey            (const PIZHashTable *x, long key, void **ptr);
 bool            pizHashTableContainsKey         (const PIZHashTable *x, long key);
 long            pizHashTableCount               (const PIZHashTable *x);
@@ -86,14 +88,14 @@ long            pizHashTableCount               (const PIZHashTable *x);
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN void pizHashTableSetFlags (PIZHashTable *x, PIZFlags flags)
+PIZ_EXTERN void pizHashTableSetFlags (PIZHashTable *x, ulong flags)
 {
     x->flags = flags;
 }
 
 PIZ_EXTERN long pizHashTableCount (const PIZHashTable *x)
 {
-    return (x->count);
+    return x->count;
 }
 
 #endif // PIZ_EXTERN_INLINE

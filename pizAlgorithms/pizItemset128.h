@@ -1,7 +1,7 @@
 /**
  * \file    pizItemset128.h
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    April 8, 2012.
  */
  
 /*
@@ -49,15 +49,13 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_ITEMSET128_SIZE                 128
-#define PIZ_ITEMSET128_SIZE_OF_ULONG        32
-#define PIZ_ITEMSET128_NUMBER_OF_ULONGS     4
+#define PIZ_ITEMSET128_SIZE  128
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZItemset128 {
-    unsigned long items[4];
+    ulong items[4];
     } PIZItemset128;
     
 // -------------------------------------------------------------------------------------------------------------
@@ -68,6 +66,7 @@ void pizItemset128UnsetAtIndex  (PIZItemset128 *itemset, long index);
 void pizItemset128Clear         (PIZItemset128 *itemset);
 long pizItemset128Count         (const PIZItemset128 *itemset);
 bool pizItemset128IsSetAtIndex  (const PIZItemset128 *itemset, long index);
+
 void pizItemset128Union         (const PIZItemset128 *a, const PIZItemset128 *b, PIZItemset128 *r);
 void pizItemset128Intersection  (const PIZItemset128 *a, const PIZItemset128 *b, PIZItemset128 *r);
 bool pizItemset128IsIncluded    (const PIZItemset128 *a, const PIZItemset128 *b);
@@ -80,24 +79,26 @@ bool pizItemset128IsEqual       (const PIZItemset128 *a, const PIZItemset128 *b)
 
 PIZ_EXTERN void pizItemset128SetAtIndex (PIZItemset128 *itemset, long index)
 {
-    long i, p, m;
+    long  i, p;
+    ulong m;
     
-    i = index / PIZ_ITEMSET128_SIZE_OF_ULONG;
-    p = index % PIZ_ITEMSET128_SIZE_OF_ULONG;
+    i = index / 32;
+    p = index % 32;
     
-    m = 1 << p;
+    m = 1UL << p;
     
     itemset->items[i] |= m;
 }
 
 PIZ_EXTERN void pizItemset128UnsetAtIndex (PIZItemset128 *itemset, long index) 
 {
-    long i, p, m;
+    long  i, p;
+    ulong m;
     
-    i = index / PIZ_ITEMSET128_SIZE_OF_ULONG;
-    p = index % PIZ_ITEMSET128_SIZE_OF_ULONG;
+    i = index / 32;
+    p = index % 32;
     
-    m = 1 << p;
+    m = 1UL << p;
     
     itemset->items[i] &= ~m;
 }
@@ -106,21 +107,20 @@ PIZ_EXTERN void pizItemset128Clear (PIZItemset128 *itemset)
 {
     long i;
     
-    for (i = 0; i < PIZ_ITEMSET128_NUMBER_OF_ULONGS; i++) {
-        itemset->items[i] = 0;
+    for (i = 0; i < 4; i++) {
+        itemset->items[i] = 0UL;
     }
 }
 
 PIZ_EXTERN long pizItemset128Count (const PIZItemset128 *itemset)
 {
-    long i;
-    long k = 0;
+    long i, k = 0;
     
-    for (i = 0; i < PIZ_ITEMSET128_NUMBER_OF_ULONGS; i++) {
-        unsigned long n = itemset->items[i];
+    for (i = 0; i < 4; i++) {
+        ulong n = itemset->items[i];
             
-        while (n != 0) {
-            k  += (n & 1);
+        while (n != 0UL) {
+            k += (n & 1UL);
             n >>= 1;
         }
     }
@@ -130,26 +130,25 @@ PIZ_EXTERN long pizItemset128Count (const PIZItemset128 *itemset)
 
 PIZ_EXTERN bool pizItemset128IsSetAtIndex (const PIZItemset128 *itemset, long index) 
 {
-    unsigned long k = 0;
+    long  i, p;
+    ulong k = 0;
 
-    long i, p;
-
-    i = index / PIZ_ITEMSET128_SIZE_OF_ULONG;
-    p = index % PIZ_ITEMSET128_SIZE_OF_ULONG;
+    i = index / 32;
+    p = index % 32;
     
     k = itemset->items[i];
 
     k >>= p;
-    k  &= 1;
+    k  &= 1UL;
     
-    return (k != 0);
+    return (k != 0UL);
 }
 
 PIZ_EXTERN void pizItemset128Union (const PIZItemset128 *a, const PIZItemset128 *b, PIZItemset128 *r) 
 {
     long i;
     
-    for (i = 0; i < PIZ_ITEMSET128_NUMBER_OF_ULONGS; i++) {
+    for (i = 0; i < 4; i++) {
         r->items[i] = a->items[i] | b->items[i];
     }
 }
@@ -158,7 +157,7 @@ PIZ_EXTERN void pizItemset128Intersection (const PIZItemset128 *a, const PIZItem
 {
     long i;
     
-    for (i = 0; i < PIZ_ITEMSET128_NUMBER_OF_ULONGS; i++) {
+    for (i = 0; i < 4; i++) {
         r->items[i] = a->items[i] & b->items[i];
     }
 }
@@ -168,7 +167,7 @@ PIZ_EXTERN bool pizItemset128IsIncluded (const PIZItemset128 *a, const PIZItemse
     long i;
     bool k = true;
             
-    for (i = 0; i < PIZ_ITEMSET128_NUMBER_OF_ULONGS; i++) {
+    for (i = 0; i < 4; i++) {
         if (b->items[i] != (b->items[i] | a->items[i])) {
             k = false;
             break;
@@ -181,9 +180,9 @@ PIZ_EXTERN bool pizItemset128IsIncluded (const PIZItemset128 *a, const PIZItemse
 PIZ_EXTERN bool pizItemset128IsEqual (const PIZItemset128 *a, const PIZItemset128 *b)
 {
     long i;
-    long k = true;
+    bool k = true;
             
-    for (i = 0; i < PIZ_ITEMSET128_NUMBER_OF_ULONGS; i++) {
+    for (i = 0; i < 4; i++) {
         if (a->items[i] != b->items[i]) {
             k = false;
             break;

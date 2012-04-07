@@ -1,7 +1,7 @@
 /**
  * \file    pizAlgorithms.h
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    April 8, 2012.
  */
 
 /*
@@ -44,13 +44,13 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_ALGORITHM_TYPE_NONE              0UL
-#define PIZ_ALGORITHM_TYPE_FACTOR_ORACLE     1UL
-#define PIZ_ALGORITHM_TYPE_GALOIS_LATTICE    2UL
-#define PIZ_ALGORITHM_TYPE_FINITE_STATE      4UL
-#define PIZ_ALGORITHM_TYPE_KOHONEN_MAP       8UL
-#define PIZ_ALGORITHM_TYPE_NEURAL_GAS        16UL
-#define PIZ_ALGORITHM_TYPE_MARKOV_MODEL      32UL
+#define PIZ_ALGORITHM_TYPE_NONE                 0UL
+#define PIZ_ALGORITHM_TYPE_FACTOR_ORACLE        1UL
+#define PIZ_ALGORITHM_TYPE_GALOIS_LATTICE       2UL
+#define PIZ_ALGORITHM_TYPE_FINITE_STATE         4UL
+#define PIZ_ALGORITHM_TYPE_KOHONEN_MAP          8UL
+#define PIZ_ALGORITHM_TYPE_NEURAL_GAS           16UL
+#define PIZ_ALGORITHM_TYPE_MARKOV_MODEL         32UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -62,11 +62,11 @@ typedef long (*PIZAlgorithmMethod)( );
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZAlgorithm {
-    PIZAlgorithmType   type;
-    PIZAlgorithmMethod addMethod;
-    PIZAlgorithmMethod clearMethod;
-    PIZAlgorithmMethod proceedMethod;
-    PIZAlgorithmMethod countMethod;
+    PIZAlgorithmType    type;
+    PIZAlgorithmMethod  add;
+    PIZAlgorithmMethod  clear;
+    PIZAlgorithmMethod  proceed;
+    PIZAlgorithmMethod  count;
     } PIZAlgorithm;
 
 // -------------------------------------------------------------------------------------------------------------

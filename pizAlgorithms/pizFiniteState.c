@@ -1,7 +1,7 @@
 /*
  * \file    pizFiniteState.c
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    April 8, 2012.
  */
  
 /*
@@ -43,12 +43,13 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_ALPHABET_SIZE                       128
-#define PIZ_BOUNDED_QUEUE_SIZE                  4
-#define PIZ_INCREMENT_JUMP_CHANCE               1   
-#define PIZ_INCREMENT_FINAL_JUMP_CHANCE         5 
-#define PIZ_MAXIMUM_THRESHOLD_TO_MERGE_NODES    100
-#define PIZ_DEFAULT_THRESHOLD_TO_MERGE_NODES    35
+#define PIZ_ALPHABET_SIZE       128
+#define PIZ_MAXIMUM_THRESHOLD   100
+#define PIZ_INCREMENT_JUMP      1   
+#define PIZ_INCREMENT_FINAL     5 
+
+#define PIZ_INIT_QUEUE_SIZE     4
+#define PIZ_DEFAULT_THRESHOLD   35
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -73,21 +74,21 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
         long i, err = PIZ_GOOD;
         
         if (x->stock = (PIZFiniteStateNode *)malloc (PIZ_ITEMSET128_SIZE * sizeof(PIZFiniteStateNode))) {
-            x->count                    = 0;
-            x->shuttle                  = -1;
-            x->jumpChance               = 0;
-            x->thresholdToMergeNodes    = PIZ_DEFAULT_THRESHOLD_TO_MERGE_NODES;
+            x->count        = 0;
+            x->shuttle      = -1;
+            x->jumpChance   = 0;
+            x->threshold    = PIZ_DEFAULT_THRESHOLD;
             
-            x->algorithm.type           = PIZ_ALGORITHM_TYPE_FINITE_STATE;
-            x->algorithm.addMethod      = pizFiniteStateAdd;
-            x->algorithm.clearMethod    = pizFiniteStateClear;
-            x->algorithm.proceedMethod  = pizFiniteStateProceed;
-            x->algorithm.countMethod    = pizFiniteStateCount;
+            x->algorithm.type       = PIZ_ALGORITHM_TYPE_FINITE_STATE;
+            x->algorithm.add        = pizFiniteStateAdd;
+            x->algorithm.clear      = pizFiniteStateClear;
+            x->algorithm.proceed    = pizFiniteStateProceed;
+            x->algorithm.count      = pizFiniteStateCount;
             
             x->seed = (unsigned int)time(NULL);
                 
-            if (argc && ((argv[0] > 0) && (argv[0] <= PIZ_MAXIMUM_THRESHOLD_TO_MERGE_NODES))) {
-                x->thresholdToMergeNodes = argv[0];
+            if (argc && ((argv[0] > 0) && (argv[0] <= PIZ_MAXIMUM_THRESHOLD))) {
+                x->threshold = argv[0];
             }
             
             if (x->ticketMachine = pizBoundedStackNew (PIZ_ITEMSET128_SIZE)) {
@@ -106,7 +107,7 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
                 
             if (x->mapByValue = (PIZBoundedQueue **)malloc (PIZ_ALPHABET_SIZE * sizeof(PIZBoundedQueue *))) {
                 for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
-                    if (!(x->mapByValue[i] = pizBoundedQueueNew (PIZ_BOUNDED_QUEUE_SIZE))) {
+                    if (!(x->mapByValue[i] = pizBoundedQueueNew (PIZ_INIT_QUEUE_SIZE))) {
                         err = PIZ_MEMORY;
                     }
                 }
@@ -214,7 +215,7 @@ PIZError pizFiniteStateAdd (PIZFiniteState *x, long argc, long *argv)
         }
     }
     
-    while ((x->count > x->thresholdToMergeNodes) && !err2) {
+    while ((x->count > x->threshold) && !err2) {
         err2 = pizFiniteStateMergeNodes (x);
     }
     //   
@@ -300,9 +301,9 @@ PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)
             x->shuttle = x->lottery[h];
             
             if (x->stock[x->shuttle].final) {
-                x->jumpChance += PIZ_INCREMENT_FINAL_JUMP_CHANCE;
+                x->jumpChance += PIZ_INCREMENT_FINAL;
             } else {
-                x->jumpChance += PIZ_INCREMENT_JUMP_CHANCE;
+                x->jumpChance += PIZ_INCREMENT_JUMP;
             }
         } else {
             x->shuttle      = -1;

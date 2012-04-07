@@ -1,7 +1,7 @@
 /*
  * \file    pizArray.c
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    April 8, 2012.
  */
  
 /*
@@ -44,33 +44,35 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include <stdlib.h>
-#include <string.h>
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_DEFAULT_SIZE 4
+#define PIZ_DEFAULT_ARRAY_SIZE    4
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZArray *pizArrayNew (long size)
 {
     PIZArray *x = NULL;
 
-    if (x = (PIZArray *)malloc (sizeof(PIZArray))) {       
-        x->size = PIZ_DEFAULT_SIZE;
-        
-        if (size > 0) {
-            x->size = size;
-        }
-        
-        if (x->values = (long *)malloc (x->size * sizeof(long))) {
-            x->index = 0;
-        } else {
-            free (x);
-            x = NULL;
-        }
+    if (x = (PIZArray *)malloc (sizeof(PIZArray))) {  
+    //     
+    x->size = PIZ_DEFAULT_ARRAY_SIZE;
+    
+    if (size > 0) {
+        x->size = size;
+    }
+    
+    if (x->values = (long *)malloc (x->size * sizeof(long))) {
+        x->index = 0;
+    } else {
+        free (x);
+        x = NULL;
+    }
+    //
     }
     
     return x;
@@ -86,10 +88,9 @@ void pizArrayFree (PIZArray *x)
     }
 }
 
-void pizArrayClear (PIZArray *x)
-{
-    x->index = 0;
-}
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZError pizArrayAppend (PIZArray *x, long value)
 {   
@@ -106,7 +107,7 @@ PIZError pizArrayAppend (PIZArray *x, long value)
         }
     }
     
-    if (err == PIZ_GOOD) {
+    if (!err) {
         x->values[x->index] = value;
         x->index ++;
     }
@@ -114,78 +115,6 @@ PIZError pizArrayAppend (PIZArray *x, long value)
     return err;
 }
 
-void pizArraySetValueAtIndex (PIZArray *x, long index, long value)
-{
-    x->values[index] = value;
-}
-
-long pizArrayValueAtIndex (const PIZArray *x, long index)
-{   
-    return (x->values[index]);
-}
-
-long pizArrayCount (const PIZArray *x)
-{
-    return (x->index);
-}
-
-long *pizArrayPtr (const PIZArray *array)
-{
-    return (array->values);
-}
-
-void pizArrayRemoveIndex (PIZArray *array, long index)
-{
-    if (index >= 0 && index < array->index) {
-        long i;
-        
-        for (i = index; i < (array->index - 1); i++) {
-            array->values[i] = array->values[i + 1];
-        }
-        
-        array->index --;
-    }
-}
-
-PIZError pizArrayRemoveLastValue (PIZArray *x)
-{
-    PIZError err = PIZ_ERROR;
-    
-    if (x->index) {
-        x->index --;
-        err = PIZ_GOOD;
-    }
-        
-    return err;
-}
-
-long pizArrayFirstIndexOfValue (const PIZArray *x, long value)
-{
-    long i, k = -1;
-    
-    for (i = 0; i < x->index; i++) {
-        if (x->values[i] == value) {
-            k = i;
-            break;
-        }
-    }
-    
-    return k;
-}
-
-bool pizArrayContainsValue (const PIZArray *x, long value)
-{
-    long i, k = false;
-    
-    for (i = 0; i < x->index; i++) {
-        if (x->values[i] == value) {
-            k = true;
-            break;
-        }
-    }
-        
-    return k;
-}
 
 PIZError pizArrayCopy (PIZArray *x, const PIZArray *toCopy)
 {
@@ -215,66 +144,82 @@ PIZError pizArrayCopy (PIZArray *x, const PIZArray *toCopy)
     return err;
 }
 
-PIZError pizArrayAppendArray (PIZArray *x, const PIZArray *toAppend)
-{
-    PIZError err = PIZ_GOOD;
-    
-    if ((toAppend->index + x->index) > x->size) {
-        long *newValues = NULL;
-        long newSize = toAppend->size + x->size;
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
-        if (newValues = (long *)realloc (x->values, newSize * sizeof(long))) {
-            x->size = newSize;
-            x->values = newValues;
-        } else {
-            err = PIZ_MEMORY;
-        }
-    }
-    
-    if (!err)  {
-        long i;
-    
-        for (i = 0; i < toAppend->index; i++) {
-            x->values[x->index + i] = toAppend->values[i];
-        }
-        
-        x->index += toAppend->index;
-    }
-    
-    return err;
+void pizArrayClear (PIZArray *x)
+{
+    x->index = 0;
 }
 
-PIZError pizArrayAppendPtr (PIZArray *x, long argc, long *argv)
+void pizArraySetValueAtIndex (PIZArray *x, long index, long value)
 {
-    PIZError err = PIZ_GOOD;
-    
-    if ((argc + x->index) > x->size) {
-        long *newValues = NULL;
-        long newSize = x->size * 2;
-        
-        while (newSize < (argc + x->index)) {
-            newSize = newSize * 2;
-        }
+    x->values[index] = value;
+}
 
-        if (newValues = (long *)realloc (x->values, newSize * sizeof(long))) {
-            x->size = newSize;
-            x->values = newValues;
-        } else {
-            err = PIZ_MEMORY;
-        }
-    }
-    
-    if (!err) {
-        long i;
-        
-        for (i = 0; i < argc; i++) {
-            x->values[x->index + i] = argv[i];
-        }
+long pizArrayValueAtIndex (const PIZArray *x, long index)
+{   
+    return x->values[index];
+}
+
+long pizArrayCount (const PIZArray *x)
+{
+    return x->index;
+}
+
+long *pizArrayPtr (const PIZArray *array)
+{
+    return array->values;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizArrayRemoveIndex (PIZArray *array, long index)
+{
+    long i;
             
-        x->index += argc;
+    for (i = index; i < (array->index - 1); i++) {
+        array->values[i] = array->values[i + 1];
     }
     
-    return err;
+    array->index --;
+}
+
+void pizArrayRemoveLastValue (PIZArray *x)
+{
+    x->index --;
+}
+
+long pizArrayFirstIndexOfValue (const PIZArray *x, long value)
+{
+    long i, k = -1;
+    
+    for (i = 0; i < x->index; i++) {
+        if (x->values[i] == value) {
+            k = i;
+            break;
+        }
+    }
+    
+    return k;
+}
+
+bool pizArrayContainsValue (const PIZArray *x, long value)
+{
+    long i;
+    bool k = false;
+    
+    for (i = 0; i < x->index; i++) {
+        if (x->values[i] == value) {
+            k = true;
+            break;
+        }
+    }
+        
+    return k;
 }
 
 // -------------------------------------------------------------------------------------------------------------
