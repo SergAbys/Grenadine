@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    April 8, 2012.
  */
  
 /*
@@ -49,25 +49,24 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_CHANNEL_NONE               0
-#define PIZ_SEQUENCE_LOOKUP_SIZE                19
-#define PIZ_SEQUENCE_DEFAULT_TIMELINE_SIZE      576 
-
 #define PIZ_SEQUENCE_MAXIMUM_NOTES              128   
 #define PIZ_SEQUENCE_MAXIMUM_DURATION           96
 //                                            -------
-#define PIZ_SEQUENCE_TEMP_ARRAY_SIZE            128
+#define PIZ_SEQUENCE_INIT_TEMP_SIZE             128
+
+#define PIZ_SEQUENCE_INIT_LOOKUP_SIZE           19
+#define PIZ_SEQUENCE_DEFAULT_TIMELINE_SIZE      576 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_ADD_FLAG_NONE              0UL
-#define PIZ_SEQUENCE_ADD_FLAG_SNAP              1UL
-#define PIZ_SEQUENCE_ADD_FLAG_PATTERN           2UL
-#define PIZ_SEQUENCE_ADD_FLAG_AMBITUS           4UL
-#define PIZ_SEQUENCE_ADD_FLAG_CLIP              8UL
-#define PIZ_SEQUENCE_ADD_FLAG_UNSELECT          16UL
-#define PIZ_SEQUENCE_ADD_FLAG_CLEAR             32UL
+#define PIZ_SEQUENCE_FLAG_NONE                  0UL
+#define PIZ_SEQUENCE_FLAG_SNAP                  1UL
+#define PIZ_SEQUENCE_FLAG_PATTERN               2UL
+#define PIZ_SEQUENCE_FLAG_AMBITUS               4UL
+#define PIZ_SEQUENCE_FLAG_CLIP                  8UL
+#define PIZ_SEQUENCE_FLAG_UNSELECT              16UL
+#define PIZ_SEQUENCE_FLAG_CLEAR                 32UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -141,20 +140,30 @@ typedef enum _PIZScaleKey {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-typedef enum _PIZDataIndex {
+#define PIZ_DATA_NOTE_SIZE      6
+#define PIZ_DATA_ZONE_SIZE      4
+  
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+      
+typedef enum _PIZNoteIndex {
     PIZ_DATA_POSITION       = 0,
-    PIZ_DATA_PITCH,
-    PIZ_DATA_VELOCITY,
-    PIZ_DATA_DURATION,
-    PIZ_DATA_CHANNEL,
-    PIZ_DATA_IS_SELECTED,
-    PIZ_DATA_NOTE_SIZE      = 6,
+    PIZ_DATA_PITCH          = 1,
+    PIZ_DATA_VELOCITY       = 2,
+    PIZ_DATA_DURATION       = 3,
+    PIZ_DATA_CHANNEL        = 4,
+    PIZ_DATA_IS_SELECTED    = 5
+    } PIZNoteIndex;
+
+typedef enum _PIZZoneIndex {
     PIZ_DATA_START          = 0,
-    PIZ_DATA_END,
-    PIZ_DATA_DOWN,
-    PIZ_DATA_UP,
-    PIZ_DATA_ZONE_SIZE      = 4
-    } PIZDataIndex;
+    PIZ_DATA_END            = 1,
+    PIZ_DATA_DOWN           = 2,
+    PIZ_DATA_UP             = 3
+    } PIZoneIndex;
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
 typedef enum _PIZNoteSelector {
     PIZ_NOTE_PITCH          = 0,
@@ -163,33 +172,32 @@ typedef enum _PIZNoteSelector {
     PIZ_NOTE_CHANNEL        = 3
     } PIZNoteSelector;
     
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
- 
 typedef struct _PIZNote {
     long     data[4];
     long     isSelected;
     long     position;
     long     tag;
     } PIZNote;
+    
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZSequence {
-    long                    *values1;
-    long                    *values2;
-    PIZNote                 **notes1;
-    PIZNote                 **notes2;
-    PIZBoundedHashTable     *hashTable;
-    PIZBoundedHashTable     *lookup;
-    PIZBoundedStack         *ticketMachine;
-    PIZLinklist             **timeline;
+    long                    *tempValues;
+    PIZNote                 **tempNotes1;
+    PIZNote                 **tempNotes2;
+    PIZBoundedHashTable     *tempHash;
     PIZArray                *map;
+    PIZLinklist             **timeline;
+    long                    timelineSize;
+    PIZBoundedStack         *ticketMachine;
+    PIZBoundedHashTable     *lookup;
     PIZArray                *scale;
     PIZArray                *pattern;
+    bool                    changedZone;
     PIZItemset128           addedNotes;
     PIZItemset128           removedNotes;
     PIZItemset128           changedNotes;
-    long                    changedZone;
-    long                    timelineSize;
     long                    start;
     long                    end;
     long                    down;

@@ -52,22 +52,24 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+PIZError    pizSequenceAlgorithm   (PIZSequence *x, PIZAlgorithm *algorithm);
+PIZError    pizSequenceNovember    (PIZSequence *x, long iterate); //
+PIZError    pizSequenceJuliet      (PIZSequence *x, long iterate, long division); //
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 void        pizSequenceClear       (PIZSequence *x);
 void        pizSequenceTranspose   (PIZSequence *x, long n);
 void        pizSequenceClean       (PIZSequence *x, long value);
-
-PIZError    pizSequenceAlgorithm   (PIZSequence *x, PIZAlgorithm *algorithm);
-PIZError    pizSequenceNovember    (PIZSequence *x, long iterate); //
-
-bool pizSequenceJuliet      (PIZSequence *x, long iterate, long division);
-bool pizSequenceRotate      (PIZSequence *x, PIZNoteSelector selector, long shift);
-bool pizSequenceScramble    (PIZSequence *x, PIZNoteSelector selector);
-bool pizSequenceSort        (PIZSequence *x, PIZNoteSelector selector, bool down);
-bool pizSequenceChange      (PIZSequence *x, PIZNoteSelector selector, long value);
-bool pizSequenceSet         (PIZSequence *x, PIZNoteSelector selector, long value);
-bool pizSequenceRandom      (PIZSequence *x, PIZNoteSelector selector, long minValue, long maxValue);
-bool pizSequenceKill        (PIZSequence *x);
-bool pizSequenceCycle       (PIZSequence *x, PIZScaleKey key, const PIZArray *a);
+void        pizSequenceRotate      (PIZSequence *x, PIZNoteSelector selector, long shift);
+void        pizSequenceScramble    (PIZSequence *x, PIZNoteSelector selector);
+void        pizSequenceSort        (PIZSequence *x, PIZNoteSelector selector, bool down);
+void        pizSequenceChange      (PIZSequence *x, PIZNoteSelector selector, long value);
+void        pizSequenceSet         (PIZSequence *x, PIZNoteSelector selector, long value);
+void        pizSequenceRandom      (PIZSequence *x, PIZNoteSelector selector, long minValue, long maxValue);
+void        pizSequenceKill        (PIZSequence *x);
+void        pizSequenceCycle       (PIZSequence *x, PIZScaleKey key, const PIZArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

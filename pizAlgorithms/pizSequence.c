@@ -98,7 +98,7 @@ PIZSequence *pizSequenceNew (long size)
     if (x = (PIZSequence *)malloc (sizeof(PIZSequence))) {
     //
     long argv1[2] = { 0, PIZ_SEQUENCE_MAXIMUM_NOTES };
-    long argv2[2] = { PIZ_SEQUENCE_LOOKUP_SIZE, PIZ_SEQUENCE_MAXIMUM_NOTES };
+    long argv2[2] = { PIZ_SEQUENCE_INIT_LOOKUP_SIZE, PIZ_SEQUENCE_MAXIMUM_NOTES };
     
     if (size > 0) {
         x->timelineSize = size;
@@ -109,22 +109,20 @@ PIZSequence *pizSequenceNew (long size)
     x->map           = pizArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
     x->scale         = pizArrayNew (PIZ_MAGIC_SCALE);
     x->pattern       = pizArrayNew (0);
-    x->values1       = (long *)malloc (sizeof(long) * PIZ_SEQUENCE_TEMP_ARRAY_SIZE);
-    x->values2       = (long *)malloc (sizeof(long) * PIZ_SEQUENCE_TEMP_ARRAY_SIZE);
-    x->notes1        = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_TEMP_ARRAY_SIZE);
-    x->notes2        = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_TEMP_ARRAY_SIZE);
-    x->hashTable     = pizBoundedHashTableNew (2, argv1);
+    x->tempValues    = (long *)malloc (sizeof(long) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
+    x->tempNotes1    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
+    x->tempNotes2    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
+    x->tempHash      = pizBoundedHashTableNew (2, argv1);
     x->lookup        = pizBoundedHashTableNew (2, argv2);
     x->ticketMachine = pizBoundedStackNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
     
     if (x->map           && 
         x->scale         &&
         x->pattern       &&
-        x->values1       &&
-        x->values2       &&
-        x->notes1        &&
-        x->notes2        &&
-        x->hashTable     &&
+        x->tempValues    &&
+        x->tempNotes1    &&
+        x->tempNotes2    &&
+        x->tempHash      &&
         x->lookup        &&
         x->ticketMachine &&
         (x->timeline = (PIZLinklist **)calloc (x->timelineSize, sizeof(PIZLinklist **)))) {
@@ -184,21 +182,18 @@ void pizSequenceFree (PIZSequence *x)
     pizArrayFree (x->scale);
     pizArrayFree (x->pattern);
     
-    pizBoundedHashTableFree (x->hashTable);
+    pizBoundedHashTableFree (x->tempHash);
     pizBoundedHashTableFree (x->lookup);
     pizBoundedStackFree (x->ticketMachine);
     
-    if (x->values1) {
-        free (x->values1);
+    if (x->tempValues) {
+        free (x->tempValues);
     }
-    if (x->values2) {
-        free (x->values2);
+    if (x->tempNotes1) {
+        free (x->tempNotes1);
     }
-    if (x->notes1) {
-        free (x->notes1);
-    }
-    if (x->notes2) {
-        free (x->notes2);
+    if (x->tempNotes2) {
+        free (x->tempNotes2);
     }
     
     free (x);
@@ -367,7 +362,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZArray *a)
                     velocity += x->velocity;
                 } 
                 
-                if (noteChannel == PIZ_SEQUENCE_CHANNEL_NONE) {
+                if (!noteChannel) {
                     noteChannel = x->channel;
                 }
                   

@@ -74,17 +74,17 @@ typedef struct _PIZBoundedHashTable {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZBoundedHashTable *pizBoundedHashTableNew        (long argc, long *argv);
-void                pizBoundedHashTableFree        (PIZBoundedHashTable *x);
+PIZBoundedHashTable *pizBoundedHashTableNew         (long argc, long *argv);
+void                pizBoundedHashTableFree         (PIZBoundedHashTable *x);
 
-PIZError            pizBoundedHashTableAdd         (PIZBoundedHashTable *x, long key, void *ptr); //
+PIZError            pizBoundedHashTableAdd          (PIZBoundedHashTable *x, long key, void *ptr); //
 
-void                pizBoundedHashTableSetFlags    (PIZBoundedHashTable *x, ulong flags);
-void                pizBoundedHashTableClear       (PIZBoundedHashTable *x);
-PIZError            pizBoundedHashTableRemoveKey   (PIZBoundedHashTable *x, long key, void *ptr);
-PIZError            pizBoundedHashTablePtrKey      (const PIZBoundedHashTable *x, long key, void **ptr);
-bool                pizBoundedHashTableContainsKey (const PIZBoundedHashTable *x, long key);
-long                pizBoundedHashTableCount       (const PIZBoundedHashTable *x);
+void                pizBoundedHashTableSetFlags     (PIZBoundedHashTable *x, ulong flags);
+void                pizBoundedHashTableClear        (PIZBoundedHashTable *x);
+PIZError            pizBoundedHashTableRemoveByKey  (PIZBoundedHashTable *x, long key, void *ptr);
+PIZError            pizBoundedHashTablePtrByKey     (const PIZBoundedHashTable *x, long key, void **ptr);
+bool                pizBoundedHashTableContainsKey  (const PIZBoundedHashTable *x, long key);
+long                pizBoundedHashTableCount        (const PIZBoundedHashTable *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

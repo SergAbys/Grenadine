@@ -122,7 +122,6 @@ typedef struct _PIZAgent {
     PIZSequence         *sequence;
     PIZArray            *tempArray;
     PIZFactorOracle     *factorOracle;
-    PIZFiniteState      *finiteState;
     PIZGaloisLattice    *galoisLattice;
     pthread_attr_t      attr;
     pthread_cond_t      eventCondition;

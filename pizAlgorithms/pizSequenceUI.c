@@ -88,7 +88,7 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     //
     if (pizItemset128IsSetAtIndex (&x->addedNotes, i)) {
     //
-    if (!(pizBoundedHashTablePtrKey (x->lookup, i, (void **)&note))) {
+    if (!(pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note))) {
     
         long argv[ ] = { note->position,
                          note->data[PIZ_NOTE_PITCH],
@@ -116,7 +116,7 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     //
     if (pizItemset128IsSetAtIndex (&x->changedNotes, i)) {
     //
-    if (!(pizBoundedHashTablePtrKey (x->lookup, i, (void **)&note))) {
+    if (!(pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note))) {
     
         long argv[ ] = { note->position,
                          note->data[PIZ_NOTE_PITCH],

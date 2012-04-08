@@ -87,7 +87,6 @@ typedef enum _PIZEventIdentifier {
     PIZ_EVENT_CLEAN,
     PIZ_EVENT_ZOULOU,
     PIZ_EVENT_ROMEO,
-    PIZ_EVENT_UNIFORN,
     PIZ_EVENT_NOVEMBER,
     PIZ_EVENT_JULIET,
     PIZ_EVENT_ROTATE,
@@ -113,7 +112,7 @@ typedef enum _PIZEventIdentifier {
     //
     } PIZEventIdentifier;
     
-typedef union _PIZEventData {
+typedef struct _PIZEventData {
     PIZTime time;
     long    values[PIZ_EVENT_VALUES_SIZE];
 } PIZEventData;

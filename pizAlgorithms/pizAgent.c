@@ -75,7 +75,6 @@ PIZAgent *pizAgentNew (void)
     x->sequence             = pizSequenceNew      (0);
     x->tempArray            = pizArrayNew         (0);
     x->factorOracle         = pizFactorOracleNew  (0, NULL);
-    x->finiteState          = pizFiniteStateNew   (0, NULL);
     x->galoisLattice        = pizGaloisLatticeNew (0, NULL);
     x->err1                 = PIZ_ERROR;
     x->err2                 = PIZ_ERROR;
@@ -89,7 +88,6 @@ PIZAgent *pizAgentNew (void)
         x->sequence         &&
         x->tempArray        &&
         x->factorOracle     &&
-        x->finiteState      &&
         x->galoisLattice)) {
         
         err |= PIZ_MEMORY;
@@ -171,7 +169,6 @@ void pizAgentFree (PIZAgent *x)
     pizArrayFree          (x->tempArray);
     
     pizFactorOracleFree   (x->factorOracle);
-    pizFiniteStateFree    (x->finiteState);
     pizGaloisLatticeFree  (x->galoisLattice);
     //
     }

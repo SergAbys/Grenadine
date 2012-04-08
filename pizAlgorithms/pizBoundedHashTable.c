@@ -186,7 +186,7 @@ void pizBoundedHashTableClear (PIZBoundedHashTable *x)
     x->count = 0;
 }
 
-PIZError pizBoundedHashTableRemoveKey (PIZBoundedHashTable *x, long key, void *ptr)
+PIZError pizBoundedHashTableRemoveByKey (PIZBoundedHashTable *x, long key, void *ptr)
 {
     PIZError err = PIZ_ERROR;
     
@@ -221,7 +221,7 @@ long pizBoundedHashTableCount (const PIZBoundedHashTable *x)
     return x->count;
 }
 
-PIZError pizBoundedHashTablePtrKey (const PIZBoundedHashTable *x, long key, void **ptr)
+PIZError pizBoundedHashTablePtrByKey (const PIZBoundedHashTable *x, long key, void **ptr)
 {
     PIZError err = PIZ_ERROR;
     
