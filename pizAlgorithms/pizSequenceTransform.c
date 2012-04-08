@@ -61,27 +61,22 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_CEIL(a,b) (((a)%(b))==0?(a)/(b):(a)/(b)+1)
- 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-static const long piz_neighbors[ ]    = {   -256, 
-                                            -130, 
-                                            -129, 
-                                            -128, 
-                                            -127, 
-                                            -126, 
-                                             126, 
-                                             127, 
-                                             128, 
-                                             129, 
-                                             130, 
-                                             256, 
-                                              -2, 
-                                              -1, 
-                                               1, 
-                                               2    };
+static const long piz_neighbors[ ]       = { -256, 
+                                             -130, 
+                                             -129, 
+                                             -128, 
+                                             -127, 
+                                             -126, 
+                                              126, 
+                                              127, 
+                                              128, 
+                                              129, 
+                                              130, 
+                                              256, 
+                                               -2, 
+                                               -1, 
+                                                1, 
+                                                2  };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -142,15 +137,9 @@ void pizSequenceTranspose (PIZSequence *x, long n)
     }
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-bool pizSequenceClean (PIZSequence *x, long value)
+void pizSequenceClean (PIZSequence *x, long value)
 {
-    long i, scale, v;
-    long index = 0;
-    bool haveChanged = false;
+    long i, scale, v, index = 0;
         
     scale = pizArrayCount (x->scale);
     v = CLAMP (value, 0, PIZ_MAGIC_PITCH);
@@ -159,64 +148,61 @@ bool pizSequenceClean (PIZSequence *x, long value)
         x->values1[i] = 0;
     }
     
-    for (i = 0; i < pizArrayCount (x->map); i++) {   
-        PIZNote *note       = NULL;
-        PIZNote *nextNote   = NULL;
+    for (i = 0; i < pizArrayCount (x->map); i++) { 
+    //  
+    PIZNote *note = NULL;
+    PIZNote *nextNote = NULL;
+    
+    long p = pizArrayValueAtIndex (x->map, i);
+    
+    pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+    
+    while (note) {
+        long j, start, end, m, n, pitch;
+        bool death = false;
         
-        long p = pizArrayValueAtIndex (x->map, i);
+        pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
         
-        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-        
-        while (note) {
-            long j, start, end, m, n, pitch;
-            bool death = false;
-            
-            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-            
-            pitch = note->data[PIZ_NOTE_PITCH];
-                    
-            if (scale) {
-                pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
-            }
-            
-            start   = pitch - v;
-            end     = start + (2 * v);
-            
-            m = CLAMP (start, 0, PIZ_MAGIC_PITCH);
-            n = CLAMP (end, 0, PIZ_MAGIC_PITCH);
-            
-            for (j = m; j <= n; j++) {
-                if (x->values1[j] == (p + 1)) {
-                    death = true;
-                }
-            }
-            
-            if (death) {
-                x->notes1[index] = note;
-                index ++;
-            } else {
-                x->values1[pitch] = (p + 1);
-            }
-            
-            note = nextNote;
+        pitch = note->data[PIZ_NOTE_PITCH];
+                
+        if (scale) {
+            pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
         }
+        
+        start = pitch - v;
+        end   = start + (2 * v);
+        
+        m = CLAMP (start, 0, PIZ_MAGIC_PITCH);
+        n = CLAMP (end, 0, PIZ_MAGIC_PITCH);
+        
+        for (j = m; j <= n; j++) {
+            if (x->values1[j] == (p + 1)) {
+                death = true;
+            }
+        }
+        
+        if (death) {
+            x->notes1[index] = note;
+            index ++;
+        } else {
+            x->values1[pitch] = (p + 1);
+        }
+        
+        note = nextNote;
+    }
+    //
     }
     
     if (index) {
         for (i = 0; i < index; i++) {
             pizSequenceRemoveNote (x, x->notes1[i]);
         }
-        
-        haveChanged = true;
     }
-    
-    return haveChanged;
 }
 
-bool pizSequenceAlgorithm (PIZSequence *x, PIZAlgorithm *algorithm)
+PIZError pizSequenceAlgorithm (PIZSequence *x, PIZAlgorithm *algorithm)
 {
     long                k;
-    bool                haveChanged = false;
     PIZError            err = PIZ_ERROR;
     PIZAlgorithmMethod  count = NULL;
     PIZAlgorithmMethod  proceed = NULL;
@@ -244,21 +230,24 @@ bool pizSequenceAlgorithm (PIZSequence *x, PIZAlgorithm *algorithm)
             } 
         }
         
-        haveChanged = pizSequenceFillValues (x, PIZ_NOTE_PITCH, k, 0);
+        pizSequenceFillValues (x, PIZ_NOTE_PITCH, k, 0);
     }
     
-    return haveChanged;
+    return err;
 }
 
-bool pizSequenceNovember (PIZSequence *x, long iterate)
+PIZError pizSequenceNovember (PIZSequence *x, long iterate)
 {
-    bool haveChanged = false;
+    PIZError err1 = PIZ_ERROR;
                                                     
     if (x->cell != PIZ_NOTE_VALUE_NONE) {
     //
     long i, start, end, mapCount, scale;
     long k = 0;
     long loop = 0;
+    bool haveChanged = false;
+    
+    err1 = PIZ_GOOD;
     
     pizBoundedHashTableClear (x->hashTable);
 
@@ -287,22 +276,22 @@ bool pizSequenceNovember (PIZSequence *x, long iterate)
             key = ((long)(note->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1));
             key += note->data[PIZ_NOTE_PITCH] + offset;
             
-            pizBoundedHashTableAdd (x->hashTable, key, (void *)note);
+            err1 |= pizBoundedHashTableAdd (x->hashTable, key, (void *)note);
             
             note = nextNote;
         }
     }
 
-    while (k < iterate && loop < PIZ_BREAK_LOOP) {
+    while (!err1 && (k < iterate) && (loop < PIZ_BREAK_LOOP)) {
     //
     if (x->count && (mapCount = pizArrayCount (x->map))) {
         long    j, here, previous, next, pitch, hCenter;
         long    q = -1;
         long    p = -1;
-        long    hPat [PIZ_H_SIZE] = {-1, -1, -1, -1, -1, -1};
+        long    hPat [PIZ_H_SIZE] = { -1, -1, -1, -1, -1, -1 };
         long    offset = 0;
         long    neighbors = 0;
-        long    err = PIZ_GOOD;
+        long    err2 = PIZ_GOOD;
         long    patternSize = pizArrayCount (x->pattern);
         bool    death = false;
         PIZNote *note = NULL;
@@ -325,12 +314,12 @@ bool pizSequenceNovember (PIZSequence *x, long iterate)
         hCenter = ((long)(note->position / (double)x->cell)) * (PIZ_MAGIC_PITCH + 1);
         hCenter += note->data[PIZ_NOTE_PITCH] + offset;
         
-        err |= (note->position < x->start);
-        err |= (note->position >= x->end);
-        err |= (pitch < x->down);
-        err |= (pitch > x->up);
+        err2 |= (note->position < x->start);
+        err2 |= (note->position >= x->end);
+        err2 |= (pitch < x->down);
+        err2 |= (pitch > x->up);
         
-        if (!err) {
+        if (!err2) {
             for (j = 0; j < PIZ_NEIGHBORS_DEATH_SIZE; j++) {
                 long key = hCenter + piz_neighbors[j];
                 if (pizBoundedHashTableContainsKey (x->hashTable, key)) {
@@ -439,11 +428,11 @@ bool pizSequenceNovember (PIZSequence *x, long iterate)
         
         for (j = 0; j < PIZ_H_SIZE; j++) {
             if ((hPat[j] >= 0) &&   
-                !pizBoundedHashTableContainsKey (x->hashTable, hPat[j] - 2) &&
-                !pizBoundedHashTableContainsKey (x->hashTable, hPat[j] - 1) &&
-                !pizBoundedHashTableContainsKey (x->hashTable, hPat[j])     &&
-                !pizBoundedHashTableContainsKey (x->hashTable, hPat[j] + 1) &&
-                !pizBoundedHashTableContainsKey (x->hashTable, hPat[j] + 2)) {
+                !(pizBoundedHashTableContainsKey (x->hashTable, hPat[j] - 2)) &&
+                !(pizBoundedHashTableContainsKey (x->hashTable, hPat[j] - 1)) &&
+                !(pizBoundedHashTableContainsKey (x->hashTable, hPat[j]))     &&
+                !(pizBoundedHashTableContainsKey (x->hashTable, hPat[j] + 1)) &&
+                !(pizBoundedHashTableContainsKey (x->hashTable, hPat[j] + 2))) {
                 long    t;
                 PIZNote *ptr = NULL;
                 PIZNote *noteToCopy = NULL;
@@ -452,7 +441,7 @@ bool pizSequenceNovember (PIZSequence *x, long iterate)
         
                 for (t = 0; t < PIZ_NEIGHBORS_BIRTH_SIZE; t++)  {
                     long key = hPat[j] + piz_neighbors[t];
-                    if (!pizBoundedHashTablePtrByKey (x->hashTable, key, (void **)&ptr)) {
+                    if (!(pizBoundedHashTablePtrKey (x->hashTable, key, (void **)&ptr))) {
                         neighbors ++;
                         noteToCopy = ptr;
                     }
@@ -472,9 +461,11 @@ bool pizSequenceNovember (PIZSequence *x, long iterate)
                 newNote = pizSequenceNewNote (x, values, PIZ_SEQUENCE_ADD_FLAG_CLIP);
                 
                 if (newNote) {
-                    pizBoundedHashTableAdd (x->hashTable, hPat[j], (void *)newNote);
+                    err1 |= pizBoundedHashTableAdd (x->hashTable, hPat[j], (void *)newNote);
                     haveChanged = true;
                     k ++;
+                } else {
+                    err1 |= PIZ_MEMORY;
                 }
                 
                 break;
@@ -484,10 +475,11 @@ bool pizSequenceNovember (PIZSequence *x, long iterate)
         }
             
         if (death) {
-            pizBoundedHashTableRemoveByKey (x->hashTable, hCenter, (void *)note);
+            pizBoundedHashTableRemoveKey (x->hashTable, hCenter, (void *)note);
             pizSequenceRemoveNote (x, note);
             haveChanged = true;
         }
+        
     } else {
         break;
     }
@@ -502,7 +494,7 @@ bool pizSequenceNovember (PIZSequence *x, long iterate)
     //
     }
             
-    return haveChanged;
+    return err1;
 }
 
 bool pizSequenceJuliet (PIZSequence *x, long iterate, long division)
@@ -624,7 +616,7 @@ bool pizSequenceJuliet (PIZSequence *x, long iterate, long division)
                 
     newKey = (newPosition * (PIZ_MAGIC_PITCH + 1)) + note1->data[PIZ_NOTE_PITCH] + offset;
     
-    if (!pizBoundedHashTableContainsKey (x->hashTable, newKey)) {
+    if (!(pizBoundedHashTableContainsKey (x->hashTable, newKey))) {
         long values[PIZ_DATA_NOTE_SIZE];
         
         values[PIZ_DATA_POSITION]       = newPosition * x->cell;
@@ -641,9 +633,9 @@ bool pizSequenceJuliet (PIZSequence *x, long iterate, long division)
             haveChanged = true;
             k ++;
         }
-    } else if (!(pizBoundedHashTablePtrByKey (x->hashTable, newKey, (void **)&note2))) {
+    } else if (!(pizBoundedHashTablePtrKey (x->hashTable, newKey, (void **)&note2))) {
         if (note2 != note1) {
-            pizBoundedHashTableRemoveByKey (x->hashTable, newKey, (void *)note2);
+            pizBoundedHashTableRemoveKey (x->hashTable, newKey, (void *)note2);
             pizSequenceRemoveNote (x, note2);
             haveChanged = true;
             k ++;

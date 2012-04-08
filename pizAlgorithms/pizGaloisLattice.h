@@ -82,7 +82,7 @@ typedef struct _PIZGaloisLattice {
 
 PIZGaloisLattice    *pizGaloisLatticeNew        (long argc, long *argv);
 void                pizGaloisLatticeFree        (PIZGaloisLattice *x);
-PIZMemory           pizGaloisLatticeAdd         (PIZGaloisLattice *x, long argc, long *argv);
+PIZError            pizGaloisLatticeAdd         (PIZGaloisLattice *x, long argc, long *argv); //
 PIZError            pizGaloisLatticeClear       (PIZGaloisLattice *x);
 PIZError            pizGaloisLatticeProceed     (PIZGaloisLattice *x, long argc, long *argv);
 long                pizGaloisLatticeCount       (const PIZGaloisLattice *x);

@@ -189,8 +189,8 @@
 		96AF1B80148CFC39001358AB /* Structures */ = {
 			isa = PBXGroup;
 			children = (
-				96DD190E144AB01900F914AE /* pizDataStructures.h */,
 				96DD1920144AB03D00F914AE /* pizTypes.h */,
+				96DD190E144AB01900F914AE /* pizDataStructures.h */,
 				96DD1914144AB02200F914AE /* pizArray.h */,
 				96DD191C144AB03400F914AE /* pizLinklist.h */,
 				96DD1918144AB02F00F914AE /* pizItemset128.h */,

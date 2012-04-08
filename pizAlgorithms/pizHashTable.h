@@ -74,12 +74,12 @@ typedef struct _PIZHashTable {
 PIZHashTable    *pizHashTableNew                (long size);
 void            pizHashTableFree                (PIZHashTable *x);
 
-PIZError        pizHashTableAdd                 (PIZHashTable *x, long key, void *ptr);
+PIZError        pizHashTableAdd                 (PIZHashTable *x, long key, void *ptr); //
 
 void            pizHashTableSetFlags            (PIZHashTable *x, ulong flags);
 void            pizHashTableClear               (PIZHashTable *x);
-PIZError        pizHashTableRemoveByKey         (PIZHashTable *x, long key, void *ptr);
-PIZError        pizHashTablePtrByKey            (const PIZHashTable *x, long key, void **ptr);
+PIZError        pizHashTableRemoveKey           (PIZHashTable *x, long key, void *ptr);
+PIZError        pizHashTablePtrKey              (const PIZHashTable *x, long key, void **ptr);
 bool            pizHashTableContainsKey         (const PIZHashTable *x, long key);
 long            pizHashTableCount               (const PIZHashTable *x);
 

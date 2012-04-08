@@ -48,37 +48,24 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-#define ARGVWITHZONE    long argv[ ] = { x->start,                              \
-                                         x->end,                                \
-                                         x->down,                               \
-                                         x->up };  
-                                        
-#define ARGVWITHNOTE    long argv[ ] = { note->position,                        \
-                                         note->data[PIZ_NOTE_PITCH],            \
-                                         note->data[PIZ_NOTE_VELOCITY],         \
-                                         note->data[PIZ_NOTE_DURATION],         \
-                                         note->data[PIZ_NOTE_CHANNEL],          \
-                                         note->isSelected };      
-                                        
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
 {
     long     i;
+    PIZError err = PIZ_GOOD;
     PIZNote  *note = NULL; 
     PIZEvent *event = NULL;
-    PIZError err = PIZ_GOOD;
         
     if (x->changedZone) {
-        ARGVWITHZONE
+        long argv[ ] = { x->start, x->end, x->down, x->up };
         event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_ZONE_CHANGED, PIZ_DATA_ZONE_SIZE, argv, 0);
         if (event) {
             if (err |= pizLinklistAppend (queue, event)) {       
                 pizEventFree (event);  
             }
+        } else {
+            err |= PIZ_MEMORY;
         }
     }
     
@@ -90,6 +77,8 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
             if (err |= pizLinklistAppend (queue, event)) {       
                 pizEventFree (event);  
             }
+        } else {
+            err |= PIZ_MEMORY;
         }
     }
     //    
@@ -99,13 +88,22 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     //
     if (pizItemset128IsSetAtIndex (&x->addedNotes, i)) {
     //
-    if (!pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note)) {
-        ARGVWITHNOTE
+    if (!(pizBoundedHashTablePtrKey (x->lookup, i, (void **)&note))) {
+    
+        long argv[ ] = { note->position,
+                         note->data[PIZ_NOTE_PITCH],
+                         note->data[PIZ_NOTE_VELOCITY],
+                         note->data[PIZ_NOTE_DURATION], 
+                         note->data[PIZ_NOTE_CHANNEL], 
+                         note->isSelected };
+                         
         event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_NOTE_ADDED, PIZ_DATA_NOTE_SIZE, argv, i);
         if (event) {
             if (err |= pizLinklistAppend (queue, event)) {       
                 pizEventFree (event);  
             }
+        } else {
+            err |= PIZ_MEMORY;
         }
     }
     pizItemset128UnsetAtIndex (&x->changedNotes, i);
@@ -118,13 +116,22 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     //
     if (pizItemset128IsSetAtIndex (&x->changedNotes, i)) {
     //
-    if (!pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note)) {
-        ARGVWITHNOTE
+    if (!(pizBoundedHashTablePtrKey (x->lookup, i, (void **)&note))) {
+    
+        long argv[ ] = { note->position,
+                         note->data[PIZ_NOTE_PITCH],
+                         note->data[PIZ_NOTE_VELOCITY],
+                         note->data[PIZ_NOTE_DURATION], 
+                         note->data[PIZ_NOTE_CHANNEL], 
+                         note->isSelected };
+                         
         event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_NOTE_CHANGED, PIZ_DATA_NOTE_SIZE, argv, i);
         if (event) {
             if (err |= pizLinklistAppend (queue, event)) {       
                 pizEventFree (event);  
             }
+        } else {
+            err |= PIZ_MEMORY;
         }
     }
     //

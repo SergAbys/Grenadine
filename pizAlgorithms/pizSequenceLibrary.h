@@ -50,7 +50,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 PIZNote     *pizSequenceNewNote              (PIZSequence *x, long *values, ulong flags);
-PIZMemory   pizSequenceMoveNote              (PIZSequence *x, PIZNote *note, long newPosition);
+PIZError    pizSequenceMoveNote              (PIZSequence *x, PIZNote *note, long newPosition); //
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

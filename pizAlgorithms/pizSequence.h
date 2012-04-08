@@ -235,14 +235,14 @@ PIZError        pizSequenceSetScale                 (PIZSequence *x,
                                                     PIZScaleType type, 
                                                     const PIZArray *a);
                                         
-PIZMemory       pizSequenceSetPattern               (PIZSequence *x, const PIZArray *a);
+PIZError        pizSequenceSetPattern               (PIZSequence *x, const PIZArray *a); //
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 bool            pizSequenceIsAtEnd                  (PIZSequence *x);
 void            pizSequenceGoToStart                (PIZSequence *x);
-PIZMemory       pizSequenceProceedStep              (PIZSequence *x, PIZArray *a);
+PIZError        pizSequenceProceedStep              (PIZSequence *x, PIZArray *a); //
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

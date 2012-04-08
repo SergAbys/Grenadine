@@ -61,8 +61,8 @@ typedef struct _PIZArray {
 PIZArray    *pizArrayNew                 (long size);
 void        pizArrayFree                 (PIZArray *x);
 
-PIZMemory   pizArrayAppend               (PIZArray *x, long value);
-PIZMemory   pizArrayCopy                 (PIZArray *x, const PIZArray *toCopy);
+PIZError    pizArrayAppend               (PIZArray *x, long value); //
+PIZError    pizArrayCopy                 (PIZArray *x, const PIZArray *toCopy); //
 
 void        pizArrayClear                (PIZArray *x);
 void        pizArraySetValueAtIndex      (PIZArray *x, long index, long value);

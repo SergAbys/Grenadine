@@ -75,8 +75,8 @@ typedef struct _PIZLinklist {
 PIZLinklist *pizLinklistNew             (void);
 void        pizLinklistFree             (PIZLinklist *x);
 
-PIZMemory   pizLinklistAppend           (PIZLinklist *x, void *ptr);
-PIZMemory   pizLinklistInsert           (PIZLinklist *x, void *ptr);
+PIZError    pizLinklistAppend           (PIZLinklist *x, void *ptr); //
+PIZError    pizLinklistInsert           (PIZLinklist *x, void *ptr); //
 
 void        pizLinklistSetFlags         (PIZLinklist *x, ulong flags);
 void        pizLinklistClear            (PIZLinklist *x);

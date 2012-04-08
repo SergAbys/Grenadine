@@ -191,8 +191,8 @@ PIZError pizFactorOracleAdd (PIZFactorOracle *x, long argc, long *argv)
         t = p - 1;
         j = x->nodes[(p - 1)].referTo;
         
-        while ((j > -1) && !pizArrayContainsValue (x->nodes[j].arcValues, argv[i])) {
-            if (!pizArrayAppend (x->nodes[j].arcValues, argv[i])) {
+        while ((j > -1) && !(pizArrayContainsValue (x->nodes[j].arcValues, argv[i]))) {
+            if (!(pizArrayAppend (x->nodes[j].arcValues, argv[i]))) {
                 if (pizArrayAppend (x->nodes[j].arcDestinations, p)) {
                     pizArrayRemoveLastValue (x->nodes[j].arcValues);
                     err = PIZ_MEMORY;

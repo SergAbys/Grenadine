@@ -100,7 +100,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *values, ulong flags)
         newNote->position                = position;
         newNote->tag                     = pizBoundedStackPoppedValue (x->ticketMachine);
     
-        if (!x->timeline[newNote->position]) {
+        if (!(x->timeline[newNote->position])) {
             if (!(x->timeline[newNote->position] = pizLinklistNew ( ))) {
                 err |= PIZ_MEMORY;
             }
@@ -113,6 +113,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *values, ulong flags)
             pizItemset128SetAtIndex (&x->addedNotes, newNote->tag);
             pizItemset128UnsetAtIndex (&x->changedNotes, newNote->tag);
         } else {
+            pizBoundedHashTableRemoveKey (x->lookup, newNote->tag, newNote);
             pizBoundedStackPush (x->ticketMachine, newNote->tag);
             free (newNote);
             newNote = NULL;
@@ -138,10 +139,12 @@ PIZError pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
     }
     
     if (!err) {
-        if (!pizLinklistChuckByPtr (x->timeline[position], (void *)note)) {            
-            if (!pizLinklistInsert (x->timeline[newPosition], (void *)note)) {
+        if (!(err |= pizLinklistChuckByPtr (x->timeline[position], (void *)note))) {            
+            if (!(err |= pizLinklistInsert (x->timeline[newPosition], (void *)note))) {
                 note->position = newPosition;
                 pizItemset128SetAtIndex (&x->changedNotes, note->tag);
+            } else {
+                pizSequenceRemoveNote (x, note);
             }
         } 
     }
@@ -160,7 +163,7 @@ void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note)
     long p = note->position;
     long tag = note->tag;
     
-    pizBoundedHashTableRemoveByKey (x->lookup, tag, note);
+    pizBoundedHashTableRemoveKey (x->lookup, tag, note);
     pizBoundedStackPush (x->ticketMachine, tag);
     pizLinklistRemoveByPtr (x->timeline[p], (void *)note);
     x->count --; 

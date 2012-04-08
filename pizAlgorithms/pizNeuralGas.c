@@ -309,7 +309,7 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
         
         for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
             if (pizItemset128IsSetAtIndex (&x->map, i)) {
-                if (!pizItemset128Count (&x->headStock[i].arcs)) {
+                if (!(pizItemset128Count (&x->headStock[i].arcs))) {
                     pizItemset128UnsetAtIndex (&x->map, i);
                     x->mapSize --;
                     pizBoundedStackPush (x->ticketMachine, i);

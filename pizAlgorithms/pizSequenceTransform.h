@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceTransform.h
  * \author  Jean Sapristi
- * \date    April 4, 2012.
+ * \date    April 8, 2012.
  */
  
 /*
@@ -52,15 +52,13 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void pizSequenceClear       (PIZSequence *x);
-void pizSequenceTranspose   (PIZSequence *x, long n);
+void        pizSequenceClear       (PIZSequence *x);
+void        pizSequenceTranspose   (PIZSequence *x, long n);
+void        pizSequenceClean       (PIZSequence *x, long value);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
+PIZError    pizSequenceAlgorithm   (PIZSequence *x, PIZAlgorithm *algorithm);
+PIZError    pizSequenceNovember    (PIZSequence *x, long iterate); //
 
-bool pizSequenceClean       (PIZSequence *x, long value);
-bool pizSequenceAlgorithm   (PIZSequence *x, PIZAlgorithm *algorithm);
-bool pizSequenceNovember    (PIZSequence *x, long iterate);
 bool pizSequenceJuliet      (PIZSequence *x, long iterate, long division);
 bool pizSequenceRotate      (PIZSequence *x, PIZNoteSelector selector, long shift);
 bool pizSequenceScramble    (PIZSequence *x, PIZNoteSelector selector);

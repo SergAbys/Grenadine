@@ -168,11 +168,11 @@ PIZError pizFiniteStateAdd (PIZFiniteState *x, long argc, long *argv)
     //
     err1 = PIZ_GOOD;            
 
-    if (!pizBoundedStackPop (x->ticketMachine)) {
+    if (!(pizBoundedStackPop (x->ticketMachine))) {
         long i, nextNode, firstNode = pizBoundedStackPoppedValue (x->ticketMachine);
         long k = CLAMP (argv[0], 0, (PIZ_ALPHABET_SIZE - 1));
         
-        if (!pizBoundedQueueAppend (x->mapByValue[k], firstNode)) {
+        if (!(pizBoundedQueueAppend (x->mapByValue[k], firstNode))) {
             x->count ++;
             
             x->stock[firstNode].value = k;
@@ -181,12 +181,12 @@ PIZError pizFiniteStateAdd (PIZFiniteState *x, long argc, long *argv)
             pizItemset128Clear (&(x->stock[firstNode].childs));
             
             for (i = 1; i < argc; i++) {
-                if (!pizBoundedStackPop (x->ticketMachine)) {
+                if (!(pizBoundedStackPop (x->ticketMachine))) {
                 
                     nextNode = pizBoundedStackPoppedValue (x->ticketMachine);
                     k = CLAMP (argv[i], 0, (PIZ_ALPHABET_SIZE - 1));
                             
-                    if (!pizBoundedQueueAppend (x->mapByValue[k], nextNode)) {
+                    if (!(pizBoundedQueueAppend (x->mapByValue[k], nextNode))) {
                         x->count ++;
                         
                         x->stock[nextNode].value = k;

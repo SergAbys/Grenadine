@@ -134,7 +134,7 @@ PIZError pizBoundedHashTableAdd (PIZBoundedHashTable *x, long key, void *ptr)
         }
         
         if (x->hashTable[p]) {
-            if (!pizBoundedStackPop (x->ticketMachine)) {
+            if (!(pizBoundedStackPop (x->ticketMachine))) {
                 long index = pizBoundedStackPoppedValue (x->ticketMachine);
 
                 err = PIZ_GOOD;
@@ -186,7 +186,7 @@ void pizBoundedHashTableClear (PIZBoundedHashTable *x)
     x->count = 0;
 }
 
-PIZError pizBoundedHashTableRemoveByKey (PIZBoundedHashTable *x, long key, void *ptr)
+PIZError pizBoundedHashTableRemoveKey (PIZBoundedHashTable *x, long key, void *ptr)
 {
     PIZError err = PIZ_ERROR;
     
@@ -221,7 +221,7 @@ long pizBoundedHashTableCount (const PIZBoundedHashTable *x)
     return x->count;
 }
 
-PIZError pizBoundedHashTablePtrByKey (const PIZBoundedHashTable *x, long key, void **ptr)
+PIZError pizBoundedHashTablePtrKey (const PIZBoundedHashTable *x, long key, void **ptr)
 {
     PIZError err = PIZ_ERROR;
     

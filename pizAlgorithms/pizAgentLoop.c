@@ -63,7 +63,7 @@ void *pizAgentEventLoop (void *agent)
     //
     PIZAGENTLOCKEVENT
     
-    while (!pizAgentEventLoopCondition (x)) {
+    while (!(pizAgentEventLoopCondition (x))) {
         pthread_cond_wait (&x->eventCondition, &x->eventLock);
         x->flags |= PIZ_AGENT_FLAG_WAKED;
         
@@ -157,7 +157,7 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
             
     PIZAGENTLOCKEVENT
     
-    if (!pizLinklistPtrAtIndex (queue, 0, (void **)&event)) {
+    if (!(pizLinklistPtrAtIndex (queue, 0, (void **)&event))) {
         pizLinklistChuckByPtr (queue, event);
     }
     
@@ -254,7 +254,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         pizAgentEventLoopDoStepEnd (x);
         
     } else {
-        MEMORY_ERROR;
+        PIZAGENTMEMORY
     }
     //
     } while (k);
@@ -270,7 +270,7 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     pizLinklistClear (x->graphicOutQueue);
     
     if (err = pizSequenceGetGraphicEvents (x->sequence, x->graphicOutQueue)) {
-        MEMORY_ERROR
+        PIZAGENTMEMORY
     }
     
     if (pizLinklistCount (x->graphicOutQueue)) {
@@ -357,7 +357,7 @@ bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
     pizTimeSet     (&now);
     pizTimeSetNano (&timeOut, PIZ_AGENT_CONSTANT_WORK_RATIO / x->bpm);
     
-    if (!pizTimeElapsedNano (&x->grainStart, &now, &elapsed)) {
+    if (!(pizTimeElapsedNano (&x->grainStart, &now, &elapsed))) {
         if (elapsed < timeOut) {
             isWorkTime = true;
         }
@@ -421,7 +421,7 @@ void pizAgentNotificationLoopNotify (PIZAgent *x)
             
     PIZAGENTLOCKNOTIFICATION
     
-    if (!pizLinklistPtrAtIndex (x->notifyQueue, 0, (void **)&event)) {
+    if (!(pizLinklistPtrAtIndex (x->notifyQueue, 0, (void **)&event))) {
         pizLinklistChuckByPtr (x->notifyQueue, event);
     }
     

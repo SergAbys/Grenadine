@@ -258,7 +258,7 @@ PIZError pizGaloisLatticeAdd (PIZGaloisLattice *x, long argc, long *argv)
             }
             
             if (generator) {
-                if (!pizBoundedStackPop (x->ticketMachine)) {
+                if (!(pizBoundedStackPop (x->ticketMachine))) {
                     long n = pizBoundedStackPoppedValue (x->ticketMachine);
                     
                     if (pizArrayAppend (x->tempMap [x->intersectionCardinal], n)) {
