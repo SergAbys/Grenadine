@@ -83,7 +83,7 @@ void pizAgentMethodUnloop (PIZAgent *x, PIZEvent *event)
 
 void pizAgentMethodBPM (PIZAgent *x, PIZEvent *event)
 {
-    x->bpm = CLAMP (event->data.values[0], PIZ_MINIMUM_BPM, PIZ_MAXIMUM_BPM);
+    x->bpm = CLAMP (event->data.value, PIZ_MINIMUM_BPM, PIZ_MAXIMUM_BPM);
         
     pizTimeSetNano (&x->grainSize, PIZ_AGENT_CONSTANT_BPM / x->bpm);    
     pizTimeCopy    (&x->grainEnd, &x->grainStart);

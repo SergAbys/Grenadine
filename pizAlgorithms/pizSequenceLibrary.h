@@ -66,7 +66,7 @@ long     pizSequenceMovePitchToAmbitus      (PIZSequence *x, long pitch);
 long     pizSequenceSnapPositionToPattern   (PIZSequence *x, long position);
 long     pizSequencePickUpNotes             (PIZSequence *x);
 
-void     pizSequenceFillValues              (PIZSequence *x, PIZNoteSelector selector, long k, bool reverse);
+void     pizSequenceFillValues              (PIZSequence *x, PIZMidi selector, long k, bool reverse);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

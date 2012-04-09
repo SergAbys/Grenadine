@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    April 9, 2012.
  */
  
 /*
@@ -348,15 +348,15 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZArray *a)
             
             pizLinklistNextByPtr (x->timeline[x->index], (void *)note, (void **)&nextNote);
             
-            pitch = note->data[PIZ_NOTE_PITCH];
+            pitch = note->midi[PIZ_MIDI_PITCH];
             
             if (scale) {
                 pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
             }
             
             if ((pitch >= x->down) && (pitch <= x->up)) {
-                long velocity       = note->data[PIZ_NOTE_VELOCITY];
-                long noteChannel    = note->data[PIZ_NOTE_CHANNEL];
+                long velocity       = note->midi[PIZ_MIDI_VELOCITY];
+                long noteChannel    = note->midi[PIZ_MIDI_CHANNEL];
                         
                 if (velocity) {
                     velocity += x->velocity;
@@ -365,11 +365,11 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZArray *a)
                 if (!noteChannel) {
                     noteChannel = x->channel;
                 }
-                  
+                
                 err |= pizArrayAppend (a, note->position);      
                 err |= pizArrayAppend (a, CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
                 err |= pizArrayAppend (a, CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY));
-                err |= pizArrayAppend (a, note->data[PIZ_NOTE_DURATION]);
+                err |= pizArrayAppend (a, note->midi[PIZ_MIDI_DURATION]);
                 err |= pizArrayAppend (a, noteChannel);
                 err |= pizArrayAppend (a, note->isSelected);
                 err |= pizArrayAppend (a, note->isPlayed);

@@ -87,25 +87,86 @@ static const char *piz_eventNames[ ] = {    "Init",
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
-PIZEvent *pizEventNew (PIZEventType type, PIZEventIdentifier ie)
+PIZEvent *pizEventNewRun (PIZEventIdentifier ie)
 {
     PIZEvent *event = NULL;
     
     if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        event->type       = type;
+        event->type       = PIZ_EVENT_RUN;
         event->identifier = ie;
     }
     
     return event;
 }
 
-PIZEvent *pizEventNewWithTime (PIZEventType type, PIZEventIdentifier ie, const PIZTime *time)
+PIZEvent *pizEventNewRunWithNote (PIZEventIdentifier ie, long *argv, long tag)
+{
+    PIZEvent *event = NULL; 
+    
+    if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
+        event->type       = PIZ_EVENT_RUN;
+        event->identifier = ie;
+        event->identifier = tag;
+        
+        if (argv) {
+            long i;
+            for (i = 0; i < PIZ_SEQUENCE_NOTE_SIZE; i++) {
+                event->data.note[i] = *(argv + i);
+            }
+        }
+    }
+    
+    return event;
+}
+
+PIZEvent *pizEventNewGraphicWithZone (PIZEventIdentifier ie, long *argv)
+{
+    PIZEvent *event = NULL; 
+    
+    if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
+        event->type       = PIZ_EVENT_GRAPHIC;
+        event->identifier = ie;
+        
+        if (argv) {
+            long i;
+            
+            for (i = 0; i < PIZ_SEQUENCE_ZONE_SIZE; i++) {
+                event->data.zone[i] = *(argv + i);
+            }
+        }
+    }
+    
+    return event;
+}
+
+PIZEvent *pizEventNewGraphicWithNote (PIZEventIdentifier ie, long *argv, long tag)
+{
+    PIZEvent *event = NULL; 
+    
+    if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
+        event->type       = PIZ_EVENT_GRAPHIC;
+        event->identifier = ie;
+        event->tag        = tag;
+        
+        if (argv) {
+            long i;
+            for (i = 0; i < PIZ_SEQUENCE_NOTE_SIZE; i++) {
+                event->data.note[i] = *(argv + i);
+            }
+        }
+    }
+    
+    return event;
+}
+
+PIZEvent *pizEventNewNotificationWithTime (PIZEventIdentifier ie, const PIZTime *time)
 {
     PIZEvent *event = NULL;
     
     if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        event->type       = type;
+        event->type       = PIZ_EVENT_NOTIFICATION;
         event->identifier = ie;
         
         if (time) {
@@ -116,47 +177,10 @@ PIZEvent *pizEventNewWithTime (PIZEventType type, PIZEventIdentifier ie, const P
     return event;
 }
 
-PIZEvent *pizEventNewWithLong (PIZEventType type, PIZEventIdentifier ie, long n)
-{
-    PIZEvent *event = NULL;
-    
-    if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        event->type       = type;
-        event->identifier = ie;
-        event->data.values[0] = n;
-    }
-    
-    return event;
-}
-
-PIZEvent *pizEventNewWithArray (PIZEventType type, PIZEventIdentifier ie, long argc, long *argv, long tag) 
-{
-    PIZEvent *event = NULL; 
-    
-    if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        event->type       = type;
-        event->identifier = ie;
-        event->tag        = tag;
-        
-        if (argv) {
-            long i;
-            
-            for (i = 0; i < argc; i++) {
-                event->data.values[i] = *(argv + i);
-            }
-        }
-    }
-    
-    return event;
-}
-
 const char *pizEventGetName (const PIZEvent *x)
 {
     return piz_eventNames[x->identifier];
 }
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 
 void pizEventFree (PIZEvent *x)
 {

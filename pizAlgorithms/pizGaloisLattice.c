@@ -65,6 +65,7 @@ void            pizGaloisLatticeKillConcept     (PIZGaloisLattice *x, long n);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
 {

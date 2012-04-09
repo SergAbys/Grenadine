@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	April 5, 2012.
+ * \date	April 9, 2012.
  */
 
 /*
@@ -45,16 +45,12 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizTime.h"
+#include "pizSequence.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #include <stdlib.h>
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZ_EVENT_VALUES_SIZE   12
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -112,31 +108,37 @@ typedef enum _PIZEventIdentifier {
     //
     } PIZEventIdentifier;
     
-typedef struct _PIZEventData {
+typedef union _PIZEventData {
     PIZTime time;
-    long    values[PIZ_EVENT_VALUES_SIZE];
+    long    note[PIZ_SEQUENCE_NOTE_SIZE];
+    long    zone[PIZ_SEQUENCE_ZONE_SIZE];
+    long    value;
 } PIZEventData;
-    
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 typedef struct _PIZEvent {
     PIZEventType        type;
     PIZEventIdentifier  identifier;
     long                tag;
-    PIZEventData        data; 
+    PIZEventData        data;
     } PIZEvent;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent    *pizEventNew          (PIZEventType type, PIZEventIdentifier ie);
-PIZEvent    *pizEventNewWithTime  (PIZEventType type, PIZEventIdentifier ie, const PIZTime *t);
-PIZEvent    *pizEventNewWithLong  (PIZEventType type, PIZEventIdentifier ie, long n);
-PIZEvent    *pizEventNewWithArray (PIZEventType type, PIZEventIdentifier ie, long argc, long *argv, long tag);
-const char  *pizEventGetName      (const PIZEvent *x);
+PIZEvent    *pizEventNewRun                     (PIZEventIdentifier ie);
+PIZEvent    *pizEventNewRunWithNote             (PIZEventIdentifier ie, long *argv, long tag);
+PIZEvent    *pizEventNewGraphicWithZone         (PIZEventIdentifier ie, long *argv);
+PIZEvent    *pizEventNewGraphicWithNote         (PIZEventIdentifier ie, long *argv, long tag);
+PIZEvent    *pizEventNewNotificationWithTime    (PIZEventIdentifier ie, const PIZTime *time);
+const char  *pizEventGetName                    (const PIZEvent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void      pizEventFree            (PIZEvent *x);  
+void        pizEventFree                        (PIZEvent *x);  
   
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

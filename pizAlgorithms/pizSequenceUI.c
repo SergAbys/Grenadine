@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceUI.c
  * \author	Jean Sapristi
- * \date	April 6, 2012.
+ * \date	April 9, 2012.
  */
  
 /*
@@ -59,8 +59,7 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
         
     if (x->changedZone) {
         long argv[ ] = { x->start, x->end, x->down, x->up };
-        event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_ZONE_CHANGED, PIZ_DATA_ZONE_SIZE, argv, 0);
-        if (event) {
+        if (event = pizEventNewGraphicWithZone (PIZ_EVENT_ZONE_CHANGED, argv)) {
             if (err |= pizLinklistAppend (queue, event)) {       
                 pizEventFree (event);  
             }
@@ -70,18 +69,15 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     }
     
     for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-    //
-    if (pizItemset128IsSetAtIndex (&x->removedNotes, i)) { 
-        event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_NOTE_REMOVED, 0, NULL, i);
-        if (event) {
-            if (err |= pizLinklistAppend (queue, event)) {       
-                pizEventFree (event);  
+        if (pizItemset128IsSetAtIndex (&x->removedNotes, i)) { 
+            if (event = pizEventNewGraphicWithNote (PIZ_EVENT_NOTE_REMOVED, NULL, i)) {
+                if (err |= pizLinklistAppend (queue, event)) {       
+                    pizEventFree (event);  
+                }
+            } else {
+                err |= PIZ_MEMORY;
             }
-        } else {
-            err |= PIZ_MEMORY;
-        }
-    }
-    //    
+        } 
     }
     
     for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
@@ -91,15 +87,14 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     if (!(pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note))) {
     
         long argv[ ] = { note->position,
-                         note->data[PIZ_NOTE_PITCH],
-                         note->data[PIZ_NOTE_VELOCITY],
-                         note->data[PIZ_NOTE_DURATION], 
-                         note->data[PIZ_NOTE_CHANNEL], 
+                         note->midi[PIZ_MIDI_PITCH],
+                         note->midi[PIZ_MIDI_VELOCITY],
+                         note->midi[PIZ_MIDI_DURATION], 
+                         note->midi[PIZ_MIDI_CHANNEL], 
                          note->isSelected, 
                          note->isPlayed };
                          
-        event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_NOTE_ADDED, PIZ_DATA_NOTE_SIZE, argv, i);
-        if (event) {
+        if (event = pizEventNewGraphicWithNote (PIZ_EVENT_NOTE_ADDED, argv, i)) {
             if (err |= pizLinklistAppend (queue, event)) {       
                 pizEventFree (event);  
             }
@@ -108,9 +103,9 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
         }
     }
     pizItemset128UnsetAtIndex (&x->changedNotes, i);
-    //    
-    }
-    //    
+    //
+    } 
+    //
     }
     
     for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
@@ -120,15 +115,14 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     if (!(pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note))) {
     
         long argv[ ] = { note->position,
-                         note->data[PIZ_NOTE_PITCH],
-                         note->data[PIZ_NOTE_VELOCITY],
-                         note->data[PIZ_NOTE_DURATION], 
-                         note->data[PIZ_NOTE_CHANNEL], 
+                         note->midi[PIZ_MIDI_PITCH],
+                         note->midi[PIZ_MIDI_VELOCITY],
+                         note->midi[PIZ_MIDI_DURATION], 
+                         note->midi[PIZ_MIDI_CHANNEL], 
                          note->isSelected, 
                          note->isPlayed };
                          
-        event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_NOTE_CHANGED, PIZ_DATA_NOTE_SIZE, argv, i);
-        if (event) {
+        if (event = pizEventNewGraphicWithNote (PIZ_EVENT_NOTE_CHANGED, argv, i)) {
             if (err |= pizLinklistAppend (queue, event)) {       
                 pizEventFree (event);  
             }

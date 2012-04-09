@@ -95,10 +95,10 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
     if (!err && (newNote = (PIZNote *)malloc (sizeof(PIZNote)))) {
         newNote->tag                     = pizBoundedStackPoppedValue (x->ticketMachine);
         newNote->position                = position;
-        newNote->data[PIZ_NOTE_PITCH]    = pitch;
-        newNote->data[PIZ_NOTE_VELOCITY] = velocity;
-        newNote->data[PIZ_NOTE_DURATION] = duration;
-        newNote->data[PIZ_NOTE_CHANNEL]  = channel;
+        newNote->midi[PIZ_MIDI_PITCH]    = pitch;
+        newNote->midi[PIZ_MIDI_VELOCITY] = velocity;
+        newNote->midi[PIZ_MIDI_DURATION] = duration;
+        newNote->midi[PIZ_MIDI_CHANNEL]  = channel;
         newNote->isSelected              = isSelected;
         newNote->isPlayed                = isPlayed;
     
@@ -290,11 +290,11 @@ long pizSequencePickUpNotes (PIZSequence *x)
     return k;
 }
 
-void pizSequenceFillValues (PIZSequence *x, PIZNoteSelector selector, long k, bool reverse)
+void pizSequenceFillValues (PIZSequence *x, PIZMidi selector, long k, bool reverse)
 {
     long i, t;
     
-    if (selector == PIZ_NOTE_DURATION) {
+    if (selector == PIZ_MIDI_DURATION) {
     //
     for (i = 0; i < k; i++) {
         if (!reverse) {
@@ -303,8 +303,8 @@ void pizSequenceFillValues (PIZSequence *x, PIZNoteSelector selector, long k, bo
             t = MIN (x->tempValues[(k - 1) - i], x->timelineSize - x->tempNotes1[i]->position);
         }
         
-        if (x->tempNotes1[i]->data[selector] != t) {
-            x->tempNotes1[i]->data[selector] = t;
+        if (x->tempNotes1[i]->midi[selector] != t) {
+            x->tempNotes1[i]->midi[selector] = t;
             pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
         }
     }
@@ -318,8 +318,8 @@ void pizSequenceFillValues (PIZSequence *x, PIZNoteSelector selector, long k, bo
             t = x->tempValues[(k - 1) - i];
         }
         
-        if (x->tempNotes1[i]->data[selector] != t) {
-            x->tempNotes1[i]->data[selector] = t;
+        if (x->tempNotes1[i]->midi[selector] != t) {
+            x->tempNotes1[i]->midi[selector] = t;
             pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
         }
     }

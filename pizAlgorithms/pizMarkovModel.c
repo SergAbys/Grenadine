@@ -66,6 +66,7 @@ void            pizMarkovModelFillStochastically    (PIZMarkovModel *x, long arg
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZMarkovModel *pizMarkovModelNew (long argc, long *argv)
 {

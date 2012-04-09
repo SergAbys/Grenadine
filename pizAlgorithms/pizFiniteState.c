@@ -65,6 +65,7 @@ PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
 {

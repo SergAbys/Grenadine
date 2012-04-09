@@ -51,8 +51,8 @@
 
 #define PIZ_SEQUENCE_MAXIMUM_NOTES              128   
 #define PIZ_SEQUENCE_MAXIMUM_DURATION           96
-//                                            -------
-#define PIZ_SEQUENCE_INIT_TEMP_SIZE             128
+                                            
+#define PIZ_SEQUENCE_INIT_TEMP_SIZE             128     /* MAX (MAXIMUM_NOTES, MAXIMUM_DURATION) */
 #define PIZ_SEQUENCE_INIT_LOOKUP_SIZE           19
 #define PIZ_SEQUENCE_DEFAULT_TIMELINE_SIZE      576 
 
@@ -66,6 +66,32 @@
 #define PIZ_SEQUENCE_FLAG_CLIP                  8UL
 #define PIZ_SEQUENCE_FLAG_UNSELECT              16UL
 #define PIZ_SEQUENCE_FLAG_CLEAR                 32UL
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define PIZ_SEQUENCE_NOTE_SIZE                  7
+#define PIZ_SEQUENCE_ZONE_SIZE                  4
+  
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+      
+enum {
+    PIZ_DATA_POSITION       = 0,
+    PIZ_DATA_PITCH          = 1,
+    PIZ_DATA_VELOCITY       = 2,
+    PIZ_DATA_DURATION       = 3,
+    PIZ_DATA_CHANNEL        = 4,
+    PIZ_DATA_IS_SELECTED    = 5,
+    PIZ_DATA_IS_PLAYED      = 6
+    };
+
+enum {
+    PIZ_DATA_START          = 0,
+    PIZ_DATA_END            = 1,
+    PIZ_DATA_DOWN           = 2,
+    PIZ_DATA_UP             = 3
+    };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -139,43 +165,17 @@ typedef enum _PIZScaleKey {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_DATA_NOTE_SIZE  7
-#define PIZ_DATA_ZONE_SIZE  4
-  
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-      
-typedef enum _PIZNoteIndex {
-    PIZ_DATA_POSITION       = 0,
-    PIZ_DATA_PITCH          = 1,
-    PIZ_DATA_VELOCITY       = 2,
-    PIZ_DATA_DURATION       = 3,
-    PIZ_DATA_CHANNEL        = 4,
-    PIZ_DATA_IS_SELECTED    = 5,
-    PIZ_DATA_IS_PLAYED      = 6
-    } PIZNoteIndex;
-
-typedef enum _PIZZoneIndex {
-    PIZ_DATA_START          = 0,
-    PIZ_DATA_END            = 1,
-    PIZ_DATA_DOWN           = 2,
-    PIZ_DATA_UP             = 3
-    } PIZoneIndex;
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-typedef enum _PIZNoteSelector {
-    PIZ_NOTE_PITCH          = 0,
-    PIZ_NOTE_VELOCITY       = 1,
-    PIZ_NOTE_DURATION       = 2,
-    PIZ_NOTE_CHANNEL        = 3
-    } PIZNoteSelector;
+typedef enum _PIZMidi {
+    PIZ_MIDI_PITCH      = 0,
+    PIZ_MIDI_VELOCITY   = 1,
+    PIZ_MIDI_DURATION   = 2,
+    PIZ_MIDI_CHANNEL    = 3
+    } PIZMidi;
     
 typedef struct _PIZNote {
     long     tag;
     long     position;
-    long     data[4];
+    long     midi[4];
     long     isSelected;
     long     isPlayed;
     } PIZNote;

@@ -118,7 +118,7 @@ PIZAgent *pizAgentNew (void)
     if (err) {
         pizAgentFree (x);
         x = NULL;
-    } else if (event = pizEventNew (PIZ_EVENT_RUN, PIZ_EVENT_INIT)) {
+    } else if (event = pizEventNewRun (PIZ_EVENT_INIT)) {
         pizAgentAddEvent (x, event);
     }
     //

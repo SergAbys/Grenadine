@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	April 5, 2012.
+ * \date	April 9, 2012.
  */
  
 /*
@@ -187,7 +187,7 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
 }
 
 void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
-{
+{   /*
     bool     k = false;
     PIZError err = PIZ_GOOD; 
 
@@ -214,9 +214,9 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     pizLinklistClear (x->runOutQueue);
     ptr = pizArrayPtr (x->tempArray);
     
-    for (i = 0; i < pizArrayCount (x->tempArray); i += PIZ_DATA_NOTE_SIZE) {
+    for (i = 0; i < pizArrayCount (x->tempArray); i += PIZ_SEQUENCE_NOTE_SIZE) {
     //
-    if (event = pizEventNewWithArray (PIZ_EVENT_RUN, PIZ_EVENT_NOTE_PLAYED, PIZ_DATA_NOTE_SIZE, (ptr + i), 0)) {
+    if (event = pizEventNewWithArray (PIZ_EVENT_RUN, PIZ_EVENT_NOTE_PLAYED, PIZ_SEQUENCE_NOTE_SIZE, (ptr + i), 0)) {
         PIZAGENTQUEUE(x->runOutQueue)
     }
     //
@@ -257,7 +257,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     //    
     } else { PIZAGENTMEMORY }
     //
-    } while (k);
+    } while (k);*/
 }
 
 void pizAgentEventLoopDoRefresh (PIZAgent *x)
@@ -274,14 +274,12 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     }
     
     if (pizLinklistCount (x->graphicOutQueue)) {
-    //
-    if (event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_GUI_READY, &x->grainStart)) {
-        PIZAGENTLOCKNOTIFICATION
-        PIZAGENTQUEUE(x->notifyQueue)
-        PIZAGENTUNLOCKNOTIFICATION
-        pthread_cond_signal (&x->notificationCondition);
-    }
-    //
+        if (event = pizEventNewNotificationWithTime (PIZ_EVENT_GUI_READY, &x->grainStart)) {
+            PIZAGENTLOCKNOTIFICATION
+            PIZAGENTQUEUE(x->notifyQueue)
+            PIZAGENTUNLOCKNOTIFICATION
+            pthread_cond_signal (&x->notificationCondition);
+        }
     }
     
     PIZAGENTUNLOCKGETTER
@@ -295,7 +293,7 @@ void pizAgentEventLoopDoStepEnd (PIZAgent *x)
 {
     PIZEvent *event = NULL;
 
-    if (event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_END, &x->grainStart)) {
+    if (event = pizEventNewNotificationWithTime (PIZ_EVENT_END, &x->grainStart)) {
         PIZAGENTLOCKNOTIFICATION
         PIZAGENTQUEUE(x->notifyQueue)
         PIZAGENTUNLOCKNOTIFICATION
@@ -307,7 +305,7 @@ void pizAgentEventLoopDoStepLast (PIZAgent *x)
 {
     PIZEvent *event = NULL;
     
-    if (event = pizEventNewWithTime (PIZ_EVENT_NOTIFICATION, PIZ_EVENT_LAST, &x->grainStart)) {
+    if (event = pizEventNewNotificationWithTime (PIZ_EVENT_LAST, &x->grainStart)) {
         PIZAGENTLOCKNOTIFICATION
         PIZAGENTQUEUE(x->notifyQueue)
         PIZAGENTUNLOCKNOTIFICATION
