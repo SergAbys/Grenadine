@@ -74,14 +74,14 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZAGENTLOCKEVENT               pthread_mutex_lock      (&x->eventLock);
-#define PIZAGENTUNLOCKEVENT             pthread_mutex_unlock    (&x->eventLock);
+#define PIZAGENTLOCK_EVENT               pthread_mutex_lock      (&x->eventLock);
+#define PIZAGENTUNLOCK_EVENT             pthread_mutex_unlock    (&x->eventLock);
 
-#define PIZAGENTLOCKNOTIFICATION        pthread_mutex_lock      (&x->notificationLock);
-#define PIZAGENTUNLOCKNOTIFICATION      pthread_mutex_unlock    (&x->notificationLock);
+#define PIZAGENTLOCK_NOTIFICATION        pthread_mutex_lock      (&x->notificationLock);
+#define PIZAGENTUNLOCK_NOTIFICATION      pthread_mutex_unlock    (&x->notificationLock);
 
-#define PIZAGENTLOCKGETTER              pthread_mutex_lock      (&x->getterLock);
-#define PIZAGENTUNLOCKGETTER            pthread_mutex_unlock    (&x->getterLock);
+#define PIZAGENTLOCK_GETTER              pthread_mutex_lock      (&x->getterLock);
+#define PIZAGENTUNLOCK_GETTER            pthread_mutex_unlock    (&x->getterLock);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -120,7 +120,6 @@ typedef struct _PIZAgent {
     PIZLinklist         *mainQueue;
     PIZLinklist         *notifyQueue;
     PIZSequence         *sequence;
-    PIZArray            *tempArray;
     PIZFactorOracle     *factorOracle;
     PIZGaloisLattice    *galoisLattice;
     pthread_attr_t      attr;

@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	April 6, 2012.
+ * \date	April 9, 2012.
  */
  
 /*
@@ -73,7 +73,6 @@ PIZAgent *pizAgentNew (void)
     x->mainQueue            = pizLinklistNew ( );
     x->notifyQueue          = pizLinklistNew ( );
     x->sequence             = pizSequenceNew      (0);
-    x->tempArray            = pizArrayNew         (0);
     x->factorOracle         = pizFactorOracleNew  (0, NULL);
     x->galoisLattice        = pizGaloisLatticeNew (0, NULL);
     x->err1                 = PIZ_ERROR;
@@ -86,7 +85,6 @@ PIZAgent *pizAgentNew (void)
         x->mainQueue        &&
         x->notifyQueue      && 
         x->sequence         &&
-        x->tempArray        &&
         x->factorOracle     &&
         x->galoisLattice)) {
         
@@ -132,18 +130,18 @@ void pizAgentFree (PIZAgent *x)
     if (x) {
     //
     if (!x->err1) {
-        PIZAGENTLOCKEVENT
+        PIZAGENTLOCK_EVENT
         x->flags |= PIZ_AGENT_FLAG_EXIT;
-        PIZAGENTUNLOCKEVENT
+        PIZAGENTUNLOCK_EVENT
     
         pthread_cond_signal (&x->eventCondition);
         pthread_join (x->eventLoop, NULL); 
     }
     
     if (!x->err2) {
-        PIZAGENTLOCKNOTIFICATION
+        PIZAGENTLOCK_NOTIFICATION
         x->flags |= PIZ_AGENT_FLAG_EXIT;
-        PIZAGENTUNLOCKNOTIFICATION
+        PIZAGENTUNLOCK_NOTIFICATION
     
         pthread_cond_signal (&x->notificationCondition);
         pthread_join (x->notificationLoop, NULL); 
@@ -154,19 +152,17 @@ void pizAgentFree (PIZAgent *x)
     pthread_mutex_destroy (&x->eventLock);
     pthread_mutex_destroy (&x->notificationLock);
     pthread_mutex_destroy (&x->getterLock);
-    
     pthread_cond_destroy  (&x->eventCondition);
     pthread_cond_destroy  (&x->notificationCondition);
     
-    pizLinklistFree       (x->runInQueue);
-    pizLinklistFree       (x->runOutQueue);
-    pizLinklistFree       (x->graphicInQueue);
-    pizLinklistFree       (x->graphicOutQueue);
-    pizLinklistFree       (x->mainQueue);
-    pizLinklistFree       (x->notifyQueue);
+    pizLinklistFree (x->runInQueue);
+    pizLinklistFree (x->runOutQueue);
+    pizLinklistFree (x->graphicInQueue);
+    pizLinklistFree (x->graphicOutQueue);
+    pizLinklistFree (x->mainQueue);
+    pizLinklistFree (x->notifyQueue);
     
-    pizSequenceFree       (x->sequence);
-    pizArrayFree          (x->tempArray);
+    pizSequenceFree (x->sequence);
     
     pizFactorOracleFree   (x->factorOracle);
     pizGaloisLatticeFree  (x->galoisLattice);
@@ -189,9 +185,10 @@ void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
     }
     
     if (queue) {
-        PIZAGENTLOCKEVENT
+        PIZAGENTLOCK_EVENT
         PIZAGENTQUEUE(queue)
-        PIZAGENTUNLOCKEVENT
+        PIZAGENTUNLOCK_EVENT
+        
         pthread_cond_signal (&x->eventCondition);
     }
 }
@@ -209,13 +206,14 @@ PIZError pizAgentGetEvent (PIZAgent *x, PIZEventType type, PIZEvent **eventPtr)
     if (queue) {
         err = PIZ_GOOD;
         
-        PIZAGENTLOCKGETTER
-    
+        PIZAGENTLOCK_GETTER
+        
+        /*
         if (!(err |= pizLinklistPtrAtIndex (queue, 0, (void **)eventPtr))) {
             pizLinklistChuckByPtr (queue, (*eventPtr));
-        }
-    
-        PIZAGENTUNLOCKGETTER
+        }*/
+        
+        PIZAGENTUNLOCK_GETTER
     }
     
     return err;

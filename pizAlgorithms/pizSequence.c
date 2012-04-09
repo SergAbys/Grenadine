@@ -39,6 +39,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizSequence.h"
+#include "pizEvent.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -108,7 +109,7 @@ PIZSequence *pizSequenceNew (long size)
     
     x->map           = pizArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
     x->scale         = pizArrayNew (PIZ_MAGIC_SCALE);
-    x->pattern       = pizArrayNew (0);
+    x->pattern       = pizArrayNew (PIZ_SEQUENCE_MAXIMUM_PATTERN);
     x->tempValues    = (long *)malloc (sizeof(long) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
     x->tempNotes1    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
     x->tempNotes2    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
@@ -322,7 +323,7 @@ void pizSequenceGoToStart (PIZSequence *x)
     x->index = x->start;
 }
 
-PIZError pizSequenceProceedStep (PIZSequence *x, PIZArray *a)
+PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue)
 {
     PIZError err = PIZ_ERROR;
     
@@ -344,7 +345,8 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZArray *a)
         pizLinklistPtrAtIndex (x->timeline[x->index], 0, (void **)&note);
         
         while (note) {
-            long pitch;
+            long     pitch, velocity, channel;
+            PIZEvent *event = NULL;
             
             pizLinklistNextByPtr (x->timeline[x->index], (void *)note, (void **)&nextNote);
             
@@ -353,26 +355,32 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZArray *a)
             if (scale) {
                 pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
             }
-            
+
+            if (velocity = note->midi[PIZ_MIDI_VELOCITY]) {
+                velocity += x->velocity;
+            } 
+                
+            if (!(channel = note->midi[PIZ_MIDI_CHANNEL])) {
+                channel = x->channel;
+            }
+                
             if ((pitch >= x->down) && (pitch <= x->up)) {
-                long velocity       = note->midi[PIZ_MIDI_VELOCITY];
-                long noteChannel    = note->midi[PIZ_MIDI_CHANNEL];
-                        
-                if (velocity) {
-                    velocity += x->velocity;
-                } 
-                
-                if (!noteChannel) {
-                    noteChannel = x->channel;
+
+                long argv[ ] = { note->position,
+                                 CLAMP (pitch, 0, PIZ_MAGIC_PITCH),
+                                 CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY),
+                                 note->midi[PIZ_MIDI_DURATION], 
+                                 channel, 
+                                 note->isSelected, 
+                                 note->isPlayed };
+                         
+                if (event = pizEventNewRunWithNote (PIZ_EVENT_NOTE_PLAYED, argv, note->tag)) {
+                    if (err |= pizLinklistAppend (queue, event)) {       
+                        pizEventFree (event);  
+                    }
+                } else {
+                    err |= PIZ_MEMORY;
                 }
-                
-                err |= pizArrayAppend (a, note->position);      
-                err |= pizArrayAppend (a, CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
-                err |= pizArrayAppend (a, CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY));
-                err |= pizArrayAppend (a, note->midi[PIZ_MIDI_DURATION]);
-                err |= pizArrayAppend (a, noteChannel);
-                err |= pizArrayAppend (a, note->isSelected);
-                err |= pizArrayAppend (a, note->isPlayed);
             }
             
             note = nextNote;

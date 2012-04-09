@@ -51,6 +51,7 @@
 
 #define PIZ_SEQUENCE_MAXIMUM_NOTES              128   
 #define PIZ_SEQUENCE_MAXIMUM_DURATION           96
+#define PIZ_SEQUENCE_MAXIMUM_PATTERN            12
                                             
 #define PIZ_SEQUENCE_INIT_TEMP_SIZE             128     /* MAX (MAXIMUM_NOTES, MAXIMUM_DURATION) */
 #define PIZ_SEQUENCE_INIT_LOOKUP_SIZE           19
@@ -244,14 +245,14 @@ PIZError        pizSequenceSetScale                 (PIZSequence *x,
                                                     PIZScaleType type, 
                                                     const PIZArray *a);
                                         
-PIZError        pizSequenceSetPattern               (PIZSequence *x, const PIZArray *a); //
+PIZError        pizSequenceSetPattern               (PIZSequence *x, const PIZArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 bool            pizSequenceIsAtEnd                  (PIZSequence *x);
 void            pizSequenceGoToStart                (PIZSequence *x);
-PIZError        pizSequenceProceedStep              (PIZSequence *x, PIZArray *a); //
+PIZError        pizSequenceProceedStep              (PIZSequence *x, PIZLinklist *queue); //
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

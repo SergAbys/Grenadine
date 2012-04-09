@@ -84,7 +84,7 @@ static const char *piz_eventNames[ ] = {    "Init",
                                             "Last",
                                             "Run Ready",
                                             "GUI Ready"     };
-    
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -161,7 +161,7 @@ PIZEvent *pizEventNewGraphicWithNote (PIZEventIdentifier ie, long *argv, long ta
     return event;
 }
 
-PIZEvent *pizEventNewNotificationWithTime (PIZEventIdentifier ie, const PIZTime *time)
+PIZEvent *pizEventNewNotification (PIZEventIdentifier ie, const PIZTime *time)
 {
     PIZEvent *event = NULL;
     
@@ -176,6 +176,10 @@ PIZEvent *pizEventNewNotificationWithTime (PIZEventIdentifier ie, const PIZTime 
     
     return event;
 }
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 const char *pizEventGetName (const PIZEvent *x)
 {

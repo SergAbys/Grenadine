@@ -128,12 +128,12 @@ typedef struct _PIZEvent {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent    *pizEventNewRun                     (PIZEventIdentifier ie);
-PIZEvent    *pizEventNewRunWithNote             (PIZEventIdentifier ie, long *argv, long tag);
-PIZEvent    *pizEventNewGraphicWithZone         (PIZEventIdentifier ie, long *argv);
-PIZEvent    *pizEventNewGraphicWithNote         (PIZEventIdentifier ie, long *argv, long tag);
-PIZEvent    *pizEventNewNotificationWithTime    (PIZEventIdentifier ie, const PIZTime *time);
-const char  *pizEventGetName                    (const PIZEvent *x);
+PIZEvent    *pizEventNewRun                 (PIZEventIdentifier ie);
+PIZEvent    *pizEventNewRunWithNote         (PIZEventIdentifier ie, long *argv, long tag);
+PIZEvent    *pizEventNewGraphicWithZone     (PIZEventIdentifier ie, long *argv);
+PIZEvent    *pizEventNewGraphicWithNote     (PIZEventIdentifier ie, long *argv, long tag);
+PIZEvent    *pizEventNewNotification        (PIZEventIdentifier ie, const PIZTime *time);
+const char  *pizEventGetName                (const PIZEvent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
