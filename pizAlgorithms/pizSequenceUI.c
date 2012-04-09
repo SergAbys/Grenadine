@@ -95,7 +95,8 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
                          note->data[PIZ_NOTE_VELOCITY],
                          note->data[PIZ_NOTE_DURATION], 
                          note->data[PIZ_NOTE_CHANNEL], 
-                         note->isSelected };
+                         note->isSelected, 
+                         note->isPlayed };
                          
         event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_NOTE_ADDED, PIZ_DATA_NOTE_SIZE, argv, i);
         if (event) {
@@ -123,7 +124,8 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
                          note->data[PIZ_NOTE_VELOCITY],
                          note->data[PIZ_NOTE_DURATION], 
                          note->data[PIZ_NOTE_CHANNEL], 
-                         note->isSelected };
+                         note->isSelected, 
+                         note->isPlayed };
                          
         event = pizEventNewWithArray (PIZ_EVENT_GRAPHIC, PIZ_EVENT_NOTE_CHANGED, PIZ_DATA_NOTE_SIZE, argv, i);
         if (event) {

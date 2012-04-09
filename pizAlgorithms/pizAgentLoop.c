@@ -243,19 +243,19 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     
     k = false;
     //    
+    
     } else if (err == PIZ_ERROR) {
-        if (x->flags & PIZ_AGENT_FLAG_LOOPED) {
-            k = true;
-        } else {
-            k = false;
-            x->flags &= ~PIZ_AGENT_FLAG_PLAYED;
-        }
-        pizSequenceGoToStart (x->sequence);
-        pizAgentEventLoopDoStepEnd (x);
-        
+    //
+    if (x->flags & PIZ_AGENT_FLAG_LOOPED) {
+        k = true;
     } else {
-        PIZAGENTMEMORY
+        k = false;
+        x->flags &= ~PIZ_AGENT_FLAG_PLAYED;
     }
+    pizSequenceGoToStart (x->sequence);
+    pizAgentEventLoopDoStepEnd (x);
+    //    
+    } else { PIZAGENTMEMORY }
     //
     } while (k);
 }

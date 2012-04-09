@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceLibrary.c
  * \author	Jean Sapristi
- * \date	April 5, 2012.
+ * \date	April 9, 2012.
  */
  
 /*
@@ -49,16 +49,17 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZNote *pizSequenceNewNote (PIZSequence *x, long *values, ulong flags)
+PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
 {
     PIZNote *newNote    = NULL;
     long    err         = PIZ_GOOD;
-    long    position    = values[PIZ_DATA_POSITION];
-    long    pitch       = CLAMP (values[PIZ_DATA_PITCH],    0, PIZ_MAGIC_PITCH);
-    long    velocity    = CLAMP (values[PIZ_DATA_VELOCITY], 0, PIZ_MAGIC_VELOCITY);
-    long    duration    = CLAMP (values[PIZ_DATA_DURATION], 1, PIZ_SEQUENCE_MAXIMUM_DURATION); 
-    long    channel     = CLAMP (values[PIZ_DATA_CHANNEL],  0, PIZ_MAGIC_CHANNEL); 
-    long    isSelected  = values[PIZ_DATA_IS_SELECTED];
+    long    position    = argv[PIZ_DATA_POSITION];
+    long    pitch       = CLAMP (argv[PIZ_DATA_PITCH],    0, PIZ_MAGIC_PITCH);
+    long    velocity    = CLAMP (argv[PIZ_DATA_VELOCITY], 0, PIZ_MAGIC_VELOCITY);
+    long    duration    = CLAMP (argv[PIZ_DATA_DURATION], 1, PIZ_SEQUENCE_MAXIMUM_DURATION); 
+    long    channel     = CLAMP (argv[PIZ_DATA_CHANNEL],  0, PIZ_MAGIC_CHANNEL); 
+    long    isSelected  = argv[PIZ_DATA_IS_SELECTED];
+    long    isPlayed    = argv[PIZ_DATA_IS_PLAYED];
     
     if (flags & PIZ_SEQUENCE_FLAG_SNAP) {
         position = MAX (((long)(position / (double)x->grid)) * x->grid, 0);
@@ -92,13 +93,14 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *values, ulong flags)
     err |= pizBoundedStackPop (x->ticketMachine);
     
     if (!err && (newNote = (PIZNote *)malloc (sizeof(PIZNote)))) {
+        newNote->tag                     = pizBoundedStackPoppedValue (x->ticketMachine);
+        newNote->position                = position;
         newNote->data[PIZ_NOTE_PITCH]    = pitch;
         newNote->data[PIZ_NOTE_VELOCITY] = velocity;
         newNote->data[PIZ_NOTE_DURATION] = duration;
         newNote->data[PIZ_NOTE_CHANNEL]  = channel;
         newNote->isSelected              = isSelected;
-        newNote->position                = position;
-        newNote->tag                     = pizBoundedStackPoppedValue (x->ticketMachine);
+        newNote->isPlayed                = isPlayed;
     
         if (!(x->timeline[newNote->position])) {
             if (!(x->timeline[newNote->position] = pizLinklistNew ( ))) {
@@ -112,6 +114,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *values, ulong flags)
             x->count ++; 
             pizItemset128SetAtIndex (&x->addedNotes, newNote->tag);
             pizItemset128UnsetAtIndex (&x->changedNotes, newNote->tag);
+            
         } else {
             pizBoundedHashTableRemoveByKey (x->lookup, newNote->tag, newNote);
             pizBoundedStackPush (x->ticketMachine, newNote->tag);
@@ -289,34 +292,38 @@ long pizSequencePickUpNotes (PIZSequence *x)
 
 void pizSequenceFillValues (PIZSequence *x, PIZNoteSelector selector, long k, bool reverse)
 {
-    long i, temp;
+    long i, t;
     
     if (selector == PIZ_NOTE_DURATION) {
-        for (i = 0; i < k; i++) {
-            if (!reverse) {
-                temp = MIN (x->tempValues[i], (x->timelineSize - x->tempNotes1[i]->position));
-            } else {
-                temp = MIN (x->tempValues[(k - 1) - i], (x->timelineSize - x->tempNotes1[i]->position));
-            }
-            
-            if (x->tempNotes1[i]->data[PIZ_NOTE_DURATION] != temp) {
-                x->tempNotes1[i]->data[PIZ_NOTE_DURATION] = temp;
-                pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
-            }
+    //
+    for (i = 0; i < k; i++) {
+        if (!reverse) {
+            t = MIN (x->tempValues[i], x->timelineSize - x->tempNotes1[i]->position);
+        } else {
+            t = MIN (x->tempValues[(k - 1) - i], x->timelineSize - x->tempNotes1[i]->position);
         }
+        
+        if (x->tempNotes1[i]->data[selector] != t) {
+            x->tempNotes1[i]->data[selector] = t;
+            pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
+        }
+    }
+    //
     } else {
-        for (i = 0; i < k; i++) {
-            if (!reverse) {
-                temp = x->tempValues[i];
-            } else {
-                temp = x->tempValues[(k - 1) - i];
-            }
-            
-            if (x->tempNotes1[i]->data[selector] != temp) {
-                x->tempNotes1[i]->data[selector] = temp;
-                pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
-            }
+    //
+    for (i = 0; i < k; i++) {
+        if (!reverse) {
+            t = x->tempValues[i];
+        } else {
+            t = x->tempValues[(k - 1) - i];
         }
+        
+        if (x->tempNotes1[i]->data[selector] != t) {
+            x->tempNotes1[i]->data[selector] = t;
+            pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
+        }
+    }
+    //
     }
 }
 

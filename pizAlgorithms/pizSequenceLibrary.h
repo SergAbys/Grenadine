@@ -1,7 +1,7 @@
 /**
  * \file	pizSequenceLibrary.h
  * \author	Jean Sapristi
- * \date	April 5, 2012.
+ * \date	April 9, 2012.
  */
 
 /*
@@ -49,24 +49,24 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZNote     *pizSequenceNewNote              (PIZSequence *x, long *values, ulong flags);
-PIZError    pizSequenceMoveNote              (PIZSequence *x, PIZNote *note, long newPosition); //
+PIZNote  *pizSequenceNewNote                (PIZSequence *x, long *argv, ulong flags);
+PIZError pizSequenceMoveNote                (PIZSequence *x, PIZNote *note, long newPosition); //
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void        pizSequenceRemoveNote            (PIZSequence *x, PIZNote *note);
-void        pizSequenceRemoveAllNotes        (PIZSequence *x);
-void        pizSequenceMakeMap               (PIZSequence *x);
+void     pizSequenceRemoveNote              (PIZSequence *x, PIZNote *note);
+void     pizSequenceRemoveAllNotes          (PIZSequence *x);
+void     pizSequenceMakeMap                 (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-long        pizSequenceMovePitchToAmbitus    (PIZSequence *x, long pitch);
-long        pizSequenceSnapPositionToPattern (PIZSequence *x, long position);
-long        pizSequencePickUpNotes           (PIZSequence *x);
+long     pizSequenceMovePitchToAmbitus      (PIZSequence *x, long pitch);
+long     pizSequenceSnapPositionToPattern   (PIZSequence *x, long position);
+long     pizSequencePickUpNotes             (PIZSequence *x);
 
-void        pizSequenceFillValues            (PIZSequence *x, PIZNoteSelector selector, long k, bool reverse);
+void     pizSequenceFillValues              (PIZSequence *x, PIZNoteSelector selector, long k, bool reverse);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

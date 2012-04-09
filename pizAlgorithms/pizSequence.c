@@ -372,6 +372,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZArray *a)
                 err |= pizArrayAppend (a, note->data[PIZ_NOTE_DURATION]);
                 err |= pizArrayAppend (a, noteChannel);
                 err |= pizArrayAppend (a, note->isSelected);
+                err |= pizArrayAppend (a, note->isPlayed);
             }
             
             note = nextNote;

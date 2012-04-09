@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    April 8, 2012.
+ * \date    April 9, 2012.
  */
  
 /*
@@ -53,7 +53,6 @@
 #define PIZ_SEQUENCE_MAXIMUM_DURATION           96
 //                                            -------
 #define PIZ_SEQUENCE_INIT_TEMP_SIZE             128
-
 #define PIZ_SEQUENCE_INIT_LOOKUP_SIZE           19
 #define PIZ_SEQUENCE_DEFAULT_TIMELINE_SIZE      576 
 
@@ -140,8 +139,8 @@ typedef enum _PIZScaleKey {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_DATA_NOTE_SIZE      6
-#define PIZ_DATA_ZONE_SIZE      4
+#define PIZ_DATA_NOTE_SIZE  7
+#define PIZ_DATA_ZONE_SIZE  4
   
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -152,7 +151,8 @@ typedef enum _PIZNoteIndex {
     PIZ_DATA_VELOCITY       = 2,
     PIZ_DATA_DURATION       = 3,
     PIZ_DATA_CHANNEL        = 4,
-    PIZ_DATA_IS_SELECTED    = 5
+    PIZ_DATA_IS_SELECTED    = 5,
+    PIZ_DATA_IS_PLAYED      = 6
     } PIZNoteIndex;
 
 typedef enum _PIZZoneIndex {
@@ -173,10 +173,11 @@ typedef enum _PIZNoteSelector {
     } PIZNoteSelector;
     
 typedef struct _PIZNote {
+    long     tag;
+    long     position;
     long     data[4];
     long     isSelected;
-    long     position;
-    long     tag;
+    long     isPlayed;
     } PIZNote;
     
 // -------------------------------------------------------------------------------------------------------------

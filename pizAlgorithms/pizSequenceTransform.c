@@ -359,15 +359,15 @@ PIZError pizSequenceNovember (PIZSequence *x, long iterate)
                 
                 if (neighbors == 1) {
                 //
-                PIZNote *newNote = NULL;
-                long    values[ ] = { ((long)(hPat[j] / (double)(PIZ_MAGIC_PITCH + 1))) * x->cell,
-                                      hPat[j] % (PIZ_MAGIC_PITCH + 1),
-                                      noteToCopy->data[PIZ_NOTE_VELOCITY], 
-                                      noteToCopy->data[PIZ_NOTE_DURATION],
-                                      noteToCopy->data[PIZ_NOTE_CHANNEL],
-                                      false };
-                
-                newNote = pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_CLIP);
+                long values[ ] = {  ((long)(hPat[j] / (double)(PIZ_MAGIC_PITCH + 1))) * x->cell,
+                                    hPat[j] % (PIZ_MAGIC_PITCH + 1),
+                                    noteToCopy->data[PIZ_NOTE_VELOCITY], 
+                                    noteToCopy->data[PIZ_NOTE_DURATION],
+                                    noteToCopy->data[PIZ_NOTE_CHANNEL],
+                                    false,  
+                                    false };
+                                    
+                PIZNote *newNote = pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_CLIP);
                 
                 if (newNote) {
                     err1 |= pizBoundedHashTableAdd (x->tempHash, hPat[j], (void *)newNote);
@@ -449,8 +449,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, long iterate, long division)
         pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
         
         while (note) {
-            long key;
-            long offset = 0;
+            long key, offset = 0;
             
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
@@ -529,11 +528,12 @@ PIZError pizSequenceJuliet (PIZSequence *x, long iterate, long division)
     if (!(pizBoundedHashTableContainsKey (x->tempHash, newKey))) {
     //
         long values[ ] = { newPosition * x->cell,
-                          note1->data[PIZ_NOTE_PITCH] + offset,
-                          note1->data[PIZ_NOTE_VELOCITY],
-                          note1->data[PIZ_NOTE_DURATION],
-                          note1->data[PIZ_NOTE_CHANNEL],
-                          false };
+                           note1->data[PIZ_NOTE_PITCH] + offset,
+                           note1->data[PIZ_NOTE_VELOCITY],
+                           note1->data[PIZ_NOTE_DURATION],
+                           note1->data[PIZ_NOTE_CHANNEL],
+                           false, 
+                           false };
 
         note2 = pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_CLIP);
         
@@ -788,7 +788,7 @@ void pizSequenceChange (PIZSequence *x, PIZNoteSelector selector, long value)
     
     while (note) {
     //
-    long max, temp;
+    long m, t;
     long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
     
     pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
@@ -797,16 +797,16 @@ void pizSequenceChange (PIZSequence *x, PIZNoteSelector selector, long value)
     //
     switch (selector) {
     //
-    case PIZ_NOTE_PITCH    : temp = CLAMP (note->data[PIZ_NOTE_PITCH] + value, 0, PIZ_MAGIC_PITCH); break;
-    case PIZ_NOTE_VELOCITY : temp = CLAMP (note->data[PIZ_NOTE_VELOCITY] + value, 0, PIZ_MAGIC_VELOCITY); break;
-    case PIZ_NOTE_DURATION : max  = MIN ((x->timelineSize - note->position), PIZ_SEQUENCE_MAXIMUM_DURATION);
-                             temp = CLAMP (note->data[PIZ_NOTE_DURATION] + value, 1, max); break;
-    case PIZ_NOTE_CHANNEL  : temp = CLAMP (note->data[PIZ_NOTE_CHANNEL] + value, 0, PIZ_MAGIC_CHANNEL); break;
+    case PIZ_NOTE_PITCH    : t = CLAMP (note->data[PIZ_NOTE_PITCH] + value, 0, PIZ_MAGIC_PITCH); break;
+    case PIZ_NOTE_VELOCITY : t = CLAMP (note->data[PIZ_NOTE_VELOCITY] + value, 0, PIZ_MAGIC_VELOCITY); break;
+    case PIZ_NOTE_DURATION : m = MIN   (x->timelineSize - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
+                             t = CLAMP (note->data[PIZ_NOTE_DURATION] + value, 1, m); break;
+    case PIZ_NOTE_CHANNEL  : t = CLAMP (note->data[PIZ_NOTE_CHANNEL] + value, 0, PIZ_MAGIC_CHANNEL); break;
     //                            
     }
     
-    if (note->data[selector] != temp) {
-        note->data[selector] = temp;
+    if (note->data[selector] != t) {
+        note->data[selector] = t;
         pizItemset128SetAtIndex (&x->changedNotes, note->tag);
     }
     //
@@ -834,22 +834,22 @@ void pizSequenceSet (PIZSequence *x, PIZNoteSelector selector, long value)
     
     while (note) {
     //
-    long max, temp;
+    long m, t;
     long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
     
     pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
     
     if (h < x->chance) {
         switch (selector) {
-        case PIZ_NOTE_PITCH    : temp = CLAMP (value, 0, PIZ_MAGIC_PITCH); break;
-        case PIZ_NOTE_VELOCITY : temp = CLAMP (value, 0, PIZ_MAGIC_VELOCITY); break;
-        case PIZ_NOTE_DURATION : max  = MIN (x->timelineSize - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
-                                 temp = CLAMP (value, 1, max); break;
-        case PIZ_NOTE_CHANNEL  : temp = CLAMP (value, 0, PIZ_MAGIC_CHANNEL); break;
+        case PIZ_NOTE_PITCH    : t = CLAMP (value, 0, PIZ_MAGIC_PITCH); break;
+        case PIZ_NOTE_VELOCITY : t = CLAMP (value, 0, PIZ_MAGIC_VELOCITY); break;
+        case PIZ_NOTE_DURATION : m = MIN   (x->timelineSize - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
+                                 t = CLAMP (value, 1, m); break;
+        case PIZ_NOTE_CHANNEL  : t = CLAMP (value, 0, PIZ_MAGIC_CHANNEL); break;
         }
         
-        if (note->data[selector] != temp) {
-            note->data[selector] = temp;
+        if (note->data[selector] != t) {
+            note->data[selector] = t;
             pizItemset128SetAtIndex (&x->changedNotes, note->tag);
         }
     }
@@ -884,7 +884,7 @@ void pizSequenceRandom (PIZSequence *x, PIZNoteSelector selector, long minValue,
     
     while (note) {
     //
-    long max, temp;
+    long m, t;
     long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
     
     pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
@@ -894,15 +894,15 @@ void pizSequenceRandom (PIZSequence *x, PIZNoteSelector selector, long minValue,
     long value = minValue + (long)(range * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
     
     switch (selector) {
-    case PIZ_NOTE_PITCH    : temp = CLAMP (note->data[PIZ_NOTE_PITCH] + value, 0, PIZ_MAGIC_PITCH); break;
-    case PIZ_NOTE_VELOCITY : temp = CLAMP (note->data[PIZ_NOTE_VELOCITY] + value, 0, PIZ_MAGIC_VELOCITY); break;
-    case PIZ_NOTE_DURATION : max  = MIN (x->timelineSize - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
-                             temp = CLAMP (note->data[PIZ_NOTE_DURATION] + value, 1, max); break;
-    case PIZ_NOTE_CHANNEL  : temp = CLAMP (note->data[PIZ_NOTE_CHANNEL] + value, 0, PIZ_MAGIC_CHANNEL); break;
+    case PIZ_NOTE_PITCH    : t = CLAMP (note->data[PIZ_NOTE_PITCH] + value, 0, PIZ_MAGIC_PITCH); break;
+    case PIZ_NOTE_VELOCITY : t = CLAMP (note->data[PIZ_NOTE_VELOCITY] + value, 0, PIZ_MAGIC_VELOCITY); break;
+    case PIZ_NOTE_DURATION : m = MIN   (x->timelineSize - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
+                             t = CLAMP (note->data[PIZ_NOTE_DURATION] + value, 1, m); break;
+    case PIZ_NOTE_CHANNEL  : t = CLAMP (note->data[PIZ_NOTE_CHANNEL] + value, 0, PIZ_MAGIC_CHANNEL); break;
     }
     
-    if (note->data[selector] != temp) {
-        note->data[selector] = temp;
+    if (note->data[selector] != t) {
+        note->data[selector] = t;
         pizItemset128SetAtIndex (&x->changedNotes, note->tag);
     }
     //
