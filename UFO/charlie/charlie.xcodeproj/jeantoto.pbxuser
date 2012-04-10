@@ -1,0 +1,64 @@
+// !$*UTF8*$!
+{
+	089C1669FE841209C02AAC07 /* Project object */ = {
+		activeBuildConfigurationName = Release;
+		activeTarget = 8D01CCC60486CAD60068D4B7 /* charlie */;
+		addToTargets = (
+			8D01CCC60486CAD60068D4B7 /* charlie */,
+		);
+		breakpointsGroup = 9688062C10BA9F300029AFFA /* XCBreakpointsBucket */;
+		codeSenseManager = 9689922A10B9908A00B21B0F /* Code sense */;
+		perUserDictionary = {
+			PBXPerProjectTemplateStateSaveDate = 355063898;
+			PBXWorkspaceStateSaveDate = 355063898;
+		};
+		sourceControlManager = 9689922910B9908A00B21B0F /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	8D01CCC60486CAD60068D4B7 /* charlie */ = {
+		activeExec = 0;
+	};
+	9688062C10BA9F300029AFFA /* XCBreakpointsBucket */ = {
+		isa = XCBreakpointsBucket;
+		name = "Project Breakpoints";
+		objects = (
+		);
+	};
+	9689922910B9908A00B21B0F /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+		scmType = "";
+	};
+	9689922A10B9908A00B21B0F /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	96950DE4140D05FE003443D1 /* charlieHide.txt */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1234, 925}}";
+			sepNavSelRange = "{596, 0}";
+			sepNavVisRect = "{{0, 0}, {1234, 645}}";
+			sepNavWindowFrame = "{{15, -1}, {1279, 774}}";
+		};
+	};
+	96D3988714B988470026A94A /* maxmspsdk.xcconfig */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1233, 1225}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 582}, {1233, 643}}";
+			sepNavWindowFrame = "{{15, 1}, {1278, 772}}";
+		};
+	};
+	99042EDA0FEFB8AA00E07832 /* charlie.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1233, 7350}}";
+			sepNavSelRange = "{9263, 794}";
+			sepNavVisRect = "{{0, 6433}, {1233, 645}}";
+			sepNavWindowFrame = "{{1, 4}, {1278, 774}}";
+		};
+	};
+}
