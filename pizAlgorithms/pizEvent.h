@@ -110,10 +110,12 @@ typedef enum _PIZEventIdentifier {
     
 typedef union _PIZEventData {
     PIZTime time;
+    long    value;
     long    note[PIZ_SEQUENCE_NOTE_SIZE];
     long    zone[PIZ_SEQUENCE_ZONE_SIZE];
-    long    value;
-} PIZEventData;
+    //long    pattern [PIZ_SEQUENCE_MAXIMUM_PATTERN];
+    //long    scale   [PIZ_MAGIC_SCALE];
+    } PIZEventData;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

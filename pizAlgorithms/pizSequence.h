@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    April 9, 2012.
+ * \date    April 10, 2012.
  */
  
 /*
@@ -52,10 +52,12 @@
 #define PIZ_SEQUENCE_MAXIMUM_NOTES              128   
 #define PIZ_SEQUENCE_MAXIMUM_DURATION           96
 #define PIZ_SEQUENCE_MAXIMUM_PATTERN            12
-                                            
-#define PIZ_SEQUENCE_INIT_TEMP_SIZE             128     /* MAX (MAXIMUM_NOTES, MAXIMUM_DURATION) */
+                                        
+#define PIZ_SEQUENCE_INIT_TEMP_SIZE             128 
 #define PIZ_SEQUENCE_INIT_LOOKUP_SIZE           19
 #define PIZ_SEQUENCE_DEFAULT_TIMELINE_SIZE      576 
+
+/* PIZ_SEQUENCE_INIT_TEMP_SIZE = MAX (MAXIMUM_NOTES, MAXIMUM_DURATION, PIZ_MAGIC_PITCH + 1) */ 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -166,12 +168,12 @@ typedef enum _PIZScaleKey {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-typedef enum _PIZMidi {
+typedef enum _PIZMidiSelector {
     PIZ_MIDI_PITCH      = 0,
     PIZ_MIDI_VELOCITY   = 1,
     PIZ_MIDI_DURATION   = 2,
     PIZ_MIDI_CHANNEL    = 3
-    } PIZMidi;
+    } PIZMidiSelector;
     
 typedef struct _PIZNote {
     long     tag;

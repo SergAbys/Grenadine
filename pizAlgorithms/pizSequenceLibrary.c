@@ -215,10 +215,9 @@ void pizSequenceMakeMap (PIZSequence *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizSequenceTestIsPlayed (PIZSequence *x)
+void pizSequenceIsPlayed (PIZSequence *x)
 {
     long i;
-    bool isHit;
     
     for (i = 0; i < pizArrayCount (x->map); i++) {   
         PIZNote *note       = NULL;
@@ -229,6 +228,7 @@ void pizSequenceTestIsPlayed (PIZSequence *x)
         pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
         
         while (note) {
+            bool isHit;
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
             isHit = (x->index >= note->position);
@@ -322,7 +322,7 @@ long pizSequencePickUpNotes (PIZSequence *x)
     return k;
 }
 
-void pizSequenceFillValues (PIZSequence *x, PIZMidi selector, long k, bool reverse)
+void pizSequenceFillValues (PIZSequence *x, PIZMidiSelector selector, long k, bool reverse)
 {
     long i, t;
     

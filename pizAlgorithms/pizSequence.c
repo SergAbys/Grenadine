@@ -39,7 +39,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizSequence.h"
-#include "pizEvent.h"
+#include "pizSequenceLibrary.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -337,7 +337,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue)
     
     if (queue) {
     //
-    pizSequenceTestIsPlayed (x);
+    pizSequenceIsPlayed (x);
     
     if (x->timeline[x->index] && pizLinklistCount (x->timeline[x->index])) {
         long    scale;

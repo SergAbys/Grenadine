@@ -597,11 +597,13 @@ void pizSequenceTranspose (PIZSequence *x, long n)
         PIZNote *note       = NULL;
         PIZNote *nextNote   = NULL;
         
-        long temp, p = pizArrayValueAtIndex (x->map, i);
+        long p = pizArrayValueAtIndex (x->map, i);
         
         pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
         
         while (note) {
+            long temp; 
+            
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
             temp = CLAMP (note->midi[PIZ_MIDI_PITCH] + n, 0, PIZ_MAGIC_PITCH);
@@ -678,7 +680,7 @@ void pizSequenceClean (PIZSequence *x, long value)
     }
 }
 
-void pizSequenceRotate (PIZSequence *x, PIZMidi selector, long shift)
+void pizSequenceRotate (PIZSequence *x, PIZMidiSelector selector, long shift)
 {
     long i, k = 0;
             
@@ -695,7 +697,7 @@ void pizSequenceRotate (PIZSequence *x, PIZMidi selector, long shift)
     pizSequenceFillValues (x, selector, k, 0);
 }
 
-void pizSequenceScramble (PIZSequence *x, PIZMidi selector)
+void pizSequenceScramble (PIZSequence *x, PIZMidiSelector selector)
 {
     long i, k = 0;
         
@@ -717,7 +719,7 @@ void pizSequenceScramble (PIZSequence *x, PIZMidi selector)
     pizSequenceFillValues (x, selector, k, 0);
 }
 
-void pizSequenceSort (PIZSequence *x, PIZMidi selector, bool down)
+void pizSequenceSort (PIZSequence *x, PIZMidiSelector selector, bool down)
 {
     long i, scale, k = 0;
         
@@ -773,7 +775,7 @@ void pizSequenceSort (PIZSequence *x, PIZMidi selector, bool down)
     pizSequenceFillValues (x, selector, k, down);
 }
 
-void pizSequenceChange (PIZSequence *x, PIZMidi selector, long value)
+void pizSequenceChange (PIZSequence *x, PIZMidiSelector selector, long value)
 {
     long i;
             
@@ -819,7 +821,7 @@ void pizSequenceChange (PIZSequence *x, PIZMidi selector, long value)
     }
 }
 
-void pizSequenceSet (PIZSequence *x, PIZMidi selector, long value)
+void pizSequenceSet (PIZSequence *x, PIZMidiSelector selector, long value)
 {
     long i;
             
@@ -861,7 +863,7 @@ void pizSequenceSet (PIZSequence *x, PIZMidi selector, long value)
     }
 }
 
-void pizSequenceRandom (PIZSequence *x, PIZMidi selector, long minValue, long maxValue)
+void pizSequenceRandom (PIZSequence *x, PIZMidiSelector selector, long minValue, long maxValue)
 {
     long i, range;
         
