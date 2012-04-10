@@ -130,6 +130,7 @@ typedef struct _PIZEvent {
 
 PIZEvent    *pizEventNewRun                 (PIZEventIdentifier ie);
 PIZEvent    *pizEventNewRunWithNote         (PIZEventIdentifier ie, long *argv, long tag);
+PIZEvent    *pizEventNewRunWithValue        (PIZEventIdentifier ie, long value);
 PIZEvent    *pizEventNewGraphicWithZone     (PIZEventIdentifier ie, long *argv);
 PIZEvent    *pizEventNewGraphicWithNote     (PIZEventIdentifier ie, long *argv, long tag);
 PIZEvent    *pizEventNewNotification        (PIZEventIdentifier ie, const PIZTime *time);

@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	April 9, 2012.
+ * \date	April 10, 2012.
  */
  
 /*
@@ -186,8 +186,8 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
 void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
 {   
     bool     k = false;
-    PIZError err = PIZ_GOOD; 
     long     count = 0;
+    PIZError err = PIZ_GOOD; 
 
     do {
     //
@@ -249,22 +249,21 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     
     PIZAGENTLOCK_GETTER
     
-    pizLinklistClear (x->graphicOutQueue);
-    err = pizSequenceGetGraphicEvents (x->sequence, x->graphicOutQueue);
-    count = pizLinklistCount (x->graphicOutQueue);
+    if (!(pizLinklistCount (x->graphicOutQueue))) {
+        err = pizSequenceGetGraphicEvents (x->sequence, x->graphicOutQueue);
+        count = pizLinklistCount (x->graphicOutQueue);
+    }
     
     PIZAGENTUNLOCK_GETTER
     
     if (!err) {
-        if (count) {
-            if (event = pizEventNewNotification (PIZ_EVENT_GUI_READY, &x->grainStart)) {
+        if (count && (event = pizEventNewNotification (PIZ_EVENT_GUI_READY, &x->grainStart))) {
             
-                PIZAGENTLOCK_NOTIFICATION
-                PIZAGENTQUEUE(x->notifyQueue)
-                PIZAGENTUNLOCK_NOTIFICATION
-                
-                pthread_cond_signal (&x->notificationCondition);
-            }
+            PIZAGENTLOCK_NOTIFICATION
+            PIZAGENTQUEUE(x->notifyQueue)
+            PIZAGENTUNLOCK_NOTIFICATION
+            
+            pthread_cond_signal (&x->notificationCondition);
         }
         
     } else if (err == PIZ_MEMORY) {

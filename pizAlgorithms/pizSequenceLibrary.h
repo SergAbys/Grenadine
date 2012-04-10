@@ -1,7 +1,7 @@
 /**
  * \file	pizSequenceLibrary.h
  * \author	Jean Sapristi
- * \date	April 9, 2012.
+ * \date	April 10, 2012.
  */
 
 /*
@@ -51,10 +51,6 @@
 
 PIZNote  *pizSequenceNewNote                (PIZSequence *x, long *argv, ulong flags);
 PIZError pizSequenceMoveNote                (PIZSequence *x, PIZNote *note, long newPosition); //
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 void     pizSequenceRemoveNote              (PIZSequence *x, PIZNote *note);
 void     pizSequenceRemoveAllNotes          (PIZSequence *x);
 void     pizSequenceMakeMap                 (PIZSequence *x);
@@ -62,10 +58,18 @@ void     pizSequenceMakeMap                 (PIZSequence *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+void     pizSequenceTestIsPlayed            (PIZSequence *x);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 long     pizSequenceMovePitchToAmbitus      (PIZSequence *x, long pitch);
 long     pizSequenceSnapPositionToPattern   (PIZSequence *x, long position);
-long     pizSequencePickUpNotes             (PIZSequence *x);
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+long     pizSequencePickUpNotes             (PIZSequence *x);
 void     pizSequenceFillValues              (PIZSequence *x, PIZMidi selector, long k, bool reverse);
 
 // -------------------------------------------------------------------------------------------------------------

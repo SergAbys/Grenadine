@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    April 9, 2012.
+ * \date    April 10, 2012.
  */
  
 /*
@@ -334,7 +334,11 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue)
     if (x->index < x->end) {
     //
     err = PIZ_GOOD;
-                
+    
+    if (queue) {
+    //
+    pizSequenceTestIsPlayed (x);
+    
     if (x->timeline[x->index] && pizLinklistCount (x->timeline[x->index])) {
         long    scale;
         PIZNote *note       = NULL;
@@ -388,6 +392,8 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue)
     }
     
     x->index ++;
+    //
+    }
     //    
     }
     

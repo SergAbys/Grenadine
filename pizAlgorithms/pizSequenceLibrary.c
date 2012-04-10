@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceLibrary.c
  * \author	Jean Sapristi
- * \date	April 9, 2012.
+ * \date	April 10, 2012.
  */
  
 /*
@@ -157,10 +157,6 @@ PIZError pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
     return err;
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note) 
 {
     long p = note->position;
@@ -211,6 +207,42 @@ void pizSequenceMakeMap (PIZSequence *x)
     for (i = 0; i < x->timelineSize; i++) {
         if (x->timeline[i] && pizLinklistCount (x->timeline[i])) {
             pizArrayAppend (x->map, i);
+        }
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizSequenceTestIsPlayed (PIZSequence *x)
+{
+    long i;
+    bool isHit;
+    
+    for (i = 0; i < pizArrayCount (x->map); i++) {   
+        PIZNote *note       = NULL;
+        PIZNote *nextNote   = NULL;
+        
+        long p = pizArrayValueAtIndex (x->map, i);
+        
+        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+        
+        while (note) {
+            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+            
+            isHit = (x->index >= note->position);
+            isHit = isHit && (x->index < (note->position + note->midi[PIZ_MIDI_DURATION]));
+            
+            if (isHit && !note->isPlayed) {
+                note->isPlayed = true;
+                pizItemset128SetAtIndex (&x->changedNotes, note->tag);
+            } else if (!isHit && note->isPlayed) {
+                note->isPlayed = false;
+                pizItemset128SetAtIndex (&x->changedNotes, note->tag);
+            }
+            
+            note = nextNote;
         }
     }
 }
