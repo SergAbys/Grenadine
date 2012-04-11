@@ -57,13 +57,13 @@
 
 typedef enum _PIZEventType {
     PIZ_EVENT_RUN             = 1,
-    PIZ_EVENT_TRANSFORMATION,
+    PIZ_EVENT_TRANSFORM,
     PIZ_EVENT_GRAPHIC,
     PIZ_EVENT_NOTIFICATION
     } PIZEventType;
 
 typedef enum _PIZEventIdentifier {
-    //
+    // RUN
     PIZ_EVENT_INIT            = 0,
     PIZ_EVENT_PLAY            = 1,
     PIZ_EVENT_STOP,
@@ -71,7 +71,7 @@ typedef enum _PIZEventIdentifier {
     PIZ_EVENT_UNLOOP,
     PIZ_EVENT_BPM,
     PIZ_EVENT_NOTE_PLAYED,
-    //
+    // TRANSFORM 
 /*    PIZ_EVENT_CHANCE,
     PIZ_EVENT_VELOCITY,
     PIZ_EVENT_CHANNEL,
@@ -93,18 +93,18 @@ typedef enum _PIZEventIdentifier {
     PIZ_EVENT_RANDOM,
     PIZ_EVENT_KILL,
     PIZ_EVENT_CYCLE,        
-    //
+    // GRAPHIC 
     PIZ_EVENT_GRID,         
     PIZ_EVENT_NOTE_VALUE,   */
     PIZ_EVENT_ZONE_CHANGED,
     PIZ_EVENT_NOTE_REMOVED,
     PIZ_EVENT_NOTE_ADDED,
     PIZ_EVENT_NOTE_CHANGED, 
-    //
+    // NOTIFICATION
     PIZ_EVENT_END,
     PIZ_EVENT_LAST,
     PIZ_EVENT_RUN_READY,
-    PIZ_EVENT_GUI_READY,
+    PIZ_EVENT_GRAPHIC_READY,
     //
     } PIZEventIdentifier;
     

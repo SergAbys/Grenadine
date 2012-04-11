@@ -86,7 +86,7 @@ void *pizAgentEventLoop (void *agent)
     }
     
     while (pizAgentEventLoopIsWorkTime (x)) {
-        if (pizAgentEventLoopDoEvent (x, x->mainQueue)) {
+        if (pizAgentEventLoopDoEvent (x, x->transformQueue)) {
             break;
         } 
     }
@@ -99,13 +99,11 @@ void *pizAgentEventLoop (void *agent)
         }
     }
     
-    if (x->flags & PIZ_AGENT_FLAG_GUI) {
-        while (pizAgentEventLoopIsWorkTime (x)) {
-            if (pizAgentEventLoopDoEvent (x, x->graphicInQueue)) {
-                pizAgentEventLoopDoRefresh (x);
-                break;
-            } 
-        }
+    while (pizAgentEventLoopIsWorkTime (x)) {
+        if (pizAgentEventLoopDoEvent (x, x->graphicInQueue)) {
+            pizAgentEventLoopDoRefresh (x);
+            break;
+        } 
     }
     
     pizAgentEventLoopSleep (x); 
@@ -257,7 +255,7 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     PIZAGENTUNLOCK_GETTER
     
     if (!err) {
-        if (count && (event = pizEventNewNotification (PIZ_EVENT_GUI_READY, &x->grainStart))) {
+        if (count && (event = pizEventNewNotification (PIZ_EVENT_GRAPHIC_READY, &x->grainStart))) {
             
             PIZAGENTLOCK_NOTIFICATION
             PIZAGENTQUEUE(x->notifyQueue)
@@ -311,9 +309,9 @@ bool pizAgentEventLoopCondition (PIZAgent *x)
 {
     bool condition = false;
     
-    if ((x->flags & PIZ_AGENT_FLAG_PLAYED) ||
-        pizLinklistCount (x->mainQueue)    ||
-        pizLinklistCount (x->runInQueue)   ||
+    if ((x->flags & PIZ_AGENT_FLAG_PLAYED)   ||
+        pizLinklistCount (x->transformQueue) ||
+        pizLinklistCount (x->runInQueue)     ||
         pizLinklistCount (x->graphicInQueue)) {
         condition = true;
     }

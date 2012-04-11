@@ -8,7 +8,7 @@
  */
  
 /*
- *  Last modified : 26/02/12.
+ *  Last modified : 11/04/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -21,12 +21,18 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizAlgorithmsMaxMSP.h"
+#include "pizFiniteState.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #define MAXIMUM_LIST_SIZE   256
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define LOCK    systhread_mutex_lock (&x->algorithmMutex);
+#define UNLOCK  systhread_mutex_unlock (&x->algorithmMutex);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -53,6 +59,7 @@ void uniform_clear      (t_uniform *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 static t_class  *uniform_class;
 
@@ -79,6 +86,7 @@ return MAX_ERR_NONE;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void *uniform_new (t_symbol *s, long argc, t_atom *argv)
 {
@@ -140,15 +148,16 @@ void uniform_assist (t_uniform *x, void *b, long m, long a, char *s)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void uniform_learn (t_uniform *x, t_symbol *s, long argc, t_atom *argv)
 {   
-    systhread_mutex_lock (&x->algorithmMutex);
+    LOCK
     
     atom_getlong_array (argc, argv, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
     pizFiniteStateAdd (x->finiteState, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
     
-    systhread_mutex_unlock (&x->algorithmMutex);
+    UNLOCK
 }
 
 void uniform_int (t_uniform *x, long n)
@@ -158,9 +167,9 @@ void uniform_int (t_uniform *x, long n)
     long    argc = 0;
 
     if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
-        long err = PIZ_ERROR;
+        PIZError err = PIZ_ERROR;
             
-        systhread_mutex_lock (&x->algorithmMutex);
+        LOCK
 
         if (pizFiniteStateCount (x->finiteState)) {
             if (!(err = pizFiniteStateProceed (x->finiteState, argc, x->values))) {
@@ -168,7 +177,7 @@ void uniform_int (t_uniform *x, long n)
             }
         }
         
-        systhread_mutex_unlock (&x->algorithmMutex);
+        UNLOCK
 
         if (!err) {
             outlet_list (x->leftOutlet, NULL, argc, argv);
@@ -180,11 +189,11 @@ void uniform_int (t_uniform *x, long n)
     
 void uniform_clear (t_uniform *x)
 {
-    systhread_mutex_lock (&x->algorithmMutex);
+    LOCK
     
     pizFiniteStateClear (x->finiteState);
     
-    systhread_mutex_unlock (&x->algorithmMutex);
+    UNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------

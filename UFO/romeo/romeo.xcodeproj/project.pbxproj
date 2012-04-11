@@ -10,8 +10,8 @@
 		96BF2F58128977430018D097 /* romeo.c in Sources */ = {isa = PBXBuildFile; fileRef = 96BF2F57128977430018D097 /* romeo.c */; };
 		96D12FB714B9919D0013AA74 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96D12FB614B9919D0013AA74 /* MaxAPI.framework */; };
 		96D12FBB14B991AB0013AA74 /* maxmspsdk.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 96D12FBA14B991AB0013AA74 /* maxmspsdk.xcconfig */; };
-		96D12FBD14B991BC0013AA74 /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96D12FBC14B991BC0013AA74 /* libPizAlgorithms.a */; };
 		96D1CE271407FE450063791F /* romeoHide.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96D1CE261407FE450063791F /* romeoHide.txt */; };
+		96D936561535CF0D006F766A /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96D936551535CF0D006F766A /* libPizAlgorithms.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,8 +19,8 @@
 		96BF2F57128977430018D097 /* romeo.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = romeo.c; sourceTree = "<group>"; };
 		96D12FB614B9919D0013AA74 /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "../../../c74support/max-includes/MaxAPI.framework"; sourceTree = SOURCE_ROOT; };
 		96D12FBA14B991AB0013AA74 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; name = maxmspsdk.xcconfig; path = ../maxmspsdk.xcconfig; sourceTree = SOURCE_ROOT; };
-		96D12FBC14B991BC0013AA74 /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../../pizAlgorithms/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
 		96D1CE261407FE450063791F /* romeoHide.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = romeoHide.txt; sourceTree = "<group>"; };
+		96D936551535CF0D006F766A /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../../pizAlgorithms/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,7 +29,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96D12FB714B9919D0013AA74 /* MaxAPI.framework in Frameworks */,
-				96D12FBD14B991BC0013AA74 /* libPizAlgorithms.a in Frameworks */,
+				96D936561535CF0D006F766A /* libPizAlgorithms.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,7 +51,7 @@
 		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				96D12FBC14B991BC0013AA74 /* libPizAlgorithms.a */,
+				96D936551535CF0D006F766A /* libPizAlgorithms.a */,
 				96D12FB614B9919D0013AA74 /* MaxAPI.framework */,
 			);
 			name = "External Frameworks and Libraries";
@@ -173,12 +173,14 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../*Tralala/PizDataStructures/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../*Tralala/PizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/../../pizAlgorithms/build/Release\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/../../pizAlgorithms/build/Release\"";
 				PREBINDING = YES;
 				PRODUCT_NAME = romeo;
 				USER_HEADER_SEARCH_PATHS = "\"/users/jeantoto/maxsdk-5.1.7/*tralala/pizdatastructures\" \"/users/jeantoto/maxsdk-5.1.7/*tralala/pizalgorithms\"";
@@ -200,27 +202,23 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
 				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../c74support/max-includes\"";
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../../c74support/max-includes\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = "";
 				GCC_NO_COMMON_BLOCKS = NO;
-				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_UNROLL_LOOPS = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/../../Info.plist";
 				INSTALL_PATH = /;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../*Tralala/PizDataStructures/build/Release\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../*Tralala/PizAlgorithms/build/Release\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/../pizAlgorithms/build/Release\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/../pizAlgorithms/build/Release\"";
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/../../pizAlgorithms/build/Release\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../pizAlgorithms/build/Release\"";
 				PREBINDING = YES;
 				PRODUCT_NAME = romeo;
 				UNEXPORTED_SYMBOLS_FILE = romeoHide.txt;

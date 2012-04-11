@@ -11,8 +11,8 @@
 		breakpointsGroup = 9689AEF3118F1C8C0017CC23 /* XCBreakpointsBucket */;
 		codeSenseManager = 969A34CD117840B80036C6BE /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 355064335;
-			PBXWorkspaceStateSaveDate = 355064335;
+			PBXPerProjectTemplateStateSaveDate = 355849269;
+			PBXWorkspaceStateSaveDate = 355849269;
 		};
 		sourceControlManager = 969A34CC117840B80036C6BE /* Source Control */;
 		userBuildSettings = {
@@ -29,9 +29,9 @@
 	};
 	9699D97114139B5800F86BD8 /* yankeeHide.txt */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1234, 1325}}";
-			sepNavSelRange = "{627, 0}";
-			sepNavVisRect = "{{0, 364}, {1234, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1234, 645}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 0}, {1234, 645}}";
 			sepNavWindowFrame = "{{-1, 4}, {1279, 774}}";
 		};
 	};

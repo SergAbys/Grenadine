@@ -65,11 +65,10 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #define PIZ_AGENT_FLAG_NONE             0UL
-#define PIZ_AGENT_FLAG_GUI              1UL
-#define PIZ_AGENT_FLAG_EXIT             2UL
-#define PIZ_AGENT_FLAG_WAKED            4UL
-#define PIZ_AGENT_FLAG_PLAYED           8UL
-#define PIZ_AGENT_FLAG_LOOPED           16UL
+#define PIZ_AGENT_FLAG_EXIT             1UL
+#define PIZ_AGENT_FLAG_WAKED            2UL
+#define PIZ_AGENT_FLAG_PLAYED           4UL
+#define PIZ_AGENT_FLAG_LOOPED           8UL
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -117,7 +116,7 @@ typedef struct _PIZAgent {
     PIZLinklist         *runOutQueue;
     PIZLinklist         *graphicInQueue;
     PIZLinklist         *graphicOutQueue;
-    PIZLinklist         *mainQueue;
+    PIZLinklist         *transformQueue;
     PIZLinklist         *notifyQueue;
     PIZSequence         *sequence;
     PIZFactorOracle     *factorOracle;

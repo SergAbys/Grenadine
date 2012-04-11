@@ -8,7 +8,7 @@
  */
  
 /*
- *  Last modified : 26/02/12.
+ *  Last modified : 11/04/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -21,7 +21,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizAlgorithmsMaxMSP.h"
+#include "pizNeuralGas.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -33,6 +33,12 @@
 #define DEFAULT_EPSILON1        0.5
 #define DEFAULT_EPSILON2        0.25
 #define DEFAULT_KAPPA           10
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define LOCK    systhread_mutex_lock (&x->algorithmMutex);
+#define UNLOCK  systhread_mutex_unlock (&x->algorithmMutex);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -73,6 +79,18 @@ void        yankee_clear        (t_yankee *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+PIZ_INLINE void     pizNeuralGasSetLambda       (PIZNeuralGas *x, long n);
+PIZ_INLINE void     pizNeuralGasSetEpsilon1     (PIZNeuralGas *x, double f);
+PIZ_INLINE void     pizNeuralGasSetEpsilon2     (PIZNeuralGas *x, double f);
+PIZ_INLINE void     pizNeuralGasSetAlpha        (PIZNeuralGas *x, double f);
+PIZ_INLINE void     pizNeuralGasSetBeta         (PIZNeuralGas *x, double f);
+PIZ_INLINE void     pizNeuralGasSetKappa        (PIZNeuralGas *x, double f);
+PIZ_INLINE PIZError pizNeuralGasEncodeToArray   (const PIZNeuralGas *x, long n, PIZArray *a);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 static t_class  *yankee_class;
 
@@ -135,6 +153,7 @@ int main (void)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void *yankee_new (t_symbol *s, long argc, t_atom *argv)
 {
@@ -209,6 +228,7 @@ void yankee_assist (t_yankee *x, void *b, long m, long a, char *s)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 t_max_err yankee_setLambda (t_yankee *x, t_object *attr, long argc, t_atom *argv)
 {
@@ -272,15 +292,16 @@ t_max_err yankee_setKappa (t_yankee *x, t_object *attr, long argc, t_atom *argv)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void yankee_learn (t_yankee *x, t_symbol *s, long argc, t_atom *argv)           
 {   
-    systhread_mutex_lock (&x->algorithmMutex);
+    LOCK
     
     atom_getlong_array (argc, argv, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
     pizNeuralGasAdd (x->neuralGas, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
     
-    systhread_mutex_unlock (&x->algorithmMutex);
+    UNLOCK
 }
 
 void yankee_int (t_yankee *x, long n)
@@ -290,9 +311,9 @@ void yankee_int (t_yankee *x, long n)
     long    argc = 0;
 
     if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
-        long err = PIZ_ERROR;
+        PIZError err = PIZ_ERROR;
             
-        systhread_mutex_lock (&x->algorithmMutex);
+        LOCK
 
         if (pizNeuralGasCount (x->neuralGas)) {
             if (!(err = pizNeuralGasProceed (x->neuralGas, argc, x->values))) {
@@ -300,7 +321,7 @@ void yankee_int (t_yankee *x, long n)
             }
         }
         
-        systhread_mutex_unlock (&x->algorithmMutex);
+        UNLOCK
 
         if (!err) {
             outlet_list (x->leftOutlet, NULL, argc, argv);
@@ -312,31 +333,31 @@ void yankee_int (t_yankee *x, long n)
     
 void yankee_clear (t_yankee *x)
 {
-    systhread_mutex_lock (&x->algorithmMutex);
+    LOCK
     
     pizNeuralGasClear (x->neuralGas);
     
-    systhread_mutex_unlock (&x->algorithmMutex);
+    UNLOCK
 }
 
 void yankee_dump (t_yankee *x, long n)
 {
-    char            alloc;
-    long            size;
-    long            argc = 0;
-    long            err = PIZ_GOOD;
-    t_atom          *argv = NULL;
-    PIZGrowingArray *values = pizGrowingArrayNew (4);
+    char     alloc;
+    long     size;
+    long     argc = 0;
+    PIZError err = PIZ_GOOD;
+    t_atom   *argv = NULL;
+    PIZArray *values = pizArrayNew (4);
     
-    systhread_mutex_lock (&x->algorithmMutex);
+    LOCK
     err = pizNeuralGasEncodeToArray (x->neuralGas, n, values);
-    systhread_mutex_unlock (&x->algorithmMutex);
+    UNLOCK
     
     if (!err) {
-        size = pizGrowingArrayCount (values);
+        size = pizArrayCount (values);
 
         if (atom_alloc_array (size, &argc, &argv, &alloc) == MAX_ERR_NONE) {
-            long *ptr = pizGrowingArrayPtr (values);
+            long *ptr = pizArrayPtr (values);
 
             atom_setlong_array (argc, argv, argc, ptr);
             outlet_list (x->rightOutlet, NULL, argc, argv);
@@ -345,7 +366,81 @@ void yankee_dump (t_yankee *x, long n)
         }
     }
     
-    pizGrowingArrayFree (values);
+    pizArrayFree (values);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZ_INLINE void pizNeuralGasSetLambda (PIZNeuralGas *x, long n)
+{
+    x->lambda = MAX (n, 1);
+}
+
+PIZ_INLINE void pizNeuralGasSetEpsilon1 (PIZNeuralGas *x, double f)
+{
+    if (f > 0. && f < 1.) {
+        x->epsilon1 = f;
+    }
+}
+
+PIZ_INLINE void pizNeuralGasSetEpsilon2 (PIZNeuralGas *x, double f)
+{
+    if (f > 0. && f < 1.) {
+        x->epsilon2 = f;
+    }
+}
+
+PIZ_INLINE void pizNeuralGasSetAlpha (PIZNeuralGas *x, double f)
+{
+    if (f > 0. && f < 1.) {
+        x->alpha = f;
+    }
+}
+
+PIZ_INLINE void pizNeuralGasSetBeta (PIZNeuralGas *x, double f)
+{
+    if (f > 0. && f < 1.) {
+            x->beta = f;
+        }
+}
+
+PIZ_INLINE void pizNeuralGasSetKappa (PIZNeuralGas *x, double f)
+{
+    if (f > 0.) {
+        x->kappa = f;
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZ_INLINE PIZError pizNeuralGasEncodeToArray (const PIZNeuralGas *x, long n, PIZArray *a)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if ((n >= 0) && (n < x->mapSize) && a) {
+        long i, j, t, k = 0;
+        
+        err = PIZ_GOOD;
+        
+        for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+            if (pizItemset128IsSetAtIndex (&x->map, i)) {
+                if (k == n) {
+                    for (j = 0; j < x->vectorSize; j++) {
+                        t = (long)(((*(x->vectorStock + (n * x->vectorSize) + j)) + 0.5));
+                        err |= pizArrayAppend (a, t);
+                    }
+                }
+                
+                k ++;
+            }
+        }
+    }
+    
+    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------

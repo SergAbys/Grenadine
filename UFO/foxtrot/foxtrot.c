@@ -28,7 +28,6 @@
 
 #define MAXIMUM_LIST_SIZE                   256
 #define DEFAULT_PERSISTENCE                 0.5
-
 #define PIZ_ALPHABET_SIZE                   128
 #define PIZ_MARKOV_MODEL_START              0
 #define PIZ_MARKOV_MODEL_TRANSITIONS        1
@@ -57,16 +56,19 @@ typedef struct _foxtrot {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void     *foxtrot_new                               (t_symbol *s, long argc, t_atom *argv);
-void      foxtrot_free                              (t_foxtrot *x);
-void      foxtrot_assist                            (t_foxtrot *x, void *b, long m, long a, char *s);
+void     *foxtrot_new               (t_symbol *s, long argc, t_atom *argv);
+void      foxtrot_free              (t_foxtrot *x);
+void      foxtrot_assist            (t_foxtrot *x, void *b, long m, long a, char *s);
 
-t_max_err foxtrot_setPersistence                    (t_foxtrot *x, t_object *attr, long argc, t_atom *argv);
+t_max_err foxtrot_setPersistence    (t_foxtrot *x, t_object *attr, long argc, t_atom *argv);
 
-void      foxtrot_learn                             (t_foxtrot *x, t_symbol *s, long argc, t_atom *argv);
-void      foxtrot_int                               (t_foxtrot *x, long n);
-void      foxtrot_dump                              (t_foxtrot *x, long n);
-void      foxtrot_clear                             (t_foxtrot *x);
+void      foxtrot_learn             (t_foxtrot *x, t_symbol *s, long argc, t_atom *argv);
+void      foxtrot_int               (t_foxtrot *x, long n);
+void      foxtrot_dump              (t_foxtrot *x, long n);
+void      foxtrot_clear             (t_foxtrot *x);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
 PIZ_INLINE void     pizMarkovModelSetPersistence    (PIZMarkovModel *x, double f);
 PIZ_INLINE PIZError pizMarkovModelEncodeToArray     (const PIZMarkovModel *x, long n, PIZArray *a);
@@ -219,7 +221,7 @@ void foxtrot_int (t_foxtrot *x, long n)
     long    argc = 0;
 
     if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
-        long err = PIZ_ERROR;
+        PIZError err = PIZ_ERROR;
             
         LOCK
 
@@ -253,7 +255,7 @@ void foxtrot_dump (t_foxtrot *x, long n)
     char     alloc;
     long     size;
     long     argc = 0;
-    long     err = PIZ_GOOD;
+    PIZError err = PIZ_GOOD;
     t_atom   *argv = NULL;
     PIZArray *values = pizArrayNew (256);
     

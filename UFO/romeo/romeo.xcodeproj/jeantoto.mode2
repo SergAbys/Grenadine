@@ -285,7 +285,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>318 254 526 448 0 0 1280 778 </string>
+								<string>130 248 526 448 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -424,8 +424,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D425E51529D9010055F6A9</string>
-				<string>96D425E61529D9010055F6A9</string>
+				<string>96D937121535D22D006F766A</string>
+				<string>96D937131535D22D006F766A</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -462,7 +462,7 @@
 		<string>/Users/jeantoto/Dev/Grenadine/Ufo/romeo/romeo.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>318 254 526 448 0 0 1280 778 </string>
+	<string>130 248 526 448 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -676,7 +676,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D425E71529D9010055F6A9</string>
+				<string>96D937161535D2DC006F766A</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

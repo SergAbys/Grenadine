@@ -64,13 +64,13 @@ PIZAgent *pizAgentNew (void)
     long     err = PIZ_GOOD;
     PIZEvent *event = NULL;
     
-    x->flags                = PIZ_AGENT_FLAG_GUI;  
+    x->flags                = PIZ_AGENT_FLAG_NONE;  
     x->bpm                  = PIZ_DEFAULT_BPM;  
     x->runInQueue           = pizLinklistNew ( );
     x->runOutQueue          = pizLinklistNew ( );
     x->graphicInQueue       = pizLinklistNew ( );
     x->graphicOutQueue      = pizLinklistNew ( );
-    x->mainQueue            = pizLinklistNew ( );
+    x->transformQueue       = pizLinklistNew ( );
     x->notifyQueue          = pizLinklistNew ( );
     x->sequence             = pizSequenceNew      (0);
     x->factorOracle         = pizFactorOracleNew  (0, NULL);
@@ -82,7 +82,7 @@ PIZAgent *pizAgentNew (void)
         x->runOutQueue      && 
         x->graphicInQueue   &&
         x->graphicOutQueue  &&
-        x->mainQueue        &&
+        x->transformQueue   &&
         x->notifyQueue      && 
         x->sequence         &&
         x->factorOracle     &&
@@ -159,7 +159,7 @@ void pizAgentFree (PIZAgent *x)
     pizLinklistFree (x->runOutQueue);
     pizLinklistFree (x->graphicInQueue);
     pizLinklistFree (x->graphicOutQueue);
-    pizLinklistFree (x->mainQueue);
+    pizLinklistFree (x->transformQueue);
     pizLinklistFree (x->notifyQueue);
     
     pizSequenceFree (x->sequence);
@@ -179,9 +179,9 @@ void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
     PIZLinklist *queue = NULL;
     
     switch (event->type) {
-        case PIZ_EVENT_RUN            : queue = x->runInQueue; break;
-        case PIZ_EVENT_TRANSFORMATION : queue = x->mainQueue; break;
-        case PIZ_EVENT_GRAPHIC        : if (x->flags & PIZ_AGENT_FLAG_GUI) { queue = x->graphicInQueue; } break;
+        case PIZ_EVENT_RUN       : queue = x->runInQueue; break;
+        case PIZ_EVENT_TRANSFORM : queue = x->transformQueue; break;
+        case PIZ_EVENT_GRAPHIC   : queue = x->graphicInQueue; break;
     }
     
     if (queue) {
@@ -200,7 +200,7 @@ PIZError pizAgentGetEvent (PIZAgent *x, PIZEventType type, PIZEvent **eventPtr)
         
     switch (type) {
         case PIZ_EVENT_RUN     : queue = x->runOutQueue; break;
-        case PIZ_EVENT_GRAPHIC : if (x->flags & PIZ_AGENT_FLAG_GUI) { queue = x->graphicOutQueue; } break;
+        case PIZ_EVENT_GRAPHIC : queue = x->graphicOutQueue; break;
     }
     
     if (queue) {

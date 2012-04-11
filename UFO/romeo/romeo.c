@@ -8,7 +8,7 @@
  */
  
 /*
- *  Last modified : 26/02/12.
+ *  Last modified : 11/04/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -21,12 +21,20 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizAlgorithmsMaxMSP.h"
+#include "pizGaloisLattice.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define MAXIMUM_LIST_SIZE   256
+#define MAXIMUM_LIST_SIZE               256
+#define PIZ_GALOIS_LATTICE_CONCEPTS     0
+#define PIZ_GALOIS_LATTICE_DATA         1
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define LOCK    systhread_mutex_lock (&x->algorithmMutex);
+#define UNLOCK  systhread_mutex_unlock (&x->algorithmMutex);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -55,6 +63,12 @@ void romeo_clear    (t_romeo *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+PIZ_INLINE PIZError pizGaloisLatticeEncodeToArray   (const PIZGaloisLattice *x, long n, PIZArray *a);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 static t_class  *romeo_class;
 
 int main (void)
@@ -79,6 +93,7 @@ int main (void)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void *romeo_new (t_symbol *s, long argc, t_atom *argv)
 {
@@ -140,15 +155,16 @@ void romeo_assist (t_romeo *x, void *b, long m, long a, char *s)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void romeo_learn (t_romeo *x, t_symbol *s, long argc, t_atom *argv)
 {   
-    systhread_mutex_lock (&x->algorithmMutex);
+    LOCK
     
     atom_getlong_array (argc, argv, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
     pizGaloisLatticeAdd (x->galoisLattice, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
     
-    systhread_mutex_unlock (&x->algorithmMutex);
+    UNLOCK
 }
 
 void romeo_int (t_romeo *x, long n)
@@ -158,9 +174,9 @@ void romeo_int (t_romeo *x, long n)
     long    argc = 0;
 
     if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
-        long err = PIZ_ERROR;
+        PIZError err = PIZ_ERROR;
             
-        systhread_mutex_lock (&x->algorithmMutex);
+        LOCK
 
         if (pizGaloisLatticeCount (x->galoisLattice)) {
             if (!(err = pizGaloisLatticeProceed (x->galoisLattice, argc, x->values))) {
@@ -168,7 +184,7 @@ void romeo_int (t_romeo *x, long n)
             }
         }
         
-        systhread_mutex_unlock (&x->algorithmMutex);
+        UNLOCK
 
         if (!err) {
             outlet_list (x->leftOutlet, NULL, argc, argv);
@@ -180,30 +196,32 @@ void romeo_int (t_romeo *x, long n)
     
 void romeo_clear (t_romeo *x)
 {
-    systhread_mutex_lock (&x->algorithmMutex);
+    LOCK
     
     pizGaloisLatticeClear (x->galoisLattice);
     
-    systhread_mutex_unlock (&x->algorithmMutex);
+    UNLOCK
 }
 
 void romeo_dump (t_romeo *x, long n)
 {
-    char            alloc;
-    t_atom          *argv = NULL;
-    long            argc = 0;
+    char    alloc;
+    t_atom  *argv = NULL;
+    long    argc = 0;
 
     if (atom_alloc_array (n, &argc, &argv, &alloc) == MAX_ERR_NONE) {
-        long            err = PIZ_GOOD;
-        PIZGrowingArray *values = pizGrowingArrayNew (4);
+        PIZError err = PIZ_GOOD;
+        PIZArray *values = pizArrayNew (4);
 
-        systhread_mutex_lock (&x->algorithmMutex);
+        LOCK
+        
         err = pizGaloisLatticeEncodeToArray (x->galoisLattice, n, values);
-        systhread_mutex_unlock (&x->algorithmMutex);
+        
+        UNLOCK
 
         if (!err) {
-            long i, count = pizGrowingArrayValueAtIndex (values, PIZ_GALOIS_LATTICE_CONCEPTS);
-            long *ptr  = pizGrowingArrayPtr (values);
+            long i, count = pizArrayValueAtIndex (values, PIZ_GALOIS_LATTICE_CONCEPTS);
+            long *ptr  = pizArrayPtr (values);
                                 
             for (i = 0; i < count; i++) {
                 atom_setlong_array (argc, argv, argc, ptr + PIZ_GALOIS_LATTICE_DATA + (n * i));
@@ -212,8 +230,37 @@ void romeo_dump (t_romeo *x, long n)
         }
             
         sysmem_freeptr (argv);
-        pizGrowingArrayFree (values);
+        pizArrayFree (values);
     }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZ_INLINE PIZError pizGaloisLatticeEncodeToArray (const PIZGaloisLattice *x, long n, PIZArray *a)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if ((n > 0) && (n < PIZ_ITEMSET128_SIZE) && a) {
+        long i, count = pizArrayCount (x->map[n]);
+        
+        err = PIZ_GOOD;
+        
+        err |= pizArrayAppend (a, count);
+        
+        for (i = 0; i < count; i++) {
+            long j, p = pizArrayValueAtIndex (x->map[n], i);
+            
+            for (j = 0; j < PIZ_ITEMSET128_SIZE; j++) {
+                if (pizItemset128IsSetAtIndex (&(x->stock[p].itemset), j)) {
+                    err |= pizArrayAppend (a, j);
+                }
+            }
+        }
+    }
+    
+    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------

@@ -55,18 +55,18 @@ typedef struct _charlie {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void        *charlie_new                            (t_symbol *s, long argc, t_atom *argv);
-void        charlie_free                            (t_charlie *x);
-void        charlie_assist                          (t_charlie *x, void *b, long m, long a, char *s);
+void        *charlie_new            (t_symbol *s, long argc, t_atom *argv);
+void        charlie_free            (t_charlie *x);
+void        charlie_assist          (t_charlie *x, void *b, long m, long a, char *s);
 
-t_max_err   charlie_setRange                        (t_charlie *x, t_object *attr, long argc, t_atom *argv);
-t_max_err   charlie_setTraining                     (t_charlie *x, t_object *attr, long argc, t_atom *argv);
-t_max_err   charlie_setStep                         (t_charlie *x, t_object *attr, long argc, t_atom *argv);
+t_max_err   charlie_setRange        (t_charlie *x, t_object *attr, long argc, t_atom *argv);
+t_max_err   charlie_setTraining     (t_charlie *x, t_object *attr, long argc, t_atom *argv);
+t_max_err   charlie_setStep         (t_charlie *x, t_object *attr, long argc, t_atom *argv);
 
-void        charlie_learn                           (t_charlie *x, t_symbol *s, long argc, t_atom *argv);
-void        charlie_int                             (t_charlie *x, long n);
-void        charlie_dump                            (t_charlie *x, long n);
-void        charlie_clear                           (t_charlie *x);
+void        charlie_learn           (t_charlie *x, t_symbol *s, long argc, t_atom *argv);
+void        charlie_int             (t_charlie *x, long n);
+void        charlie_dump            (t_charlie *x, long n);
+void        charlie_clear           (t_charlie *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
