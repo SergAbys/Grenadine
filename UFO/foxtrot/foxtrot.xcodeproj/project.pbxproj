@@ -210,12 +210,7 @@
 				GCC_UNROLL_LOOPS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/../../Info.plist";
 				INSTALL_PATH = /;
-				LIBRARY_SEARCH_PATHS = (
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
-				);
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../pizAlgorithms/build/Release\"";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = foxtrot;
 				UNEXPORTED_SYMBOLS_FILE = foxtrotHide.txt;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";

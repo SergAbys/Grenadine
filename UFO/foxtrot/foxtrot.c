@@ -29,6 +29,7 @@
 #define MAXIMUM_LIST_SIZE                   256
 #define DEFAULT_PERSISTENCE                 0.5
 #define PIZ_ALPHABET_SIZE                   128
+
 #define PIZ_MARKOV_MODEL_START              0
 #define PIZ_MARKOV_MODEL_TRANSITIONS        1
 #define PIZ_MARKOV_MODEL_EMISSIONS          2

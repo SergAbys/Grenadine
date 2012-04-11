@@ -11,8 +11,8 @@
 		breakpointsGroup = 9689AEF3118F1C8C0017CC23 /* XCBreakpointsBucket */;
 		codeSenseManager = 969A34CD117840B80036C6BE /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 355849269;
-			PBXWorkspaceStateSaveDate = 355849269;
+			PBXPerProjectTemplateStateSaveDate = 355851406;
+			PBXWorkspaceStateSaveDate = 355851406;
 		};
 		sourceControlManager = 969A34CC117840B80036C6BE /* Source Control */;
 		userBuildSettings = {
@@ -29,9 +29,9 @@
 	};
 	9699D97114139B5800F86BD8 /* yankeeHide.txt */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1234, 645}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRect = "{{0, 0}, {1234, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1234, 1050}}";
+			sepNavSelRange = "{760, 0}";
+			sepNavVisRect = "{{0, 405}, {1234, 645}}";
 			sepNavWindowFrame = "{{-1, 4}, {1279, 774}}";
 		};
 	};
@@ -49,9 +49,9 @@
 	};
 	969A34D3117841580036C6BE /* yankee.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1236, 8800}}";
-			sepNavSelRange = "{7152, 0}";
-			sepNavVisRect = "{{0, 3157}, {1236, 643}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1236, 11175}}";
+			sepNavSelRange = "{14536, 0}";
+			sepNavVisRect = "{{0, 10532}, {1236, 643}}";
 			sepNavWindowFrame = "{{0, 6}, {1281, 772}}";
 		};
 	};

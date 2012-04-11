@@ -27,6 +27,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #define MAXIMUM_LIST_SIZE               256
+
 #define PIZ_GALOIS_LATTICE_CONCEPTS     0
 #define PIZ_GALOIS_LATTICE_DATA         1
 

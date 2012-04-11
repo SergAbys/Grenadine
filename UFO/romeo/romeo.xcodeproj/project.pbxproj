@@ -218,7 +218,6 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
-				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../pizAlgorithms/build/Release\"";
 				PREBINDING = YES;
 				PRODUCT_NAME = romeo;
 				UNEXPORTED_SYMBOLS_FILE = romeoHide.txt;

@@ -11,8 +11,8 @@
 		breakpointsGroup = 96D9BA9D14E0225800245697 /* XCBreakpointsBucket */;
 		codeSenseManager = 968B637510BAC78D00DEB777 /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 355309892;
-			PBXWorkspaceStateSaveDate = 355309892;
+			PBXPerProjectTemplateStateSaveDate = 355851442;
+			PBXWorkspaceStateSaveDate = 355851442;
 		};
 		sourceControlManager = 968B637410BAC78D00DEB777 /* Source Control */;
 		userBuildSettings = {
@@ -20,9 +20,9 @@
 	};
 	08FB77B2FE8417CDC02AAC07 /* zoulou.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1237, 7100}}";
-			sepNavSelRange = "{9220, 28}";
-			sepNavVisRect = "{{0, 6351}, {1237, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1237, 8800}}";
+			sepNavSelRange = "{1028, 0}";
+			sepNavVisRect = "{{0, 8155}, {1237, 645}}";
 			sepNavWindowFrame = "{{-4, 4}, {1282, 774}}";
 		};
 	};
@@ -43,9 +43,9 @@
 	};
 	96CB70DF1407C35500601EBA /* zoulouHide.txt */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1234, 875}}";
-			sepNavSelRange = "{655, 0}";
-			sepNavVisRect = "{{0, 101}, {1234, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1234, 775}}";
+			sepNavSelRange = "{594, 0}";
+			sepNavVisRect = "{{0, 0}, {1234, 645}}";
 			sepNavWindowFrame = "{{15, -1}, {1279, 774}}";
 		};
 	};

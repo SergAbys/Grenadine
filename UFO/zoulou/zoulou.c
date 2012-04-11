@@ -8,7 +8,7 @@
  */
  
 /*
- *  Last modified : 26/02/12.
+ *  Last modified : 11/04/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -21,14 +21,25 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizAlgorithmsMaxMSP.h"
+#include "pizFactorOracle.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define MAXIMUM_LIST_SIZE           256
-#define DEFAULT_BACKWARD_THRESHOLD  2
-#define DEFAULT_STRAIGHT_RATIO      0.25
+#define MAXIMUM_LIST_SIZE               256
+#define DEFAULT_BACKWARD_THRESHOLD      2
+#define DEFAULT_STRAIGHT_RATIO          0.25
+
+#define PIZ_FACTOR_ORACLE_REFER         0
+#define PIZ_FACTOR_ORACLE_LRS           1
+#define PIZ_FACTOR_ORACLE_ARCS          2
+#define PIZ_FACTOR_ORACLE_DATA          3
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define LOCK    systhread_mutex_lock (&x->algorithmMutex);
+#define UNLOCK  systhread_mutex_unlock (&x->algorithmMutex);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -61,6 +72,14 @@ void        zoulou_clear                    (t_zoulou *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+PIZ_INLINE void     pizFactorOracleSetBackwardThreshold     (PIZFactorOracle *x, long n);
+PIZ_INLINE void     pizFactorOracleSetStraightRatio         (PIZFactorOracle *x, double f);
+PIZ_INLINE PIZError pizFactorOracleEncodeToArray            (const PIZFactorOracle *x, long node, PIZArray *a);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 static t_class  *zoulou_class;
 
@@ -111,6 +130,7 @@ int main (void)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void *zoulou_new (t_symbol *s, long argc, t_atom *argv)
 {
@@ -171,6 +191,7 @@ void zoulou_assist (t_zoulou *x, void *b, long m, long a, char *s)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 t_max_err zoulou_setStraightRatio (t_zoulou *x, t_object *attr, long argc, t_atom *argv)
 {
@@ -194,15 +215,16 @@ t_max_err zoulou_setBackwardThreshold (t_zoulou *x, t_object *attr, long argc, t
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void zoulou_learn (t_zoulou *x, t_symbol *s, long argc, t_atom *argv)          
 {   
-    systhread_mutex_lock (&x->algorithmMutex);
+    LOCK
     
     atom_getlong_array (argc, argv, MIN (argc, MAXIMUM_LIST_SIZE), x->values);
     pizFactorOracleAdd (x->factorOracle, MIN (argc, MAXIMUM_LIST_SIZE), x->values);
     
-    systhread_mutex_unlock (&x->algorithmMutex);
+    UNLOCK
 }
 
 void zoulou_int (t_zoulou *x, long n)
@@ -212,9 +234,9 @@ void zoulou_int (t_zoulou *x, long n)
     long    argc = 0;
 
     if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
-        long err = PIZ_ERROR;
+        PIZError err = PIZ_ERROR;
             
-        systhread_mutex_lock (&x->algorithmMutex);
+        LOCK
 
         if (pizFactorOracleCount (x->factorOracle)) {
             if (!(err = pizFactorOracleProceed (x->factorOracle, argc, x->values))) {
@@ -222,7 +244,7 @@ void zoulou_int (t_zoulou *x, long n)
             }
         }
         
-        systhread_mutex_unlock (&x->algorithmMutex);
+        UNLOCK
 
         if (!err) {
             outlet_list (x->leftOutlet, NULL, argc, argv);
@@ -234,29 +256,31 @@ void zoulou_int (t_zoulou *x, long n)
     
 void zoulou_clear (t_zoulou *x)
 {
-    systhread_mutex_lock (&x->algorithmMutex);
+    LOCK
     
     pizFactorOracleClear (x->factorOracle);
 
-    systhread_mutex_unlock (&x->algorithmMutex);
+    UNLOCK
 }
 
 void zoulou_dump (t_zoulou *x, long n)
 {
-    long err = PIZ_GOOD;
-    PIZGrowingArray *values = pizGrowingArrayNew (4);
+    PIZError err = PIZ_GOOD;
+    PIZArray *values = pizArrayNew (4);
 
-    systhread_mutex_lock (&x->algorithmMutex);
+    LOCK
+    
     err = pizFactorOracleEncodeToArray (x->factorOracle, n, values);
-    systhread_mutex_unlock (&x->algorithmMutex);
+    
+    UNLOCK
     
     if (!err) {
         long    i, k, ref, lrs;
         t_atom  result[4];
         
-        ref = pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_REFER);
-        lrs = pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_LRS);
-        k   = pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_ARCS);
+        ref = pizArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_REFER);
+        lrs = pizArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_LRS);
+        k   = pizArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_ARCS);
         
         atom_setlong        (result, n);
         atom_setsym         (result + 1, zoulou_sym_ref);
@@ -270,14 +294,58 @@ void zoulou_dump (t_zoulou *x, long n)
         atom_setsym         (result + 1, zoulou_sym_arc);
         
         for (i = 0; i < k; i++) {
-            atom_setlong (result + 2, pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i));
-            atom_setlong (result + 3, pizGrowingArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i + k));
+            atom_setlong (result + 2, pizArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i));
+            atom_setlong (result + 3, pizArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i + k));
     
             outlet_anything (x->rightOutlet, zoulou_sym_node, 4, result);
         }
     }
     
-    pizGrowingArrayFree (values);
+    pizArrayFree (values);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZ_INLINE void pizFactorOracleSetBackwardThreshold (PIZFactorOracle *x, long n)
+{
+    if (n >= 0) {
+        x->backwardThreshold = n;
+    }
+}
+
+PIZ_INLINE void pizFactorOracleSetStraightRatio (PIZFactorOracle *x, double f)
+{
+    if ((f >= 0.) && (f <= 1.)) {
+        x->straightRatio = f;
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZ_INLINE PIZError pizFactorOracleEncodeToArray (const PIZFactorOracle *x, long node, PIZArray *a)
+{
+    long     i, count;
+    PIZError err = PIZ_ERROR;
+    
+    if ((node < x->index) && a) {
+            err = PIZ_GOOD;
+            
+            err |= pizArrayAppend (a, x->nodes[node].referTo);
+            err |= pizArrayAppend (a, x->nodes[node].lengthRepeatedSuffix);
+            err |= pizArrayAppend (a, (count = pizArrayCount (x->nodes[node].arcDestinations)));
+            
+            for (i = 0; i < count; i++) {
+                err |= pizArrayAppend (a, pizArrayValueAtIndex (x->nodes[node].arcDestinations, i));
+            }
+            
+            for (i = 0; i < count; i++) {
+                err |= pizArrayAppend (a, pizArrayValueAtIndex (x->nodes[node].arcValues, i));
+            }
+        }
+    
+    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------
