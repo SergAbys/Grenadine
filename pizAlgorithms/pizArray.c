@@ -1,7 +1,7 @@
 /*
  * \file    pizArray.c
  * \author  Jean Sapristi
- * \date    April 8, 2012.
+ * \date    April 10, 2012.
  */
  
 /*
@@ -171,55 +171,6 @@ long pizArrayCount (const PIZArray *x)
 long *pizArrayPtr (const PIZArray *array)
 {
     return array->values;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void pizArrayRemoveIndex (PIZArray *array, long index)
-{
-    long i;
-            
-    for (i = index; i < (array->index - 1); i++) {
-        array->values[i] = array->values[i + 1];
-    }
-    
-    array->index --;
-}
-
-void pizArrayRemoveLastValue (PIZArray *x)
-{
-    x->index --;
-}
-
-long pizArrayFirstIndexOfValue (const PIZArray *x, long value)
-{
-    long i, k = -1;
-    
-    for (i = 0; i < x->index; i++) {
-        if (x->values[i] == value) {
-            k = i;
-            break;
-        }
-    }
-    
-    return k;
-}
-
-bool pizArrayContainsValue (const PIZArray *x, long value)
-{
-    long i;
-    bool k = false;
-    
-    for (i = 0; i < x->index; i++) {
-        if (x->values[i] == value) {
-            k = true;
-            break;
-        }
-    }
-        
-    return k;
 }
 
 // -------------------------------------------------------------------------------------------------------------

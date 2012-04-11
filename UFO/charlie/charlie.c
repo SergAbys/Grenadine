@@ -8,7 +8,7 @@
  */
  
 /*
- *  Last modified : 26/02/12.
+ *  Last modified : 11/04/12.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -21,15 +21,21 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizAlgorithmsMaxMSP.h"
+#include "pizKohonenMap.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define MAXIMUM_LIST_SIZE   256
-#define DEFAULT_RANGE       10
-#define DEFAULT_TRAINING    60
-#define DEFAULT_STEP        1.
+#define MAXIMUM_LIST_SIZE       256
+#define DEFAULT_RANGE           10
+#define DEFAULT_TRAINING        60
+#define DEFAULT_STEP            1.
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define LOCK    systhread_mutex_lock (&x->algorithmMutex);
+#define UNLOCK  systhread_mutex_unlock (&x->algorithmMutex);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -49,21 +55,30 @@ typedef struct _charlie {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void        *charlie_new            (t_symbol *s, long argc, t_atom *argv);
-void        charlie_free            (t_charlie *x);
-void        charlie_assist          (t_charlie *x, void *b, long m, long a, char *s);
+void        *charlie_new                            (t_symbol *s, long argc, t_atom *argv);
+void        charlie_free                            (t_charlie *x);
+void        charlie_assist                          (t_charlie *x, void *b, long m, long a, char *s);
 
-t_max_err   charlie_setRange        (t_charlie *x, t_object *attr, long argc, t_atom *argv);
-t_max_err   charlie_setTraining     (t_charlie *x, t_object *attr, long argc, t_atom *argv);
-t_max_err   charlie_setStep         (t_charlie *x, t_object *attr, long argc, t_atom *argv);
+t_max_err   charlie_setRange                        (t_charlie *x, t_object *attr, long argc, t_atom *argv);
+t_max_err   charlie_setTraining                     (t_charlie *x, t_object *attr, long argc, t_atom *argv);
+t_max_err   charlie_setStep                         (t_charlie *x, t_object *attr, long argc, t_atom *argv);
 
-void        charlie_learn           (t_charlie *x, t_symbol *s, long argc, t_atom *argv);
-void        charlie_int             (t_charlie *x, long n);
-void        charlie_dump            (t_charlie *x, long n);
-void        charlie_clear           (t_charlie *x);
+void        charlie_learn                           (t_charlie *x, t_symbol *s, long argc, t_atom *argv);
+void        charlie_int                             (t_charlie *x, long n);
+void        charlie_dump                            (t_charlie *x, long n);
+void        charlie_clear                           (t_charlie *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+PIZ_INLINE void     pizKohonenMapSetRange           (PIZKohonenMap *x, long n);
+PIZ_INLINE void     pizKohonenMapSetTraining        (PIZKohonenMap *x, long n);
+PIZ_INLINE void     pizKohonenMapSetStep            (PIZKohonenMap *x, double f);
+PIZ_INLINE PIZError pizKohonenMapEncodeToArray      (const PIZKohonenMap *x, long n, PIZArray *a);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 static t_class  *charlie_class;
 
@@ -110,6 +125,7 @@ return MAX_ERR_NONE;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void *charlie_new (t_symbol *s, long argc, t_atom *argv)
 {
@@ -181,6 +197,7 @@ void charlie_assist (t_charlie *x, void *b, long m, long a, char *s)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 t_max_err charlie_setRange (t_charlie *x, t_object *attr, long argc, t_atom *argv)
 {
@@ -214,27 +231,28 @@ t_max_err charlie_setStep (t_charlie *x, t_object *attr, long argc, t_atom *argv
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void charlie_learn (t_charlie *x, t_symbol *s, long argc, t_atom *argv)
 {   
-    systhread_mutex_lock (&x->algorithmMutex);
+    LOCK
     
     atom_getlong_array (argc, argv, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
     pizKohonenMapAdd (x->kohonenMap, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
     
-    systhread_mutex_unlock (&x->algorithmMutex);
+    UNLOCK
 }
 
 void charlie_int (t_charlie *x, long n)
 {
-    char    alloc;
-    t_atom  *argv = NULL;
-    long    argc = 0;
-
+    char     alloc;
+    t_atom   *argv = NULL;
+    long     argc = 0;
+    PIZError err = PIZ_ERROR;
+    
     if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
-        long err = PIZ_ERROR;
-            
-        systhread_mutex_lock (&x->algorithmMutex);
+
+        LOCK
 
         if (pizKohonenMapCount (x->kohonenMap)) {
             if (!(err = pizKohonenMapProceed (x->kohonenMap, argc, x->values))) {
@@ -242,7 +260,7 @@ void charlie_int (t_charlie *x, long n)
             }
         }
         
-        systhread_mutex_unlock (&x->algorithmMutex);
+        UNLOCK
 
         if (!err) {
             outlet_list (x->leftOutlet, NULL, argc, argv);
@@ -254,31 +272,32 @@ void charlie_int (t_charlie *x, long n)
     
 void charlie_clear (t_charlie *x)
 {
-    systhread_mutex_lock (&x->algorithmMutex);
+    LOCK
     
     pizKohonenMapClear (x->kohonenMap);
     
-    systhread_mutex_unlock (&x->algorithmMutex);
+    UNLOCK
 }
 
 void charlie_dump (t_charlie *x, long n)
 {
-    char            alloc;
-    long            size;
-    long            argc = 0;
-    long            err = PIZ_GOOD;
-    t_atom          *argv = NULL;
-    PIZGrowingArray *values = pizGrowingArrayNew (4);
+    char     alloc;
+    long     size, argc = 0;
+    PIZError err = PIZ_GOOD;
+    t_atom   *argv = NULL;
+    PIZArray *values = pizArrayNew (4);
     
-    systhread_mutex_lock (&x->algorithmMutex);
+    LOCK
+    
     err = pizKohonenMapEncodeToArray (x->kohonenMap, n, values);
-    systhread_mutex_unlock (&x->algorithmMutex);
+    
+    UNLOCK
     
     if (!err) {
-        size = pizGrowingArrayCount (values);
+        size = pizArrayCount (values);
 
         if (atom_alloc_array (size, &argc, &argv, &alloc) == MAX_ERR_NONE) {
-            long *ptr = pizGrowingArrayPtr (values);
+            long *ptr = pizArrayPtr (values);
 
             atom_setlong_array (argc, argv, argc, ptr);
             outlet_list (x->rightOutlet, NULL, argc, argv);
@@ -287,7 +306,49 @@ void charlie_dump (t_charlie *x, long n)
         }
     }
     
-    pizGrowingArrayFree (values);
+    pizArrayFree (values);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZ_INLINE void pizKohonenMapSetRange (PIZKohonenMap *x, long n)
+{
+    x->range = MAX (n, 1);
+}
+
+PIZ_INLINE void pizKohonenMapSetTraining (PIZKohonenMap *x, long n)
+{
+    x->training = MAX (n, 1);
+}
+
+PIZ_INLINE void pizKohonenMapSetStep (PIZKohonenMap *x, double f)
+{
+    if (f > 0.) {
+        x->step = f;
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZ_INLINE PIZError pizKohonenMapEncodeToArray (const PIZKohonenMap *x, long n, PIZArray *a)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if ((n >= 0) && (n < x->mapSize) && a) {
+        long i;
+        
+        err = PIZ_GOOD;
+        
+        for (i = 0; i < x->vectorSize; i++) {
+            err |= pizArrayAppend (a, (long)(((*(x->map + (n * x->vectorSize) + i)) + 0.5)));
+        }
+    }
+    
+    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------

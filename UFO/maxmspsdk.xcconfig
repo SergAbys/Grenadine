@@ -42,6 +42,6 @@ GENERATE_PKGINFO_FILE = YES
 //
 //
 
-// Tralala Paths
+// UFO Paths
 USER_HEADER_SEARCH_PATHS = $(SRCROOT)/../../pizAlgorithms
 LIBRARY_SEARCH_PATHS = $(SRCROOT)/../../pizAlgorithms/build/release
