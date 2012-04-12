@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	April 9, 2012.
+ * \date	April 12, 2012.
  */
 
 /*
@@ -72,6 +72,7 @@ typedef enum _PIZEventIdentifier {
     PIZ_EVENT_BPM,
     PIZ_EVENT_NOTE_PLAYED,
     // TRANSFORM 
+    PIZ_EVENT_CLEAR,
 /*    PIZ_EVENT_CHANCE,
     PIZ_EVENT_VELOCITY,
     PIZ_EVENT_CHANNEL,
@@ -113,8 +114,6 @@ typedef union _PIZEventData {
     long    value;
     long    note[PIZ_SEQUENCE_NOTE_SIZE];
     long    zone[PIZ_SEQUENCE_ZONE_SIZE];
-    //long    pattern [PIZ_SEQUENCE_MAXIMUM_PATTERN];
-    //long    scale   [PIZ_MAGIC_SCALE];
     } PIZEventData;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -141,7 +140,7 @@ const char  *pizEventGetName                (const PIZEvent *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void        pizEventFree                        (PIZEvent *x);  
+void        pizEventFree                    (PIZEvent *x);  
   
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

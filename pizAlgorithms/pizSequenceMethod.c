@@ -1,5 +1,5 @@
 /*
- * \file    pizSequenceTransform.c
+ * \file    pizSequenceMethod.c
  * \author  Jean Sapristi
  * \date    April 12, 2012.
  */
@@ -38,7 +38,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizSequenceTransform.h"
+#include "pizSequenceMethod.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -117,9 +117,9 @@ static const double piz_distribution11[ ] = { 0.54, 0.59, 0.63, 0.68, 0.72, 0.77
 #pragma mark -
 
 //PIZError pizSequenceAlgorithm (PIZSequence *x, PIZAlgorithm *algorithm)
-PIZError pizSequenceAlgorithm (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceMethodAlgorithm (PIZSequence *x, PIZEvent *event)
 {
-    PIZError            err = PIZ_ERROR; /*
+    PIZError            err = PIZ_GOOD; /*
     long                k;
     PIZAlgorithmMethod  count = NULL;
     PIZAlgorithmMethod  proceed = NULL;
@@ -155,9 +155,9 @@ PIZError pizSequenceAlgorithm (PIZSequence *x, PIZEvent *event)
 }
 
 //PIZError pizSequenceNovember (PIZSequence *x, long iterate)
-PIZError pizSequenceNovember (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceMethodNovember (PIZSequence *x, PIZEvent *event)
 {
-    PIZError err1 = PIZ_ERROR;
+    PIZError err1 = PIZ_GOOD;
     /*                                                
     if (x->cell != PIZ_NOTE_VALUE_NONE) {
     //
@@ -384,9 +384,9 @@ PIZError pizSequenceNovember (PIZSequence *x, PIZEvent *event)
 }
 
 //PIZError pizSequenceJuliet (PIZSequence *x, long iterate, long division)
-PIZError pizSequenceJuliet (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceMethodJuliet (PIZSequence *x, PIZEvent *event)
 {
-    PIZError err = PIZ_ERROR;/*
+    PIZError err = PIZ_GOOD;/*
     bool     haveChanged = false;
     
     if (x->cell != PIZ_NOTE_VALUE_NONE) {
@@ -521,7 +521,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, PIZEvent *event)
     return err;
 }
 
-PIZError pizSequenceClear (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceMethodClear (PIZSequence *x, PIZEvent *event)
 {
     if (x->count) {
         pizSequenceFunAll (x, pizSequenceRemoveNote, NULL);
@@ -532,7 +532,7 @@ PIZError pizSequenceClear (PIZSequence *x, PIZEvent *event)
 }
 
 //PIZError pizSequenceTranspose (PIZSequence *x, long n)
-PIZError pizSequenceTranspose (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceMethodTranspose (PIZSequence *x, PIZEvent *event)
 {/*
     long i, a, b;
         
@@ -576,7 +576,7 @@ PIZError pizSequenceTranspose (PIZSequence *x, PIZEvent *event)
 }
 
 //PIZError pizSequenceClean (PIZSequence *x, long value)
-PIZError pizSequenceClean (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceMethodClean (PIZSequence *x, PIZEvent *event)
 {/*
     long i, scale, v, index = 0;
         
@@ -642,7 +642,7 @@ PIZError pizSequenceClean (PIZSequence *x, PIZEvent *event)
 }
 
 //PIZError pizSequenceRotate (PIZSequence *x, PIZMidiSelector selector, long shift)
-PIZError pizSequenceRotate (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceMethodRotate (PIZSequence *x, PIZEvent *event)
 {/*
     long i, k;
             
@@ -662,7 +662,7 @@ PIZError pizSequenceRotate (PIZSequence *x, PIZEvent *event)
 }
 
 //PIZError pizSequenceScramble (PIZSequence *x, PIZMidiSelector selector)
-PIZError pizSequenceScramble (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceMethodScramble (PIZSequence *x, PIZEvent *event)
 {/*
     long i, k;
         
@@ -687,7 +687,7 @@ PIZError pizSequenceScramble (PIZSequence *x, PIZEvent *event)
 }
 
 //PIZError pizSequenceSort (PIZSequence *x, PIZMidiSelector selector, bool down)
-PIZError pizSequenceSort (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceMethodSort (PIZSequence *x, PIZEvent *event)
 {/*
     long i, scale, k;
         
@@ -751,7 +751,7 @@ PIZError pizSequenceSort (PIZSequence *x, PIZEvent *event)
 }
 
 //PIZError pizSequenceChange (PIZSequence *x, PIZMidiSelector selector, long value)
-PIZError pizSequenceChange (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceMethodChange (PIZSequence *x, PIZEvent *event)
 {/*
     long i;
             
@@ -800,7 +800,7 @@ PIZError pizSequenceChange (PIZSequence *x, PIZEvent *event)
 }
 
 //PIZError pizSequenceSet (PIZSequence *x, PIZMidiSelector selector, long value)
-PIZError pizSequenceSet (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceMethodSet (PIZSequence *x, PIZEvent *event)
 {/*
     long i;
             
@@ -845,7 +845,7 @@ PIZError pizSequenceSet (PIZSequence *x, PIZEvent *event)
 }
 
 //PIZError pizSequenceRandom (PIZSequence *x, PIZMidiSelector selector, long minValue, long maxValue)
-PIZError pizSequenceRandom (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceMethodRandom (PIZSequence *x, PIZEvent *event)
 {/*
     long i, range;
         
@@ -902,7 +902,7 @@ PIZError pizSequenceRandom (PIZSequence *x, PIZEvent *event)
 }
 
 //PIZError pizSequenceKill (PIZSequence *x)
-PIZError pizSequenceKill (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceMethodKill (PIZSequence *x, PIZEvent *event)
 {/*
     long i;
     bool haveChanged = false;
@@ -935,7 +935,7 @@ PIZError pizSequenceKill (PIZSequence *x, PIZEvent *event)
 }
 
 //PIZError pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZArray *a)
-PIZError pizSequenceCycle (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceMethodCycle (PIZSequence *x, PIZEvent *event)
 {/*
     if (a) {
     //

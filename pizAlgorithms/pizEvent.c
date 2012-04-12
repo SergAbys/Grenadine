@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	April 8, 2012.
+ * \date	April 12, 2012.
  */
  
 /*
@@ -50,7 +50,8 @@ static const char *piz_eventNames[ ] = {    "Init",
                                             "Unloop",
                                             "Bpm",
                                             "Note Played",
-                                    //
+                                    // 
+                                            "Clear",
                                  /*   "Chance",
                                     "Velocity",
                                     "Channel",
