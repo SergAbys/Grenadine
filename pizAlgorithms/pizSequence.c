@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    April 10, 2012.
+ * \date    April 11, 2012.
  */
  
 /*
@@ -337,7 +337,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue)
     
     if (queue) {
     //
-    pizSequenceIsPlayed (x);
+    pizSequenceFunAll (x, pizSequenceTestIsPlayed, NULL);
     
     if (x->timeline[x->index] && pizLinklistCount (x->timeline[x->index])) {
         long    scale;

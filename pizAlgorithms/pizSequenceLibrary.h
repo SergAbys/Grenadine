@@ -1,7 +1,7 @@
 /**
  * \file	pizSequenceLibrary.h
  * \author	Jean Sapristi
- * \date	April 10, 2012.
+ * \date	April 12, 2012.
  */
 
 /*
@@ -50,38 +50,35 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-//typedef void (*PIZSequenceMethod)(PIZSequence *x, PIZNote *note, PIZEvent *event);
+void     pizSequenceFunAll                  (PIZSequence *x, PIZSequenceMethod f, PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-//void    pizSequenceDoAllNotes               (PIZSequence *x, PIZSequenceMethod f, PIZEvent *event);
+void     pizSequenceRemoveNote              (PIZSequence *x, PIZNote *note, PIZEvent *event);
+void     pizSequenceTestIsPlayed            (PIZSequence *x, PIZNote *note, PIZEvent *event);
+void     pizSequenceFillTempHash            (PIZSequence *x, PIZNote *note, PIZEvent *event);
+void     pizSequenceFillTempNotes           (PIZSequence *x, PIZNote *note, PIZEvent *event);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+void     pizSequenceFillNotes               (PIZSequence *x, PIZMidiSelector selector, bool reverse);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 PIZNote  *pizSequenceNewNote                (PIZSequence *x, long *argv, ulong flags);
 PIZError pizSequenceMoveNote                (PIZSequence *x, PIZNote *note, long newPosition); //
-void     pizSequenceRemoveNote              (PIZSequence *x, PIZNote *note);
-void     pizSequenceRemoveAllNotes          (PIZSequence *x);
+//void   pizSequenceRemoveNote              (PIZSequence *x, PIZNote *note);
+
 void     pizSequenceMakeMap                 (PIZSequence *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void     pizSequenceIsPlayed                (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 long     pizSequenceMovePitchToAmbitus      (PIZSequence *x, long pitch);
 long     pizSequenceSnapPositionToPattern   (PIZSequence *x, long position);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-long     pizSequencePickUpNotes             (PIZSequence *x);
-void     pizSequenceFillValues              (PIZSequence *x, PIZMidiSelector selector, long k, bool reverse);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

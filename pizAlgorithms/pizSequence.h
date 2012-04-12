@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    April 10, 2012.
+ * \date    April 12, 2012.
  */
  
 /*
@@ -187,10 +187,12 @@ typedef struct _PIZNote {
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZSequence {
+    long                    tempIndex;
+    PIZError                tempError;
     long                    *tempValues;
+    PIZBoundedHashTable     *tempHash;
     PIZNote                 **tempNotes1;
     PIZNote                 **tempNotes2;
-    PIZBoundedHashTable     *tempHash;
     PIZArray                *map;
     PIZLinklist             **timeline;
     long                    timelineSize;
@@ -220,41 +222,46 @@ typedef struct _PIZSequence {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZSequence     *pizSequenceNew                     (long size);
-void            pizSequenceFree                     (PIZSequence *x);
+typedef void (*PIZSequenceMethod)( );
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-long            pizSequenceCount                    (PIZSequence *x);
+PIZSequence     *pizSequenceNew             (long size);
+void            pizSequenceFree             (PIZSequence *x);
 
-long            pizSequenceChance                   (PIZSequence *x);
-long            pizSequenceVelocity                 (PIZSequence *x);
-long            pizSequenceChannel                  (PIZSequence *x);
-PIZNoteValue    pizSequenceCell                     (PIZSequence *x);
-PIZNoteValue    pizSequenceGrid                     (PIZSequence *x);
-PIZNoteValue    pizSequenceNoteValue                (PIZSequence *x);
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
-void            pizSequenceSetChance                (PIZSequence *x, long value);
-void            pizSequenceSetVelocity              (PIZSequence *x, long value);
-void            pizSequenceSetChannel               (PIZSequence *x, long channel);
-void            pizSequenceSetCell                  (PIZSequence *x, PIZNoteValue snapValue);
-void            pizSequenceSetGrid                  (PIZSequence *x, PIZNoteValue snapValue);
-void            pizSequenceSetNoteValue             (PIZSequence *x, PIZNoteValue noteValue);
+long            pizSequenceCount            (PIZSequence *x);
 
-PIZError        pizSequenceSetScale                 (PIZSequence *x, 
-                                                    PIZScaleKey key, 
-                                                    PIZScaleType type, 
-                                                    const PIZArray *a);
+long            pizSequenceChance           (PIZSequence *x);
+long            pizSequenceVelocity         (PIZSequence *x);
+long            pizSequenceChannel          (PIZSequence *x);
+PIZNoteValue    pizSequenceCell             (PIZSequence *x);
+PIZNoteValue    pizSequenceGrid             (PIZSequence *x);
+PIZNoteValue    pizSequenceNoteValue        (PIZSequence *x);
+
+void            pizSequenceSetChance        (PIZSequence *x, long value);
+void            pizSequenceSetVelocity      (PIZSequence *x, long value);
+void            pizSequenceSetChannel       (PIZSequence *x, long channel);
+void            pizSequenceSetCell          (PIZSequence *x, PIZNoteValue snapValue);
+void            pizSequenceSetGrid          (PIZSequence *x, PIZNoteValue snapValue);
+void            pizSequenceSetNoteValue     (PIZSequence *x, PIZNoteValue noteValue);
+
+PIZError        pizSequenceSetScale         (PIZSequence *x, 
+                                            PIZScaleKey key, 
+                                            PIZScaleType type, 
+                                            const PIZArray *a);
                                         
-PIZError        pizSequenceSetPattern               (PIZSequence *x, const PIZArray *a);
+PIZError        pizSequenceSetPattern       (PIZSequence *x, const PIZArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-bool            pizSequenceIsAtEnd                  (PIZSequence *x);
-void            pizSequenceGoToStart                (PIZSequence *x);
-PIZError        pizSequenceProceedStep              (PIZSequence *x, PIZLinklist *queue); //
+bool            pizSequenceIsAtEnd          (PIZSequence *x);
+void            pizSequenceGoToStart        (PIZSequence *x);
+PIZError        pizSequenceProceedStep      (PIZSequence *x, PIZLinklist *queue); //
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

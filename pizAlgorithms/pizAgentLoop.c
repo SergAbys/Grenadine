@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	April 10, 2012.
+ * \date	April 12, 2012.
  */
  
 /*
@@ -160,9 +160,11 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
     
     PIZAGENTUNLOCK_EVENT
     
+    DEBUGEVENT
+    
     if (event) {
         pizAgentEventLoopGetMethod (event, &f);
-        DEBUGEVENT
+        
         if (f) {
             (*f)(x, event);
         }
@@ -263,7 +265,6 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
             
             pthread_cond_signal (&x->notificationCondition);
         }
-        
     } else if (err == PIZ_MEMORY) {
         PIZAGENTMEMORY
     }

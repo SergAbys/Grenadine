@@ -11,8 +11,8 @@
 		breakpointsGroup = 96D9BA9D14E0225800245697 /* XCBreakpointsBucket */;
 		codeSenseManager = 968B637510BAC78D00DEB777 /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 355851701;
-			PBXWorkspaceStateSaveDate = 355851701;
+			PBXPerProjectTemplateStateSaveDate = 355914471;
+			PBXWorkspaceStateSaveDate = 355914471;
 		};
 		sourceControlManager = 968B637410BAC78D00DEB777 /* Source Control */;
 		userBuildSettings = {

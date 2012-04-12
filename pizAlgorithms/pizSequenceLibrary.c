@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceLibrary.c
  * \author	Jean Sapristi
- * \date	April 10, 2012.
+ * \date	April 12, 2012.
  */
  
 /*
@@ -44,6 +44,128 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include <stdlib.h>
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizSequenceFunAll (PIZSequence *x, PIZSequenceMethod f, PIZEvent *event)
+{
+    long i;
+    
+    for (i = 0; i < pizArrayCount (x->map); i++) {   
+        PIZNote *note       = NULL;
+        PIZNote *nextNote   = NULL;
+        
+        long p = pizArrayValueAtIndex (x->map, i);
+        
+        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+        
+        while (note) {
+            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+            
+            (*f)(x, note, event);
+            
+            note = nextNote;
+        }
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, PIZEvent *event) 
+{
+    long p = note->position;
+    long tag = note->tag;
+    
+    pizBoundedHashTableRemoveByKey (x->lookup, tag, note);
+    pizBoundedStackPush (x->ticketMachine, tag);
+    pizLinklistRemoveByPtr (x->timeline[p], (void *)note);
+    x->count --; 
+    
+    pizItemset128SetAtIndex   (&x->removedNotes, tag);
+    pizItemset128UnsetAtIndex (&x->addedNotes, tag);
+    pizItemset128UnsetAtIndex (&x->changedNotes, tag);
+}
+
+void pizSequenceTestIsPlayed (PIZSequence *x, PIZNote *note, PIZEvent *event)
+{
+    bool isHit;
+    
+    isHit = (x->index >= note->position);
+    isHit = isHit && (x->index < (note->position + note->midi[PIZ_MIDI_DURATION]));
+    
+    if (isHit && !note->isPlayed) {
+        note->isPlayed = true;
+        pizItemset128SetAtIndex (&x->changedNotes, note->tag);
+    } else if (!isHit && note->isPlayed) {
+        note->isPlayed = false;
+        pizItemset128SetAtIndex (&x->changedNotes, note->tag);
+    }
+}
+
+void pizSequenceFillTempHash (PIZSequence *x, PIZNote *note, PIZEvent *event)
+{
+    long key, scale, offset = 0;
+    
+    if (scale = pizArrayCount (x->scale)) {
+        offset = pizArrayValueAtIndex (x->scale, note->midi[PIZ_MIDI_PITCH] % scale);
+    }
+    
+    key = ((long)(note->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1));
+    key += note->midi[PIZ_MIDI_PITCH] + offset;
+    
+    x->tempError |= pizBoundedHashTableAdd (x->tempHash, key, (void *)note);
+}
+
+void pizSequenceFillTempNotes (PIZSequence *x, PIZNote *note, PIZEvent *event)
+{
+    x->tempNotes1[x->tempIndex] = note;
+    x->tempIndex ++;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizSequenceFillNotes (PIZSequence *x, PIZMidiSelector selector, bool reverse)
+{
+    long i, t;
+    
+    if (selector == PIZ_MIDI_DURATION) {
+    //
+    for (i = 0; i < x->tempIndex; i++) {
+        if (!reverse) {
+            t = MIN (x->tempValues[i], x->timelineSize - x->tempNotes1[i]->position);
+        } else {
+            t = MIN (x->tempValues[(x->tempIndex - 1) - i], x->timelineSize - x->tempNotes1[i]->position);
+        }
+        
+        if (x->tempNotes1[i]->midi[selector] != t) {
+            x->tempNotes1[i]->midi[selector] = t;
+            pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
+        }
+    }
+    //
+    } else {
+    //
+    for (i = 0; i < x->tempIndex; i++) {
+        if (!reverse) {
+            t = x->tempValues[i];
+        } else {
+            t = x->tempValues[(x->tempIndex - 1) - i];
+        }
+        
+        if (x->tempNotes1[i]->midi[selector] != t) {
+            x->tempNotes1[i]->midi[selector] = t;
+            pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
+        }
+    }
+    //
+    }
+}
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -147,7 +269,7 @@ PIZError pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
                 note->position = newPosition;
                 pizItemset128SetAtIndex (&x->changedNotes, note->tag);
             } else {
-                pizSequenceRemoveNote (x, note);
+                pizSequenceRemoveNote (x, note, NULL);
             }
         } 
     }
@@ -155,47 +277,6 @@ PIZError pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
     }
     
     return err;
-}
-
-void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note) 
-{
-    long p = note->position;
-    long tag = note->tag;
-    
-    pizBoundedHashTableRemoveByKey (x->lookup, tag, note);
-    pizBoundedStackPush (x->ticketMachine, tag);
-    pizLinklistRemoveByPtr (x->timeline[p], (void *)note);
-    x->count --; 
-    
-    pizItemset128SetAtIndex   (&x->removedNotes, tag);
-    pizItemset128UnsetAtIndex (&x->addedNotes, tag);
-    pizItemset128UnsetAtIndex (&x->changedNotes, tag);
-}
-
-void pizSequenceRemoveAllNotes (PIZSequence *x)
-{
-    if (x->count) {
-    //
-    long i;
-    
-    for (i = 0; i < pizArrayCount (x->map); i++) {   
-        PIZNote *note       = NULL;
-        PIZNote *nextNote   = NULL;
-        
-        long p = pizArrayValueAtIndex (x->map, i);
-        
-        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-        
-        while (note) {
-            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-            pizSequenceRemoveNote (x, note);
-            note = nextNote;
-        }
-    }
-    
-    pizArrayClear (x->map);
-    //    
-    }
 }
 
 void pizSequenceMakeMap (PIZSequence *x)
@@ -207,42 +288,6 @@ void pizSequenceMakeMap (PIZSequence *x)
     for (i = 0; i < x->timelineSize; i++) {
         if (x->timeline[i] && pizLinklistCount (x->timeline[i])) {
             pizArrayAppend (x->map, i);
-        }
-    }
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void pizSequenceIsPlayed (PIZSequence *x)
-{
-    long i;
-    
-    for (i = 0; i < pizArrayCount (x->map); i++) {   
-        PIZNote *note       = NULL;
-        PIZNote *nextNote   = NULL;
-        
-        long p = pizArrayValueAtIndex (x->map, i);
-        
-        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-        
-        while (note) {
-            bool isHit;
-            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-            
-            isHit = (x->index >= note->position);
-            isHit = isHit && (x->index < (note->position + note->midi[PIZ_MIDI_DURATION]));
-            
-            if (isHit && !note->isPlayed) {
-                note->isPlayed = true;
-                pizItemset128SetAtIndex (&x->changedNotes, note->tag);
-            } else if (!isHit && note->isPlayed) {
-                note->isPlayed = false;
-                pizItemset128SetAtIndex (&x->changedNotes, note->tag);
-            }
-            
-            note = nextNote;
         }
     }
 }
@@ -291,72 +336,6 @@ long pizSequenceSnapPositionToPattern (PIZSequence *x, long position)
     }
 
     return position;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-long pizSequencePickUpNotes (PIZSequence *x)
-{
-    long i, k = 0;
-    
-    for (i = 0; i < pizArrayCount (x->map); i++) {   
-        PIZNote *note       = NULL;
-        PIZNote *nextNote   = NULL;
-        
-        long p = pizArrayValueAtIndex (x->map, i);
-        
-        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-        
-        while (note) {
-            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-                
-            x->tempNotes1[k] = note;
-            k ++;
-                
-            note = nextNote;
-        }
-    }
-    
-    return k;
-}
-
-void pizSequenceFillValues (PIZSequence *x, PIZMidiSelector selector, long k, bool reverse)
-{
-    long i, t;
-    
-    if (selector == PIZ_MIDI_DURATION) {
-    //
-    for (i = 0; i < k; i++) {
-        if (!reverse) {
-            t = MIN (x->tempValues[i], x->timelineSize - x->tempNotes1[i]->position);
-        } else {
-            t = MIN (x->tempValues[(k - 1) - i], x->timelineSize - x->tempNotes1[i]->position);
-        }
-        
-        if (x->tempNotes1[i]->midi[selector] != t) {
-            x->tempNotes1[i]->midi[selector] = t;
-            pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
-        }
-    }
-    //
-    } else {
-    //
-    for (i = 0; i < k; i++) {
-        if (!reverse) {
-            t = x->tempValues[i];
-        } else {
-            t = x->tempValues[(k - 1) - i];
-        }
-        
-        if (x->tempNotes1[i]->midi[selector] != t) {
-            x->tempNotes1[i]->midi[selector] = t;
-            pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
-        }
-    }
-    //
-    }
 }
 
 // -------------------------------------------------------------------------------------------------------------

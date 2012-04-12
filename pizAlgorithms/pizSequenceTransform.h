@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceTransform.h
  * \author  Jean Sapristi
- * \date    April 8, 2012.
+ * \date    April 12, 2012.
  */
  
 /*
@@ -45,6 +45,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizSequence.h"
+#include "pizSequenceLibrary.h"
 #include "pizFactorOracle.h"
 #include "pizFiniteState.h"
 #include "pizGaloisLattice.h"
@@ -52,24 +53,20 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError    pizSequenceAlgorithm   (PIZSequence *x, PIZAlgorithm *algorithm);
-PIZError    pizSequenceNovember    (PIZSequence *x, long iterate); //
-PIZError    pizSequenceJuliet      (PIZSequence *x, long iterate, long division); //
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void        pizSequenceClear       (PIZSequence *x);
-void        pizSequenceTranspose   (PIZSequence *x, long n);
-void        pizSequenceClean       (PIZSequence *x, long value);
-void        pizSequenceRotate      (PIZSequence *x, PIZMidiSelector selector, long shift);
-void        pizSequenceScramble    (PIZSequence *x, PIZMidiSelector selector);
-void        pizSequenceSort        (PIZSequence *x, PIZMidiSelector selector, bool down);
-void        pizSequenceChange      (PIZSequence *x, PIZMidiSelector selector, long value);
-void        pizSequenceSet         (PIZSequence *x, PIZMidiSelector selector, long value);
-void        pizSequenceRandom      (PIZSequence *x, PIZMidiSelector selector, long minValue, long maxValue);
-void        pizSequenceKill        (PIZSequence *x);
-void        pizSequenceCycle       (PIZSequence *x, PIZScaleKey key, const PIZArray *a);
+PIZError    pizSequenceAlgorithm   (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceNovember    (PIZSequence *x, PIZEvent *event); //
+PIZError    pizSequenceJuliet      (PIZSequence *x, PIZEvent *event); //
+PIZError    pizSequenceClear       (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceTranspose   (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceClean       (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceRotate      (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceScramble    (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceSort        (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceChange      (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceSet         (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceRandom      (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceKill        (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceCycle       (PIZSequence *x, PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
