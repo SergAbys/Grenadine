@@ -130,47 +130,6 @@ void pizSequenceFillTempNotes (PIZSequence *x, PIZNote *note, const PIZEvent *ev
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizSequenceFillNotes (PIZSequence *x, PIZMidiSelector selector, bool reverse)
-{
-    long i, t;
-    
-    if (selector == PIZ_MIDI_DURATION) {
-    //
-    for (i = 0; i < x->tempIndex; i++) {
-        if (!reverse) {
-            t = MIN (x->tempValues[i], x->timelineSize - x->tempNotes1[i]->position);
-        } else {
-            t = MIN (x->tempValues[(x->tempIndex - 1) - i], x->timelineSize - x->tempNotes1[i]->position);
-        }
-        
-        if (x->tempNotes1[i]->midi[selector] != t) {
-            x->tempNotes1[i]->midi[selector] = t;
-            pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
-        }
-    }
-    //
-    } else {
-    //
-    for (i = 0; i < x->tempIndex; i++) {
-        if (!reverse) {
-            t = x->tempValues[i];
-        } else {
-            t = x->tempValues[(x->tempIndex - 1) - i];
-        }
-        
-        if (x->tempNotes1[i]->midi[selector] != t) {
-            x->tempNotes1[i]->midi[selector] = t;
-            pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
-        }
-    }
-    //
-    }
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
 {
     PIZNote *newNote    = NULL;
@@ -249,7 +208,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
         
     return newNote;
 }   
-
+/*
 PIZError pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
 {
     long     position = note->position;
@@ -277,7 +236,7 @@ PIZError pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
     }
     
     return err;
-}
+}*/
 
 void pizSequenceMakeMap (PIZSequence *x)
 {

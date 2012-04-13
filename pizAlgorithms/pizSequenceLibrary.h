@@ -50,30 +50,19 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void     pizSequenceFunAll          (PIZSequence *x, PIZMethod f, const PIZEvent *event);
+void     pizSequenceFunAll                  (PIZSequence *x, PIZMethod f,   const PIZEvent *event);
+
+void     pizSequenceRemoveNote              (PIZSequence *x, PIZNote *note, const PIZEvent *event);
+void     pizSequenceTestIsPlayed            (PIZSequence *x, PIZNote *note, const PIZEvent *event);
+void     pizSequenceFillTempHash            (PIZSequence *x, PIZNote *note, const PIZEvent *event);
+void     pizSequenceFillTempNotes           (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void     pizSequenceRemoveNote      (PIZSequence *x, PIZNote *note, const PIZEvent *event);
-void     pizSequenceTestIsPlayed    (PIZSequence *x, PIZNote *note, const PIZEvent *event);
-void     pizSequenceFillTempHash    (PIZSequence *x, PIZNote *note, const PIZEvent *event);
-void     pizSequenceFillTempNotes   (PIZSequence *x, PIZNote *note, const PIZEvent *event);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void     pizSequenceFillNotes       (PIZSequence *x, PIZMidiSelector selector, bool reverse);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZNote  *pizSequenceNewNote        (PIZSequence *x, long *argv, ulong flags);
-PIZError pizSequenceMoveNote        (PIZSequence *x, PIZNote *note, long newPosition); //
-void     pizSequenceMakeMap         (PIZSequence *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
+PIZNote  *pizSequenceNewNote                (PIZSequence *x, long *argv, ulong flags);
+// PIZError pizSequenceMoveNote                (PIZSequence *x, PIZNote *note, long newPosition); //
+void     pizSequenceMakeMap                 (PIZSequence *x);
 
 long     pizSequenceMovePitchToAmbitus      (PIZSequence *x, long pitch);
 long     pizSequenceSnapPositionToPattern   (PIZSequence *x, long position);
