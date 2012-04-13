@@ -56,8 +56,8 @@ void pizAgentPlay (PIZAgent *x, PIZEvent *event)
         pizSequenceGoToStart (x->sequence);
         x->flags |= PIZ_AGENT_FLAG_PLAYED; 
         
-        if (event->data.time) {
-            pizTimeCopy    (&x->grainStart, &event->data.time);
+        if (event->time) {
+            pizTimeCopy    (&x->grainStart, &event->time);
             pizTimeCopy    (&x->grainEnd, &x->grainStart);
             pizTimeAddNano (&x->grainEnd, &x->grainSize);
         } 
@@ -83,7 +83,7 @@ void pizAgentUnloop (PIZAgent *x, PIZEvent *event)
 
 void pizAgentBPM (PIZAgent *x, PIZEvent *event)
 {
-    x->bpm = CLAMP (event->data.value, PIZ_MINIMUM_BPM, PIZ_MAXIMUM_BPM);
+    x->bpm = CLAMP (pizArrayValueAtIndex (event->data, 0), PIZ_MINIMUM_BPM, PIZ_MAXIMUM_BPM);
         
     pizTimeSetNano (&x->grainSize, PIZ_AGENT_CONSTANT_BPM / x->bpm);    
     pizTimeCopy    (&x->grainEnd, &x->grainStart);

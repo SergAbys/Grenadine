@@ -45,7 +45,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizEvent.h"
-#include "pizSequence.h"
 #include "pizFactorOracle.h"
 #include "pizFiniteState.h"
 #include "pizGaloisLattice.h"

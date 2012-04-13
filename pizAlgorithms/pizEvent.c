@@ -48,6 +48,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#define PIZ_INIT_ARRAY_SIZE 12
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 static const char *piz_eventNames[ ] = {    "Init",
                                             "Play",
                                             "Stop",
@@ -110,7 +115,7 @@ PIZEvent *pizEventNewRunWithTime (PIZEventIdentifier ie, const PIZTime *time)
     PIZEvent *event = pizEventNew (PIZ_EVENT_RUN, ie);
     
     if (event && time) {
-        pizTimeCopy (&event->data.time, time);
+        pizTimeCopy (&event->time, time);
     }
     
     return event;
@@ -121,12 +126,12 @@ PIZEvent *pizEventNewRunWithNote (PIZEventIdentifier ie, long *argv, long tag)
     PIZEvent *event = pizEventNew (PIZ_EVENT_RUN, ie); 
     
     if (event) {
-        event->identifier = tag;
+        event->tag = tag;
         
         if (argv) {
             long i;
             for (i = 0; i < PIZ_SEQUENCE_NOTE_SIZE; i++) {
-                event->data.note[i] = *(argv + i);
+                pizArrayAppend (event->data, *(argv + i));
             }
         }
     }
@@ -139,7 +144,7 @@ PIZEvent *pizEventNewRunWithValue (PIZEventIdentifier ie, long value)
     PIZEvent *event = pizEventNew (PIZ_EVENT_RUN, ie); 
     
     if (event) {
-        event->data.value = value;
+        pizArrayAppend (event->data, value);
     }
     
     return event;
@@ -152,7 +157,7 @@ PIZEvent *pizEventNewGraphicWithZone (PIZEventIdentifier ie, long *argv)
     if (event && argv) {
         long i;
         for (i = 0; i < PIZ_SEQUENCE_ZONE_SIZE; i++) {
-            event->data.zone[i] = *(argv + i);
+            pizArrayAppend (event->data, *(argv + i));
         }
     }
     
@@ -169,7 +174,7 @@ PIZEvent *pizEventNewGraphicWithNote (PIZEventIdentifier ie, long *argv, long ta
         if (argv) {
             long i;
             for (i = 0; i < PIZ_SEQUENCE_NOTE_SIZE; i++) {
-                event->data.note[i] = *(argv + i);
+                pizArrayAppend (event->data, *(argv + i));
             }
         }
     }
@@ -182,7 +187,7 @@ PIZEvent *pizEventNewNotification (PIZEventIdentifier ie, const PIZTime *time)
     PIZEvent *event = pizEventNew (PIZ_EVENT_NOTIFICATION, ie);
     
     if (event && time) {
-        pizTimeCopy (&event->data.time, time);
+        pizTimeCopy (&event->time, time);
     }
     
     return event;
@@ -206,8 +211,13 @@ PIZEvent *pizEventNew (PIZEventType type, PIZEventIdentifier ie)
     PIZEvent *event = NULL;
     
     if (event = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        event->type       = type;
-        event->identifier = ie;
+        if (event->data = pizArrayNew(PIZ_INIT_ARRAY_SIZE)) {
+            event->type = type;
+            event->identifier = ie;
+        } else {
+            free (event);
+            event = NULL;
+        }
     }
     
     return event;
@@ -216,6 +226,7 @@ PIZEvent *pizEventNew (PIZEventType type, PIZEventIdentifier ie)
 void pizEventFree (PIZEvent *x)
 {
     if (x) {
+        pizArrayFree (x->data);
         free (x);
     }
 }
