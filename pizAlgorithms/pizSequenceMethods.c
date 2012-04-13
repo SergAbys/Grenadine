@@ -121,13 +121,13 @@ static const double piz_distribution11[ ] = { 0.54, 0.59, 0.63, 0.68, 0.72, 0.77
 #pragma mark -
 
 //PIZError pizSequenceAlgorithm (PIZSequence *x, PIZAlgorithm *algorithm)
-PIZError pizSequenceAlgorithm (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
 {
-    PIZError                err = PIZ_GOOD; /*
-    long                    k;
-    PIZAlgorithmMethodLong  count = NULL;
-    PIZAlgorithmMethodError proceed = NULL;
-    PIZMidiSelector         selector = PIZ_MIDI_PITCH;
+    PIZError        err = PIZ_GOOD; /*
+    long            k;
+    PIZMethodLong   count = NULL;
+    PIZMethodError  proceed = NULL;
+    PIZMidiSelector selector = PIZ_MIDI_PITCH;
     
     PICKUPNOTES
 
@@ -159,7 +159,7 @@ PIZError pizSequenceAlgorithm (PIZSequence *x, PIZEvent *event)
 }
 
 //PIZError pizSequenceNovember (PIZSequence *x, long iterate)
-PIZError pizSequenceNovember (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
 {
     PIZError err1 = PIZ_GOOD;
     /*                                                
@@ -388,7 +388,7 @@ PIZError pizSequenceNovember (PIZSequence *x, PIZEvent *event)
 }
 
 //PIZError pizSequenceJuliet (PIZSequence *x, long iterate, long division)
-PIZError pizSequenceJuliet (PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
 {
     PIZError err = PIZ_GOOD;/*
     bool     haveChanged = false;
@@ -525,18 +525,20 @@ PIZError pizSequenceJuliet (PIZSequence *x, PIZEvent *event)
     return err;
 }
 
-PIZError pizSequenceClear (PIZSequence *x, PIZEvent *event)
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizSequenceClear (PIZSequence *x, const PIZEvent *event)
 {
     if (x->count) {
         pizSequenceFunAll (x, pizSequenceRemoveNote, NULL);
         pizArrayClear (x->map);  
     }
-    
-    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceTranspose (PIZSequence *x, long n)
-PIZError pizSequenceTranspose (PIZSequence *x, PIZEvent *event)
+void pizSequenceTranspose (PIZSequence *x, const PIZEvent *event)
 {/*
     long i, a, b;
         
@@ -575,12 +577,10 @@ PIZError pizSequenceTranspose (PIZSequence *x, PIZEvent *event)
             note = nextNote;
         }
     }*/
-    
-    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceClean (PIZSequence *x, long value)
-PIZError pizSequenceClean (PIZSequence *x, PIZEvent *event)
+void pizSequenceClean (PIZSequence *x, const PIZEvent *event)
 {/*
     long i, scale, v, index = 0;
         
@@ -641,12 +641,10 @@ PIZError pizSequenceClean (PIZSequence *x, PIZEvent *event)
             pizSequenceRemoveNote (x, x->tempNotes1[i], NULL);
         }
     }*/
-    
-    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceRotate (PIZSequence *x, PIZMidiSelector selector, long shift)
-PIZError pizSequenceRotate (PIZSequence *x, PIZEvent *event)
+void pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
 {/*
     long i, k;
             
@@ -661,12 +659,10 @@ PIZError pizSequenceRotate (PIZSequence *x, PIZEvent *event)
     }
                 
     FILLNOTES*/
-    
-    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceScramble (PIZSequence *x, PIZMidiSelector selector)
-PIZError pizSequenceScramble (PIZSequence *x, PIZEvent *event)
+void pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
 {/*
     long i, k;
         
@@ -686,12 +682,10 @@ PIZError pizSequenceScramble (PIZSequence *x, PIZEvent *event)
     }
             
     FILLNOTES*/
-    
-    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceSort (PIZSequence *x, PIZMidiSelector selector, bool down)
-PIZError pizSequenceSort (PIZSequence *x, PIZEvent *event)
+void pizSequenceSort (PIZSequence *x, const PIZEvent *event)
 {/*
     long i, scale, k;
         
@@ -750,12 +744,10 @@ PIZError pizSequenceSort (PIZSequence *x, PIZEvent *event)
     } else {
         FILLNOTESREVERSE
     }*/
-    
-    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceChange (PIZSequence *x, PIZMidiSelector selector, long value)
-PIZError pizSequenceChange (PIZSequence *x, PIZEvent *event)
+void pizSequenceChange (PIZSequence *x, const PIZEvent *event)
 {/*
     long i;
             
@@ -799,12 +791,10 @@ PIZError pizSequenceChange (PIZSequence *x, PIZEvent *event)
     }
     //
     }*/
-    
-    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceSet (PIZSequence *x, PIZMidiSelector selector, long value)
-PIZError pizSequenceSet (PIZSequence *x, PIZEvent *event)
+void pizSequenceSet (PIZSequence *x, const PIZEvent *event)
 {/*
     long i;
             
@@ -844,12 +834,10 @@ PIZError pizSequenceSet (PIZSequence *x, PIZEvent *event)
     }
     //
     }*/
-    
-    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceRandom (PIZSequence *x, PIZMidiSelector selector, long minValue, long maxValue)
-PIZError pizSequenceRandom (PIZSequence *x, PIZEvent *event)
+void pizSequenceRandom (PIZSequence *x, const PIZEvent *event)
 {/*
     long i, range;
         
@@ -901,12 +889,10 @@ PIZError pizSequenceRandom (PIZSequence *x, PIZEvent *event)
     }
     //
     }*/
-    
-    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceKill (PIZSequence *x)
-PIZError pizSequenceKill (PIZSequence *x, PIZEvent *event)
+void pizSequenceKill (PIZSequence *x, const PIZEvent *event)
 {/*
     long i;
     bool haveChanged = false;
@@ -934,12 +920,10 @@ PIZError pizSequenceKill (PIZSequence *x, PIZEvent *event)
     if (haveChanged) {
         pizSequenceMakeMap (x);
     }*/
-    
-    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZArray *a)
-PIZError pizSequenceCycle (PIZSequence *x, PIZEvent *event)
+void pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
 {/*
     if (a) {
     //
@@ -1010,8 +994,6 @@ PIZError pizSequenceCycle (PIZSequence *x, PIZEvent *event)
     }
     //    
     }*/
-    
-    return PIZ_GOOD;
 }
 
 // -------------------------------------------------------------------------------------------------------------

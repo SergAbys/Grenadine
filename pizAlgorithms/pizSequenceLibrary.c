@@ -49,7 +49,7 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizSequenceFunAll (PIZSequence *x, PIZSequenceMethod f, PIZEvent *event)
+void pizSequenceFunAll (PIZSequence *x, PIZMethod f, const PIZEvent *event)
 {
     long i;
     
@@ -75,7 +75,7 @@ void pizSequenceFunAll (PIZSequence *x, PIZSequenceMethod f, PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, PIZEvent *event) 
+void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event) 
 {
     long p = note->position;
     long tag = note->tag;
@@ -90,7 +90,7 @@ void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, PIZEvent *event)
     pizItemset128UnsetAtIndex (&x->changedNotes, tag);
 }
 
-void pizSequenceTestIsPlayed (PIZSequence *x, PIZNote *note, PIZEvent *event)
+void pizSequenceTestIsPlayed (PIZSequence *x, PIZNote *note, const PIZEvent *event)
 {
     bool isHit;
     
@@ -106,7 +106,7 @@ void pizSequenceTestIsPlayed (PIZSequence *x, PIZNote *note, PIZEvent *event)
     }
 }
 
-void pizSequenceFillTempHash (PIZSequence *x, PIZNote *note, PIZEvent *event)
+void pizSequenceFillTempHash (PIZSequence *x, PIZNote *note, const PIZEvent *event)
 {
     long key, scale, offset = 0;
     
@@ -120,7 +120,7 @@ void pizSequenceFillTempHash (PIZSequence *x, PIZNote *note, PIZEvent *event)
     x->tempError |= pizBoundedHashTableAdd (x->tempHash, key, (void *)note);
 }
 
-void pizSequenceFillTempNotes (PIZSequence *x, PIZNote *note, PIZEvent *event)
+void pizSequenceFillTempNotes (PIZSequence *x, PIZNote *note, const PIZEvent *event)
 {
     x->tempNotes1[x->tempIndex] = note;
     x->tempIndex ++;

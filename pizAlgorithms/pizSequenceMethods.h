@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceMethods.h
  * \author  Jean Sapristi
- * \date    April 12, 2012.
+ * \date    April 13, 2012.
  */
  
 /*
@@ -50,20 +50,24 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError    pizSequenceAlgorithm   (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceNovember    (PIZSequence *x, PIZEvent *event); //
-PIZError    pizSequenceJuliet      (PIZSequence *x, PIZEvent *event); //
-PIZError    pizSequenceClear       (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceTranspose   (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceClean       (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceRotate      (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceScramble    (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceSort        (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceChange      (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceSet         (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceRandom      (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceKill        (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceCycle       (PIZSequence *x, PIZEvent *event);
+PIZError pizSequenceAlgorithm       (PIZSequence *x, const PIZEvent *event);
+PIZError pizSequenceNovember        (PIZSequence *x, const PIZEvent *event); //
+PIZError pizSequenceJuliet          (PIZSequence *x, const PIZEvent *event); //
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+void     pizSequenceClear           (PIZSequence *x, const PIZEvent *event);
+void     pizSequenceTranspose       (PIZSequence *x, const PIZEvent *event);
+void     pizSequenceClean           (PIZSequence *x, const PIZEvent *event);
+void     pizSequenceRotate          (PIZSequence *x, const PIZEvent *event);
+void     pizSequenceScramble        (PIZSequence *x, const PIZEvent *event);
+void     pizSequenceSort            (PIZSequence *x, const PIZEvent *event);
+void     pizSequenceChange          (PIZSequence *x, const PIZEvent *event);
+void     pizSequenceSet             (PIZSequence *x, const PIZEvent *event);
+void     pizSequenceRandom          (PIZSequence *x, const PIZEvent *event);
+void     pizSequenceKill            (PIZSequence *x, const PIZEvent *event);
+void     pizSequenceCycle           (PIZSequence *x, const PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

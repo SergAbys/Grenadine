@@ -62,18 +62,12 @@ typedef unsigned long PIZAlgorithmType;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-typedef long     (*PIZAlgorithmMethodLong)( );
-typedef PIZError (*PIZAlgorithmMethodError)( ); 
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 typedef struct _PIZAlgorithm {
-    PIZAlgorithmType            type;
-    PIZAlgorithmMethodError     add;
-    PIZAlgorithmMethodError     clear;
-    PIZAlgorithmMethodError     proceed;
-    PIZAlgorithmMethodLong      count;
+    PIZAlgorithmType    type;
+    PIZMethodError      add;
+    PIZMethodError      clear;
+    PIZMethodError      proceed;
+    PIZMethodLong       count;
     } PIZAlgorithm;
 
 // -------------------------------------------------------------------------------------------------------------

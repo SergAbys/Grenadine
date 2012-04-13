@@ -55,26 +55,24 @@ void        *pizAgentNotificationLoop       (void *agent);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError    pizAgentEventLoopDoEvent        (PIZAgent *x, PIZLinklist *queue);
-void        pizAgentEventLoopDoStep         (PIZAgent *x, bool blank);
-void        pizAgentEventLoopDoRefresh      (PIZAgent *x);
+PIZError pizAgentEventLoopDoEvent       (PIZAgent *x, PIZLinklist *queue);
+void     pizAgentEventLoopDoStep        (PIZAgent *x, bool blank);
+void     pizAgentEventLoopDoRefresh     (PIZAgent *x);
 
-void        pizAgentEventLoopDoStepEnd      (PIZAgent *x);
-void        pizAgentEventLoopDoStepLast     (PIZAgent *x);
+void     pizAgentEventLoopDoStepEnd     (PIZAgent *x);
+void     pizAgentEventLoopDoStepLast    (PIZAgent *x);
 
-bool        pizAgentEventLoopCondition      (PIZAgent *x);
-void        pizAgentEventLoopInit           (PIZAgent *x);
-bool        pizAgentEventLoopIsWorkTime     (PIZAgent *x);
-void        pizAgentEventLoopSleep          (PIZAgent *x);
+bool     pizAgentEventLoopCondition     (PIZAgent *x);
+void     pizAgentEventLoopInit          (PIZAgent *x);
+bool     pizAgentEventLoopIsWorkTime    (PIZAgent *x);
+void     pizAgentEventLoopSleep         (PIZAgent *x);
 
-void        pizAgentEventLoopGetMethod      (const PIZEvent *x, 
-                                            PIZAgentMethod *f, 
-                                            PIZSequenceMethodError *g);
+void     pizAgentEventLoopGetMethod     (const PIZEvent *x, PIZMethod *f, PIZMethodError *g);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void        pizAgentNotificationLoopNotify  (PIZAgent *x);
+void     pizAgentNotificationLoopNotify (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

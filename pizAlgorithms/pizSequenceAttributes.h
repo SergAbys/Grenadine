@@ -45,102 +45,28 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizSequence.h"
+#include "pizEvent.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-long            pizSequenceCount            (PIZSequence *x);
+void    pizSequenceSetChance        (PIZSequence *x, const PIZEvent *event);
+void    pizSequenceSetVelocity      (PIZSequence *x, const PIZEvent *event);
+void    pizSequenceSetChannel       (PIZSequence *x, const PIZEvent *event);
+void    pizSequenceSetCell          (PIZSequence *x, const PIZEvent *event);
+void    pizSequenceSetGrid          (PIZSequence *x, const PIZEvent *event);
+void    pizSequenceSetNoteValue     (PIZSequence *x, const PIZEvent *event);
 
-long            pizSequenceChance           (PIZSequence *x);
-long            pizSequenceVelocity         (PIZSequence *x);
-long            pizSequenceChannel          (PIZSequence *x);
-PIZNoteValue    pizSequenceCell             (PIZSequence *x);
-PIZNoteValue    pizSequenceGrid             (PIZSequence *x);
-PIZNoteValue    pizSequenceNoteValue        (PIZSequence *x);
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
-void            pizSequenceSetChance        (PIZSequence *x, long value);
-void            pizSequenceSetVelocity      (PIZSequence *x, long value);
-void            pizSequenceSetChannel       (PIZSequence *x, long channel);
-void            pizSequenceSetCell          (PIZSequence *x, PIZNoteValue snapValue);
-void            pizSequenceSetGrid          (PIZSequence *x, PIZNoteValue snapValue);
-void            pizSequenceSetNoteValue     (PIZSequence *x, PIZNoteValue noteValue);
-
-PIZError        pizSequenceSetScale         (PIZSequence *x, 
-                                            PIZScaleKey key, 
-                                            PIZScaleType type, 
-                                            const PIZArray *a);
-                                        
-PIZError        pizSequenceSetPattern       (PIZSequence *x, const PIZArray *a);
+PIZError pizSequenceSetScale        (PIZSequence *x, const PIZEvent *event);
+PIZError pizSequenceSetPattern      (PIZSequence *x, const PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #ifdef PIZ_EXTERN_INLINE
-
-PIZ_EXTERN long pizSequenceCount (PIZSequence *x)
-{   
-    return x->count;
-}   
-
-PIZ_EXTERN long pizSequenceChance (PIZSequence *x)
-{
-    return x->chance;
-}
-
-PIZ_EXTERN long pizSequenceVelocity (PIZSequence *x)
-{
-    return x->velocity;
-}
-
-PIZ_EXTERN long pizSequenceChannel (PIZSequence *x)
-{
-    return x->channel;
-}
-
-PIZ_EXTERN PIZNoteValue pizSequenceCell (PIZSequence *x)
-{
-    return x->cell;
-}
-
-PIZ_EXTERN PIZNoteValue pizSequenceGrid (PIZSequence *x)
-{
-    return x->grid;
-}
-
-PIZ_EXTERN PIZNoteValue pizSequenceNoteValue (PIZSequence *x)
-{
-    return x->noteValue;
-}
-
-PIZ_EXTERN void pizSequenceSetChance (PIZSequence *x, long value)
-{
-    x->chance = CLAMP (value, 0, 100);
-}
-
-PIZ_EXTERN void pizSequenceSetVelocity (PIZSequence *x, long value)
-{
-    x->velocity = value;
-}
-
-PIZ_EXTERN void pizSequenceSetChannel (PIZSequence *x, long channel)
-{
-    x->channel = CLAMP (channel, 1, PIZ_MAGIC_CHANNEL);
-}
-
-PIZ_EXTERN void pizSequenceSetCell (PIZSequence *x, PIZNoteValue snapValue)
-{
-    x->cell = snapValue;
-}
-
-PIZ_EXTERN void pizSequenceSetGrid (PIZSequence *x, PIZNoteValue snapValue)
-{
-    x->grid = snapValue;
-}
-
-PIZ_EXTERN void pizSequenceSetNoteValue (PIZSequence *x, PIZNoteValue noteValue)
-{
-    x->noteValue = noteValue;
-}
 
 #endif // PIZ_EXTERN_INLINE
 

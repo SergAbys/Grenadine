@@ -79,81 +79,50 @@ static const long piz_modes[ ] =
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-long pizSequenceCount (PIZSequence *x)
-{   
-    return x->count;
-}   
-
-long pizSequenceChance (PIZSequence *x)
+//void pizSequenceSetChance (PIZSequence *x, long value)
+void pizSequenceSetChance (PIZSequence *x, const PIZEvent *event)
 {
-    return x->chance;
+    //x->chance = CLAMP (value, 0, 100);
 }
 
-long pizSequenceVelocity (PIZSequence *x)
+//void pizSequenceSetVelocity (PIZSequence *x, long value)
+void pizSequenceSetVelocity (PIZSequence *x, const PIZEvent *event)
 {
-    return x->velocity;
+    //x->velocity = value;
 }
 
-long pizSequenceChannel (PIZSequence *x)
+//void pizSequenceSetChannel (PIZSequence *x, long channel)
+void pizSequenceSetChannel (PIZSequence *x, const PIZEvent *event)
 {
-    return x->channel;
+    //x->channel = CLAMP (channel, 1, PIZ_MAGIC_CHANNEL);
 }
 
-PIZNoteValue pizSequenceCell (PIZSequence *x)
+//void pizSequenceSetCell (PIZSequence *x, PIZNoteValue snapValue)
+void pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
 {
-    return x->cell;
+    //x->cell = snapValue;
 }
 
-PIZNoteValue pizSequenceGrid (PIZSequence *x)
+//void pizSequenceSetGrid (PIZSequence *x, PIZNoteValue snapValue)
+void pizSequenceSetGrid (PIZSequence *x, const PIZEvent *event)
 {
-    return x->grid;
+    //x->grid = snapValue;
 }
 
-PIZNoteValue pizSequenceNoteValue (PIZSequence *x)
+//void pizSequenceSetNoteValue (PIZSequence *x, PIZNoteValue noteValue)
+void pizSequenceSetNoteValue (PIZSequence *x, const PIZEvent *event)
 {
-    return x->noteValue;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void pizSequenceSetChance (PIZSequence *x, long value)
-{
-    x->chance = CLAMP (value, 0, 100);
-}
-
-void pizSequenceSetVelocity (PIZSequence *x, long value)
-{
-    x->velocity = value;
-}
-
-void pizSequenceSetChannel (PIZSequence *x, long channel)
-{
-    x->channel = CLAMP (channel, 1, PIZ_MAGIC_CHANNEL);
-}
-
-void pizSequenceSetCell (PIZSequence *x, PIZNoteValue snapValue)
-{
-    x->cell = snapValue;
-}
-
-void pizSequenceSetGrid (PIZSequence *x, PIZNoteValue snapValue)
-{
-    x->grid = snapValue;
-}
-
-void pizSequenceSetNoteValue (PIZSequence *x, PIZNoteValue noteValue)
-{
-    x->noteValue = noteValue;
+    //x->noteValue = noteValue;
 }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type, const PIZArray *a)
+//PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type, const PIZArray *a)
+PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
 {
+    PIZError    err = PIZ_GOOD;/*
     const long  *ptr = NULL;
-    PIZError    err = PIZ_GOOD;
 
     pizArrayClear (x->scale);
     
@@ -172,14 +141,17 @@ PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type
         for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
             pizArrayAppend (x->scale, *(ptr + ((PIZ_MAGIC_SCALE - key + i) % PIZ_MAGIC_SCALE)));
         }
-    }
+    }*/
     
     return err;
 }   
 
-PIZError pizSequenceSetPattern (PIZSequence *x, const PIZArray *a)
+//PIZError pizSequenceSetPattern (PIZSequence *x, const PIZArray *a)
+PIZError pizSequenceSetPattern (PIZSequence *x, const PIZEvent *event)
 {
-    return pizArrayCopy (x->pattern, a);
+    // return pizArrayCopy (x->pattern, a);
+    
+    return PIZ_GOOD;
 }
 
 // -------------------------------------------------------------------------------------------------------------

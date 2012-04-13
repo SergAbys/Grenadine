@@ -150,10 +150,10 @@ void *pizAgentNotificationLoop (void *agent)
 
 PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue) 
 {
-    long                    err = PIZ_GOOD;
-    PIZEvent                *event = NULL;
-    PIZAgentMethod          f = NULL;
-    PIZSequenceMethodError  g = NULL;
+    long            err = PIZ_GOOD;
+    PIZEvent        *event = NULL;
+    PIZMethod       f = NULL;
+    PIZMethodError  g = NULL;
             
     PIZAGENTLOCK_EVENT
     
@@ -395,7 +395,7 @@ void pizAgentEventLoopSleep (PIZAgent *x)
     }
 }
 
-void pizAgentEventLoopGetMethod (const PIZEvent *x, PIZAgentMethod *f, PIZSequenceMethodError *g)
+void pizAgentEventLoopGetMethod (const PIZEvent *x, PIZMethod *f, PIZMethodError *g)
 {
     switch (x->identifier) {
         case PIZ_EVENT_PLAY     : *f = pizAgentPlay;       break;
@@ -403,7 +403,6 @@ void pizAgentEventLoopGetMethod (const PIZEvent *x, PIZAgentMethod *f, PIZSequen
         case PIZ_EVENT_LOOP     : *f = pizAgentLoop;       break;
         case PIZ_EVENT_UNLOOP   : *f = pizAgentUnloop;     break; 
         case PIZ_EVENT_BPM      : *f = pizAgentBPM;        break;
-        case PIZ_EVENT_CLEAR    : *g = pizSequenceClear;   break;
     }
 }
 
