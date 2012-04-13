@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	April 12, 2012.
+ * \date	April 13, 2012.
  */
  
 /*
@@ -39,6 +39,11 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizEvent.h"
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#include <stdlib.h>
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -98,6 +103,17 @@ PIZEvent *pizEventNew (PIZEventType type, PIZEventIdentifier ie);
 PIZEvent *pizEventNewRun (PIZEventIdentifier ie)
 {
     return pizEventNew (PIZ_EVENT_RUN, ie);
+}
+
+PIZEvent *pizEventNewRunWithTime (PIZEventIdentifier ie, const PIZTime *time)
+{
+    PIZEvent *event = pizEventNew (PIZ_EVENT_RUN, ie);
+    
+    if (event && time) {
+        pizTimeCopy (&event->data.time, time);
+    }
+    
+    return event;
 }
 
 PIZEvent *pizEventNewRunWithNote (PIZEventIdentifier ie, long *argv, long tag)

@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	April 12, 2012.
+ * \date	April 13, 2012.
  */
  
 /*
@@ -40,7 +40,8 @@
 
 #include "pizAgentLoop.h"
 #include "pizAgentMethod.h"
-#include "pizSequenceMethod.h"
+#include "pizSequenceMethods.h"
+#include "pizSequenceUI.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -397,12 +398,12 @@ void pizAgentEventLoopSleep (PIZAgent *x)
 void pizAgentEventLoopGetMethod (const PIZEvent *x, PIZAgentMethod *f, PIZSequenceMethodError *g)
 {
     switch (x->identifier) {
-        case PIZ_EVENT_PLAY     : *f = pizAgentMethodPlay;       break;
-        case PIZ_EVENT_STOP     : *f = pizAgentMethodStop;       break;
-        case PIZ_EVENT_LOOP     : *f = pizAgentMethodLoop;       break;
-        case PIZ_EVENT_UNLOOP   : *f = pizAgentMethodUnloop;     break; 
-        case PIZ_EVENT_BPM      : *f = pizAgentMethodBPM;        break;
-        case PIZ_EVENT_CLEAR    : *g = pizSequenceMethodClear;   break;
+        case PIZ_EVENT_PLAY     : *f = pizAgentPlay;       break;
+        case PIZ_EVENT_STOP     : *f = pizAgentStop;       break;
+        case PIZ_EVENT_LOOP     : *f = pizAgentLoop;       break;
+        case PIZ_EVENT_UNLOOP   : *f = pizAgentUnloop;     break; 
+        case PIZ_EVENT_BPM      : *f = pizAgentBPM;        break;
+        case PIZ_EVENT_CLEAR    : *g = pizSequenceClear;   break;
     }
 }
 

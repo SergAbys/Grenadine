@@ -1,5 +1,5 @@
 /**
- * \file    pizSequenceMethod.h
+ * \file    pizSequenceMethods.h
  * \author  Jean Sapristi
  * \date    April 12, 2012.
  */
@@ -38,36 +38,33 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_SEQUENCE_METHOD_H
-#define PIZ_SEQUENCE_METHOD_H
+#ifndef PIZ_SEQUENCE_METHODS_H
+#define PIZ_SEQUENCE_METHODS_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizSequence.h"
-#include "pizSequenceLibrary.h"
-#include "pizFactorOracle.h"
-#include "pizFiniteState.h"
-#include "pizGaloisLattice.h"
+#include "pizEvent.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError    pizSequenceMethodAlgorithm   (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceMethodNovember    (PIZSequence *x, PIZEvent *event); //
-PIZError    pizSequenceMethodJuliet      (PIZSequence *x, PIZEvent *event); //
-PIZError    pizSequenceMethodClear       (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceMethodTranspose   (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceMethodClean       (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceMethodRotate      (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceMethodScramble    (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceMethodSort        (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceMethodChange      (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceMethodSet         (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceMethodRandom      (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceMethodKill        (PIZSequence *x, PIZEvent *event);
-PIZError    pizSequenceMethodCycle       (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceAlgorithm   (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceNovember    (PIZSequence *x, PIZEvent *event); //
+PIZError    pizSequenceJuliet      (PIZSequence *x, PIZEvent *event); //
+PIZError    pizSequenceClear       (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceTranspose   (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceClean       (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceRotate      (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceScramble    (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceSort        (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceChange      (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceSet         (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceRandom      (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceKill        (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceCycle       (PIZSequence *x, PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_METHOD_H
+#endif // PIZ_SEQUENCE_METHODS_H

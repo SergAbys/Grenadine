@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	April 12, 2012.
+ * \date	April 13, 2012.
  */
 
 /*
@@ -46,11 +46,6 @@
 
 #include "pizTime.h"
 #include "pizSequence.h"
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#include <stdlib.h>
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -130,6 +125,7 @@ typedef struct _PIZEvent {
 // -------------------------------------------------------------------------------------------------------------
 
 PIZEvent    *pizEventNewRun                 (PIZEventIdentifier ie);
+PIZEvent    *pizEventNewRunWithTime         (PIZEventIdentifier ie, const PIZTime *time);
 PIZEvent    *pizEventNewRunWithNote         (PIZEventIdentifier ie, long *argv, long tag);
 PIZEvent    *pizEventNewRunWithValue        (PIZEventIdentifier ie, long value);
 PIZEvent    *pizEventNewGraphicWithZone     (PIZEventIdentifier ie, long *argv);

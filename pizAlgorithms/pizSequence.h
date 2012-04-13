@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    April 12, 2012.
+ * \date    April 13, 2012.
  */
  
 /*
@@ -228,111 +228,20 @@ typedef PIZError (*PIZSequenceMethodError)( );
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZSequence     *pizSequenceNew             (long size);
-void            pizSequenceFree             (PIZSequence *x);
+PIZSequence      *pizSequenceNew             (long size);
+void             pizSequenceFree             (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-long            pizSequenceCount            (PIZSequence *x);
-
-long            pizSequenceChance           (PIZSequence *x);
-long            pizSequenceVelocity         (PIZSequence *x);
-long            pizSequenceChannel          (PIZSequence *x);
-PIZNoteValue    pizSequenceCell             (PIZSequence *x);
-PIZNoteValue    pizSequenceGrid             (PIZSequence *x);
-PIZNoteValue    pizSequenceNoteValue        (PIZSequence *x);
-
-void            pizSequenceSetChance        (PIZSequence *x, long value);
-void            pizSequenceSetVelocity      (PIZSequence *x, long value);
-void            pizSequenceSetChannel       (PIZSequence *x, long channel);
-void            pizSequenceSetCell          (PIZSequence *x, PIZNoteValue snapValue);
-void            pizSequenceSetGrid          (PIZSequence *x, PIZNoteValue snapValue);
-void            pizSequenceSetNoteValue     (PIZSequence *x, PIZNoteValue noteValue);
-
-PIZError        pizSequenceSetScale         (PIZSequence *x, 
-                                            PIZScaleKey key, 
-                                            PIZScaleType type, 
-                                            const PIZArray *a);
-                                        
-PIZError        pizSequenceSetPattern       (PIZSequence *x, const PIZArray *a);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-bool            pizSequenceIsAtEnd          (PIZSequence *x);
-void            pizSequenceGoToStart        (PIZSequence *x);
-PIZError        pizSequenceProceedStep      (PIZSequence *x, PIZLinklist *queue); //
+bool             pizSequenceIsAtEnd          (PIZSequence *x);
+void             pizSequenceGoToStart        (PIZSequence *x);
+PIZError         pizSequenceProceedStep      (PIZSequence *x, PIZLinklist *queue); //
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #ifdef PIZ_EXTERN_INLINE
-
-PIZ_EXTERN long pizSequenceCount (PIZSequence *x)
-{   
-    return x->count;
-}   
-
-PIZ_EXTERN long pizSequenceChance (PIZSequence *x)
-{
-    return x->chance;
-}
-
-PIZ_EXTERN long pizSequenceVelocity (PIZSequence *x)
-{
-    return x->velocity;
-}
-
-PIZ_EXTERN long pizSequenceChannel (PIZSequence *x)
-{
-    return x->channel;
-}
-
-PIZ_EXTERN PIZNoteValue pizSequenceCell (PIZSequence *x)
-{
-    return x->cell;
-}
-
-PIZ_EXTERN PIZNoteValue pizSequenceGrid (PIZSequence *x)
-{
-    return x->grid;
-}
-
-PIZ_EXTERN PIZNoteValue pizSequenceNoteValue (PIZSequence *x)
-{
-    return x->noteValue;
-}
-
-PIZ_EXTERN void pizSequenceSetChance (PIZSequence *x, long value)
-{
-    x->chance = CLAMP (value, 0, 100);
-}
-
-PIZ_EXTERN void pizSequenceSetVelocity (PIZSequence *x, long value)
-{
-    x->velocity = value;
-}
-
-PIZ_EXTERN void pizSequenceSetChannel (PIZSequence *x, long channel)
-{
-    x->channel = CLAMP (channel, 1, PIZ_MAGIC_CHANNEL);
-}
-
-PIZ_EXTERN void pizSequenceSetCell (PIZSequence *x, PIZNoteValue snapValue)
-{
-    x->cell = snapValue;
-}
-
-PIZ_EXTERN void pizSequenceSetGrid (PIZSequence *x, PIZNoteValue snapValue)
-{
-    x->grid = snapValue;
-}
-
-PIZ_EXTERN void pizSequenceSetNoteValue (PIZSequence *x, PIZNoteValue noteValue)
-{
-    x->noteValue = noteValue;
-}
 
 PIZ_EXTERN bool pizSequenceIsAtEnd (PIZSequence *x)
 {

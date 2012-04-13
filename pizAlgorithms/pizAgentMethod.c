@@ -50,7 +50,7 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizAgentMethodPlay (PIZAgent *x, PIZEvent *event)
+void pizAgentPlay (PIZAgent *x, PIZEvent *event)
 {
     if (!(x->flags & PIZ_AGENT_FLAG_PLAYED)) {
         pizSequenceGoToStart (x->sequence);
@@ -64,24 +64,24 @@ void pizAgentMethodPlay (PIZAgent *x, PIZEvent *event)
     } 
 }
 
-void pizAgentMethodStop (PIZAgent *x, PIZEvent *event)
+void pizAgentStop (PIZAgent *x, PIZEvent *event)
 {
     x->flags &= ~PIZ_AGENT_FLAG_PLAYED; 
     x->flags &= ~PIZ_AGENT_FLAG_LOOPED;
 }
 
-void pizAgentMethodLoop (PIZAgent *x, PIZEvent *event)
+void pizAgentLoop (PIZAgent *x, PIZEvent *event)
 {
     x->flags |= PIZ_AGENT_FLAG_LOOPED;
-    pizAgentMethodPlay (x, event);
+    pizAgentPlay (x, event);
 }
 
-void pizAgentMethodUnloop (PIZAgent *x, PIZEvent *event)
+void pizAgentUnloop (PIZAgent *x, PIZEvent *event)
 {
     x->flags &= ~PIZ_AGENT_FLAG_LOOPED;
 }
 
-void pizAgentMethodBPM (PIZAgent *x, PIZEvent *event)
+void pizAgentBPM (PIZAgent *x, PIZEvent *event)
 {
     x->bpm = CLAMP (event->data.value, PIZ_MINIMUM_BPM, PIZ_MAXIMUM_BPM);
         

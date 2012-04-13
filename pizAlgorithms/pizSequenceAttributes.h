@@ -1,9 +1,9 @@
 /**
- * \file    pizAlgorithms.h
+ * \file    pizSequenceAttributes.h
  * \author  Jean Sapristi
  * \date    April 13, 2012.
  */
-
+ 
 /*
  *  Copyright (c) 2011, Jean Sapristi & Tom Javel, 
  *  "nicolas.danet@free.fr".
@@ -38,44 +38,112 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_ALGORITHMS_H
-#define PIZ_ALGORITHMS_H
+#ifndef PIZ_SEQUENCE_ATTRIBUTES_H
+#define PIZ_SEQUENCE_ATTRIBUTES_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizTypes.h"
+#include "pizSequence.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_ALGORITHM_TYPE_NONE                 0UL
-#define PIZ_ALGORITHM_TYPE_FACTOR_ORACLE        1UL
-#define PIZ_ALGORITHM_TYPE_GALOIS_LATTICE       2UL
-#define PIZ_ALGORITHM_TYPE_FINITE_STATE         4UL
-#define PIZ_ALGORITHM_TYPE_KOHONEN_MAP          8UL
-#define PIZ_ALGORITHM_TYPE_NEURAL_GAS           16UL
-#define PIZ_ALGORITHM_TYPE_MARKOV_MODEL         32UL
+long            pizSequenceCount            (PIZSequence *x);
 
-typedef unsigned long PIZAlgorithmType;
+long            pizSequenceChance           (PIZSequence *x);
+long            pizSequenceVelocity         (PIZSequence *x);
+long            pizSequenceChannel          (PIZSequence *x);
+PIZNoteValue    pizSequenceCell             (PIZSequence *x);
+PIZNoteValue    pizSequenceGrid             (PIZSequence *x);
+PIZNoteValue    pizSequenceNoteValue        (PIZSequence *x);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
+void            pizSequenceSetChance        (PIZSequence *x, long value);
+void            pizSequenceSetVelocity      (PIZSequence *x, long value);
+void            pizSequenceSetChannel       (PIZSequence *x, long channel);
+void            pizSequenceSetCell          (PIZSequence *x, PIZNoteValue snapValue);
+void            pizSequenceSetGrid          (PIZSequence *x, PIZNoteValue snapValue);
+void            pizSequenceSetNoteValue     (PIZSequence *x, PIZNoteValue noteValue);
 
-typedef long     (*PIZAlgorithmMethodLong)( );
-typedef PIZError (*PIZAlgorithmMethodError)( ); 
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-typedef struct _PIZAlgorithm {
-    PIZAlgorithmType            type;
-    PIZAlgorithmMethodError     add;
-    PIZAlgorithmMethodError     clear;
-    PIZAlgorithmMethodError     proceed;
-    PIZAlgorithmMethodLong      count;
-    } PIZAlgorithm;
+PIZError        pizSequenceSetScale         (PIZSequence *x, 
+                                            PIZScaleKey key, 
+                                            PIZScaleType type, 
+                                            const PIZArray *a);
+                                        
+PIZError        pizSequenceSetPattern       (PIZSequence *x, const PIZArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif  // PIZ_ALGORITHMS_H
+
+#ifdef PIZ_EXTERN_INLINE
+
+PIZ_EXTERN long pizSequenceCount (PIZSequence *x)
+{   
+    return x->count;
+}   
+
+PIZ_EXTERN long pizSequenceChance (PIZSequence *x)
+{
+    return x->chance;
+}
+
+PIZ_EXTERN long pizSequenceVelocity (PIZSequence *x)
+{
+    return x->velocity;
+}
+
+PIZ_EXTERN long pizSequenceChannel (PIZSequence *x)
+{
+    return x->channel;
+}
+
+PIZ_EXTERN PIZNoteValue pizSequenceCell (PIZSequence *x)
+{
+    return x->cell;
+}
+
+PIZ_EXTERN PIZNoteValue pizSequenceGrid (PIZSequence *x)
+{
+    return x->grid;
+}
+
+PIZ_EXTERN PIZNoteValue pizSequenceNoteValue (PIZSequence *x)
+{
+    return x->noteValue;
+}
+
+PIZ_EXTERN void pizSequenceSetChance (PIZSequence *x, long value)
+{
+    x->chance = CLAMP (value, 0, 100);
+}
+
+PIZ_EXTERN void pizSequenceSetVelocity (PIZSequence *x, long value)
+{
+    x->velocity = value;
+}
+
+PIZ_EXTERN void pizSequenceSetChannel (PIZSequence *x, long channel)
+{
+    x->channel = CLAMP (channel, 1, PIZ_MAGIC_CHANNEL);
+}
+
+PIZ_EXTERN void pizSequenceSetCell (PIZSequence *x, PIZNoteValue snapValue)
+{
+    x->cell = snapValue;
+}
+
+PIZ_EXTERN void pizSequenceSetGrid (PIZSequence *x, PIZNoteValue snapValue)
+{
+    x->grid = snapValue;
+}
+
+PIZ_EXTERN void pizSequenceSetNoteValue (PIZSequence *x, PIZNoteValue noteValue)
+{
+    x->noteValue = noteValue;
+}
+
+#endif // PIZ_EXTERN_INLINE
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#endif // PIZ_SEQUENCE_ATTRIBUTES_H
