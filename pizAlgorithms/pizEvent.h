@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	April 13, 2012.
+ * \date	April 14, 2012.
  */
 
 /*
@@ -131,7 +131,56 @@ const char  *pizEventGetName                (const PIZEvent *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void        pizEventFree                    (PIZEvent *x);  
+PIZEvent *pizEventNew   (PIZEventType type, 
+                        PIZEventIdentifier ie, 
+                        long tag, 
+                        const PIZTime *time, 
+                        long argc, 
+                        long *argv);
+                        
+void     pizEventFree   (PIZEvent *x);  
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#ifdef PIZ_EXTERN_INLINE
+
+PIZ_EXTERN PIZEvent *pizEventNewRun (PIZEventIdentifier ie)
+{
+    return pizEventNew (PIZ_EVENT_RUN, ie, -1, NULL, 0, NULL);
+}
+
+PIZ_EXTERN PIZEvent *pizEventNewRunWithTime (PIZEventIdentifier ie, const PIZTime *time)
+{
+    return pizEventNew (PIZ_EVENT_RUN, ie, -1, time, 0, NULL);
+}
+
+PIZ_EXTERN PIZEvent *pizEventNewRunWithNote (PIZEventIdentifier ie, long *argv, long tag)
+{
+    return pizEventNew (PIZ_EVENT_RUN, ie, tag, NULL, PIZ_SEQUENCE_NOTE_SIZE, argv);
+}
+
+PIZ_EXTERN PIZEvent *pizEventNewRunWithValue (PIZEventIdentifier ie, long value)
+{
+    return pizEventNew (PIZ_EVENT_RUN, ie, -1, NULL, 1, &value);
+}
+
+PIZ_EXTERN PIZEvent *pizEventNewGraphicWithZone (PIZEventIdentifier ie, long *argv)
+{
+    return pizEventNew (PIZ_EVENT_GRAPHIC, ie, -1, NULL, PIZ_SEQUENCE_ZONE_SIZE, argv);
+}
+
+PIZ_EXTERN PIZEvent *pizEventNewGraphicWithNote (PIZEventIdentifier ie, long *argv, long tag)
+{
+    return pizEventNew (PIZ_EVENT_GRAPHIC, ie, tag, NULL, PIZ_SEQUENCE_NOTE_SIZE, argv);
+}
+
+PIZ_EXTERN PIZEvent *pizEventNewNotification (PIZEventIdentifier ie, const PIZTime *time)
+{
+    return pizEventNew (PIZ_EVENT_NOTIFICATION, ie, -1, time, 0, NULL);
+}
+
+#endif // PIZ_EXTERN_INLINE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
