@@ -66,7 +66,7 @@ void *pizAgentEventLoop (void *agent)
     
     PIZAGENTLOCK_EVENT
     
-    while (!(pizAgentEventLoopCondition (x))) {
+    while (!(pizAgentEventLoopIsCondition (x))) {
         pthread_cond_wait (&x->eventCondition, &x->eventLock);
         x->flags |= PIZ_AGENT_FLAG_WAKED;
         if (EXIT) { 
@@ -314,7 +314,7 @@ void pizAgentEventLoopDoStepLast (PIZAgent *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-bool pizAgentEventLoopCondition (PIZAgent *x)
+bool pizAgentEventLoopIsCondition (PIZAgent *x)
 {
     bool condition = false;
     

@@ -133,11 +133,34 @@ PIZEvent *pizEventNewNotification (PIZEventIdentifier ie, const PIZTime *time)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-/*
-const char *pizEventGetName (const PIZEvent *x)
+
+PIZError pizEventGetTime (const PIZEvent *x, PIZTime *time)
 {
-    return piz_eventNames[x->identifier];
-}*/
+    PIZError err = PIZ_ERROR;
+    
+    if (!(pizTimeIsZero (&x->time))) {
+        pizTimeCopy (time, &x->time);
+    }
+    
+    return err;
+}
+
+PIZError pizEventGetValue (const PIZEvent *x, long *value)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if (pizArrayCount (x->data)) {
+        err = PIZ_GOOD;
+        (*value) = pizArrayValueAtIndex (x->data, 0);
+    }
+    
+    return err;
+}
+
+void pizEventGetName (const PIZEvent *x, const char **name)
+{
+    (*name) = piz_eventNames[x->identifier];
+}
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -62,7 +62,7 @@ void     pizAgentEventLoopDoRefresh     (PIZAgent *x);
 void     pizAgentEventLoopDoStepEnd     (PIZAgent *x);
 void     pizAgentEventLoopDoStepLast    (PIZAgent *x);
 
-bool     pizAgentEventLoopCondition     (PIZAgent *x);
+bool     pizAgentEventLoopIsCondition   (PIZAgent *x);
 void     pizAgentEventLoopInit          (PIZAgent *x);
 bool     pizAgentEventLoopIsWorkTime    (PIZAgent *x);
 void     pizAgentEventLoopSleep         (PIZAgent *x);

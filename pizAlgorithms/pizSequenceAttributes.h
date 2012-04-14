@@ -60,7 +60,7 @@ void    pizSequenceSetNoteValue     (PIZSequence *x, const PIZEvent *event);
 // -------------------------------------------------------------------------------------------------------------
 
 PIZError pizSequenceSetScale        (PIZSequence *x, const PIZEvent *event);
-PIZError pizSequenceSetPattern      (PIZSequence *x, const PIZEvent *event); //
+PIZError pizSequenceSetPattern      (PIZSequence *x, const PIZEvent *event); 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

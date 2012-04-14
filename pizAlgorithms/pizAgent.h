@@ -93,8 +93,12 @@
                                             pizEventFree (event);                       \
                                             PIZAGENTMEMORY                              \
                                         }
-
-#define DEBUGEVENT
+                                        
+#define DEBUGEVENT                      if (event) {                                    \
+                                            const char *name = NULL;                    \
+                                            pizEventGetName (event, &name);             \
+                                            post ("%s / %s", name, __FUNCTION__);       \
+                                        }
         
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

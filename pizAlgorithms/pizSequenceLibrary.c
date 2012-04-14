@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceLibrary.c
  * \author	Jean Sapristi
- * \date	April 12, 2012.
+ * \date	April 14, 2012.
  */
  
 /*
@@ -90,7 +90,7 @@ void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event
     pizItemset128UnsetAtIndex (&x->changedNotes, tag);
 }
 
-void pizSequenceTestIsPlayed (PIZSequence *x, PIZNote *note, const PIZEvent *event)
+void pizSequenceSetIsPlayed (PIZSequence *x, PIZNote *note, const PIZEvent *event)
 {
     bool isHit;
     

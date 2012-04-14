@@ -53,6 +53,7 @@
 
 #define PIZ_SEQUENCE_MAXIMUM_NOTES              128   
 #define PIZ_SEQUENCE_MAXIMUM_DURATION           96
+#define PIZ_SEQUENCE_MAXIMUM_PATTERN            16
                                         
 #define PIZ_SEQUENCE_INIT_TEMP_SIZE             128 
 #define PIZ_SEQUENCE_INIT_LOOKUP_SIZE           19

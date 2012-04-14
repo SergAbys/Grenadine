@@ -127,7 +127,8 @@ PIZEvent    *pizEventNewGraphicWithZone     (PIZEventIdentifier ie, const long *
 PIZEvent    *pizEventNewGraphicWithNote     (PIZEventIdentifier ie, const long *argv, long tag);
 PIZEvent    *pizEventNewNotification        (PIZEventIdentifier ie, const PIZTime *time);
 
-void        pizEventGetTime                 (const PIZEvent *x, PIZTime **time);
+PIZError    pizEventGetTime                 (const PIZEvent *x, PIZTime *time);
+PIZError    pizEventGetValue                (const PIZEvent *x, long *value);
 void        pizEventGetName                 (const PIZEvent *x, const char **name);
 
 // -------------------------------------------------------------------------------------------------------------

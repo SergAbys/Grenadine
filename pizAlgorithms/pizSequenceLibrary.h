@@ -1,7 +1,7 @@
 /**
  * \file	pizSequenceLibrary.h
  * \author	Jean Sapristi
- * \date	April 12, 2012.
+ * \date	April 14, 2012.
  */
 
 /*
@@ -52,7 +52,7 @@
 void     pizSequenceFunAll                  (PIZSequence *x, PIZMethod f,   const PIZEvent *event);
 
 void     pizSequenceRemoveNote              (PIZSequence *x, PIZNote *note, const PIZEvent *event);
-void     pizSequenceTestIsPlayed            (PIZSequence *x, PIZNote *note, const PIZEvent *event);
+void     pizSequenceSetIsPlayed             (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 void     pizSequenceFillTempHash            (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 void     pizSequenceFillTempNotes           (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 
@@ -60,8 +60,14 @@ void     pizSequenceFillTempNotes           (PIZSequence *x, PIZNote *note, cons
 // -------------------------------------------------------------------------------------------------------------
 
 PIZNote  *pizSequenceNewNote                (PIZSequence *x, long *argv, ulong flags);
-// PIZError pizSequenceMoveNote                (PIZSequence *x, PIZNote *note, long newPosition); //
-void     pizSequenceMakeMap                 (PIZSequence *x);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+void     pizSequenceMakeMap                 (PIZSequence *x); 
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
 long     pizSequenceMovePitchToAmbitus      (PIZSequence *x, long pitch);
 long     pizSequenceSnapPositionToPattern   (PIZSequence *x, long position);

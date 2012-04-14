@@ -78,7 +78,7 @@ PIZSequence *pizSequenceNew (long size)
     
     x->map           = pizArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
     x->scale         = pizArrayNew (PIZ_MAGIC_SCALE);
-    x->pattern       = pizArrayNew (0);
+    x->pattern       = pizArrayNew (PIZ_SEQUENCE_MAXIMUM_PATTERN);
     x->tempValues    = (long *)malloc (sizeof(long) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
     x->tempNotes1    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
     x->tempNotes2    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
@@ -199,7 +199,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue)
     
     if (queue) {
     //
-    pizSequenceFunAll (x, pizSequenceTestIsPlayed, NULL);
+    pizSequenceFunAll (x, pizSequenceSetIsPlayed, NULL);
     
     if (x->timeline[x->index] && pizLinklistCount (x->timeline[x->index])) {
         long    scale;
