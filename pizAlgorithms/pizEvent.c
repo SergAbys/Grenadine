@@ -105,7 +105,7 @@ PIZEvent *pizEventNewRunWithTime (PIZEventIdentifier ie, const PIZTime *time)
     return pizEventNew (PIZ_EVENT_RUN, ie, -1, time, 0, NULL);
 }
 
-PIZEvent *pizEventNewRunWithNote (PIZEventIdentifier ie, long *argv, long tag)
+PIZEvent *pizEventNewRunWithNote (PIZEventIdentifier ie, const long *argv, long tag)
 {
     return pizEventNew (PIZ_EVENT_RUN, ie, tag, NULL, PIZ_SEQUENCE_NOTE_SIZE, argv);
 }
@@ -115,12 +115,12 @@ PIZEvent *pizEventNewRunWithValue (PIZEventIdentifier ie, long value)
     return pizEventNew (PIZ_EVENT_RUN, ie, -1, NULL, 1, &value);
 }
 
-PIZEvent *pizEventNewGraphicWithZone (PIZEventIdentifier ie, long *argv)
+PIZEvent *pizEventNewGraphicWithZone (PIZEventIdentifier ie, const long *argv)
 {
     return pizEventNew (PIZ_EVENT_GRAPHIC, ie, -1, NULL, PIZ_SEQUENCE_ZONE_SIZE, argv);
 }
 
-PIZEvent *pizEventNewGraphicWithNote (PIZEventIdentifier ie, long *argv, long tag)
+PIZEvent *pizEventNewGraphicWithNote (PIZEventIdentifier ie, const long *argv, long tag)
 {
     return pizEventNew (PIZ_EVENT_GRAPHIC, ie, tag, NULL, PIZ_SEQUENCE_NOTE_SIZE, argv);
 }
@@ -133,11 +133,11 @@ PIZEvent *pizEventNewNotification (PIZEventIdentifier ie, const PIZTime *time)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-
+/*
 const char *pizEventGetName (const PIZEvent *x)
 {
     return piz_eventNames[x->identifier];
-}
+}*/
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -148,7 +148,7 @@ PIZEvent *pizEventNew   (PIZEventType type,
                         long tag, 
                         const PIZTime *time, 
                         long argc, 
-                        long *argv) 
+                        const long *argv) 
 //                        
 {
     PIZEvent *x = NULL;

@@ -121,12 +121,14 @@ typedef struct _PIZEvent {
 
 PIZEvent    *pizEventNewRun                 (PIZEventIdentifier ie);
 PIZEvent    *pizEventNewRunWithTime         (PIZEventIdentifier ie, const PIZTime *time);
-PIZEvent    *pizEventNewRunWithNote         (PIZEventIdentifier ie, long *argv, long tag);
+PIZEvent    *pizEventNewRunWithNote         (PIZEventIdentifier ie, const long *argv, long tag);
 PIZEvent    *pizEventNewRunWithValue        (PIZEventIdentifier ie, long value);
-PIZEvent    *pizEventNewGraphicWithZone     (PIZEventIdentifier ie, long *argv);
-PIZEvent    *pizEventNewGraphicWithNote     (PIZEventIdentifier ie, long *argv, long tag);
+PIZEvent    *pizEventNewGraphicWithZone     (PIZEventIdentifier ie, const long *argv);
+PIZEvent    *pizEventNewGraphicWithNote     (PIZEventIdentifier ie, const long *argv, long tag);
 PIZEvent    *pizEventNewNotification        (PIZEventIdentifier ie, const PIZTime *time);
-const char  *pizEventGetName                (const PIZEvent *x);
+
+void        pizEventGetTime                 (const PIZEvent *x, PIZTime **time);
+void        pizEventGetName                 (const PIZEvent *x, const char **name);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -136,7 +138,7 @@ PIZEvent *pizEventNew   (PIZEventType type,
                         long tag, 
                         const PIZTime *time, 
                         long argc, 
-                        long *argv);
+                        const long *argv);
                         
 void     pizEventFree   (PIZEvent *x);  
 
@@ -155,7 +157,7 @@ PIZ_EXTERN PIZEvent *pizEventNewRunWithTime (PIZEventIdentifier ie, const PIZTim
     return pizEventNew (PIZ_EVENT_RUN, ie, -1, time, 0, NULL);
 }
 
-PIZ_EXTERN PIZEvent *pizEventNewRunWithNote (PIZEventIdentifier ie, long *argv, long tag)
+PIZ_EXTERN PIZEvent *pizEventNewRunWithNote (PIZEventIdentifier ie, const long *argv, long tag)
 {
     return pizEventNew (PIZ_EVENT_RUN, ie, tag, NULL, PIZ_SEQUENCE_NOTE_SIZE, argv);
 }
@@ -165,12 +167,12 @@ PIZ_EXTERN PIZEvent *pizEventNewRunWithValue (PIZEventIdentifier ie, long value)
     return pizEventNew (PIZ_EVENT_RUN, ie, -1, NULL, 1, &value);
 }
 
-PIZ_EXTERN PIZEvent *pizEventNewGraphicWithZone (PIZEventIdentifier ie, long *argv)
+PIZ_EXTERN PIZEvent *pizEventNewGraphicWithZone (PIZEventIdentifier ie, const long *argv)
 {
     return pizEventNew (PIZ_EVENT_GRAPHIC, ie, -1, NULL, PIZ_SEQUENCE_ZONE_SIZE, argv);
 }
 
-PIZ_EXTERN PIZEvent *pizEventNewGraphicWithNote (PIZEventIdentifier ie, long *argv, long tag)
+PIZ_EXTERN PIZEvent *pizEventNewGraphicWithNote (PIZEventIdentifier ie, const long *argv, long tag)
 {
     return pizEventNew (PIZ_EVENT_GRAPHIC, ie, tag, NULL, PIZ_SEQUENCE_NOTE_SIZE, argv);
 }
