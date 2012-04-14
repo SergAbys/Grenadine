@@ -139,6 +139,7 @@ PIZError pizEventGetTime (const PIZEvent *x, PIZTime *time)
     PIZError err = PIZ_ERROR;
     
     if (!(pizTimeIsZero (&x->time))) {
+        err = PIZ_GOOD;
         pizTimeCopy (time, &x->time);
     }
     
