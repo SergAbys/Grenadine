@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentMethod.c
  * \author	Jean Sapristi
- * \date	April 14, 2012.
+ * \date	April 15, 2012.
  */
  
 /*
@@ -43,8 +43,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_MAXIMUM_BPM   300
-#define PIZ_MINIMUM_BPM   40
+#define PIZ_MAXIMUM_BPM     300
+#define PIZ_MINIMUM_BPM     40
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -52,12 +52,12 @@
 
 void pizAgentPlay (PIZAgent *x, PIZEvent *event)
 {
-    if (!(x->flags & PIZ_AGENT_FLAG_PLAYED)) {
+    if (!(x->flags & PIZ_AGENT_FLAG_PLAYING)) {
     //
     PIZTime time;
     
     pizSequenceGoToStart (x->sequence);
-    x->flags |= PIZ_AGENT_FLAG_PLAYED; 
+    x->flags |= PIZ_AGENT_FLAG_PLAYING; 
     
     if (!(pizEventGetTime (event, &time))) {
         pizTimeCopy    (&x->grainStart, &time);
@@ -70,7 +70,7 @@ void pizAgentPlay (PIZAgent *x, PIZEvent *event)
 
 void pizAgentStop (PIZAgent *x, PIZEvent *event)
 {
-    x->flags &= ~PIZ_AGENT_FLAG_PLAYED; 
+    x->flags &= ~PIZ_AGENT_FLAG_PLAYING; 
     x->flags &= ~PIZ_AGENT_FLAG_LOOPED;
 }
 

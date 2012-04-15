@@ -49,6 +49,12 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+void     pizSequenceClear           (PIZSequence *x, const PIZEvent *event);
+void     pizSequenceTranspose       (PIZSequence *x, const PIZEvent *event);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 PIZError pizSequenceAlgorithm       (PIZSequence *x, const PIZEvent *event);
 PIZError pizSequenceNovember        (PIZSequence *x, const PIZEvent *event); //
 PIZError pizSequenceJuliet          (PIZSequence *x, const PIZEvent *event); //
@@ -56,8 +62,6 @@ PIZError pizSequenceJuliet          (PIZSequence *x, const PIZEvent *event); //
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void     pizSequenceClear           (PIZSequence *x, const PIZEvent *event);
-void     pizSequenceTranspose       (PIZSequence *x, const PIZEvent *event);
 void     pizSequenceClean           (PIZSequence *x, const PIZEvent *event);
 void     pizSequenceRotate          (PIZSequence *x, const PIZEvent *event);
 void     pizSequenceScramble        (PIZSequence *x, const PIZEvent *event);

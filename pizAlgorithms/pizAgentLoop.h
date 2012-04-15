@@ -62,12 +62,12 @@ void     pizAgentEventLoopDoRefresh     (PIZAgent *x);
 void     pizAgentEventLoopDoStepEnd     (PIZAgent *x);
 void     pizAgentEventLoopDoStepLast    (PIZAgent *x);
 
-bool     pizAgentEventLoopIsCondition   (PIZAgent *x);
 void     pizAgentEventLoopInit          (PIZAgent *x);
-bool     pizAgentEventLoopIsWorkTime    (PIZAgent *x);
 void     pizAgentEventLoopSleep         (PIZAgent *x);
+bool     pizAgentEventLoopIsCondition   (PIZAgent *x);
+bool     pizAgentEventLoopIsWorkTime    (PIZAgent *x);
 
-void     pizAgentEventLoopGetMethod     (const PIZEvent *x, PIZMethod *f, PIZMethodError *g);
+long     pizAgentEventLoopGetMethod     (const PIZEvent *event, PIZMethod *f, PIZMethodError *g);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

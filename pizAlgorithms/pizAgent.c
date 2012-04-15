@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	April 12, 2012.
+ * \date	April 15, 2012.
  */
  
 /*
@@ -49,7 +49,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_DEFAULT_BPM 120
+#define PIZ_DEFAULT_BPM     120
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -130,18 +130,18 @@ void pizAgentFree (PIZAgent *x)
     if (x) {
     //
     if (!x->err1) {
-        PIZAGENTLOCK_EVENT
+        PIZ_AGENT_LOCK_EVENT
         x->flags |= PIZ_AGENT_FLAG_EXIT;
-        PIZAGENTUNLOCK_EVENT
+        PIZ_AGENT_UNLOCK_EVENT
     
         pthread_cond_signal (&x->eventCondition);
         pthread_join (x->eventLoop, NULL); 
     }
     
     if (!x->err2) {
-        PIZAGENTLOCK_NOTIFICATION
+        PIZ_AGENT_LOCK_NOTIFICATION
         x->flags |= PIZ_AGENT_FLAG_EXIT;
-        PIZAGENTUNLOCK_NOTIFICATION
+        PIZ_AGENT_UNLOCK_NOTIFICATION
     
         pthread_cond_signal (&x->notificationCondition);
         pthread_join (x->notificationLoop, NULL); 
@@ -185,9 +185,9 @@ void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
     }
     
     if (queue) {
-        PIZAGENTLOCK_EVENT
-        PIZAGENTQUEUE(queue)
-        PIZAGENTUNLOCK_EVENT
+        PIZ_AGENT_LOCK_EVENT
+        PIZ_AGENT_QUEUE(queue)
+        PIZ_AGENT_UNLOCK_EVENT
         
         pthread_cond_signal (&x->eventCondition);
     }
@@ -206,14 +206,14 @@ PIZError pizAgentGetEvent (PIZAgent *x, PIZEventType type, PIZEvent **eventPtr)
     if (queue) {
         err = PIZ_GOOD;
         
-        PIZAGENTLOCK_GETTER
+        PIZ_AGENT_LOCK_GETTER
         
         /*
         if (!(err |= pizLinklistPtrAtIndex (queue, 0, (void **)eventPtr))) {
             pizLinklistChuckByPtr (queue, (*eventPtr));
         }*/
         
-        PIZAGENTUNLOCK_GETTER
+        PIZ_AGENT_UNLOCK_GETTER
     }
     
     return err;

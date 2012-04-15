@@ -66,32 +66,32 @@
 #define PIZ_AGENT_FLAG_NONE             0UL
 #define PIZ_AGENT_FLAG_EXIT             1UL
 #define PIZ_AGENT_FLAG_WAKED            2UL
-#define PIZ_AGENT_FLAG_PLAYED           4UL
+#define PIZ_AGENT_FLAG_PLAYING          4UL
 #define PIZ_AGENT_FLAG_LOOPED           8UL
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZAGENTLOCK_EVENT               pthread_mutex_lock      (&x->eventLock);
-#define PIZAGENTUNLOCK_EVENT             pthread_mutex_unlock    (&x->eventLock);
+#define PIZ_AGENT_LOCK_EVENT               pthread_mutex_lock      (&x->eventLock);
+#define PIZ_AGENT_UNLOCK_EVENT             pthread_mutex_unlock    (&x->eventLock);
 
-#define PIZAGENTLOCK_NOTIFICATION        pthread_mutex_lock      (&x->notificationLock);
-#define PIZAGENTUNLOCK_NOTIFICATION      pthread_mutex_unlock    (&x->notificationLock);
+#define PIZ_AGENT_LOCK_NOTIFICATION        pthread_mutex_lock      (&x->notificationLock);
+#define PIZ_AGENT_UNLOCK_NOTIFICATION      pthread_mutex_unlock    (&x->notificationLock);
 
-#define PIZAGENTLOCK_GETTER              pthread_mutex_lock      (&x->getterLock);
-#define PIZAGENTUNLOCK_GETTER            pthread_mutex_unlock    (&x->getterLock);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZAGENTMEMORY
+#define PIZ_AGENT_LOCK_GETTER              pthread_mutex_lock      (&x->getterLock);
+#define PIZ_AGENT_UNLOCK_GETTER            pthread_mutex_unlock    (&x->getterLock);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZAGENTQUEUE(queue)            if (pizLinklistAppend ((queue), event)) {       \
+#define PIZ_AGENT_MEMORY
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define PIZ_AGENT_QUEUE(queue)          if (pizLinklistAppend ((queue), event)) {       \
                                             pizEventFree (event);                       \
-                                            PIZAGENTMEMORY                              \
+                                            PIZ_AGENT_MEMORY                            \
                                         }
                                         
 #define DEBUGEVENT                      if (event) {                                    \

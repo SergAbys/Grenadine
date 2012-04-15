@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceMethods.c
  * \author  Jean Sapristi
- * \date    April 12, 2012.
+ * \date    April 15, 2012.
  */
  
 /*
@@ -107,20 +107,74 @@ static const double piz_distribution11[ ] = { 0.54, 0.59, 0.63, 0.68, 0.72, 0.77
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_CEIL(a,b)       (((a)%(b))==0?(a)/(b):(a)/(b)+1)
+#define PIZ_CEIL(a,b)           (((a)%(b))==0?(a)/(b):(a)/(b)+1)
 
-#define PICKUPNOTES         x->tempIndex = 0; \
-                            pizSequenceFunAll (x, pizSequenceFillTempNotes, NULL); \
-                            k = x->tempIndex;
+#define PIZ_PICKUP_NOTES        x->tempIndex = 0; \
+                                pizSequenceFunAll (x, pizSequenceFillTempNotes, NULL); \
+                                k = x->tempIndex;
                         
-#define FILLNOTES           pizSequenceFillNotes (x, selector, 0);
-#define FILLNOTESREVERSE    pizSequenceFillNotes (x, selector, 1);
+#define PIZ_FILL_NOTES          pizSequenceFillNotes (x, selector, 0);
+#define PIZ_FILL_NOTES_REVERSE  pizSequenceFillNotes (x, selector, 1);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 void pizSequenceFillNotes (PIZSequence *x, PIZMidiSelector selector, bool reverse);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizSequenceClear (PIZSequence *x, const PIZEvent *event)
+{
+    if (x->count) {
+        pizSequenceFunAll (x, pizSequenceRemoveNote, NULL);
+        pizArrayClear (x->map);  
+    }
+}
+
+//PIZError pizSequenceTranspose (PIZSequence *x, long n)
+void pizSequenceTranspose (PIZSequence *x, const PIZEvent *event)
+{/*
+    long i, a, b;
+        
+    a = CLAMP (x->down + n, 0, PIZ_MAGIC_PITCH);
+    b = CLAMP (x->up + n, 0, PIZ_MAGIC_PITCH);
+    
+    if (x->down != a) {
+        x->down = a;
+        x->changedZone = true;
+    }
+    
+    if (x->up != b) {
+        x->up = b;
+        x->changedZone = true;
+    }
+    
+    for (i = 0; i < pizArrayCount (x->map); i++) {   
+        PIZNote *note       = NULL;
+        PIZNote *nextNote   = NULL;
+        
+        long p = pizArrayValueAtIndex (x->map, i);
+        
+        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
+        
+        while (note) {
+            long temp; 
+            
+            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+            
+            temp = CLAMP (note->midi[PIZ_MIDI_PITCH] + n, 0, PIZ_MAGIC_PITCH);
+            if (note->midi[PIZ_MIDI_PITCH] != temp) {
+                note->midi[PIZ_MIDI_PITCH] = temp;
+                pizItemset128SetAtIndex (&x->changedNotes, note->tag);
+            }
+            
+            note = nextNote;
+        }
+    }*/
+}
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -135,7 +189,7 @@ PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
     PIZMethodError  proceed = NULL;
     PIZMidiSelector selector = PIZ_MIDI_PITCH;
     
-    PICKUPNOTES
+    PIZ_PICKUP_NOTES
 
     count = algorithm->count;
     proceed = algorithm->proceed;
@@ -158,7 +212,7 @@ PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
             } 
         }
         
-        FILLNOTES
+        PIZ_FILL_NOTES
     }*/
     
     return err;
@@ -353,7 +407,6 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
                                     noteToCopy->midi[PIZ_MIDI_VELOCITY], 
                                     noteToCopy->midi[PIZ_MIDI_DURATION],
                                     noteToCopy->midi[PIZ_MIDI_CHANNEL],
-                                    false,  
                                     false };
                                     
                 PIZNote *newNote = pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_CLIP);
@@ -496,7 +549,6 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
                            note1->midi[PIZ_MIDI_VELOCITY],
                            note1->midi[PIZ_MIDI_DURATION],
                            note1->midi[PIZ_MIDI_CHANNEL],
-                           false, 
                            false };
 
         note2 = pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_CLIP);
@@ -534,56 +586,6 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-
-void pizSequenceClear (PIZSequence *x, const PIZEvent *event)
-{
-    if (x->count) {
-        pizSequenceFunAll (x, pizSequenceRemoveNote, NULL);
-        pizArrayClear (x->map);  
-    }
-}
-
-//PIZError pizSequenceTranspose (PIZSequence *x, long n)
-void pizSequenceTranspose (PIZSequence *x, const PIZEvent *event)
-{/*
-    long i, a, b;
-        
-    a = CLAMP (x->down + n, 0, PIZ_MAGIC_PITCH);
-    b = CLAMP (x->up + n, 0, PIZ_MAGIC_PITCH);
-    
-    if (x->down != a) {
-        x->down = a;
-        x->changedZone = true;
-    }
-    
-    if (x->up != b) {
-        x->up = b;
-        x->changedZone = true;
-    }
-    
-    for (i = 0; i < pizArrayCount (x->map); i++) {   
-        PIZNote *note       = NULL;
-        PIZNote *nextNote   = NULL;
-        
-        long p = pizArrayValueAtIndex (x->map, i);
-        
-        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-        
-        while (note) {
-            long temp; 
-            
-            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-            
-            temp = CLAMP (note->midi[PIZ_MIDI_PITCH] + n, 0, PIZ_MAGIC_PITCH);
-            if (note->midi[PIZ_MIDI_PITCH] != temp) {
-                note->midi[PIZ_MIDI_PITCH] = temp;
-                pizItemset128SetAtIndex (&x->changedNotes, note->tag);
-            }
-            
-            note = nextNote;
-        }
-    }*/
-}
 
 //PIZError pizSequenceClean (PIZSequence *x, long value)
 void pizSequenceClean (PIZSequence *x, const PIZEvent *event)
@@ -654,7 +656,7 @@ void pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
 {/*
     long i, k;
             
-    PICKUPNOTES
+    PIZ_PICKUP_NOTES
     
     if (k && shift < 0) {
         shift = k - ((-shift) % k);
@@ -664,7 +666,7 @@ void pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
         x->tempValues[i] = x->tempNotes1[(i + shift) % k]->midi[selector];
     }
                 
-    FILLNOTES*/
+    PIZ_FILL_NOTES*/
 }
 
 //PIZError pizSequenceScramble (PIZSequence *x, PIZMidiSelector selector)
@@ -672,7 +674,7 @@ void pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
 {/*
     long i, k;
         
-    PICKUPNOTES
+    PIZ_PICKUP_NOTES
     
     for (i = 0; i < k; i++) {
         x->tempValues[i] = x->tempNotes1[i]->midi[selector];
@@ -687,7 +689,7 @@ void pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
         x->tempNotes1[i] = temp;
     }
             
-    FILLNOTES*/
+    PIZ_FILL_NOTES*/
 }
 
 //PIZError pizSequenceSort (PIZSequence *x, PIZMidiSelector selector, bool down)
@@ -695,7 +697,7 @@ void pizSequenceSort (PIZSequence *x, const PIZEvent *event)
 {/*
     long i, scale, k;
         
-    PICKUPNOTES
+    PIZ_PICKUP_NOTES
     
     scale = pizArrayCount (x->scale);
     
@@ -746,9 +748,9 @@ void pizSequenceSort (PIZSequence *x, const PIZEvent *event)
     }
      
     if (!down) {
-        FILLNOTES
+        PIZ_FILL_NOTES
     } else {
-        FILLNOTESREVERSE
+        PIZ_FILL_NOTES_REVERSE
     }*/
 }
 

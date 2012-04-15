@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    April 13, 2012.
+ * \date    April 15, 2012.
  */
  
 /*
@@ -67,13 +67,11 @@
 #define PIZ_SEQUENCE_FLAG_PATTERN               2UL
 #define PIZ_SEQUENCE_FLAG_AMBITUS               4UL
 #define PIZ_SEQUENCE_FLAG_CLIP                  8UL
-#define PIZ_SEQUENCE_FLAG_UNSELECT              16UL
-#define PIZ_SEQUENCE_FLAG_CLEAR                 32UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_NOTE_SIZE                  7
+#define PIZ_SEQUENCE_NOTE_SIZE                  6
 #define PIZ_SEQUENCE_ZONE_SIZE                  4
   
 // -------------------------------------------------------------------------------------------------------------
@@ -85,8 +83,7 @@ enum {
     PIZ_DATA_VELOCITY       = 2,
     PIZ_DATA_DURATION       = 3,
     PIZ_DATA_CHANNEL        = 4,
-    PIZ_DATA_IS_SELECTED    = 5,
-    PIZ_DATA_IS_PLAYED      = 6
+    PIZ_DATA_IS_PLAYED      = 5
     };
 
 enum {
@@ -179,7 +176,6 @@ typedef struct _PIZNote {
     long     tag;
     long     position;
     long     midi[4];
-    long     isSelected;
     long     isPlayed;
     } PIZNote;
     

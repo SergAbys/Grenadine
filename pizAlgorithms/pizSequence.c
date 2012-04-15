@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    April 12, 2012.
+ * \date    April 15, 2012.
  */
  
 /*
@@ -237,7 +237,6 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue)
                                  CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY),
                                  note->midi[PIZ_MIDI_DURATION], 
                                  channel, 
-                                 note->isSelected, 
                                  note->isPlayed };
                          
                 if (event = pizEventNewRunWithNote (PIZ_EVENT_NOTE_PLAYED, argv, note->tag)) {

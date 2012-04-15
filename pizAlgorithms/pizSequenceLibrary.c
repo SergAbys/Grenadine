@@ -139,7 +139,6 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
     long    velocity    = CLAMP (argv[PIZ_DATA_VELOCITY], 0, PIZ_MAGIC_VELOCITY);
     long    duration    = CLAMP (argv[PIZ_DATA_DURATION], 1, PIZ_SEQUENCE_MAXIMUM_DURATION); 
     long    channel     = CLAMP (argv[PIZ_DATA_CHANNEL],  0, PIZ_MAGIC_CHANNEL); 
-    long    isSelected  = argv[PIZ_DATA_IS_SELECTED];
     long    isPlayed    = argv[PIZ_DATA_IS_PLAYED];
     
     if (flags & PIZ_SEQUENCE_FLAG_SNAP) {
@@ -152,10 +151,6 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
     
     if (flags & PIZ_SEQUENCE_FLAG_AMBITUS) {
         pitch = pizSequenceMovePitchToAmbitus (x, pitch);
-    }
-        
-    if (flags & PIZ_SEQUENCE_FLAG_UNSELECT) {
-        isSelected = false;
     }
                 
     err |= (position < 0);
@@ -180,7 +175,6 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
         newNote->midi[PIZ_MIDI_VELOCITY] = velocity;
         newNote->midi[PIZ_MIDI_DURATION] = duration;
         newNote->midi[PIZ_MIDI_CHANNEL]  = channel;
-        newNote->isSelected              = isSelected;
         newNote->isPlayed                = isPlayed;
     
         if (!(x->timeline[newNote->position])) {
