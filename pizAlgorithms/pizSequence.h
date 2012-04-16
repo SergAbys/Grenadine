@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    April 15, 2012.
+ * \date    April 16, 2012.
  */
  
 /*
@@ -64,7 +64,6 @@
 
 #define PIZ_SEQUENCE_FLAG_NONE                  0UL
 #define PIZ_SEQUENCE_FLAG_SNAP                  1UL
-#define PIZ_SEQUENCE_FLAG_PATTERN               2UL
 #define PIZ_SEQUENCE_FLAG_AMBITUS               4UL
 #define PIZ_SEQUENCE_FLAG_CLIP                  8UL
 
@@ -210,7 +209,6 @@ typedef struct _PIZSequence {
     long                    channel;
     long                    velocity;
     PIZNoteValue            cell;
-    PIZNoteValue            grid;
     PIZNoteValue            noteValue;
     unsigned int            seed;
     } PIZSequence;

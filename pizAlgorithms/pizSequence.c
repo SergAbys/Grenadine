@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    April 15, 2012.
+ * \date    April 16, 2012.
  */
  
 /*
@@ -120,7 +120,6 @@ PIZSequence *pizSequenceNew (long size)
         x->channel   = PIZ_DEFAULT_CHANNEL;
         x->velocity  = 0;
         x->cell      = PIZ_NOTE_VALUE_NONE;
-        x->grid      = PIZ_NOTE_VALUE_NONE;
         x->noteValue = PIZ_NOTE_VALUE_NONE;
             
     } else {

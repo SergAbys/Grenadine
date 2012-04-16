@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceLibrary.c
  * \author	Jean Sapristi
- * \date	April 14, 2012.
+ * \date	April 16, 2012.
  */
  
 /*
@@ -96,6 +96,7 @@ void pizSequenceSetIsPlayed (PIZSequence *x, PIZNote *note, const PIZEvent *even
     
     isHit = (x->index >= note->position);
     isHit = isHit && (x->index < (note->position + note->midi[PIZ_MIDI_DURATION]));
+    isHit = isHit && ((note->midi[PIZ_MIDI_PITCH] >= x->down) && (note->midi[PIZ_MIDI_PITCH] <= x->up));
     
     if (isHit && !note->isPlayed) {
         note->isPlayed = true;
@@ -107,7 +108,7 @@ void pizSequenceSetIsPlayed (PIZSequence *x, PIZNote *note, const PIZEvent *even
 }
 
 void pizSequenceFillTempHash (PIZSequence *x, PIZNote *note, const PIZEvent *event)
-{
+{   /*
     long key, scale, offset = 0;
     
     if (scale = pizArrayCount (x->scale)) {
@@ -117,7 +118,7 @@ void pizSequenceFillTempHash (PIZSequence *x, PIZNote *note, const PIZEvent *eve
     key = ((long)(note->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1));
     key += note->midi[PIZ_MIDI_PITCH] + offset;
     
-    x->tempError |= pizBoundedHashTableAdd (x->tempHash, key, (void *)note);
+    x->tempError |= pizBoundedHashTableAdd (x->tempHash, key, (void *)note);*/
 }
 
 void pizSequenceFillTempNotes (PIZSequence *x, PIZNote *note, const PIZEvent *event)
@@ -132,20 +133,16 @@ void pizSequenceFillTempNotes (PIZSequence *x, PIZNote *note, const PIZEvent *ev
 
 PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
 {
-    PIZNote *newNote    = NULL;
-    long    err         = PIZ_GOOD;
-    long    position    = argv[PIZ_DATA_POSITION];
-    long    pitch       = CLAMP (argv[PIZ_DATA_PITCH],    0, PIZ_MAGIC_PITCH);
-    long    velocity    = CLAMP (argv[PIZ_DATA_VELOCITY], 0, PIZ_MAGIC_VELOCITY);
-    long    duration    = CLAMP (argv[PIZ_DATA_DURATION], 1, PIZ_SEQUENCE_MAXIMUM_DURATION); 
-    long    channel     = CLAMP (argv[PIZ_DATA_CHANNEL],  0, PIZ_MAGIC_CHANNEL); 
-    long    isPlayed    = argv[PIZ_DATA_IS_PLAYED];
+    PIZNote *newNote = NULL;
+    long    err      = PIZ_GOOD;
+    long    position = argv[PIZ_DATA_POSITION];
+    long    pitch    = argv[PIZ_DATA_PITCH];
+    long    velocity = argv[PIZ_DATA_VELOCITY];
+    long    duration = argv[PIZ_DATA_DURATION]; 
+    long    channel  = argv[PIZ_DATA_CHANNEL]; 
+    long    isPlayed = argv[PIZ_DATA_IS_PLAYED];
     
     if (flags & PIZ_SEQUENCE_FLAG_SNAP) {
-        position = MAX (((long)(position / (double)x->grid)) * x->grid, 0);
-    }
-    
-    if (flags & PIZ_SEQUENCE_FLAG_PATTERN) {
         position = pizSequenceSnapPositionToPattern (x, position);
     } 
     
@@ -251,14 +248,6 @@ void pizSequenceMakeMap (PIZSequence *x)
 
 long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
 {
-    long scale, offset = 0;
-    
-    if (scale = pizArrayCount (x->scale)) {
-        offset = pizArrayValueAtIndex (x->scale, pitch % scale);
-    }
-
-    pitch += offset;
-            
     if (pitch < x->down) {
         while ((pitch < x->down) && (pitch < PIZ_MAGIC_PITCH)) {
             pitch += PIZ_MAGIC_SCALE;
@@ -268,24 +257,22 @@ long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
             pitch -= PIZ_MAGIC_SCALE;
         }
     }
-            
-    pitch -= offset;
     
     return (CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
 }
 
 long pizSequenceSnapPositionToPattern (PIZSequence *x, long position)
 {
-    long patternSize = pizArrayCount (x->pattern);  
+    long s = pizArrayCount (x->pattern);  
         
-    if (patternSize) {
-        if (x->cell != PIZ_NOTE_VALUE_NONE) {
-            long j = MAX ((long)(position / (double)x->cell), 0);
-            long k = j % patternSize;
+    if (s) {
+        long j = (long)(position / (double)x->cell);
+        long k = j % s;
         
-            position = j * x->cell;
-            position += pizArrayValueAtIndex (x->pattern, k) * x->cell;
-        }
+        position = j * x->cell;
+        position += pizArrayValueAtIndex (x->pattern, k) * x->cell;
+    } else {
+        position = ((long)(position / (double)x->cell)) * x->cell;
     }
 
     return position;

@@ -103,12 +103,6 @@ void pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
     //x->cell = snapValue;
 }
 
-//void pizSequenceSetGrid (PIZSequence *x, PIZNoteValue snapValue)
-void pizSequenceSetGrid (PIZSequence *x, const PIZEvent *event)
-{
-    //x->grid = snapValue;
-}
-
 //void pizSequenceSetNoteValue (PIZSequence *x, PIZNoteValue noteValue)
 void pizSequenceSetNoteValue (PIZSequence *x, const PIZEvent *event)
 {

@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	April 14, 2012.
+ * \date	April 16, 2012.
  */
  
 /*
@@ -79,7 +79,6 @@ static const char *piz_eventNames[ ] = {    "Init",
                                     "Kill",
                                     "Cycle",
                                     //
-                                    "Grid",
                                     "Note Value",*/
                                             "Zone Changed",
                                             "Note Removed",

@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceAttributes.h
  * \author  Jean Sapristi
- * \date    April 13, 2012.
+ * \date    April 16, 2012.
  */
  
 /*
@@ -53,7 +53,6 @@ void    pizSequenceSetChance        (PIZSequence *x, const PIZEvent *event);
 void    pizSequenceSetVelocity      (PIZSequence *x, const PIZEvent *event);
 void    pizSequenceSetChannel       (PIZSequence *x, const PIZEvent *event);
 void    pizSequenceSetCell          (PIZSequence *x, const PIZEvent *event);
-void    pizSequenceSetGrid          (PIZSequence *x, const PIZEvent *event);
 void    pizSequenceSetNoteValue     (PIZSequence *x, const PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
