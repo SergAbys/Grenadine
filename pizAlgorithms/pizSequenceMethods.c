@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceMethods.c
  * \author  Jean Sapristi
- * \date    April 15, 2012.
+ * \date    April 16, 2012.
  */
  
 /*
@@ -406,8 +406,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
                                     hPat[j] % (PIZ_MAGIC_PITCH + 1),
                                     noteToCopy->midi[PIZ_MIDI_VELOCITY], 
                                     noteToCopy->midi[PIZ_MIDI_DURATION],
-                                    noteToCopy->midi[PIZ_MIDI_CHANNEL],
-                                    false };
+                                    noteToCopy->midi[PIZ_MIDI_CHANNEL]  };
                                     
                 PIZNote *newNote = pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_CLIP);
                 
@@ -548,8 +547,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
                            note1->midi[PIZ_MIDI_PITCH] + offset,
                            note1->midi[PIZ_MIDI_VELOCITY],
                            note1->midi[PIZ_MIDI_DURATION],
-                           note1->midi[PIZ_MIDI_CHANNEL],
-                           false };
+                           note1->midi[PIZ_MIDI_CHANNEL]    };
 
         note2 = pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_CLIP);
         
@@ -1010,36 +1008,21 @@ void pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
 
 void pizSequenceFillNotes (PIZSequence *x, PIZMidiSelector selector, bool reverse)
 {
-    long i, t;
+    long i;
     
-    if (selector == PIZ_MIDI_DURATION) {
-    //
     for (i = 0; i < x->tempIndex; i++) {
-        if (!reverse) {
-            t = MIN (x->tempValues[i], x->timelineSize - x->tempNotes1[i]->position);
-        } else {
-            t = MIN (x->tempValues[(x->tempIndex - 1) - i], x->timelineSize - x->tempNotes1[i]->position);
-        }
-        
-        if (x->tempNotes1[i]->midi[selector] != t) {
-            x->tempNotes1[i]->midi[selector] = t;
-            pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
-        }
-    }
     //
+    long t;
+
+    if (!reverse) {
+        t = x->tempValues[i];
     } else {
-    //
-    for (i = 0; i < x->tempIndex; i++) {
-        if (!reverse) {
-            t = x->tempValues[i];
-        } else {
-            t = x->tempValues[(x->tempIndex - 1) - i];
-        }
-        
-        if (x->tempNotes1[i]->midi[selector] != t) {
-            x->tempNotes1[i]->midi[selector] = t;
-            pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
-        }
+        t = x->tempValues[(x->tempIndex - 1) - i];
+    }
+    
+    if (x->tempNotes1[i]->midi[selector] != t) {
+        x->tempNotes1[i]->midi[selector] = t;
+        pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
     }
     //
     }

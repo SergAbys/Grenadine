@@ -90,23 +90,6 @@ void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event
     pizItemset128UnsetAtIndex (&x->changedNotes, tag);
 }
 
-void pizSequenceSetIsPlayed (PIZSequence *x, PIZNote *note, const PIZEvent *event)
-{
-    bool isHit;
-    
-    isHit = (x->index >= note->position);
-    isHit = isHit && (x->index < (note->position + note->midi[PIZ_MIDI_DURATION]));
-    isHit = isHit && ((note->midi[PIZ_MIDI_PITCH] >= x->down) && (note->midi[PIZ_MIDI_PITCH] <= x->up));
-    
-    if (isHit && !note->isPlayed) {
-        note->isPlayed = true;
-        pizItemset128SetAtIndex (&x->changedNotes, note->tag);
-    } else if (!isHit && note->isPlayed) {
-        note->isPlayed = false;
-        pizItemset128SetAtIndex (&x->changedNotes, note->tag);
-    }
-}
-
 void pizSequenceFillTempHash (PIZSequence *x, PIZNote *note, const PIZEvent *event)
 {   /*
     long key, scale, offset = 0;
@@ -140,7 +123,6 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
     long    velocity = argv[PIZ_DATA_VELOCITY];
     long    duration = argv[PIZ_DATA_DURATION]; 
     long    channel  = argv[PIZ_DATA_CHANNEL]; 
-    long    isPlayed = argv[PIZ_DATA_IS_PLAYED];
     
     if (flags & PIZ_SEQUENCE_FLAG_SNAP) {
         position = pizSequenceSnapPositionToPattern (x, position);
@@ -151,7 +133,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
     }
                 
     err |= (position < 0);
-    err |= (position > (x->timelineSize - MAX (duration, 1)));
+    err |= (position > (x->timelineSize - 1));
     err |= (x->count >= PIZ_SEQUENCE_MAXIMUM_NOTES);
     
     if (flags & PIZ_SEQUENCE_FLAG_CLIP) {
@@ -172,7 +154,6 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
         newNote->midi[PIZ_MIDI_VELOCITY] = velocity;
         newNote->midi[PIZ_MIDI_DURATION] = duration;
         newNote->midi[PIZ_MIDI_CHANNEL]  = channel;
-        newNote->isPlayed                = isPlayed;
     
         if (!(x->timeline[newNote->position])) {
             if (!(x->timeline[newNote->position] = pizLinklistNew ( ))) {

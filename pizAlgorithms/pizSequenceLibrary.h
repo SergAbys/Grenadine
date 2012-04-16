@@ -52,7 +52,6 @@
 void     pizSequenceFunAll                  (PIZSequence *x, PIZMethod f,   const PIZEvent *event);
 
 void     pizSequenceRemoveNote              (PIZSequence *x, PIZNote *note, const PIZEvent *event);
-void     pizSequenceSetIsPlayed             (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 void     pizSequenceFillTempHash            (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 void     pizSequenceFillTempNotes           (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 

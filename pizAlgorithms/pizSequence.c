@@ -198,8 +198,6 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue)
     
     if (queue) {
     //
-    pizSequenceFunAll (x, pizSequenceSetIsPlayed, NULL);
-    
     if (x->timeline[x->index] && pizLinklistCount (x->timeline[x->index])) {
         long    scale;
         PIZNote *note       = NULL;
@@ -235,8 +233,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue)
                                  CLAMP (pitch, 0, PIZ_MAGIC_PITCH),
                                  CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY),
                                  note->midi[PIZ_MIDI_DURATION], 
-                                 channel, 
-                                 note->isPlayed };
+                                 channel };
                          
                 if (event = pizEventNewRunWithNote (PIZ_EVENT_NOTE_PLAYED, argv, note->tag)) {
                     if (err |= pizLinklistAppend (queue, event)) {       
