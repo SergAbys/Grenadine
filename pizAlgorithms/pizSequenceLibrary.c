@@ -143,10 +143,10 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
     err |= (x->count >= PIZ_SEQUENCE_MAXIMUM_NOTES);
     
     if (flags & PIZ_SEQUENCE_FLAG_CLIP) {
+        err |= (pitch > x->up);
+        err |= (pitch < x->down);
         err |= (position < x->start);
         err |= (position >= x->end);
-        err |= (pitch < x->down);
-        err |= (pitch > x->up);
     }
         
     if (!err) {
@@ -216,6 +216,10 @@ PIZError pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
     return err;
 }*/
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 void pizSequenceMakeMap (PIZSequence *x)
 {
     long i;
@@ -250,16 +254,20 @@ long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
 
 long pizSequenceSnapPositionToPattern (PIZSequence *x, long position)
 {
-    long s = pizArrayCount (x->pattern);  
-        
+    long s = pizArrayCount (x->pattern); 
+    long j = (long)(position / (double)x->cell);
+    
+    position = j * x->cell;
+    
     if (s) {
-        long j = (long)(position / (double)x->cell);
+        long k = (long)(x->start / (double)x->cell);
         
-        position = j * x->cell;
-        position += pizArrayValueAtIndex (x->pattern, j % s) * x->cell;
-    } else {
-        position = ((long)(position / (double)x->cell)) * x->cell;
-    }
+        while (k > position) {
+            k -= s;
+        }
+        
+        position += pizArrayValueAtIndex (x->pattern, (j - k) % s) * x->cell;
+    } 
 
     return position;
 }

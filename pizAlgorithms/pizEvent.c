@@ -61,6 +61,7 @@ static const char *piz_eventNames[ ] = {    "Init",
                                     "Velocity",
                                     "Channel",
                                     "Cell",
+                                    "Note Value",
                                     "Scale",
                                     "Pattern",
                                     "Learn",
@@ -78,8 +79,7 @@ static const char *piz_eventNames[ ] = {    "Init",
                                     "Random",
                                     "Kill",
                                     "Cycle",
-                                    //
-                                    "Note Value",*/
+                                    //*/
                                             "Zone Changed",
                                             "Note Removed",
                                             "Note Added",

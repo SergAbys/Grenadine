@@ -126,8 +126,8 @@ typedef struct _PIZAgent {
     pthread_mutex_t     getterLock;
     pthread_t           eventLoop;
     pthread_t           notificationLoop;
-    long                err1;
-    long                err2;
+    PIZError            err1;
+    PIZError            err2;
     } PIZAgent;  
 
 // -------------------------------------------------------------------------------------------------------------

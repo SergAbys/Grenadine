@@ -47,6 +47,11 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+#define PIZ_UNTAG   pizItemset128UnsetAtIndex 
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
@@ -99,7 +104,7 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
             err |= PIZ_MEMORY;
         }
     }
-    pizItemset128UnsetAtIndex (&x->changedNotes, i);
+    PIZ_UNTAG (&x->changedNotes, i);
     //
     } 
     //

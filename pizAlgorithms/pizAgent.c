@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	April 15, 2012.
+ * \date	April 17, 2012.
  */
  
 /*
@@ -101,19 +101,22 @@ PIZAgent *pizAgentNew (void)
     err |= pthread_attr_init  (&x->attr);
     
     if (!err) {
-        pthread_attr_setscope        (&x->attr, PTHREAD_SCOPE_SYSTEM);
-        pthread_attr_setinheritsched (&x->attr, PTHREAD_EXPLICIT_SCHED);
-        pthread_attr_setdetachstate  (&x->attr, PTHREAD_CREATE_JOINABLE);
-        pthread_attr_setschedpolicy  (&x->attr, SCHED_OTHER);
-        
-        x->err1 = pthread_create (&x->eventLoop, &x->attr, pizAgentEventLoop, (void *)x); 
-        err |= x->err1;
-        
-        x->err2 = pthread_create (&x->notificationLoop, &x->attr, pizAgentNotificationLoop, (void *)x); 
-        err |= x->err2;
+    //
+    pthread_attr_setscope        (&x->attr, PTHREAD_SCOPE_SYSTEM);
+    pthread_attr_setinheritsched (&x->attr, PTHREAD_EXPLICIT_SCHED);
+    pthread_attr_setdetachstate  (&x->attr, PTHREAD_CREATE_JOINABLE);
+    pthread_attr_setschedpolicy  (&x->attr, SCHED_OTHER);
+    
+    x->err1 = (pthread_create (&x->eventLoop, &x->attr, pizAgentEventLoop, (void *)x) != 0); 
+    err |= x->err1;
+    
+    x->err2 = (pthread_create (&x->notificationLoop, &x->attr, pizAgentNotificationLoop, (void *)x) != 0); 
+    err |= x->err2;
+    //
     }
     
     if (err) {
+        post ("ERROR");
         pizAgentFree (x);
         x = NULL;
     } else if (event = pizEventNewRun (PIZ_EVENT_INIT)) {
