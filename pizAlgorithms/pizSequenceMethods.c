@@ -116,6 +116,8 @@ static const double piz_distribution11[ ] = { 0.54, 0.59, 0.63, 0.68, 0.72, 0.77
 #define PIZ_FILL_NOTES          pizSequenceFillNotes (x, selector, 0);
 #define PIZ_FILL_NOTES_REVERSE  pizSequenceFillNotes (x, selector, 1);
 
+#define PIZ_TAG                 pizItemset128SetAtIndex 
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -168,7 +170,7 @@ void pizSequenceTranspose (PIZSequence *x, const PIZEvent *event)
             temp = CLAMP (note->midi[PIZ_MIDI_PITCH] + n, 0, PIZ_MAGIC_PITCH);
             if (note->midi[PIZ_MIDI_PITCH] != temp) {
                 note->midi[PIZ_MIDI_PITCH] = temp;
-                pizItemset128SetAtIndex (&x->changedNotes, note->tag);
+                PIZ_TAG (&x->changedNotes, note->tag);
             }
             
             note = nextNote;
@@ -787,7 +789,7 @@ void pizSequenceChange (PIZSequence *x, const PIZEvent *event)
     
     if (note->midi[selector] != t) {
         note->midi[selector] = t;
-        pizItemset128SetAtIndex (&x->changedNotes, note->tag);
+        PIZ_TAG (&x->changedNotes, note->tag);
     }
     //
     }
@@ -831,7 +833,7 @@ void pizSequenceSet (PIZSequence *x, const PIZEvent *event)
         
         if (note->midi[selector] != t) {
             note->midi[selector] = t;
-            pizItemset128SetAtIndex (&x->changedNotes, note->tag);
+            PIZ_TAG (&x->changedNotes, note->tag);
         }
     }
     
@@ -885,7 +887,7 @@ void pizSequenceRandom (PIZSequence *x, const PIZEvent *event)
     
     if (note->midi[selector] != t) {
         note->midi[selector] = t;
-        pizItemset128SetAtIndex (&x->changedNotes, note->tag);
+        PIZ_TAG (&x->changedNotes, note->tag);
     }
     //
     }
@@ -988,7 +990,7 @@ void pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
     
             if (pitch != (note->midi[PIZ_MIDI_PITCH] + offset)) {
                 note->midi[PIZ_MIDI_PITCH] = CLAMP (pitch, 0, PIZ_MAGIC_PITCH);
-                pizItemset128SetAtIndex (&x->changedNotes, note->tag);
+                PIZ_TAG (&x->changedNotes, note->tag);
             }
         }
 
@@ -1022,7 +1024,7 @@ void pizSequenceFillNotes (PIZSequence *x, PIZMidiSelector selector, bool revers
     
     if (x->tempNotes1[i]->midi[selector] != t) {
         x->tempNotes1[i]->midi[selector] = t;
-        pizItemset128SetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
+        PIZ_TAG (&x->changedNotes, x->tempNotes1[i]->tag);
     }
     //
     }

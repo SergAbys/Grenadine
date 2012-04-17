@@ -47,6 +47,12 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+#define PIZ_TAG     pizItemset128SetAtIndex 
+#define PIZ_UNTAG   pizItemset128UnsetAtIndex 
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 void pizSequenceFunAll (PIZSequence *x, PIZMethod f, const PIZEvent *event)
@@ -85,9 +91,9 @@ void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event
     pizLinklistRemoveByPtr (x->timeline[p], (void *)note);
     x->count --; 
     
-    pizItemset128SetAtIndex   (&x->removedNotes, tag);
-    pizItemset128UnsetAtIndex (&x->addedNotes, tag);
-    pizItemset128UnsetAtIndex (&x->changedNotes, tag);
+    PIZ_TAG   (&x->removedNotes, tag);
+    PIZ_UNTAG (&x->addedNotes, tag);
+    PIZ_UNTAG (&x->changedNotes, tag);
 }
 
 void pizSequenceFillTempHash (PIZSequence *x, PIZNote *note, const PIZEvent *event)
@@ -165,8 +171,8 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
                                 
         if (!err && !(pizLinklistInsert (x->timeline[newNote->position], (void *)newNote))) {
             x->count ++; 
-            pizItemset128SetAtIndex (&x->addedNotes, newNote->tag);
-            pizItemset128UnsetAtIndex (&x->changedNotes, newNote->tag);
+            PIZ_TAG   (&x->addedNotes, newNote->tag);
+            PIZ_UNTAG (&x->changedNotes, newNote->tag);
             
         } else {
             pizBoundedHashTableRemoveByKey (x->lookup, newNote->tag, newNote);
@@ -198,7 +204,7 @@ PIZError pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
         if (!(err |= pizLinklistChuckByPtr (x->timeline[position], (void *)note))) {            
             if (!(err |= pizLinklistInsert (x->timeline[newPosition], (void *)note))) {
                 note->position = newPosition;
-                pizItemset128SetAtIndex (&x->changedNotes, note->tag);
+                PIZ_TAG (&x->changedNotes, note->tag);
             } else {
                 pizSequenceRemoveNote (x, note, NULL);
             }
@@ -248,10 +254,9 @@ long pizSequenceSnapPositionToPattern (PIZSequence *x, long position)
         
     if (s) {
         long j = (long)(position / (double)x->cell);
-        long k = j % s;
         
         position = j * x->cell;
-        position += pizArrayValueAtIndex (x->pattern, k) * x->cell;
+        position += pizArrayValueAtIndex (x->pattern, j % s) * x->cell;
     } else {
         position = ((long)(position / (double)x->cell)) * x->cell;
     }

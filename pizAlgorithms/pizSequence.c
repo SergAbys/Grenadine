@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    April 16, 2012.
+ * \date    April 17, 2012.
  */
  
 /*
@@ -213,17 +213,19 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue)
             
             pizLinklistNextByPtr (x->timeline[x->index], (void *)note, (void **)&nextNote);
             
-            pitch = note->midi[PIZ_MIDI_PITCH];
+            pitch    = note->midi[PIZ_MIDI_PITCH];
+            velocity = note->midi[PIZ_MIDI_VELOCITY];
+            channel  = note->midi[PIZ_MIDI_CHANNEL];
             
             if (scale) {
                 pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
             }
 
-            if (velocity = note->midi[PIZ_MIDI_VELOCITY]) {
+            if (velocity) {
                 velocity += x->velocity;
             } 
                 
-            if (!(channel = note->midi[PIZ_MIDI_CHANNEL])) {
+            if (!channel) {
                 channel = x->channel;
             }
                 

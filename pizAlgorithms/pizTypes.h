@@ -1,7 +1,7 @@
 /**
  * \file    pizTypes.h
  * \author  Jean Sapristi
- * \date    April 13, 2012.
+ * \date    April 17, 2012.
  */
  
 /*
