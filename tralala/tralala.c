@@ -28,7 +28,7 @@ int main (void)
 
     c = class_new ("tralala", (method)tralala_new, (method)tralala_free, sizeof(t_tralala), 0L, A_GIMME, 0);
 
-    class_addmethod	(c, (method)tralala_assist,    "assist",    A_CANT, 0);
+    class_addmethod (c, (method)tralala_assist,    "assist",    A_CANT, 0);
     class_addmethod (c, (method)tralala_bang,      "bang",      0);
     class_addmethod (c, (method)tralala_play,      "play",      0);
     class_addmethod (c, (method)tralala_stop,      "stop",      0);
@@ -50,9 +50,9 @@ int main (void)
 
 void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 {
-	t_tralala *x = NULL;
+    t_tralala *x = NULL;
 	
-	if (x = (t_tralala *)object_alloc (tralala_class)) {
+    if (x = (t_tralala *)object_alloc (tralala_class)) {
         if (x->agent = pizAgentNew ( )) {
             x->outlet = outlet_new ((t_object *)x, NULL);
         } else {
@@ -71,10 +71,10 @@ void tralala_free (t_tralala *x)
 
 void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
 {
-	if (m == ASSIST_INLET) { 
-        sprintf (s, "Messages In");
+    if (m == ASSIST_INLET) { 
+        sprintf (s, "Messages");
     } else {	
-        sprintf (s, "Messages Out");
+        sprintf (s, "Out");
     }
 }
 
