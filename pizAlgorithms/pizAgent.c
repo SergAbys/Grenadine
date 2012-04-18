@@ -61,8 +61,7 @@ PIZAgent *pizAgentNew (void)
     
     if (x = (PIZAgent *)malloc (sizeof(PIZAgent))) {
     //
-    long     err = PIZ_GOOD;
-    PIZEvent *event = NULL;
+    long err = PIZ_GOOD;
     
     x->flags                = PIZ_AGENT_FLAG_NONE;  
     x->bpm                  = PIZ_DEFAULT_BPM;  
@@ -102,8 +101,7 @@ PIZAgent *pizAgentNew (void)
     
     if (!err) {
     //
-    pthread_attr_setscope        (&x->attr, PTHREAD_SCOPE_SYSTEM);
-    pthread_attr_setinheritsched (&x->attr, PTHREAD_EXPLICIT_SCHED);
+    pthread_attr_setscope        (&x->attr, PTHREAD_SCOPE_PROCESS);
     pthread_attr_setdetachstate  (&x->attr, PTHREAD_CREATE_JOINABLE);
     pthread_attr_setschedpolicy  (&x->attr, SCHED_OTHER);
     
@@ -116,11 +114,9 @@ PIZAgent *pizAgentNew (void)
     }
     
     if (err) {
-        post ("ERROR");
         pizAgentFree (x);
         x = NULL;
-    } else if (event = pizEventNewRun (PIZ_EVENT_INIT)) {
-        pizAgentAddEvent (x, event);
+        
     }
     //
     }
@@ -131,22 +127,23 @@ PIZAgent *pizAgentNew (void)
 void pizAgentFree (PIZAgent *x)
 { 
     if (x) {
+
     //
     if (!x->err1) {
         PIZ_AGENT_LOCK_EVENT
         x->flags |= PIZ_AGENT_FLAG_EXIT;
-        PIZ_AGENT_UNLOCK_EVENT
-    
         pthread_cond_signal (&x->eventCondition);
+        PIZ_AGENT_UNLOCK_EVENT
+        
         pthread_join (x->eventLoop, NULL); 
     }
     
     if (!x->err2) {
         PIZ_AGENT_LOCK_NOTIFICATION
         x->flags |= PIZ_AGENT_FLAG_EXIT;
-        PIZ_AGENT_UNLOCK_NOTIFICATION
-    
         pthread_cond_signal (&x->notificationCondition);
+        PIZ_AGENT_UNLOCK_NOTIFICATION
+        
         pthread_join (x->notificationLoop, NULL); 
     }
     
@@ -190,9 +187,8 @@ void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
     if (queue) {
         PIZ_AGENT_LOCK_EVENT
         PIZ_AGENT_QUEUE(queue)
-        PIZ_AGENT_UNLOCK_EVENT
-        
         pthread_cond_signal (&x->eventCondition);
+        PIZ_AGENT_UNLOCK_EVENT
     }
 }
 

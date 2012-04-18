@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	April 15, 2012.
+ * \date	April 17, 2012.
  */
  
 /*
@@ -120,7 +120,7 @@ void *pizAgentEventLoop (void *agent)
     }
     //
     }
-    
+
     pthread_exit (NULL);
 }
 
@@ -235,9 +235,8 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
             
                 PIZ_AGENT_LOCK_NOTIFICATION
                 PIZ_AGENT_QUEUE(x->notifyQueue)
-                PIZ_AGENT_UNLOCK_NOTIFICATION
-                
                 pthread_cond_signal (&x->notificationCondition);
+                PIZ_AGENT_UNLOCK_NOTIFICATION
             }
         }
         
@@ -285,9 +284,8 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
             
             PIZ_AGENT_LOCK_NOTIFICATION
             PIZ_AGENT_QUEUE(x->notifyQueue)
-            PIZ_AGENT_UNLOCK_NOTIFICATION
-            
             pthread_cond_signal (&x->notificationCondition);
+            PIZ_AGENT_UNLOCK_NOTIFICATION
         }
         
     } else if (err == PIZ_MEMORY) {
@@ -307,9 +305,8 @@ void pizAgentEventLoopDoStepEnd (PIZAgent *x)
     
         PIZ_AGENT_LOCK_NOTIFICATION
         PIZ_AGENT_QUEUE(x->notifyQueue)
-        PIZ_AGENT_UNLOCK_NOTIFICATION
-        
         pthread_cond_signal (&x->notificationCondition);
+        PIZ_AGENT_UNLOCK_NOTIFICATION
     }
 }
 
@@ -321,9 +318,8 @@ void pizAgentEventLoopDoStepLast (PIZAgent *x)
     
         PIZ_AGENT_LOCK_NOTIFICATION
         PIZ_AGENT_QUEUE(x->notifyQueue)
-        PIZ_AGENT_UNLOCK_NOTIFICATION
-        
         pthread_cond_signal (&x->notificationCondition);
+        PIZ_AGENT_UNLOCK_NOTIFICATION
     }
 }
 
