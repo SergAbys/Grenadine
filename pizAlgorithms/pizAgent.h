@@ -89,17 +89,21 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_AGENT_QUEUE(queue)          if (pizLinklistAppend ((queue), event)) {       \
-                                            pizEventFree (event);                       \
-                                            PIZ_AGENT_MEMORY                            \
+#define PIZ_AGENT_QUEUE(queue)          if (pizLinklistAppend ((queue), event)) {               \
+                                            pizEventFree (event);                               \
+                                            PIZ_AGENT_MEMORY                                    \
                                         }
                                         
-#define DEBUGEVENT                      if (event) {                                    \
-                                            const char *name = NULL;                    \
-                                            pizEventGetName (event, &name);             \
-                                            post ("%s / %s", name, __FUNCTION__);       \
+#define DEBUGEVENT                      if (event) {                                            \
+                                            const char *name = NULL;                            \
+                                            pizEventGetName (event, &name);                     \
+                                            post ("%s / %s", name, __FUNCTION__);               \
                                         }
-        
+                                        
+#define DEBUGTIME                       PIZTime tttt;                                           \
+                                        pizTimeSet (&tttt);                                     \
+                                        post ("%llu / %s", tttt, __FUNCTION__);
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 

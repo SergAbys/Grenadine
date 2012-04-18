@@ -237,7 +237,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue)
                                  note->midi[PIZ_MIDI_DURATION], 
                                  channel };
                          
-                if (event = pizEventNewRunWithNote (PIZ_EVENT_NOTE_PLAYED, argv, note->tag)) {
+                if (event = pizEventNewWithNote (PIZ_EVENT_NOTE_PLAYED, argv, note->tag)) {
                     if (err |= pizLinklistAppend (queue, event)) {       
                         pizEventFree (event);  
                     }

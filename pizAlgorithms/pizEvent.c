@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	April 16, 2012.
+ * \date	April 18, 2012.
  */
  
 /*
@@ -48,6 +48,45 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+static const long piz_eventTypes[ ]  = {    PIZ_EVENT_RUN,              // PIZ_EVENT_INIT
+                                            PIZ_EVENT_RUN,              // PIZ_EVENT_PLAY
+                                            PIZ_EVENT_RUN,              // PIZ_EVENT_STOP
+                                            PIZ_EVENT_RUN,              // PIZ_EVENT_LOOP
+                                            PIZ_EVENT_RUN,              // PIZ_EVENT_UNLOOP
+                                            PIZ_EVENT_RUN,              // PIZ_EVENT_BPM
+                                            PIZ_EVENT_RUN,              // PIZ_EVENT_NOTE_PLAYED
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_CLEAR
+                                                                        // PIZ_EVENT_CHANCE
+                                                                        // PIZ_EVENT_VELOCITY
+                                                                        // PIZ_EVENT_CHANNEL
+                                                                        // PIZ_EVENT_CELL
+                                                                        // PIZ_EVENT_NOTE_VALUE
+                                                                        // PIZ_EVENT_SCALE
+                                                                        // PIZ_EVENT_PATTERN
+                                                                        // PIZ_EVENT_LEARN
+                                                                        // PIZ_EVENT_TRANSPOSE
+                                                                        // PIZ_EVENT_CLEAN
+                                                                        // PIZ_EVENT_ZOULOU
+                                                                        // PIZ_EVENT_ROMEO
+                                                                        // PIZ_EVENT_NOVEMBER
+                                                                        // PIZ_EVENT_JULIET
+                                                                        // PIZ_EVENT_ROTATE
+                                                                        // PIZ_EVENT_SCRAMBLE
+                                                                        // PIZ_EVENT_SORT
+                                                                        // PIZ_EVENT_CHANGE
+                                                                        // PIZ_EVENT_SET
+                                                                        // PIZ_EVENT_RANDOM
+                                                                        // PIZ_EVENT_KILL
+                                                                        // PIZ_EVENT_CYCLE        
+                                            PIZ_EVENT_GRAPHIC,          // PIZ_EVENT_ZONE_CHANGED
+                                            PIZ_EVENT_GRAPHIC,          // PIZ_EVENT_NOTE_REMOVED
+                                            PIZ_EVENT_GRAPHIC,          // PIZ_EVENT_NOTE_ADDED
+                                            PIZ_EVENT_GRAPHIC,          // PIZ_EVENT_NOTE_CHANGED
+                                            PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_END
+                                            PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_LAST
+                                            PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_RUN_READY
+                                            PIZ_EVENT_NOTIFICATION };   // PIZ_EVENT_GRAPHIC_READY
+
 static const char *piz_eventNames[ ] = {    "Init",
                                             "Play",
                                             "Stop",
@@ -88,45 +127,35 @@ static const char *piz_eventNames[ ] = {    "Init",
                                             "End",
                                             "Last",
                                             "Run Ready",
-                                            "Graphic Ready"     };
+                                            "Graphic Ready" };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZEvent *pizEventNewRun (PIZEventIdentifier ie)
+PIZEvent *pizEventNew (PIZEventIdentifier ie)
 {
-    return pizEventNew (PIZ_EVENT_RUN, ie, -1, NULL, 0, NULL);
+    return pizEventAlloc (ie, -1, NULL, 0, NULL);
 }
 
-PIZEvent *pizEventNewRunWithTime (PIZEventIdentifier ie, const PIZTime *time)
+PIZEvent *pizEventNewWithTime (PIZEventIdentifier ie, const PIZTime *time)
 {
-    return pizEventNew (PIZ_EVENT_RUN, ie, -1, time, 0, NULL);
+    return pizEventAlloc (ie, -1, time, 0, NULL);
 }
 
-PIZEvent *pizEventNewRunWithNote (PIZEventIdentifier ie, const long *argv, long tag)
+PIZEvent *pizEventNewWithNote (PIZEventIdentifier ie, const long *argv, long tag)
 {
-    return pizEventNew (PIZ_EVENT_RUN, ie, tag, NULL, PIZ_SEQUENCE_NOTE_SIZE, argv);
+    return pizEventAlloc (ie, tag, NULL, PIZ_SEQUENCE_NOTE_SIZE, argv);
 }
 
-PIZEvent *pizEventNewRunWithValue (PIZEventIdentifier ie, long value)
+PIZEvent *pizEventNewWithZone (PIZEventIdentifier ie, const long *argv)
 {
-    return pizEventNew (PIZ_EVENT_RUN, ie, -1, NULL, 1, &value);
+    return pizEventAlloc (ie, -1, NULL, PIZ_SEQUENCE_ZONE_SIZE, argv);
 }
 
-PIZEvent *pizEventNewGraphicWithZone (PIZEventIdentifier ie, const long *argv)
+PIZEvent *pizEventNewWithValue (PIZEventIdentifier ie, long value)
 {
-    return pizEventNew (PIZ_EVENT_GRAPHIC, ie, -1, NULL, PIZ_SEQUENCE_ZONE_SIZE, argv);
-}
-
-PIZEvent *pizEventNewGraphicWithNote (PIZEventIdentifier ie, const long *argv, long tag)
-{
-    return pizEventNew (PIZ_EVENT_GRAPHIC, ie, tag, NULL, PIZ_SEQUENCE_NOTE_SIZE, argv);
-}
-
-PIZEvent *pizEventNewNotification (PIZEventIdentifier ie, const PIZTime *time)
-{
-    return pizEventNew (PIZ_EVENT_NOTIFICATION, ie, -1, time, 0, NULL);
+    return pizEventAlloc (ie, -1, NULL, 1, &value);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -166,20 +195,14 @@ void pizEventGetName (const PIZEvent *x, const char **name)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZEvent *pizEventNew   (PIZEventType type, 
-                        PIZEventIdentifier ie, 
-                        long tag, 
-                        const PIZTime *time, 
-                        long argc, 
-                        const long *argv) 
-//                        
+PIZEvent *pizEventAlloc (PIZEventIdentifier ie, long tag, const PIZTime *time, long argc, const long *argv)
 {
     PIZEvent *x = NULL;
     PIZError err = PIZ_GOOD;
     
     if (x = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
         if (x->data = pizArrayNew (PIZ_MAGIC_SCALE)) {
-            x->type = type;
+            x->type = piz_eventTypes[ie];
             x->identifier = ie;
             x->tag = tag; 
             

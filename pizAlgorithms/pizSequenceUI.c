@@ -63,7 +63,7 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
         
     if (x->changedZone) {
         long argv[ ] = { x->start, x->end, x->down, x->up };
-        if (event = pizEventNewGraphicWithZone (PIZ_EVENT_ZONE_CHANGED, argv)) {
+        if (event = pizEventNewWithZone (PIZ_EVENT_ZONE_CHANGED, argv)) {
             if (err |= pizLinklistAppend (queue, event)) {       
                 pizEventFree (event);  
             }
@@ -74,7 +74,7 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     
     for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
         if (pizItemset128IsSetAtIndex (&x->removedNotes, i)) { 
-            if (event = pizEventNewGraphicWithNote (PIZ_EVENT_NOTE_REMOVED, NULL, i)) {
+            if (event = pizEventNewWithNote (PIZ_EVENT_NOTE_REMOVED, NULL, i)) {
                 if (err |= pizLinklistAppend (queue, event)) {       
                     pizEventFree (event);  
                 }
@@ -96,7 +96,7 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
                          note->midi[PIZ_MIDI_DURATION], 
                          note->midi[PIZ_MIDI_CHANNEL] };
                          
-        if (event = pizEventNewGraphicWithNote (PIZ_EVENT_NOTE_ADDED, argv, i)) {
+        if (event = pizEventNewWithNote (PIZ_EVENT_NOTE_ADDED, argv, i)) {
             if (err |= pizLinklistAppend (queue, event)) {       
                 pizEventFree (event);  
             }
@@ -122,7 +122,7 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
                          note->midi[PIZ_MIDI_DURATION], 
                          note->midi[PIZ_MIDI_CHANNEL] };
                          
-        if (event = pizEventNewGraphicWithNote (PIZ_EVENT_NOTE_CHANGED, argv, i)) {
+        if (event = pizEventNewWithNote (PIZ_EVENT_NOTE_CHANGED, argv, i)) {
             if (err |= pizLinklistAppend (queue, event)) {       
                 pizEventFree (event);  
             }

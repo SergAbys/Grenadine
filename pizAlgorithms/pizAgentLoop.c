@@ -212,7 +212,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     bool     k = false;
     long     count = 0;
     PIZError err = PIZ_GOOD; 
-
+    
     do {
     //
     
@@ -231,7 +231,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     if (err == PIZ_GOOD) {
         if (count) {
             PIZEvent *event = NULL;
-            if (event = pizEventNewNotification (PIZ_EVENT_RUN_READY, &x->grainStart)) {
+            if (event = pizEventNewWithTime (PIZ_EVENT_RUN_READY, &x->grainStart)) {
             
                 PIZ_AGENT_LOCK_NOTIFICATION
                 PIZ_AGENT_QUEUE(x->notifyQueue)
@@ -280,7 +280,7 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     PIZ_AGENT_UNLOCK_GETTER
     
     if (!err) {
-        if (count && (event = pizEventNewNotification (PIZ_EVENT_GRAPHIC_READY, &x->grainStart))) {
+        if (count && (event = pizEventNewWithTime (PIZ_EVENT_GRAPHIC_READY, &x->grainStart))) {
             
             PIZ_AGENT_LOCK_NOTIFICATION
             PIZ_AGENT_QUEUE(x->notifyQueue)
@@ -301,7 +301,7 @@ void pizAgentEventLoopDoStepEnd (PIZAgent *x)
 {
     PIZEvent *event = NULL;
 
-    if (event = pizEventNewNotification (PIZ_EVENT_END, &x->grainStart)) {
+    if (event = pizEventNewWithTime (PIZ_EVENT_END, &x->grainStart)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
         PIZ_AGENT_QUEUE(x->notifyQueue)
@@ -314,7 +314,7 @@ void pizAgentEventLoopDoStepLast (PIZAgent *x)
 {
     PIZEvent *event = NULL;
     
-    if (event = pizEventNewNotification (PIZ_EVENT_LAST, &x->grainStart)) {
+    if (event = pizEventNewWithTime (PIZ_EVENT_LAST, &x->grainStart)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
         PIZ_AGENT_QUEUE(x->notifyQueue)
@@ -328,7 +328,7 @@ void pizAgentEventLoopDoStepLast (PIZAgent *x)
 #pragma mark -
 
 void pizAgentEventLoopInit (PIZAgent *x)
-{
+{   
     if (x->flags & PIZ_AGENT_FLAG_WAKED) {
         pizTimeSet (&x->grainStart);
         x->flags &= ~PIZ_AGENT_FLAG_WAKED;

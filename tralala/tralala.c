@@ -86,7 +86,7 @@ void tralala_bang (t_tralala *x)
 {   
     PIZEvent *event = NULL;
     
-    if (event = pizEventNewRun (PIZ_EVENT_INIT)) {
+    if (event = pizEventNew (PIZ_EVENT_INIT)) {
         pizAgentAddEvent (x->agent, event);
     }
         
@@ -97,7 +97,7 @@ void tralala_play (t_tralala *x)
 {   
     PIZEvent *event = NULL;
     
-    if (event = pizEventNewRun (PIZ_EVENT_PLAY)) {
+    if (event = pizEventNew (PIZ_EVENT_PLAY)) {
         pizAgentAddEvent (x->agent, event);
     }
 }
@@ -106,7 +106,7 @@ void tralala_stop (t_tralala *x)
 {   
     PIZEvent *event = NULL;
     
-    if (event = pizEventNewRun (PIZ_EVENT_STOP)) {
+    if (event = pizEventNew (PIZ_EVENT_STOP)) {
         pizAgentAddEvent (x->agent, event);
     }
 }
@@ -115,7 +115,7 @@ void tralala_loop (t_tralala *x)
 {   
     PIZEvent *event = NULL;
     
-    if (event = pizEventNewRun (PIZ_EVENT_LOOP)) {
+    if (event = pizEventNew (PIZ_EVENT_LOOP)) {
         pizAgentAddEvent (x->agent, event);
     }
 }
@@ -124,7 +124,7 @@ void tralala_unloop (t_tralala *x)
 {   
     PIZEvent *event = NULL;
     
-    if (event = pizEventNewRun (PIZ_EVENT_UNLOOP)) {
+    if (event = pizEventNew (PIZ_EVENT_UNLOOP)) {
         pizAgentAddEvent (x->agent, event);
     }
 }
@@ -137,7 +137,7 @@ void tralala_clear (t_tralala *x)
 {   
     PIZEvent *event = NULL;
     
-    if (event = pizEventNewRun (PIZ_EVENT_CLEAR)) {
+    if (event = pizEventNew (PIZ_EVENT_CLEAR)) {
         pizAgentAddEvent (x->agent, event);
     }
 }
@@ -146,7 +146,7 @@ void tralala_bpm (t_tralala *x, long n)
 {   
     PIZEvent *event = NULL;
     
-    if (event = pizEventNewRunWithValue (PIZ_EVENT_BPM, n)) {
+    if (event = pizEventNewWithValue (PIZ_EVENT_BPM, n)) {
         pizAgentAddEvent (x->agent, event);
     }
 }

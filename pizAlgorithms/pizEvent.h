@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	April 16, 2012.
+ * \date	April 18, 2012.
  */
 
 /*
@@ -62,13 +62,13 @@ typedef enum _PIZEventIdentifier {
     // RUN
     PIZ_EVENT_INIT            = 0,
     PIZ_EVENT_PLAY            = 1,
-    PIZ_EVENT_STOP,
-    PIZ_EVENT_LOOP,
-    PIZ_EVENT_UNLOOP,
-    PIZ_EVENT_BPM,
-    PIZ_EVENT_NOTE_PLAYED,
+    PIZ_EVENT_STOP            = 2,
+    PIZ_EVENT_LOOP            = 3,
+    PIZ_EVENT_UNLOOP          = 4,
+    PIZ_EVENT_BPM             = 5,
+    PIZ_EVENT_NOTE_PLAYED     = 6,
     // TRANSFORM 
-    PIZ_EVENT_CLEAR,
+    PIZ_EVENT_CLEAR           = 7,
 /*    PIZ_EVENT_CHANCE,
     PIZ_EVENT_VELOCITY,
     PIZ_EVENT_CHANNEL,
@@ -118,68 +118,50 @@ typedef struct _PIZEvent {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent    *pizEventNewRun                 (PIZEventIdentifier ie);
-PIZEvent    *pizEventNewRunWithTime         (PIZEventIdentifier ie, const PIZTime *time);
-PIZEvent    *pizEventNewRunWithNote         (PIZEventIdentifier ie, const long *argv, long tag);
-PIZEvent    *pizEventNewRunWithValue        (PIZEventIdentifier ie, long value);
-PIZEvent    *pizEventNewGraphicWithZone     (PIZEventIdentifier ie, const long *argv);
-PIZEvent    *pizEventNewGraphicWithNote     (PIZEventIdentifier ie, const long *argv, long tag);
-PIZEvent    *pizEventNewNotification        (PIZEventIdentifier ie, const PIZTime *time);
+PIZEvent *pizEventNew            (PIZEventIdentifier ie);
+PIZEvent *pizEventNewWithTime    (PIZEventIdentifier ie, const PIZTime *time);
+PIZEvent *pizEventNewWithNote    (PIZEventIdentifier ie, const long *argv, long tag);
+PIZEvent *pizEventNewWithZone    (PIZEventIdentifier ie, const long *argv);
+PIZEvent *pizEventNewWithValue   (PIZEventIdentifier ie, long value);
 
-PIZError    pizEventGetTime                 (const PIZEvent *x, PIZTime *time);
-PIZError    pizEventGetValue                (const PIZEvent *x, long *value);
-void        pizEventGetName                 (const PIZEvent *x, const char **name);
+void     pizEventFree            (PIZEvent *x);
+PIZError pizEventGetTime         (const PIZEvent *x, PIZTime *time);
+PIZError pizEventGetValue        (const PIZEvent *x, long *value);
+void     pizEventGetName         (const PIZEvent *x, const char **name);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent *pizEventNew   (PIZEventType type, 
-                        PIZEventIdentifier ie, 
-                        long tag, 
-                        const PIZTime *time, 
-                        long argc, 
-                        const long *argv);
-                        
-void     pizEventFree   (PIZEvent *x);  
+PIZEvent *pizEventAlloc (PIZEventIdentifier ie, long tag, const PIZTime *time, long argc, const long *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN PIZEvent *pizEventNewRun (PIZEventIdentifier ie)
+PIZ_EXTERN PIZEvent *pizEventNew (PIZEventIdentifier ie)
 {
-    return pizEventNew (PIZ_EVENT_RUN, ie, -1, NULL, 0, NULL);
+    return pizEventAlloc (ie, -1, NULL, 0, NULL);
 }
 
-PIZ_EXTERN PIZEvent *pizEventNewRunWithTime (PIZEventIdentifier ie, const PIZTime *time)
+PIZ_EXTERN PIZEvent *pizEventNewWithTime (PIZEventIdentifier ie, const PIZTime *time)
 {
-    return pizEventNew (PIZ_EVENT_RUN, ie, -1, time, 0, NULL);
+    return pizEventAlloc (ie, -1, time, 0, NULL);
 }
 
-PIZ_EXTERN PIZEvent *pizEventNewRunWithNote (PIZEventIdentifier ie, const long *argv, long tag)
+PIZ_EXTERN PIZEvent *pizEventNewWithNote (PIZEventIdentifier ie, const long *argv, long tag)
 {
-    return pizEventNew (PIZ_EVENT_RUN, ie, tag, NULL, PIZ_SEQUENCE_NOTE_SIZE, argv);
+    return pizEventAlloc (ie, tag, NULL, PIZ_SEQUENCE_NOTE_SIZE, argv);
 }
 
-PIZ_EXTERN PIZEvent *pizEventNewRunWithValue (PIZEventIdentifier ie, long value)
+PIZ_EXTERN PIZEvent *pizEventNewWithZone (PIZEventIdentifier ie, const long *argv)
 {
-    return pizEventNew (PIZ_EVENT_RUN, ie, -1, NULL, 1, &value);
+    return pizEventAlloc (ie, -1, NULL, PIZ_SEQUENCE_ZONE_SIZE, argv);
 }
 
-PIZ_EXTERN PIZEvent *pizEventNewGraphicWithZone (PIZEventIdentifier ie, const long *argv)
+PIZ_EXTERN PIZEvent *pizEventNewWithValue (PIZEventIdentifier ie, long value)
 {
-    return pizEventNew (PIZ_EVENT_GRAPHIC, ie, -1, NULL, PIZ_SEQUENCE_ZONE_SIZE, argv);
-}
-
-PIZ_EXTERN PIZEvent *pizEventNewGraphicWithNote (PIZEventIdentifier ie, const long *argv, long tag)
-{
-    return pizEventNew (PIZ_EVENT_GRAPHIC, ie, tag, NULL, PIZ_SEQUENCE_NOTE_SIZE, argv);
-}
-
-PIZ_EXTERN PIZEvent *pizEventNewNotification (PIZEventIdentifier ie, const PIZTime *time)
-{
-    return pizEventNew (PIZ_EVENT_NOTIFICATION, ie, -1, time, 0, NULL);
+    return pizEventAlloc (ie, -1, NULL, 1, &value);
 }
 
 #endif // PIZ_EXTERN_INLINE
