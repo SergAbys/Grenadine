@@ -1,7 +1,7 @@
 /*
- * \file    pizSequenceMethods.c
+ * \file    pizSequenceTransform.c
  * \author  Jean Sapristi
- * \date    April 16, 2012.
+ * \date    April 19, 2012.
  */
  
 /*
@@ -38,7 +38,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizSequenceMethods.h"
+#include "pizSequenceTransform.h"
 #include "pizSequenceLibrary.h"
 #include "pizFactorOracle.h"
 #include "pizFiniteState.h"

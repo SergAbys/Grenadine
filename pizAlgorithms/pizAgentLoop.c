@@ -40,8 +40,9 @@
 
 #include "pizAgentLoop.h"
 #include "pizAgentMethod.h"
-#include "pizSequenceMethods.h"
-#include "pizSequenceUI.h"
+#include "pizSequenceRun.h"
+#include "pizSequenceTransform.h"
+#include "pizSequenceGraphic.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

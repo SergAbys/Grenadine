@@ -214,32 +214,8 @@ typedef struct _PIZSequence {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZSequence      *pizSequenceNew             (long size);
-void             pizSequenceFree             (PIZSequence *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-bool             pizSequenceIsAtEnd          (PIZSequence *x);
-void             pizSequenceGoToStart        (PIZSequence *x);
-PIZError         pizSequenceProceedStep      (PIZSequence *x, PIZLinklist *queue); //
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#ifdef PIZ_EXTERN_INLINE
-
-PIZ_EXTERN bool pizSequenceIsAtEnd (PIZSequence *x)
-{
-    return (x->index >= x->end);
-}
-
-PIZ_EXTERN void pizSequenceGoToStart (PIZSequence *x)
-{
-    x->index = x->start;
-}
-
-#endif // PIZ_EXTERN_INLINE
+PIZSequence *pizSequenceNew     (long size);
+void        pizSequenceFree     (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
