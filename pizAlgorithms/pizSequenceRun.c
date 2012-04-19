@@ -1,5 +1,5 @@
 /*
- * \file    pizSequence.c
+ * \file    pizSequenceRun.c
  * \author  Jean Sapristi
  * \date    April 19, 2012.
  */

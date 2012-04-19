@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	April 18, 2012.
+ * \date	April 19, 2012.
  */
 
 /*
@@ -62,14 +62,13 @@ typedef enum _PIZEventIdentifier {
     // RUN
     PIZ_EVENT_INIT            = 0,
     PIZ_EVENT_PLAY            = 1,
-    PIZ_EVENT_STOP            = 2,
-    PIZ_EVENT_LOOP            = 3,
-    PIZ_EVENT_UNLOOP          = 4,
-    PIZ_EVENT_BPM             = 5,
-    PIZ_EVENT_NOTE_PLAYED     = 6,
+    PIZ_EVENT_STOP,
+    PIZ_EVENT_LOOP,
+    PIZ_EVENT_UNLOOP,
+    PIZ_EVENT_BPM,
+    PIZ_EVENT_NOTE_PLAYED,
     // TRANSFORM 
-    PIZ_EVENT_CLEAR           = 7,
-/*    PIZ_EVENT_CHANCE,
+    PIZ_EVENT_CHANCE,
     PIZ_EVENT_VELOCITY,
     PIZ_EVENT_CHANNEL,
     PIZ_EVENT_CELL,
@@ -77,12 +76,13 @@ typedef enum _PIZEventIdentifier {
     PIZ_EVENT_SCALE,
     PIZ_EVENT_PATTERN,
     PIZ_EVENT_LEARN,
+    PIZ_EVENT_CLEAR,
     PIZ_EVENT_TRANSPOSE,
-    PIZ_EVENT_CLEAN,
     PIZ_EVENT_ZOULOU,
     PIZ_EVENT_ROMEO,
     PIZ_EVENT_NOVEMBER,
     PIZ_EVENT_JULIET,
+    PIZ_EVENT_CLEAN,
     PIZ_EVENT_ROTATE,
     PIZ_EVENT_SCRAMBLE,
     PIZ_EVENT_SORT,
@@ -91,7 +91,7 @@ typedef enum _PIZEventIdentifier {
     PIZ_EVENT_RANDOM,
     PIZ_EVENT_KILL,
     PIZ_EVENT_CYCLE,        
-    // GRAPHIC      */
+    // GRAPHIC     
     PIZ_EVENT_ZONE_CHANGED,
     PIZ_EVENT_NOTE_REMOVED,
     PIZ_EVENT_NOTE_ADDED,

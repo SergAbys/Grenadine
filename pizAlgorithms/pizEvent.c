@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	April 18, 2012.
+ * \date	April 19, 2012.
  */
  
 /*
@@ -55,29 +55,29 @@ static const long piz_eventTypes[ ]  = {    PIZ_EVENT_RUN,              // PIZ_E
                                             PIZ_EVENT_RUN,              // PIZ_EVENT_UNLOOP
                                             PIZ_EVENT_RUN,              // PIZ_EVENT_BPM
                                             PIZ_EVENT_RUN,              // PIZ_EVENT_NOTE_PLAYED
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_CHANCE
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_VELOCITY
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_CHANNEL
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_CELL
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_NOTE_VALUE
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_SCALE
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_PATTERN
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_LEARN
                                             PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_CLEAR
-                                                                        // PIZ_EVENT_CHANCE
-                                                                        // PIZ_EVENT_VELOCITY
-                                                                        // PIZ_EVENT_CHANNEL
-                                                                        // PIZ_EVENT_CELL
-                                                                        // PIZ_EVENT_NOTE_VALUE
-                                                                        // PIZ_EVENT_SCALE
-                                                                        // PIZ_EVENT_PATTERN
-                                                                        // PIZ_EVENT_LEARN
-                                                                        // PIZ_EVENT_TRANSPOSE
-                                                                        // PIZ_EVENT_CLEAN
-                                                                        // PIZ_EVENT_ZOULOU
-                                                                        // PIZ_EVENT_ROMEO
-                                                                        // PIZ_EVENT_NOVEMBER
-                                                                        // PIZ_EVENT_JULIET
-                                                                        // PIZ_EVENT_ROTATE
-                                                                        // PIZ_EVENT_SCRAMBLE
-                                                                        // PIZ_EVENT_SORT
-                                                                        // PIZ_EVENT_CHANGE
-                                                                        // PIZ_EVENT_SET
-                                                                        // PIZ_EVENT_RANDOM
-                                                                        // PIZ_EVENT_KILL
-                                                                        // PIZ_EVENT_CYCLE        
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_TRANSPOSE
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_ZOULOU
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_ROMEO
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_NOVEMBER
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_JULIET
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_CLEAN
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_ROTATE
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_SCRAMBLE
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_SORT
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_CHANGE
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_SET
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_RANDOM
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_KILL
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_CYCLE        
                                             PIZ_EVENT_GRAPHIC,          // PIZ_EVENT_ZONE_CHANGED
                                             PIZ_EVENT_GRAPHIC,          // PIZ_EVENT_NOTE_REMOVED
                                             PIZ_EVENT_GRAPHIC,          // PIZ_EVENT_NOTE_ADDED
@@ -94,31 +94,31 @@ static const char *piz_eventNames[ ] = {    "Init",
                                             "Unloop",
                                             "Bpm",
                                             "Note Played",
-                                    // 
+                                            // 
+                                            "Chance",
+                                            "Velocity",
+                                            "Channel",
+                                            "Cell",
+                                            "Note Value",
+                                            "Scale",
+                                            "Pattern",
+                                            "Learn",
                                             "Clear",
-                                 /*   "Chance",
-                                    "Velocity",
-                                    "Channel",
-                                    "Cell",
-                                    "Note Value",
-                                    "Scale",
-                                    "Pattern",
-                                    "Learn",
-                                    "Transpose",
-                                    "Clean",
-                                    "Zoulou",
-                                    "Romeo",
-                                    "November",
-                                    "Juliet",
-                                    "Rotate",
-                                    "Scramble",
-                                    "Sort",
-                                    "Change",
-                                    "Set",
-                                    "Random",
-                                    "Kill",
-                                    "Cycle",
-                                    //*/
+                                            "Transpose",
+                                            "Zoulou",
+                                            "Romeo",
+                                            "November",
+                                            "Juliet",
+                                            "Clean",
+                                            "Rotate",
+                                            "Scramble",
+                                            "Sort",
+                                            "Change",
+                                            "Set",
+                                            "Random",
+                                            "Kill",
+                                            "Cycle",
+                                            //
                                             "Zone Changed",
                                             "Note Removed",
                                             "Note Added",
