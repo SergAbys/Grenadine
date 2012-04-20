@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceRun.h
  * \author  Jean Sapristi
- * \date    April 19, 2012.
+ * \date    April 20, 2012.
  */
  
 /*
@@ -51,7 +51,7 @@
 
 bool        pizSequenceIsAtEnd          (PIZSequence *x);
 void        pizSequenceGoToStart        (PIZSequence *x);
-PIZError    pizSequenceProceedStep      (PIZSequence *x, PIZLinklist *queue); //
+PIZError    pizSequenceProceedStep      (PIZSequence *x, PIZLinklist *queue, long bpm); //
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

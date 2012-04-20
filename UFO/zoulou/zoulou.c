@@ -8,7 +8,7 @@
  */
  
 /*
- * April 11, 2012.
+ * April 20, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ int main (void)
     c = class_new ("zoulou", (method)zoulou_new, (method)zoulou_free, (long)sizeof(t_zoulou), 0L, A_GIMME, 0);
 
     class_addmethod (c, (method)zoulou_assist,              "assist",   A_CANT, 0); 
-    class_addmethod (c, (method)zoulou_learn,               "learn",    A_GIMME);
+    class_addmethod (c, (method)zoulou_learn,               "learn",    A_GIMME, 0);
     class_addmethod (c, (method)zoulou_int,                 "int",      A_LONG, 0);
     class_addmethod (c, (method)zoulou_dump,                "dump",     A_DEFLONG, 0);
     class_addmethod (c, (method)zoulou_clear,               "clear",    0);

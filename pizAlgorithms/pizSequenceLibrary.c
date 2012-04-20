@@ -156,10 +156,10 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
     if (!err && (newNote = (PIZNote *)malloc (sizeof(PIZNote)))) {
         newNote->tag                     = pizBoundedStackPoppedValue (x->ticketMachine);
         newNote->position                = position;
-        newNote->midi[PIZ_MIDI_PITCH]    = pitch;
-        newNote->midi[PIZ_MIDI_VELOCITY] = velocity;
-        newNote->midi[PIZ_MIDI_DURATION] = duration;
-        newNote->midi[PIZ_MIDI_CHANNEL]  = channel;
+        newNote->midi[PIZ_MIDI_PITCH]    = CLAMP (pitch,    0, PIZ_MAGIC_PITCH);
+        newNote->midi[PIZ_MIDI_VELOCITY] = CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY);
+        newNote->midi[PIZ_MIDI_DURATION] = CLAMP (duration, 0, PIZ_SEQUENCE_MAXIMUM_DURATION);
+        newNote->midi[PIZ_MIDI_CHANNEL]  = CLAMP (channel,  0, PIZ_MAGIC_CHANNEL);
     
         if (!(x->timeline[newNote->position])) {
             if (!(x->timeline[newNote->position] = pizLinklistNew ( ))) {

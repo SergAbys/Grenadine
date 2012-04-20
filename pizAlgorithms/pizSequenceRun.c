@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceRun.c
  * \author  Jean Sapristi
- * \date    April 19, 2012.
+ * \date    April 20, 2012.
  */
  
 /*
@@ -48,6 +48,11 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+#define PIZ_CONSTANT_DURATION   2500.
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 bool pizSequenceIsAtEnd (PIZSequence *x)
@@ -60,7 +65,7 @@ void pizSequenceGoToStart (PIZSequence *x)
     x->index = x->start;
 }
 
-PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue)
+PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue, long bpm)
 {
     PIZError err = PIZ_ERROR;
     
@@ -84,13 +89,17 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue)
         pizLinklistPtrAtIndex (x->timeline[x->index], 0, (void **)&note);
         
         while (note) {
-            long     pitch, velocity, channel;
+            long     pitch, 
+                     velocity, 
+                     channel, 
+                     duration;
             PIZEvent *event = NULL;
             
             pizLinklistNextByPtr (x->timeline[x->index], (void *)note, (void **)&nextNote);
             
             pitch    = note->midi[PIZ_MIDI_PITCH];
             velocity = note->midi[PIZ_MIDI_VELOCITY];
+            duration = note->midi[PIZ_MIDI_DURATION];
             channel  = note->midi[PIZ_MIDI_CHANNEL];
             
             if (scale) {
@@ -110,7 +119,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue)
                 long argv[ ] = { note->position,
                                  CLAMP (pitch, 0, PIZ_MAGIC_PITCH),
                                  CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY),
-                                 note->midi[PIZ_MIDI_DURATION], 
+                                 (long)(duration * (PIZ_CONSTANT_DURATION / bpm)), 
                                  channel };
                          
                 if (event = pizEventNewWithNote (PIZ_EVENT_NOTE_PLAYED, argv, note->tag)) {

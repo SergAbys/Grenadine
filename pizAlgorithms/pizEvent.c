@@ -156,6 +156,11 @@ PIZEvent *pizEventNewWithZone (PIZEventIdentifier ie, const long *argv)
     return pizEventAlloc (ie, -1, NULL, PIZ_SEQUENCE_ZONE_SIZE, argv);
 }
 
+PIZEvent *pizEventNewWithArgs (PIZEventIdentifier ie, long argc, const long *argv)
+{
+    return pizEventAlloc (ie, -1, NULL, argc, argv);
+}
+
 PIZEvent *pizEventNewWithValue (PIZEventIdentifier ie, long value)
 {
     return pizEventAlloc (ie, -1, NULL, 1, &value);
@@ -184,6 +189,18 @@ PIZError pizEventGetValue (const PIZEvent *x, long *value)
     if (pizArrayCount (x->data)) {
         err = PIZ_GOOD;
         (*value) = pizArrayValueAtIndex (x->data, 0);
+    } 
+    
+    return err;
+}
+
+PIZError pizEventGetData (const PIZEvent *x, long *argc, long **argv)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if ((*argc) = pizArrayCount (x->data)) {
+        err = PIZ_GOOD;
+        (*argv) = pizArrayPtr (x->data);
     }
     
     return err;
@@ -222,6 +239,7 @@ PIZEvent *pizEventAlloc (PIZEventIdentifier ie, long tag, const PIZTime *time, l
             
             if (err) {
                 pizEventFree (x);
+                x = NULL;
             }
             
         } else {

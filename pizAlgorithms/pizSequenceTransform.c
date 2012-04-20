@@ -130,7 +130,27 @@ void pizSequenceFillNotes (PIZSequence *x, PIZMidiSelector selector, bool revers
 
 void pizSequenceAdd (PIZSequence *x, const PIZEvent *event)
 {
-
+    long argc;
+    long *argv = NULL;
+    
+    if (!(pizEventGetData (event, &argc, &argv))) {
+        long i;
+        long values[ ] = { -1, 
+                            0, 
+                            PIZ_SEQUENCE_DEFAULT_VELOCITY, 
+                            x->noteValue, 
+                            0 };
+        
+        for (i = 0; i < MIN (argc, PIZ_SEQUENCE_NOTE_SIZE); i++) {
+            values[i] = argv[i];
+        }
+        
+        for (i = 0; i < 5; i++) {
+            post ("? %ld", values[i]);
+        }
+        
+        //pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_SNAP);
+    } 
 }
 
 void pizSequenceClear (PIZSequence *x, const PIZEvent *event)

@@ -121,16 +121,18 @@ typedef struct _PIZEvent {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent *pizEventNew            (PIZEventIdentifier ie);
-PIZEvent *pizEventNewWithTime    (PIZEventIdentifier ie, const PIZTime *time);
-PIZEvent *pizEventNewWithNote    (PIZEventIdentifier ie, const long *argv, long tag);
-PIZEvent *pizEventNewWithZone    (PIZEventIdentifier ie, const long *argv);
-PIZEvent *pizEventNewWithValue   (PIZEventIdentifier ie, long value);
+PIZEvent *pizEventNew               (PIZEventIdentifier ie);
+PIZEvent *pizEventNewWithTime       (PIZEventIdentifier ie, const PIZTime *time);
+PIZEvent *pizEventNewWithNote       (PIZEventIdentifier ie, const long *argv, long tag);
+PIZEvent *pizEventNewWithZone       (PIZEventIdentifier ie, const long *argv);
+PIZEvent *pizEventNewWithArgs       (PIZEventIdentifier ie, long argc, const long *argv);
+PIZEvent *pizEventNewWithValue      (PIZEventIdentifier ie, long value);
 
-void     pizEventFree            (PIZEvent *x);
-PIZError pizEventGetTime         (const PIZEvent *x, PIZTime *time);
-PIZError pizEventGetValue        (const PIZEvent *x, long *value);
-void     pizEventGetName         (const PIZEvent *x, const char **name);
+void     pizEventFree               (PIZEvent *x);
+PIZError pizEventGetTime            (const PIZEvent *x, PIZTime *time);
+PIZError pizEventGetValue           (const PIZEvent *x, long *value);
+PIZError pizEventGetData            (const PIZEvent *x, long *argc, long **argv);
+void     pizEventGetName            (const PIZEvent *x, const char **name);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -160,6 +162,11 @@ PIZ_EXTERN PIZEvent *pizEventNewWithNote (PIZEventIdentifier ie, const long *arg
 PIZ_EXTERN PIZEvent *pizEventNewWithZone (PIZEventIdentifier ie, const long *argv)
 {
     return pizEventAlloc (ie, -1, NULL, PIZ_SEQUENCE_ZONE_SIZE, argv);
+}
+
+PIZ_EXTERN PIZEvent *pizEventNewWithArgs (PIZEventIdentifier ie, long argc, const long *argv)
+{
+    return pizEventAlloc (ie, -1, NULL, argc, argv);
 }
 
 PIZ_EXTERN PIZEvent *pizEventNewWithValue (PIZEventIdentifier ie, long value)

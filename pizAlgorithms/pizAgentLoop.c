@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	April 17, 2012.
+ * \date	April 20, 2012.
  */
  
 /*
@@ -171,6 +171,10 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
         pizLinklistChuckByPtr (queue, event);
     }
     
+    if (!(pizLinklistCount (queue))) {
+        err = PIZ_ERROR;
+    }
+    
     PIZ_AGENT_UNLOCK_EVENT
     
     DEBUGEVENT
@@ -197,14 +201,6 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
     //
     }
     
-    PIZ_AGENT_LOCK_EVENT
-    
-    if (!(pizLinklistCount (queue))) {
-        err = PIZ_ERROR;
-    }
-    
-    PIZ_AGENT_UNLOCK_EVENT
-    
     return err;
 }
 
@@ -221,12 +217,12 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         PIZ_AGENT_LOCK_GETTER
         
         pizLinklistClear (x->runOutQueue);
-        err = pizSequenceProceedStep (x->sequence, x->runOutQueue);
+        err = pizSequenceProceedStep (x->sequence, x->runOutQueue, x->bpm);
         count = pizLinklistCount (x->runOutQueue);
         
         PIZ_AGENT_UNLOCK_GETTER
     } else {
-        err = pizSequenceProceedStep (x->sequence, NULL);
+        err = pizSequenceProceedStep (x->sequence, NULL, x->bpm);
     }
     
     if (err == PIZ_GOOD) {
@@ -423,6 +419,7 @@ long pizAgentEventLoopGetMethod (const PIZEvent *event, PIZMethod *f, PIZMethodE
         case PIZ_EVENT_LOOP     : *f = pizAgentLoop;        k = PIZ_OBJECT_AGENT; break;
         case PIZ_EVENT_UNLOOP   : *f = pizAgentUnloop;      k = PIZ_OBJECT_AGENT; break;
         case PIZ_EVENT_BPM      : *f = pizAgentBPM;         k = PIZ_OBJECT_AGENT; break;
+        case PIZ_EVENT_ADD      : *f = pizSequenceAdd;      k = PIZ_OBJECT_SEQUENCE; break;
         case PIZ_EVENT_CLEAR    : *f = pizSequenceClear;    k = PIZ_OBJECT_SEQUENCE; break;  
     }
     

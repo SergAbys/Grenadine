@@ -36,6 +36,7 @@ int main (void)
     class_addmethod (c, (method)tralala_unloop,    "unloop",    0);
     class_addmethod (c, (method)tralala_clear,     "clear",     0);
     class_addmethod (c, (method)tralala_bpm,       "bpm",       A_LONG, 0);
+    class_addmethod (c, (method)tralala_add,       "add",       A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
 
@@ -50,10 +51,15 @@ int main (void)
 
 void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 {
+    PIZEvent  *event = NULL;
     t_tralala *x = NULL;
 	
     if (x = (t_tralala *)object_alloc (tralala_class)) {
         if (x->agent = pizAgentNew ( )) {
+            if (event = pizEventNew (PIZ_EVENT_INIT)) {
+                pizAgentAddEvent (x->agent, event);
+            }
+            
             x->outlet = outlet_new ((t_object *)x, NULL);
         } else {
             object_free (x);
@@ -148,6 +154,22 @@ void tralala_bpm (t_tralala *x, long n)
     
     if (event = pizEventNewWithValue (PIZ_EVENT_BPM, n)) {
         pizAgentAddEvent (x->agent, event);
+    }
+}
+
+void tralala_add (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    if ((argc > 1) && (argc <= PIZ_SEQUENCE_NOTE_SIZE)) {
+    //
+    PIZEvent *event = NULL;
+    long     values[PIZ_SEQUENCE_NOTE_SIZE];
+    
+    atom_getlong_array (argc, argv, PIZ_SEQUENCE_NOTE_SIZE, values);
+    
+    if (event = pizEventNewWithArgs (PIZ_EVENT_ADD, argc, values)) {
+        pizAgentAddEvent (x->agent, event);
+    }
+    //
     }
 }
 
