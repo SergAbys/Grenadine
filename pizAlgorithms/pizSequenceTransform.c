@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceTransform.c
  * \author  Jean Sapristi
- * \date    April 19, 2012.
+ * \date    April 20, 2012.
  */
  
 /*
@@ -127,6 +127,11 @@ void pizSequenceFillNotes (PIZSequence *x, PIZMidiSelector selector, bool revers
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+
+void pizSequenceAdd (PIZSequence *x, const PIZEvent *event)
+{
+
+}
 
 void pizSequenceClear (PIZSequence *x, const PIZEvent *event)
 {

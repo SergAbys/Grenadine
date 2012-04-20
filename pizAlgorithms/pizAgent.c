@@ -181,6 +181,7 @@ void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
     switch (event->type) {
         case PIZ_EVENT_RUN       : queue = x->runInQueue; break;
         case PIZ_EVENT_TRANSFORM : queue = x->transformQueue; break;
+        case PIZ_EVENT_ATTRIBUTE : queue = x->transformQueue; break;
         case PIZ_EVENT_GRAPHIC   : queue = x->graphicInQueue; break;
     }
     

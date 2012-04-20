@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceTransform.h
  * \author  Jean Sapristi
- * \date    April 19, 2012.
+ * \date    April 20, 2012.
  */
  
 /*
@@ -49,8 +49,10 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+void     pizSequenceAdd             (PIZSequence *x, const PIZEvent *event);
 void     pizSequenceClear           (PIZSequence *x, const PIZEvent *event);
 void     pizSequenceTranspose       (PIZSequence *x, const PIZEvent *event);
+void     pizSequenceLearn           (PIZSequence *x, const PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
