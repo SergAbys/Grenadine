@@ -10,7 +10,7 @@
 		9665E26D13B77366008C158A /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9665E26C13B77366008C158A /* MaxAPI.framework */; };
 		9676982713B7784800FE77F4 /* tralala.c in Sources */ = {isa = PBXBuildFile; fileRef = 9676982513B7784800FE77F4 /* tralala.c */; };
 		96D1301914B993970013AA74 /* tralala.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 96D1301814B993970013AA74 /* tralala.xcconfig */; };
-		96D92FCF14EF92F2005971EE /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96D92FCE14EF92F2005971EE /* libPizAlgorithms.a */; };
+		96D4A1AF154314DD00995831 /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96D4A1AE154314DD00995831 /* libPizAlgorithms.a */; };
 		96D9672C1507C5EE006A848D /* tralalaHide.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96D9672B1507C5EE006A848D /* tralalaHide.txt */; };
 /* End PBXBuildFile section */
 
@@ -20,7 +20,7 @@
 		9676982513B7784800FE77F4 /* tralala.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tralala.c; sourceTree = "<group>"; };
 		96CE0A77153D6FF40004B3C3 /* tralala.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tralala.h; sourceTree = "<group>"; };
 		96D1301814B993970013AA74 /* tralala.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; name = tralala.xcconfig; path = ../tralala.xcconfig; sourceTree = SOURCE_ROOT; };
-		96D92FCE14EF92F2005971EE /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../pizAlgorithms/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
+		96D4A1AE154314DD00995831 /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../pizAlgorithms/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
 		96D9672B1507C5EE006A848D /* tralalaHide.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = tralalaHide.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -30,7 +30,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9665E26D13B77366008C158A /* MaxAPI.framework in Frameworks */,
-				96D92FCF14EF92F2005971EE /* libPizAlgorithms.a in Frameworks */,
+				96D4A1AF154314DD00995831 /* libPizAlgorithms.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,7 +52,7 @@
 		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				96D92FCE14EF92F2005971EE /* libPizAlgorithms.a */,
+				96D4A1AE154314DD00995831 /* libPizAlgorithms.a */,
 				9665E26C13B77366008C158A /* MaxAPI.framework */,
 			);
 			name = "External Frameworks and Libraries";
@@ -165,7 +165,11 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "$(SRCROOT)/../Info.plist";
 				INSTALL_PATH = /;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../pizAlgorithms/build/Release\"";
 				PRODUCT_NAME = tralala;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
 				WRAPPER_EXTENSION = mxo;
@@ -188,13 +192,18 @@
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = "";
-				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				GCC_UNROLL_LOOPS = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/../Info.plist";
 				INSTALL_PATH = /;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				KEEP_PRIVATE_EXTERNS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../pizAlgorithms/build/Release\"";
 				PREBINDING = YES;
 				PRODUCT_NAME = tralala;
 				UNEXPORTED_SYMBOLS_FILE = tralalaHide.txt;

@@ -4,6 +4,7 @@
 		activeBuildConfigurationName = Release;
 		activeTarget = 8D01CCC60486CAD60068D4B7 /* max_external */;
 		addToTargets = (
+			8D01CCC60486CAD60068D4B7 /* max_external */,
 		);
 		breakpoints = (
 		);
@@ -94,8 +95,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 356631025;
-			PBXWorkspaceStateSaveDate = 356631025;
+			PBXPerProjectTemplateStateSaveDate = 356721493;
+			PBXWorkspaceStateSaveDate = 356721493;
 		};
 		sourceControlManager = 965F6CC112FF252E00F96EF1 /* Source Control */;
 		userBuildSettings = {
@@ -118,9 +119,9 @@
 	};
 	9676982513B7784800FE77F4 /* tralala.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 4425}}";
-			sepNavSelRange = "{4434, 0}";
-			sepNavVisRect = "{{0, 2028}, {1233, 643}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1233, 3875}}";
+			sepNavSelRange = "{3039, 0}";
+			sepNavVisRect = "{{0, 0}, {1233, 643}}";
 			sepNavWindowFrame = "{{0, 6}, {1278, 772}}";
 		};
 	};
@@ -128,14 +129,14 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1235, 1375}}";
 			sepNavSelRange = "{669, 0}";
-			sepNavVisRect = "{{0, 364}, {1235, 645}}";
+			sepNavVisRect = "{{0, 98}, {1235, 645}}";
 			sepNavWindowFrame = "{{4, 4}, {1280, 774}}";
 		};
 	};
 	96D1301814B993970013AA74 /* tralala.xcconfig */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1233, 1225}}";
-			sepNavSelRange = "{0, 0}";
+			sepNavSelRange = "{1323, 0}";
 			sepNavVisRect = "{{0, 582}, {1233, 643}}";
 			sepNavWindowFrame = "{{15, 1}, {1278, 772}}";
 		};

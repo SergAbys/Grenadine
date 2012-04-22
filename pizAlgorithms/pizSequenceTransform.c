@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceTransform.c
  * \author  Jean Sapristi
- * \date    April 20, 2012.
+ * \date    April 21, 2012.
  */
  
 /*
@@ -145,11 +145,7 @@ void pizSequenceAdd (PIZSequence *x, const PIZEvent *event)
             values[i] = argv[i];
         }
         
-        for (i = 0; i < 5; i++) {
-            post ("? %ld", values[i]);
-        }
-        
-        //pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_SNAP);
+        pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_SNAP);
     } 
 }
 

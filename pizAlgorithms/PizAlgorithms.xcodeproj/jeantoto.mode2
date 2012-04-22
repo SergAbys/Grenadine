@@ -185,48 +185,7 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>968B35D91541C14D007F1F1F</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>pizSequenceTransform.c</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>968B35DA1541C14D007F1F1F</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>pizSequenceTransform.c</string>
-						<key>_historyCapacity</key>
-						<integer>40</integer>
-						<key>bookmark</key>
-						<string>968B35DB1541C14D007F1F1F</string>
-						<key>history</key>
-						<array>
-							<string>968B35D61541C0AD007F1F1F</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {1281, 677}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>-5 59 1281 718 0 0 1280 778 </string>
-			</dict>
-		</dict>
-	</array>
+	<array/>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -291,17 +250,15 @@
 									<array>
 										<string>08FB7794FE84155DC02AAC07</string>
 										<string>08FB7795FE84155DC02AAC07</string>
-										<string>96D425811529D3170055F6A9</string>
 										<string>96AF1B7E148CFBF7001358AB</string>
-										<string>96D8682714FF5A4B00849A50</string>
 										<string>C6A0FF2B0290797F04C91782</string>
 										<string>1AB674ADFE9D54B511CA2CBB</string>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>20</integer>
-											<integer>9</integer>
+											<integer>18</integer>
+											<integer>7</integer>
 											<integer>2</integer>
 											<integer>0</integer>
 										</array>
@@ -330,7 +287,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>179 115 609 645 0 0 1280 778 </string>
+								<string>426 56 609 645 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -467,8 +424,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>968B35D71541C14D007F1F1F</string>
-				<string>968B35D81541C14D007F1F1F</string>
+				<string>962A7790154324F900278D7E</string>
+				<string>962A7791154324F900278D7E</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -501,11 +458,10 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>968B35D91541C14D007F1F1F</string>
 		<string>/Users/jeantoto/Dev/Grenadine/pizAlgorithms/PizAlgorithms.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>179 115 609 645 0 0 1280 778 </string>
+	<string>426 56 609 645 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -719,7 +675,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>968B35331541BBDC007F1F1F</string>
+				<string>96D4A1A4154314C800995831</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
