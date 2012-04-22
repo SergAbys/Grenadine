@@ -11,12 +11,26 @@
 		breakpointsGroup = 96EDD4C813BDCC1A0058E023 /* XCBreakpointsBucket */;
 		codeSenseManager = 965F6CC212FF252E00F96EF1 /* Code sense */;
 		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXErrorsWarningsDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXErrorsWarningsDataSource_LocationID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					300,
+					200,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXErrorsWarningsDataSource_TypeID,
+					PBXErrorsWarningsDataSource_MessageID,
+					PBXErrorsWarningsDataSource_LocationID,
+				);
+			};
 			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
 				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					533,
+					238,
 					20,
 					48,
 					43,
@@ -33,14 +47,26 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXConfiguration.PBXFileTableDataSource3.PBXSymbolsDataSource = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFindDataSource = {
 				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
-				PBXFileTableDataSourceColumnSortingKey = PBXSymbolsDataSource_SymbolTypeID;
+				PBXFileTableDataSourceColumnSortingKey = PBXFindDataSource_LocationID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					200,
+					120,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFindDataSource_MessageID,
+					PBXFindDataSource_LocationID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXSymbolsDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = 1;
+				PBXFileTableDataSourceColumnSortingKey = PBXSymbolsDataSource_SymbolNameID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					16,
 					200,
 					302,
-					304,
+					45.2085,
 				);
 				PBXFileTableDataSourceColumnsKey = (
 					PBXSymbolsDataSource_SymbolTypeIconID,
@@ -55,9 +81,9 @@
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
 					20,
-					592,
+					532,
 					20,
-					48.1626,
+					48,
 					43,
 					43,
 					20,
@@ -95,8 +121,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 356721493;
-			PBXWorkspaceStateSaveDate = 356721493;
+			PBXPerProjectTemplateStateSaveDate = 356798784;
+			PBXWorkspaceStateSaveDate = 356798784;
 		};
 		sourceControlManager = 965F6CC112FF252E00F96EF1 /* Source Control */;
 		userBuildSettings = {
@@ -119,17 +145,17 @@
 	};
 	9676982513B7784800FE77F4 /* tralala.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 3875}}";
-			sepNavSelRange = "{3039, 0}";
-			sepNavVisRect = "{{0, 0}, {1233, 643}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1233, 4375}}";
+			sepNavSelRange = "{4213, 0}";
+			sepNavVisRect = "{{0, 2378}, {1233, 643}}";
 			sepNavWindowFrame = "{{0, 6}, {1278, 772}}";
 		};
 	};
 	96CE0A77153D6FF40004B3C3 /* tralala.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 1375}}";
-			sepNavSelRange = "{669, 0}";
-			sepNavVisRect = "{{0, 98}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 1400}}";
+			sepNavSelRange = "{1879, 0}";
+			sepNavVisRect = "{{0, 755}, {1235, 645}}";
 			sepNavWindowFrame = "{{4, 4}, {1280, 774}}";
 		};
 	};

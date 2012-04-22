@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	April 17, 2012.
+ * \date	April 22, 2012.
  */
  
 /*
@@ -70,21 +70,21 @@ PIZAgent *pizAgentNew (void)
     x->graphicInQueue       = pizLinklistNew ( );
     x->graphicOutQueue      = pizLinklistNew ( );
     x->transformQueue       = pizLinklistNew ( );
-    x->notifyQueue          = pizLinklistNew ( );
+    x->notificationQueue    = pizLinklistNew ( );
     x->sequence             = pizSequenceNew      (0);
     x->factorOracle         = pizFactorOracleNew  (0, NULL);
     x->galoisLattice        = pizGaloisLatticeNew (0, NULL);
     x->err1                 = PIZ_ERROR;
     x->err2                 = PIZ_ERROR;
     
-    if (!(x->runInQueue     &&  
-        x->runOutQueue      && 
-        x->graphicInQueue   &&
-        x->graphicOutQueue  &&
-        x->transformQueue   &&
-        x->notifyQueue      && 
-        x->sequence         &&
-        x->factorOracle     &&
+    if (!(x->runInQueue      &&  
+        x->runOutQueue       && 
+        x->graphicInQueue    &&
+        x->graphicOutQueue   &&
+        x->transformQueue    &&
+        x->notificationQueue && 
+        x->sequence          &&
+        x->factorOracle      &&
         x->galoisLattice)) {
         
         err |= PIZ_MEMORY;
@@ -160,7 +160,7 @@ void pizAgentFree (PIZAgent *x)
     pizLinklistFree (x->graphicInQueue);
     pizLinklistFree (x->graphicOutQueue);
     pizLinklistFree (x->transformQueue);
-    pizLinklistFree (x->notifyQueue);
+    pizLinklistFree (x->notificationQueue);
     
     pizSequenceFree (x->sequence);
     

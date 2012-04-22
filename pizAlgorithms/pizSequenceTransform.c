@@ -128,7 +128,7 @@ void pizSequenceFillNotes (PIZSequence *x, PIZMidiSelector selector, bool revers
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizSequenceAdd (PIZSequence *x, const PIZEvent *event)
+void pizSequenceNote (PIZSequence *x, const PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -145,7 +145,9 @@ void pizSequenceAdd (PIZSequence *x, const PIZEvent *event)
             values[i] = argv[i];
         }
         
-        pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_SNAP);
+        if (pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS)) {
+            pizSequenceMakeMap (x);
+        }
     } 
 }
 

@@ -55,7 +55,7 @@ static const long piz_eventTypes[ ]  = {    PIZ_EVENT_RUN,              // PIZ_E
                                             PIZ_EVENT_RUN,              // PIZ_EVENT_UNLOOP
                                             PIZ_EVENT_RUN,              // PIZ_EVENT_BPM
                                             PIZ_EVENT_RUN,              // PIZ_EVENT_NOTE_PLAYED
-                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_ADD
+                                            PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_NOTE
                                             PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_CLEAR
                                             PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_TRANSPOSE
                                             PIZ_EVENT_TRANSFORM,        // PIZ_EVENT_LEARN
@@ -96,7 +96,7 @@ static const char *piz_eventNames[ ] = {    "Init",
                                             "Bpm",
                                             "Note Played",
                                             // 
-                                            "Add",
+                                            "Note",
                                             "Clear",
                                             "Transpose",
                                             "Learn",

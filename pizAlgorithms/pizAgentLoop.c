@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	April 20, 2012.
+ * \date	April 22, 2012.
  */
  
 /*
@@ -134,7 +134,7 @@ void *pizAgentNotificationLoop (void *agent)
     
     PIZ_AGENT_LOCK_NOTIFICATION
     
-    while (!(pizLinklistCount (x->notifyQueue))) {
+    while (!(pizLinklistCount (x->notificationQueue))) {
         pthread_cond_wait (&x->notificationCondition, &x->notificationLock);
         if (PIZ_EXIT) {
             break;
@@ -231,7 +231,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
             if (event = pizEventNewWithTime (PIZ_EVENT_RUN_READY, &x->grainStart)) {
             
                 PIZ_AGENT_LOCK_NOTIFICATION
-                PIZ_AGENT_QUEUE(x->notifyQueue)
+                PIZ_AGENT_QUEUE(x->notificationQueue)
                 pthread_cond_signal (&x->notificationCondition);
                 PIZ_AGENT_UNLOCK_NOTIFICATION
             }
@@ -280,7 +280,7 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
         if (count && (event = pizEventNewWithTime (PIZ_EVENT_GRAPHIC_READY, &x->grainStart))) {
             
             PIZ_AGENT_LOCK_NOTIFICATION
-            PIZ_AGENT_QUEUE(x->notifyQueue)
+            PIZ_AGENT_QUEUE(x->notificationQueue)
             pthread_cond_signal (&x->notificationCondition);
             PIZ_AGENT_UNLOCK_NOTIFICATION
         }
@@ -301,7 +301,7 @@ void pizAgentEventLoopDoStepEnd (PIZAgent *x)
     if (event = pizEventNewWithTime (PIZ_EVENT_END, &x->grainStart)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
-        PIZ_AGENT_QUEUE(x->notifyQueue)
+        PIZ_AGENT_QUEUE(x->notificationQueue)
         pthread_cond_signal (&x->notificationCondition);
         PIZ_AGENT_UNLOCK_NOTIFICATION
     }
@@ -314,7 +314,7 @@ void pizAgentEventLoopDoStepLast (PIZAgent *x)
     if (event = pizEventNewWithTime (PIZ_EVENT_LAST, &x->grainStart)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
-        PIZ_AGENT_QUEUE(x->notifyQueue)
+        PIZ_AGENT_QUEUE(x->notificationQueue)
         pthread_cond_signal (&x->notificationCondition);
         PIZ_AGENT_UNLOCK_NOTIFICATION
     }
@@ -419,7 +419,7 @@ long pizAgentEventLoopGetMethod (const PIZEvent *event, PIZMethod *f, PIZMethodE
         case PIZ_EVENT_LOOP     : *f = pizAgentLoop;        k = PIZ_OBJECT_AGENT; break;
         case PIZ_EVENT_UNLOOP   : *f = pizAgentUnloop;      k = PIZ_OBJECT_AGENT; break;
         case PIZ_EVENT_BPM      : *f = pizAgentBPM;         k = PIZ_OBJECT_AGENT; break;
-        case PIZ_EVENT_ADD      : *f = pizSequenceAdd;      k = PIZ_OBJECT_SEQUENCE; break;
+        case PIZ_EVENT_NOTE     : *f = pizSequenceNote;     k = PIZ_OBJECT_SEQUENCE; break;
         case PIZ_EVENT_CLEAR    : *f = pizSequenceClear;    k = PIZ_OBJECT_SEQUENCE; break;  
     }
     
@@ -436,8 +436,8 @@ void pizAgentNotificationLoopNotify (PIZAgent *x)
             
     PIZ_AGENT_LOCK_NOTIFICATION
     
-    if (!(pizLinklistPtrAtIndex (x->notifyQueue, 0, (void **)&event))) {
-        pizLinklistChuckByPtr (x->notifyQueue, event);
+    if (!(pizLinklistPtrAtIndex (x->notificationQueue, 0, (void **)&event))) {
+        pizLinklistChuckByPtr (x->notificationQueue, event);
     }
     
     PIZ_AGENT_UNLOCK_NOTIFICATION   

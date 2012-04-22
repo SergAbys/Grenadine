@@ -49,7 +49,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void     pizSequenceAdd             (PIZSequence *x, const PIZEvent *event);
+void     pizSequenceNote            (PIZSequence *x, const PIZEvent *event);
 void     pizSequenceClear           (PIZSequence *x, const PIZEvent *event);
 void     pizSequenceTranspose       (PIZSequence *x, const PIZEvent *event);
 void     pizSequenceLearn           (PIZSequence *x, const PIZEvent *event);

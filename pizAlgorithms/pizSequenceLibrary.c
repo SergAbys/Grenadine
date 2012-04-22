@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceLibrary.c
  * \author	Jean Sapristi
- * \date	April 16, 2012.
+ * \date	April 22, 2012.
  */
  
 /*
@@ -148,9 +148,13 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
         err |= (position < x->start);
         err |= (position >= x->end);
     }
-        
+    
+    post ("Err / %ld", err);
+    post ("Note / %ld %ld %ld %ld %ld", position, pitch, velocity, duration, channel);
+    
     if (!err) {
     //
+    
     err |= pizBoundedStackPop (x->ticketMachine);
     
     if (!err && (newNote = (PIZNote *)malloc (sizeof(PIZNote)))) {
@@ -254,22 +258,13 @@ long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
 
 long pizSequenceSnapPositionToPattern (PIZSequence *x, long position)
 {
-    long s = pizArrayCount (x->pattern); 
-    long j = (long)(position / (double)x->cell);
+    long s, j = (long)(position / (double)x->cell);
     
-    position = j * x->cell;
-    
-    if (s) {
-        long k = (long)(x->start / (double)x->cell);
-        
-        while (k > position) {
-            k -= s;
-        }
-        
-        position += pizArrayValueAtIndex (x->pattern, (j - k) % s) * x->cell;
-    } 
+    if (s = pizArrayCount (x->pattern)) {
+        j += pizArrayValueAtIndex (x->pattern, j % s);
+    }
 
-    return position;
+    return (j * x->cell);
 }
 
 // -------------------------------------------------------------------------------------------------------------

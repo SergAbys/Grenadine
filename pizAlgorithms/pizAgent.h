@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	April 14, 2012.
+ * \date	April 22, 2012.
  */
 
 /*
@@ -118,7 +118,7 @@ typedef struct _PIZAgent {
     PIZLinklist         *graphicInQueue;
     PIZLinklist         *graphicOutQueue;
     PIZLinklist         *transformQueue;
-    PIZLinklist         *notifyQueue;
+    PIZLinklist         *notificationQueue;
     PIZSequence         *sequence;
     PIZFactorOracle     *factorOracle;
     PIZGaloisLattice    *galoisLattice;

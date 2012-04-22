@@ -8,13 +8,18 @@
  */
  
 /*
- *  April 21, 2012.
+ *  April 22, 2012.
  */
  
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #include "tralala.h"
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define TICKS_PER_STEP      20
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -52,7 +57,7 @@ int main (void)
     class_addmethod (c, (method)tralala_unloop,    "unloop",    0);
     class_addmethod (c, (method)tralala_clear,     "clear",     0);
     class_addmethod (c, (method)tralala_bpm,       "bpm",       A_LONG, 0);
-    class_addmethod (c, (method)tralala_add,       "add",       A_GIMME, 0);
+    class_addmethod (c, (method)tralala_note,      "note",      A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
 
@@ -102,6 +107,15 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+PIZError tralala_notify (t_tralala *x, PIZEvent *event)
+{
+    return PIZ_GOOD;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 void tralala_bang (t_tralala *x) 
 {   
     EVENT (PIZ_EVENT_PLAY)
@@ -127,28 +141,34 @@ void tralala_unloop (t_tralala *x)
     EVENT (PIZ_EVENT_UNLOOP)
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void tralala_clear (t_tralala *x) 
-{   
-    EVENT (PIZ_EVENT_CLEAR)
-}
-
 void tralala_bpm (t_tralala *x, long n) 
 {   
     EVENT_VALUE (PIZ_EVENT_BPM, n)
 }
 
-void tralala_add (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void tralala_note (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
+    if ((argc > 1) && (argc <= PIZ_SEQUENCE_NOTE_SIZE)) {
+    //
     long values[PIZ_SEQUENCE_NOTE_SIZE];
     
-    if ((argc > 1) && (argc <= PIZ_SEQUENCE_NOTE_SIZE)) {
-        atom_getlong_array (argc, argv, PIZ_SEQUENCE_NOTE_SIZE, values);
-        EVENT_ARGS (PIZ_EVENT_ADD, argc, values)
+    atom_getlong_array (argc, argv, PIZ_SEQUENCE_NOTE_SIZE, values);
+    
+    values[PIZ_DATA_POSITION] = (long)(values[PIZ_DATA_POSITION] / TICKS_PER_STEP);
+    values[PIZ_DATA_DURATION] = (long)(values[PIZ_DATA_DURATION] / TICKS_PER_STEP);
+    
+    EVENT_ARGS (PIZ_EVENT_NOTE, argc, values)
+    //
     }
+}
+
+void tralala_clear (t_tralala *x) 
+{   
+    EVENT (PIZ_EVENT_CLEAR)
 }
 
 // -------------------------------------------------------------------------------------------------------------
