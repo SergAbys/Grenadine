@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	April 22, 2012.
+ * \date	April 23, 2012.
  */
  
 /*
@@ -70,10 +70,12 @@ PIZAgent *pizAgentNew (void)
     x->graphicInQueue       = pizLinklistNew ( );
     x->graphicOutQueue      = pizLinklistNew ( );
     x->transformQueue       = pizLinklistNew ( );
-    x->notificationQueue    = pizLinklistNew ( );
+    x->notificationQueue    = pizLinklistNew ( );            
     x->sequence             = pizSequenceNew      (0);
     x->factorOracle         = pizFactorOracleNew  (0, NULL);
     x->galoisLattice        = pizGaloisLatticeNew (0, NULL);
+    x->observer.observer    = NULL;
+    x->observer.notify      = NULL;
     x->err1                 = PIZ_ERROR;
     x->err2                 = PIZ_ERROR;
     
@@ -101,6 +103,7 @@ PIZAgent *pizAgentNew (void)
     
     if (!err) {
     //
+
     pthread_attr_setscope        (&x->attr, PTHREAD_SCOPE_PROCESS);
     pthread_attr_setdetachstate  (&x->attr, PTHREAD_CREATE_JOINABLE);
     pthread_attr_setschedpolicy  (&x->attr, SCHED_OTHER);

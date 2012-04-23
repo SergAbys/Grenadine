@@ -94,6 +94,9 @@
                                             PIZ_AGENT_MEMORY                                    \
                                         }
                                         
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+                                        
 #define DEBUGEVENT                      if (event) {                                            \
                                             const char *name = NULL;                            \
                                             pizEventGetName (event, &name);                     \
@@ -103,6 +106,14 @@
 #define DEBUGTIME                       PIZTime tttt;                                           \
                                         pizTimeSet (&tttt);                                     \
                                         post ("%llu / %s", tttt, __FUNCTION__);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+typedef struct _PIZObserver {
+    void        *observer;
+    PIZMethod   notify;
+    } PIZObserver;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -122,6 +133,7 @@ typedef struct _PIZAgent {
     PIZSequence         *sequence;
     PIZFactorOracle     *factorOracle;
     PIZGaloisLattice    *galoisLattice;
+    PIZObserver         observer;
     pthread_attr_t      attr;
     pthread_cond_t      eventCondition;
     pthread_cond_t      notificationCondition;
@@ -137,14 +149,20 @@ typedef struct _PIZAgent {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZAgent *pizAgentNew     (void);
-void     pizAgentFree     (PIZAgent *x);
+PIZAgent *pizAgentNew           (void);
+void     pizAgentFree           (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void     pizAgentAddEvent (PIZAgent *x, PIZEvent *event);
-PIZError pizAgentGetEvent (PIZAgent *x, PIZEventType type, PIZEvent **eventPtr);
+PIZError pizAgentAttach         (PIZAgent *x, PIZMethod notify, void *observer); 
+PIZError pizAgentDetach         (PIZAgent *x, PIZMethod notify);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+void     pizAgentAddEvent       (PIZAgent *x, PIZEvent *event);
+PIZError pizAgentGetEvent       (PIZAgent *x, PIZEventType type, PIZEvent **eventPtr);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

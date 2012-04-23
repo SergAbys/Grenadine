@@ -107,9 +107,9 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError tralala_notify (t_tralala *x, PIZEvent *event)
+void tralala_notify (t_tralala *x, PIZEvent *event)
 {
-    return PIZ_GOOD;
+    ;
 }
 
 // -------------------------------------------------------------------------------------------------------------
