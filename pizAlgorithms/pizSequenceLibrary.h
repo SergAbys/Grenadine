@@ -1,7 +1,7 @@
 /**
  * \file	pizSequenceLibrary.h
  * \author	Jean Sapristi
- * \date	April 14, 2012.
+ * \date	April 23, 2012.
  */
 
 /*
@@ -49,27 +49,18 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void     pizSequenceFunAll                  (PIZSequence *x, PIZMethod f,   const PIZEvent *event);
-
-void     pizSequenceRemoveNote              (PIZSequence *x, PIZNote *note, const PIZEvent *event);
-void     pizSequenceFillTempHash            (PIZSequence *x, PIZNote *note, const PIZEvent *event);
-void     pizSequenceFillTempNotes           (PIZSequence *x, PIZNote *note, const PIZEvent *event);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZNote  *pizSequenceNewNote                (PIZSequence *x, long *argv, ulong flags);
+PIZ_LOCAL void    pizSequenceFunAll                (PIZSequence *x, PIZMethod f,   const PIZEvent *event);
+PIZ_LOCAL void    pizSequenceRemoveNote            (PIZSequence *x, PIZNote *note, const PIZEvent *event);
+PIZ_LOCAL void    pizSequenceFillTempHash          (PIZSequence *x, PIZNote *note, const PIZEvent *event);
+PIZ_LOCAL void    pizSequenceFillTempNotes         (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void     pizSequenceMakeMap                 (PIZSequence *x); 
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-long     pizSequenceMovePitchToAmbitus      (PIZSequence *x, long pitch);
-long     pizSequenceSnapPositionToPattern   (PIZSequence *x, long position);
+PIZ_LOCAL PIZNote *pizSequenceNewNote              (PIZSequence *x, long *argv, ulong flags);
+PIZ_LOCAL void    pizSequenceMakeMap               (PIZSequence *x);
+PIZ_LOCAL long    pizSequenceMovePitchToAmbitus    (PIZSequence *x, long pitch);
+PIZ_LOCAL long    pizSequenceSnapPositionToPattern (PIZSequence *x, long position);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

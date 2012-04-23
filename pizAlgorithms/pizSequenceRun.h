@@ -49,9 +49,9 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-bool        pizSequenceIsAtEnd          (PIZSequence *x);
-void        pizSequenceGoToStart        (PIZSequence *x);
-PIZError    pizSequenceProceedStep      (PIZSequence *x, PIZLinklist *queue, long bpm); //
+PIZ_LOCAL bool        pizSequenceIsAtEnd      (PIZSequence *x);
+PIZ_LOCAL void        pizSequenceGoToStart    (PIZSequence *x);
+PIZ_LOCAL PIZError    pizSequenceProceedStep  (PIZSequence *x, PIZLinklist *queue, long bpm); //
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

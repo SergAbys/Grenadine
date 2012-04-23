@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	April 22, 2012.
+ * \date	April 23, 2012.
  */
  
 /*
@@ -90,13 +90,13 @@ void *pizAgentEventLoop (void *agent)
     pizAgentEventLoopInit (x);
      
     while (pizAgentEventLoopIsWorkTime (x)) {
-        if (pizAgentEventLoopDoEvent (x, x->runInQueue)) {
+        if (pizAgentEventLoopDoEvent (x, x->run)) {
             break;
         } 
     }
     
     while (pizAgentEventLoopIsWorkTime (x)) {
-        if (pizAgentEventLoopDoEvent (x, x->transformQueue)) {
+        if (pizAgentEventLoopDoEvent (x, x->transform)) {
             break;
         } 
     }
@@ -110,7 +110,7 @@ void *pizAgentEventLoop (void *agent)
     }
     
     while (pizAgentEventLoopIsWorkTime (x)) {
-        if (pizAgentEventLoopDoEvent (x, x->graphicInQueue)) {
+        if (pizAgentEventLoopDoEvent (x, x->graphic)) {
             pizAgentEventLoopDoRefresh (x);
             break;
         } 
@@ -134,7 +134,7 @@ void *pizAgentNotificationLoop (void *agent)
     
     PIZ_AGENT_LOCK_NOTIFICATION
     
-    while (!(pizLinklistCount (x->notificationQueue))) {
+    while (!(pizLinklistCount (x->notification))) {
         pthread_cond_wait (&x->notificationCondition, &x->notificationLock);
         if (PIZ_EXIT) {
             break;
@@ -163,7 +163,6 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
     PIZEvent        *event = NULL;
     PIZMethod       f = NULL;
     PIZMethodError  g = NULL;
-
             
     PIZ_AGENT_LOCK_EVENT
     
@@ -206,41 +205,35 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
 
 void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
 {   
+    long     count;
     bool     k = false;
-    long     count = 0;
     PIZError err = PIZ_GOOD; 
     
     do {
     //
     
     if (!blank) {
-        PIZ_AGENT_LOCK_GETTER
         
-        pizLinklistClear (x->runOutQueue);
-        err = pizSequenceProceedStep (x->sequence, x->runOutQueue, x->bpm);
-        count = pizLinklistCount (x->runOutQueue);
+        PIZ_AGENT_LOCK_NOTIFICATION
         
-        PIZ_AGENT_UNLOCK_GETTER
+        count = pizLinklistCount (x->notification);
+        err = pizSequenceProceedStep (x->sequence, x->notification, x->bpm);
+        count -= pizLinklistCount (x->notification);
+        
+        if (count) {   
+            pthread_cond_signal (&x->notificationCondition);
+        }
+        
+        PIZ_AGENT_UNLOCK_NOTIFICATION
+
     } else {
         err = pizSequenceProceedStep (x->sequence, NULL, x->bpm);
     }
     
     if (err == PIZ_GOOD) {
-        if (count) {
-            PIZEvent *event = NULL;
-            if (event = pizEventNewWithTime (PIZ_EVENT_RUN_READY, &x->grainStart)) {
-            
-                PIZ_AGENT_LOCK_NOTIFICATION
-                PIZ_AGENT_QUEUE(x->notificationQueue)
-                pthread_cond_signal (&x->notificationCondition);
-                PIZ_AGENT_UNLOCK_NOTIFICATION
-            }
-        }
-        
         if (pizSequenceIsAtEnd (x->sequence)) {
             pizAgentEventLoopDoStepLast (x);
         }
-        
         k = false;  
         
     } else if (err == PIZ_ERROR) {
@@ -263,29 +256,22 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
 
 void pizAgentEventLoopDoRefresh (PIZAgent *x)
 {
-    PIZEvent *event = NULL;
+    long     count;
     PIZError err = PIZ_ERROR;
-    long     count = 0;
     
-    PIZ_AGENT_LOCK_GETTER
+    PIZ_AGENT_LOCK_NOTIFICATION
     
-    if (!(pizLinklistCount (x->graphicOutQueue))) {
-        err = pizSequenceGetGraphicEvents (x->sequence, x->graphicOutQueue);
-        count = pizLinklistCount (x->graphicOutQueue);
+    count = pizLinklistCount (x->notification);
+    err = pizSequenceGetGraphicEvents (x->sequence, x->notification);
+    count -= pizLinklistCount (x->notification);
+     
+    if (!err && count) {
+        pthread_cond_signal (&x->notificationCondition);
     }
     
-    PIZ_AGENT_UNLOCK_GETTER
-    
-    if (!err) {
-        if (count && (event = pizEventNewWithTime (PIZ_EVENT_GRAPHIC_READY, &x->grainStart))) {
-            
-            PIZ_AGENT_LOCK_NOTIFICATION
-            PIZ_AGENT_QUEUE(x->notificationQueue)
-            pthread_cond_signal (&x->notificationCondition);
-            PIZ_AGENT_UNLOCK_NOTIFICATION
-        }
+    PIZ_AGENT_UNLOCK_NOTIFICATION
         
-    } else if (err == PIZ_MEMORY) {
+    if (err == PIZ_MEMORY) {
         PIZ_AGENT_MEMORY
     }
 }
@@ -301,7 +287,7 @@ void pizAgentEventLoopDoStepEnd (PIZAgent *x)
     if (event = pizEventNewWithTime (PIZ_EVENT_END, &x->grainStart)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
-        PIZ_AGENT_QUEUE(x->notificationQueue)
+        PIZ_AGENT_QUEUE(x->notification)
         pthread_cond_signal (&x->notificationCondition);
         PIZ_AGENT_UNLOCK_NOTIFICATION
     }
@@ -314,7 +300,7 @@ void pizAgentEventLoopDoStepLast (PIZAgent *x)
     if (event = pizEventNewWithTime (PIZ_EVENT_LAST, &x->grainStart)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
-        PIZ_AGENT_QUEUE(x->notificationQueue)
+        PIZ_AGENT_QUEUE(x->notification)
         pthread_cond_signal (&x->notificationCondition);
         PIZ_AGENT_UNLOCK_NOTIFICATION
     }
@@ -376,10 +362,10 @@ bool pizAgentEventLoopIsCondition (PIZAgent *x)
 {
     bool condition = false;
     
-    if ((x->flags & PIZ_AGENT_FLAG_PLAYING)   ||
-        pizLinklistCount (x->transformQueue) ||
-        pizLinklistCount (x->runInQueue)     ||
-        pizLinklistCount (x->graphicInQueue)) {
+    if (pizLinklistCount (x->transform)     ||
+        pizLinklistCount (x->run)           ||
+        pizLinklistCount (x->graphic)       ||
+        (x->flags & PIZ_AGENT_FLAG_PLAYING)) {
         condition = true;
     }
     
@@ -436,8 +422,8 @@ void pizAgentNotificationLoopNotify (PIZAgent *x)
             
     PIZ_AGENT_LOCK_NOTIFICATION
     
-    if (!(pizLinklistPtrAtIndex (x->notificationQueue, 0, (void **)&event))) {
-        pizLinklistChuckByPtr (x->notificationQueue, event);
+    if (!(pizLinklistPtrAtIndex (x->notification, 0, (void **)&event))) {
+        pizLinklistChuckByPtr (x->notification, event);
     }
     
     PIZ_AGENT_UNLOCK_NOTIFICATION   

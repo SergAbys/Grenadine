@@ -11,6 +11,10 @@ _pizArrayRemoveIndex
 _pizArrayRemoveLastValue
 _pizArraySetValueAtIndex
 _pizArrayValueAtIndex
+_pizArrayContainsValue
+_pizArrayFirstIndexOfValue
+_pizArrayRemoveIndex
+_pizArrayRemoveLastValue
 _pizFactorOracleAdd
 _pizFactorOracleClear
 _pizFactorOracleCount

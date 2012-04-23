@@ -122,7 +122,7 @@ static const double piz_distribution11[ ] = { 0.54, 0.59, 0.63, 0.68, 0.72, 0.77
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizSequenceFillNotes (PIZSequence *x, PIZMidiSelector selector, bool reverse);
+PIZ_LOCAL void pizSequenceFillNotes (PIZSequence *x, PIZMidiSelector selector, bool reverse);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

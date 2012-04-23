@@ -256,8 +256,8 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>3</integer>
-											<integer>2</integer>
+											<integer>5</integer>
+											<integer>4</integer>
 											<integer>0</integer>
 										</array>
 									</array>
@@ -424,8 +424,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>968B35981541BD7A007F1F1F</string>
-				<string>968B35991541BD7A007F1F1F</string>
+				<string>96D9421A1545AE0000683EE7</string>
+				<string>96D9421B1545AE0000683EE7</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -458,6 +458,7 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/Ufo/zoulou/zoulou.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -675,7 +676,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96A6A4821536D2F200706E44</string>
+				<string>96D9421C1545AE0000683EE7</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

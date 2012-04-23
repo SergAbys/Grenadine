@@ -7,6 +7,10 @@ _pizArrayNew
 _pizArrayPtr
 _pizArraySetValueAtIndex
 _pizArrayValueAtIndex
+_pizArrayContainsValue
+_pizArrayFirstIndexOfValue
+_pizArrayRemoveIndex
+_pizArrayRemoveLastValue
 _pizBoundedStackClear
 _pizBoundedStackCount
 _pizBoundedStackFree

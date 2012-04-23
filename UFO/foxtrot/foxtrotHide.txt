@@ -15,6 +15,10 @@ _pizArrayNew
 _pizArrayPtr
 _pizArraySetValueAtIndex
 _pizArrayValueAtIndex
+_pizArrayContainsValue
+_pizArrayFirstIndexOfValue
+_pizArrayRemoveIndex
+_pizArrayRemoveLastValue
 _pizMarkovModelAdd
 _pizMarkovModelBaumWelch
 _pizMarkovModelClear

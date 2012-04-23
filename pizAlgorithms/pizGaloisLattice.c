@@ -1,7 +1,7 @@
 /*
  * \file    pizGaloisLattice.c
  * \author  Jean Sapristi
- * \date    April 8, 2012.
+ * \date    April 23, 2012.
  */
  
 /*
@@ -59,9 +59,9 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_INLINE void pizGaloisLatticeReconnect       (PIZGaloisLattice *x, long g, long n);
-PIZError        pizGaloisLatticeMakeMap         (PIZGaloisLattice *x);
-void            pizGaloisLatticeKillConcept     (PIZGaloisLattice *x, long n);
+PIZ_LOCAL PIZ_INLINE void pizGaloisLatticeReconnect       (PIZGaloisLattice *x, long g, long n);
+PIZ_LOCAL PIZError        pizGaloisLatticeMakeMap         (PIZGaloisLattice *x);
+PIZ_LOCAL void            pizGaloisLatticeKillConcept     (PIZGaloisLattice *x, long n);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

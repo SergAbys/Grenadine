@@ -49,30 +49,30 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void     pizSequenceNote            (PIZSequence *x, const PIZEvent *event);
-void     pizSequenceClear           (PIZSequence *x, const PIZEvent *event);
-void     pizSequenceTranspose       (PIZSequence *x, const PIZEvent *event);
-void     pizSequenceLearn           (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceNote            (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceClear           (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceTranspose       (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceLearn           (PIZSequence *x, const PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizSequenceAlgorithm       (PIZSequence *x, const PIZEvent *event);
-PIZError pizSequenceNovember        (PIZSequence *x, const PIZEvent *event); //
-PIZError pizSequenceJuliet          (PIZSequence *x, const PIZEvent *event); //
+PIZ_LOCAL PIZError  pizSequenceAlgorithm       (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceNovember        (PIZSequence *x, const PIZEvent *event); //
+PIZ_LOCAL PIZError  pizSequenceJuliet          (PIZSequence *x, const PIZEvent *event); //
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void     pizSequenceClean           (PIZSequence *x, const PIZEvent *event);
-void     pizSequenceRotate          (PIZSequence *x, const PIZEvent *event);
-void     pizSequenceScramble        (PIZSequence *x, const PIZEvent *event);
-void     pizSequenceSort            (PIZSequence *x, const PIZEvent *event);
-void     pizSequenceChange          (PIZSequence *x, const PIZEvent *event);
-void     pizSequenceSet             (PIZSequence *x, const PIZEvent *event);
-void     pizSequenceRandom          (PIZSequence *x, const PIZEvent *event);
-void     pizSequenceKill            (PIZSequence *x, const PIZEvent *event);
-void     pizSequenceCycle           (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceClean           (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceRotate          (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceScramble        (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceSort            (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceChange          (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceSet             (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceRandom          (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceKill            (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceCycle           (PIZSequence *x, const PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

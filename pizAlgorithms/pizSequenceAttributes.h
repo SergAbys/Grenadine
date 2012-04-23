@@ -49,17 +49,17 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void    pizSequenceSetChance        (PIZSequence *x, const PIZEvent *event);
-void    pizSequenceSetVelocity      (PIZSequence *x, const PIZEvent *event);
-void    pizSequenceSetChannel       (PIZSequence *x, const PIZEvent *event);
-void    pizSequenceSetCell          (PIZSequence *x, const PIZEvent *event);
-void    pizSequenceSetNoteValue     (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceSetChance        (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceSetVelocity      (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceSetChannel       (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceSetCell          (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceSetNoteValue     (PIZSequence *x, const PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizSequenceSetScale        (PIZSequence *x, const PIZEvent *event);
-PIZError pizSequenceSetPattern      (PIZSequence *x, const PIZEvent *event); 
+PIZ_LOCAL PIZError  pizSequenceSetScale        (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSetPattern      (PIZSequence *x, const PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

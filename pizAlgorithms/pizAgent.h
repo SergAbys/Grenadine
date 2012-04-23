@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	April 22, 2012.
+ * \date	April 23, 2012.
  */
 
 /*
@@ -57,17 +57,17 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_AGENT_CONSTANT_BPM          25.E8
-#define PIZ_AGENT_CONSTANT_WORK_RATIO   25.E8 * 0.75
+#define PIZ_AGENT_CONSTANT_BPM              25.E8
+#define PIZ_AGENT_CONSTANT_WORK_RATIO       25.E8 * 0.75
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_AGENT_FLAG_NONE             0UL
-#define PIZ_AGENT_FLAG_EXIT             1UL
-#define PIZ_AGENT_FLAG_WAKED            2UL
-#define PIZ_AGENT_FLAG_PLAYING          4UL
-#define PIZ_AGENT_FLAG_LOOPED           8UL
+#define PIZ_AGENT_FLAG_NONE                 0UL
+#define PIZ_AGENT_FLAG_EXIT                 1UL
+#define PIZ_AGENT_FLAG_WAKED                2UL
+#define PIZ_AGENT_FLAG_PLAYING              4UL
+#define PIZ_AGENT_FLAG_LOOPED               8UL
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -78,9 +78,6 @@
 #define PIZ_AGENT_LOCK_NOTIFICATION         pthread_mutex_lock      (&x->notificationLock);
 #define PIZ_AGENT_UNLOCK_NOTIFICATION       pthread_mutex_unlock    (&x->notificationLock);
 
-#define PIZ_AGENT_LOCK_GETTER               pthread_mutex_lock      (&x->getterLock);
-#define PIZ_AGENT_UNLOCK_GETTER             pthread_mutex_unlock    (&x->getterLock);
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
@@ -89,31 +86,23 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_AGENT_QUEUE(queue)          if (pizLinklistAppend ((queue), event)) {               \
-                                            pizEventFree (event);                               \
-                                            PIZ_AGENT_MEMORY                                    \
-                                        }
+#define PIZ_AGENT_QUEUE(queue)              if (pizLinklistAppend ((queue), event)) {               \
+                                                pizEventFree (event);                               \
+                                                PIZ_AGENT_MEMORY                                    \
+                                            }
                                         
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
                                         
-#define DEBUGEVENT                      if (event) {                                            \
-                                            const char *name = NULL;                            \
-                                            pizEventGetName (event, &name);                     \
-                                            post ("%s / %s", name, __FUNCTION__);               \
-                                        }
+#define DEBUGEVENT                          if (event) {                                            \
+                                                const char *name = NULL;                            \
+                                                pizEventGetName (event, &name);                     \
+                                                post ("%s / %s", name, __FUNCTION__);               \
+                                            }
                                         
-#define DEBUGTIME                       PIZTime tttt;                                           \
-                                        pizTimeSet (&tttt);                                     \
-                                        post ("%llu / %s", tttt, __FUNCTION__);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-typedef struct _PIZObserver {
-    void        *observer;
-    PIZMethod   notify;
-    } PIZObserver;
+#define DEBUGTIME                           PIZTime tttt;                                           \
+                                            pizTimeSet (&tttt);                                     \
+                                            post ("%llu / %s", tttt, __FUNCTION__);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -124,22 +113,18 @@ typedef struct _PIZAgent {
     PIZNano             grainSize;
     PIZTime             grainStart;
     PIZTime             grainEnd;
-    PIZLinklist         *runInQueue;
-    PIZLinklist         *runOutQueue;
-    PIZLinklist         *graphicInQueue;
-    PIZLinklist         *graphicOutQueue;
-    PIZLinklist         *transformQueue;
-    PIZLinklist         *notificationQueue;
+    PIZLinklist         *run;
+    PIZLinklist         *graphic;
+    PIZLinklist         *transform;
+    PIZLinklist         *notification;
     PIZSequence         *sequence;
     PIZFactorOracle     *factorOracle;
     PIZGaloisLattice    *galoisLattice;
-    PIZObserver         observer;
     pthread_attr_t      attr;
     pthread_cond_t      eventCondition;
     pthread_cond_t      notificationCondition;
     pthread_mutex_t     eventLock;
     pthread_mutex_t     notificationLock;
-    pthread_mutex_t     getterLock;
     pthread_t           eventLoop;
     pthread_t           notificationLoop;
     PIZError            err1;
@@ -149,20 +134,16 @@ typedef struct _PIZAgent {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZAgent *pizAgentNew           (void);
-void     pizAgentFree           (PIZAgent *x);
+PIZAgent    *pizAgentNew       (void);
+void        pizAgentFree       (PIZAgent *x);
+
+PIZError    pizAgentAttach     (PIZAgent *x, PIZMethod f, void *observer); 
+PIZError    pizAgentDetach     (PIZAgent *x, PIZMethod f);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizAgentAttach         (PIZAgent *x, PIZMethod notify, void *observer); 
-PIZError pizAgentDetach         (PIZAgent *x, PIZMethod notify);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void     pizAgentAddEvent       (PIZAgent *x, PIZEvent *event);
-PIZError pizAgentGetEvent       (PIZAgent *x, PIZEventType type, PIZEvent **eventPtr);
+void        pizAgentAddEvent   (PIZAgent *x, PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -149,9 +149,6 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
         err |= (position >= x->end);
     }
     
-    post ("Err / %ld", err);
-    post ("Note / %ld %ld %ld %ld %ld", position, pitch, velocity, duration, channel);
-    
     if (!err) {
     //
     

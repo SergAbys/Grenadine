@@ -9,8 +9,8 @@
 		breakpointsGroup = 9688062C10BA9F300029AFFA /* XCBreakpointsBucket */;
 		codeSenseManager = 9689922A10B9908A00B21B0F /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 356629737;
-			PBXWorkspaceStateSaveDate = 356629737;
+			PBXPerProjectTemplateStateSaveDate = 356888023;
+			PBXWorkspaceStateSaveDate = 356888023;
 		};
 		sourceControlManager = 9689922910B9908A00B21B0F /* Source Control */;
 		userBuildSettings = {
@@ -39,9 +39,9 @@
 	};
 	96950DE4140D05FE003443D1 /* charlieHide.txt */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1234, 725}}";
-			sepNavSelRange = "{493, 0}";
-			sepNavVisRect = "{{0, 0}, {1234, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1234, 825}}";
+			sepNavSelRange = "{398, 0}";
+			sepNavVisRect = "{{0, 180}, {1234, 645}}";
 			sepNavWindowFrame = "{{15, -1}, {1279, 774}}";
 		};
 	};

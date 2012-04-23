@@ -63,30 +63,24 @@ PIZAgent *pizAgentNew (void)
     //
     long err = PIZ_GOOD;
     
-    x->flags                = PIZ_AGENT_FLAG_NONE;  
-    x->bpm                  = PIZ_DEFAULT_BPM;  
-    x->runInQueue           = pizLinklistNew ( );
-    x->runOutQueue          = pizLinklistNew ( );
-    x->graphicInQueue       = pizLinklistNew ( );
-    x->graphicOutQueue      = pizLinklistNew ( );
-    x->transformQueue       = pizLinklistNew ( );
-    x->notificationQueue    = pizLinklistNew ( );            
-    x->sequence             = pizSequenceNew      (0);
-    x->factorOracle         = pizFactorOracleNew  (0, NULL);
-    x->galoisLattice        = pizGaloisLatticeNew (0, NULL);
-    x->observer.observer    = NULL;
-    x->observer.notify      = NULL;
-    x->err1                 = PIZ_ERROR;
-    x->err2                 = PIZ_ERROR;
+    x->flags            = PIZ_AGENT_FLAG_NONE;  
+    x->bpm              = PIZ_DEFAULT_BPM;  
+    x->run              = pizLinklistNew ( );
+    x->graphic          = pizLinklistNew ( );
+    x->transform        = pizLinklistNew ( );
+    x->notification     = pizLinklistNew ( );            
+    x->sequence         = pizSequenceNew      (0);
+    x->factorOracle     = pizFactorOracleNew  (0, NULL);
+    x->galoisLattice    = pizGaloisLatticeNew (0, NULL);
+    x->err1             = PIZ_ERROR;
+    x->err2             = PIZ_ERROR;
     
-    if (!(x->runInQueue      &&  
-        x->runOutQueue       && 
-        x->graphicInQueue    &&
-        x->graphicOutQueue   &&
-        x->transformQueue    &&
-        x->notificationQueue && 
-        x->sequence          &&
-        x->factorOracle      &&
+    if (!(x->run        &&  
+        x->graphic      &&
+        x->transform    &&
+        x->notification && 
+        x->sequence     &&
+        x->factorOracle &&
         x->galoisLattice)) {
         
         err |= PIZ_MEMORY;
@@ -94,7 +88,6 @@ PIZAgent *pizAgentNew (void)
     
     err |= pthread_mutex_init (&x->eventLock, NULL);
     err |= pthread_mutex_init (&x->notificationLock, NULL);
-    err |= pthread_mutex_init (&x->getterLock, NULL);
     
     err |= pthread_cond_init  (&x->eventCondition, NULL);
     err |= pthread_cond_init  (&x->notificationCondition, NULL);
@@ -119,7 +112,6 @@ PIZAgent *pizAgentNew (void)
     if (err) {
         pizAgentFree (x);
         x = NULL;
-        
     }
     //
     }
@@ -154,16 +146,13 @@ void pizAgentFree (PIZAgent *x)
     
     pthread_mutex_destroy (&x->eventLock);
     pthread_mutex_destroy (&x->notificationLock);
-    pthread_mutex_destroy (&x->getterLock);
     pthread_cond_destroy  (&x->eventCondition);
     pthread_cond_destroy  (&x->notificationCondition);
     
-    pizLinklistFree (x->runInQueue);
-    pizLinklistFree (x->runOutQueue);
-    pizLinklistFree (x->graphicInQueue);
-    pizLinklistFree (x->graphicOutQueue);
-    pizLinklistFree (x->transformQueue);
-    pizLinklistFree (x->notificationQueue);
+    pizLinklistFree (x->run);
+    pizLinklistFree (x->graphic);
+    pizLinklistFree (x->transform);
+    pizLinklistFree (x->notification);
     
     pizSequenceFree (x->sequence);
     
@@ -182,10 +171,10 @@ void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
     PIZLinklist *queue = NULL;
     
     switch (event->type) {
-        case PIZ_EVENT_RUN       : queue = x->runInQueue; break;
-        case PIZ_EVENT_TRANSFORM : queue = x->transformQueue; break;
-        case PIZ_EVENT_ATTRIBUTE : queue = x->transformQueue; break;
-        case PIZ_EVENT_GRAPHIC   : queue = x->graphicInQueue; break;
+        case PIZ_EVENT_RUN       : queue = x->run;         break;
+        case PIZ_EVENT_TRANSFORM : queue = x->transform;   break;
+        case PIZ_EVENT_ATTRIBUTE : queue = x->transform;   break;
+        case PIZ_EVENT_GRAPHIC   : queue = x->graphic;     break;
     }
     
     if (queue) {
@@ -194,32 +183,6 @@ void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
         pthread_cond_signal (&x->eventCondition);
         PIZ_AGENT_UNLOCK_EVENT
     }
-}
-
-PIZError pizAgentGetEvent (PIZAgent *x, PIZEventType type, PIZEvent **eventPtr)
-{
-    PIZError err = PIZ_ERROR;
-    PIZLinklist *queue = NULL;
-        
-    switch (type) {
-        case PIZ_EVENT_RUN     : queue = x->runOutQueue; break;
-        case PIZ_EVENT_GRAPHIC : queue = x->graphicOutQueue; break;
-    }
-    
-    if (queue) {
-        err = PIZ_GOOD;
-        
-        PIZ_AGENT_LOCK_GETTER
-        
-        /*
-        if (!(err |= pizLinklistPtrAtIndex (queue, 0, (void **)eventPtr))) {
-            pizLinklistChuckByPtr (queue, (*eventPtr));
-        }*/
-        
-        PIZ_AGENT_UNLOCK_GETTER
-    }
-    
-    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------
