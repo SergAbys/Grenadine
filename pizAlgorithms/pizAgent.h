@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	April 23, 2012.
+ * \date	April 24, 2012.
  */
 
 /*
@@ -86,23 +86,27 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_AGENT_QUEUE(queue)              if (pizLinklistAppend ((queue), event)) {               \
-                                                pizEventFree (event);                               \
-                                                PIZ_AGENT_MEMORY                                    \
+#define PIZ_AGENT_QUEUE(queue)              if (pizLinklistAppend ((queue), event)) {       \
+                                                pizEventFree (event);                       \
+                                                PIZ_AGENT_MEMORY                            \
                                             }
                                         
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
                                         
-#define DEBUGEVENT                          if (event) {                                            \
-                                                const char *name = NULL;                            \
-                                                pizEventGetName (event, &name);                     \
-                                                post ("%s / %s", name, __FUNCTION__);               \
+#define DEBUGEVENT                          if (event) {                                                    \
+                                                const char *name = NULL;                                    \
+                                                pizEventGetName (event, &name);                             \
+                                                post ("%llu / %s / %s", event->time, name, __FUNCTION__);   \
                                             }
-                                        
-#define DEBUGTIME                           PIZTime tttt;                                           \
-                                            pizTimeSet (&tttt);                                     \
-                                            post ("%llu / %s", tttt, __FUNCTION__);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+typedef struct _PIZObserver {
+    void        *observer;
+    PIZMethod   notify;
+    } PIZObserver;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -117,6 +121,7 @@ typedef struct _PIZAgent {
     PIZLinklist         *graphic;
     PIZLinklist         *transform;
     PIZLinklist         *notification;
+    PIZLinklist         *observer;
     PIZSequence         *sequence;
     PIZFactorOracle     *factorOracle;
     PIZGaloisLattice    *galoisLattice;

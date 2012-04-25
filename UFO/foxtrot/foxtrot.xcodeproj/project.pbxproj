@@ -211,6 +211,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/../../Info.plist";
 				INSTALL_PATH = /;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				PREBINDING = NO;
 				PRODUCT_NAME = foxtrot;
 				UNEXPORTED_SYMBOLS_FILE = foxtrotHide.txt;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";

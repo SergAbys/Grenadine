@@ -190,6 +190,7 @@
 				GCC_UNROLL_LOOPS = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/../../Info.plist";
 				INSTALL_PATH = /;
+				PREBINDING = NO;
 				PRODUCT_NAME = quebec;
 				UNEXPORTED_SYMBOLS_FILE = quebecHide.txt;
 				WRAPPER_EXTENSION = mxo;

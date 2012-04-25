@@ -297,7 +297,7 @@ void pizAgentEventLoopDoStepLast (PIZAgent *x)
 {
     PIZEvent *event = NULL;
     
-    if (event = pizEventNewWithTime (PIZ_EVENT_LAST, &x->grainStart)) {
+    if (event = pizEventNew (PIZ_EVENT_LAST)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
         PIZ_AGENT_QUEUE(x->notification)

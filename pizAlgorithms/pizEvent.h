@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	April 23, 2012.
+ * \date	April 25, 2012.
  */
 
 /*
@@ -109,8 +109,8 @@ typedef enum _PIZEventIdentifier {
 typedef struct _PIZEvent {
     PIZEventType        type;
     PIZEventIdentifier  identifier;
-    long                tag;
     PIZTime             time;
+    long                tag;
     PIZArray            *data;
     } PIZEvent;
 
@@ -133,7 +133,7 @@ void     pizEventGetName            (const PIZEvent *x, const char **name);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent *pizEventAlloc (PIZEventIdentifier ie, long tag, const PIZTime *time, long argc, const long *argv);
+PIZEvent *pizEventAlloc (PIZEventIdentifier ie, const PIZTime *time, long tag, long argc, const long *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -142,32 +142,32 @@ PIZEvent *pizEventAlloc (PIZEventIdentifier ie, long tag, const PIZTime *time, l
 
 PIZ_EXTERN PIZEvent *pizEventNew (PIZEventIdentifier ie)
 {
-    return pizEventAlloc (ie, -1, NULL, 0, NULL);
+    return pizEventAlloc (ie, NULL, -1, 0, NULL);
 }
 
 PIZ_EXTERN PIZEvent *pizEventNewWithTime (PIZEventIdentifier ie, const PIZTime *time)
 {
-    return pizEventAlloc (ie, -1, time, 0, NULL);
+    return pizEventAlloc (ie, time, -1, 0, NULL);
 }
 
 PIZ_EXTERN PIZEvent *pizEventNewWithNote (PIZEventIdentifier ie, const long *argv, long tag)
 {
-    return pizEventAlloc (ie, tag, NULL, PIZ_SEQUENCE_NOTE_SIZE, argv);
+    return pizEventAlloc (ie, NULL, tag, PIZ_SEQUENCE_NOTE_SIZE, argv);
 }
 
 PIZ_EXTERN PIZEvent *pizEventNewWithZone (PIZEventIdentifier ie, const long *argv)
 {
-    return pizEventAlloc (ie, -1, NULL, PIZ_SEQUENCE_ZONE_SIZE, argv);
+    return pizEventAlloc (ie, NULL, -1, PIZ_SEQUENCE_ZONE_SIZE, argv);
 }
 
 PIZ_EXTERN PIZEvent *pizEventNewWithArgs (PIZEventIdentifier ie, long argc, const long *argv)
 {
-    return pizEventAlloc (ie, -1, NULL, argc, argv);
+    return pizEventAlloc (ie, NULL, -1, argc, argv);
 }
 
 PIZ_EXTERN PIZEvent *pizEventNewWithValue (PIZEventIdentifier ie, long value)
 {
-    return pizEventAlloc (ie, -1, NULL, 1, &value);
+    return pizEventAlloc (ie, NULL, -1, 1, &value);
 }
 
 #endif // PIZ_EXTERN_INLINE
