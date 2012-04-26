@@ -222,7 +222,6 @@ PIZError pizAgentDetach (PIZAgent *x, void *observer)
         
         if (ptr->observer == observer) {
             err = pizLinklistRemoveByPtr (x->observer, (void *)ptr);
-            break;
         }
         
         ptr = nextPtr;

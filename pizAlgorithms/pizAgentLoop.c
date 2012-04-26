@@ -217,7 +217,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         PIZ_AGENT_LOCK_NOTIFICATION
         
         count = pizLinklistCount (x->notification);
-        err = pizSequenceProceedStep (x->sequence, x->notification, x->bpm);
+        err   = pizSequenceProceedStep (x->sequence, x->notification, x->bpm);
         count -= pizLinklistCount (x->notification);
         
         if (count) {   
@@ -262,7 +262,7 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     PIZ_AGENT_LOCK_NOTIFICATION
     
     count = pizLinklistCount (x->notification);
-    err = pizSequenceGetGraphicEvents (x->sequence, x->notification);
+    err   = pizSequenceGetGraphicEvents (x->sequence, x->notification);
     count -= pizLinklistCount (x->notification);
      
     if (!err && count) {
@@ -290,6 +290,9 @@ void pizAgentEventLoopDoStepEnd (PIZAgent *x)
         PIZ_AGENT_QUEUE (x->notification)
         pthread_cond_signal (&x->notificationCondition);
         PIZ_AGENT_UNLOCK_NOTIFICATION
+        
+    } else {
+        PIZ_AGENT_MEMORY
     }
 }
 
@@ -303,6 +306,9 @@ void pizAgentEventLoopDoStepLast (PIZAgent *x)
         PIZ_AGENT_QUEUE (x->notification)
         pthread_cond_signal (&x->notificationCondition);
         PIZ_AGENT_UNLOCK_NOTIFICATION
+        
+    } else {
+        PIZ_AGENT_MEMORY
     }
 }
 
