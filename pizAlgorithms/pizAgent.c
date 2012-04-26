@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	April 24, 2012.
+ * \date	April 26, 2012.
  */
  
 /*
@@ -90,6 +90,7 @@ PIZAgent *pizAgentNew (void)
     
     err |= pthread_mutex_init (&x->eventLock, NULL);
     err |= pthread_mutex_init (&x->notificationLock, NULL);
+    err |= pthread_mutex_init (&x->observerLock, NULL);
     
     err |= pthread_cond_init  (&x->eventCondition, NULL);
     err |= pthread_cond_init  (&x->notificationCondition, NULL);
@@ -148,6 +149,8 @@ void pizAgentFree (PIZAgent *x)
     
     pthread_mutex_destroy (&x->eventLock);
     pthread_mutex_destroy (&x->notificationLock);
+    pthread_mutex_destroy (&x->observerLock);
+    
     pthread_cond_destroy  (&x->eventCondition);
     pthread_cond_destroy  (&x->notificationCondition);
     
@@ -169,6 +172,71 @@ void pizAgentFree (PIZAgent *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+PIZError pizAgentAttach (PIZAgent *x, void *observer, PIZMethod f)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if (observer && f) {
+    //
+    PIZObserver *newObserver = NULL;
+    
+    if (newObserver = (PIZObserver *)malloc (sizeof(PIZObserver))) {
+    //
+    err = PIZ_GOOD;
+    
+    newObserver->observer = observer;
+    newObserver->notify = f;
+    
+    PIZ_AGENT_LOCK_OBSERVER
+    
+    err = pizLinklistAppend (x->observer, newObserver);
+        
+    PIZ_AGENT_UNLOCK_OBSERVER
+    
+    //
+    } else {
+        err = PIZ_MEMORY;
+    }
+    
+    if (err == PIZ_MEMORY) {
+        PIZ_AGENT_MEMORY
+    }
+    //
+    }
+    
+    return err;
+}
+
+PIZError pizAgentDetach (PIZAgent *x, void *observer)
+{
+    PIZError    err = PIZ_ERROR;
+    PIZObserver *ptr = NULL;
+    PIZObserver *nextPtr = NULL;
+    
+    PIZ_AGENT_LOCK_OBSERVER
+    
+    pizLinklistPtrAtIndex (x->observer, 0, (void **)&ptr);
+    
+    while (ptr) {
+        pizLinklistNextByPtr (x->observer, (void *)ptr, (void **)&nextPtr);
+        
+        if (ptr->observer == observer) {
+            err = pizLinklistRemoveByPtr (x->observer, (void *)ptr);
+            break;
+        }
+        
+        ptr = nextPtr;
+    }
+    
+    PIZ_AGENT_UNLOCK_OBSERVER
+    
+    return err;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
 {
     PIZLinklist *queue = NULL;
@@ -182,7 +250,7 @@ void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
     
     if (queue) {
         PIZ_AGENT_LOCK_EVENT
-        PIZ_AGENT_QUEUE(queue)
+        PIZ_AGENT_QUEUE (queue)
         pthread_cond_signal (&x->eventCondition);
         PIZ_AGENT_UNLOCK_EVENT
     }

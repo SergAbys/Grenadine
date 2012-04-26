@@ -123,6 +123,7 @@ PIZEvent *pizEventNewWithNote       (PIZEventIdentifier ie, const long *argv, lo
 PIZEvent *pizEventNewWithZone       (PIZEventIdentifier ie, const long *argv);
 PIZEvent *pizEventNewWithArgs       (PIZEventIdentifier ie, long argc, const long *argv);
 PIZEvent *pizEventNewWithValue      (PIZEventIdentifier ie, long value);
+PIZEvent *pizEventNewCopy           (PIZEvent *x);
 
 void     pizEventFree               (PIZEvent *x);
 PIZError pizEventGetTime            (const PIZEvent *x, PIZTime *time);
@@ -168,6 +169,11 @@ PIZ_EXTERN PIZEvent *pizEventNewWithArgs (PIZEventIdentifier ie, long argc, cons
 PIZ_EXTERN PIZEvent *pizEventNewWithValue (PIZEventIdentifier ie, long value)
 {
     return pizEventAlloc (ie, NULL, -1, 1, &value);
+}
+
+PIZ_EXTERN PIZEvent *pizEventNewCopy (PIZEvent *x)
+{
+    return pizEventAlloc (x->identifier, &x->time, x->tag, pizArrayCount (x->data), pizArrayPtr (x->data));
 }
 
 #endif // PIZ_EXTERN_INLINE

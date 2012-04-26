@@ -287,7 +287,7 @@ void pizAgentEventLoopDoStepEnd (PIZAgent *x)
     if (event = pizEventNewWithTime (PIZ_EVENT_END, &x->grainStart)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
-        PIZ_AGENT_QUEUE(x->notification)
+        PIZ_AGENT_QUEUE (x->notification)
         pthread_cond_signal (&x->notificationCondition);
         PIZ_AGENT_UNLOCK_NOTIFICATION
     }
@@ -300,7 +300,7 @@ void pizAgentEventLoopDoStepLast (PIZAgent *x)
     if (event = pizEventNew (PIZ_EVENT_LAST)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
-        PIZ_AGENT_QUEUE(x->notification)
+        PIZ_AGENT_QUEUE (x->notification)
         pthread_cond_signal (&x->notificationCondition);
         PIZ_AGENT_UNLOCK_NOTIFICATION
     }
@@ -427,8 +427,36 @@ void pizAgentNotificationLoopNotify (PIZAgent *x)
     }
     
     PIZ_AGENT_UNLOCK_NOTIFICATION   
-           
-    DEBUGEVENT    
+    
+    PIZ_AGENT_LOCK_OBSERVER
+    
+    if (pizLinklistCount (x->observer)) {
+    //
+    PIZObserver *ptr = NULL;
+    PIZObserver *nextPtr = NULL;
+    
+    pizLinklistPtrAtIndex (x->observer, 0, (void **)&ptr);
+    
+    while (ptr) {
+        PIZEvent    *newEvent = NULL;
+        PIZMethod   f = NULL;
+        
+        pizLinklistNextByPtr (x->observer, (void *)ptr, (void **)&nextPtr);
+        
+        if (newEvent = pizEventNewCopy (event)) {
+            if (f = ptr->notify) {
+                (*f)(ptr->observer, newEvent);
+            }
+        } else {
+            PIZ_AGENT_MEMORY
+        }
+        
+        ptr = nextPtr;
+    }
+    //
+    }
+    
+    PIZ_AGENT_UNLOCK_OBSERVER
         
     pizEventFree (event);
 } 

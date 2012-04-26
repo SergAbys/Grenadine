@@ -163,6 +163,11 @@ PIZEvent *pizEventNewWithValue (PIZEventIdentifier ie, long value)
     return pizEventAlloc (ie, NULL, -1, 1, &value);
 }
 
+PIZEvent *pizEventNewCopy (PIZEvent *x)
+{
+    return pizEventAlloc (x->identifier, &x->time, x->tag, pizArrayCount (x->data), pizArrayPtr (x->data));
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -

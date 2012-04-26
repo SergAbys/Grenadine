@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	April 24, 2012.
+ * \date	April 25, 2012.
  */
 
 /*
@@ -78,14 +78,13 @@
 #define PIZ_AGENT_LOCK_NOTIFICATION         pthread_mutex_lock      (&x->notificationLock);
 #define PIZ_AGENT_UNLOCK_NOTIFICATION       pthread_mutex_unlock    (&x->notificationLock);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZ_AGENT_MEMORY
+#define PIZ_AGENT_LOCK_OBSERVER             pthread_mutex_lock      (&x->observerLock);
+#define PIZ_AGENT_UNLOCK_OBSERVER           pthread_mutex_unlock    (&x->observerLock);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#define PIZ_AGENT_MEMORY                    ;
 #define PIZ_AGENT_QUEUE(queue)              if (pizLinklistAppend ((queue), event)) {       \
                                                 pizEventFree (event);                       \
                                                 PIZ_AGENT_MEMORY                            \
@@ -130,6 +129,7 @@ typedef struct _PIZAgent {
     pthread_cond_t      notificationCondition;
     pthread_mutex_t     eventLock;
     pthread_mutex_t     notificationLock;
+    pthread_mutex_t     observerLock;
     pthread_t           eventLoop;
     pthread_t           notificationLoop;
     PIZError            err1;
@@ -142,8 +142,11 @@ typedef struct _PIZAgent {
 PIZAgent    *pizAgentNew       (void);
 void        pizAgentFree       (PIZAgent *x);
 
-PIZError    pizAgentAttach     (PIZAgent *x, PIZMethod f, void *observer); 
-PIZError    pizAgentDetach     (PIZAgent *x, PIZMethod f);
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZError    pizAgentAttach     (PIZAgent *x, void *observer, PIZMethod f); 
+PIZError    pizAgentDetach     (PIZAgent *x, void *observer);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
