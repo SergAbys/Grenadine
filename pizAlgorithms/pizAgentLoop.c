@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	April 23, 2012.
+ * \date	April 26, 2012.
  */
  
 /*
@@ -400,13 +400,13 @@ long pizAgentEventLoopGetMethod (const PIZEvent *event, PIZMethod *f, PIZMethodE
     long k = PIZ_OBJECT_NONE;
     
     switch (event->identifier) {
-        case PIZ_EVENT_PLAY     : *f = pizAgentPlay;        k = PIZ_OBJECT_AGENT; break;
-        case PIZ_EVENT_STOP     : *f = pizAgentStop;        k = PIZ_OBJECT_AGENT; break;
-        case PIZ_EVENT_LOOP     : *f = pizAgentLoop;        k = PIZ_OBJECT_AGENT; break;
-        case PIZ_EVENT_UNLOOP   : *f = pizAgentUnloop;      k = PIZ_OBJECT_AGENT; break;
-        case PIZ_EVENT_BPM      : *f = pizAgentBPM;         k = PIZ_OBJECT_AGENT; break;
-        case PIZ_EVENT_NOTE     : *f = pizSequenceNote;     k = PIZ_OBJECT_SEQUENCE; break;
-        case PIZ_EVENT_CLEAR    : *f = pizSequenceClear;    k = PIZ_OBJECT_SEQUENCE; break;  
+        case PIZ_EVENT_PLAY     : *f = pizAgentPlay;        k = PIZ_OBJECT_AGENT;       break;
+        case PIZ_EVENT_STOP     : *f = pizAgentStop;        k = PIZ_OBJECT_AGENT;       break;
+        case PIZ_EVENT_LOOP     : *f = pizAgentLoop;        k = PIZ_OBJECT_AGENT;       break;
+        case PIZ_EVENT_UNLOOP   : *f = pizAgentUnloop;      k = PIZ_OBJECT_AGENT;       break;
+        case PIZ_EVENT_BPM      : *f = pizAgentBPM;         k = PIZ_OBJECT_AGENT;       break;
+        case PIZ_EVENT_NOTE     : *f = pizSequenceNote;     k = PIZ_OBJECT_SEQUENCE;    break;
+        case PIZ_EVENT_CLEAR    : *f = pizSequenceClear;    k = PIZ_OBJECT_SEQUENCE;    break;  
     }
     
     return k;
@@ -438,8 +438,8 @@ void pizAgentNotificationLoopNotify (PIZAgent *x)
     pizLinklistPtrAtIndex (x->observer, 0, (void **)&ptr);
     
     while (ptr) {
-        PIZEvent    *newEvent = NULL;
-        PIZMethod   f = NULL;
+        PIZEvent  *newEvent = NULL;
+        PIZMethod f = NULL;
         
         pizLinklistNextByPtr (x->observer, (void *)ptr, (void **)&nextPtr);
         
