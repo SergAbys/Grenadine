@@ -79,7 +79,6 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
             x->outlet = outlet_new ((t_object *)x, NULL);
             pizAgentAttach (x->agent, (void *)x, tralala_notify);
             TRALALA (PIZ_EVENT_INIT)
-            
         } else {
             object_free (x);
             x = NULL;
