@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	April 25, 2012.
+ * \date	April 27, 2012.
  */
  
 /*
@@ -135,12 +135,12 @@ static const char *piz_eventNames[ ] = {    "Init",
 
 PIZEvent *pizEventNew (PIZEventIdentifier ie)
 {
-    return pizEventAlloc (ie, NULL, -1, 0, NULL);
+    return pizEventAlloc (ie, NULL, PIZ_SEQUENCE_NO_TAG, 0, NULL);
 }
 
 PIZEvent *pizEventNewWithTime (PIZEventIdentifier ie, const PIZTime *time)
 {
-    return pizEventAlloc (ie, time, -1, 0, NULL);
+    return pizEventAlloc (ie, time, PIZ_SEQUENCE_NO_TAG, 0, NULL);
 }
 
 PIZEvent *pizEventNewWithNote (PIZEventIdentifier ie, const long *argv, long tag)
@@ -150,17 +150,17 @@ PIZEvent *pizEventNewWithNote (PIZEventIdentifier ie, const long *argv, long tag
 
 PIZEvent *pizEventNewWithZone (PIZEventIdentifier ie, const long *argv)
 {
-    return pizEventAlloc (ie, NULL, -1, PIZ_SEQUENCE_ZONE_SIZE, argv);
+    return pizEventAlloc (ie, NULL, PIZ_SEQUENCE_NO_TAG, PIZ_SEQUENCE_ZONE_SIZE, argv);
 }
 
 PIZEvent *pizEventNewWithArgs (PIZEventIdentifier ie, long argc, const long *argv)
 {
-    return pizEventAlloc (ie, NULL, -1, argc, argv);
+    return pizEventAlloc (ie, NULL, PIZ_SEQUENCE_NO_TAG, argc, argv);
 }
 
 PIZEvent *pizEventNewWithValue (PIZEventIdentifier ie, long value)
 {
-    return pizEventAlloc (ie, NULL, -1, 1, &value);
+    return pizEventAlloc (ie, NULL, PIZ_SEQUENCE_NO_TAG, 1, &value);
 }
 
 PIZEvent *pizEventNewCopy (PIZEvent *x)

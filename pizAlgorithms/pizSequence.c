@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    April 22, 2012.
+ * \date    April 27, 2012.
  */
  
 /*
@@ -83,7 +83,6 @@ PIZSequence *pizSequenceNew (long size)
     x->tempNotes2    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
     x->tempHash      = pizBoundedHashTableNew (2, argv1);
     x->lookup        = pizBoundedHashTableNew (2, argv2);
-    x->ticketMachine = pizBoundedStackNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
     
     if (x->map           && 
         x->scale         &&
@@ -93,14 +92,9 @@ PIZSequence *pizSequenceNew (long size)
         x->tempNotes2    &&
         x->tempHash      &&
         x->lookup        &&
-        x->ticketMachine &&
         (x->timeline = (PIZLinklist **)calloc (x->timelineSize, sizeof(PIZLinklist **)))) {
-        long i;
-        
-        for (i = (PIZ_SEQUENCE_MAXIMUM_NOTES - 1); i >= 0; i--) {
-            pizBoundedStackPush (x->ticketMachine, i);
-        }
-        
+
+        pizItemset128Clear (&x->busyNotes);
         pizItemset128Clear (&x->addedNotes);
         pizItemset128Clear (&x->removedNotes);
         pizItemset128Clear (&x->changedNotes);
@@ -152,7 +146,6 @@ void pizSequenceFree (PIZSequence *x)
     
     pizBoundedHashTableFree (x->tempHash);
     pizBoundedHashTableFree (x->lookup);
-    pizBoundedStackFree (x->ticketMachine);
     
     if (x->tempValues) {
         free (x->tempValues);

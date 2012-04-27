@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceLibrary.c
  * \author	Jean Sapristi
- * \date	April 22, 2012.
+ * \date	April 27, 2012.
  */
  
 /*
@@ -87,7 +87,7 @@ void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event
     long tag = note->tag;
     
     pizBoundedHashTableRemoveByKey (x->lookup, tag, note);
-    pizBoundedStackPush (x->ticketMachine, tag);
+    pizItemset128UnsetAtIndex (&x->busyNotes, tag);
     pizLinklistRemoveByPtr (x->timeline[p], (void *)note);
     x->count --; 
     
@@ -120,10 +120,11 @@ void pizSequenceFillTempNotes (PIZSequence *x, PIZNote *note, const PIZEvent *ev
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
+PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, long tag, ulong flags)
 {
     PIZNote *newNote = NULL;
     long    err      = PIZ_GOOD;
+    long    k        = PIZ_SEQUENCE_NO_TAG;
     long    position = argv[PIZ_DATA_POSITION];
     long    pitch    = argv[PIZ_DATA_PITCH];
     long    velocity = argv[PIZ_DATA_VELOCITY];
@@ -152,10 +153,10 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
     if (!err) {
     //
     
-    err |= pizBoundedStackPop (x->ticketMachine);
+    err |= pizSequenceGetTag (x, tag, &k);
     
     if (!err && (newNote = (PIZNote *)malloc (sizeof(PIZNote)))) {
-        newNote->tag                     = pizBoundedStackPoppedValue (x->ticketMachine);
+        newNote->tag                     = k;
         newNote->position                = position;
         newNote->midi[PIZ_MIDI_PITCH]    = CLAMP (pitch,    0, PIZ_MAGIC_PITCH);
         newNote->midi[PIZ_MIDI_VELOCITY] = CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY);
@@ -177,7 +178,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
             
         } else {
             pizBoundedHashTableRemoveByKey (x->lookup, newNote->tag, newNote);
-            pizBoundedStackPush (x->ticketMachine, newNote->tag);
+            pizItemset128UnsetAtIndex (&x->busyNotes, tag);
             free (newNote);
             newNote = NULL;
         }
@@ -187,35 +188,6 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
         
     return newNote;
 }   
-/*
-PIZError pizSequenceMoveNote (PIZSequence *x, PIZNote *note, long newPosition)
-{
-    long     position = note->position;
-    PIZError err = PIZ_GOOD; 
-    
-    if (position != newPosition) {
-    //
-    if (!x->timeline[newPosition]) {
-        if (!(x->timeline[newPosition] = pizLinklistNew ( ))) {
-            err |= PIZ_MEMORY;
-        }
-    }
-    
-    if (!err) {
-        if (!(err |= pizLinklistChuckByPtr (x->timeline[position], (void *)note))) {            
-            if (!(err |= pizLinklistInsert (x->timeline[newPosition], (void *)note))) {
-                note->position = newPosition;
-                PIZ_TAG (&x->changedNotes, note->tag);
-            } else {
-                pizSequenceRemoveNote (x, note, NULL);
-            }
-        } 
-    }
-    //
-    }
-    
-    return err;
-}*/
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -262,6 +234,38 @@ long pizSequenceSnapPositionToPattern (PIZSequence *x, long position)
     }
 
     return (j * x->cell);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZ_INLINE PIZError pizSequenceGetTag (PIZSequence *x, long tag, long *ptr)
+{
+    long     i, k = -1;
+    PIZError err = PIZ_ERROR;
+    
+    if ((tag >= 0) && (tag < PIZ_ITEMSET128_SIZE) && !(pizItemset128IsSetAtIndex (&x->busyNotes, tag))) {
+        pizItemset128SetAtIndex (&x->busyNotes, tag);
+        k = tag;
+    } 
+    
+    if (k == -1) {
+        for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+            if (!(pizItemset128IsSetAtIndex (&x->busyNotes, i))) {
+                pizItemset128SetAtIndex (&x->busyNotes, i);
+                k = i;
+                break;
+            }
+        }
+    }
+    
+    if (k != -1) {
+        (*ptr) = k;
+        err = PIZ_GOOD;
+    }
+    
+    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------

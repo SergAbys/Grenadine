@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceTransform.c
  * \author  Jean Sapristi
- * \date    April 21, 2012.
+ * \date    April 27, 2012.
  */
  
 /*
@@ -134,8 +134,9 @@ void pizSequenceNote (PIZSequence *x, const PIZEvent *event)
     long *argv = NULL;
     
     if (!(pizEventGetData (event, &argc, &argv))) {
-        long i;
-        long values[ ] = { -1, 
+        long  i;
+        ulong flags = PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS;
+        long  values[ ] = { -1, 
                             0, 
                             PIZ_SEQUENCE_DEFAULT_VELOCITY, 
                             x->noteValue, 
@@ -145,7 +146,7 @@ void pizSequenceNote (PIZSequence *x, const PIZEvent *event)
             values[i] = argv[i];
         }
         
-        if (pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS)) {
+        if (pizSequenceNewNote (x, values, event->tag, flags)) {
             pizSequenceMakeMap (x);
         }
     } 
@@ -433,7 +434,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
                                     noteToCopy->midi[PIZ_MIDI_DURATION],
                                     noteToCopy->midi[PIZ_MIDI_CHANNEL]  };
                                     
-                PIZNote *newNote = pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_CLIP);
+                PIZNote *newNote = pizSequenceNewNote (x, values, PIZ_SEQUENCE_NO_TAG, PIZ_SEQUENCE_FLAG_CLIP);
                 
                 if (newNote) {
                     err1 |= pizBoundedHashTableAdd (x->tempHash, hPat[j], (void *)newNote);
@@ -574,7 +575,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
                            note1->midi[PIZ_MIDI_DURATION],
                            note1->midi[PIZ_MIDI_CHANNEL]    };
 
-        note2 = pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_CLIP);
+        note2 = pizSequenceNewNote (x, values, PIZ_SEQUENCE_NO_TAG, PIZ_SEQUENCE_FLAG_CLIP);
         
         if (note2) {
             err |= pizBoundedHashTableAdd (x->tempHash, newKey, (void *)note2);

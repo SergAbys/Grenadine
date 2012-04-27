@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    April 16, 2012.
+ * \date    April 27, 2012.
  */
  
 /*
@@ -34,9 +34,13 @@
  *  The fact that you are presently reading this means that you have had
  *  knowledge of the CeCILL-C license and that you accept its terms.
  */
- 
- /* PIZ_SEQUENCE_INIT_TEMP_SIZE = MAX (MAXIMUM_NOTES, MAXIMUM_DURATION, PIZ_MAGIC_PITCH + 1) */ 
- 
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+/* PIZ_SEQUENCE_MAXIMUM_NOTES  = PIZ_ITEMSET128_SIZE */
+/* PIZ_SEQUENCE_INIT_TEMP_SIZE = MAX (MAXIMUM_NOTES, MAXIMUM_DURATION, PIZ_MAGIC_PITCH + 1) */
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
@@ -51,11 +55,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_MAXIMUM_NOTES              128   
+#define PIZ_SEQUENCE_MAXIMUM_NOTES              128
 #define PIZ_SEQUENCE_MAXIMUM_DURATION           96
 #define PIZ_SEQUENCE_MAXIMUM_PATTERN            16
                                         
-#define PIZ_SEQUENCE_INIT_TEMP_SIZE             128 
+#define PIZ_SEQUENCE_INIT_TEMP_SIZE             128
 #define PIZ_SEQUENCE_INIT_LOOKUP_SIZE           19
 #define PIZ_SEQUENCE_DEFAULT_VELOCITY           80
 #define PIZ_SEQUENCE_DEFAULT_TIMELINE_SIZE      576 
@@ -71,6 +75,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#define PIZ_SEQUENCE_NO_TAG                    -1
 #define PIZ_SEQUENCE_NOTE_SIZE                  5
 #define PIZ_SEQUENCE_ZONE_SIZE                  4
 
@@ -189,8 +194,6 @@ typedef struct _PIZSequence {
     PIZNote                 **tempNotes2;
     PIZArray                *map;
     PIZLinklist             **timeline;
-    long                    timelineSize;
-    PIZBoundedStack         *ticketMachine;
     PIZBoundedHashTable     *lookup;
     PIZArray                *scale;
     PIZArray                *pattern;
@@ -198,6 +201,8 @@ typedef struct _PIZSequence {
     PIZItemset128           addedNotes;
     PIZItemset128           removedNotes;
     PIZItemset128           changedNotes;
+    PIZItemset128           busyNotes;
+    long                    timelineSize;
     long                    start;
     long                    end;
     long                    down;
