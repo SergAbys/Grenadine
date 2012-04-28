@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceGraphic.c
  * \author	Jean Sapristi
- * \date	April 19, 2012.
+ * \date	April 28, 2012.
  */
  
 /*
@@ -59,13 +59,13 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     long     i;
     PIZError err = PIZ_GOOD;
     PIZNote  *note = NULL; 
-    PIZEvent *event = NULL;
+    PIZEvent *notification = NULL;
         
     if (x->changedZone) {
         long argv[ ] = { x->start, x->end, x->down, x->up };
-        if (event = pizEventNewWithZone (PIZ_EVENT_ZONE_CHANGED, argv)) {
-            if (err |= pizLinklistAppend (queue, event)) {       
-                pizEventFree (event);  
+        if (notification = pizEventNewWithZone (PIZ_EVENT_ZONE_CHANGED, argv)) {
+            if (err |= pizLinklistAppend (queue, notification)) {       
+                pizEventFree (notification);  
             }
         } else {
             err |= PIZ_MEMORY;
@@ -74,9 +74,9 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     
     for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
         if (pizItemset128IsSetAtIndex (&x->removedNotes, i)) { 
-            if (event = pizEventNewWithNote (PIZ_EVENT_NOTE_REMOVED, NULL, i)) {
-                if (err |= pizLinklistAppend (queue, event)) {       
-                    pizEventFree (event);  
+            if (notification = pizEventNewWithNote (PIZ_EVENT_NOTE_REMOVED, NULL, i)) {
+                if (err |= pizLinklistAppend (queue, notification)) {       
+                    pizEventFree (notification);  
                 }
             } else {
                 err |= PIZ_MEMORY;
@@ -96,9 +96,9 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
                          note->midi[PIZ_MIDI_DURATION], 
                          note->midi[PIZ_MIDI_CHANNEL] };
                          
-        if (event = pizEventNewWithNote (PIZ_EVENT_NOTE_ADDED, argv, i)) {
-            if (err |= pizLinklistAppend (queue, event)) {       
-                pizEventFree (event);  
+        if (notification = pizEventNewWithNote (PIZ_EVENT_NOTE_ADDED, argv, i)) {
+            if (err |= pizLinklistAppend (queue, notification)) {       
+                pizEventFree (notification);  
             }
         } else {
             err |= PIZ_MEMORY;
@@ -122,9 +122,9 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
                          note->midi[PIZ_MIDI_DURATION], 
                          note->midi[PIZ_MIDI_CHANNEL] };
                          
-        if (event = pizEventNewWithNote (PIZ_EVENT_NOTE_CHANGED, argv, i)) {
-            if (err |= pizLinklistAppend (queue, event)) {       
-                pizEventFree (event);  
+        if (notification = pizEventNewWithNote (PIZ_EVENT_NOTE_CHANGED, argv, i)) {
+            if (err |= pizLinklistAppend (queue, notification)) {       
+                pizEventFree (notification);  
             }
         } else {
             err |= PIZ_MEMORY;

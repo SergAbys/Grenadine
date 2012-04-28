@@ -282,12 +282,12 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
 
 void pizAgentEventLoopDoStepEnd (PIZAgent *x)
 {
-    PIZEvent *event = NULL;
+    PIZEvent *notification = NULL;
 
-    if (event = pizEventNewWithTime (PIZ_EVENT_END, &x->grainStart)) {
+    if (notification = pizEventNewWithTime (PIZ_EVENT_END, &x->grainStart)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
-        PIZ_AGENT_QUEUE (x->notification)
+        PIZ_AGENT_QUEUE (x->notification, notification)
         pthread_cond_signal (&x->notificationCondition);
         PIZ_AGENT_UNLOCK_NOTIFICATION
         
@@ -298,12 +298,12 @@ void pizAgentEventLoopDoStepEnd (PIZAgent *x)
 
 void pizAgentEventLoopDoStepLast (PIZAgent *x)
 {
-    PIZEvent *event = NULL;
+    PIZEvent *notification = NULL;
     
-    if (event = pizEventNew (PIZ_EVENT_LAST)) {
+    if (notification = pizEventNew (PIZ_EVENT_LAST)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
-        PIZ_AGENT_QUEUE (x->notification)
+        PIZ_AGENT_QUEUE (x->notification, notification)
         pthread_cond_signal (&x->notificationCondition);
         PIZ_AGENT_UNLOCK_NOTIFICATION
         

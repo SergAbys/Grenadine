@@ -249,7 +249,7 @@ void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
     
     if (queue) {
         PIZ_AGENT_LOCK_EVENT
-        PIZ_AGENT_QUEUE (queue)
+        PIZ_AGENT_QUEUE (queue, event)
         pthread_cond_signal (&x->eventCondition);
         PIZ_AGENT_UNLOCK_EVENT
     }

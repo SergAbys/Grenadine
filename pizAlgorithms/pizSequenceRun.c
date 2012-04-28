@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceRun.c
  * \author  Jean Sapristi
- * \date    April 20, 2012.
+ * \date    April 28, 2012.
  */
  
 /*
@@ -93,7 +93,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue, long bpm)
                      velocity, 
                      channel, 
                      duration;
-            PIZEvent *event = NULL;
+            PIZEvent *notification = NULL;
             
             pizLinklistNextByPtr (x->timeline[x->index], (void *)note, (void **)&nextNote);
             
@@ -122,9 +122,9 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue, long bpm)
                                  (long)(duration * (PIZ_CONSTANT_DURATION / bpm)), 
                                  channel };
                          
-                if (event = pizEventNewWithNote (PIZ_EVENT_NOTE_PLAYED, argv, note->tag)) {
-                    if (err |= pizLinklistAppend (queue, event)) {       
-                        pizEventFree (event);  
+                if (notification = pizEventNewWithNote (PIZ_EVENT_NOTE_PLAYED, argv, note->tag)) {
+                    if (err |= pizLinklistAppend (queue, notification)) {       
+                        pizEventFree (notification);  
                     }
                 } else {
                     err |= PIZ_MEMORY;

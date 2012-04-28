@@ -8,7 +8,7 @@
  */
  
 /*
- *  April 22, 2012.
+ *  April 28, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -30,7 +30,8 @@
 typedef struct _tralala {
 	t_object    ob;
     PIZAgent    *agent;
-	void        *outlet;
+	void        *leftOutlet;
+    void        *rightOutlet;
 	} t_tralala;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -47,6 +48,7 @@ void tralala_play       (t_tralala *x);
 void tralala_stop       (t_tralala *x);
 void tralala_loop       (t_tralala *x);
 void tralala_unloop     (t_tralala *x);
+
 void tralala_bpm        (t_tralala *x, long n);
 
 void tralala_note       (t_tralala *x, t_symbol *s, long argc, t_atom *argv);

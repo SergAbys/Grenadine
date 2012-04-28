@@ -8,7 +8,7 @@
  */
  
 /*
- *  April 27, 2012.
+ *  April 28, 2012.
  */
  
 // -------------------------------------------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define TICKS_PER_STEP      20
+#define TICKS_PER_STEP          20
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -76,9 +76,13 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 	
     if (x = (t_tralala *)object_alloc (tralala_class)) {
         if (x->agent = pizAgentNew ( )) {
-            x->outlet = outlet_new ((t_object *)x, NULL);
+
+            x->rightOutlet = listout ((t_object *)x);
+            x->leftOutlet  = listout ((t_object *)x);
+            
             pizAgentAttach (x->agent, (void *)x, tralala_notify);
             TRALALA (PIZ_EVENT_INIT)
+
         } else {
             object_free (x);
             x = NULL;
@@ -99,7 +103,10 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
     if (m == ASSIST_INLET) { 
         sprintf (s, "Messages");
     } else {	
-        sprintf (s, "Out");
+        switch (a) {
+            case 0 : sprintf (s, "Notes");   break;
+            case 1 : sprintf (s, "Dumpout"); break;
+        }
     }
 }
 
@@ -141,6 +148,10 @@ void tralala_unloop (t_tralala *x)
 {   
     TRALALA (PIZ_EVENT_UNLOOP)
 }
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void tralala_bpm (t_tralala *x, long n) 
 {   

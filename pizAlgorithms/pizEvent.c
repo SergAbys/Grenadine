@@ -54,9 +54,6 @@ static const long piz_eventTypes[ ]  = {    PIZ_EVENT_RUN,                  // P
                                             PIZ_EVENT_RUN,                  // PIZ_EVENT_LOOP
                                             PIZ_EVENT_RUN,                  // PIZ_EVENT_UNLOOP
                                             PIZ_EVENT_RUN,                  // PIZ_EVENT_BPM
-                                            PIZ_EVENT_RUN,                  // PIZ_EVENT_NOTE_PLAYED
-                                            PIZ_EVENT_RUN,                  // PIZ_EVENT_END
-                                            PIZ_EVENT_RUN,                  // PIZ_EVENT_LAST
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_NOTE
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CLEAR
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_TRANSPOSE
@@ -74,17 +71,20 @@ static const long piz_eventTypes[ ]  = {    PIZ_EVENT_RUN,                  // P
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_RANDOM
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_KILL
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CYCLE        
-                                            PIZ_EVENT_GRAPHIC,              // PIZ_EVENT_ZONE_CHANGED
-                                            PIZ_EVENT_GRAPHIC,              // PIZ_EVENT_NOTE_REMOVED
-                                            PIZ_EVENT_GRAPHIC,              // PIZ_EVENT_NOTE_ADDED
-                                            PIZ_EVENT_GRAPHIC,              // PIZ_EVENT_NOTE_CHANGED
                                             PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_CHANCE
                                             PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_VELOCITY
                                             PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_CHANNEL
                                             PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_CELL
                                             PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_NOTE_VALUE
                                             PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_SCALE
-                                            PIZ_EVENT_ATTRIBUTE         };  // PIZ_EVENT_PATTERN
+                                            PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_PATTERN
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_ZONE_CHANGED
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_REMOVED
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_ADDED
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_CHANGED
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_PLAYED
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_END
+                                            PIZ_EVENT_NOTIFICATION      };  // PIZ_EVENT_LAST
 
    
 
@@ -94,9 +94,6 @@ static const char *piz_eventNames[ ] = {    "Init",
                                             "Loop",
                                             "Unloop",
                                             "Bpm",
-                                            "Note Played",
-                                            "End",
-                                            "Last",
                                             // 
                                             "Note",
                                             "Clear",
@@ -116,10 +113,7 @@ static const char *piz_eventNames[ ] = {    "Init",
                                             "Kill",
                                             "Cycle",
                                             //
-                                            "Zone Changed",
-                                            "Note Removed",
-                                            "Note Added",
-                                            "Note Changed",
+                                            
                                             //
                                             "Chance",
                                             "Velocity",
@@ -127,7 +121,15 @@ static const char *piz_eventNames[ ] = {    "Init",
                                             "Cell",
                                             "Note Value",
                                             "Scale",
-                                            "Pattern"           };
+                                            "Pattern", 
+                                            //
+                                            "Zone Changed",
+                                            "Note Removed",
+                                            "Note Added",
+                                            "Note Changed",
+                                            "Note Played",
+                                            "End",
+                                            "Last"      };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
