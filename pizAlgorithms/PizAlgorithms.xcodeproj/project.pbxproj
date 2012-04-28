@@ -168,10 +168,10 @@
 				96D1ABEB150CB776000CD8FC /* pizSequenceGraphic.h */,
 				968C6BBE1528B80E00AB45D3 /* pizSequenceLibrary.h */,
 				96A16F78148CF839008268A6 /* pizSequence.c */,
+				96D1ABEC150CB776000CD8FC /* pizSequenceGraphic.c */,
 				96F915071538024D00202438 /* pizSequenceAttributes.c */,
 				96FF9E821540640D0081EB6A /* pizSequenceRun.c */,
 				96A16F77148CF839008268A6 /* pizSequenceTransform.c */,
-				96D1ABEC150CB776000CD8FC /* pizSequenceGraphic.c */,
 				968C6BBF1528B80E00AB45D3 /* pizSequenceLibrary.c */,
 			);
 			name = Sequence;

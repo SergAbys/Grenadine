@@ -134,6 +134,7 @@ PIZError pizEventGetTime            (const PIZEvent *x, PIZTime *time);
 PIZError pizEventGetValue           (const PIZEvent *x, long *value);
 PIZError pizEventGetData            (const PIZEvent *x, long *argc, long **argv);
 void     pizEventGetName            (const PIZEvent *x, const char **name);
+void     pizEventGetIdentifier      (const PIZEvent *x, PIZEventIdentifier *ie);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -178,6 +179,11 @@ PIZ_EXTERN PIZEvent *pizEventNewWithValue (PIZEventIdentifier ie, long value)
 PIZ_EXTERN PIZEvent *pizEventNewCopy (PIZEvent *x)
 {
     return pizEventAlloc (x->identifier, &x->time, x->tag, pizArrayCount (x->data), pizArrayPtr (x->data));
+}
+
+PIZ_EXTERN void pizEventGetIdentifier (const PIZEvent *x, PIZEventIdentifier *ie)
+{
+    (*ie) = x->identifier;
 }
 
 #endif // PIZ_EXTERN_INLINE

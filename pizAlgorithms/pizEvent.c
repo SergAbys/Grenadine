@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	April 27, 2012.
+ * \date	April 28, 2012.
  */
  
 /*
@@ -215,6 +215,11 @@ PIZError pizEventGetData (const PIZEvent *x, long *argc, long **argv)
 void pizEventGetName (const PIZEvent *x, const char **name)
 {
     (*name) = piz_eventNames[x->identifier];
+}
+
+void pizEventGetIdentifier (const PIZEvent *x, PIZEventIdentifier *ie)
+{
+    (*ie) = x->identifier;
 }
 
 // -------------------------------------------------------------------------------------------------------------

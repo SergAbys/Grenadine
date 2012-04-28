@@ -114,9 +114,29 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_notify (void *x, PIZEvent *event)
+void tralala_notify (void *ptr, PIZEvent *event)
 {
-    DEBUGEVENT
+    PIZEventIdentifier ie;
+    t_tralala *x = (t_tralala *)ptr;
+    
+    pizEventGetIdentifier (event, &ie);
+    
+    if (ie == PIZ_EVENT_NOTE_PLAYED) {
+    //
+    long argc;
+    long *argv = NULL;
+    
+    if ((!(pizEventGetData (event, &argc, &argv)) && (argc == PIZ_SEQUENCE_NOTE_SIZE))) {
+        atom_setlong_array (4, x->notePlayed, 4, argv + PIZ_DATA_PITCH);
+        outlet_list (x->leftOutlet, NULL, 4, x->notePlayed); 
+    }
+    //
+    } else if (ie == PIZ_EVENT_END) {
+    
+    } else if (ie == PIZ_EVENT_LAST) {
+    
+    }
+    
     pizEventFree (event);
 }
 

@@ -30,6 +30,7 @@
 typedef struct _tralala {
 	t_object    ob;
     PIZAgent    *agent;
+    t_atom      notePlayed[4];
 	void        *leftOutlet;
     void        *rightOutlet;
 	} t_tralala;
@@ -41,7 +42,7 @@ void *tralala_new       (t_symbol *s, long argc, t_atom *argv);
 void tralala_free       (t_tralala *x);
 void tralala_assist     (t_tralala *x, void *b, long m, long a, char *s);
 
-void tralala_notify     (void *x, PIZEvent *event);
+void tralala_notify     (void *ptr, PIZEvent *event);
 
 void tralala_bang       (t_tralala *x);
 void tralala_play       (t_tralala *x);
