@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	April 27, 2012.
+ * \date	April 28, 2012.
  */
 
 /*
@@ -96,6 +96,7 @@ typedef enum _PIZEventIdentifier {
     PIZ_EVENT_SCALE,
     PIZ_EVENT_PATTERN,
     // NOTIFICATION 
+    PIZ_EVENT_BPM_CHANGED,
     PIZ_EVENT_ZONE_CHANGED,
     PIZ_EVENT_NOTE_REMOVED,
     PIZ_EVENT_NOTE_ADDED,

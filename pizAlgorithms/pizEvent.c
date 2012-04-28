@@ -78,6 +78,7 @@ static const long piz_eventTypes[ ]  = {    PIZ_EVENT_RUN,                  // P
                                             PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_NOTE_VALUE
                                             PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_SCALE
                                             PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_PATTERN
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_BPM_CHANGED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_ZONE_CHANGED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_REMOVED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_ADDED
@@ -123,6 +124,7 @@ static const char *piz_eventNames[ ] = {    "Init",
                                             "Scale",
                                             "Pattern", 
                                             //
+                                            "Bpm Changed",
                                             "Zone Changed",
                                             "Note Removed",
                                             "Note Added",

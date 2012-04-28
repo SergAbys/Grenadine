@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentMethod.c
  * \author	Jean Sapristi
- * \date	April 23, 2012.
+ * \date	April 28, 2012.
  */
  
 /*
@@ -87,14 +87,32 @@ void pizAgentUnloop (PIZAgent *x, PIZEvent *event)
 
 void pizAgentBPM (PIZAgent *x, PIZEvent *event)
 {
-    long value;
+    long     value;
+    PIZEvent *notification = NULL;
     
     pizEventGetValue (event, &value);
-    x->bpm = CLAMP (value, PIZ_MINIMUM_BPM, PIZ_MAXIMUM_BPM);
+    value = CLAMP (value, PIZ_MINIMUM_BPM, PIZ_MAXIMUM_BPM);
+    
+    if (x->bpm != value) {
+    //
+    x->bpm = value;
+    
+    if (notification = pizEventNewWithValue (PIZ_EVENT_BPM_CHANGED, value)) {
+    
+        PIZ_AGENT_LOCK_NOTIFICATION
+        PIZ_AGENT_QUEUE (x->notification, notification)
+        pthread_cond_signal (&x->notificationCondition);
+        PIZ_AGENT_UNLOCK_NOTIFICATION
+        
+    } else {
+        PIZ_AGENT_MEMORY
+    }
         
     pizTimeSetNano (&x->grainSize, PIZ_AGENT_CONSTANT_BPM / x->bpm);    
     pizTimeCopy    (&x->grainEnd, &x->grainStart);
     pizTimeAddNano (&x->grainEnd, &x->grainSize);
+    //
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------

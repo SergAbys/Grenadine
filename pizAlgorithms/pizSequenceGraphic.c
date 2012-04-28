@@ -70,8 +70,12 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
         } else {
             err |= PIZ_MEMORY;
         }
+        
+        x->changedZone = false;
     }
     
+    if (pizItemset128Count (&x->removedNotes)) {
+    //
     for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
         if (pizItemset128IsSetAtIndex (&x->removedNotes, i)) { 
             if (notification = pizEventNewWithNote (PIZ_EVENT_NOTE_REMOVED, NULL, i)) {
@@ -83,7 +87,13 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
             }
         } 
     }
+    //
     
+    pizItemset128Clear (&x->removedNotes);
+    }
+    
+    if (pizItemset128Count (&x->addedNotes)) {
+    //
     for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
     //
     if (pizItemset128IsSetAtIndex (&x->addedNotes, i)) {
@@ -110,6 +120,12 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     //
     }
     
+    pizItemset128Clear (&x->addedNotes);
+    //
+    }
+    
+    if (pizItemset128Count (&x->changedNotes)) {
+    //
     for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
     //
     if (pizItemset128IsSetAtIndex (&x->changedNotes, i)) {
@@ -135,12 +151,10 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     //    
     }
     
-    pizItemset128Clear (&x->removedNotes);
-    pizItemset128Clear (&x->addedNotes);
     pizItemset128Clear (&x->changedNotes);
-    
-    x->changedZone = false;
-    
+    //
+    }
+        
     return err;
 }
 
