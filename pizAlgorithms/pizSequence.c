@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    April 27, 2012.
+ * \date    April 29, 2012.
  */
  
 /*
@@ -94,12 +94,12 @@ PIZSequence *pizSequenceNew (long size)
         x->lookup        &&
         (x->timeline = (PIZLinklist **)calloc (x->timelineSize, sizeof(PIZLinklist **)))) {
 
-        pizItemset128Clear (&x->busyNotes);
+        x->isZoneChanged = true;
+        
+        pizItemset128Clear (&x->usedNotes);
         pizItemset128Clear (&x->addedNotes);
         pizItemset128Clear (&x->removedNotes);
         pizItemset128Clear (&x->changedNotes);
-        
-        x->changedZone = true;
         
         x->seed = (unsigned int)time(NULL);
                         

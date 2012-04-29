@@ -129,6 +129,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue, long bpm)
                 } else {
                     err |= PIZ_MEMORY;
                 }
+                
             }
             
             note = nextNote;

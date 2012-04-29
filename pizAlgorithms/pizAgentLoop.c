@@ -176,8 +176,6 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
     
     PIZ_AGENT_UNLOCK_EVENT
     
-    DEBUGEVENT
-    
     if (event && (k = pizAgentEventLoopGetMethod (event, &f, &g))) {
     //
     void *ptr = NULL;
@@ -232,7 +230,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     
     if (err == PIZ_GOOD) {
         if (pizSequenceIsAtEnd (x->sequence)) {
-            pizAgentEventLoopDoStepLast (x);
+            pizAgentEventLoopDoStepWillEnd (x);
         }
         k = false;  
         
@@ -296,11 +294,11 @@ void pizAgentEventLoopDoStepEnd (PIZAgent *x)
     }
 }
 
-void pizAgentEventLoopDoStepLast (PIZAgent *x)
+void pizAgentEventLoopDoStepWillEnd (PIZAgent *x)
 {
     PIZEvent *notification = NULL;
     
-    if (notification = pizEventNew (PIZ_EVENT_LAST)) {
+    if (notification = pizEventNew (PIZ_EVENT_WILL_END)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
         PIZ_AGENT_QUEUE (x->notification, notification)

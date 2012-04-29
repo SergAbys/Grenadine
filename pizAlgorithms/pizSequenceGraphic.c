@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceGraphic.c
  * \author	Jean Sapristi
- * \date	April 28, 2012.
+ * \date	April 29, 2012.
  */
  
 /*
@@ -60,8 +60,9 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
     PIZError err = PIZ_GOOD;
     PIZNote  *note = NULL; 
     PIZEvent *notification = NULL;
+    
+    if (x->isZoneChanged) {
         
-    if (x->changedZone) {
         long argv[ ] = { x->start, x->end, x->down, x->up };
         if (notification = pizEventNewWithZone (PIZ_EVENT_ZONE_CHANGED, argv)) {
             if (err |= pizLinklistAppend (queue, notification)) {       
@@ -71,7 +72,7 @@ PIZError pizSequenceGetGraphicEvents (PIZSequence *x, PIZLinklist *queue)
             err |= PIZ_MEMORY;
         }
         
-        x->changedZone = false;
+        x->isZoneChanged = false;
     }
     
     if (pizItemset128Count (&x->removedNotes)) {

@@ -60,7 +60,7 @@ PIZ_LOCAL void      pizAgentEventLoopDoStep        (PIZAgent *x, bool blank);
 PIZ_LOCAL void      pizAgentEventLoopDoRefresh     (PIZAgent *x);
 
 PIZ_LOCAL void      pizAgentEventLoopDoStepEnd     (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopDoStepLast    (PIZAgent *x);
+PIZ_LOCAL void      pizAgentEventLoopDoStepWillEnd (PIZAgent *x);
 
 PIZ_LOCAL void      pizAgentEventLoopInit          (PIZAgent *x);
 PIZ_LOCAL void      pizAgentEventLoopSleep         (PIZAgent *x);

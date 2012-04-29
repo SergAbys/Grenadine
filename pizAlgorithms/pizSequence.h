@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    April 27, 2012.
+ * \date    April 29, 2012.
  */
  
 /*
@@ -76,6 +76,10 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #define PIZ_SEQUENCE_NO_TAG                    -1
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 #define PIZ_SEQUENCE_NOTE_SIZE                  5
 #define PIZ_SEQUENCE_ZONE_SIZE                  4
 
@@ -194,15 +198,15 @@ typedef struct _PIZSequence {
     PIZNote                 **tempNotes2;
     PIZArray                *map;
     PIZLinklist             **timeline;
+    long                    timelineSize;
     PIZBoundedHashTable     *lookup;
     PIZArray                *scale;
     PIZArray                *pattern;
-    bool                    changedZone;
+    bool                    isZoneChanged;
+    PIZItemset128           usedNotes;
     PIZItemset128           addedNotes;
-    PIZItemset128           removedNotes;
     PIZItemset128           changedNotes;
-    PIZItemset128           busyNotes;
-    long                    timelineSize;
+    PIZItemset128           removedNotes;
     long                    start;
     long                    end;
     long                    down;

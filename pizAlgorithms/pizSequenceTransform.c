@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceTransform.c
  * \author  Jean Sapristi
- * \date    April 27, 2012.
+ * \date    April 29, 2012.
  */
  
 /*
@@ -61,22 +61,22 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const long piz_neighbors[ ]  = { -256, 
-                                        -130, 
-                                        -129, 
-                                        -128, 
-                                        -127, 
-                                        -126, 
-                                         126, 
-                                         127, 
-                                         128, 
-                                         129, 
-                                         130, 
-                                         256, 
-                                          -2, 
-                                          -1, 
-                                           1, 
-                                           2  };
+static const long pizSequenceNeighbors[ ]   = { -256, 
+                                                -130, 
+                                                -129, 
+                                                -128, 
+                                                -127, 
+                                                -126, 
+                                                 126, 
+                                                 127, 
+                                                 128, 
+                                                 129, 
+                                                 130, 
+                                                 256, 
+                                                  -2, 
+                                                  -1, 
+                                                   1, 
+                                                   2  };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -87,36 +87,35 @@ static const long piz_neighbors[ ]  = { -256,
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const long piz_divisions[ ]  = { 2, 3, 4, 5, 7, 11 };
+static const long pizSequenceDivisions[ ]   = { 2, 3, 4, 5, 7 };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_DIVISIONS_SIZE          6
+#define PIZ_DIVISIONS_SIZE          5
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const double piz_distribution2[ ]  = { 0.75, 1. };
-static const double piz_distribution3[ ]  = { 0.68, 0.85, 1. };
-static const double piz_distribution4[ ]  = { 0.63, 0.75, 0.87, 1. };
-static const double piz_distribution5[ ]  = { 0.60, 0.70, 0.80, 0.90, 1. };
-static const double piz_distribution7[ ]  = { 0.56, 0.63, 0.70, 0.77, 0.84, 0.91, 1. };
-static const double piz_distribution11[ ] = { 0.54, 0.59, 0.63, 0.68, 0.72, 0.77, 0.81, 0.86, 0.9, 0.95, 1. };
+static const double pizSequenceProbability2[ ]   = { 0.75, 1. };
+static const double pizSequenceDistribution3[ ]  = { 0.68, 0.85, 1. };
+static const double pizSequenceDistribution4[ ]  = { 0.63, 0.75, 0.87, 1. };
+static const double pizSequenceDistribution5[ ]  = { 0.60, 0.70, 0.80, 0.90, 1. };
+static const double pizSequenceDistribution7[ ]  = { 0.56, 0.63, 0.70, 0.77, 0.84, 0.91, 1. };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_CEIL(a,b)           (((a)%(b))==0?(a)/(b):(a)/(b)+1)
+#define PIZ_CEIL(a,b)               (((a)%(b))==0?(a)/(b):(a)/(b)+1)
 
-#define PIZ_PICKUP_NOTES        x->tempIndex = 0; \
-                                pizSequenceFunAll (x, pizSequenceFillTempNotes, NULL); \
-                                k = x->tempIndex;
+#define PIZ_PICKUP_NOTES            x->tempIndex = 0; \
+                                    pizSequenceFunAll (x, pizSequenceFillTempNotes, NULL); \
+                                    k = x->tempIndex;
                         
-#define PIZ_FILL_NOTES          pizSequenceFillNotes (x, selector, 0);
-#define PIZ_FILL_NOTES_REVERSE  pizSequenceFillNotes (x, selector, 1);
+#define PIZ_FILL_NOTES              pizSequenceFillNotes (x, selector, 0);
+#define PIZ_FILL_NOTES_REVERSE      pizSequenceFillNotes (x, selector, 1);
 
-#define PIZ_TAG                 pizItemset128SetAtIndex 
+#define PIZ_TAG                     pizItemset128SetAtIndex 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -170,12 +169,12 @@ void pizSequenceTranspose (PIZSequence *x, const PIZEvent *event)
     
     if (x->down != a) {
         x->down = a;
-        x->changedZone = true;
+        x->isZoneChanged = true;
     }
     
     if (x->up != b) {
         x->up = b;
-        x->changedZone = true;
+        x->isZoneChanged = true;
     }
     
     for (i = 0; i < pizArrayCount (x->map); i++) {   
@@ -304,7 +303,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
         
         if (!err2) {
             for (j = 0; j < PIZ_NEIGHBORS_DEATH_SIZE; j++) {
-                long key = hCenter + piz_neighbors[j];
+                long key = hCenter + pizSequenceNeighbors[j];
                 if (pizBoundedHashTableContainsKey (x->tempHash, key)) {
                     neighbors ++;
                 }
@@ -419,7 +418,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
                 neighbors = 0;
         
                 for (t = 0; t < PIZ_NEIGHBORS_BIRTH_SIZE; t++)  {
-                    long key = hPat[j] + piz_neighbors[t];
+                    long key = hPat[j] + pizSequenceNeighbors[t];
                     if (!(pizBoundedHashTablePtrByKey (x->tempHash, key, (void **)&ptr))) {
                         neighbors ++;
                         noteToCopy = ptr;
@@ -486,8 +485,8 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
     
     if (size = (end - start)) {
         for (i = 0; i < PIZ_DIVISIONS_SIZE; i++) {
-            if (!(size % piz_divisions[i])) {
-                b = piz_divisions[i];
+            if (!(size % pizSequenceDivisions[i])) {
+                b = pizSequenceDivisions[i];
                 if (b == division) {
                     break;
                 }
@@ -535,12 +534,11 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
     step *= b;
     
     switch (b) {
-        case 2  :   distribution = piz_distribution2;   break;
-        case 3  :   distribution = piz_distribution3;   break;
-        case 4  :   distribution = piz_distribution4;   break;
-        case 5  :   distribution = piz_distribution5;   break;
-        case 7  :   distribution = piz_distribution7;   break;
-        case 11 :   distribution = piz_distribution11;  break;
+        case 2  :   distribution = pizSequenceDistribution2;   break;
+        case 3  :   distribution = pizSequenceDistribution3;   break;
+        case 4  :   distribution = pizSequenceDistribution4;   break;
+        case 5  :   distribution = pizSequenceDistribution5;   break;
+        case 7  :   distribution = pizSequenceDistribution7;   break;
     }
     
     for (j = 0; j < (b - 1); j++) {

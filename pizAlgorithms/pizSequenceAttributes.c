@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceAttributes.c
  * \author  Jean Sapristi
- * \date    April 13, 2012.
+ * \date    April 29, 2012.
  */
  
 /*
@@ -48,7 +48,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const long piz_modes[ ] = 
+static const long pizSequenceModes[ ] = 
 {   0,-1, 0, 1, 0, 0, 1, 0,-1, 0, 1, 0,     // Ionian
     0,-1, 0, 0,-1, 0, 1, 0,-1, 0, 0,-1,     // Dorian
     0, 0,-1, 0,-1, 0, 1, 0, 0,-1, 0,-1,     // Phrygian
@@ -127,7 +127,7 @@ PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
             err = PIZ_ERROR;
         }
     } else if (type != PIZ_SCALE_NONE) {
-        ptr = piz_modes + (type * PIZ_MAGIC_SCALE); 
+        ptr = pizSequenceModes + (type * PIZ_MAGIC_SCALE); 
     }
     
     if (ptr) {

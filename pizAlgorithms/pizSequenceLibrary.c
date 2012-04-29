@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceLibrary.c
  * \author	Jean Sapristi
- * \date	April 27, 2012.
+ * \date	April 29, 2012.
  */
  
 /*
@@ -87,7 +87,7 @@ void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event
     long tag = note->tag;
     
     pizBoundedHashTableRemoveByKey (x->lookup, tag, note);
-    pizItemset128UnsetAtIndex (&x->busyNotes, tag);
+    pizItemset128UnsetAtIndex (&x->usedNotes, tag);
     pizLinklistRemoveByPtr (x->timeline[p], (void *)note);
     x->count --; 
     
@@ -178,7 +178,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, long tag, ulong flags)
             
         } else {
             pizBoundedHashTableRemoveByKey (x->lookup, newNote->tag, newNote);
-            pizItemset128UnsetAtIndex (&x->busyNotes, tag);
+            pizItemset128UnsetAtIndex (&x->usedNotes, tag);
             free (newNote);
             newNote = NULL;
         }
@@ -245,15 +245,15 @@ PIZ_INLINE PIZError pizSequenceGetTag (PIZSequence *x, long tag, long *ptr)
     long     i, k = -1;
     PIZError err = PIZ_ERROR;
     
-    if ((tag >= 0) && (tag < PIZ_ITEMSET128_SIZE) && !(pizItemset128IsSetAtIndex (&x->busyNotes, tag))) {
-        pizItemset128SetAtIndex (&x->busyNotes, tag);
+    if ((tag >= 0) && (tag < PIZ_ITEMSET128_SIZE) && !(pizItemset128IsSetAtIndex (&x->usedNotes, tag))) {
+        pizItemset128SetAtIndex (&x->usedNotes, tag);
         k = tag;
     } 
     
     if (k == -1) {
         for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-            if (!(pizItemset128IsSetAtIndex (&x->busyNotes, i))) {
-                pizItemset128SetAtIndex (&x->busyNotes, i);
+            if (!(pizItemset128IsSetAtIndex (&x->usedNotes, i))) {
+                pizItemset128SetAtIndex (&x->usedNotes, i);
                 k = i;
                 break;
             }

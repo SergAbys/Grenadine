@@ -46,7 +46,7 @@
 
 #ifdef __MACH__
 
-static mach_timebase_info_data_t piz_timebaseInfo;
+static mach_timebase_info_data_t pizTimeBaseInfo;
 
 void pizTimeSet (PIZTime *t) 
 {
@@ -60,11 +60,11 @@ void pizTimeCopy (PIZTime *t, const PIZTime *toCopy)
 
 void pizTimeAddNano (PIZTime *t, const PIZNano *ns)
 {
-    if (piz_timebaseInfo.denom == 0) {
-        mach_timebase_info (&piz_timebaseInfo);
+    if (pizTimeBaseInfo.denom == 0) {
+        mach_timebase_info (&pizTimeBaseInfo);
     } 
         
-    (*t) += (*ns) * piz_timebaseInfo.denom / piz_timebaseInfo.numer;
+    (*t) += (*ns) * pizTimeBaseInfo.denom / pizTimeBaseInfo.numer;
 }
 
 PIZError pizTimeElapsedNano (const PIZTime *t0, const PIZTime *t1, PIZNano *result)
@@ -77,11 +77,11 @@ PIZError pizTimeElapsedNano (const PIZTime *t0, const PIZTime *t1, PIZNano *resu
         
         elapsed = (*t1) - (*t0);
 
-        if (piz_timebaseInfo.denom == 0) {
-            mach_timebase_info (&piz_timebaseInfo);
+        if (pizTimeBaseInfo.denom == 0) {
+            mach_timebase_info (&pizTimeBaseInfo);
         } 
 
-        (*result) = elapsed * piz_timebaseInfo.numer / piz_timebaseInfo.denom;
+        (*result) = elapsed * pizTimeBaseInfo.numer / pizTimeBaseInfo.denom;
     }
 
     return err;

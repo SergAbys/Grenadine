@@ -48,7 +48,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const long piz_eventTypes[ ]  = {    PIZ_EVENT_RUN,                  // PIZ_EVENT_INIT
+static const long pizEventTypes[ ]   = {    PIZ_EVENT_RUN,                  // PIZ_EVENT_INIT
                                             PIZ_EVENT_RUN,                  // PIZ_EVENT_PLAY
                                             PIZ_EVENT_RUN,                  // PIZ_EVENT_STOP
                                             PIZ_EVENT_RUN,                  // PIZ_EVENT_LOOP
@@ -80,16 +80,16 @@ static const long piz_eventTypes[ ]  = {    PIZ_EVENT_RUN,                  // P
                                             PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_PATTERN
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_BPM_CHANGED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_ZONE_CHANGED
-                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_REMOVED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_ADDED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_CHANGED
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_REMOVED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_PLAYED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_END
-                                            PIZ_EVENT_NOTIFICATION      };  // PIZ_EVENT_LAST
+                                            PIZ_EVENT_NOTIFICATION      };  // PIZ_EVENT_WILL_END
 
    
 
-static const char *piz_eventNames[ ] = {    "Init",
+static const char *pizEventNames[ ]  = {    "Init",
                                             "Play",
                                             "Stop",
                                             "Loop",
@@ -126,12 +126,12 @@ static const char *piz_eventNames[ ] = {    "Init",
                                             //
                                             "Bpm Changed",
                                             "Zone Changed",
-                                            "Note Removed",
                                             "Note Added",
                                             "Note Changed",
+                                            "Note Removed",
                                             "Note Played",
                                             "End",
-                                            "Last"      };
+                                            "Will End"      };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -214,7 +214,7 @@ PIZError pizEventGetData (const PIZEvent *x, long *argc, long **argv)
 
 void pizEventGetName (const PIZEvent *x, const char **name)
 {
-    (*name) = piz_eventNames[x->identifier];
+    (*name) = pizEventNames[x->identifier];
 }
 
 void pizEventGetIdentifier (const PIZEvent *x, PIZEventIdentifier *ie)
@@ -235,7 +235,7 @@ PIZEvent *pizEventAlloc (PIZEventIdentifier ie, const PIZTime *time, long tag, l
     //
     if (x->data = pizArrayNew (PIZ_MAGIC_SCALE)) {
     //
-    x->type = piz_eventTypes[ie];
+    x->type = pizEventTypes[ie];
     x->identifier = ie;
     
     if (time) {

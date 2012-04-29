@@ -8,13 +8,47 @@
  */
  
 /*
- *  April 28, 2012.
+ *  April 29, 2012.
  */
- 
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "tralala.h"
+#include "ext.h"
+#include "ext_obex.h"
+#include "pizAgent.h"
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+typedef struct _tralala {
+	t_object    ob;
+    PIZAgent    *agent;
+	void        *leftOutlet;
+    void        *middleLeftOutlet;
+    void        *middleRightOutlet;
+    void        *rightOutlet;
+	} t_tralala;
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+void *tralala_new               (t_symbol *s, long argc, t_atom *argv);
+void tralala_free               (t_tralala *x);
+void tralala_assist             (t_tralala *x, void *b, long m, long a, char *s);
+
+void tralala_notify             (void *ptr, PIZEvent *event);
+
+void tralala_bang               (t_tralala *x);
+void tralala_play               (t_tralala *x);
+void tralala_stop               (t_tralala *x);
+void tralala_loop               (t_tralala *x);
+void tralala_unloop             (t_tralala *x);
+
+void tralala_bpm                (t_tralala *x, long n);
+
+void tralala_note               (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_clear              (t_tralala *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -76,9 +110,11 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 	
     if (x = (t_tralala *)object_alloc (tralala_class)) {
         if (x->agent = pizAgentNew ( )) {
-
-            x->rightOutlet = listout ((t_object *)x);
-            x->leftOutlet  = listout ((t_object *)x);
+            
+            x->rightOutlet          = bangout ((t_object *)x);
+            x->middleRightOutlet    = bangout ((t_object *)x);
+            x->middleLeftOutlet     = listout ((t_object *)x); 
+            x->leftOutlet           = listout ((t_object *)x);
             
             pizAgentAttach (x->agent, (void *)x, tralala_notify);
             TRALALA (PIZ_EVENT_INIT)
@@ -104,8 +140,10 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
         sprintf (s, "Messages");
     } else {	
         switch (a) {
-            case 0 : sprintf (s, "Notes");   break;
-            case 1 : sprintf (s, "Dumpout"); break;
+            case 0 : sprintf (s, "(List) Played");  break;
+            case 1 : sprintf (s, "(List) Dumped");  break;
+            case 2 : sprintf (s, "(Bang) End");     break;
+            case 3 : sprintf (s, "(Bang) Will End");    break;
         }
     }
 }
@@ -123,19 +161,24 @@ void tralala_notify (void *ptr, PIZEvent *event)
     
     if (ie == PIZ_EVENT_NOTE_PLAYED) {
     //
-    long argc;
-    long *argv = NULL;
+    long    argc;
+    long    *argv = NULL;
+    t_atom  notePlayed[4];
     
     if ((!(pizEventGetData (event, &argc, &argv)) && (argc == PIZ_SEQUENCE_NOTE_SIZE))) {
-        atom_setlong_array (4, x->notePlayed, 4, argv + PIZ_DATA_PITCH);
-        outlet_list (x->leftOutlet, NULL, 4, x->notePlayed); 
+        atom_setlong_array (4, notePlayed, 4, argv + PIZ_DATA_PITCH);
+        outlet_list (x->leftOutlet, NULL, 4, notePlayed); 
     }
     //
+    
     } else if (ie == PIZ_EVENT_END) {
-    
-    } else if (ie == PIZ_EVENT_LAST) {
-    
+        outlet_bang (x->middleRightOutlet);
+
+    } else if (ie == PIZ_EVENT_WILL_END) {
+        outlet_bang (x->rightOutlet);
     }
+    
+    DEBUGEVENT
     
     pizEventFree (event);
 }
