@@ -18,12 +18,9 @@ _pizArrayRemoveLastValue
 _pizFactorOracleAdd
 _pizFactorOracleClear
 _pizFactorOracleCount
-_pizFactorOracleEncodeToArray
 _pizFactorOracleFree
 _pizFactorOracleNew
 _pizFactorOracleProceed
-_pizFactorOracleSetBackwardThreshold
-_pizFactorOracleSetStraightRatio
 _zoulou_assist
 _zoulou_clear
 _zoulou_dump

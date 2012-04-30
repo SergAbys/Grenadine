@@ -107,17 +107,17 @@ int main (void)
 void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 {
     t_tralala *x = NULL;
-	
+
     if (x = (t_tralala *)object_alloc (tralala_class)) {
         if (x->agent = pizAgentNew ( )) {
-            
+        
             x->rightOutlet          = bangout ((t_object *)x);
             x->middleRightOutlet    = bangout ((t_object *)x);
             x->middleLeftOutlet     = listout ((t_object *)x); 
             x->leftOutlet           = listout ((t_object *)x);
             
             pizAgentAttach (x->agent, (void *)x, tralala_notify);
-            TRALALA (PIZ_EVENT_INIT)
+            //TRALALA (PIZ_EVENT_INIT)
 
         } else {
             object_free (x);
@@ -177,8 +177,6 @@ void tralala_notify (void *ptr, PIZEvent *event)
     } else if (ie == PIZ_EVENT_WILL_END) {
         outlet_bang (x->rightOutlet);
     }
-    
-    DEBUGEVENT
     
     pizEventFree (event);
 }

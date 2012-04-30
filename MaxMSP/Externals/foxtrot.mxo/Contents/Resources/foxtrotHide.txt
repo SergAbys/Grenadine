@@ -20,12 +20,8 @@ _pizArrayFirstIndexOfValue
 _pizArrayRemoveIndex
 _pizArrayRemoveLastValue
 _pizMarkovModelAdd
-_pizMarkovModelBaumWelch
 _pizMarkovModelClear
 _pizMarkovModelCount
-_pizMarkovModelEncodeToArray
-_pizMarkovModelFillStochastically
 _pizMarkovModelFree
 _pizMarkovModelNew
 _pizMarkovModelProceed
-_pizMarkovModelSetPersistence

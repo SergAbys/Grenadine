@@ -21,13 +21,9 @@ _pizBoundedStackPush
 _pizGaloisLatticeAdd
 _pizGaloisLatticeClear
 _pizGaloisLatticeCount
-_pizGaloisLatticeEncodeToArray
 _pizGaloisLatticeFree
-_pizGaloisLatticeKillConcept
-_pizGaloisLatticeMakeMap
 _pizGaloisLatticeNew
 _pizGaloisLatticeProceed
-_pizGaloisLatticeReconnect
 _romeo_assist
 _romeo_clear
 _romeo_dump

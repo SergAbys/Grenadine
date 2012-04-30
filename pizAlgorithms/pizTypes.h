@@ -1,7 +1,7 @@
 /**
  * \file    pizTypes.h
  * \author  Jean Sapristi
- * \date    April 23, 2012.
+ * \date    April 29, 2012.
  */
  
 /*
@@ -106,16 +106,11 @@ typedef enum {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifdef __MACH__
-    #define PIZ_EXTERN_INLINE
-    #define PIZ_INLINE inline
-    #define PIZ_EXTERN extern inline
-    #define PIZ_LOCAL  __attribute__ ((visibility("hidden")))
-#else
-    #define PIZ_INLINE
-    #define PIZ_LOCAL
-#endif 
+#define PIZ_EXTERN_INLINE
 
+#define PIZ_INLINE static inline
+#define PIZ_EXTERN extern inline
+#define PIZ_LOCAL  __attribute__ ((visibility("hidden")))
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

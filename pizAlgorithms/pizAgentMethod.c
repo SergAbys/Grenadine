@@ -101,8 +101,8 @@ void pizAgentBPM (PIZAgent *x, PIZEvent *event)
     
         PIZ_AGENT_LOCK_NOTIFICATION
         PIZ_AGENT_QUEUE (x->notification, notification)
-        pthread_cond_signal (&x->notificationCondition);
         PIZ_AGENT_UNLOCK_NOTIFICATION
+        pthread_cond_signal (&x->notificationCondition);
         
     } else {
         PIZ_AGENT_MEMORY

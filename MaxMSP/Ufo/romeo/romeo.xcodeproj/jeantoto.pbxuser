@@ -11,8 +11,8 @@
 		breakpointsGroup = 968F41EB129A9DCD00CACE6F /* XCBreakpointsBucket */;
 		codeSenseManager = 96BF2F54128976F00018D097 /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 357318628;
-			PBXWorkspaceStateSaveDate = 357318628;
+			PBXPerProjectTemplateStateSaveDate = 357402214;
+			PBXWorkspaceStateSaveDate = 357402214;
 		};
 		sourceControlManager = 96BF2F53128976F00018D097 /* Source Control */;
 		userBuildSettings = {
@@ -41,9 +41,9 @@
 	};
 	96BF2F57128977430018D097 /* romeo.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 6700}}";
-			sepNavSelRange = "{629, 30}";
-			sepNavVisRect = "{{0, 445}, {997, 286}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1231, 6700}}";
+			sepNavSelRange = "{930, 0}";
+			sepNavVisRect = "{{0, 1145}, {1231, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1276, 774}}";
 		};
 	};
@@ -57,9 +57,9 @@
 	};
 	96D1CE261407FE450063791F /* romeoHide.txt */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1234, 925}}";
-			sepNavSelRange = "{242, 0}";
-			sepNavVisRect = "{{0, 0}, {1234, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1234, 825}}";
+			sepNavSelRange = "{531, 0}";
+			sepNavVisRect = "{{0, 180}, {1234, 645}}";
 			sepNavWindowFrame = "{{15, -1}, {1279, 774}}";
 		};
 	};

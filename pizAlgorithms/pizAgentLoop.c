@@ -176,7 +176,9 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
     
     PIZ_AGENT_UNLOCK_EVENT
     
-    if (event && (k = pizAgentEventLoopGetMethod (event, &f, &g))) {
+    if (event) {
+    //
+    if (k = pizAgentEventLoopGetMethod (event, &f, &g)) {
     //
     void *ptr = NULL;
     
@@ -193,7 +195,9 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
             PIZ_AGENT_MEMORY
         }
     }
-
+    //
+    }
+        
     pizEventFree (event);
     //
     }
@@ -218,11 +222,12 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         err   = pizSequenceProceedStep (x->sequence, x->notification, x->bpm);
         count -= pizLinklistCount (x->notification);
         
-        if (count) {   
+        if (count) { 
+            PIZ_AGENT_UNLOCK_NOTIFICATION
             pthread_cond_signal (&x->notificationCondition);
+        } else {
+            PIZ_AGENT_UNLOCK_NOTIFICATION
         }
-        
-        PIZ_AGENT_UNLOCK_NOTIFICATION
 
     } else {
         err = pizSequenceProceedStep (x->sequence, NULL, x->bpm);
@@ -264,10 +269,11 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     count -= pizLinklistCount (x->notification);
      
     if (!err && count) {
+        PIZ_AGENT_UNLOCK_NOTIFICATION
         pthread_cond_signal (&x->notificationCondition);
+    } else {
+        PIZ_AGENT_UNLOCK_NOTIFICATION
     }
-    
-    PIZ_AGENT_UNLOCK_NOTIFICATION
         
     if (err == PIZ_MEMORY) {
         PIZ_AGENT_MEMORY
@@ -286,8 +292,8 @@ void pizAgentEventLoopDoStepEnd (PIZAgent *x)
     
         PIZ_AGENT_LOCK_NOTIFICATION
         PIZ_AGENT_QUEUE (x->notification, notification)
-        pthread_cond_signal (&x->notificationCondition);
         PIZ_AGENT_UNLOCK_NOTIFICATION
+        pthread_cond_signal (&x->notificationCondition);
         
     } else {
         PIZ_AGENT_MEMORY
@@ -302,8 +308,8 @@ void pizAgentEventLoopDoStepWillEnd (PIZAgent *x)
     
         PIZ_AGENT_LOCK_NOTIFICATION
         PIZ_AGENT_QUEUE (x->notification, notification)
-        pthread_cond_signal (&x->notificationCondition);
         PIZ_AGENT_UNLOCK_NOTIFICATION
+        pthread_cond_signal (&x->notificationCondition);
         
     } else {
         PIZ_AGENT_MEMORY

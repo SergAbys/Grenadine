@@ -59,9 +59,9 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZ_INLINE void pizGaloisLatticeReconnect       (PIZGaloisLattice *x, long g, long n);
-PIZ_LOCAL PIZError        pizGaloisLatticeMakeMap         (PIZGaloisLattice *x);
-PIZ_LOCAL void            pizGaloisLatticeKillConcept     (PIZGaloisLattice *x, long n);
+PIZ_INLINE void     pizGaloisLatticeReconnect       (PIZGaloisLattice *x, long g, long n);
+PIZ_LOCAL PIZError  pizGaloisLatticeMakeMap         (PIZGaloisLattice *x);
+PIZ_LOCAL void      pizGaloisLatticeKillConcept     (PIZGaloisLattice *x, long n);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
