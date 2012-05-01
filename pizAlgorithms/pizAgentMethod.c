@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentMethod.c
  * \author	Jean Sapristi
- * \date	April 28, 2012.
+ * \date	May 1, 2012.
  */
  
 /*
@@ -52,12 +52,12 @@
 
 void pizAgentPlay (PIZAgent *x, PIZEvent *event)
 {
-    if (!(x->flags & PIZ_AGENT_FLAG_PLAYING)) {
+    if (!(x->flags & PIZ_AGENT_FLAG_RUNNING)) {
     //
     PIZTime time;
     
     pizSequenceGoToStart (x->sequence);
-    x->flags |= PIZ_AGENT_FLAG_PLAYING; 
+    x->flags |= PIZ_AGENT_FLAG_RUNNING; 
     
     if (!(pizEventGetTime (event, &time))) {
         pizTimeCopy    (&x->grainStart, &time);
@@ -65,13 +65,14 @@ void pizAgentPlay (PIZAgent *x, PIZEvent *event)
         pizTimeAddNano (&x->grainEnd, &x->grainSize);
     } 
     //
-    } 
+    } else {
+        x->flags |= PIZ_AGENT_FLAG_REPLAY;
+    }
 }
 
 void pizAgentStop (PIZAgent *x, PIZEvent *event)
 {
-    x->flags &= ~PIZ_AGENT_FLAG_PLAYING; 
-    x->flags &= ~PIZ_AGENT_FLAG_LOOPED;
+    x->flags &= ~(PIZ_AGENT_FLAG_LOOPED | PIZ_AGENT_FLAG_REPLAY | PIZ_AGENT_FLAG_RUNNING);
 }
 
 void pizAgentLoop (PIZAgent *x, PIZEvent *event)

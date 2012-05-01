@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	April 26, 2012.
+ * \date	May 1, 2012.
  */
  
 /*
@@ -76,7 +76,7 @@ void *pizAgentEventLoop (void *agent)
     
     while (!(pizAgentEventLoopIsCondition (x))) {
         pthread_cond_wait (&x->eventCondition, &x->eventLock);
-        x->flags |= PIZ_AGENT_FLAG_WAKED;
+        x->flags |= PIZ_AGENT_FLAG_INIT;
         if (PIZ_EXIT) { 
             break; 
         } 
@@ -101,7 +101,7 @@ void *pizAgentEventLoop (void *agent)
         } 
     }
     
-    if (x->flags & PIZ_AGENT_FLAG_PLAYING) {
+    if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
         if (pizAgentEventLoopIsWorkTime (x)) {
             pizAgentEventLoopDoStep (x, 0);
         } else {
@@ -197,7 +197,7 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
     }
     //
     }
-        
+       
     pizEventFree (event);
     //
     }
@@ -230,7 +230,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         }
 
     } else {
-        err = pizSequenceProceedStep (x->sequence, NULL, x->bpm);
+        err = pizSequenceProceedStep (x->sequence, NULL, x->bpm); 
     }
     
     if (err == PIZ_GOOD) {
@@ -240,12 +240,14 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         k = false;  
         
     } else if (err == PIZ_ERROR) {
-        if (x->flags & PIZ_AGENT_FLAG_LOOPED) {
+        if (x->flags & (PIZ_AGENT_FLAG_LOOPED | PIZ_AGENT_FLAG_REPLAY)) {
             k = true;
+            x->flags &= ~PIZ_AGENT_FLAG_REPLAY;
         } else {
             k = false;
-            x->flags &= ~PIZ_AGENT_FLAG_PLAYING;
+            x->flags &= ~PIZ_AGENT_FLAG_RUNNING;
         }
+        
         pizSequenceGoToStart (x->sequence);
         pizAgentEventLoopDoStepEnd (x);
   
@@ -322,9 +324,9 @@ void pizAgentEventLoopDoStepWillEnd (PIZAgent *x)
 
 void pizAgentEventLoopInit (PIZAgent *x)
 {   
-    if (x->flags & PIZ_AGENT_FLAG_WAKED) {
+    if (x->flags & PIZ_AGENT_FLAG_INIT) {
         pizTimeSet (&x->grainStart);
-        x->flags &= ~PIZ_AGENT_FLAG_WAKED;
+        x->flags &= ~PIZ_AGENT_FLAG_INIT;
     } else {
         pizTimeCopy (&x->grainStart, &x->grainEnd);
     }
@@ -336,25 +338,26 @@ void pizAgentEventLoopInit (PIZAgent *x)
 
 void pizAgentEventLoopSleep (PIZAgent *x)
 {
-    PIZTime          now;
+    PIZTime now;
+    pizTimeSet (&now);
+    
+    if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
+    //
     PIZNano          ns;
     struct timespec  t0, t1;
     struct timespec* ptrA = &t0;
     struct timespec* ptrB = &t1;
     struct timespec* temp = NULL;
-
+    
     PIZError err = PIZ_GOOD;
     
-    pizTimeSet (&now);
     err = pizTimeElapsedNano (&now, &x->grainEnd, &ns);
     
     while (err) {
         pizTimeAddNano (&x->grainStart, &x->grainSize);
         pizTimeAddNano (&x->grainEnd, &x->grainSize); 
         
-        if (x->flags & PIZ_AGENT_FLAG_PLAYING) {
-            pizAgentEventLoopDoStep (x, 1);
-        } 
+        pizAgentEventLoopDoStep (x, 1);
         
         err = pizTimeElapsedNano (&now, &x->grainEnd, &ns);
     }
@@ -366,6 +369,10 @@ void pizAgentEventLoopSleep (PIZAgent *x)
         ptrA = ptrB;
         ptrB = temp;
     }
+    //
+    } else {
+        x->flags |= PIZ_AGENT_FLAG_INIT;
+    }
 }
 
 bool pizAgentEventLoopIsCondition (PIZAgent *x)
@@ -375,7 +382,7 @@ bool pizAgentEventLoopIsCondition (PIZAgent *x)
     if (pizLinklistCount (x->transform)     ||
         pizLinklistCount (x->run)           ||
         pizLinklistCount (x->graphic)       ||
-        (x->flags & PIZ_AGENT_FLAG_PLAYING)) {
+        (x->flags & PIZ_AGENT_FLAG_RUNNING)) {
         condition = true;
     }
     

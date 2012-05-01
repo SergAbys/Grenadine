@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	April 26, 2012.
+ * \date	May 1, 2012.
  */
  
 /*
@@ -63,7 +63,7 @@ PIZAgent *pizAgentNew (void)
     //
     long err = PIZ_GOOD;
     
-    x->flags            = PIZ_AGENT_FLAG_WAKED; 
+    x->flags            = PIZ_AGENT_FLAG_INIT; 
     x->bpm              = PIZ_DEFAULT_BPM;  
     x->run              = pizLinklistNew ( );
     x->graphic          = pizLinklistNew ( );
@@ -100,7 +100,7 @@ PIZAgent *pizAgentNew (void)
     if (!err) {
     //
 
-    pthread_attr_setscope        (&x->attr, PTHREAD_SCOPE_SYSTEM);
+    pthread_attr_setscope        (&x->attr, PTHREAD_SCOPE_PROCESS);
     pthread_attr_setdetachstate  (&x->attr, PTHREAD_CREATE_JOINABLE);
     pthread_attr_setschedpolicy  (&x->attr, SCHED_OTHER);
     

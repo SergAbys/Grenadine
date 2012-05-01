@@ -135,10 +135,10 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue, long bpm)
             note = nextNote;
         }
     }
-    
-    x->index ++;
     //
     }
+    
+    x->index ++;
     //    
     }
     

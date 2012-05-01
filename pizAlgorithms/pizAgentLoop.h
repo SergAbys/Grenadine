@@ -1,7 +1,7 @@
 /**
  * \file	pizAgentLoop.h
  * \author	Jean Sapristi
- * \date	April 23, 2012.
+ * \date	May 1, 2012.
  */
 
 /*
@@ -55,24 +55,24 @@ PIZ_LOCAL void      *pizAgentNotificationLoop       (void *agent);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZError  pizAgentEventLoopDoEvent       (PIZAgent *x, PIZLinklist *queue);
-PIZ_LOCAL void      pizAgentEventLoopDoStep        (PIZAgent *x, bool blank);
-PIZ_LOCAL void      pizAgentEventLoopDoRefresh     (PIZAgent *x);
+PIZ_LOCAL PIZError  pizAgentEventLoopDoEvent        (PIZAgent *x, PIZLinklist *queue);
+PIZ_LOCAL void      pizAgentEventLoopDoStep         (PIZAgent *x, bool blank);
+PIZ_LOCAL void      pizAgentEventLoopDoRefresh      (PIZAgent *x);
 
-PIZ_LOCAL void      pizAgentEventLoopDoStepEnd     (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopDoStepWillEnd (PIZAgent *x);
+PIZ_LOCAL void      pizAgentEventLoopDoStepEnd      (PIZAgent *x);
+PIZ_LOCAL void      pizAgentEventLoopDoStepWillEnd  (PIZAgent *x);
 
-PIZ_LOCAL void      pizAgentEventLoopInit          (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopSleep         (PIZAgent *x);
-PIZ_LOCAL bool      pizAgentEventLoopIsCondition   (PIZAgent *x);
-PIZ_LOCAL bool      pizAgentEventLoopIsWorkTime    (PIZAgent *x);
+PIZ_LOCAL void      pizAgentEventLoopInit           (PIZAgent *x);
+PIZ_LOCAL void      pizAgentEventLoopSleep          (PIZAgent *x);
+PIZ_LOCAL bool      pizAgentEventLoopIsCondition    (PIZAgent *x);
+PIZ_LOCAL bool      pizAgentEventLoopIsWorkTime     (PIZAgent *x);
 
-PIZ_LOCAL long      pizAgentEventLoopGetMethod     (const PIZEvent *event, PIZMethod *f, PIZMethodError *g);
+PIZ_LOCAL long      pizAgentEventLoopGetMethod      (const PIZEvent *event, PIZMethod *f, PIZMethodError *g);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void     pizAgentNotificationLoopNotify (PIZAgent *x);
+PIZ_LOCAL void     pizAgentNotificationLoopNotify   (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

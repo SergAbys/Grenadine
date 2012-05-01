@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	April 25, 2012.
+ * \date	May 1, 2012.
  */
 
 /*
@@ -65,9 +65,10 @@
 
 #define PIZ_AGENT_FLAG_NONE                 0UL
 #define PIZ_AGENT_FLAG_EXIT                 1UL
-#define PIZ_AGENT_FLAG_WAKED                2UL
-#define PIZ_AGENT_FLAG_PLAYING              4UL
-#define PIZ_AGENT_FLAG_LOOPED               8UL
+#define PIZ_AGENT_FLAG_INIT                 2UL
+#define PIZ_AGENT_FLAG_LOOPED               4UL
+#define PIZ_AGENT_FLAG_REPLAY               8UL
+#define PIZ_AGENT_FLAG_RUNNING              16UL
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -93,11 +94,15 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
                                         
-#define DEBUGEVENT                          if (event) {                                                    \
-                                                const char *name = NULL;                                    \
-                                                pizEventGetName (event, &name);                             \
-                                                post ("%llu / %s / %s", event->time, name, __FUNCTION__);   \
-                                            }
+#define DEBUGEVENT      if (event) {                                                        \
+                            const char *name = NULL;                                        \
+                            PIZTime t, tt;                                                  \
+                            pizTimeSet (&t);                                                \
+                            t = t / 1000000.;                                               \
+                            tt = event->time / 1000000.;                                    \
+                            pizEventGetName (event, &name);                                 \
+                            post ("%llu / %s / %llu / %s", t, name, tt, __FUNCTION__);      \
+                        }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
