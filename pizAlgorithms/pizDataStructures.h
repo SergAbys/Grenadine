@@ -45,6 +45,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizTypes.h"
+#include "pizTime.h"
 #include "pizArray.h"
 #include "pizLinklist.h"
 #include "pizItemset128.h"

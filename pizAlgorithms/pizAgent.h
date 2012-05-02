@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	May 1, 2012.
+ * \date	May 2, 2012.
  */
 
 /*
@@ -45,8 +45,8 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizEvent.h"
+#include "pizSequence.h"
 #include "pizFactorOracle.h"
-#include "pizFiniteState.h"
 #include "pizGaloisLattice.h"
 
 // -------------------------------------------------------------------------------------------------------------
@@ -94,14 +94,13 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
                                         
-#define DEBUGEVENT      if (event) {                                                        \
-                            const char *name = NULL;                                        \
-                            PIZTime t, tt;                                                  \
-                            pizTimeSet (&t);                                                \
-                            t = t / 1000000.;                                               \
-                            tt = event->time / 1000000.;                                    \
-                            pizEventGetName (event, &name);                                 \
-                            post ("%llu / %s / %llu / %s", t, name, tt, __FUNCTION__);      \
+#define DEBUGEVENT      if (event) {                                                                    \
+                            const char *name = NULL;                                                    \
+                            PIZTime t;                                                                  \
+                            pizTimeSet (&t);                                                            \
+                            t = t / 1000000.;                                                           \
+                            pizEventName (event, &name);                                                \
+                            post ("                         %llu / %s / %s", t, name, __FUNCTION__);    \
                         }
 
 // -------------------------------------------------------------------------------------------------------------

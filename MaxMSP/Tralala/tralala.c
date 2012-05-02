@@ -59,15 +59,15 @@ void tralala_clear              (t_tralala *x);
 // -------------------------------------------------------------------------------------------------------------
 
 #define TRALALA(a)              PIZEvent *event = NULL;                                             \
-                                if (event = pizEventNew ((a))) {                                    \
+                                if (event = pizEvent ((a))) {                                       \
                                     pizAgentAddEvent (x->agent, event);                             \
                                 }
 #define TRALALA_VALUE(a,b)      PIZEvent *event = NULL;                                             \
-                                if (event = pizEventNewWithValue ((a), (b))) {                      \
+                                if (event = pizEventWithValue ((a), (b))) {                         \
                                     pizAgentAddEvent (x->agent, event);                             \
                                 }
 #define TRALALA_ARGS(a,b,c)     PIZEvent *event = NULL;                                             \
-                                if (event = pizEventNewWithArgs ((a), (b), (c))) {                  \
+                                if (event = pizEventWithArgs ((a), (b), (c))) {                     \
                                     pizAgentAddEvent (x->agent, event);                             \
                                 }   
                                                  
@@ -117,7 +117,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
             x->leftOutlet           = listout ((t_object *)x);
             
             pizAgentAttach (x->agent, (void *)x, tralala_notify);
-            //TRALALA (PIZ_EVENT_INIT)
+            TRALALA (PIZ_EVENT_INIT)
 
         } else {
             object_free (x);
@@ -157,7 +157,7 @@ void tralala_notify (void *ptr, PIZEvent *event)
     PIZEventIdentifier ie;
     t_tralala *x = (t_tralala *)ptr;
     
-    pizEventGetIdentifier (event, &ie);
+    pizEventIdentifier (event, &ie);
     
     if (ie == PIZ_EVENT_NOTE_PLAYED) {
     //
@@ -165,7 +165,7 @@ void tralala_notify (void *ptr, PIZEvent *event)
     long    *argv = NULL;
     t_atom  notePlayed[4];
     
-    if ((!(pizEventGetData (event, &argc, &argv)) && (argc == PIZ_SEQUENCE_NOTE_SIZE))) {
+    if ((!(pizEventPtr (event, &argc, &argv)) && (argc == PIZ_SEQUENCE_NOTE_SIZE))) {
         atom_setlong_array (4, notePlayed, 4, argv + PIZ_DATA_PITCH);
         outlet_list (x->leftOutlet, NULL, 4, notePlayed); 
     }
@@ -177,6 +177,8 @@ void tralala_notify (void *ptr, PIZEvent *event)
     } else if (ie == PIZ_EVENT_WILL_END) {
         outlet_bang (x->rightOutlet);
     }
+    
+    DEBUGEVENT
     
     pizEventFree (event);
 }

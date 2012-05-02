@@ -38,18 +38,14 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizSequenceTransform.h"
 #include "pizSequenceLibrary.h"
-#include "pizFactorOracle.h"
-#include "pizFiniteState.h"
-#include "pizGaloisLattice.h"
+#include "pizSequenceTransform.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include <stdlib.h>
-#include <string.h>
 #include <math.h>
+#include <string.h>
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -132,7 +128,7 @@ void pizSequenceNote (PIZSequence *x, const PIZEvent *event)
     long argc;
     long *argv = NULL;
     
-    if (!(pizEventGetData (event, &argc, &argv))) {
+    if (!(pizEventPtr (event, &argc, &argv))) {
         long  i;
         ulong flags = PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS;
         long  values[ ] = { -1, 

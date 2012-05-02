@@ -39,12 +39,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizSequenceRun.h"
-#include "pizEvent.h"
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#include <stdlib.h>
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -122,7 +116,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue, long bpm)
                                  (long)(duration * (PIZ_CONSTANT_DURATION / bpm)), 
                                  channel };
                          
-                if (notification = pizEventNewWithNote (PIZ_EVENT_NOTE_PLAYED, argv, note->tag)) {
+                if (notification = pizEventWithNote (PIZ_EVENT_NOTE_PLAYED, argv, note->tag)) {
                     if (err |= pizLinklistAppend (queue, notification)) {       
                         pizEventFree (notification);  
                     }

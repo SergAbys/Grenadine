@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	April 28, 2012.
+ * \date	May 2, 2012.
  */
  
 /*
@@ -39,11 +39,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizEvent.h"
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#include <stdlib.h>
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -137,87 +132,79 @@ static const char *pizEventNames[ ]  = {    "Init",
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZEvent *pizEventNew (PIZEventIdentifier ie)
+PIZEvent *pizEvent (PIZEventIdentifier ie)
 {
-    return pizEventAlloc (ie, NULL, PIZ_SEQUENCE_NO_TAG, 0, NULL);
+    return pizEventNew (ie, PIZ_SEQUENCE_NO_TAG, 0, NULL);
 }
 
-PIZEvent *pizEventNewWithTime (PIZEventIdentifier ie, const PIZTime *time)
+PIZEvent *pizEventWithNote (PIZEventIdentifier ie, const long *argv, long tag)
 {
-    return pizEventAlloc (ie, time, PIZ_SEQUENCE_NO_TAG, 0, NULL);
+    return pizEventNew (ie, tag, PIZ_SEQUENCE_NOTE_SIZE, argv);
 }
 
-PIZEvent *pizEventNewWithNote (PIZEventIdentifier ie, const long *argv, long tag)
+PIZEvent *pizEventWithZone (PIZEventIdentifier ie, const long *argv)
 {
-    return pizEventAlloc (ie, NULL, tag, PIZ_SEQUENCE_NOTE_SIZE, argv);
+    return pizEventNew (ie, PIZ_SEQUENCE_NO_TAG, PIZ_SEQUENCE_ZONE_SIZE, argv);
 }
 
-PIZEvent *pizEventNewWithZone (PIZEventIdentifier ie, const long *argv)
+PIZEvent *pizEventWithArgs (PIZEventIdentifier ie, long argc, const long *argv)
 {
-    return pizEventAlloc (ie, NULL, PIZ_SEQUENCE_NO_TAG, PIZ_SEQUENCE_ZONE_SIZE, argv);
+    return pizEventNew (ie, PIZ_SEQUENCE_NO_TAG, argc, argv);
 }
 
-PIZEvent *pizEventNewWithArgs (PIZEventIdentifier ie, long argc, const long *argv)
+PIZEvent *pizEventWithValue (PIZEventIdentifier ie, long value)
 {
-    return pizEventAlloc (ie, NULL, PIZ_SEQUENCE_NO_TAG, argc, argv);
+    return pizEventNew (ie, PIZ_SEQUENCE_NO_TAG, 1, &value);
 }
 
-PIZEvent *pizEventNewWithValue (PIZEventIdentifier ie, long value)
+PIZEvent *pizEventCopy (PIZEvent *x)
 {
-    return pizEventAlloc (ie, NULL, PIZ_SEQUENCE_NO_TAG, 1, &value);
-}
-
-PIZEvent *pizEventNewCopy (PIZEvent *x)
-{
-    return pizEventAlloc (x->identifier, &x->time, x->tag, pizArrayCount (x->data), pizArrayPtr (x->data));
+    return pizEventNew (x->identifier, x->tag, x->size, x->data);
 }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizEventGetTime (const PIZEvent *x, PIZTime *time)
+void pizEventFree (PIZEvent *x)
 {
-    PIZError err = PIZ_ERROR;
-    
-    if (!(pizTimeIsZero (&x->time))) {
-        err = PIZ_GOOD;
-        pizTimeCopy (time, &x->time);
-    }
-    
-    return err;
+    free (x);
 }
 
-PIZError pizEventGetValue (const PIZEvent *x, long *value)
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZError pizEventValue (const PIZEvent *x, long *value)
 {
     PIZError err = PIZ_ERROR;
     
-    if (pizArrayCount (x->data)) {
+    if (x->size) {
         err = PIZ_GOOD;
-        (*value) = pizArrayValueAtIndex (x->data, 0);
+        (*value) = x->data[0];
     } 
     
     return err;
 }
 
-PIZError pizEventGetData (const PIZEvent *x, long *argc, long **argv)
+PIZError pizEventPtr (const PIZEvent *x, long *argc, long **argv)
 {
     PIZError err = PIZ_ERROR;
     
-    if ((*argc) = pizArrayCount (x->data)) {
+    if ((*argc) = x->size) {
         err = PIZ_GOOD;
-        (*argv) = pizArrayPtr (x->data);
+        (*argv) = (long *)x->data;
     }
     
     return err;
 }
 
-void pizEventGetName (const PIZEvent *x, const char **name)
+void pizEventName (const PIZEvent *x, const char **name)
 {
     (*name) = pizEventNames[x->identifier];
 }
 
-void pizEventGetIdentifier (const PIZEvent *x, PIZEventIdentifier *ie)
+void pizEventIdentifier (const PIZEvent *x, PIZEventIdentifier *ie)
 {
     (*ie) = x->identifier;
 }
@@ -226,54 +213,25 @@ void pizEventGetIdentifier (const PIZEvent *x, PIZEventIdentifier *ie)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZEvent *pizEventAlloc (PIZEventIdentifier ie, const PIZTime *time, long tag, long argc, const long *argv)
+PIZEvent *pizEventNew (PIZEventIdentifier ie, long tag, long argc, const long *argv)
 {
     PIZEvent *x = NULL;
-    PIZError err = PIZ_GOOD;
     
     if (x = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-    //
-    if (x->data = pizArrayNew (PIZ_MAGIC_SCALE)) {
-    //
-    x->type = pizEventTypes[ie];
-    x->identifier = ie;
-    
-    if (time) {
-        pizTimeCopy (&x->time, time);
-    } else {
-        pizTimeSet (&x->time);
-    }
-    
-    x->tag = tag; 
-        
-    if (argc && argv) {
-        long i;
-        for (i = 0; i < argc; i++) {
-            err |= pizArrayAppend (x->data, *(argv + i));
+        x->type = pizEventTypes[ie];
+        x->identifier = ie;
+        x->tag = tag; 
+            
+        if (argc && argv) {
+            long i;
+            x->size = MIN (argc, PIZ_EVENT_DATA_SIZE);
+            for (i = 0; i < x->size; i++) {
+                x->data[i] = argv[i];
+            }
         }
     }
     
-    if (err) {
-        pizEventFree (x);
-        x = NULL;
-    }
-    //    
-    } else {
-        free (x);
-        x = NULL;
-    }
-    //
-    }
-    
     return x;
-}
-
-void pizEventFree (PIZEvent *x)
-{
-    if (x) {
-        pizArrayFree (x->data);
-        free (x);
-    }
 }
 
 // -------------------------------------------------------------------------------------------------------------

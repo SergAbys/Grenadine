@@ -41,8 +41,8 @@
 #include "pizAgentLoop.h"
 #include "pizAgentMethod.h"
 #include "pizSequenceRun.h"
-#include "pizSequenceTransform.h"
 #include "pizSequenceGraphic.h"
+#include "pizSequenceTransform.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -197,7 +197,9 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
     }
     //
     }
-       
+    
+    DEBUGEVENT
+    
     pizEventFree (event);
     //
     }
@@ -235,7 +237,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     
     if (err == PIZ_GOOD) {
         if (pizSequenceIsAtEnd (x->sequence)) {
-            pizAgentEventLoopDoStepWillEnd (x);
+            pizAgentEventLoopDoStepNotify (x, PIZ_EVENT_WILL_END);
         }
         k = false;  
         
@@ -249,7 +251,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         }
         
         pizSequenceGoToStart (x->sequence);
-        pizAgentEventLoopDoStepEnd (x);
+        pizAgentEventLoopDoStepNotify (x, PIZ_EVENT_END);
   
     } else if (err == PIZ_MEMORY) { 
         PIZ_AGENT_MEMORY 
@@ -286,27 +288,11 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizAgentEventLoopDoStepEnd (PIZAgent *x)
+void pizAgentEventLoopDoStepNotify (PIZAgent *x, PIZEventType type)
 {
     PIZEvent *notification = NULL;
 
-    if (notification = pizEventNewWithTime (PIZ_EVENT_END, &x->grainStart)) {
-    
-        PIZ_AGENT_LOCK_NOTIFICATION
-        PIZ_AGENT_QUEUE (x->notification, notification)
-        PIZ_AGENT_UNLOCK_NOTIFICATION
-        pthread_cond_signal (&x->notificationCondition);
-        
-    } else {
-        PIZ_AGENT_MEMORY
-    }
-}
-
-void pizAgentEventLoopDoStepWillEnd (PIZAgent *x)
-{
-    PIZEvent *notification = NULL;
-    
-    if (notification = pizEventNew (PIZ_EVENT_WILL_END)) {
+    if (notification = pizEvent (type)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
         PIZ_AGENT_QUEUE (x->notification, notification)
@@ -445,6 +431,8 @@ void pizAgentNotificationLoopNotify (PIZAgent *x)
     
     PIZ_AGENT_UNLOCK_NOTIFICATION   
     
+    if (event) {
+    //
     PIZ_AGENT_LOCK_OBSERVER
     
     if (pizLinklistCount (x->observer)) {
@@ -460,7 +448,7 @@ void pizAgentNotificationLoopNotify (PIZAgent *x)
         
         pizLinklistNextByPtr (x->observer, (void *)ptr, (void **)&nextPtr);
         
-        if (newEvent = pizEventNewCopy (event)) {
+        if (newEvent = pizEventCopy (event)) {
             if (f = ptr->notify) {
                 (*f)(ptr->observer, newEvent);
             }
@@ -476,6 +464,8 @@ void pizAgentNotificationLoopNotify (PIZAgent *x)
     PIZ_AGENT_UNLOCK_OBSERVER
         
     pizEventFree (event);
+    //
+    }
 } 
 
 // -------------------------------------------------------------------------------------------------------------

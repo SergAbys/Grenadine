@@ -59,8 +59,7 @@ PIZ_LOCAL PIZError  pizAgentEventLoopDoEvent        (PIZAgent *x, PIZLinklist *q
 PIZ_LOCAL void      pizAgentEventLoopDoStep         (PIZAgent *x, bool blank);
 PIZ_LOCAL void      pizAgentEventLoopDoRefresh      (PIZAgent *x);
 
-PIZ_LOCAL void      pizAgentEventLoopDoStepEnd      (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopDoStepWillEnd  (PIZAgent *x);
+PIZ_LOCAL void      pizAgentEventLoopDoStepNotify   (PIZAgent *x, PIZEventType type);
 
 PIZ_LOCAL void      pizAgentEventLoopInit           (PIZAgent *x);
 PIZ_LOCAL void      pizAgentEventLoopSleep          (PIZAgent *x);

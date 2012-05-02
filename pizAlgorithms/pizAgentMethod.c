@@ -52,21 +52,11 @@
 
 void pizAgentPlay (PIZAgent *x, PIZEvent *event)
 {
-    if (!(x->flags & PIZ_AGENT_FLAG_RUNNING)) {
-    //
-    PIZTime time;
-    
-    pizSequenceGoToStart (x->sequence);
-    x->flags |= PIZ_AGENT_FLAG_RUNNING; 
-    
-    if (!(pizEventGetTime (event, &time))) {
-        pizTimeCopy    (&x->grainStart, &time);
-        pizTimeCopy    (&x->grainEnd, &x->grainStart);
-        pizTimeAddNano (&x->grainEnd, &x->grainSize);
-    } 
-    //
-    } else {
+    if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
         x->flags |= PIZ_AGENT_FLAG_REPLAY;
+    } else {
+        pizSequenceGoToStart (x->sequence);
+        x->flags |= PIZ_AGENT_FLAG_RUNNING; 
     }
 }
 
@@ -91,14 +81,14 @@ void pizAgentBPM (PIZAgent *x, PIZEvent *event)
     long     value;
     PIZEvent *notification = NULL;
     
-    pizEventGetValue (event, &value);
+    pizEventValue (event, &value);
     value = CLAMP (value, PIZ_MINIMUM_BPM, PIZ_MAXIMUM_BPM);
     
     if (x->bpm != value) {
     //
     x->bpm = value;
     
-    if (notification = pizEventNewWithValue (PIZ_EVENT_BPM_CHANGED, value)) {
+    if (notification = pizEventWithValue (PIZ_EVENT_BPM_CHANGED, value)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
         PIZ_AGENT_QUEUE (x->notification, notification)

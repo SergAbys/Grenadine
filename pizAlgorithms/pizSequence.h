@@ -38,8 +38,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-/* PIZ_SEQUENCE_MAXIMUM_NOTES  = PIZ_ITEMSET128_SIZE */
-/* PIZ_SEQUENCE_INIT_TEMP_SIZE = MAX (MAXIMUM_NOTES, MAXIMUM_DURATION, PIZ_MAGIC_PITCH + 1) */
+/* 
+ *  PIZ_SEQUENCE_MAXIMUM_NOTES   = PIZ_ITEMSET128_SIZE 
+ *  PIZ_SEQUENCE_MAXIMUM_PATTERN = PIZ_EVENT_DATA_SIZE 
+ *  PIZ_SEQUENCE_INIT_TEMP_SIZE  = MAX (MAXIMUM_NOTES, MAXIMUM_DURATION, PIZ_MAGIC_PITCH + 1) 
+ */
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -57,7 +60,7 @@
 
 #define PIZ_SEQUENCE_MAXIMUM_NOTES              128
 #define PIZ_SEQUENCE_MAXIMUM_DURATION           96
-#define PIZ_SEQUENCE_MAXIMUM_PATTERN            16
+#define PIZ_SEQUENCE_MAXIMUM_PATTERN            12
                                         
 #define PIZ_SEQUENCE_INIT_TEMP_SIZE             128
 #define PIZ_SEQUENCE_INIT_LOOKUP_SIZE           19

@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	April 28, 2012.
+ * \date	May 2, 2012.
  */
 
 /*
@@ -44,9 +44,12 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizTime.h"
 #include "pizSequence.h"
-#include "pizDataStructures.h"
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define PIZ_EVENT_DATA_SIZE 12
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -113,75 +116,73 @@ typedef enum _PIZEventIdentifier {
 typedef struct _PIZEvent {
     PIZEventType        type;
     PIZEventIdentifier  identifier;
-    PIZTime             time;
     long                tag;
-    PIZArray            *data;
+    long                size;
+    long                data[PIZ_EVENT_DATA_SIZE];
     } PIZEvent;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent *pizEventNew               (PIZEventIdentifier ie);
-PIZEvent *pizEventNewWithTime       (PIZEventIdentifier ie, const PIZTime *time);
-PIZEvent *pizEventNewWithNote       (PIZEventIdentifier ie, const long *argv, long tag);
-PIZEvent *pizEventNewWithZone       (PIZEventIdentifier ie, const long *argv);
-PIZEvent *pizEventNewWithArgs       (PIZEventIdentifier ie, long argc, const long *argv);
-PIZEvent *pizEventNewWithValue      (PIZEventIdentifier ie, long value);
-PIZEvent *pizEventNewCopy           (PIZEvent *x);
+PIZEvent *pizEvent                  (PIZEventIdentifier ie);
+PIZEvent *pizEventWithNote          (PIZEventIdentifier ie, const long *argv, long tag);
+PIZEvent *pizEventWithZone          (PIZEventIdentifier ie, const long *argv);
+PIZEvent *pizEventWithArgs          (PIZEventIdentifier ie, long argc, const long *argv);
+PIZEvent *pizEventWithValue         (PIZEventIdentifier ie, long value);
+PIZEvent *pizEventCopy              (PIZEvent *x);
 
 void     pizEventFree               (PIZEvent *x);
-PIZError pizEventGetTime            (const PIZEvent *x, PIZTime *time);
-PIZError pizEventGetValue           (const PIZEvent *x, long *value);
-PIZError pizEventGetData            (const PIZEvent *x, long *argc, long **argv);
-void     pizEventGetName            (const PIZEvent *x, const char **name);
-void     pizEventGetIdentifier      (const PIZEvent *x, PIZEventIdentifier *ie);
+PIZError pizEventValue              (const PIZEvent *x, long *value);
+PIZError pizEventPtr                (const PIZEvent *x, long *argc, long **argv);
+void     pizEventName               (const PIZEvent *x, const char **name);
+void     pizEventIdentifier         (const PIZEvent *x, PIZEventIdentifier *ie);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent *pizEventAlloc (PIZEventIdentifier ie, const PIZTime *time, long tag, long argc, const long *argv);
+PIZEvent *pizEventNew               (PIZEventIdentifier ie, long tag, long argc, const long *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN PIZEvent *pizEventNew (PIZEventIdentifier ie)
+PIZ_EXTERN PIZEvent *pizEvent (PIZEventIdentifier ie)
 {
-    return pizEventAlloc (ie, NULL, PIZ_SEQUENCE_NO_TAG, 0, NULL);
+    return pizEventNew (ie, PIZ_SEQUENCE_NO_TAG, 0, NULL);
 }
 
-PIZ_EXTERN PIZEvent *pizEventNewWithTime (PIZEventIdentifier ie, const PIZTime *time)
+PIZ_EXTERN PIZEvent *pizEventWithNote (PIZEventIdentifier ie, const long *argv, long tag)
 {
-    return pizEventAlloc (ie, time, PIZ_SEQUENCE_NO_TAG, 0, NULL);
+    return pizEventNew (ie, tag, PIZ_SEQUENCE_NOTE_SIZE, argv);
 }
 
-PIZ_EXTERN PIZEvent *pizEventNewWithNote (PIZEventIdentifier ie, const long *argv, long tag)
+PIZ_EXTERN PIZEvent *pizEventWithZone (PIZEventIdentifier ie, const long *argv)
 {
-    return pizEventAlloc (ie, NULL, tag, PIZ_SEQUENCE_NOTE_SIZE, argv);
+    return pizEventNew (ie, PIZ_SEQUENCE_NO_TAG, PIZ_SEQUENCE_ZONE_SIZE, argv);
 }
 
-PIZ_EXTERN PIZEvent *pizEventNewWithZone (PIZEventIdentifier ie, const long *argv)
+PIZ_EXTERN PIZEvent *pizEventWithArgs (PIZEventIdentifier ie, long argc, const long *argv)
 {
-    return pizEventAlloc (ie, NULL, PIZ_SEQUENCE_NO_TAG, PIZ_SEQUENCE_ZONE_SIZE, argv);
+    return pizEventNew (ie, PIZ_SEQUENCE_NO_TAG, argc, argv);
 }
 
-PIZ_EXTERN PIZEvent *pizEventNewWithArgs (PIZEventIdentifier ie, long argc, const long *argv)
+PIZ_EXTERN PIZEvent *pizEventWithValue (PIZEventIdentifier ie, long value)
 {
-    return pizEventAlloc (ie, NULL, PIZ_SEQUENCE_NO_TAG, argc, argv);
+    return pizEventNew (ie, PIZ_SEQUENCE_NO_TAG, 1, &value);
 }
 
-PIZ_EXTERN PIZEvent *pizEventNewWithValue (PIZEventIdentifier ie, long value)
+PIZ_EXTERN PIZEvent *pizEventCopy (PIZEvent *x)
 {
-    return pizEventAlloc (ie, NULL, PIZ_SEQUENCE_NO_TAG, 1, &value);
+    return pizEventNew (x->identifier, x->tag, x->size, x->data);
 }
 
-PIZ_EXTERN PIZEvent *pizEventNewCopy (PIZEvent *x)
+PIZ_EXTERN void pizEventFree (PIZEvent *x)
 {
-    return pizEventAlloc (x->identifier, &x->time, x->tag, pizArrayCount (x->data), pizArrayPtr (x->data));
+    free (x);
 }
 
-PIZ_EXTERN void pizEventGetIdentifier (const PIZEvent *x, PIZEventIdentifier *ie)
+PIZ_EXTERN void pizEventIdentifier (const PIZEvent *x, PIZEventIdentifier *ie)
 {
     (*ie) = x->identifier;
 }

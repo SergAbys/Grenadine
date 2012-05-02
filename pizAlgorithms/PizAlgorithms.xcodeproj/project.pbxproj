@@ -44,7 +44,6 @@
 		96DD1912144AB01900F914AE /* pizBoundedStack.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DD190F144AB01900F914AE /* pizBoundedStack.h */; };
 		96DD1913144AB01900F914AE /* pizBoundedQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DD1910144AB01900F914AE /* pizBoundedQueue.h */; };
 		96DD1915144AB02200F914AE /* pizArray.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DD1914144AB02200F914AE /* pizArray.h */; };
-		96DD1917144AB02800F914AE /* pizHashTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DD1916144AB02800F914AE /* pizHashTable.h */; };
 		96DD191A144AB02F00F914AE /* pizItemset128.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DD1918144AB02F00F914AE /* pizItemset128.h */; };
 		96DD191D144AB03400F914AE /* pizLinklist.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DD191C144AB03400F914AE /* pizLinklist.h */; };
 		96DD1921144AB03D00F914AE /* pizTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 96DD1920144AB03D00F914AE /* pizTypes.h */; };
@@ -52,7 +51,6 @@
 		96DD1925144AB04600F914AE /* pizBoundedQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = 96DD1923144AB04600F914AE /* pizBoundedQueue.c */; };
 		96DD1927144AB04C00F914AE /* pizArray.c in Sources */ = {isa = PBXBuildFile; fileRef = 96DD1926144AB04C00F914AE /* pizArray.c */; };
 		96DD192B144AB05400F914AE /* pizItemset128.c in Sources */ = {isa = PBXBuildFile; fileRef = 96DD1928144AB05400F914AE /* pizItemset128.c */; };
-		96DD192C144AB05400F914AE /* pizHashTable.c in Sources */ = {isa = PBXBuildFile; fileRef = 96DD1929144AB05400F914AE /* pizHashTable.c */; };
 		96DD192F144AB05B00F914AE /* pizLinklist.c in Sources */ = {isa = PBXBuildFile; fileRef = 96DD192E144AB05B00F914AE /* pizLinklist.c */; };
 		96F915091538024D00202438 /* pizSequenceAttributes.c in Sources */ = {isa = PBXBuildFile; fileRef = 96F915071538024D00202438 /* pizSequenceAttributes.c */; };
 		96F9150A1538024D00202438 /* pizSequenceAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = 96F915081538024D00202438 /* pizSequenceAttributes.h */; };
@@ -99,7 +97,6 @@
 		96DD190F144AB01900F914AE /* pizBoundedStack.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizBoundedStack.h; sourceTree = "<group>"; };
 		96DD1910144AB01900F914AE /* pizBoundedQueue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizBoundedQueue.h; sourceTree = "<group>"; };
 		96DD1914144AB02200F914AE /* pizArray.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizArray.h; sourceTree = "<group>"; };
-		96DD1916144AB02800F914AE /* pizHashTable.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizHashTable.h; sourceTree = "<group>"; };
 		96DD1918144AB02F00F914AE /* pizItemset128.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; path = pizItemset128.h; sourceTree = "<group>"; };
 		96DD191C144AB03400F914AE /* pizLinklist.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizLinklist.h; sourceTree = "<group>"; };
 		96DD1920144AB03D00F914AE /* pizTypes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizTypes.h; sourceTree = "<group>"; };
@@ -107,7 +104,6 @@
 		96DD1923144AB04600F914AE /* pizBoundedQueue.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizBoundedQueue.c; sourceTree = "<group>"; };
 		96DD1926144AB04C00F914AE /* pizArray.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizArray.c; sourceTree = "<group>"; };
 		96DD1928144AB05400F914AE /* pizItemset128.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizItemset128.c; sourceTree = "<group>"; };
-		96DD1929144AB05400F914AE /* pizHashTable.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizHashTable.c; sourceTree = "<group>"; };
 		96DD192E144AB05B00F914AE /* pizLinklist.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizLinklist.c; sourceTree = "<group>"; };
 		96F915071538024D00202438 /* pizSequenceAttributes.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pizSequenceAttributes.c; sourceTree = "<group>"; };
 		96F915081538024D00202438 /* pizSequenceAttributes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = pizSequenceAttributes.h; sourceTree = "<group>"; };
@@ -200,8 +196,8 @@
 		96AF1B80148CFC39001358AB /* Structures */ = {
 			isa = PBXGroup;
 			children = (
-				96DD1920144AB03D00F914AE /* pizTypes.h */,
 				96DD190E144AB01900F914AE /* pizDataStructures.h */,
+				96DD1920144AB03D00F914AE /* pizTypes.h */,
 				96D7965915170FD800109654 /* pizTime.h */,
 				96DD1914144AB02200F914AE /* pizArray.h */,
 				96DD191C144AB03400F914AE /* pizLinklist.h */,
@@ -209,7 +205,6 @@
 				96DD190F144AB01900F914AE /* pizBoundedStack.h */,
 				96DD1910144AB01900F914AE /* pizBoundedQueue.h */,
 				9631920F1482169D00E63964 /* pizBoundedHashTable.h */,
-				96DD1916144AB02800F914AE /* pizHashTable.h */,
 				96D7965A15170FD800109654 /* pizTime.c */,
 				96DD1926144AB04C00F914AE /* pizArray.c */,
 				96DD192E144AB05B00F914AE /* pizLinklist.c */,
@@ -217,7 +212,6 @@
 				96DD1922144AB04600F914AE /* pizBoundedStack.c */,
 				96DD1923144AB04600F914AE /* pizBoundedQueue.c */,
 				9631920E1482169D00E63964 /* pizBoundedHashTable.c */,
-				96DD1929144AB05400F914AE /* pizHashTable.c */,
 			);
 			name = Structures;
 			sourceTree = "<group>";
@@ -268,7 +262,6 @@
 				96DD1912144AB01900F914AE /* pizBoundedStack.h in Headers */,
 				96DD1913144AB01900F914AE /* pizBoundedQueue.h in Headers */,
 				96DD1915144AB02200F914AE /* pizArray.h in Headers */,
-				96DD1917144AB02800F914AE /* pizHashTable.h in Headers */,
 				96DD191A144AB02F00F914AE /* pizItemset128.h in Headers */,
 				96DD191D144AB03400F914AE /* pizLinklist.h in Headers */,
 				96DD1921144AB03D00F914AE /* pizTypes.h in Headers */,
@@ -338,7 +331,6 @@
 				96DD1925144AB04600F914AE /* pizBoundedQueue.c in Sources */,
 				96DD1927144AB04C00F914AE /* pizArray.c in Sources */,
 				96DD192B144AB05400F914AE /* pizItemset128.c in Sources */,
-				96DD192C144AB05400F914AE /* pizHashTable.c in Sources */,
 				96DD192F144AB05B00F914AE /* pizLinklist.c in Sources */,
 				963192101482169D00E63964 /* pizBoundedHashTable.c in Sources */,
 				96A16F79148CF839008268A6 /* pizSequenceTransform.c in Sources */,
