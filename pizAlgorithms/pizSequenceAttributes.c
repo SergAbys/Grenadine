@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceAttributes.c
  * \author  Jean Sapristi
- * \date    April 29, 2012.
+ * \date    May 4, 2012.
  */
  
 /*

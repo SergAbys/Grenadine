@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceLibrary.c
  * \author	Jean Sapristi
- * \date	April 29, 2012.
+ * \date	May 4, 2012.
  */
  
 /*
@@ -120,11 +120,11 @@ void pizSequenceFillTempNotes (PIZSequence *x, PIZNote *note, const PIZEvent *ev
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, long tag, ulong flags)
+PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
 {
     PIZNote *newNote = NULL;
     long    err      = PIZ_GOOD;
-    long    k        = PIZ_SEQUENCE_NO_TAG;
+    long    k        = -1;
     long    position = argv[PIZ_DATA_POSITION];
     long    pitch    = argv[PIZ_DATA_PITCH];
     long    velocity = argv[PIZ_DATA_VELOCITY];

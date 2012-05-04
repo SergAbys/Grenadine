@@ -58,17 +58,13 @@ void tralala_clear              (t_tralala *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define TRALALA(a)              PIZEvent *event = NULL;                                             \
-                                if (event = pizEvent ((a))) {                                       \
-                                    pizAgentAddEvent (x->agent, event);                             \
+#define TRALALA(a)              PIZEvent *event = NULL;                                 \
+                                if (event = pizEventNew ((a), -1, 0, NULL)) {           \
+                                    pizAgentAddEvent (x->agent, event);                 \
                                 }
-#define TRALALA_VALUE(a,b)      PIZEvent *event = NULL;                                             \
-                                if (event = pizEventWithValue ((a), (b))) {                         \
-                                    pizAgentAddEvent (x->agent, event);                             \
-                                }
-#define TRALALA_ARGS(a,b,c)     PIZEvent *event = NULL;                                             \
-                                if (event = pizEventWithArgs ((a), (b), (c))) {                     \
-                                    pizAgentAddEvent (x->agent, event);                             \
+#define TRALALA_ARGS(a,b,c)     PIZEvent *event = NULL;                                 \
+                                if (event = pizEventNew ((a), -1, (b), (c))) {          \
+                                    pizAgentAddEvent (x->agent, event);                 \
                                 }   
                                                  
 // -------------------------------------------------------------------------------------------------------------
@@ -140,10 +136,10 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
         sprintf (s, "Messages");
     } else {	
         switch (a) {
-            case 0 : sprintf (s, "(List) Played");  break;
-            case 1 : sprintf (s, "(List) Dumped");  break;
-            case 2 : sprintf (s, "(Bang) End");     break;
-            case 3 : sprintf (s, "(Bang) Will End");    break;
+            case 0 : sprintf (s, "(List) Played");   break;
+            case 1 : sprintf (s, "(List) Dumped");   break;
+            case 2 : sprintf (s, "(Bang) End");      break;
+            case 3 : sprintf (s, "(Bang) Will End"); break;
         }
     }
 }
@@ -154,12 +150,12 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
 
 void tralala_notify (void *ptr, PIZEvent *event)
 {
-    PIZEventIdentifier ie;
+    PIZEventName name;
     t_tralala *x = (t_tralala *)ptr;
     
-    pizEventIdentifier (event, &ie);
+    pizEventName (event, &name);
     
-    if (ie == PIZ_EVENT_NOTE_PLAYED) {
+    if (name == PIZ_EVENT_NOTE_PLAYED) {
     //
     long    argc;
     long    *argv = NULL;
@@ -171,10 +167,10 @@ void tralala_notify (void *ptr, PIZEvent *event)
     }
     //
     
-    } else if (ie == PIZ_EVENT_END) {
+    } else if (name == PIZ_EVENT_END) {
         outlet_bang (x->middleRightOutlet);
 
-    } else if (ie == PIZ_EVENT_WILL_END) {
+    } else if (name == PIZ_EVENT_WILL_END) {
         outlet_bang (x->rightOutlet);
     }
     
@@ -218,7 +214,7 @@ void tralala_unloop (t_tralala *x)
 
 void tralala_bpm (t_tralala *x, long n) 
 {   
-    TRALALA_VALUE (PIZ_EVENT_BPM, n)
+    TRALALA_ARGS (PIZ_EVENT_BPM, 1, &n)
 }
 
 // -------------------------------------------------------------------------------------------------------------

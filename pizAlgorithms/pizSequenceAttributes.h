@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceAttributes.h
  * \author  Jean Sapristi
- * \date    April 26, 2012.
+ * \date    May 4, 2012.
  */
  
 /*
@@ -59,8 +59,8 @@ PIZ_LOCAL void      pizSequenceSetNoteValue     (PIZSequence *x, const PIZEvent 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZError  pizSequenceSetScale        (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetPattern      (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSetScale         (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSetPattern       (PIZSequence *x, const PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

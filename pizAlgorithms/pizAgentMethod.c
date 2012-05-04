@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentMethod.c
  * \author	Jean Sapristi
- * \date	May 1, 2012.
+ * \date	May 4, 2012.
  */
  
 /*
@@ -55,8 +55,15 @@ void pizAgentPlay (PIZAgent *x, PIZEvent *event)
     if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
         x->flags |= PIZ_AGENT_FLAG_REPLAY;
     } else {
+        PIZTime time;
+        
         pizSequenceGoToStart (x->sequence);
         x->flags |= PIZ_AGENT_FLAG_RUNNING; 
+    
+        pizEventTime    (event, &time);
+        pizTimeCopy     (&x->grainStart, &time);
+        pizTimeCopy     (&x->grainEnd, &x->grainStart);
+        pizTimeAddNano  (&x->grainEnd, &x->grainSize);
     }
 }
 
@@ -78,31 +85,17 @@ void pizAgentUnloop (PIZAgent *x, PIZEvent *event)
 
 void pizAgentBPM (PIZAgent *x, PIZEvent *event)
 {
-    long     value;
-    PIZEvent *notification = NULL;
+    long value;
     
     pizEventValue (event, &value);
-    value = CLAMP (value, PIZ_MINIMUM_BPM, PIZ_MAXIMUM_BPM);
     
-    if (x->bpm != value) {
-    //
-    x->bpm = value;
-    
-    if (notification = pizEventWithValue (PIZ_EVENT_BPM_CHANGED, value)) {
-    
-        PIZ_AGENT_LOCK_NOTIFICATION
-        PIZ_AGENT_QUEUE (x->notification, notification)
-        PIZ_AGENT_UNLOCK_NOTIFICATION
-        pthread_cond_signal (&x->notificationCondition);
-        
-    } else {
-        PIZ_AGENT_MEMORY
-    }
-        
-    pizTimeSetNano (&x->grainSize, PIZ_AGENT_CONSTANT_BPM / x->bpm);    
-    pizTimeCopy    (&x->grainEnd, &x->grainStart);
-    pizTimeAddNano (&x->grainEnd, &x->grainSize);
-    //
+    if ((value >= PIZ_MINIMUM_BPM) && (value <= PIZ_MAXIMUM_BPM) && (value != x->bpm)) {
+        x->bpm = value;
+        pizAgentAddNotification (x, PIZ_EVENT_BPM_CHANGED, -1, 1, &value);
+            
+        pizTimeSetNano (&x->grainSize, PIZ_AGENT_CONSTANT_BPM / x->bpm);    
+        pizTimeCopy    (&x->grainEnd, &x->grainStart);
+        pizTimeAddNano (&x->grainEnd, &x->grainSize);
     }
 }
 

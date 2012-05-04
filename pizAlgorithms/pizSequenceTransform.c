@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceTransform.c
  * \author  Jean Sapristi
- * \date    April 29, 2012.
+ * \date    May 4, 2012.
  */
  
 /*
@@ -141,7 +141,7 @@ void pizSequenceNote (PIZSequence *x, const PIZEvent *event)
             values[i] = argv[i];
         }
         
-        if (pizSequenceNewNote (x, values, event->tag, flags)) {
+        if (pizSequenceNewNote (x, event->tag, values, flags)) {
             pizSequenceMakeMap (x);
         }
     } 
@@ -429,7 +429,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
                                     noteToCopy->midi[PIZ_MIDI_DURATION],
                                     noteToCopy->midi[PIZ_MIDI_CHANNEL]  };
                                     
-                PIZNote *newNote = pizSequenceNewNote (x, values, PIZ_SEQUENCE_NO_TAG, PIZ_SEQUENCE_FLAG_CLIP);
+                PIZNote *newNote = pizSequenceNewNote (x, -1, values, PIZ_SEQUENCE_FLAG_CLIP);
                 
                 if (newNote) {
                     err1 |= pizBoundedHashTableAdd (x->tempHash, hPat[j], (void *)newNote);
@@ -569,7 +569,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
                            note1->midi[PIZ_MIDI_DURATION],
                            note1->midi[PIZ_MIDI_CHANNEL]    };
 
-        note2 = pizSequenceNewNote (x, values, PIZ_SEQUENCE_NO_TAG, PIZ_SEQUENCE_FLAG_CLIP);
+        note2 = pizSequenceNewNote (x, -1, values, PIZ_SEQUENCE_FLAG_CLIP);
         
         if (note2) {
             err |= pizBoundedHashTableAdd (x->tempHash, newKey, (void *)note2);

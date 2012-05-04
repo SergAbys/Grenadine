@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	May 1, 2012.
+ * \date	May 4, 2012.
  */
  
 /*
@@ -41,7 +41,6 @@
 #include "pizAgentLoop.h"
 #include "pizAgentMethod.h"
 #include "pizSequenceRun.h"
-#include "pizSequenceGraphic.h"
 #include "pizSequenceTransform.h"
 
 // -------------------------------------------------------------------------------------------------------------
@@ -57,9 +56,9 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_OBJECT_NONE         0
-#define PIZ_OBJECT_AGENT        1
-#define PIZ_OBJECT_SEQUENCE     2
+#define PIZ_NONE         0
+#define PIZ_AGENT        1
+#define PIZ_SEQUENCE     2
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -156,21 +155,21 @@ void *pizAgentNotificationLoop (void *agent)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue) 
+PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q) 
 {
     long            k; 
     PIZError        err = PIZ_GOOD;
     PIZEvent        *event = NULL;
     PIZMethod       f = NULL;
-    PIZMethodError  g = NULL;
+    PIZMethodError  e = NULL;
             
     PIZ_AGENT_LOCK_EVENT
     
-    if (!(pizLinklistPtrAtIndex (queue, 0, (void **)&event))) {
-        pizLinklistChuckByPtr (queue, event);
+    if (!(pizLinklistPtrAtIndex (q, 0, (void **)&event))) {
+        pizLinklistChuckByPtr (q, event);
     }
     
-    if (!(pizLinklistCount (queue))) {
+    if (!(pizLinklistCount (q))) {
         err = PIZ_ERROR;
     }
     
@@ -178,11 +177,11 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
     
     if (event) {
     //
-    if (k = pizAgentEventLoopGetMethod (event, &f, &g)) {
+    if (k = pizAgentEventLoopGetMethod (event, &f, &e)) {
     //
     void *ptr = NULL;
     
-    if (k == PIZ_OBJECT_AGENT) {
+    if (k == PIZ_AGENT) {
         ptr = x;
     } else {
         ptr = x->sequence;
@@ -191,7 +190,7 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *queue)
     if (f) {
         (*f)(ptr, event);
     } else {
-        if ((*g)(ptr, event) == PIZ_MEMORY) {
+        if ((*e)(ptr, event) == PIZ_MEMORY) {
             PIZ_AGENT_MEMORY
         }
     }
@@ -237,7 +236,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     
     if (err == PIZ_GOOD) {
         if (pizSequenceIsAtEnd (x->sequence)) {
-            pizAgentEventLoopDoStepNotify (x, PIZ_EVENT_WILL_END);
+            pizAgentAddNotification (x, PIZ_EVENT_WILL_END, -1, 0, NULL);
         }
         k = false;  
         
@@ -251,7 +250,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         }
         
         pizSequenceGoToStart (x->sequence);
-        pizAgentEventLoopDoStepNotify (x, PIZ_EVENT_END);
+        pizAgentAddNotification (x, PIZ_EVENT_END, -1, 0, NULL);
   
     } else if (err == PIZ_MEMORY) { 
         PIZ_AGENT_MEMORY 
@@ -269,7 +268,7 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     PIZ_AGENT_LOCK_NOTIFICATION
     
     count = pizLinklistCount (x->notification);
-    err   = pizSequenceGetGraphicEvents (x->sequence, x->notification);
+    err   = pizSequenceGraphicEvents (x->sequence, x->notification);
     count -= pizLinklistCount (x->notification);
      
     if (!err && count) {
@@ -280,26 +279,6 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     }
         
     if (err == PIZ_MEMORY) {
-        PIZ_AGENT_MEMORY
-    }
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void pizAgentEventLoopDoStepNotify (PIZAgent *x, PIZEventType type)
-{
-    PIZEvent *notification = NULL;
-
-    if (notification = pizEvent (type)) {
-    
-        PIZ_AGENT_LOCK_NOTIFICATION
-        PIZ_AGENT_QUEUE (x->notification, notification)
-        PIZ_AGENT_UNLOCK_NOTIFICATION
-        pthread_cond_signal (&x->notificationCondition);
-        
-    } else {
         PIZ_AGENT_MEMORY
     }
 }
@@ -398,18 +377,21 @@ bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-long pizAgentEventLoopGetMethod (const PIZEvent *event, PIZMethod *f, PIZMethodError *g)
+long pizAgentEventLoopGetMethod (const PIZEvent *event, PIZMethod *f, PIZMethodError *e)
 {
-    long k = PIZ_OBJECT_NONE;
+    long         k = PIZ_NONE;
+    PIZEventName name;
     
-    switch (event->identifier) {
-        case PIZ_EVENT_PLAY     : *f = pizAgentPlay;        k = PIZ_OBJECT_AGENT;       break;
-        case PIZ_EVENT_STOP     : *f = pizAgentStop;        k = PIZ_OBJECT_AGENT;       break;
-        case PIZ_EVENT_LOOP     : *f = pizAgentLoop;        k = PIZ_OBJECT_AGENT;       break;
-        case PIZ_EVENT_UNLOOP   : *f = pizAgentUnloop;      k = PIZ_OBJECT_AGENT;       break;
-        case PIZ_EVENT_BPM      : *f = pizAgentBPM;         k = PIZ_OBJECT_AGENT;       break;
-        case PIZ_EVENT_NOTE     : *f = pizSequenceNote;     k = PIZ_OBJECT_SEQUENCE;    break;
-        case PIZ_EVENT_CLEAR    : *f = pizSequenceClear;    k = PIZ_OBJECT_SEQUENCE;    break;  
+    pizEventName (event, &name);
+    
+    switch (name) {
+        case PIZ_EVENT_PLAY     : *f = pizAgentPlay;        k = PIZ_AGENT;       break;
+        case PIZ_EVENT_STOP     : *f = pizAgentStop;        k = PIZ_AGENT;       break;
+        case PIZ_EVENT_LOOP     : *f = pizAgentLoop;        k = PIZ_AGENT;       break;
+        case PIZ_EVENT_UNLOOP   : *f = pizAgentUnloop;      k = PIZ_AGENT;       break;
+        case PIZ_EVENT_BPM      : *f = pizAgentBPM;         k = PIZ_AGENT;       break;
+        case PIZ_EVENT_NOTE     : *f = pizSequenceNote;     k = PIZ_SEQUENCE;    break;
+        case PIZ_EVENT_CLEAR    : *f = pizSequenceClear;    k = PIZ_SEQUENCE;    break;  
     }
     
     return k;
@@ -418,6 +400,22 @@ long pizAgentEventLoopGetMethod (const PIZEvent *event, PIZMethod *f, PIZMethodE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+
+void pizAgentAddNotification (PIZAgent *x, PIZEventName n, long tag, long ac, long *av)
+{
+    PIZEvent *notification = NULL;
+
+    if (notification = pizEventNew (n, tag, ac, av)) {
+    
+        PIZ_AGENT_LOCK_NOTIFICATION
+        PIZ_AGENT_QUEUE (x->notification, notification)
+        PIZ_AGENT_UNLOCK_NOTIFICATION
+        pthread_cond_signal (&x->notificationCondition);
+        
+    } else {
+        PIZ_AGENT_MEMORY
+    }
+}
 
 void pizAgentNotificationLoopNotify (PIZAgent *x)
 {
@@ -448,7 +446,7 @@ void pizAgentNotificationLoopNotify (PIZAgent *x)
         
         pizLinklistNextByPtr (x->observer, (void *)ptr, (void **)&nextPtr);
         
-        if (newEvent = pizEventCopy (event)) {
+        if (newEvent = pizEventNewCopy (event)) {
             if (f = ptr->notify) {
                 (*f)(ptr->observer, newEvent);
             }

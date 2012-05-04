@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	May 2, 2012.
+ * \date	May 4, 2012.
  */
  
 /*
@@ -234,18 +234,18 @@ PIZError pizAgentDetach (PIZAgent *x, void *observer)
 
 void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
 {
-    PIZLinklist *queue = NULL;
+    PIZLinklist *q = NULL;
     
     switch (event->type) {
-        case PIZ_EVENT_RUN       : queue = x->run;         break;
-        case PIZ_EVENT_TRANSFORM : queue = x->transform;   break;
-        case PIZ_EVENT_ATTRIBUTE : queue = x->transform;   break;
-        case PIZ_EVENT_GRAPHIC   : queue = x->graphic;     break;
+        case PIZ_EVENT_RUN       : q = x->run;         break;
+        case PIZ_EVENT_TRANSFORM : q = x->transform;   break;
+        case PIZ_EVENT_ATTRIBUTE : q = x->transform;   break;
+        case PIZ_EVENT_GRAPHIC   : q = x->graphic;     break;
     }
     
-    if (queue) {
+    if (q) {
         PIZ_AGENT_LOCK_EVENT
-        PIZ_AGENT_QUEUE (queue, event)
+        PIZ_AGENT_QUEUE (q, event)
         PIZ_AGENT_UNLOCK_EVENT
         pthread_cond_signal (&x->eventCondition);
     }

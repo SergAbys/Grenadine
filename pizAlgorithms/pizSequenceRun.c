@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceRun.c
  * \author  Jean Sapristi
- * \date    April 28, 2012.
+ * \date    May 4, 2012.
  */
  
 /*
@@ -47,6 +47,11 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+#define PIZ_UNTAG pizItemset128UnsetAtIndex 
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 bool pizSequenceIsAtEnd (PIZSequence *x)
@@ -59,7 +64,7 @@ void pizSequenceGoToStart (PIZSequence *x)
     x->index = x->start;
 }
 
-PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue, long bpm)
+PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *q, long bpm)
 {
     PIZError err = PIZ_ERROR;
     
@@ -71,7 +76,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue, long bpm)
     //
     err = PIZ_GOOD;
     
-    if (queue) {
+    if (q) {
     //
     if (x->timeline[x->index] && pizLinklistCount (x->timeline[x->index])) {
         long    scale;
@@ -83,50 +88,42 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue, long bpm)
         pizLinklistPtrAtIndex (x->timeline[x->index], 0, (void **)&note);
         
         while (note) {
-            long     pitch, 
-                     velocity, 
-                     channel, 
-                     duration;
-            PIZEvent *notification = NULL;
-            
-            pizLinklistNextByPtr (x->timeline[x->index], (void *)note, (void **)&nextNote);
-            
-            pitch    = note->midi[PIZ_MIDI_PITCH];
-            velocity = note->midi[PIZ_MIDI_VELOCITY];
-            duration = note->midi[PIZ_MIDI_DURATION];
-            channel  = note->midi[PIZ_MIDI_CHANNEL];
-            
-            if (scale) {
-                pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
-            }
+        //
+        long pitch, velocity, channel, duration;
+        
+        pizLinklistNextByPtr (x->timeline[x->index], (void *)note, (void **)&nextNote);
+        
+        pitch    = note->midi[PIZ_MIDI_PITCH];
+        velocity = note->midi[PIZ_MIDI_VELOCITY];
+        duration = note->midi[PIZ_MIDI_DURATION];
+        channel  = note->midi[PIZ_MIDI_CHANNEL];
+        
+        if (scale) {
+            pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
+        }
 
-            if (velocity) {
-                velocity += x->velocity;
-            } 
-                
-            if (!channel) {
-                channel = x->channel;
-            }
-                
-            if ((pitch >= x->down) && (pitch <= x->up)) {
-
-                long argv[ ] = { note->position,
-                                 CLAMP (pitch, 0, PIZ_MAGIC_PITCH),
-                                 CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY),
-                                 (long)(duration * (PIZ_CONSTANT_DURATION / bpm)), 
-                                 channel };
-                         
-                if (notification = pizEventWithNote (PIZ_EVENT_NOTE_PLAYED, argv, note->tag)) {
-                    if (err |= pizLinklistAppend (queue, notification)) {       
-                        pizEventFree (notification);  
-                    }
-                } else {
-                    err |= PIZ_MEMORY;
-                }
-                
-            }
+        if (velocity) {
+            velocity += x->velocity;
+        } 
             
-            note = nextNote;
+        if (!channel) {
+            channel = x->channel;
+        }
+            
+        if ((pitch >= x->down) && (pitch <= x->up)) {
+        //
+        long a[ ] = { note->position,
+                      CLAMP (pitch, 0, PIZ_MAGIC_PITCH),
+                      CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY),
+                      (long)(duration * (PIZ_CONSTANT_DURATION / bpm)), 
+                      channel };
+        
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_NOTE_PLAYED, note->tag, PIZ_SEQUENCE_NOTE_SIZE, a);
+        //
+        }
+        
+        note = nextNote;
+        //
         }
     }
     //
@@ -134,6 +131,103 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *queue, long bpm)
     
     x->index ++;
     //    
+    }
+    
+    return err;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZError pizSequenceGraphicEvents (PIZSequence *x, PIZLinklist *q)
+{
+    long     i;
+    PIZError err = PIZ_GOOD;
+    PIZNote  *note = NULL; 
+    
+    if (x->isZoneChanged) {
+    //
+    long a[ ] = { x->start, x->end, x->down, x->up };
+    
+    err |= pizSequenceAddNotification (q, PIZ_EVENT_ZONE_CHANGED, -1, PIZ_SEQUENCE_ZONE_SIZE, a);
+    x->isZoneChanged = false;
+    //
+    }
+    
+    if (pizItemset128Count (&x->removedNotes)) {
+    //
+    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+        if (pizItemset128IsSetAtIndex (&x->removedNotes, i)) { 
+            err |= pizSequenceAddNotification (q, PIZ_EVENT_NOTE_REMOVED, i, 0, NULL);
+        } 
+    }
+    
+    pizItemset128Clear (&x->removedNotes);
+    //
+    }
+    
+    if (pizItemset128Count (&x->addedNotes)) {
+    //
+    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+        if (pizItemset128IsSetAtIndex (&x->addedNotes, i)) {
+            if (!(pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note))) {
+            
+                long a[ ] = { note->position,
+                              note->midi[PIZ_MIDI_PITCH],
+                              note->midi[PIZ_MIDI_VELOCITY],
+                              note->midi[PIZ_MIDI_DURATION], 
+                              note->midi[PIZ_MIDI_CHANNEL] };
+                
+                err |= pizSequenceAddNotification (q, PIZ_EVENT_NOTE_ADDED, i, PIZ_SEQUENCE_NOTE_SIZE, a);
+            }
+            PIZ_UNTAG (&x->changedNotes, i);
+        } 
+    }
+
+    pizItemset128Clear (&x->addedNotes);
+    //
+    }
+    
+    if (pizItemset128Count (&x->changedNotes)) {
+    //
+    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+        if (pizItemset128IsSetAtIndex (&x->changedNotes, i)) {
+            if (!(pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note))) {
+            
+                long a[ ] = { note->position,
+                              note->midi[PIZ_MIDI_PITCH],
+                              note->midi[PIZ_MIDI_VELOCITY],
+                              note->midi[PIZ_MIDI_DURATION], 
+                              note->midi[PIZ_MIDI_CHANNEL] };
+                
+                pizSequenceAddNotification (q, PIZ_EVENT_NOTE_CHANGED, i, PIZ_SEQUENCE_NOTE_SIZE, a);
+            }
+        } 
+    }
+    
+    pizItemset128Clear (&x->changedNotes);
+    //
+    }
+        
+    return err;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZError pizSequenceAddNotification (PIZLinklist *q, PIZEventName n, long tag, long ac, long *av)
+{
+    PIZEvent *notification = NULL;
+    PIZError err = PIZ_GOOD;
+    
+    if (notification = pizEventNew (n, tag, ac, av)) {
+        if (err |= pizLinklistAppend (q, notification)) {       
+            pizEventFree (notification);  
+        }
+    } else {
+        err |= PIZ_MEMORY;
     }
     
     return err;

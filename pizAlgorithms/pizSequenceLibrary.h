@@ -1,7 +1,7 @@
 /**
  * \file	pizSequenceLibrary.h
  * \author	Jean Sapristi
- * \date	April 27, 2012.
+ * \date	May 4, 2012.
  */
 
 /*
@@ -58,7 +58,7 @@ PIZ_LOCAL void      pizSequenceFillTempNotes            (PIZSequence *x, PIZNote
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZNote   *pizSequenceNewNote                 (PIZSequence *x, long *argv, long tag, ulong flags);
+PIZ_LOCAL PIZNote   *pizSequenceNewNote                 (PIZSequence *x, long tag, long *argv, ulong flags);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

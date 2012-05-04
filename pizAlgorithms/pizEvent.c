@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	May 2, 2012.
+ * \date	May 4, 2012.
  */
  
 /*
@@ -82,8 +82,6 @@ static const long pizEventTypes[ ]   = {    PIZ_EVENT_RUN,                  // P
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_END
                                             PIZ_EVENT_NOTIFICATION      };  // PIZ_EVENT_WILL_END
 
-   
-
 static const char *pizEventNames[ ]  = {    "Init",
                                             "Play",
                                             "Stop",
@@ -132,34 +130,32 @@ static const char *pizEventNames[ ]  = {    "Init",
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZEvent *pizEvent (PIZEventIdentifier ie)
+PIZEvent *pizEventNew (PIZEventName name, long tag, long argc, const long *argv)
 {
-    return pizEventNew (ie, PIZ_SEQUENCE_NO_TAG, 0, NULL);
+    PIZEvent *x = NULL;
+    
+    if (x = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
+        x->type = pizEventTypes[name];
+        x->name = name;
+        x->tag  = tag; 
+        
+        pizTimeSet (&x->time);
+            
+        if (argc && argv) {
+            long i;
+            x->size = MIN (argc, PIZ_EVENT_DATA_SIZE);
+            for (i = 0; i < x->size; i++) {
+                x->data[i] = argv[i];
+            }
+        }
+    }
+    
+    return x;
 }
 
-PIZEvent *pizEventWithNote (PIZEventIdentifier ie, const long *argv, long tag)
+PIZEvent *pizEventNewCopy (PIZEvent *x)
 {
-    return pizEventNew (ie, tag, PIZ_SEQUENCE_NOTE_SIZE, argv);
-}
-
-PIZEvent *pizEventWithZone (PIZEventIdentifier ie, const long *argv)
-{
-    return pizEventNew (ie, PIZ_SEQUENCE_NO_TAG, PIZ_SEQUENCE_ZONE_SIZE, argv);
-}
-
-PIZEvent *pizEventWithArgs (PIZEventIdentifier ie, long argc, const long *argv)
-{
-    return pizEventNew (ie, PIZ_SEQUENCE_NO_TAG, argc, argv);
-}
-
-PIZEvent *pizEventWithValue (PIZEventIdentifier ie, long value)
-{
-    return pizEventNew (ie, PIZ_SEQUENCE_NO_TAG, 1, &value);
-}
-
-PIZEvent *pizEventCopy (PIZEvent *x)
-{
-    return pizEventNew (x->identifier, x->tag, x->size, x->data);
+    return pizEventNew (x->name, x->tag, x->size, x->data);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -171,10 +167,6 @@ void pizEventFree (PIZEvent *x)
     free (x);
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 PIZError pizEventValue (const PIZEvent *x, long *value)
 {
     PIZError err = PIZ_ERROR;
@@ -185,6 +177,16 @@ PIZError pizEventValue (const PIZEvent *x, long *value)
     } 
     
     return err;
+}
+
+void pizEventName (const PIZEvent *x, PIZEventName *name)
+{
+    (*name) = x->name;
+}
+
+void pizEventTime (const PIZEvent *x, PIZTime *time)
+{
+    pizTimeCopy (time, &x->time);
 }
 
 PIZError pizEventPtr (const PIZEvent *x, long *argc, long **argv)
@@ -199,39 +201,9 @@ PIZError pizEventPtr (const PIZEvent *x, long *argc, long **argv)
     return err;
 }
 
-void pizEventName (const PIZEvent *x, const char **name)
+void pizEventNameAsString (const PIZEvent *x, const char **name)
 {
-    (*name) = pizEventNames[x->identifier];
-}
-
-void pizEventIdentifier (const PIZEvent *x, PIZEventIdentifier *ie)
-{
-    (*ie) = x->identifier;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-PIZEvent *pizEventNew (PIZEventIdentifier ie, long tag, long argc, const long *argv)
-{
-    PIZEvent *x = NULL;
-    
-    if (x = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        x->type = pizEventTypes[ie];
-        x->identifier = ie;
-        x->tag = tag; 
-            
-        if (argc && argv) {
-            long i;
-            x->size = MIN (argc, PIZ_EVENT_DATA_SIZE);
-            for (i = 0; i < x->size; i++) {
-                x->data[i] = argv[i];
-            }
-        }
-    }
-    
-    return x;
+    (*name) = pizEventNames[x->name];
 }
 
 // -------------------------------------------------------------------------------------------------------------

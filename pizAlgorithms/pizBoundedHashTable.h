@@ -78,7 +78,6 @@ PIZBoundedHashTable *pizBoundedHashTableNew         (long argc, long *argv);
 void                pizBoundedHashTableFree         (PIZBoundedHashTable *x);
 
 PIZError            pizBoundedHashTableAdd          (PIZBoundedHashTable *x, long key, void *ptr); //
-
 void                pizBoundedHashTableSetFlags     (PIZBoundedHashTable *x, ulong flags);
 void                pizBoundedHashTableClear        (PIZBoundedHashTable *x);
 PIZError            pizBoundedHashTableRemoveByKey  (PIZBoundedHashTable *x, long key, void *ptr);
