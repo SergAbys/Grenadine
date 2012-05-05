@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	May 4, 2012.
+ * \date	May 5, 2012.
  */
 
 /*
@@ -100,6 +100,9 @@ typedef enum _PIZEventName {
     PIZ_EVENT_PATTERN,
     // NOTIFICATION 
     PIZ_EVENT_BPM_CHANGED,
+    PIZ_EVENT_CHANCE_CHANGED,
+    PIZ_EVENT_VELOCITY_CHANGED,
+    PIZ_EVENT_CHANNEL_CHANGED,
     PIZ_EVENT_ZONE_CHANGED,
     PIZ_EVENT_NOTE_ADDED,
     PIZ_EVENT_NOTE_CHANGED,
@@ -132,9 +135,9 @@ PIZEvent *pizEventNewCopy       (PIZEvent *x);
 // -------------------------------------------------------------------------------------------------------------
 
 void     pizEventFree           (PIZEvent *x);
-PIZError pizEventValue          (const PIZEvent *x, long *value);
 void     pizEventName           (const PIZEvent *x, PIZEventName *name);
 void     pizEventTime           (const PIZEvent *x, PIZTime *time);
+PIZError pizEventValue          (const PIZEvent *x, long *value);
 PIZError pizEventPtr            (const PIZEvent *x, long *argc, long **argv);
 
 // -------------------------------------------------------------------------------------------------------------
@@ -165,6 +168,30 @@ PIZ_EXTERN void pizEventName (const PIZEvent *x, PIZEventName *name)
 PIZ_EXTERN void pizEventTime (const PIZEvent *x, PIZTime *time)
 {
     pizTimeCopy (time, &x->time);
+}
+
+PIZ_EXTERN PIZError pizEventValue (const PIZEvent *x, long *value)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if (x->size) {
+        err = PIZ_GOOD;
+        (*value) = x->data[0];
+    } 
+    
+    return err;
+}
+
+PIZ_EXTERN PIZError pizEventPtr (const PIZEvent *x, long *argc, long **argv)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if ((*argc) = x->size) {
+        err = PIZ_GOOD;
+        (*argv) = (long *)x->data;
+    }
+    
+    return err;
 }
 
 #endif // PIZ_EXTERN_INLINE

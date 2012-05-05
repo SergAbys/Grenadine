@@ -55,7 +55,7 @@ PIZ_INLINE PIZError pizSequenceGetTag (PIZSequence *x, long tag, long *ptr);
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizSequenceFunAll (PIZSequence *x, PIZMethod f, const PIZEvent *event)
+void pizSequenceDoAll (PIZSequence *x, PIZMethod f, const PIZEvent *event)
 {
     long i;
     
@@ -140,7 +140,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
     }
                 
     err |= (position < 0);
-    err |= (position > (x->timelineSize - 1));
+    err |= (position > (x->size - 1));
     err |= (x->count >= PIZ_SEQUENCE_MAXIMUM_NOTES);
     
     if (flags & PIZ_SEQUENCE_FLAG_CLIP) {
@@ -199,7 +199,7 @@ void pizSequenceMakeMap (PIZSequence *x)
             
     pizArrayClear (x->map);
                             
-    for (i = 0; i < x->timelineSize; i++) {
+    for (i = 0; i < x->size; i++) {
         if (x->timeline[i] && pizLinklistCount (x->timeline[i])) {
             pizArrayAppend (x->map, i);
         }

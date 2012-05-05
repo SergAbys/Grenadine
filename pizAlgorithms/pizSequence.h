@@ -58,28 +58,33 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_MAXIMUM_NOTES              128
-#define PIZ_SEQUENCE_MAXIMUM_DURATION           96
-#define PIZ_SEQUENCE_MAXIMUM_PATTERN            12
+#define PIZ_SEQUENCE_MAXIMUM_NOTES          128
+#define PIZ_SEQUENCE_MAXIMUM_DURATION       96
+#define PIZ_SEQUENCE_MAXIMUM_PATTERN        12
                                         
-#define PIZ_SEQUENCE_INIT_TEMP_SIZE             128
-#define PIZ_SEQUENCE_INIT_LOOKUP_SIZE           19
-#define PIZ_SEQUENCE_DEFAULT_VELOCITY           80
-#define PIZ_SEQUENCE_DEFAULT_TIMELINE_SIZE      288 
+#define PIZ_SEQUENCE_INIT_TEMP_SIZE         128
+#define PIZ_SEQUENCE_INIT_LOOKUP_SIZE       19
+#define PIZ_SEQUENCE_DEFAULT_SIZE           288 
+#define PIZ_SEQUENCE_DEFAULT_VELOCITY       80
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_FLAG_NONE                  0UL
-#define PIZ_SEQUENCE_FLAG_SNAP                  1UL
-#define PIZ_SEQUENCE_FLAG_AMBITUS               4UL
-#define PIZ_SEQUENCE_FLAG_CLIP                  8UL
+#define PIZ_SEQUENCE_FLAG_NONE              0UL
+#define PIZ_SEQUENCE_FLAG_SNAP              1UL
+#define PIZ_SEQUENCE_FLAG_AMBITUS           2UL
+#define PIZ_SEQUENCE_FLAG_CLIP              4UL
+
+#define PIZ_SEQUENCE_FLAG_ZONE              1UL
+#define PIZ_SEQUENCE_FLAG_CHANCE            2UL
+#define PIZ_SEQUENCE_FLAG_VELOCITY          4UL
+#define PIZ_SEQUENCE_FLAG_CHANNEL           8UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_NOTE_SIZE                  5
-#define PIZ_SEQUENCE_ZONE_SIZE                  4
+#define PIZ_SEQUENCE_NOTE_SIZE              5
+#define PIZ_SEQUENCE_ZONE_SIZE              4
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -179,9 +184,9 @@ typedef enum _PIZMidiSelector {
     } PIZMidiSelector;
     
 typedef struct _PIZNote {
-    long     tag;
-    long     position;
-    long     midi[4];
+    long    tag;
+    long    position;
+    long    midi[4];
     } PIZNote;
     
 // -------------------------------------------------------------------------------------------------------------
@@ -196,15 +201,15 @@ typedef struct _PIZSequence {
     PIZNote                 **tempNotes2;
     PIZArray                *map;
     PIZLinklist             **timeline;
-    long                    timelineSize;
     PIZBoundedHashTable     *lookup;
     PIZArray                *scale;
     PIZArray                *pattern;
-    bool                    isZoneChanged;
     PIZItemset128           usedNotes;
     PIZItemset128           addedNotes;
     PIZItemset128           changedNotes;
     PIZItemset128           removedNotes;
+    ulong                   flags;
+    long                    size;
     long                    start;
     long                    end;
     long                    down;

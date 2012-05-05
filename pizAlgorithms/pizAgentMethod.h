@@ -1,7 +1,7 @@
 /**
  * \file	pizAgentMethod.h
  * \author	Jean Sapristi
- * \date	May 4, 2012.
+ * \date	May 5, 2012.
  */
 
 /*
@@ -49,11 +49,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void pizAgentPlay       (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL void pizAgentStop       (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL void pizAgentLoop       (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL void pizAgentUnloop     (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL void pizAgentBPM        (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizAgentPlay       (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizAgentStop       (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizAgentLoop       (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizAgentUnloop     (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizAgentBPM        (PIZAgent *x, PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

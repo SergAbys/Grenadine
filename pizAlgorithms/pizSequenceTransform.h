@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceTransform.h
  * \author  Jean Sapristi
- * \date    May 4, 2012.
+ * \date    May 5, 2012.
  */
  
 /*
@@ -50,30 +50,22 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void          pizSequenceNote            (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL void          pizSequenceClear           (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL void          pizSequenceTranspose       (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL void          pizSequenceLearn           (PIZSequence *x, const PIZEvent *event);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_LOCAL PIZError      pizSequenceAlgorithm       (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError      pizSequenceNovember        (PIZSequence *x, const PIZEvent *event); //
-PIZ_LOCAL PIZError      pizSequenceJuliet          (PIZSequence *x, const PIZEvent *event); //
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_LOCAL void          pizSequenceClean           (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL void          pizSequenceRotate          (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL void          pizSequenceScramble        (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL void          pizSequenceSort            (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL void          pizSequenceChange          (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL void          pizSequenceSet             (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL void          pizSequenceRandom          (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL void          pizSequenceKill            (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL void          pizSequenceCycle           (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceNote            (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceClear           (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceTranspose       (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceLearn           (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceAlgorithm       (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceNovember        (PIZSequence *x, const PIZEvent *event); //
+PIZ_LOCAL PIZError  pizSequenceJuliet          (PIZSequence *x, const PIZEvent *event); //
+PIZ_LOCAL PIZError  pizSequenceClean           (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceRotate          (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceScramble        (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSort            (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceChange          (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSet             (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceRandom          (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceKill            (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceCycle           (PIZSequence *x, const PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -57,22 +57,22 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const long pizSequenceNeighbors[ ]   = { -256, 
-                                                -130, 
-                                                -129, 
-                                                -128, 
-                                                -127, 
-                                                -126, 
-                                                 126, 
-                                                 127, 
-                                                 128, 
-                                                 129, 
-                                                 130, 
-                                                 256, 
-                                                  -2, 
-                                                  -1, 
-                                                   1, 
-                                                   2  };
+static const long pizSequenceNeighbors[ ]       = { -256, 
+                                                    -130, 
+                                                    -129, 
+                                                    -128, 
+                                                    -127, 
+                                                    -126, 
+                                                     126, 
+                                                     127, 
+                                                     128, 
+                                                     129, 
+                                                     130, 
+                                                     256, 
+                                                      -2, 
+                                                      -1, 
+                                                       1, 
+                                                       2  };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ static const long pizSequenceNeighbors[ ]   = { -256,
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const long pizSequenceDivisions[ ]   = { 2, 3, 4, 5, 7 };
+static const long   pizSequenceDivisions[ ]     = { 2, 3, 4, 5, 7 };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -93,11 +93,11 @@ static const long pizSequenceDivisions[ ]   = { 2, 3, 4, 5, 7 };
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const double pizSequenceProbability2[ ]   = { 0.75, 1. };
-static const double pizSequenceDistribution3[ ]  = { 0.68, 0.85, 1. };
-static const double pizSequenceDistribution4[ ]  = { 0.63, 0.75, 0.87, 1. };
-static const double pizSequenceDistribution5[ ]  = { 0.60, 0.70, 0.80, 0.90, 1. };
-static const double pizSequenceDistribution7[ ]  = { 0.56, 0.63, 0.70, 0.77, 0.84, 0.91, 1. };
+static const double pizSequenceProbability2[ ]  = { 0.75, 1. };
+static const double pizSequenceDistribution3[ ] = { 0.68, 0.85, 1. };
+static const double pizSequenceDistribution4[ ] = { 0.63, 0.75, 0.87, 1. };
+static const double pizSequenceDistribution5[ ] = { 0.60, 0.70, 0.80, 0.90, 1. };
+static const double pizSequenceDistribution7[ ] = { 0.56, 0.63, 0.70, 0.77, 0.84, 0.91, 1. };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ static const double pizSequenceDistribution7[ ]  = { 0.56, 0.63, 0.70, 0.77, 0.8
 #define PIZ_CEIL(a,b)               (((a)%(b))==0?(a)/(b):(a)/(b)+1)
 
 #define PIZ_PICKUP_NOTES            x->tempIndex = 0; \
-                                    pizSequenceFunAll (x, pizSequenceFillTempNotes, NULL); \
+                                    pizSequenceDoAll (x, pizSequenceFillTempNotes, NULL); \
                                     k = x->tempIndex;
                         
 #define PIZ_FILL_NOTES              pizSequenceFillNotes (x, selector, 0);
@@ -123,7 +123,7 @@ PIZ_LOCAL void pizSequenceFillNotes (PIZSequence *x, PIZMidiSelector selector, b
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizSequenceNote (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -145,18 +145,22 @@ void pizSequenceNote (PIZSequence *x, const PIZEvent *event)
             pizSequenceMakeMap (x);
         }
     } 
+    
+    return PIZ_GOOD;
 }
 
-void pizSequenceClear (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceClear (PIZSequence *x, const PIZEvent *event)
 {
     if (x->count) {
-        pizSequenceFunAll (x, pizSequenceRemoveNote, NULL);
+        pizSequenceDoAll (x, pizSequenceRemoveNote, NULL);
         pizArrayClear (x->map);  
     }
+    
+    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceTranspose (PIZSequence *x, long n)
-void pizSequenceTranspose (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceTranspose (PIZSequence *x, const PIZEvent *event)
 {/*
     long i, a, b;
         
@@ -165,12 +169,12 @@ void pizSequenceTranspose (PIZSequence *x, const PIZEvent *event)
     
     if (x->down != a) {
         x->down = a;
-        x->isZoneChanged = true;
+        x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
     }
     
     if (x->up != b) {
         x->up = b;
-        x->isZoneChanged = true;
+        x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
     }
     
     for (i = 0; i < pizArrayCount (x->map); i++) {   
@@ -195,11 +199,9 @@ void pizSequenceTranspose (PIZSequence *x, const PIZEvent *event)
             note = nextNote;
         }
     }*/
+    
+    return PIZ_GOOD;
 }
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
 //PIZError pizSequenceAlgorithm (PIZSequence *x, PIZAlgorithm *algorithm)
 PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
@@ -257,7 +259,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
     
     x->tempError = PIZ_GOOD;
     pizBoundedHashTableClear (x->tempHash);
-    pizSequenceFunAll (x, pizSequenceFillTempHash, NULL);
+    pizSequenceDoAll (x, pizSequenceFillTempHash, NULL);
     err1 = x->tempError;
 
     while (!err1 && (k < iterate) && (loop < PIZ_MAXIMUM_LOOP)) {
@@ -500,7 +502,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
      
     x->tempError = PIZ_GOOD;
     pizBoundedHashTableClear (x->tempHash);
-    pizSequenceFunAll (x, pizSequenceFillTempHash, NULL);
+    pizSequenceDoAll (x, pizSequenceFillTempHash, NULL);
     err = x->tempError;
     
     while (!err && x->count && (k < iterate) && (loop < PIZ_MAXIMUM_LOOP)) {
@@ -601,12 +603,8 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
     return err;
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 //PIZError pizSequenceClean (PIZSequence *x, long value)
-void pizSequenceClean (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceClean (PIZSequence *x, const PIZEvent *event)
 {/*
     long i, scale, v, index = 0;
         
@@ -667,10 +665,12 @@ void pizSequenceClean (PIZSequence *x, const PIZEvent *event)
             pizSequenceRemoveNote (x, x->tempNotes1[i], NULL);
         }
     }*/
+    
+    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceRotate (PIZSequence *x, PIZMidiSelector selector, long shift)
-void pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
 {/*
     long i, k;
             
@@ -685,10 +685,12 @@ void pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
     }
                 
     PIZ_FILL_NOTES*/
+    
+    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceScramble (PIZSequence *x, PIZMidiSelector selector)
-void pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
 {/*
     long i, k;
         
@@ -708,10 +710,12 @@ void pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
     }
             
     PIZ_FILL_NOTES*/
+    
+    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceSort (PIZSequence *x, PIZMidiSelector selector, bool down)
-void pizSequenceSort (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
 {/*
     long i, scale, k;
         
@@ -770,10 +774,12 @@ void pizSequenceSort (PIZSequence *x, const PIZEvent *event)
     } else {
         PIZ_FILL_NOTES_REVERSE
     }*/
+    
+    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceChange (PIZSequence *x, PIZMidiSelector selector, long value)
-void pizSequenceChange (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceChange (PIZSequence *x, const PIZEvent *event)
 {/*
     long i;
             
@@ -799,7 +805,7 @@ void pizSequenceChange (PIZSequence *x, const PIZEvent *event)
     //
     case PIZ_MIDI_PITCH    : t = CLAMP (note->midi[PIZ_MIDI_PITCH] + value, 0, PIZ_MAGIC_PITCH); break;
     case PIZ_MIDI_VELOCITY : t = CLAMP (note->midi[PIZ_MIDI_VELOCITY] + value, 0, PIZ_MAGIC_VELOCITY); break;
-    case PIZ_MIDI_DURATION : m = MIN   (x->timelineSize - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
+    case PIZ_MIDI_DURATION : m = MIN   (x->size - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
                              t = CLAMP (note->midi[PIZ_MIDI_DURATION] + value, 1, m); break;
     case PIZ_MIDI_CHANNEL  : t = CLAMP (note->midi[PIZ_MIDI_CHANNEL] + value, 0, PIZ_MAGIC_CHANNEL); break;
     //                            
@@ -817,10 +823,12 @@ void pizSequenceChange (PIZSequence *x, const PIZEvent *event)
     }
     //
     }*/
+    
+    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceSet (PIZSequence *x, PIZMidiSelector selector, long value)
-void pizSequenceSet (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSet (PIZSequence *x, const PIZEvent *event)
 {/*
     long i;
             
@@ -844,7 +852,7 @@ void pizSequenceSet (PIZSequence *x, const PIZEvent *event)
         switch (selector) {
         case PIZ_MIDI_PITCH    : t = CLAMP (value, 0, PIZ_MAGIC_PITCH); break;
         case PIZ_MIDI_VELOCITY : t = CLAMP (value, 0, PIZ_MAGIC_VELOCITY); break;
-        case PIZ_MIDI_DURATION : m = MIN   (x->timelineSize - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
+        case PIZ_MIDI_DURATION : m = MIN   (x->size - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
                                  t = CLAMP (value, 1, m); break;
         case PIZ_MIDI_CHANNEL  : t = CLAMP (value, 0, PIZ_MAGIC_CHANNEL); break;
         }
@@ -860,10 +868,12 @@ void pizSequenceSet (PIZSequence *x, const PIZEvent *event)
     }
     //
     }*/
+    
+    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceRandom (PIZSequence *x, PIZMidiSelector selector, long minValue, long maxValue)
-void pizSequenceRandom (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceRandom (PIZSequence *x, const PIZEvent *event)
 {/*
     long i, range;
         
@@ -898,7 +908,7 @@ void pizSequenceRandom (PIZSequence *x, const PIZEvent *event)
     switch (selector) {
     case PIZ_MIDI_PITCH    : t = CLAMP (note->midi[PIZ_MIDI_PITCH] + value, 0, PIZ_MAGIC_PITCH); break;
     case PIZ_MIDI_VELOCITY : t = CLAMP (note->midi[PIZ_MIDI_VELOCITY] + value, 0, PIZ_MAGIC_VELOCITY); break;
-    case PIZ_MIDI_DURATION : m = MIN   (x->timelineSize - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
+    case PIZ_MIDI_DURATION : m = MIN   (x->size - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
                              t = CLAMP (note->midi[PIZ_MIDI_DURATION] + value, 1, m); break;
     case PIZ_MIDI_CHANNEL  : t = CLAMP (note->midi[PIZ_MIDI_CHANNEL] + value, 0, PIZ_MAGIC_CHANNEL); break;
     }
@@ -915,10 +925,12 @@ void pizSequenceRandom (PIZSequence *x, const PIZEvent *event)
     }
     //
     }*/
+    
+    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceKill (PIZSequence *x)
-void pizSequenceKill (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceKill (PIZSequence *x, const PIZEvent *event)
 {/*
     long i;
     bool haveChanged = false;
@@ -946,10 +958,12 @@ void pizSequenceKill (PIZSequence *x, const PIZEvent *event)
     if (haveChanged) {
         pizSequenceMakeMap (x);
     }*/
+    
+    return PIZ_GOOD;
 }
 
 //PIZError pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZArray *a)
-void pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
 {/*
     if (a) {
     //
@@ -1020,6 +1034,8 @@ void pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
     }
     //    
     }*/
+    
+    return PIZ_GOOD;
 }
 
 // -------------------------------------------------------------------------------------------------------------

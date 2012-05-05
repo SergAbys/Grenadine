@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceRun.c
  * \author  Jean Sapristi
- * \date    May 4, 2012.
+ * \date    May 5, 2012.
  */
  
 /*
@@ -43,12 +43,17 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_CONSTANT_DURATION   2500.
+#define PIZ_CONSTANT_DURATION 2500.
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #define PIZ_UNTAG pizItemset128UnsetAtIndex 
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZ_LOCAL PIZError pizSequenceAddNotification (PIZLinklist *q, PIZEventName n, long tag, long ac, long *av);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -140,18 +145,32 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *q, long bpm)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizSequenceGraphicEvents (PIZSequence *x, PIZLinklist *q)
+PIZError pizSequenceNotifications (PIZSequence *x, PIZLinklist *q)
 {
     long     i;
     PIZError err = PIZ_GOOD;
     PIZNote  *note = NULL; 
     
-    if (x->isZoneChanged) {
+    if (x->flags) {
     //
-    long a[ ] = { x->start, x->end, x->down, x->up };
+    if (x->flags & PIZ_SEQUENCE_FLAG_ZONE) {
+        long a[ ] = { x->start, x->end, x->down, x->up };
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_ZONE_CHANGED, -1, PIZ_SEQUENCE_ZONE_SIZE, a);
+    }
     
-    err |= pizSequenceAddNotification (q, PIZ_EVENT_ZONE_CHANGED, -1, PIZ_SEQUENCE_ZONE_SIZE, a);
-    x->isZoneChanged = false;
+    if (x->flags & PIZ_SEQUENCE_FLAG_CHANCE) {
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANCE_CHANGED, -1, 1, &x->chance);
+    }
+    
+    if (x->flags & PIZ_SEQUENCE_FLAG_VELOCITY) {
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_VELOCITY_CHANGED, -1, 1, &x->velocity);
+    }
+    
+    if (x->flags & PIZ_SEQUENCE_FLAG_CHANNEL) {
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANNEL_CHANGED, -1, 1, &x->channel);
+    }
+    
+    x->flags = PIZ_SEQUENCE_FLAG_NONE;
     //
     }
     

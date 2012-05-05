@@ -8,7 +8,7 @@
  */
  
 /*
- *  April 29, 2012.
+ *  May 5, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -46,6 +46,9 @@ void tralala_loop               (t_tralala *x);
 void tralala_unloop             (t_tralala *x);
 
 void tralala_bpm                (t_tralala *x, long n);
+void tralala_chance             (t_tralala *x, long n);
+void tralala_velocity           (t_tralala *x, long n);
+void tralala_channel            (t_tralala *x, long n);
 
 void tralala_note               (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_clear              (t_tralala *x);
@@ -87,6 +90,9 @@ int main (void)
     class_addmethod (c, (method)tralala_unloop,    "unloop",    0);
     class_addmethod (c, (method)tralala_clear,     "clear",     0);
     class_addmethod (c, (method)tralala_bpm,       "bpm",       A_LONG, 0);
+    class_addmethod (c, (method)tralala_chance,    "chance",    A_LONG, 0);
+    class_addmethod (c, (method)tralala_velocity,  "velocity",  A_LONG, 0);
+    class_addmethod (c, (method)tralala_channel,   "channel",   A_LONG, 0);
     class_addmethod (c, (method)tralala_note,      "note",      A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
@@ -113,7 +119,6 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
             x->leftOutlet           = listout ((t_object *)x);
             
             pizAgentAttach (x->agent, (void *)x, tralala_notify);
-            TRALALA (PIZ_EVENT_INIT)
 
         } else {
             object_free (x);
@@ -136,8 +141,8 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
         sprintf (s, "Messages");
     } else {	
         switch (a) {
-            case 0 : sprintf (s, "(List) Played");   break;
-            case 1 : sprintf (s, "(List) Dumped");   break;
+            case 0 : sprintf (s, "(List) Notes Played");   break;
+            case 1 : sprintf (s, "(List) Notes Dumped");   break;
             case 2 : sprintf (s, "(Bang) End");      break;
             case 3 : sprintf (s, "(Bang) Will End"); break;
         }
@@ -215,6 +220,21 @@ void tralala_unloop (t_tralala *x)
 void tralala_bpm (t_tralala *x, long n) 
 {   
     TRALALA_ARGS (PIZ_EVENT_BPM, 1, &n)
+}
+
+void tralala_chance (t_tralala *x, long n) 
+{   
+    TRALALA_ARGS (PIZ_EVENT_CHANCE, 1, &n)
+}
+
+void tralala_velocity (t_tralala *x, long n) 
+{   
+    TRALALA_ARGS (PIZ_EVENT_VELOCITY, 1, &n)
+}
+
+void tralala_channel (t_tralala *x, long n) 
+{   
+    TRALALA_ARGS (PIZ_EVENT_CHANNEL, 1, &n)
 }
 
 // -------------------------------------------------------------------------------------------------------------

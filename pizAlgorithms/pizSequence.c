@@ -65,9 +65,9 @@ PIZSequence *pizSequenceNew (long size)
     long argv2[2] = { PIZ_SEQUENCE_INIT_LOOKUP_SIZE, PIZ_SEQUENCE_MAXIMUM_NOTES };
     
     if (size > 0) {
-        x->timelineSize = size;
+        x->size = size;
     } else {
-        x->timelineSize = PIZ_SEQUENCE_DEFAULT_TIMELINE_SIZE;
+        x->size = PIZ_SEQUENCE_DEFAULT_SIZE;
     }
     
     x->map           = pizArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
@@ -87,9 +87,9 @@ PIZSequence *pizSequenceNew (long size)
         x->tempNotes2    &&
         x->tempHash      &&
         x->lookup        &&
-        (x->timeline = (PIZLinklist **)calloc (x->timelineSize, sizeof(PIZLinklist **)))) {
+        (x->timeline = (PIZLinklist **)calloc (x->size, sizeof(PIZLinklist **)))) {
 
-        x->isZoneChanged = true;
+        x->flags = PIZ_SEQUENCE_FLAG_NONE;
         
         pizItemset128Clear (&x->usedNotes);
         pizItemset128Clear (&x->addedNotes);
@@ -127,7 +127,7 @@ void pizSequenceFree (PIZSequence *x)
     if (x->timeline) {
         long i;
         
-        for (i = 0; i < x->timelineSize; i++) {
+        for (i = 0; i < x->size; i++) {
             pizLinklistFree (x->timeline[i]);
         }
             

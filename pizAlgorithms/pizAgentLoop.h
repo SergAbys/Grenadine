@@ -64,7 +64,7 @@ PIZ_LOCAL void      pizAgentEventLoopSleep          (PIZAgent *x);
 PIZ_LOCAL bool      pizAgentEventLoopIsCondition    (PIZAgent *x);
 PIZ_LOCAL bool      pizAgentEventLoopIsWorkTime     (PIZAgent *x);
 
-PIZ_LOCAL long      pizAgentEventLoopGetMethod      (const PIZEvent *event, PIZMethod *f, PIZMethodError *e);
+PIZ_LOCAL long      pizAgentEventLoopMethod         (const PIZEvent *event, PIZMethodError *f);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

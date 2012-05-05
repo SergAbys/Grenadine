@@ -50,7 +50,7 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizAgentPlay (PIZAgent *x, PIZEvent *event)
+PIZError pizAgentPlay (PIZAgent *x, PIZEvent *event)
 {
     if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
         x->flags |= PIZ_AGENT_FLAG_REPLAY;
@@ -65,30 +65,37 @@ void pizAgentPlay (PIZAgent *x, PIZEvent *event)
         pizTimeCopy     (&x->grainEnd, &x->grainStart);
         pizTimeAddNano  (&x->grainEnd, &x->grainSize);
     }
+    
+    return PIZ_GOOD;
 }
 
-void pizAgentStop (PIZAgent *x, PIZEvent *event)
+PIZError pizAgentStop (PIZAgent *x, PIZEvent *event)
 {
     x->flags &= ~(PIZ_AGENT_FLAG_LOOPED | PIZ_AGENT_FLAG_REPLAY | PIZ_AGENT_FLAG_RUNNING);
+    
+    return PIZ_GOOD;
 }
 
-void pizAgentLoop (PIZAgent *x, PIZEvent *event)
+PIZError pizAgentLoop (PIZAgent *x, PIZEvent *event)
 {
     x->flags |= PIZ_AGENT_FLAG_LOOPED;
-    pizAgentPlay (x, event);
+    
+    return (pizAgentPlay (x, event));
 }
 
-void pizAgentUnloop (PIZAgent *x, PIZEvent *event)
+PIZError pizAgentUnloop (PIZAgent *x, PIZEvent *event)
 {
     x->flags &= ~PIZ_AGENT_FLAG_LOOPED;
+    
+    return PIZ_GOOD;
 }
 
-void pizAgentBPM (PIZAgent *x, PIZEvent *event)
+PIZError pizAgentBPM (PIZAgent *x, PIZEvent *event)
 {
     long value;
     
-    pizEventValue (event, &value);
-    
+    if (!(pizEventValue (event, &value))) {
+    //
     if ((value >= PIZ_MINIMUM_BPM) && (value <= PIZ_MAXIMUM_BPM) && (value != x->bpm)) {
         x->bpm = value;
         pizAgentAddNotification (x, PIZ_EVENT_BPM_CHANGED, -1, 1, &value);
@@ -97,6 +104,10 @@ void pizAgentBPM (PIZAgent *x, PIZEvent *event)
         pizTimeCopy    (&x->grainEnd, &x->grainStart);
         pizTimeAddNano (&x->grainEnd, &x->grainSize);
     }
+    //
+    }
+    
+    return PIZ_GOOD;
 }
 
 // -------------------------------------------------------------------------------------------------------------

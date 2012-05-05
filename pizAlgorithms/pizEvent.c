@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	May 4, 2012.
+ * \date	May 5, 2012.
  */
  
 /*
@@ -74,6 +74,9 @@ static const long pizEventTypes[ ]   = {    PIZ_EVENT_RUN,                  // P
                                             PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_SCALE
                                             PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_PATTERN
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_BPM_CHANGED
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANCE_CHANGED
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_VELOCITY_CHANGED
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANNEL_CHANGED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_ZONE_CHANGED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_ADDED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_CHANGED
@@ -118,6 +121,9 @@ static const char *pizEventNames[ ]  = {    "Init",
                                             "Pattern", 
                                             //
                                             "Bpm Changed",
+                                            "Chance Changed",
+                                            "Velocity Changed",
+                                            "Channel Changed",
                                             "Zone Changed",
                                             "Note Added",
                                             "Note Changed",
@@ -145,7 +151,7 @@ PIZEvent *pizEventNew (PIZEventName name, long tag, long argc, const long *argv)
             long i;
             x->size = MIN (argc, PIZ_EVENT_DATA_SIZE);
             for (i = 0; i < x->size; i++) {
-                x->data[i] = argv[i];
+                x->data[i] = *(argv + i);
             }
         }
     }
@@ -167,6 +173,16 @@ void pizEventFree (PIZEvent *x)
     free (x);
 }
 
+void pizEventName (const PIZEvent *x, PIZEventName *name)
+{
+    (*name) = x->name;
+}
+
+void pizEventTime (const PIZEvent *x, PIZTime *time)
+{
+    pizTimeCopy (time, &x->time);
+}
+
 PIZError pizEventValue (const PIZEvent *x, long *value)
 {
     PIZError err = PIZ_ERROR;
@@ -177,16 +193,6 @@ PIZError pizEventValue (const PIZEvent *x, long *value)
     } 
     
     return err;
-}
-
-void pizEventName (const PIZEvent *x, PIZEventName *name)
-{
-    (*name) = x->name;
-}
-
-void pizEventTime (const PIZEvent *x, PIZTime *time)
-{
-    pizTimeCopy (time, &x->time);
 }
 
 PIZError pizEventPtr (const PIZEvent *x, long *argc, long **argv)
@@ -200,6 +206,10 @@ PIZError pizEventPtr (const PIZEvent *x, long *argc, long **argv)
     
     return err;
 }
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void pizEventNameAsString (const PIZEvent *x, const char **name)
 {

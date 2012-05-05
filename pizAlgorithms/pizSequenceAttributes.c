@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceAttributes.c
  * \author  Jean Sapristi
- * \date    May 4, 2012.
+ * \date    May 5, 2012.
  */
  
 /*
@@ -74,34 +74,62 @@ static const long pizSequenceModes[ ] =
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-//void pizSequenceSetChance (PIZSequence *x, long value)
-void pizSequenceSetChance (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetChance (PIZSequence *x, const PIZEvent *event)
 {
-    //x->chance = CLAMP (value, 0, 100);
+    long value;
+    
+    if (!(pizEventValue (event, &value))) {
+        if ((value >= 0) && (value <= 100) && (value != x->chance)) {
+            x->chance = value;
+            x->flags |= PIZ_SEQUENCE_FLAG_CHANCE;
+        }
+    }
+    
+    return PIZ_GOOD;
 }
 
-//void pizSequenceSetVelocity (PIZSequence *x, long value)
-void pizSequenceSetVelocity (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetVelocity (PIZSequence *x, const PIZEvent *event)
 {
-    //x->velocity = value;
+    long value;
+    
+    if (!(pizEventValue (event, &value))) {
+        if (value != x->velocity) {
+            x->velocity = value;
+            x->flags |= PIZ_SEQUENCE_FLAG_VELOCITY;
+        }
+    }
+    
+    return PIZ_GOOD;
 }
 
-//void pizSequenceSetChannel (PIZSequence *x, long channel)
-void pizSequenceSetChannel (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetChannel (PIZSequence *x, const PIZEvent *event)
 {
-    //x->channel = CLAMP (channel, 1, PIZ_MAGIC_CHANNEL);
+    long value;
+    
+    if (!(pizEventValue (event, &value))) {
+        if ((value >= 0) && (value <= PIZ_MAGIC_CHANNEL) && (value != x->channel)) {
+            x->channel = value;
+            x->flags |= PIZ_SEQUENCE_FLAG_CHANNEL;
+        }
+    }
+    
+    return PIZ_GOOD;
 }
 
 //void pizSequenceSetCell (PIZSequence *x, PIZNoteValue snapValue)
-void pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
 {
     //x->cell = snapValue;
+    
+    return PIZ_GOOD;
 }
 
 //void pizSequenceSetNoteValue (PIZSequence *x, PIZNoteValue noteValue)
-void pizSequenceSetNoteValue (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetNoteValue (PIZSequence *x, const PIZEvent *event)
 {
     //x->noteValue = noteValue;
+    
+    return PIZ_GOOD;
 }
 
 // -------------------------------------------------------------------------------------------------------------
