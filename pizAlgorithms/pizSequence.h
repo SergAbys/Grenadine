@@ -40,7 +40,6 @@
 
 /* 
  *  PIZ_SEQUENCE_MAXIMUM_NOTES   = PIZ_ITEMSET128_SIZE 
- *  PIZ_SEQUENCE_MAXIMUM_PATTERN = PIZ_EVENT_DATA_SIZE 
  *  PIZ_SEQUENCE_INIT_TEMP_SIZE  = MAX (MAXIMUM_NOTES, MAXIMUM_DURATION, PIZ_MAGIC_PITCH + 1) 
  */
 
@@ -60,10 +59,11 @@
 
 #define PIZ_SEQUENCE_MAXIMUM_NOTES          128
 #define PIZ_SEQUENCE_MAXIMUM_DURATION       96
-#define PIZ_SEQUENCE_MAXIMUM_PATTERN        12
                                         
 #define PIZ_SEQUENCE_INIT_TEMP_SIZE         128
 #define PIZ_SEQUENCE_INIT_LOOKUP_SIZE       19
+#define PIZ_SEQUENCE_INIT_PATTERN_SIZE      12
+
 #define PIZ_SEQUENCE_DEFAULT_SIZE           288 
 #define PIZ_SEQUENCE_DEFAULT_VELOCITY       80
 
@@ -82,32 +82,8 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-#define PIZ_SEQUENCE_NOTE_SIZE              5
-#define PIZ_SEQUENCE_ZONE_SIZE              4
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
       
 enum {
-    PIZ_DATA_POSITION       = 0,
-    PIZ_DATA_PITCH          = 1,
-    PIZ_DATA_VELOCITY       = 2,
-    PIZ_DATA_DURATION       = 3,
-    PIZ_DATA_CHANNEL        = 4,
-    };
-
-enum {
-    PIZ_DATA_START          = 0,
-    PIZ_DATA_END            = 1,
-    PIZ_DATA_DOWN           = 2,
-    PIZ_DATA_UP             = 3
-    };
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-typedef enum _PIZNoteValue {
     PIZ_WHOLE_NOTE_DOTTED           = 144,
     PIZ_WHOLE_NOTE                  = 96,
     PIZ_WHOLE_NOTE_TRIPLET          = 64,
@@ -126,9 +102,9 @@ typedef enum _PIZNoteValue {
     PIZ_THIRTY_SECOND_NOTE          = 3,
     PIZ_THIRTY_SECOND_NOTE_TRIPLET  = 2,
     PIZ_NOTE_VALUE_NONE             = 1
-    } PIZNoteValue;
+    };
 
-typedef enum _PIZScaleType {
+enum {
     PIZ_SCALE_CUSTOM                = -2,
     PIZ_SCALE_NONE                  = -1,
     PIZ_IONIAN                      =  0,
@@ -156,9 +132,9 @@ typedef enum _PIZScaleType {
     PIZ_SEVENTH_SUSPENDED,
     PIZ_SEVENTH_SHARP_FIVE,
     PIZ_SEVENTH_FLAT_FIVE
-    } PIZScaleType;
+    };
 
-typedef enum _PIZScaleKey {
+enum {
     PIZ_KEY_C = 0,
     PIZ_KEY_C_SHARP,
     PIZ_KEY_D,
@@ -171,27 +147,24 @@ typedef enum _PIZScaleKey {
     PIZ_KEY_A,
     PIZ_KEY_A_SHARP,
     PIZ_KEY_B
-    } PIZScaleKey;
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-typedef enum _PIZMidiSelector {
-    PIZ_MIDI_PITCH      = 0,
-    PIZ_MIDI_VELOCITY   = 1,
-    PIZ_MIDI_DURATION   = 2,
-    PIZ_MIDI_CHANNEL    = 3
-    } PIZMidiSelector;
+    };
     
+enum {
+    PIZ_VALUE_PITCH      = 0,
+    PIZ_VALUE_VELOCITY   = 1,
+    PIZ_VALUE_DURATION   = 2,
+    PIZ_VALUE_CHANNEL    = 3, 
+    };
+    
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 typedef struct _PIZNote {
-    long    tag;
-    long    position;
-    long    midi[4];
+    long tag;
+    long position;
+    long values[4];
     } PIZNote;
     
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 typedef struct _PIZSequence {
     long                    tempIndex;
     PIZError                tempError;
@@ -219,16 +192,16 @@ typedef struct _PIZSequence {
     long                    chance;
     long                    channel;
     long                    velocity;
-    PIZNoteValue            cell;
-    PIZNoteValue            noteValue;
+    long                    cell;
+    long                    noteValue;
     unsigned int            seed;
     } PIZSequence;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZSequence   *pizSequenceNew   (long size);
-PIZ_LOCAL void          pizSequenceFree   (PIZSequence *x);
+PIZ_LOCAL PIZSequence   *pizSequenceNew (long size);
+PIZ_LOCAL void          pizSequenceFree (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

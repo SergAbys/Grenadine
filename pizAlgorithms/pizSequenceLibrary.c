@@ -101,11 +101,11 @@ void pizSequenceFillTempHash (PIZSequence *x, PIZNote *note, const PIZEvent *eve
     long key, scale, offset = 0;
     
     if (scale = pizArrayCount (x->scale)) {
-        offset = pizArrayValueAtIndex (x->scale, note->midi[PIZ_MIDI_PITCH] % scale);
+        offset = pizArrayValueAtIndex (x->scale, note->values[PIZ_VALUE_PITCH] % scale);
     }
     
     key = ((long)(note->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1));
-    key += note->midi[PIZ_MIDI_PITCH] + offset;
+    key += note->values[PIZ_VALUE_PITCH] + offset;
     
     x->tempError |= pizBoundedHashTableAdd (x->tempHash, key, (void *)note);*/
 }
@@ -125,11 +125,11 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
     PIZNote *newNote = NULL;
     long    err      = PIZ_GOOD;
     long    k        = -1;
-    long    position = argv[PIZ_DATA_POSITION];
-    long    pitch    = argv[PIZ_DATA_PITCH];
-    long    velocity = argv[PIZ_DATA_VELOCITY];
-    long    duration = argv[PIZ_DATA_DURATION]; 
-    long    channel  = argv[PIZ_DATA_CHANNEL]; 
+    long    position = argv[0];
+    long    pitch    = argv[1];
+    long    velocity = argv[2];
+    long    duration = argv[3]; 
+    long    channel  = argv[4]; 
     
     if (flags & PIZ_SEQUENCE_FLAG_SNAP) {
         position = pizSequenceSnapPositionToPattern (x, position);
@@ -156,12 +156,12 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
     err |= pizSequenceGetTag (x, tag, &k);
     
     if (!err && (newNote = (PIZNote *)malloc (sizeof(PIZNote)))) {
-        newNote->tag                     = k;
-        newNote->position                = position;
-        newNote->midi[PIZ_MIDI_PITCH]    = CLAMP (pitch,    0, PIZ_MAGIC_PITCH);
-        newNote->midi[PIZ_MIDI_VELOCITY] = CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY);
-        newNote->midi[PIZ_MIDI_DURATION] = CLAMP (duration, 0, PIZ_SEQUENCE_MAXIMUM_DURATION);
-        newNote->midi[PIZ_MIDI_CHANNEL]  = CLAMP (channel,  0, PIZ_MAGIC_CHANNEL);
+        newNote->tag                        = k;
+        newNote->position                   = position;
+        newNote->values[PIZ_VALUE_PITCH]    = CLAMP (pitch,    0, PIZ_MAGIC_PITCH);
+        newNote->values[PIZ_VALUE_VELOCITY] = CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY);
+        newNote->values[PIZ_VALUE_DURATION] = CLAMP (duration, 0, PIZ_SEQUENCE_MAXIMUM_DURATION);
+        newNote->values[PIZ_VALUE_CHANNEL]  = CLAMP (channel,  0, PIZ_MAGIC_CHANNEL);
     
         if (!(x->timeline[newNote->position])) {
             if (!(x->timeline[newNote->position] = pizLinklistNew ( ))) {

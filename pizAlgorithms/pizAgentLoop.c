@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	May 5, 2012.
+ * \date	May 6, 2012.
  */
  
 /*
@@ -57,9 +57,9 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_NONE        0
-#define PIZ_AGENT       1
-#define PIZ_SEQUENCE    2
+#define PIZ_PTR_NONE        0
+#define PIZ_PTR_AGENT       1
+#define PIZ_PTR_SEQUENCE    2
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -181,7 +181,7 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q)
     
     if (k = pizAgentEventLoopMethod (event, &f)) {
         
-        if (k == PIZ_AGENT) {
+        if (k == PIZ_PTR_AGENT) {
             o = x;
         } else {
             o = x->sequence;
@@ -374,22 +374,22 @@ bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
 
 long pizAgentEventLoopMethod (const PIZEvent *event, PIZMethodError *f)
 {
-    long         k = PIZ_NONE;
+    long         k = PIZ_PTR_NONE;
     PIZEventName name;
     
     pizEventName (event, &name);
     
     switch (name) {
-        case PIZ_EVENT_PLAY     : *f = pizAgentPlay;            k = PIZ_AGENT;      break;
-        case PIZ_EVENT_STOP     : *f = pizAgentStop;            k = PIZ_AGENT;      break;
-        case PIZ_EVENT_LOOP     : *f = pizAgentLoop;            k = PIZ_AGENT;      break;
-        case PIZ_EVENT_UNLOOP   : *f = pizAgentUnloop;          k = PIZ_AGENT;      break;
-        case PIZ_EVENT_BPM      : *f = pizAgentBPM;             k = PIZ_AGENT;      break;
-        case PIZ_EVENT_NOTE     : *f = pizSequenceNote;         k = PIZ_SEQUENCE;   break;
-        case PIZ_EVENT_CLEAR    : *f = pizSequenceClear;        k = PIZ_SEQUENCE;   break; 
-        case PIZ_EVENT_CHANCE   : *f = pizSequenceSetChance;    k = PIZ_SEQUENCE;   break;
-        case PIZ_EVENT_VELOCITY : *f = pizSequenceSetVelocity;  k = PIZ_SEQUENCE;   break;
-        case PIZ_EVENT_CHANNEL  : *f = pizSequenceSetChannel;   k = PIZ_SEQUENCE;   break;
+        case PIZ_EVENT_PLAY     : *f = pizAgentPlay;            k = PIZ_PTR_AGENT;      break;
+        case PIZ_EVENT_STOP     : *f = pizAgentStop;            k = PIZ_PTR_AGENT;      break;
+        case PIZ_EVENT_LOOP     : *f = pizAgentLoop;            k = PIZ_PTR_AGENT;      break;
+        case PIZ_EVENT_UNLOOP   : *f = pizAgentUnloop;          k = PIZ_PTR_AGENT;      break;
+        case PIZ_EVENT_BPM      : *f = pizAgentBPM;             k = PIZ_PTR_AGENT;      break;
+        case PIZ_EVENT_NOTE     : *f = pizSequenceNote;         k = PIZ_PTR_SEQUENCE;   break;
+        case PIZ_EVENT_CLEAR    : *f = pizSequenceClear;        k = PIZ_PTR_SEQUENCE;   break; 
+        case PIZ_EVENT_CHANCE   : *f = pizSequenceSetChance;    k = PIZ_PTR_SEQUENCE;   break;
+        case PIZ_EVENT_VELOCITY : *f = pizSequenceSetVelocity;  k = PIZ_PTR_SEQUENCE;   break;
+        case PIZ_EVENT_CHANNEL  : *f = pizSequenceSetChannel;   k = PIZ_PTR_SEQUENCE;   break;
     }
     
     return k;

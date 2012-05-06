@@ -117,7 +117,7 @@ static const double pizSequenceDistribution7[ ] = { 0.56, 0.63, 0.70, 0.77, 0.84
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL void pizSequenceFillNotes (PIZSequence *x, PIZMidiSelector selector, bool reverse);
+PIZ_LOCAL void pizSequenceFillNotes (PIZSequence *x, long selector, bool reverse);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -131,13 +131,13 @@ PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
     if (!(pizEventPtr (event, &argc, &argv))) {
         long  i;
         ulong flags = PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS;
-        long  values[ ] = { -1, 
-                            0, 
-                            PIZ_SEQUENCE_DEFAULT_VELOCITY, 
-                            x->noteValue, 
-                            0 };
+        long  values[ ] = { -1,
+                             0, 
+                             PIZ_SEQUENCE_DEFAULT_VELOCITY, 
+                             x->noteValue, 
+                             0 };
         
-        for (i = 0; i < MIN (argc, PIZ_SEQUENCE_NOTE_SIZE); i++) {
+        for (i = 0; i < MIN (argc, 5); i++) {
             values[i] = argv[i];
         }
         
@@ -190,9 +190,9 @@ PIZError pizSequenceTranspose (PIZSequence *x, const PIZEvent *event)
             
             pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
-            temp = CLAMP (note->midi[PIZ_MIDI_PITCH] + n, 0, PIZ_MAGIC_PITCH);
-            if (note->midi[PIZ_MIDI_PITCH] != temp) {
-                note->midi[PIZ_MIDI_PITCH] = temp;
+            temp = CLAMP (note->values[PIZ_VALUE_PITCH] + n, 0, PIZ_MAGIC_PITCH);
+            if (note->values[PIZ_VALUE_PITCH] != temp) {
+                note->values[PIZ_VALUE_PITCH] = temp;
                 PIZ_TAG (&x->changedNotes, note->tag);
             }
             
@@ -210,7 +210,7 @@ PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
     long            k;
     PIZMethodLong   count = NULL;
     PIZMethodError  proceed = NULL;
-    PIZMidiSelector selector = PIZ_MIDI_PITCH;
+    PIZMidiSelector selector = PIZ_VALUE_PITCH;
     
     PIZ_PICKUP_NOTES
 
@@ -231,7 +231,7 @@ PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
         for (i = 0; i < k; i++) {        
             h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
             if (h >= x->chance) {
-                x->tempValues[i] = x->tempNotes1[i]->midi[selector];
+                x->tempValues[i] = x->tempNotes1[i]->values[selector];
             } 
         }
         
@@ -286,13 +286,13 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
         pizLinklistPtrAtIndex (x->timeline[p], q, (void **)&note);
         
         if (scale) {
-            offset = pizArrayValueAtIndex (x->scale, note->midi[PIZ_MIDI_PITCH] % scale);
+            offset = pizArrayValueAtIndex (x->scale, note->values[PIZ_VALUE_PITCH] % scale);
         }
         
-        pitch = note->midi[PIZ_MIDI_PITCH] + offset;
+        pitch = note->values[PIZ_VALUE_PITCH] + offset;
         
         hCenter = ((long)(note->position / (double)x->cell)) * (PIZ_MAGIC_PITCH + 1);
-        hCenter += note->midi[PIZ_MIDI_PITCH] + offset;
+        hCenter += note->values[PIZ_VALUE_PITCH] + offset;
         
         err2 |= (note->position < x->start);
         err2 |= (note->position >= x->end);
@@ -425,11 +425,11 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
                 
                 if (neighbors == 1) {
                 //
-                long values[ ] = {  ((long)(hPat[j] / (double)(PIZ_MAGIC_PITCH + 1))) * x->cell,
-                                    hPat[j] % (PIZ_MAGIC_PITCH + 1),
-                                    noteToCopy->midi[PIZ_MIDI_VELOCITY], 
-                                    noteToCopy->midi[PIZ_MIDI_DURATION],
-                                    noteToCopy->midi[PIZ_MIDI_CHANNEL]  };
+                long values[ ] = { ((long)(hPat[j] / (double)(PIZ_MAGIC_PITCH + 1))) * x->cell,
+                                   hPat[j] % (PIZ_MAGIC_PITCH + 1),
+                                   noteToCopy->values[PIZ_VALUE_VELOCITY], 
+                                   noteToCopy->values[PIZ_VALUE_DURATION],
+                                   noteToCopy->values[PIZ_VALUE_CHANNEL] };
                                     
                 PIZNote *newNote = pizSequenceNewNote (x, -1, values, PIZ_SEQUENCE_FLAG_CLIP);
                 
@@ -558,18 +558,18 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
     }
     
     if (scale) {
-        offset = pizArrayValueAtIndex (x->scale, note1->midi[PIZ_MIDI_PITCH] % scale);
+        offset = pizArrayValueAtIndex (x->scale, note1->values[PIZ_VALUE_PITCH] % scale);
     }
                 
-    newKey = (newPosition * (PIZ_MAGIC_PITCH + 1)) + note1->midi[PIZ_MIDI_PITCH] + offset;
+    newKey = (newPosition * (PIZ_MAGIC_PITCH + 1)) + note1->values[PIZ_VALUE_PITCH] + offset;
     
     if (!(pizBoundedHashTableContainsKey (x->tempHash, newKey))) {
     //
         long values[ ] = { newPosition * x->cell,
-                           note1->midi[PIZ_MIDI_PITCH] + offset,
-                           note1->midi[PIZ_MIDI_VELOCITY],
-                           note1->midi[PIZ_MIDI_DURATION],
-                           note1->midi[PIZ_MIDI_CHANNEL]    };
+                           note1->values[PIZ_VALUE_PITCH] + offset,
+                           note1->values[PIZ_VALUE_VELOCITY],
+                           note1->values[PIZ_VALUE_DURATION],
+                           note1->values[PIZ_VALUE_CHANNEL] };
 
         note2 = pizSequenceNewNote (x, -1, values, PIZ_SEQUENCE_FLAG_CLIP);
         
@@ -630,7 +630,7 @@ PIZError pizSequenceClean (PIZSequence *x, const PIZEvent *event)
         
         pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
         
-        pitch = note->midi[PIZ_MIDI_PITCH];
+        pitch = note->values[PIZ_VALUE_PITCH];
                 
         if (scale) {
             pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
@@ -681,7 +681,7 @@ PIZError pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
     }
 
     for (i = 0; i < k; i++) {
-        x->tempValues[i] = x->tempNotes1[(i + shift) % k]->midi[selector];
+        x->tempValues[i] = x->tempNotes1[(i + shift) % k]->values[selector];
     }
                 
     PIZ_FILL_NOTES*/
@@ -697,7 +697,7 @@ PIZError pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
     PIZ_PICKUP_NOTES
     
     for (i = 0; i < k; i++) {
-        x->tempValues[i] = x->tempNotes1[i]->midi[selector];
+        x->tempValues[i] = x->tempNotes1[i]->values[selector];
     }
         
     for (i = (k - 1); i > 0; i--) {
@@ -727,9 +727,9 @@ PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
         x->tempValues[i] = 0;
     }
     
-    if (selector == PIZ_MIDI_PITCH) {
+    if (selector == PIZ_VALUE_PITCH) {
         for (i = 0; i < k; i++) { 
-            long pitch = x->tempNotes1[i]->midi[PIZ_MIDI_PITCH];
+            long pitch = x->tempNotes1[i]->values[PIZ_VALUE_PITCH];
                             
             if (scale) {
                 pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
@@ -739,7 +739,7 @@ PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
         }
     } else {
         for (i = 0; i < k; i++) { 
-            x->tempValues[x->tempNotes1[i]->midi[selector]] ++; 
+            x->tempValues[x->tempNotes1[i]->values[selector]] ++; 
         }   
     }
         
@@ -747,9 +747,9 @@ PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
         x->tempValues[i] += x->tempValues[i - 1];
     }
                 
-    if (selector == PIZ_MIDI_PITCH) {
+    if (selector == PIZ_VALUE_PITCH) {
         for (i = (k - 1); i >= 0; i--) {
-            long pitch = x->tempNotes1[i]->midi[PIZ_MIDI_PITCH];
+            long pitch = x->tempNotes1[i]->values[PIZ_VALUE_PITCH];
                                 
             if (scale) {
                 pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
@@ -760,13 +760,13 @@ PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
         }
     } else {
         for (i = (k - 1); i >= 0; i--) {    
-            x->tempNotes2[x->tempValues[x->tempNotes1[i]->midi[selector]] - 1] = x->tempNotes1[i];
-            x->tempValues[x->tempNotes1[i]->midi[selector]] --;
+            x->tempNotes2[x->tempValues[x->tempNotes1[i]->values[selector]] - 1] = x->tempNotes1[i];
+            x->tempValues[x->tempNotes1[i]->values[selector]] --;
         }
     }
     
     for (i = 0; i < k; i++) {
-        x->tempValues[i] = x->tempNotes2[i]->midi[selector];
+        x->tempValues[i] = x->tempNotes2[i]->values[selector];
     }
      
     if (!down) {
@@ -803,16 +803,17 @@ PIZError pizSequenceChange (PIZSequence *x, const PIZEvent *event)
     //
     switch (selector) {
     //
-    case PIZ_MIDI_PITCH    : t = CLAMP (note->midi[PIZ_MIDI_PITCH] + value, 0, PIZ_MAGIC_PITCH); break;
-    case PIZ_MIDI_VELOCITY : t = CLAMP (note->midi[PIZ_MIDI_VELOCITY] + value, 0, PIZ_MAGIC_VELOCITY); break;
-    case PIZ_MIDI_DURATION : m = MIN   (x->size - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
-                             t = CLAMP (note->midi[PIZ_MIDI_DURATION] + value, 1, m); break;
-    case PIZ_MIDI_CHANNEL  : t = CLAMP (note->midi[PIZ_MIDI_CHANNEL] + value, 0, PIZ_MAGIC_CHANNEL); break;
+    case PIZ_VALUE_PITCH    : t = CLAMP (note->values[PIZ_VALUE_PITCH] + value, 0, PIZ_MAGIC_PITCH); break;
+    case PIZ_VALUE_VELOCITY : t = CLAMP (note->values[PIZ_VALUE_VELOCITY] + value, 0, PIZ_MAGIC_VELOCITY); 
+                                break;
+    case PIZ_VALUE_DURATION : m = MIN   (x->size - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
+                             t = CLAMP (note->values[PIZ_VALUE_DURATION] + value, 1, m); break;
+    case PIZ_VALUE_CHANNEL  : t = CLAMP (note->values[PIZ_VALUE_CHANNEL] + value, 0, PIZ_MAGIC_CHANNEL); break;
     //                            
     }
     
-    if (note->midi[selector] != t) {
-        note->midi[selector] = t;
+    if (note->values[selector] != t) {
+        note->values[selector] = t;
         PIZ_TAG (&x->changedNotes, note->tag);
     }
     //
@@ -850,15 +851,15 @@ PIZError pizSequenceSet (PIZSequence *x, const PIZEvent *event)
     
     if (h < x->chance) {
         switch (selector) {
-        case PIZ_MIDI_PITCH    : t = CLAMP (value, 0, PIZ_MAGIC_PITCH); break;
-        case PIZ_MIDI_VELOCITY : t = CLAMP (value, 0, PIZ_MAGIC_VELOCITY); break;
-        case PIZ_MIDI_DURATION : m = MIN   (x->size - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
+        case PIZ_VALUE_PITCH    : t = CLAMP (value, 0, PIZ_MAGIC_PITCH); break;
+        case PIZ_VALUE_VELOCITY : t = CLAMP (value, 0, PIZ_MAGIC_VELOCITY); break;
+        case PIZ_VALUE_DURATION : m = MIN   (x->size - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
                                  t = CLAMP (value, 1, m); break;
-        case PIZ_MIDI_CHANNEL  : t = CLAMP (value, 0, PIZ_MAGIC_CHANNEL); break;
+        case PIZ_VALUE_CHANNEL  : t = CLAMP (value, 0, PIZ_MAGIC_CHANNEL); break;
         }
         
-        if (note->midi[selector] != t) {
-            note->midi[selector] = t;
+        if (note->values[selector] != t) {
+            note->values[selector] = t;
             PIZ_TAG (&x->changedNotes, note->tag);
         }
     }
@@ -906,15 +907,16 @@ PIZError pizSequenceRandom (PIZSequence *x, const PIZEvent *event)
     long value = minValue + (long)(range * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
     
     switch (selector) {
-    case PIZ_MIDI_PITCH    : t = CLAMP (note->midi[PIZ_MIDI_PITCH] + value, 0, PIZ_MAGIC_PITCH); break;
-    case PIZ_MIDI_VELOCITY : t = CLAMP (note->midi[PIZ_MIDI_VELOCITY] + value, 0, PIZ_MAGIC_VELOCITY); break;
-    case PIZ_MIDI_DURATION : m = MIN   (x->size - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
-                             t = CLAMP (note->midi[PIZ_MIDI_DURATION] + value, 1, m); break;
-    case PIZ_MIDI_CHANNEL  : t = CLAMP (note->midi[PIZ_MIDI_CHANNEL] + value, 0, PIZ_MAGIC_CHANNEL); break;
+    case PIZ_VALUE_PITCH    : t = CLAMP (note->values[PIZ_VALUE_PITCH] + value, 0, PIZ_MAGIC_PITCH); break;
+    case PIZ_VALUE_VELOCITY : t = CLAMP (note->values[PIZ_VALUE_VELOCITY] + value, 0, PIZ_MAGIC_VELOCITY); 
+                            break;
+    case PIZ_VALUE_DURATION : m = MIN   (x->size - note->position, PIZ_SEQUENCE_MAXIMUM_DURATION);
+                             t = CLAMP (note->values[PIZ_VALUE_DURATION] + value, 1, m); break;
+    case PIZ_VALUE_CHANNEL  : t = CLAMP (note->values[PIZ_VALUE_CHANNEL] + value, 0, PIZ_MAGIC_CHANNEL); break;
     }
     
-    if (note->midi[selector] != t) {
-        note->midi[selector] = t;
+    if (note->values[selector] != t) {
+        note->values[selector] = t;
         PIZ_TAG (&x->changedNotes, note->tag);
     }
     //
@@ -1011,7 +1013,7 @@ PIZError pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
         if (h < x->chance) {
             long pitch, offset = 0;
             
-            pitch = note->midi[PIZ_MIDI_PITCH];
+            pitch = note->values[PIZ_VALUE_PITCH];
             
             if (scale) {
                 offset += pizArrayValueAtIndex (x->scale, pitch % scale);
@@ -1020,8 +1022,8 @@ PIZError pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
             pitch = CLAMP (pitch + offset, 0, PIZ_MAGIC_PITCH);
             pitch += s[pitch % PIZ_MAGIC_SCALE];
     
-            if (pitch != (note->midi[PIZ_MIDI_PITCH] + offset)) {
-                note->midi[PIZ_MIDI_PITCH] = CLAMP (pitch, 0, PIZ_MAGIC_PITCH);
+            if (pitch != (note->values[PIZ_VALUE_PITCH] + offset)) {
+                note->values[PIZ_VALUE_PITCH] = CLAMP (pitch, 0, PIZ_MAGIC_PITCH);
                 PIZ_TAG (&x->changedNotes, note->tag);
             }
         }
@@ -1042,7 +1044,7 @@ PIZError pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizSequenceFillNotes (PIZSequence *x, PIZMidiSelector selector, bool reverse)
+void pizSequenceFillNotes (PIZSequence *x, long selector, bool reverse)
 {
     long i;
     
@@ -1056,8 +1058,8 @@ void pizSequenceFillNotes (PIZSequence *x, PIZMidiSelector selector, bool revers
         t = x->tempValues[(x->tempIndex - 1) - i];
     }
     
-    if (x->tempNotes1[i]->midi[selector] != t) {
-        x->tempNotes1[i]->midi[selector] = t;
+    if (x->tempNotes1[i]->values[selector] != t) {
+        x->tempNotes1[i]->values[selector] = t;
         PIZ_TAG (&x->changedNotes, x->tempNotes1[i]->tag);
     }
     //

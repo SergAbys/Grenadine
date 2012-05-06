@@ -161,16 +161,14 @@ void tralala_notify (void *ptr, PIZEvent *event)
     pizEventName (event, &name);
     
     if (name == PIZ_EVENT_NOTE_PLAYED) {
-    //
-    long    argc;
-    long    *argv = NULL;
-    t_atom  notePlayed[4];
-    
-    if ((!(pizEventPtr (event, &argc, &argv)) && (argc == PIZ_SEQUENCE_NOTE_SIZE))) {
-        atom_setlong_array (4, notePlayed, 4, argv + PIZ_DATA_PITCH);
-        outlet_list (x->leftOutlet, NULL, 4, notePlayed); 
-    }
-    //
+        long    argc;
+        long    *argv = NULL;
+        t_atom  notePlayed[4];
+        
+        if (!(pizEventPtr (event, &argc, &argv))) {
+            atom_setlong_array (4, notePlayed, 4, argv + 1);
+            outlet_list (x->leftOutlet, NULL, 4, notePlayed); 
+        }
     
     } else if (name == PIZ_EVENT_END) {
         outlet_bang (x->middleRightOutlet);
@@ -243,17 +241,15 @@ void tralala_channel (t_tralala *x, long n)
 
 void tralala_note (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    if ((argc > 1) && (argc <= PIZ_SEQUENCE_NOTE_SIZE)) {
-    //
-    long values[PIZ_SEQUENCE_NOTE_SIZE];
-    
-    atom_getlong_array (argc, argv, PIZ_SEQUENCE_NOTE_SIZE, values);
-    
-    values[PIZ_DATA_POSITION] = (long)(values[PIZ_DATA_POSITION] / TICKS_PER_STEP);
-    values[PIZ_DATA_DURATION] = (long)(values[PIZ_DATA_DURATION] / TICKS_PER_STEP);
-    
-    TRALALA_ARGS (PIZ_EVENT_NOTE, argc, values)
-    //
+    if ((argc > 1) && (argc <= 5)) {
+        long values[5];
+        
+        atom_getlong_array (argc, argv, 5, values);
+        
+        values[0] = (long)(values[0] / TICKS_PER_STEP);
+        values[3] = (long)(values[3] / TICKS_PER_STEP);
+        
+        TRALALA_ARGS (PIZ_EVENT_NOTE, argc, values)
     }
 }
 

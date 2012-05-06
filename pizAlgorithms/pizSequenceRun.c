@@ -98,10 +98,10 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *q, long bpm)
         
         pizLinklistNextByPtr (x->timeline[x->index], (void *)note, (void **)&nextNote);
         
-        pitch    = note->midi[PIZ_MIDI_PITCH];
-        velocity = note->midi[PIZ_MIDI_VELOCITY];
-        duration = note->midi[PIZ_MIDI_DURATION];
-        channel  = note->midi[PIZ_MIDI_CHANNEL];
+        pitch    = note->values[PIZ_VALUE_PITCH];
+        velocity = note->values[PIZ_VALUE_VELOCITY];
+        duration = note->values[PIZ_VALUE_DURATION];
+        channel  = note->values[PIZ_VALUE_CHANNEL];
         
         if (scale) {
             pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
@@ -117,13 +117,13 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *q, long bpm)
             
         if ((pitch >= x->down) && (pitch <= x->up)) {
         //
-        long a[ ] = { note->position,
+        long a[ ] = { note->position, 
                       CLAMP (pitch, 0, PIZ_MAGIC_PITCH),
                       CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY),
                       (long)(duration * (PIZ_CONSTANT_DURATION / bpm)), 
                       channel };
         
-        err |= pizSequenceAddNotification (q, PIZ_EVENT_NOTE_PLAYED, note->tag, PIZ_SEQUENCE_NOTE_SIZE, a);
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_NOTE_PLAYED, note->tag, 5, a);
         //
         }
         
@@ -155,7 +155,7 @@ PIZError pizSequenceNotifications (PIZSequence *x, PIZLinklist *q)
     //
     if (x->flags & PIZ_SEQUENCE_FLAG_ZONE) {
         long a[ ] = { x->start, x->end, x->down, x->up };
-        err |= pizSequenceAddNotification (q, PIZ_EVENT_ZONE_CHANGED, -1, PIZ_SEQUENCE_ZONE_SIZE, a);
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_ZONE_CHANGED, -1, 4, a);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANCE) {
@@ -192,13 +192,13 @@ PIZError pizSequenceNotifications (PIZSequence *x, PIZLinklist *q)
         if (pizItemset128IsSetAtIndex (&x->addedNotes, i)) {
             if (!(pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note))) {
             
-                long a[ ] = { note->position,
-                              note->midi[PIZ_MIDI_PITCH],
-                              note->midi[PIZ_MIDI_VELOCITY],
-                              note->midi[PIZ_MIDI_DURATION], 
-                              note->midi[PIZ_MIDI_CHANNEL] };
+                long a[ ] = { note->position, 
+                              note->values[PIZ_VALUE_PITCH],
+                              note->values[PIZ_VALUE_VELOCITY],
+                              note->values[PIZ_VALUE_DURATION], 
+                              note->values[PIZ_VALUE_CHANNEL] };
                 
-                err |= pizSequenceAddNotification (q, PIZ_EVENT_NOTE_ADDED, i, PIZ_SEQUENCE_NOTE_SIZE, a);
+                err |= pizSequenceAddNotification (q, PIZ_EVENT_NOTE_ADDED, i, 5, a);
             }
             PIZ_UNTAG (&x->changedNotes, i);
         } 
@@ -215,12 +215,12 @@ PIZError pizSequenceNotifications (PIZSequence *x, PIZLinklist *q)
             if (!(pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note))) {
             
                 long a[ ] = { note->position,
-                              note->midi[PIZ_MIDI_PITCH],
-                              note->midi[PIZ_MIDI_VELOCITY],
-                              note->midi[PIZ_MIDI_DURATION], 
-                              note->midi[PIZ_MIDI_CHANNEL] };
+                              note->values[PIZ_VALUE_PITCH],
+                              note->values[PIZ_VALUE_VELOCITY],
+                              note->values[PIZ_VALUE_DURATION], 
+                              note->values[PIZ_VALUE_CHANNEL] };
                 
-                pizSequenceAddNotification (q, PIZ_EVENT_NOTE_CHANGED, i, PIZ_SEQUENCE_NOTE_SIZE, a);
+                pizSequenceAddNotification (q, PIZ_EVENT_NOTE_CHANGED, i, 5, a);
             }
         } 
     }

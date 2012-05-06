@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	May 5, 2012.
+ * \date	May 6, 2012.
  */
  
 /*
@@ -141,8 +141,8 @@ PIZEvent *pizEventNew (PIZEventName name, long tag, long argc, const long *argv)
     PIZEvent *x = NULL;
     
     if (x = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        x->type = pizEventTypes[name];
         x->name = name;
+        x->type = pizEventTypes[name];
         x->tag  = tag; 
         
         pizTimeSet (&x->time);
@@ -151,7 +151,7 @@ PIZEvent *pizEventNew (PIZEventName name, long tag, long argc, const long *argv)
             long i;
             x->size = MIN (argc, PIZ_EVENT_DATA_SIZE);
             for (i = 0; i < x->size; i++) {
-                x->data[i] = *(argv + i);
+                x->data[i] = argv[i];
             }
         }
     }
