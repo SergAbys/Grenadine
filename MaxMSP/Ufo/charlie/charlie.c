@@ -1,8 +1,6 @@
 /*
  *  charlie.c
  *
- *  Created : 03/03/11.
- *
  *  nicolas.danet@free.fr
  *
  */

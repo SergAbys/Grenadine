@@ -4,7 +4,6 @@
 		activeBuildConfigurationName = Release;
 		activeTarget = 8D01CCC60486CAD60068D4B7 /* max_external */;
 		addToTargets = (
-			8D01CCC60486CAD60068D4B7 /* max_external */,
 		);
 		breakpoints = (
 		);
@@ -121,8 +120,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 358009477;
-			PBXWorkspaceStateSaveDate = 358009477;
+			PBXPerProjectTemplateStateSaveDate = 358095190;
+			PBXWorkspaceStateSaveDate = 358095190;
 		};
 		sourceControlManager = 965F6CC112FF252E00F96EF1 /* Source Control */;
 		userBuildSettings = {
@@ -145,10 +144,18 @@
 	};
 	9676982513B7784800FE77F4 /* tralala.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 6550}}";
-			sepNavSelRange = "{8673, 0}";
-			sepNavVisRect = "{{0, 0}, {1233, 643}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 5850}}";
+			sepNavSelRange = "{2630, 37}";
+			sepNavVisRect = "{{0, 1610}, {1147, 156}}";
 			sepNavWindowFrame = "{{0, 6}, {1278, 772}}";
+		};
+	};
+	96A14B101557F1A400377037 /* tralala.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 2000}}";
+			sepNavSelRange = "{3638, 0}";
+			sepNavVisRect = "{{0, 1355}, {1235, 645}}";
+			sepNavWindowFrame = "{{1, 4}, {1280, 774}}";
 		};
 	};
 	96CF9325154C40F60027BB96 /* tralala.xcconfig */ = {
@@ -165,6 +172,22 @@
 			sepNavSelRange = "{0, 0}";
 			sepNavVisRect = "{{0, 0}, {1235, 645}}";
 			sepNavWindowFrame = "{{15, -1}, {1280, 774}}";
+		};
+	};
+	96DC326315581A5500C26797 /* tralalaSymbols.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 2850}}";
+			sepNavSelRange = "{314, 28}";
+			sepNavVisRect = "{{0, 285}, {1147, 156}}";
+			sepNavWindowFrame = "{{7, 4}, {1280, 774}}";
+		};
+	};
+	96DC326715581AC500C26797 /* tralalaSymbols.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 2400}}";
+			sepNavSelRange = "{872, 51}";
+			sepNavVisRect = "{{0, 585}, {1147, 156}}";
+			sepNavWindowFrame = "{{1, 3}, {1280, 774}}";
 		};
 	};
 	96EDD4C813BDCC1A0058E023 /* XCBreakpointsBucket */ = {

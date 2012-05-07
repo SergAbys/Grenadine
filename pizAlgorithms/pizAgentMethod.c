@@ -55,15 +55,8 @@ PIZError pizAgentPlay (PIZAgent *x, PIZEvent *event)
     if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
         x->flags |= PIZ_AGENT_FLAG_REPLAY;
     } else {
-        PIZTime time;
-        
         pizSequenceGoToStart (x->sequence);
         x->flags |= PIZ_AGENT_FLAG_RUNNING; 
-    
-        pizEventTime    (event, &time);
-        pizTimeCopy     (&x->grainStart, &time);
-        pizTimeCopy     (&x->grainEnd, &x->grainStart);
-        pizTimeAddNano  (&x->grainEnd, &x->grainSize);
     }
     
     return PIZ_GOOD;

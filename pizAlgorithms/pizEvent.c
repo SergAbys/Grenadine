@@ -77,6 +77,7 @@ static const long pizEventTypes[ ]   = {    PIZ_EVENT_RUN,                  // P
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANCE_CHANGED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_VELOCITY_CHANGED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANNEL_CHANGED
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CELL_CHANGED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_ZONE_CHANGED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_ADDED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_CHANGED
@@ -124,6 +125,7 @@ static const char *pizEventNames[ ]  = {    "Init",
                                             "Chance Changed",
                                             "Velocity Changed",
                                             "Channel Changed",
+                                            "Cell Changed",
                                             "Zone Changed",
                                             "Note Added",
                                             "Note Changed",
@@ -144,8 +146,6 @@ PIZEvent *pizEventNew (PIZEventName name, long tag, long argc, const long *argv)
         x->name = name;
         x->type = pizEventTypes[name];
         x->tag  = tag; 
-        
-        pizTimeSet (&x->time);
             
         if (argc && argv) {
             long i;
@@ -176,11 +176,6 @@ void pizEventFree (PIZEvent *x)
 void pizEventName (const PIZEvent *x, PIZEventName *name)
 {
     (*name) = x->name;
-}
-
-void pizEventTime (const PIZEvent *x, PIZTime *time)
-{
-    pizTimeCopy (time, &x->time);
 }
 
 PIZError pizEventValue (const PIZEvent *x, long *value)

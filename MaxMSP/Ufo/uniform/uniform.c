@@ -1,8 +1,6 @@
 /*
  *  uniform.c
  *
- *  Created : 04/03/11.
- *
  *  nicolas.danet@free.fr
  *
  */

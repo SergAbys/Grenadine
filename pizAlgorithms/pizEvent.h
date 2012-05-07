@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	May 6, 2012.
+ * \date	May 7, 2012.
  */
 
 /*
@@ -103,6 +103,7 @@ typedef enum _PIZEventName {
     PIZ_EVENT_CHANCE_CHANGED,
     PIZ_EVENT_VELOCITY_CHANGED,
     PIZ_EVENT_CHANNEL_CHANGED,
+    PIZ_EVENT_CELL_CHANGED,
     PIZ_EVENT_ZONE_CHANGED,
     PIZ_EVENT_NOTE_ADDED,
     PIZ_EVENT_NOTE_CHANGED,
@@ -119,7 +120,6 @@ typedef enum _PIZEventName {
 typedef struct _PIZEvent {
     PIZEventName    name;
     PIZEventType    type;
-    PIZTime         time;
     long            tag;
     long            size;
     long            data[PIZ_EVENT_DATA_SIZE];
@@ -136,7 +136,6 @@ PIZEvent *pizEventNewCopy       (PIZEvent *x);
 
 void     pizEventFree           (PIZEvent *x);
 void     pizEventName           (const PIZEvent *x, PIZEventName *name);
-void     pizEventTime           (const PIZEvent *x, PIZTime *time);
 PIZError pizEventValue          (const PIZEvent *x, long *value);
 PIZError pizEventPtr            (const PIZEvent *x, long *argc, long **argv);
 
@@ -163,11 +162,6 @@ PIZ_EXTERN void pizEventFree (PIZEvent *x)
 PIZ_EXTERN void pizEventName (const PIZEvent *x, PIZEventName *name)
 {
     (*name) = x->name;
-}
-
-PIZ_EXTERN void pizEventTime (const PIZEvent *x, PIZTime *time)
-{
-    pizTimeCopy (time, &x->time);
 }
 
 PIZ_EXTERN PIZError pizEventValue (const PIZEvent *x, long *value)

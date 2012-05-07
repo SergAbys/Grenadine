@@ -79,7 +79,6 @@ void pizSequenceDoAll (PIZSequence *x, PIZMethod f, const PIZEvent *event)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
 void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event) 
 {
@@ -191,7 +190,6 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
 void pizSequenceMakeMap (PIZSequence *x)
 {
@@ -208,7 +206,6 @@ void pizSequenceMakeMap (PIZSequence *x)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
 long pizSequenceMovePitchToAmbitus (PIZSequence *x, long pitch)
 {
@@ -238,7 +235,6 @@ long pizSequenceSnapPositionToPattern (PIZSequence *x, long position)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
 PIZ_INLINE PIZError pizSequenceGetTag (PIZSequence *x, long tag, long *ptr)
 {

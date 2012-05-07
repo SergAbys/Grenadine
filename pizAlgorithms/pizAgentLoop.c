@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	May 6, 2012.
+ * \date	May 7, 2012.
  */
  
 /*
@@ -380,16 +380,17 @@ long pizAgentEventLoopMethod (const PIZEvent *event, PIZMethodError *f)
     pizEventName (event, &name);
     
     switch (name) {
-        case PIZ_EVENT_PLAY     : *f = pizAgentPlay;            k = PIZ_PTR_AGENT;      break;
-        case PIZ_EVENT_STOP     : *f = pizAgentStop;            k = PIZ_PTR_AGENT;      break;
-        case PIZ_EVENT_LOOP     : *f = pizAgentLoop;            k = PIZ_PTR_AGENT;      break;
-        case PIZ_EVENT_UNLOOP   : *f = pizAgentUnloop;          k = PIZ_PTR_AGENT;      break;
-        case PIZ_EVENT_BPM      : *f = pizAgentBPM;             k = PIZ_PTR_AGENT;      break;
-        case PIZ_EVENT_NOTE     : *f = pizSequenceNote;         k = PIZ_PTR_SEQUENCE;   break;
-        case PIZ_EVENT_CLEAR    : *f = pizSequenceClear;        k = PIZ_PTR_SEQUENCE;   break; 
-        case PIZ_EVENT_CHANCE   : *f = pizSequenceSetChance;    k = PIZ_PTR_SEQUENCE;   break;
-        case PIZ_EVENT_VELOCITY : *f = pizSequenceSetVelocity;  k = PIZ_PTR_SEQUENCE;   break;
-        case PIZ_EVENT_CHANNEL  : *f = pizSequenceSetChannel;   k = PIZ_PTR_SEQUENCE;   break;
+        case PIZ_EVENT_PLAY     : *f = pizAgentPlay;            return PIZ_PTR_AGENT;
+        case PIZ_EVENT_STOP     : *f = pizAgentStop;            return PIZ_PTR_AGENT;
+        case PIZ_EVENT_LOOP     : *f = pizAgentLoop;            return PIZ_PTR_AGENT;
+        case PIZ_EVENT_UNLOOP   : *f = pizAgentUnloop;          return PIZ_PTR_AGENT;
+        case PIZ_EVENT_BPM      : *f = pizAgentBPM;             return PIZ_PTR_AGENT;
+        case PIZ_EVENT_NOTE     : *f = pizSequenceNote;         return PIZ_PTR_SEQUENCE;
+        case PIZ_EVENT_CLEAR    : *f = pizSequenceClear;        return PIZ_PTR_SEQUENCE;
+        case PIZ_EVENT_CHANCE   : *f = pizSequenceSetChance;    return PIZ_PTR_SEQUENCE;
+        case PIZ_EVENT_VELOCITY : *f = pizSequenceSetVelocity;  return PIZ_PTR_SEQUENCE;
+        case PIZ_EVENT_CHANNEL  : *f = pizSequenceSetChannel;   return PIZ_PTR_SEQUENCE;
+        case PIZ_EVENT_CELL     : *f = pizSequenceSetCell;      return PIZ_PTR_SEQUENCE;
     }
     
     return k;

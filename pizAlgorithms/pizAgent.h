@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	May 4, 2012.
+ * \date	May 7, 2012.
  */
 
 /*
@@ -94,15 +94,13 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
                                         
-#define DEBUGEVENT  if (event) {                                                                            \
-                        const char *name = NULL;                                                            \
-                        PIZTime t, ttt;                                                                     \
-                        pizTimeSet (&t);                                                                    \
-                        t = t / 1000000.;                                                                   \
-                        pizEventTime (event, &ttt);                                                         \
-                        ttt = ttt / 1000000.;                                                               \
-                        pizEventNameAsString (event, &name);                                                \
-                        post ("                    %llu / %llu / %s / %s", t, ttt, name, __FUNCTION__);     \
+#define DEBUGEVENT  if (event) {                                                                \
+                        const char *name = NULL;                                                \
+                        PIZTime t;                                                              \
+                        pizTimeSet (&t);                                                        \
+                        t = t / 1000000.;                                                       \
+                        pizEventNameAsString (event, &name);                                    \
+                        post ("                    %llu / %s / %s", t, name, __FUNCTION__);     \
                     }
 
 // -------------------------------------------------------------------------------------------------------------

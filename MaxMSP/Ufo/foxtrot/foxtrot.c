@@ -1,8 +1,6 @@
 /*
  *  foxtrot.c
  *
- *  Created : 15/03/11.
- *
  *  nicolas.danet@free.fr
  *
  */

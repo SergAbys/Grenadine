@@ -44,10 +44,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #define PIZ_CONSTANT_DURATION 2500.
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 #define PIZ_UNTAG pizItemset128UnsetAtIndex 
 
 // -------------------------------------------------------------------------------------------------------------
@@ -157,17 +153,17 @@ PIZError pizSequenceNotifications (PIZSequence *x, PIZLinklist *q)
         long a[ ] = { x->start, x->end, x->down, x->up };
         err |= pizSequenceAddNotification (q, PIZ_EVENT_ZONE_CHANGED, -1, 4, a);
     }
-    
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANCE) {
         err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANCE_CHANGED, -1, 1, &x->chance);
     }
-    
     if (x->flags & PIZ_SEQUENCE_FLAG_VELOCITY) {
         err |= pizSequenceAddNotification (q, PIZ_EVENT_VELOCITY_CHANGED, -1, 1, &x->velocity);
     }
-    
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANNEL) {
         err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANNEL_CHANGED, -1, 1, &x->channel);
+    }
+    if (x->flags & PIZ_SEQUENCE_FLAG_CELL) {
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CELL_CHANGED, -1, 1, &x->cell);
     }
     
     x->flags = PIZ_SEQUENCE_FLAG_NONE;

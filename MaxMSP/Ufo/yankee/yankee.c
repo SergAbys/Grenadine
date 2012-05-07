@@ -1,8 +1,6 @@
 /*
  *  yankee.c
  *
- *  Created : 10/05/11.
- *
  *  nicolas.danet@free.fr
  *
  */

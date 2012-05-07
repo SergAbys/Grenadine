@@ -1,8 +1,6 @@
 /*
  *  romeo.c
  *
- *  Created : 07/05/11.
- *
  *  nicolas.danet@free.fr
  *
  */

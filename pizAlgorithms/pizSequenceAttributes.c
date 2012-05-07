@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceAttributes.c
  * \author  Jean Sapristi
- * \date    May 5, 2012.
+ * \date    May 7, 2012.
  */
  
 /*
@@ -116,10 +116,37 @@ PIZError pizSequenceSetChannel (PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-//void pizSequenceSetCell (PIZSequence *x, PIZNoteValue snapValue)
 PIZError pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
 {
-    //x->cell = snapValue;
+    long value;
+    
+    if (!(pizEventValue (event, &value))) {
+    //
+    if ((value != x->cell) && (
+        value == PIZ_WHOLE_NOTE_DOTTED          ||
+        value == PIZ_WHOLE_NOTE                 ||
+        value == PIZ_WHOLE_NOTE_TRIPLET         ||
+        value == PIZ_HALF_NOTE_DOTTED           ||
+        value == PIZ_HALF_NOTE                  ||
+        value == PIZ_HALF_NOTE_TRIPLET          ||
+        value == PIZ_QUARTER_NOTE_DOTTED        ||
+        value == PIZ_QUARTER_NOTE               ||
+        value == PIZ_QUARTER_NOTE_TRIPLET       ||
+        value == PIZ_EIGHTH_NOTE_DOTTED         ||
+        value == PIZ_EIGHTH_NOTE                ||
+        value == PIZ_EIGHTH_NOTE_TRIPLET        ||
+        value == PIZ_SIXTEENTH_NOTE_DOTTED      ||
+        value == PIZ_SIXTEENTH_NOTE             ||
+        value == PIZ_SIXTEENTH_NOTE_TRIPLET     ||
+        value == PIZ_THIRTY_SECOND_NOTE         ||
+        value == PIZ_THIRTY_SECOND_NOTE_TRIPLET ||
+        value == PIZ_NOTE_VALUE_NONE)
+        ) {
+            x->cell = value;
+            x->flags |= PIZ_SEQUENCE_FLAG_CELL;
+        }
+    //
+    }
     
     return PIZ_GOOD;
 }

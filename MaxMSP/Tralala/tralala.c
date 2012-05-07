@@ -1,74 +1,19 @@
 /*
  *  tralala.c
  *
- *  Created : 17/05/12.
- *
  *  nicolas.danet@free.fr
  *
  */
  
 /*
- *  May 5, 2012.
+ *  May 7, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "ext.h"
-#include "ext_obex.h"
-#include "pizAgent.h"
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-typedef struct _tralala {
-	t_object    ob;
-    PIZAgent    *agent;
-	void        *leftOutlet;
-    void        *middleLeftOutlet;
-    void        *middleRightOutlet;
-    void        *rightOutlet;
-	} t_tralala;
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void *tralala_new               (t_symbol *s, long argc, t_atom *argv);
-void tralala_free               (t_tralala *x);
-void tralala_assist             (t_tralala *x, void *b, long m, long a, char *s);
-
-void tralala_notify             (void *ptr, PIZEvent *event);
-
-void tralala_bang               (t_tralala *x);
-void tralala_play               (t_tralala *x);
-void tralala_stop               (t_tralala *x);
-void tralala_loop               (t_tralala *x);
-void tralala_unloop             (t_tralala *x);
-
-void tralala_bpm                (t_tralala *x, long n);
-void tralala_chance             (t_tralala *x, long n);
-void tralala_velocity           (t_tralala *x, long n);
-void tralala_channel            (t_tralala *x, long n);
-
-void tralala_note               (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-void tralala_clear              (t_tralala *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define TICKS_PER_STEP          20
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define TRALALA(a)              PIZEvent *event = NULL;                                 \
-                                if (event = pizEventNew ((a), -1, 0, NULL)) {           \
-                                    pizAgentAddEvent (x->agent, event);                 \
-                                }
-#define TRALALA_ARGS(a,b,c)     PIZEvent *event = NULL;                                 \
-                                if (event = pizEventNew ((a), -1, (b), (c))) {          \
-                                    pizAgentAddEvent (x->agent, event);                 \
-                                }   
+#include "tralala.h"  
+#include "tralalaSymbols.h"
                                                  
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -93,6 +38,7 @@ int main (void)
     class_addmethod (c, (method)tralala_chance,    "chance",    A_LONG, 0);
     class_addmethod (c, (method)tralala_velocity,  "velocity",  A_LONG, 0);
     class_addmethod (c, (method)tralala_channel,   "channel",   A_LONG, 0);
+    class_addmethod (c, (method)tralala_cell,      "cell",      A_GIMME, 0);
     class_addmethod (c, (method)tralala_note,      "note",      A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
@@ -119,6 +65,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
             x->leftOutlet           = listout ((t_object *)x);
             
             pizAgentAttach (x->agent, (void *)x, tralala_notify);
+            tralala_symbolsInit ( );
 
         } else {
             object_free (x);
@@ -235,9 +182,39 @@ void tralala_channel (t_tralala *x, long n)
     TRALALA_ARGS (PIZ_EVENT_CHANNEL, 1, &n)
 }
 
+void tralala_cell (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    ;
+}
+
+/*
+t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_atom *argv)
+{
+    if (argc && argv) {
+        long        size = 0;
+        char        *string = NULL;
+        t_symbol    *s = NULL;
+
+        atom_gettext (argc, argv, &size, &string, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
+        
+        if (string) {
+            s = gensym (string);
+            
+            sysmem_freeptr (string);
+        }
+    }
+    
+    return MAX_ERR_NONE;
+}*/
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+
+void tralala_clear (t_tralala *x) 
+{   
+    TRALALA (PIZ_EVENT_CLEAR)
+}
 
 void tralala_note (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
@@ -251,11 +228,6 @@ void tralala_note (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         
         TRALALA_ARGS (PIZ_EVENT_NOTE, argc, values)
     }
-}
-
-void tralala_clear (t_tralala *x) 
-{   
-    TRALALA (PIZ_EVENT_CLEAR)
 }
 
 // -------------------------------------------------------------------------------------------------------------
