@@ -6,7 +6,7 @@
  */
  
 /*
- *  May 7, 2012.
+ *  May 8, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -88,10 +88,10 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
         sprintf (s, "Messages");
     } else {	
         switch (a) {
-            case 0 : sprintf (s, "(List) Notes Played");   break;
-            case 1 : sprintf (s, "(List) Notes Dumped");   break;
-            case 2 : sprintf (s, "(Bang) End");      break;
-            case 3 : sprintf (s, "(Bang) Will End"); break;
+            case 0 : sprintf (s, "(List) Notes Played"); break;
+            case 1 : sprintf (s, "(List) Notes Dumped"); break;
+            case 2 : sprintf (s, "(Bang) End");          break;
+            case 3 : sprintf (s, "(Bang) Will End");     break;
         }
     }
 }
@@ -184,28 +184,21 @@ void tralala_channel (t_tralala *x, long n)
 
 void tralala_cell (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    ;
-}
-
-/*
-t_max_err tralala_setPatternCell (t_tralala *x, t_object *attr, long argc, t_atom *argv)
-{
     if (argc && argv) {
-        long        size = 0;
-        char        *string = NULL;
-        t_symbol    *s = NULL;
+        long value, size = 0;
+        char *string = NULL;
 
         atom_gettext (argc, argv, &size, &string, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
         
         if (string) {
-            s = gensym (string);
-            
+            if (!(tralala_noteValueFromSymbol ((gensym (string)), &value))) {
+                TRALALA_ARGS (PIZ_EVENT_CELL, 1, &value)
+            }
+
             sysmem_freeptr (string);
         }
     }
-    
-    return MAX_ERR_NONE;
-}*/
+}
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceTransform.h
  * \author  Jean Sapristi
- * \date    May 5, 2012.
+ * \date    May 8, 2012.
  */
  
 /*
@@ -62,7 +62,7 @@ PIZ_LOCAL PIZError  pizSequenceRotate          (PIZSequence *x, const PIZEvent *
 PIZ_LOCAL PIZError  pizSequenceScramble        (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceSort            (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceChange          (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSet             (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceFill            (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceRandom          (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceKill            (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceCycle           (PIZSequence *x, const PIZEvent *event);

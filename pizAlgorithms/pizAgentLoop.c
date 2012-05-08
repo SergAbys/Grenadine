@@ -380,17 +380,20 @@ long pizAgentEventLoopMethod (const PIZEvent *event, PIZMethodError *f)
     pizEventName (event, &name);
     
     switch (name) {
-        case PIZ_EVENT_PLAY     : *f = pizAgentPlay;            return PIZ_PTR_AGENT;
-        case PIZ_EVENT_STOP     : *f = pizAgentStop;            return PIZ_PTR_AGENT;
-        case PIZ_EVENT_LOOP     : *f = pizAgentLoop;            return PIZ_PTR_AGENT;
-        case PIZ_EVENT_UNLOOP   : *f = pizAgentUnloop;          return PIZ_PTR_AGENT;
-        case PIZ_EVENT_BPM      : *f = pizAgentBPM;             return PIZ_PTR_AGENT;
-        case PIZ_EVENT_NOTE     : *f = pizSequenceNote;         return PIZ_PTR_SEQUENCE;
-        case PIZ_EVENT_CLEAR    : *f = pizSequenceClear;        return PIZ_PTR_SEQUENCE;
-        case PIZ_EVENT_CHANCE   : *f = pizSequenceSetChance;    return PIZ_PTR_SEQUENCE;
-        case PIZ_EVENT_VELOCITY : *f = pizSequenceSetVelocity;  return PIZ_PTR_SEQUENCE;
-        case PIZ_EVENT_CHANNEL  : *f = pizSequenceSetChannel;   return PIZ_PTR_SEQUENCE;
-        case PIZ_EVENT_CELL     : *f = pizSequenceSetCell;      return PIZ_PTR_SEQUENCE;
+        case PIZ_EVENT_PLAY         : *f = pizAgentPlay;            return PIZ_PTR_AGENT;
+        case PIZ_EVENT_STOP         : *f = pizAgentStop;            return PIZ_PTR_AGENT;
+        case PIZ_EVENT_LOOP         : *f = pizAgentLoop;            return PIZ_PTR_AGENT;
+        case PIZ_EVENT_UNLOOP       : *f = pizAgentUnloop;          return PIZ_PTR_AGENT;
+        case PIZ_EVENT_BPM          : *f = pizAgentBPM;             return PIZ_PTR_AGENT;
+        case PIZ_EVENT_NOTE         : *f = pizSequenceNote;         return PIZ_PTR_SEQUENCE;
+        case PIZ_EVENT_CLEAR        : *f = pizSequenceClear;        return PIZ_PTR_SEQUENCE;
+        case PIZ_EVENT_CHANCE       : *f = pizSequenceSetChance;    return PIZ_PTR_SEQUENCE;
+        case PIZ_EVENT_VELOCITY     : *f = pizSequenceSetVelocity;  return PIZ_PTR_SEQUENCE;
+        case PIZ_EVENT_CHANNEL      : *f = pizSequenceSetChannel;   return PIZ_PTR_SEQUENCE;
+        case PIZ_EVENT_CELL         : *f = pizSequenceSetCell;      return PIZ_PTR_SEQUENCE;
+        case PIZ_EVENT_NOTE_VALUE   : *f = pizSequenceSetNoteValue; return PIZ_PTR_SEQUENCE;
+        case PIZ_EVENT_SCALE        : *f = pizSequenceSetScale;     return PIZ_PTR_SEQUENCE;
+        case PIZ_EVENT_PATTERN      : *f = pizSequenceSetPattern;   return PIZ_PTR_SEQUENCE;
     }
     
     return k;

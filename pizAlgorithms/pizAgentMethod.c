@@ -43,8 +43,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_MAXIMUM_BPM     300
 #define PIZ_MINIMUM_BPM     40
+#define PIZ_MAXIMUM_BPM     300
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ PIZError pizAgentBPM (PIZAgent *x, PIZEvent *event)
     //
     if ((value >= PIZ_MINIMUM_BPM) && (value <= PIZ_MAXIMUM_BPM) && (value != x->bpm)) {
         x->bpm = value;
-        pizAgentAddNotification (x, PIZ_EVENT_BPM_CHANGED, -1, 1, &value);
+        pizAgentAddNotification (x, PIZ_EVENT_CHANGED_BPM, -1, 1, &value);
             
         pizTimeSetNano (&x->grainSize, PIZ_AGENT_CONSTANT_BPM / x->bpm);    
         pizTimeCopy    (&x->grainEnd, &x->grainStart);

@@ -6,7 +6,7 @@
  */
  
 /*
- *  May 7, 2012.
+ *  May 8, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -140,31 +140,37 @@ void tralala_symbolsInit ( )
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError tralala_noteValue (const t_symbol *s, long *value)
+PIZError tralala_noteValueFromSymbol (const t_symbol *s, long *value)
 {
+    long     k = 0;
     PIZError err = PIZ_ERROR;
     
     if (s && value) {
     //
-    if      (s == tll_none)                 { *value = PIZ_NOTE_VALUE_NONE; } 
-    else if (s == tll_whole)                { *value = PIZ_WHOLE_NOTE; } 
-    else if (s == tll_half)                 { *value = PIZ_HALF_NOTE; } 
-    else if (s == tll_quarter)              { *value = PIZ_QUARTER_NOTE; } 
-    else if (s == tll_eighth)               { *value = PIZ_EIGHTH_NOTE; } 
-    else if (s == tll_sixteenth)            { *value = PIZ_SIXTEENTH_NOTE; } 
-    else if (s == tll_thirtySecond)         { *value = PIZ_THIRTY_SECOND_NOTE; } 
-    else if (s == tll_wholeTriplet)         { *value = PIZ_WHOLE_NOTE_TRIPLET; } 
-    else if (s == tll_halfTriplet)          { *value = PIZ_HALF_NOTE_TRIPLET; } 
-    else if (s == tll_quarterTriplet)       { *value = PIZ_QUARTER_NOTE_TRIPLET; }
-    else if (s == tll_eighthTriplet)        { *value = PIZ_EIGHTH_NOTE_TRIPLET; }
-    else if (s == tll_sixteenthTriplet)     { *value = PIZ_SIXTEENTH_NOTE_TRIPLET; }
-    else if (s == tll_thirtySecondTriplet)  { *value = PIZ_THIRTY_SECOND_NOTE_TRIPLET; } 
-    else if (s == tll_wholeDotted)          { *value = PIZ_WHOLE_NOTE_DOTTED; } 
-    else if (s == tll_halfDotted)           { *value = PIZ_HALF_NOTE_DOTTED; } 
-    else if (s == tll_quarterDotted)        { *value = PIZ_QUARTER_NOTE_DOTTED; } 
-    else if (s == tll_eighthDotted)         { *value = PIZ_EIGHTH_NOTE_DOTTED; } 
-    else if (s == tll_sixteenthDotted)      { *value = PIZ_SIXTEENTH_NOTE_DOTTED; } 
+    if      (s == tll_none)                 { k = PIZ_NOTE_VALUE_NONE;             } 
+    else if (s == tll_whole)                { k = PIZ_WHOLE_NOTE;                  } 
+    else if (s == tll_half)                 { k = PIZ_HALF_NOTE;                   } 
+    else if (s == tll_quarter)              { k = PIZ_QUARTER_NOTE;                } 
+    else if (s == tll_eighth)               { k = PIZ_EIGHTH_NOTE;                 } 
+    else if (s == tll_sixteenth)            { k = PIZ_SIXTEENTH_NOTE;              } 
+    else if (s == tll_thirtySecond)         { k = PIZ_THIRTY_SECOND_NOTE;          } 
+    else if (s == tll_wholeTriplet)         { k = PIZ_WHOLE_NOTE_TRIPLET;          } 
+    else if (s == tll_halfTriplet)          { k = PIZ_HALF_NOTE_TRIPLET;           } 
+    else if (s == tll_quarterTriplet)       { k = PIZ_QUARTER_NOTE_TRIPLET;        }
+    else if (s == tll_eighthTriplet)        { k = PIZ_EIGHTH_NOTE_TRIPLET;         }
+    else if (s == tll_sixteenthTriplet)     { k = PIZ_SIXTEENTH_NOTE_TRIPLET;      }
+    else if (s == tll_thirtySecondTriplet)  { k = PIZ_THIRTY_SECOND_NOTE_TRIPLET;  } 
+    else if (s == tll_wholeDotted)          { k = PIZ_WHOLE_NOTE_DOTTED;           } 
+    else if (s == tll_halfDotted)           { k = PIZ_HALF_NOTE_DOTTED;            } 
+    else if (s == tll_quarterDotted)        { k = PIZ_QUARTER_NOTE_DOTTED;         } 
+    else if (s == tll_eighthDotted)         { k = PIZ_EIGHTH_NOTE_DOTTED;          } 
+    else if (s == tll_sixteenthDotted)      { k = PIZ_SIXTEENTH_NOTE_DOTTED;       } 
     //
+    }
+    
+    if (k) {
+        *value = k;
+        err = PIZ_GOOD;
     }
             
     return err;

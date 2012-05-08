@@ -120,8 +120,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 358095190;
-			PBXWorkspaceStateSaveDate = 358095190;
+			PBXPerProjectTemplateStateSaveDate = 358185728;
+			PBXWorkspaceStateSaveDate = 358185728;
 		};
 		sourceControlManager = 965F6CC112FF252E00F96EF1 /* Source Control */;
 		userBuildSettings = {
@@ -144,17 +144,17 @@
 	};
 	9676982513B7784800FE77F4 /* tralala.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 5850}}";
-			sepNavSelRange = "{2630, 37}";
-			sepNavVisRect = "{{0, 1610}, {1147, 156}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1233, 5675}}";
+			sepNavSelRange = "{5976, 0}";
+			sepNavVisRect = "{{0, 4826}, {1233, 643}}";
 			sepNavWindowFrame = "{{0, 6}, {1278, 772}}";
 		};
 	};
 	96A14B101557F1A400377037 /* tralala.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1235, 2000}}";
-			sepNavSelRange = "{3638, 0}";
-			sepNavVisRect = "{{0, 1355}, {1235, 645}}";
+			sepNavSelRange = "{2121, 0}";
+			sepNavVisRect = "{{0, 1352}, {1235, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1280, 774}}";
 		};
 	};
@@ -176,17 +176,17 @@
 	};
 	96DC326315581A5500C26797 /* tralalaSymbols.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 2850}}";
-			sepNavSelRange = "{314, 28}";
-			sepNavVisRect = "{{0, 285}, {1147, 156}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 4500}}";
+			sepNavSelRange = "{7008, 0}";
+			sepNavVisRect = "{{0, 3047}, {1235, 645}}";
 			sepNavWindowFrame = "{{7, 4}, {1280, 774}}";
 		};
 	};
 	96DC326715581AC500C26797 /* tralalaSymbols.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 2400}}";
-			sepNavSelRange = "{872, 51}";
-			sepNavVisRect = "{{0, 585}, {1147, 156}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 900}}";
+			sepNavSelRange = "{618, 0}";
+			sepNavVisRect = "{{0, 255}, {1235, 645}}";
 			sepNavWindowFrame = "{{1, 3}, {1280, 774}}";
 		};
 	};

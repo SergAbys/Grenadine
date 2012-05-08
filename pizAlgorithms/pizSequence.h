@@ -80,6 +80,9 @@
 #define PIZ_SEQUENCE_FLAG_VELOCITY          4UL
 #define PIZ_SEQUENCE_FLAG_CHANNEL           8UL
 #define PIZ_SEQUENCE_FLAG_CELL              16UL
+#define PIZ_SEQUENCE_FLAG_NOTE_VALUE        32UL
+#define PIZ_SEQUENCE_FLAG_SCALE             64UL
+#define PIZ_SEQUENCE_FLAG_PATTERN           128UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -105,6 +108,21 @@ enum {
     PIZ_NOTE_VALUE_NONE             = 1
     };
 
+enum {
+    PIZ_KEY_C = 0,
+    PIZ_KEY_C_SHARP,
+    PIZ_KEY_D,
+    PIZ_KEY_D_SHARP,
+    PIZ_KEY_E,
+    PIZ_KEY_F,
+    PIZ_KEY_F_SHARP,
+    PIZ_KEY_G,
+    PIZ_KEY_G_SHARP,
+    PIZ_KEY_A,
+    PIZ_KEY_A_SHARP,
+    PIZ_KEY_B
+    };
+    
 enum {
     PIZ_SCALE_CUSTOM                = -2,
     PIZ_SCALE_NONE                  = -1,
@@ -135,21 +153,6 @@ enum {
     PIZ_SEVENTH_FLAT_FIVE
     };
 
-enum {
-    PIZ_KEY_C = 0,
-    PIZ_KEY_C_SHARP,
-    PIZ_KEY_D,
-    PIZ_KEY_D_SHARP,
-    PIZ_KEY_E,
-    PIZ_KEY_F,
-    PIZ_KEY_F_SHARP,
-    PIZ_KEY_G,
-    PIZ_KEY_G_SHARP,
-    PIZ_KEY_A,
-    PIZ_KEY_A_SHARP,
-    PIZ_KEY_B
-    };
-    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 

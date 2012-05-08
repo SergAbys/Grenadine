@@ -112,7 +112,6 @@ typedef enum {
 // -------------------------------------------------------------------------------------------------------------
 
 #define PIZ_EXTERN_INLINE
-
 #define PIZ_INLINE static inline
 #define PIZ_EXTERN extern inline
 #define PIZ_LOCAL  __attribute__ ((visibility("hidden")))

@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	May 7, 2012.
+ * \date	May 8, 2012.
  */
 
 /*
@@ -35,6 +35,10 @@
  *	knowledge of the CeCILL-C license and that you accept its terms.
  */
 
+/* 
+ *  PIZ_EVENT_DATA_SIZE = 2 + PIZ_MAGIC_SCALE  
+ */
+ 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
@@ -49,7 +53,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_EVENT_DATA_SIZE 12
+#define PIZ_EVENT_DATA_SIZE 14
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -84,7 +88,7 @@ typedef enum _PIZEventName {
     PIZ_EVENT_SCRAMBLE,
     PIZ_EVENT_SORT,
     PIZ_EVENT_CHANGE,
-    PIZ_EVENT_SET,
+    PIZ_EVENT_FILL,
     PIZ_EVENT_RANDOM,
     PIZ_EVENT_KILL,
     PIZ_EVENT_CYCLE,        
@@ -99,16 +103,21 @@ typedef enum _PIZEventName {
     PIZ_EVENT_SCALE,
     PIZ_EVENT_PATTERN,
     // NOTIFICATION 
-    PIZ_EVENT_BPM_CHANGED,
-    PIZ_EVENT_CHANCE_CHANGED,
-    PIZ_EVENT_VELOCITY_CHANGED,
-    PIZ_EVENT_CHANNEL_CHANGED,
-    PIZ_EVENT_CELL_CHANGED,
-    PIZ_EVENT_ZONE_CHANGED,
+    PIZ_EVENT_CHANGED_BPM,
+    PIZ_EVENT_CHANGED_CHANCE,
+    PIZ_EVENT_CHANGED_VELOCITY,
+    PIZ_EVENT_CHANGED_CHANNEL,
+    PIZ_EVENT_CHANGED_CELL,
+    PIZ_EVENT_CHANGED_NOTE_VALUE,
+    PIZ_EVENT_CHANGED_SCALE,
+    PIZ_EVENT_CHANGED_PATTERN,
+    PIZ_EVENT_CHANGED_ZONE,
+    //
     PIZ_EVENT_NOTE_ADDED,
     PIZ_EVENT_NOTE_CHANGED,
     PIZ_EVENT_NOTE_REMOVED,
     PIZ_EVENT_NOTE_PLAYED,
+    //
     PIZ_EVENT_END,
     PIZ_EVENT_WILL_END
      //
@@ -162,30 +171,6 @@ PIZ_EXTERN void pizEventFree (PIZEvent *x)
 PIZ_EXTERN void pizEventName (const PIZEvent *x, PIZEventName *name)
 {
     (*name) = x->name;
-}
-
-PIZ_EXTERN PIZError pizEventValue (const PIZEvent *x, long *value)
-{
-    PIZError err = PIZ_ERROR;
-    
-    if (x->size) {
-        err = PIZ_GOOD;
-        (*value) = x->data[0];
-    } 
-    
-    return err;
-}
-
-PIZ_EXTERN PIZError pizEventPtr (const PIZEvent *x, long *argc, long **argv)
-{
-    PIZError err = PIZ_ERROR;
-    
-    if ((*argc) = x->size) {
-        err = PIZ_GOOD;
-        (*argv) = (long *)x->data;
-    }
-    
-    return err;
 }
 
 #endif // PIZ_EXTERN_INLINE

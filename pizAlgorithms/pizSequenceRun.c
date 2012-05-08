@@ -48,6 +48,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZ_LOCAL PIZError pizSequenceAddNotification (PIZLinklist *q, PIZEventName n, long tag, long ac, long *av);
 
@@ -151,19 +152,22 @@ PIZError pizSequenceNotifications (PIZSequence *x, PIZLinklist *q)
     //
     if (x->flags & PIZ_SEQUENCE_FLAG_ZONE) {
         long a[ ] = { x->start, x->end, x->down, x->up };
-        err |= pizSequenceAddNotification (q, PIZ_EVENT_ZONE_CHANGED, -1, 4, a);
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_ZONE, -1, 4, a);
     }
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANCE) {
-        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANCE_CHANGED, -1, 1, &x->chance);
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_CHANCE, -1, 1, &x->chance);
     }
     if (x->flags & PIZ_SEQUENCE_FLAG_VELOCITY) {
-        err |= pizSequenceAddNotification (q, PIZ_EVENT_VELOCITY_CHANGED, -1, 1, &x->velocity);
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_VELOCITY, -1, 1, &x->velocity);
     }
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANNEL) {
-        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANNEL_CHANGED, -1, 1, &x->channel);
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_CHANNEL, -1, 1, &x->channel);
     }
     if (x->flags & PIZ_SEQUENCE_FLAG_CELL) {
-        err |= pizSequenceAddNotification (q, PIZ_EVENT_CELL_CHANGED, -1, 1, &x->cell);
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_CELL, -1, 1, &x->cell);
+    }
+    if (x->flags & PIZ_SEQUENCE_FLAG_NOTE_VALUE) {
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_NOTE_VALUE, -1, 1, &x->noteValue);
     }
     
     x->flags = PIZ_SEQUENCE_FLAG_NONE;

@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceAttributes.c
  * \author  Jean Sapristi
- * \date    May 7, 2012.
+ * \date    May 8, 2012.
  */
  
 /*
@@ -74,6 +74,12 @@ static const long pizSequenceModes[ ] =
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+PIZ_INLINE bool pizSequenceIsValid (long value);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 PIZError pizSequenceSetChance (PIZSequence *x, const PIZEvent *event)
 {
     long value;
@@ -121,9 +127,80 @@ PIZError pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
+        if ((value != x->cell) && (pizSequenceIsValid (value))) {
+            x->cell = value;
+            x->flags |= PIZ_SEQUENCE_FLAG_CELL;
+        }
+    }
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceSetNoteValue (PIZSequence *x, const PIZEvent *event)
+{
+    long value;
+    
+    if (!(pizEventValue (event, &value))) {
+        if ((value != x->noteValue) && (pizSequenceIsValid (value))) {
+            x->noteValue = value;
+            x->flags |= PIZ_SEQUENCE_FLAG_NOTE_VALUE;
+        }
+    }
+    
+    return PIZ_GOOD;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
+{
+    long       argc;
+    long       *argv = NULL;
+    const long *ptr = NULL;
+    PIZError   err = PIZ_ERROR;
+
+    if (!(pizEventPtr (event, &argc, &argv))) {
     //
-    if ((value != x->cell) && (
-        value == PIZ_WHOLE_NOTE_DOTTED          ||
+    long key  = CLAMP (argv[0], 0, PIZ_MAGIC_SCALE);
+    long type = CLAMP (argv[1], PIZ_SCALE_CUSTOM, PIZ_SEVENTH_FLAT_FIVE);
+    
+    err = PIZ_GOOD;
+    
+    pizArrayClear (x->scale);
+    
+    if (type == PIZ_SCALE_CUSTOM) {
+        ptr = argv + 2;
+    } else if (type != PIZ_SCALE_NONE) {
+        ptr = pizSequenceModes + (type * PIZ_MAGIC_SCALE); 
+    }
+    
+    if (ptr) {
+        long i;
+        for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
+            pizArrayAppend (x->scale, *(ptr + ((PIZ_MAGIC_SCALE - key + i) % PIZ_MAGIC_SCALE)));
+        }
+    }
+    //
+    }
+    
+    return err;
+}   
+
+//PIZError pizSequenceSetPattern (PIZSequence *x, const PIZArray *a)
+PIZError pizSequenceSetPattern (PIZSequence *x, const PIZEvent *event)
+{
+    // return pizArrayCopy (x->pattern, a);
+    
+    return PIZ_GOOD;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZ_INLINE bool pizSequenceIsValid (long value) 
+{
+    if (value == PIZ_WHOLE_NOTE_DOTTED          ||
         value == PIZ_WHOLE_NOTE                 ||
         value == PIZ_WHOLE_NOTE_TRIPLET         ||
         value == PIZ_HALF_NOTE_DOTTED           ||
@@ -140,62 +217,11 @@ PIZError pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
         value == PIZ_SIXTEENTH_NOTE_TRIPLET     ||
         value == PIZ_THIRTY_SECOND_NOTE         ||
         value == PIZ_THIRTY_SECOND_NOTE_TRIPLET ||
-        value == PIZ_NOTE_VALUE_NONE)
-        ) {
-            x->cell = value;
-            x->flags |= PIZ_SEQUENCE_FLAG_CELL;
-        }
-    //
+        value == PIZ_NOTE_VALUE_NONE) {
+        return true;
     }
-    
-    return PIZ_GOOD;
-}
-
-//void pizSequenceSetNoteValue (PIZSequence *x, PIZNoteValue noteValue)
-PIZError pizSequenceSetNoteValue (PIZSequence *x, const PIZEvent *event)
-{
-    //x->noteValue = noteValue;
-    
-    return PIZ_GOOD;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-//PIZError pizSequenceSetScale (PIZSequence *x, PIZScaleKey key, PIZScaleType type, const PIZArray *a)
-PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
-{
-    PIZError    err = PIZ_GOOD;/*
-    const long  *ptr = NULL;
-
-    pizArrayClear (x->scale);
-    
-    if (type == PIZ_SCALE_CUSTOM) {
-        if (pizArrayCount (a) == PIZ_MAGIC_SCALE) { 
-            ptr = pizArrayPtr (a);
-        } else {
-            err = PIZ_ERROR;
-        }
-    } else if (type != PIZ_SCALE_NONE) {
-        ptr = pizSequenceModes + (type * PIZ_MAGIC_SCALE); 
-    }
-    
-    if (ptr) {
-        long i;
-        for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
-            pizArrayAppend (x->scale, *(ptr + ((PIZ_MAGIC_SCALE - key + i) % PIZ_MAGIC_SCALE)));
-        }
-    }*/
-    
-    return err;
-}   
-
-//PIZError pizSequenceSetPattern (PIZSequence *x, const PIZArray *a)
-PIZError pizSequenceSetPattern (PIZSequence *x, const PIZEvent *event)
-{
-    // return pizArrayCopy (x->pattern, a);
-    
-    return PIZ_GOOD;
+        
+    return false;
 }
 
 // -------------------------------------------------------------------------------------------------------------

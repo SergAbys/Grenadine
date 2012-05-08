@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceTransform.c
  * \author  Jean Sapristi
- * \date    May 4, 2012.
+ * \date    May 8, 2012.
  */
  
 /*
@@ -104,8 +104,8 @@ static const double pizSequenceDistribution7[ ] = { 0.56, 0.63, 0.70, 0.77, 0.84
 
 #define PIZ_CEIL(a,b)               (((a)%(b))==0?(a)/(b):(a)/(b)+1)
 
-#define PIZ_PICKUP_NOTES            x->tempIndex = 0; \
-                                    pizSequenceDoAll (x, pizSequenceFillTempNotes, NULL); \
+#define PIZ_PICKUP_NOTES            x->tempIndex = 0;                                           \
+                                    pizSequenceForEach (x, pizSequenceFillTempNotes, NULL);     \
                                     k = x->tempIndex;
                         
 #define PIZ_FILL_NOTES              pizSequenceFillNotes (x, selector, 0);
@@ -152,7 +152,7 @@ PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
 PIZError pizSequenceClear (PIZSequence *x, const PIZEvent *event)
 {
     if (x->count) {
-        pizSequenceDoAll (x, pizSequenceRemoveNote, NULL);
+        pizSequenceForEach (x, pizSequenceRemoveNote, NULL);
         pizArrayClear (x->map);  
     }
     
@@ -259,7 +259,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
     
     x->tempError = PIZ_GOOD;
     pizBoundedHashTableClear (x->tempHash);
-    pizSequenceDoAll (x, pizSequenceFillTempHash, NULL);
+    pizSequenceForEach (x, pizSequenceFillTempHash, NULL);
     err1 = x->tempError;
 
     while (!err1 && (k < iterate) && (loop < PIZ_MAXIMUM_LOOP)) {
@@ -502,7 +502,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
      
     x->tempError = PIZ_GOOD;
     pizBoundedHashTableClear (x->tempHash);
-    pizSequenceDoAll (x, pizSequenceFillTempHash, NULL);
+    pizSequenceForEach (x, pizSequenceFillTempHash, NULL);
     err = x->tempError;
     
     while (!err && x->count && (k < iterate) && (loop < PIZ_MAXIMUM_LOOP)) {
@@ -828,8 +828,8 @@ PIZError pizSequenceChange (PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-//PIZError pizSequenceSet (PIZSequence *x, PIZMidiSelector selector, long value)
-PIZError pizSequenceSet (PIZSequence *x, const PIZEvent *event)
+//PIZError pizSequenceFill (PIZSequence *x, PIZMidiSelector selector, long value)
+PIZError pizSequenceFill (PIZSequence *x, const PIZEvent *event)
 {/*
     long i;
             

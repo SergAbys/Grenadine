@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceLibrary.c
  * \author	Jean Sapristi
- * \date	May 4, 2012.
+ * \date	May 8, 2012.
  */
  
 /*
@@ -48,6 +48,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZ_INLINE PIZError pizSequenceGetTag (PIZSequence *x, long tag, long *ptr);
 
@@ -55,7 +56,7 @@ PIZ_INLINE PIZError pizSequenceGetTag (PIZSequence *x, long tag, long *ptr);
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizSequenceDoAll (PIZSequence *x, PIZMethod f, const PIZEvent *event)
+void pizSequenceForEach (PIZSequence *x, PIZMethod f, const PIZEvent *event)
 {
     long i;
     

@@ -62,7 +62,7 @@ static const long pizEventTypes[ ]   = {    PIZ_EVENT_RUN,                  // P
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_SCRAMBLE
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_SORT
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CHANGE
-                                            PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_SET
+                                            PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_FILL
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_RANDOM
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_KILL
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CYCLE        
@@ -73,12 +73,15 @@ static const long pizEventTypes[ ]   = {    PIZ_EVENT_RUN,                  // P
                                             PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_NOTE_VALUE
                                             PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_SCALE
                                             PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_PATTERN
-                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_BPM_CHANGED
-                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANCE_CHANGED
-                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_VELOCITY_CHANGED
-                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANNEL_CHANGED
-                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CELL_CHANGED
-                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_ZONE_CHANGED
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_BPM
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_CHANCE
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_VELOCITY
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_CHANNEL
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_CELL
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_NOTE_VALUE
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_SCALE
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_PATTERN
+                                            PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_ZONE
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_ADDED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_CHANGED
                                             PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_NOTE_REMOVED
@@ -106,7 +109,7 @@ static const char *pizEventNames[ ]  = {    "Init",
                                             "Scramble",
                                             "Sort",
                                             "Change",
-                                            "Set",
+                                            "Fill",
                                             "Random",
                                             "Kill",
                                             "Cycle",
@@ -121,12 +124,15 @@ static const char *pizEventNames[ ]  = {    "Init",
                                             "Scale",
                                             "Pattern", 
                                             //
-                                            "Bpm Changed",
-                                            "Chance Changed",
-                                            "Velocity Changed",
-                                            "Channel Changed",
-                                            "Cell Changed",
-                                            "Zone Changed",
+                                            "Changed Bpm",
+                                            "Changed Chance",
+                                            "Changed Velocity ",
+                                            "Changed Channel",
+                                            "Changed Cell",
+                                            "Changed Note Value",
+                                            "Changed Scale",
+                                            "Changed Pattern",
+                                            "Changed Zone",
                                             "Note Added",
                                             "Note Changed",
                                             "Note Removed",

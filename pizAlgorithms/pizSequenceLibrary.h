@@ -1,7 +1,7 @@
 /**
  * \file	pizSequenceLibrary.h
  * \author	Jean Sapristi
- * \date	May 4, 2012.
+ * \date	May 8, 2012.
  */
 
 /*
@@ -50,7 +50,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void      pizSequenceDoAll                 (PIZSequence *x, PIZMethod f,   const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceForEach               (PIZSequence *x, PIZMethod f,   const PIZEvent *event);
 PIZ_LOCAL void      pizSequenceRemoveNote            (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 PIZ_LOCAL void      pizSequenceFillTempHash          (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 PIZ_LOCAL void      pizSequenceFillTempNotes         (PIZSequence *x, PIZNote *note, const PIZEvent *event);
