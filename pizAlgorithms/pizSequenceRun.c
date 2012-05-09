@@ -43,8 +43,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_CONSTANT_DURATION 2500.
-#define PIZ_UNTAG pizItemset128UnsetAtIndex 
+#define PIZ_CONSTANT_DURATION   2500.
+#define PIZ_UNTAG               pizItemset128UnsetAtIndex 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -168,6 +168,10 @@ PIZError pizSequenceNotifications (PIZSequence *x, PIZLinklist *q)
     }
     if (x->flags & PIZ_SEQUENCE_FLAG_NOTE_VALUE) {
         err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_NOTE_VALUE, -1, 1, &x->noteValue);
+    }
+    if (x->flags & PIZ_SEQUENCE_FLAG_SCALE) {
+        long a[ ] = { x->key, x->type };
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_SCALE, -1, 2, a);
     }
     
     x->flags = PIZ_SEQUENCE_FLAG_NONE;

@@ -72,7 +72,7 @@ PIZSequence *pizSequenceNew (long size)
     
     x->map           = pizArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
     x->scale         = pizArrayNew (PIZ_MAGIC_SCALE);
-    x->pattern       = pizArrayNew (PIZ_SEQUENCE_INIT_PATTERN_SIZE);
+    x->pattern       = pizArrayNew (0);
     x->tempValues    = (long *)malloc (sizeof(long) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
     x->tempNotes1    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
     x->tempNotes2    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
@@ -97,7 +97,7 @@ PIZSequence *pizSequenceNew (long size)
         pizItemset128Clear (&x->changedNotes);
         
         x->seed = (unsigned int)time(NULL);
-                        
+        
         x->start     = PIZ_DEFAULT_START;
         x->end       = PIZ_DEFAULT_END;
         x->down      = PIZ_DEFAULT_DOWN;
@@ -107,6 +107,8 @@ PIZSequence *pizSequenceNew (long size)
         x->chance    = PIZ_DEFAULT_CHANCE;
         x->channel   = PIZ_DEFAULT_CHANNEL;
         x->velocity  = 0;
+        x->key       = PIZ_KEY_C;
+        x->type      = PIZ_SCALE_NONE;
         x->cell      = PIZ_EIGHTH_NOTE;
         x->noteValue = PIZ_EIGHTH_NOTE;
             

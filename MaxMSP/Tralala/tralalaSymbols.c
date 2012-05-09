@@ -6,7 +6,7 @@
  */
  
 /*
- *  May 8, 2012.
+ *  May 9, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -17,6 +17,18 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+static t_symbol *tll_c                     = NULL;
+static t_symbol *tll_cSharp                = NULL;
+static t_symbol *tll_d                     = NULL;
+static t_symbol *tll_dSharp                = NULL;
+static t_symbol *tll_e                     = NULL;
+static t_symbol *tll_f                     = NULL;
+static t_symbol *tll_fSharp                = NULL;
+static t_symbol *tll_g                     = NULL;
+static t_symbol *tll_gSharp                = NULL;
+static t_symbol *tll_a                     = NULL;
+static t_symbol *tll_aSharp                = NULL;
+static t_symbol *tll_b                     = NULL;
 static t_symbol *tll_none                  = NULL;
 static t_symbol *tll_ionian                = NULL;
 static t_symbol *tll_dorian                = NULL;
@@ -43,19 +55,6 @@ static t_symbol *tll_seventhDiminished     = NULL;
 static t_symbol *tll_seventhSuspended      = NULL;
 static t_symbol *tll_seventhSharpFive      = NULL;
 static t_symbol *tll_seventhFlatFive       = NULL;
-static t_symbol *tll_custom                = NULL;
-static t_symbol *tll_c                     = NULL;
-static t_symbol *tll_cSharp                = NULL;
-static t_symbol *tll_d                     = NULL;
-static t_symbol *tll_dSharp                = NULL;
-static t_symbol *tll_e                     = NULL;
-static t_symbol *tll_f                     = NULL;
-static t_symbol *tll_fSharp                = NULL;
-static t_symbol *tll_g                     = NULL;
-static t_symbol *tll_gSharp                = NULL;
-static t_symbol *tll_a                     = NULL;
-static t_symbol *tll_aSharp                = NULL;
-static t_symbol *tll_b                     = NULL;
 static t_symbol *tll_whole                 = NULL;
 static t_symbol *tll_half                  = NULL;
 static t_symbol *tll_quarter               = NULL;
@@ -79,6 +78,18 @@ static t_symbol *tll_sixteenthDotted       = NULL;
 
 void tralala_symbolsInit ( )
 {
+    tll_c                     = gensym ("C");
+    tll_cSharp                = gensym ("C#");
+    tll_d                     = gensym ("D");
+    tll_dSharp                = gensym ("D#");
+    tll_e                     = gensym ("E");
+    tll_f                     = gensym ("F");
+    tll_fSharp                = gensym ("F#");
+    tll_g                     = gensym ("G");
+    tll_gSharp                = gensym ("G#");
+    tll_a                     = gensym ("A");
+    tll_aSharp                = gensym ("A#");
+    tll_b                     = gensym ("B");
     tll_none                  = gensym ("none");
     tll_ionian                = gensym ("ionian");
     tll_dorian                = gensym ("dorian");
@@ -105,19 +116,6 @@ void tralala_symbolsInit ( )
     tll_seventhSuspended      = gensym ("7th dominant suspended");
     tll_seventhSharpFive      = gensym ("7th dominant sharp five");
     tll_seventhFlatFive       = gensym ("7th dominant flat five");
-    tll_custom                = gensym ("custom");
-    tll_c                     = gensym ("C");
-    tll_cSharp                = gensym ("C#");
-    tll_d                     = gensym ("D");
-    tll_dSharp                = gensym ("D#");
-    tll_e                     = gensym ("E");
-    tll_f                     = gensym ("F");
-    tll_fSharp                = gensym ("F#");
-    tll_g                     = gensym ("G");
-    tll_gSharp                = gensym ("G#");
-    tll_a                     = gensym ("A");
-    tll_aSharp                = gensym ("A#");
-    tll_b                     = gensym ("B");
     tll_whole                 = gensym ("whole");
     tll_half                  = gensym ("half");
     tll_quarter               = gensym ("quarter");
@@ -140,12 +138,86 @@ void tralala_symbolsInit ( )
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError tralala_noteValueFromSymbol (const t_symbol *s, long *value)
+PIZError tralala_keyWithSymbol (const t_symbol *s, long *value)
 {
     long     k = 0;
     PIZError err = PIZ_ERROR;
     
-    if (s && value) {
+    if (s) {
+    //
+    if      (s == tll_c)        { k = PIZ_KEY_C;        } 
+    else if (s == tll_cSharp)   { k = PIZ_KEY_C_SHARP;  } 
+    else if (s == tll_d)        { k = PIZ_KEY_D;        } 
+    else if (s == tll_dSharp)   { k = PIZ_KEY_D_SHARP;  } 
+    else if (s == tll_e)        { k = PIZ_KEY_E;        } 
+    else if (s == tll_f)        { k = PIZ_KEY_F;        } 
+    else if (s == tll_fSharp)   { k = PIZ_KEY_F_SHARP;  }
+    else if (s == tll_g)        { k = PIZ_KEY_G;        } 
+    else if (s == tll_gSharp)   { k = PIZ_KEY_G_SHARP;  } 
+    else if (s == tll_a)        { k = PIZ_KEY_A;        } 
+    else if (s == tll_aSharp)   { k = PIZ_KEY_A_SHARP;  } 
+    else if (s == tll_b)        { k = PIZ_KEY_B;        } 
+    //
+    }
+    
+    if (k && value) {
+        *value = k;
+        err = PIZ_GOOD;
+    }
+            
+    return err;
+}
+
+PIZError tralala_scaleWithSymbol (const t_symbol *s, long *value)
+{
+    long     k = 0;
+    PIZError err = PIZ_ERROR;
+    
+    if (s) {
+    //
+    if      (s == tll_none)                     { k = PIZ_SCALE_NONE;               } 
+    else if (s == tll_ionian)                   { k = PIZ_IONIAN;                   } 
+    else if (s == tll_dorian)                   { k = PIZ_DORIAN;                   } 
+    else if (s == tll_phrygian)                 { k = PIZ_PHRYGIAN;                 } 
+    else if (s == tll_lydian)                   { k = PIZ_LYDIAN;                   } 
+    else if (s == tll_mixolydian)               { k = PIZ_MIXOLYDIAN;               } 
+    else if (s == tll_aeolian)                  { k = PIZ_AEOLIAN;                  } 
+    else if (s == tll_locrian)                  { k = PIZ_LOCRIAN;                  }
+    else if (s == tll_natural)                  { k = PIZ_NATURAL;                  } 
+    else if (s == tll_harmonic)                 { k = PIZ_HARMONIC;                 } 
+    else if (s == tll_melodic)                  { k = PIZ_MELODIC;                  } 
+    else if (s == tll_wholeTone)                { k = PIZ_WHOLE_TONE;               } 
+    else if (s == tll_pentatonicMajor)          { k = PIZ_PENTATONIC_MAJOR;         } 
+    else if (s == tll_pentatonicMinor)          { k = PIZ_PENTATONIC_MINOR;         } 
+    else if (s == tll_octatonicHalfWhole)       { k = PIZ_OCTATONIC_HALF_WHOLE;     } 
+    else if (s == tll_octatonicWholeHalf)       { k = PIZ_OCTATONIC_WHOLE_HALF;     } 
+    else if (s == tll_seventhMajor)             { k = PIZ_SEVENTH_MAJOR;            } 
+    else if (s == tll_seventhDominant)          { k = PIZ_SEVENTH_DOMINANT;         } 
+    else if (s == tll_seventhMinor)             { k = PIZ_SEVENTH_MINOR;            } 
+    else if (s == tll_seventhMajorSixth)        { k = PIZ_SEVENTH_MAJOR_SIXTH;      } 
+    else if (s == tll_seventhMinorSixth)        { k = PIZ_SEVENTH_MINOR_SIXTH;      }
+    else if (s == tll_seventhHalfDiminished)    { k = PIZ_SEVENTH_HALF_DIMINISHED;  } 
+    else if (s == tll_seventhDiminished)        { k = PIZ_SEVENTH_DIMINISHED;       } 
+    else if (s == tll_seventhSuspended)         { k = PIZ_SEVENTH_SUSPENDED;        } 
+    else if (s == tll_seventhSharpFive)         { k = PIZ_SEVENTH_SHARP_FIVE;       } 
+    else if (s == tll_seventhFlatFive)          { k = PIZ_SEVENTH_FLAT_FIVE;        } 
+    //
+    }
+    
+    if (k && value) {
+        *value = k;
+        err = PIZ_GOOD;
+    }
+            
+    return err;
+}
+
+PIZError tralala_noteValueWithSymbol (const t_symbol *s, long *value)
+{
+    long     k = 0;
+    PIZError err = PIZ_ERROR;
+    
+    if (s) {
     //
     if      (s == tll_none)                 { k = PIZ_NOTE_VALUE_NONE;             } 
     else if (s == tll_whole)                { k = PIZ_WHOLE_NOTE;                  } 
@@ -168,7 +240,7 @@ PIZError tralala_noteValueFromSymbol (const t_symbol *s, long *value)
     //
     }
     
-    if (k) {
+    if (k && value) {
         *value = k;
         err = PIZ_GOOD;
     }

@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceAttributes.c
  * \author  Jean Sapristi
- * \date    May 8, 2012.
+ * \date    May 9, 2012.
  */
  
 /*
@@ -74,7 +74,7 @@ static const long pizSequenceModes[ ] =
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_INLINE bool pizSequenceIsValid (long value);
+PIZ_INLINE bool pizSequenceIsValidNoteValue (long value);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ PIZError pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
-        if ((value != x->cell) && (pizSequenceIsValid (value))) {
+        if ((value != x->cell) && (pizSequenceIsValidNoteValue (value))) {
             x->cell = value;
             x->flags |= PIZ_SEQUENCE_FLAG_CELL;
         }
@@ -141,7 +141,7 @@ PIZError pizSequenceSetNoteValue (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
-        if ((value != x->noteValue) && (pizSequenceIsValid (value))) {
+        if ((value != x->noteValue) && (pizSequenceIsValidNoteValue (value))) {
             x->noteValue = value;
             x->flags |= PIZ_SEQUENCE_FLAG_NOTE_VALUE;
         }
@@ -157,28 +157,31 @@ PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
 {
     long       argc;
     long       *argv = NULL;
-    const long *ptr = NULL;
     PIZError   err = PIZ_ERROR;
 
     if (!(pizEventPtr (event, &argc, &argv))) {
     //
-    long key  = CLAMP (argv[0], 0, PIZ_MAGIC_SCALE);
-    long type = CLAMP (argv[1], PIZ_SCALE_CUSTOM, PIZ_SEVENTH_FLAT_FIVE);
+    const long *ptr = NULL;
+        
+    x->key  = CLAMP (argv[0], 0, PIZ_MAGIC_SCALE);
+    x->type = CLAMP (argv[1], PIZ_SCALE_NONE, PIZ_SEVENTH_FLAT_FIVE);
     
     err = PIZ_GOOD;
     
     pizArrayClear (x->scale);
     
-    if (type == PIZ_SCALE_CUSTOM) {
-        ptr = argv + 2;
-    } else if (type != PIZ_SCALE_NONE) {
-        ptr = pizSequenceModes + (type * PIZ_MAGIC_SCALE); 
+    if (x->type != PIZ_SCALE_NONE) {
+        ptr = pizSequenceModes + (x->type * PIZ_MAGIC_SCALE); 
     }
     
     if (ptr) {
         long i;
         for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
-            pizArrayAppend (x->scale, *(ptr + ((PIZ_MAGIC_SCALE - key + i) % PIZ_MAGIC_SCALE)));
+            err |= pizArrayAppend (x->scale, *(ptr + ((PIZ_MAGIC_SCALE - x->key + i) % PIZ_MAGIC_SCALE)));
+        }
+        
+        if (!err) {
+            x->flags |= PIZ_SEQUENCE_FLAG_SCALE;
         }
     }
     //
@@ -198,7 +201,7 @@ PIZError pizSequenceSetPattern (PIZSequence *x, const PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_INLINE bool pizSequenceIsValid (long value) 
+PIZ_INLINE bool pizSequenceIsValidNoteValue (long value) 
 {
     if (value == PIZ_WHOLE_NOTE_DOTTED          ||
         value == PIZ_WHOLE_NOTE                 ||

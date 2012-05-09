@@ -39,6 +39,7 @@ int main (void)
     class_addmethod (c, (method)tralala_velocity,  "velocity",  A_LONG, 0);
     class_addmethod (c, (method)tralala_channel,   "channel",   A_LONG, 0);
     class_addmethod (c, (method)tralala_cell,      "cell",      A_GIMME, 0);
+    class_addmethod (c, (method)tralala_scale,     "scale",     A_GIMME, 0);
     class_addmethod (c, (method)tralala_note,      "note",      A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
@@ -191,13 +192,18 @@ void tralala_cell (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         atom_gettext (argc, argv, &size, &string, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
         
         if (string) {
-            if (!(tralala_noteValueFromSymbol ((gensym (string)), &value))) {
+            if (!(tralala_noteValueWithSymbol ((gensym (string)), &value))) {
                 TRALALA_ARGS (PIZ_EVENT_CELL, 1, &value)
             }
 
             sysmem_freeptr (string);
         }
     }
+}
+
+void tralala_scale (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+
 }
 
 // -------------------------------------------------------------------------------------------------------------

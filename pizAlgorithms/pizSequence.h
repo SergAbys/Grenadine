@@ -62,7 +62,6 @@
                                         
 #define PIZ_SEQUENCE_INIT_TEMP_SIZE         128
 #define PIZ_SEQUENCE_INIT_LOOKUP_SIZE       19
-#define PIZ_SEQUENCE_INIT_PATTERN_SIZE      12
 
 #define PIZ_SEQUENCE_DEFAULT_SIZE           288 
 #define PIZ_SEQUENCE_DEFAULT_VELOCITY       80
@@ -124,7 +123,6 @@ enum {
     };
     
 enum {
-    PIZ_SCALE_CUSTOM                = -2,
     PIZ_SCALE_NONE                  = -1,
     PIZ_IONIAN                      =  0,
     PIZ_DORIAN,
@@ -200,6 +198,8 @@ typedef struct _PIZSequence {
     long                    chance;
     long                    channel;
     long                    velocity;
+    long                    key;
+    long                    type;
     long                    cell;
     long                    noteValue;
     unsigned int            seed;

@@ -54,9 +54,10 @@ void tralala_chance             (t_tralala *x, long n);
 void tralala_velocity           (t_tralala *x, long n);
 void tralala_channel            (t_tralala *x, long n);
 void tralala_cell               (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_scale              (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 
-void tralala_clear              (t_tralala *x);
 void tralala_note               (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_clear              (t_tralala *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
