@@ -1,7 +1,7 @@
 /*
  * \file    pizArray.c
  * \author  Jean Sapristi
- * \date    April 10, 2012.
+ * \date    May 10, 2012.
  */
  
 /*
@@ -109,39 +109,6 @@ PIZError pizArrayAppend (PIZArray *x, long value)
         
     return err;
 }
-
-
-PIZError pizArrayCopy (PIZArray *x, const PIZArray *toCopy)
-{
-    PIZError err = PIZ_GOOD;
-    
-    if (toCopy->index > x->size) {
-        long *newValues = NULL;
-        
-        if (newValues = (long *)realloc (x->values, toCopy->size * sizeof(long))) {
-            x->size = toCopy->size;
-            x->values = newValues;
-        } else {
-            err = PIZ_MEMORY;
-        }
-    }
-    
-    if (!err)  {
-        long i;
-        
-        for (i = 0; i < toCopy->index; i++) {
-            x->values[i] = toCopy->values[i];
-        }
-            
-        x->index = toCopy->index;
-    }
-    
-    return err;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
 void pizArrayClear (PIZArray *x)
 {

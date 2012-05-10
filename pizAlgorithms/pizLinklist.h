@@ -1,7 +1,7 @@
 /**
  * \file    pizLinklist.h
  * \author  Jean Sapristi
- * \date    April 8, 2012.
+ * \date    May 10, 2012.
  */
 
 /*
@@ -84,7 +84,6 @@ PIZError    pizLinklistPtrAtIndex       (PIZLinklist *x, long index, void **ptr)
 PIZError    pizLinklistNextByPtr        (PIZLinklist *x, void *ptr, void **nextPtr);
 PIZError    pizLinklistRemoveByPtr      (PIZLinklist *x, void *ptr);
 PIZError    pizLinklistChuckByPtr       (PIZLinklist *x, void *ptr);
-PIZError    pizLinklistSwapByIndexes    (PIZLinklist *x, long m, long n);
 long        pizLinklistCount            (const PIZLinklist *x);
 
 // -------------------------------------------------------------------------------------------------------------

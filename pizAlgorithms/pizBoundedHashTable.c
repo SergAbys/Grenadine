@@ -1,7 +1,7 @@
 /*
  * \file    pizBoundedHashTable.c
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    May 10, 2012.
  */
  
 /*
@@ -156,11 +156,6 @@ PIZError pizBoundedHashTableAdd (PIZBoundedHashTable *x, long key, void *ptr)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-
-void pizBoundedHashTableSetFlags (PIZBoundedHashTable *x, ulong flags)
-{
-    x->flags = flags;
-}
 
 void pizBoundedHashTableClear (PIZBoundedHashTable *x)
 {

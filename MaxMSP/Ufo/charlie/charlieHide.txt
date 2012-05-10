@@ -10,7 +10,6 @@ _charlie_setStep
 _charlie_setTraining
 _pizArrayAppend
 _pizArrayClear
-_pizArrayCopy
 _pizArrayCount
 _pizArrayFree
 _pizArrayNew

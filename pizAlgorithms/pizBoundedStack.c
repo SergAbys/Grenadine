@@ -1,7 +1,7 @@
 /*
  * \file    pizBoundedStack.c
  * \author  Jean Sapristi
- * \date    April 8, 2012.
+ * \date    May 10, 2012.
  */
  
 /*
@@ -50,8 +50,8 @@ PIZBoundedStack *pizBoundedStackNew (long size)
     
     if (size > 0 && (x = (PIZBoundedStack *)malloc (sizeof(PIZBoundedStack)))) {
         if (x->values = (long *)malloc (size * sizeof(long))) {
-            x->bound        = size;
-            x->stack        = 0;
+            x->size         = size;
+            x->index        = 0;
             x->poppedValue  = -1;
         } else {
             free (x);
@@ -78,7 +78,7 @@ void pizBoundedStackFree (PIZBoundedStack *x)
 
 void pizBoundedStackClear (PIZBoundedStack *x)
 {
-    x->stack       = 0;
+    x->index       = 0;
     x->poppedValue = -1;
 }
 
@@ -86,11 +86,11 @@ PIZError pizBoundedStackPush (PIZBoundedStack *x, long value)
 {   
     PIZError err = PIZ_ERROR;
     
-    if (x->stack < x->bound)  {
+    if (x->index < x->size)  {
         err = PIZ_GOOD;
         
-        x->values[x->stack] = value;
-        x->stack ++;
+        x->values[x->index] = value;
+        x->index ++;
     }
     
     return err;
@@ -100,11 +100,11 @@ PIZError pizBoundedStackPop (PIZBoundedStack *x)
 {
     PIZError err = PIZ_ERROR;
     
-    if (x->stack) {
+    if (x->index) {
         err = PIZ_GOOD;
         
-        x->poppedValue = x->values[x->stack - 1];
-        x->stack --;
+        x->poppedValue = x->values[x->index - 1];
+        x->index --;
     }
     
     return err;
@@ -112,7 +112,7 @@ PIZError pizBoundedStackPop (PIZBoundedStack *x)
 
 long pizBoundedStackCount (const PIZBoundedStack *x)
 {
-    return x->stack;
+    return x->index;
 }
 
 long pizBoundedStackPoppedValue (const PIZBoundedStack *x)

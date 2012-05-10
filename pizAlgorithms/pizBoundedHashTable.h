@@ -1,7 +1,7 @@
 /**
  * \file    pizBoundedHashTable.h
  * \author  Jean Sapristi
- * \date    April 8, 2012.
+ * \date    May 10, 2012.
  */
  
 /*
@@ -78,7 +78,6 @@ PIZBoundedHashTable *pizBoundedHashTableNew         (long argc, long *argv);
 void                pizBoundedHashTableFree         (PIZBoundedHashTable *x);
 
 PIZError            pizBoundedHashTableAdd          (PIZBoundedHashTable *x, long key, void *ptr); //
-void                pizBoundedHashTableSetFlags     (PIZBoundedHashTable *x, ulong flags);
 void                pizBoundedHashTableClear        (PIZBoundedHashTable *x);
 PIZError            pizBoundedHashTableRemoveByKey  (PIZBoundedHashTable *x, long key, void *ptr);
 PIZError            pizBoundedHashTablePtrByKey     (const PIZBoundedHashTable *x, long key, void **ptr);
@@ -89,11 +88,6 @@ long                pizBoundedHashTableCount        (const PIZBoundedHashTable *
 // -------------------------------------------------------------------------------------------------------------
 
 #ifdef PIZ_EXTERN_INLINE
-
-PIZ_EXTERN void pizBoundedHashTableSetFlags (PIZBoundedHashTable *x, ulong flags)
-{
-    x->flags = flags;
-}
 
 PIZ_EXTERN long pizBoundedHashTableCount (const PIZBoundedHashTable *x)
 {

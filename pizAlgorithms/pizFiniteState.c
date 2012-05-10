@@ -71,7 +71,8 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
     PIZFiniteState *x = NULL;
 
     if (x = (PIZFiniteState *)malloc (sizeof(PIZFiniteState))) {
-        long i, err = PIZ_GOOD;
+        long     i;
+        PIZError err = PIZ_GOOD;
         
         if (x->stock = (PIZFiniteStateNode *)malloc (PIZ_ITEMSET128_SIZE * sizeof(PIZFiniteStateNode))) {
             x->count        = 0;

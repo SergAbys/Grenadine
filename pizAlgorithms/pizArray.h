@@ -1,7 +1,7 @@
 /**
  * \file    pizArray.h
  * \author  Jean Sapristi
- * \date    April 7, 2012.
+ * \date    May 10, 2012.
  */
  
 /*
@@ -62,8 +62,6 @@ PIZArray    *pizArrayNew                 (long size);
 void        pizArrayFree                 (PIZArray *x);
 
 PIZError    pizArrayAppend               (PIZArray *x, long value); //
-PIZError    pizArrayCopy                 (PIZArray *x, const PIZArray *toCopy); //
-
 void        pizArrayClear                (PIZArray *x);
 void        pizArraySetValueAtIndex      (PIZArray *x, long index, long value);
 long        pizArrayValueAtIndex         (const PIZArray *x, long index);
@@ -71,6 +69,7 @@ long        pizArrayCount                (const PIZArray *x);
 long        *pizArrayPtr                 (const PIZArray *x); 
 
 void        pizArrayRemoveIndex          (PIZArray *x, long index);
+
 void        pizArrayRemoveLastValue      (PIZArray *x);
 long        pizArrayFirstIndexOfValue    (const PIZArray *x, long value);
 bool        pizArrayContainsValue        (const PIZArray *x, long value);

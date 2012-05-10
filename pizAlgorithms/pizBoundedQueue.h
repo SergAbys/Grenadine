@@ -1,7 +1,7 @@
 /**
  * \file    pizBoundedQueue.h
  * \author  Jean Sapristi
- * \date    April 8, 2012.
+ * \date    May 10, 2012.
  */
  
 /*
@@ -51,7 +51,7 @@
  
 typedef struct _PIZBoundedQueue {
     long count;
-    long bound;
+    long size;
     long head;
     long tail;
     long poppedValue;

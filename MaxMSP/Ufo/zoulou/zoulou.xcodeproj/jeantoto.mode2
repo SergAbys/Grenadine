@@ -285,7 +285,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>177 248 462 429 0 0 1280 778 </string>
+								<string>148 262 462 429 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -424,8 +424,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D96492154D870800789C29</string>
-				<string>96D96493154D870800789C29</string>
+				<string>96DE7781155C01D20050DC86</string>
+				<string>96DE7782155C01D20050DC86</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -458,11 +458,10 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/MaxMSP/Ufo/zoulou/zoulou.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>177 248 462 429 0 0 1280 778 </string>
+	<string>148 262 462 429 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -676,7 +675,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D96494154D870800789C29</string>
+				<string>96EAB309155BE78C00A7E5C7</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

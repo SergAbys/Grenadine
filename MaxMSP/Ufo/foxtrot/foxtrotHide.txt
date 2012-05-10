@@ -8,7 +8,6 @@ _foxtrot_new
 _foxtrot_setPersistence
 _pizArrayAppend
 _pizArrayClear
-_pizArrayCopy
 _pizArrayCount
 _pizArrayFree
 _pizArrayNew

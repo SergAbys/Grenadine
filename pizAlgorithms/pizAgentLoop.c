@@ -42,7 +42,7 @@
 #include "pizAgentMethod.h"
 #include "pizSequenceRun.h"
 #include "pizSequenceTransform.h"
-#include "pizSequenceAttributes.h"
+#include "pizSequenceAttribute.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

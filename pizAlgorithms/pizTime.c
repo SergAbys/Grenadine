@@ -69,7 +69,7 @@ void pizTimeAddNano (PIZTime *t, const PIZNano *ns)
 
 PIZError pizTimeElapsedNano (const PIZTime *t0, const PIZTime *t1, PIZNano *result)
 {
-    long     err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     uint64_t elapsed;
     
     if ((*t1) > (*t0)) {

@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceRun.c
  * \author  Jean Sapristi
- * \date    May 5, 2012.
+ * \date    May 10, 2012.
  */
  
 /*
@@ -152,26 +152,26 @@ PIZError pizSequenceNotifications (PIZSequence *x, PIZLinklist *q)
     //
     if (x->flags & PIZ_SEQUENCE_FLAG_ZONE) {
         long a[ ] = { x->start, x->end, x->down, x->up };
-        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_ZONE, -1, 4, a);
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_ZONE,       -1, 4, a);
     }
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANCE) {
-        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_CHANCE, -1, 1, &x->chance);
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_CHANCE,     -1, 1, &x->chance);
     }
     if (x->flags & PIZ_SEQUENCE_FLAG_VELOCITY) {
-        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_VELOCITY, -1, 1, &x->velocity);
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_VELOCITY,   -1, 1, &x->velocity);
     }
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANNEL) {
-        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_CHANNEL, -1, 1, &x->channel);
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_CHANNEL,    -1, 1, &x->channel);
     }
     if (x->flags & PIZ_SEQUENCE_FLAG_CELL) {
-        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_CELL, -1, 1, &x->cell);
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_CELL,       -1, 1, &x->cell);
     }
     if (x->flags & PIZ_SEQUENCE_FLAG_NOTE_VALUE) {
         err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_NOTE_VALUE, -1, 1, &x->noteValue);
     }
     if (x->flags & PIZ_SEQUENCE_FLAG_SCALE) {
         long a[ ] = { x->key, x->type };
-        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_SCALE, -1, 2, a);
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_SCALE,      -1, 2, a);
     }
     
     x->flags = PIZ_SEQUENCE_FLAG_NONE;

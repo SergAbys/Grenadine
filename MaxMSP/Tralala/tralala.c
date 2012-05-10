@@ -6,14 +6,14 @@
  */
  
 /*
- *  May 8, 2012.
+ *  May 10, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #include "tralala.h"  
-#include "tralalaSymbols.h"
+#include "tralalaSymbol.h"
                                                  
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -186,24 +186,50 @@ void tralala_channel (t_tralala *x, long n)
 void tralala_cell (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
     if (argc && argv) {
-        long value, size = 0;
-        char *string = NULL;
+        long     value, size = 0;
+        char     *string = NULL;
+        PIZError err = PIZ_GOOD;
 
         atom_gettext (argc, argv, &size, &string, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
         
         if (string) {
-            if (!(tralala_noteValueWithSymbol ((gensym (string)), &value))) {
-                TRALALA_ARGS (PIZ_EVENT_CELL, 1, &value)
-            }
-
+            err |= tralala_noteValueWithSymbol ((gensym (string)), &value);
             sysmem_freeptr (string);
+        }
+        
+        if (!err) {
+            TRALALA_ARGS (PIZ_EVENT_CELL, 1, &value);
         }
     }
 }
 
 void tralala_scale (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
+    if ((argc > 1) && argv) {
+    //
+    if (atom_gettype (argv) == A_SYM) {
+    //
+    long     key, type, size = 0;
+    char     *string = NULL;
+    PIZError err = PIZ_GOOD;
 
+    err |= tralala_keyWithSymbol (atom_getsym (argv), &key);
+    
+    atom_gettext (argc - 1, argv + 1, &size, &string, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
+    
+    if (string) {
+        err |= tralala_scaleWithSymbol ((gensym (string)), &type);
+        sysmem_freeptr (string);
+    }
+
+    if (!err) {
+        long values[ ] = { key, type };
+        TRALALA_ARGS (PIZ_EVENT_SCALE, 2, values);
+    }
+    //
+    }
+    //
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -218,14 +244,16 @@ void tralala_clear (t_tralala *x)
 void tralala_note (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
     if ((argc > 1) && (argc <= 5)) {
-        long values[5];
-        
-        atom_getlong_array (argc, argv, 5, values);
-        
-        values[0] = (long)(values[0] / TICKS_PER_STEP);
-        values[3] = (long)(values[3] / TICKS_PER_STEP);
-        
-        TRALALA_ARGS (PIZ_EVENT_NOTE, argc, values)
+    //
+    long values[ ] = { 0, 0, 0, 0, 0 };
+    
+    atom_getlong_array (argc, argv, 5, values);
+    
+    values[0] = (long)(values[0] / TICKS_PER_STEP);
+    values[3] = (long)(values[3] / TICKS_PER_STEP);
+    
+    TRALALA_ARGS (PIZ_EVENT_NOTE, argc, values)
+    //
     }
 }
 

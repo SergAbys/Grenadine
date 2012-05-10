@@ -1,7 +1,7 @@
 /*
  * \file    pizLinklist.c
  * \author  Jean Sapristi
- * \date    April 8, 2012.
+ * \date    May 10, 2012.
  */
  
 /*
@@ -73,7 +73,7 @@ void pizLinklistFree (PIZLinklist *x)
 
 PIZError pizLinklistAppend (PIZLinklist *x, void *ptr)
 {
-    long                err = PIZ_ERROR;
+    PIZError            err = PIZ_ERROR;
     PIZLinklistElement  *newElement = NULL;
     
     if (ptr) {
@@ -111,7 +111,7 @@ PIZError pizLinklistAppend (PIZLinklist *x, void *ptr)
 
 PIZError pizLinklistInsert (PIZLinklist *x, void *ptr)
 {
-    long                err = PIZ_ERROR;
+    PIZError            err = PIZ_ERROR;
     PIZLinklistElement  *newElement = NULL;
     
     if (ptr) {
@@ -183,7 +183,7 @@ void pizLinklistClear (PIZLinklist *x)
 PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr)
 {
     long                i = 0;
-    long                err = PIZ_ERROR;
+    PIZError            err = PIZ_ERROR;
     PIZLinklistElement  *theElement = NULL;
     
     if (*ptr) {
@@ -214,7 +214,7 @@ PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr)
 
 PIZError pizLinklistNextByPtr (PIZLinklist *x, void *ptr, void **nextPtr)
 {
-    long                err = PIZ_ERROR;
+    PIZError            err = PIZ_ERROR;
     PIZLinklistElement  *matchedElement = NULL;
     
     if (*nextPtr) {
@@ -251,7 +251,7 @@ PIZError pizLinklistNextByPtr (PIZLinklist *x, void *ptr, void **nextPtr)
 
 PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr)
 {
-    long                err = PIZ_ERROR;
+    PIZError            err = PIZ_ERROR;
     PIZLinklistElement  *elementToBeRemoved = NULL;
     
     if (x->cache && x->cache->previous && (x->cache->previous->ptr == ptr)) {
@@ -307,7 +307,7 @@ PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr)
 
 PIZError pizLinklistChuckByPtr (PIZLinklist *x, void *ptr)
 {
-    long                err = PIZ_ERROR;
+    PIZError            err = PIZ_ERROR;
     PIZLinklistElement  *elementToBeChucked = NULL;
     
     if (x->cache && x->cache->previous && (x->cache->previous->ptr == ptr)) {
@@ -351,50 +351,6 @@ PIZError pizLinklistChuckByPtr (PIZLinklist *x, void *ptr)
         err = PIZ_GOOD;
     }
             
-    return err;
-}
-
-PIZError pizLinklistSwapByIndexes (PIZLinklist *x, long m, long n)
-{
-    long a, b;
-    PIZError err = PIZ_ERROR;
-    
-    a = MIN (m, n);
-    b = MAX (m, n);
-    
-    if (x->count > b && b > a && a >= 0) {
-        long                i = 0;
-        PIZLinklistElement  *element1 = NULL;
-        PIZLinklistElement  *element2 = NULL;
-        PIZLinklistElement  *theElement = NULL;
-    
-        theElement = x->head;
-            
-        while (theElement) {
-            PIZLinklistElement *tempElement = NULL;
-
-            if (i == a) {
-                element1 = theElement;
-            } else if (i == b) {
-                element2 = theElement;
-                break;
-            }
-            
-            tempElement = theElement;
-            theElement  = tempElement->next;
-            
-            i ++;
-        }
-        
-        if (element1 && element2) {
-            void *temp = (void *)element2->ptr;
-            element2->ptr = element1->ptr;
-            element1->ptr = temp;
-            
-            err = PIZ_GOOD;
-        }
-    }
-    
     return err;
 }
 

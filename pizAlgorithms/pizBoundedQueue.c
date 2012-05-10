@@ -1,7 +1,7 @@
 /*
  * \file    pizBoundedQueue.c
  * \author  Jean Sapristi
- * \date    April 8, 2012.
+ * \date    May 10, 2012.
  */
  
 /*
@@ -51,7 +51,7 @@ PIZBoundedQueue *pizBoundedQueueNew (long size)
     if (size > 0 && (x = (PIZBoundedQueue *)malloc (sizeof(PIZBoundedQueue)))) {
         if (x->values = (long *)malloc ((size + 1) * sizeof(long))) {
             x->count        = 0;
-            x->bound        = size;
+            x->size         = size;
             x->head         = 0;
             x->tail         = 0;
             x->poppedValue  = -1;
@@ -90,14 +90,14 @@ PIZError pizBoundedQueueAppend (PIZBoundedQueue *x, long value)
 {   
     PIZError err = PIZ_ERROR;
     
-    if (((x->tail + 1) != x->head) && !((x->tail == x->bound) && (x->head == 0))) {
+    if (((x->tail + 1) != x->head) && !((x->tail == x->size) && (x->head == 0))) {
         err = PIZ_GOOD;
         
         x->count ++;
         
         x->values[x->tail] = value;
         
-        if (x->tail == x->bound) {
+        if (x->tail == x->size) {
             x->tail = 0;
         } else {
             x->tail ++;
@@ -118,7 +118,7 @@ PIZError pizBoundedQueuePop (PIZBoundedQueue *x)
         
         x->poppedValue = x->values[x->head];
         
-        if (x->head == x->bound) {
+        if (x->head == x->size) {
             x->head = 0;
         } else {
             x->head ++;
@@ -136,7 +136,7 @@ PIZError pizBoundedQueuePopLastValue (PIZBoundedQueue *x)
         err = PIZ_GOOD;
         
         if (x->tail == 0) {
-            x->tail = x->bound;
+            x->tail = x->size;
         } else {
             x->tail --;
         }
