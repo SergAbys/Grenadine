@@ -155,65 +155,54 @@ PIZError pizSequenceSetNoteValue (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
 {
-    long       argc;
-    long       *argv = NULL;
-    PIZError   err = PIZ_ERROR;
+    long     argc;
+    long     *argv = NULL;
+    PIZError err = PIZ_GOOD;
 
-    if (!(pizEventPtr (event, &argc, &argv))) {
-    //
-    const long *ptr = NULL;
-        
-    x->key  = CLAMP (argv[0], 0, PIZ_MAGIC_SCALE);
-    x->type = CLAMP (argv[1], PIZ_SCALE_NONE, PIZ_SEVENTH_FLAT_FIVE);
-    
-    err = PIZ_GOOD;
-    
     pizArrayClear (x->scale);
     
-    if (x->type != PIZ_SCALE_NONE) {
-        ptr = pizSequenceModes + (x->type * PIZ_MAGIC_SCALE); 
-    }
+    if (!(pizEventPtr (event, &argc, &argv))) {
+    //
+    x->key  = CLAMP (argv[0], PIZ_KEY_C, PIZ_KEY_B);
+    x->type = CLAMP (argv[1], PIZ_SCALE_NONE, PIZ_SEVENTH_FLAT_FIVE);
     
-    if (ptr) {
-        long i;
+    if (x->type != PIZ_SCALE_NONE) {
+        long       i;
+        const long *ptr = NULL;
+        
+        ptr = pizSequenceModes + (x->type * PIZ_MAGIC_SCALE); 
+        
         for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
             err |= pizArrayAppend (x->scale, *(ptr + ((PIZ_MAGIC_SCALE - x->key + i) % PIZ_MAGIC_SCALE)));
         }
-        
-        if (!err) {
-            x->flags |= PIZ_SEQUENCE_FLAG_SCALE;
-        }
     }
     //
+    } else {
+        x->key  = PIZ_KEY_C;
+        x->type = PIZ_SCALE_NONE;
     }
+    
+    x->flags |= PIZ_SEQUENCE_FLAG_SCALE;
     
     return err;
 }   
 
 PIZError pizSequenceSetPattern (PIZSequence *x, const PIZEvent *event)
 {
-    long       argc;
-    long       *argv = NULL;
-    PIZError   err = PIZ_ERROR;
+    long     argc;
+    long     *argv = NULL;
+    PIZError err = PIZ_GOOD;
 
-    if (!(pizEventPtr (event, &argc, &argv))) {
-    //
-    long i;
-    
-    err = PIZ_GOOD;
-    
     pizArrayClear (x->pattern);
-        
-    for (i = 0; i < argc; i++) {
-        err |= pizArrayAppend (x->pattern, argv[i]);
+    
+    if (!(pizEventPtr (event, &argc, &argv))) {
+        long i;
+        for (i = 0; i < argc; i++) {
+            err |= pizArrayAppend (x->pattern, argv[i]);
+        }
     }
     
-    if (!err) {
-        x->flags |= PIZ_SEQUENCE_FLAG_PATTERN;
-    }
-        
-    //
-    }
+    x->flags |= PIZ_SEQUENCE_FLAG_PATTERN;
     
     return err;
 }

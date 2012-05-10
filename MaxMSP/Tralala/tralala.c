@@ -14,7 +14,24 @@
 
 #include "tralala.h"  
 #include "tralalaSymbol.h"
-                                                 
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define TICKS_PER_STEP          20
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define TRALALA(a)              PIZEvent *event = NULL;                                 \
+                                if (event = pizEventNew ((a), -1, 0, NULL)) {           \
+                                    pizAgentAddEvent (x->agent, event);                 \
+                                }
+#define TRALALA_ARGS(a,b,c)     PIZEvent *event = NULL;                                 \
+                                if (event = pizEventNew ((a), -1, (b), (c))) {          \
+                                    pizAgentAddEvent (x->agent, event);                 \
+                                } 
+                                                                                 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -40,6 +57,7 @@ int main (void)
     class_addmethod (c, (method)tralala_channel,   "channel",   A_LONG, 0);
     class_addmethod (c, (method)tralala_cell,      "cell",      A_GIMME, 0);
     class_addmethod (c, (method)tralala_scale,     "scale",     A_GIMME, 0);
+    class_addmethod (c, (method)tralala_pattern,   "pattern",   A_GIMME, 0);
     class_addmethod (c, (method)tralala_note,      "note",      A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
@@ -59,7 +77,6 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 
     if (x = (t_tralala *)object_alloc (tralala_class)) {
         if (x->agent = pizAgentNew ( )) {
-        
             x->rightOutlet          = bangout ((t_object *)x);
             x->middleRightOutlet    = bangout ((t_object *)x);
             x->middleLeftOutlet     = listout ((t_object *)x); 
@@ -109,14 +126,14 @@ void tralala_notify (void *ptr, PIZEvent *event)
     pizEventName (event, &name);
     
     if (name == PIZ_EVENT_NOTE_PLAYED) {
-        long    argc;
+        long    argc = 0;
         long    *argv = NULL;
         t_atom  notePlayed[4];
         
-        if (!(pizEventPtr (event, &argc, &argv))) {
-            atom_setlong_array (4, notePlayed, 4, argv + 1);
-            outlet_list (x->leftOutlet, NULL, 4, notePlayed); 
-        }
+        pizEventPtr (event, &argc, &argv);
+        
+        atom_setlong_array (4, notePlayed, argc - 1, argv + 1);
+        outlet_list (x->leftOutlet, NULL, 4, notePlayed); 
     
     } else if (name == PIZ_EVENT_END) {
         outlet_bang (x->middleRightOutlet);
@@ -185,50 +202,68 @@ void tralala_channel (t_tralala *x, long n)
 
 void tralala_cell (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    if (argc && argv) {
-        long     value, size = 0;
-        char     *string = NULL;
-        PIZError err = PIZ_GOOD;
+    PIZError err = PIZ_GOOD;
+    long     value = PIZ_NOTE_VALUE_NONE;
+    
+    if (argc) {
+    //
+    long size = 0;
+    char *string = NULL;
 
-        atom_gettext (argc, argv, &size, &string, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
-        
-        if (string) {
-            err |= tralala_noteValueWithSymbol ((gensym (string)), &value);
-            sysmem_freeptr (string);
-        }
-        
-        if (!err) {
-            TRALALA_ARGS (PIZ_EVENT_CELL, 1, &value);
-        }
+    atom_gettext (argc, argv, &size, &string, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
+    
+    if (string) {
+        err |= tralala_noteValueWithSymbol ((gensym (string)), &value);
+        sysmem_freeptr (string);
+    }
+    //
+    }
+    
+    if (!err) {
+        TRALALA_ARGS (PIZ_EVENT_CELL, 1, &value);
     }
 }
 
 void tralala_scale (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    if ((argc > 1) && argv) {
+    if (argc > 1) {
     //
     if (atom_gettype (argv) == A_SYM) {
-    //
-    long     key, type, size = 0;
-    char     *string = NULL;
-    PIZError err = PIZ_GOOD;
+        long     key, type, size = 0;
+        char     *string = NULL;
+        PIZError err = PIZ_GOOD;
 
-    err |= tralala_keyWithSymbol (atom_getsym (argv), &key);
-    
-    atom_gettext (argc - 1, argv + 1, &size, &string, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
-    
-    if (string) {
-        err |= tralala_scaleWithSymbol ((gensym (string)), &type);
-        sysmem_freeptr (string);
-    }
+        err |= tralala_keyWithSymbol (atom_getsym (argv), &key);
+        
+        atom_gettext (argc - 1, argv + 1, &size, &string, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
+        
+        if (string) {
+            err |= tralala_scaleWithSymbol ((gensym (string)), &type);
+            sysmem_freeptr (string);
+        }
 
-    if (!err) {
-        long values[ ] = { key, type };
-        TRALALA_ARGS (PIZ_EVENT_SCALE, 2, values);
+        if (!err) {
+            long values[ ] = { key, type };
+            TRALALA_ARGS (PIZ_EVENT_SCALE, 2, values);
+        }
     }
     //
+    } else {
+        TRALALA (PIZ_EVENT_SCALE)
+    }
+}
+
+void tralala_pattern (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    if (argc) {
+    //
+    long values[argc];
+    if (!(atom_getlong_array (argc, argv, argc, values))) {
+        TRALALA_ARGS (PIZ_EVENT_PATTERN, argc, values)
     }
     //
+    } else {
+        TRALALA (PIZ_EVENT_PATTERN)
     }
 }
 
@@ -243,16 +278,14 @@ void tralala_clear (t_tralala *x)
 
 void tralala_note (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    if ((argc > 1) && (argc <= 5)) {
+    if (argc > 1) {
     //
     long values[ ] = { 0, 0, 0, 0, 0 };
-    
-    atom_getlong_array (argc, argv, 5, values);
-    
-    values[0] = (long)(values[0] / TICKS_PER_STEP);
-    values[3] = (long)(values[3] / TICKS_PER_STEP);
-    
-    TRALALA_ARGS (PIZ_EVENT_NOTE, argc, values)
+    if (!(atom_getlong_array (argc, argv, 5, values))) {
+        values[0] = (long)(values[0] / TICKS_PER_STEP);
+        values[3] = (long)(values[3] / TICKS_PER_STEP);
+        TRALALA_ARGS (PIZ_EVENT_NOTE, argc, values)
+    }
     //
     }
 }

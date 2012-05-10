@@ -29,7 +29,6 @@ static t_symbol *tll_gSharp                = NULL;
 static t_symbol *tll_a                     = NULL;
 static t_symbol *tll_aSharp                = NULL;
 static t_symbol *tll_b                     = NULL;
-static t_symbol *tll_none                  = NULL;
 static t_symbol *tll_ionian                = NULL;
 static t_symbol *tll_dorian                = NULL;
 static t_symbol *tll_phrygian              = NULL;
@@ -90,7 +89,6 @@ void tralala_symbolsInit ( )
     tll_a                     = gensym ("A");
     tll_aSharp                = gensym ("A#");
     tll_b                     = gensym ("B");
-    tll_none                  = gensym ("none");
     tll_ionian                = gensym ("ionian");
     tll_dorian                = gensym ("dorian");
     tll_phrygian              = gensym ("phrygian");
@@ -175,8 +173,7 @@ PIZError tralala_scaleWithSymbol (const t_symbol *s, long *value)
     
     err = PIZ_GOOD;
     
-    if      (s == tll_none)                     { *value = PIZ_SCALE_NONE;               } 
-    else if (s == tll_ionian)                   { *value = PIZ_IONIAN;                   } 
+    if      (s == tll_ionian)                   { *value = PIZ_IONIAN;                   } 
     else if (s == tll_dorian)                   { *value = PIZ_DORIAN;                   } 
     else if (s == tll_phrygian)                 { *value = PIZ_PHRYGIAN;                 } 
     else if (s == tll_lydian)                   { *value = PIZ_LYDIAN;                   } 
@@ -218,8 +215,7 @@ PIZError tralala_noteValueWithSymbol (const t_symbol *s, long *value)
     
     err = PIZ_GOOD;
     
-    if      (s == tll_none)                 { *value = PIZ_NOTE_VALUE_NONE;             } 
-    else if (s == tll_whole)                { *value = PIZ_WHOLE_NOTE;                  } 
+    if      (s == tll_whole)                { *value = PIZ_WHOLE_NOTE;                  } 
     else if (s == tll_half)                 { *value = PIZ_HALF_NOTE;                   } 
     else if (s == tll_quarter)              { *value = PIZ_QUARTER_NOTE;                } 
     else if (s == tll_eighth)               { *value = PIZ_EIGHTH_NOTE;                 } 

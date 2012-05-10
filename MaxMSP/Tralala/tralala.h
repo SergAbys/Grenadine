@@ -55,26 +55,10 @@ void tralala_velocity           (t_tralala *x, long n);
 void tralala_channel            (t_tralala *x, long n);
 void tralala_cell               (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_scale              (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_pattern            (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 
 void tralala_note               (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_clear              (t_tralala *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define TICKS_PER_STEP          20
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define TRALALA(a)              PIZEvent *event = NULL;                                 \
-                                if (event = pizEventNew ((a), -1, 0, NULL)) {           \
-                                    pizAgentAddEvent (x->agent, event);                 \
-                                }
-#define TRALALA_ARGS(a,b,c)     PIZEvent *event = NULL;                                 \
-                                if (event = pizEventNew ((a), -1, (b), (c))) {          \
-                                    pizAgentAddEvent (x->agent, event);                 \
-                                } 
                                 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

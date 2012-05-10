@@ -61,8 +61,8 @@ PIZSequence *pizSequenceNew (long size)
     
     if (x = (PIZSequence *)malloc (sizeof(PIZSequence))) {
     //
-    long argv1[2] = { 0, PIZ_SEQUENCE_MAXIMUM_NOTES };
-    long argv2[2] = { PIZ_SEQUENCE_INIT_LOOKUP_SIZE, PIZ_SEQUENCE_MAXIMUM_NOTES };
+    long argv1[ ] = { 0, PIZ_SEQUENCE_MAXIMUM_NOTES };
+    long argv2[ ] = { PIZ_SEQUENCE_INIT_LOOKUP_SIZE, PIZ_SEQUENCE_MAXIMUM_NOTES };
     
     if (size > 0) {
         x->size = size;
