@@ -11,8 +11,12 @@
 		breakpointsGroup = 9699A8E613D9A57300D9A0AD /* XCBreakpointsBucket */;
 		codeSenseManager = 96CFCDA713D7F01D004431BB /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 358352127;
-			PBXWorkspaceStateSaveDate = 358352127;
+			PBXPerProjectTemplateStateSaveDate = 358352297;
+			PBXWorkspaceStateSaveDate = 358352297;
+		};
+		perUserProjectItems = {
+			96DE7822155C05F70050DC86 /* PBXTextBookmark */ = 96DE7822155C05F70050DC86 /* PBXTextBookmark */;
+			96DE7823155C05F70050DC86 /* PBXTextBookmark */ = 96DE7823155C05F70050DC86 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 96CFCDA613D7F01D004431BB /* Source Control */;
 		userBuildSettings = {
@@ -155,8 +159,8 @@
 	96A16F7E148CF856008268A6 /* pizSequence.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1234, 5400}}";
-			sepNavSelRange = "{8277, 0}";
-			sepNavVisRect = "{{0, 4755}, {1234, 645}}";
+			sepNavSelRange = "{2570, 19}";
+			sepNavVisRect = "{{0, 1041}, {1234, 645}}";
 			sepNavWindowFrame = "{{-1, 4}, {1279, 774}}";
 		};
 	};
@@ -292,14 +296,6 @@
 			sepNavWindowFrame = "{{-2, 4}, {1280, 774}}";
 		};
 	};
-	96DD190E144AB01900F914AE /* pizDataStructures.h */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1234, 1450}}";
-			sepNavSelRange = "{2015, 0}";
-			sepNavVisRect = "{{0, 805}, {1234, 645}}";
-			sepNavWindowFrame = "{{-3, 4}, {1279, 774}}";
-		};
-	};
 	96DD190F144AB01900F914AE /* pizBoundedStack.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1234, 2400}}";
@@ -387,6 +383,23 @@
 			sepNavVisRect = "{{0, 0}, {1234, 645}}";
 			sepNavWindowFrame = "{{0, 3}, {1279, 774}}";
 		};
+	};
+	96DE7822155C05F70050DC86 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96A16F7E148CF856008268A6 /* pizSequence.h */;
+		rLen = 202;
+		rLoc = 2570;
+		rType = 0;
+	};
+	96DE7823155C05F70050DC86 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96A16F7E148CF856008268A6 /* pizSequence.h */;
+		name = pizDataStructures.h;
+		rLen = 202;
+		rLoc = 2570;
+		rType = 0;
+		vrLen = 259;
+		vrLoc = 2446;
 	};
 	96F915071538024D00202438 /* pizSequenceAttribute.c */ = {
 		uiCtxt = {
