@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    May 4, 2012.
+ * \date    May 10, 2012.
  */
  
 /*
@@ -53,12 +53,9 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizTypes.h"
-//#include "pizTime.h"
 #include "pizArray.h"
 #include "pizLinklist.h"
 #include "pizItemset128.h"
-//#include "pizBoundedStack.h"
-//#include "pizBoundedQueue.h"
 #include "pizBoundedHashTable.h"
 
 // -------------------------------------------------------------------------------------------------------------

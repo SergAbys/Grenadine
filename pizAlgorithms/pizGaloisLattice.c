@@ -83,7 +83,6 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
     x->shuttle              = -1;
     x->previousShuttle      = -1;
     
-    x->algorithm.type       = PIZ_ALGORITHM_TYPE_GALOIS_LATTICE;
     x->algorithm.add        = pizGaloisLatticeAdd;
     x->algorithm.clear      = pizGaloisLatticeClear;
     x->algorithm.proceed    = pizGaloisLatticeProceed;

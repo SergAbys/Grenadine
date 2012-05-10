@@ -173,6 +173,11 @@ PIZError pizSequenceNotifications (PIZSequence *x, PIZLinklist *q)
         long a[ ] = { x->key, x->type };
         err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_SCALE,      -1, 2, a);
     }
+    if (x->flags & PIZ_SEQUENCE_FLAG_PATTERN) {
+        long argc  = pizArrayCount (x->pattern);
+        long *argv = pizArrayPtr (x->pattern);
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_PATTERN,    -1, argc, argv);
+    }
     
     x->flags = PIZ_SEQUENCE_FLAG_NONE;
     //

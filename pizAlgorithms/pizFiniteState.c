@@ -80,7 +80,6 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
             x->jumpChance   = 0;
             x->threshold    = PIZ_DEFAULT_THRESHOLD;
             
-            x->algorithm.type       = PIZ_ALGORITHM_TYPE_FINITE_STATE;
             x->algorithm.add        = pizFiniteStateAdd;
             x->algorithm.clear      = pizFiniteStateClear;
             x->algorithm.proceed    = pizFiniteStateProceed;

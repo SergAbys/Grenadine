@@ -74,7 +74,6 @@ PIZKohonenMap *pizKohonenMapNew (long argc, long *argv)
         x->training      = PIZ_DEFAULT_TRAINING;
         x->step          = PIZ_DEFAULT_STEP;
         
-        x->algorithm.type       = PIZ_ALGORITHM_TYPE_KOHONEN_MAP;
         x->algorithm.add        = pizKohonenMapAdd;
         x->algorithm.clear      = pizKohonenMapClear;
         x->algorithm.proceed    = pizKohonenMapProceed;

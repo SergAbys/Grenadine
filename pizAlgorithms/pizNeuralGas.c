@@ -86,7 +86,6 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
         x->beta          = PIZ_DEFAULT_BETA;
         x->kappa         = PIZ_DEFAULT_KAPPA;
         
-        x->algorithm.type       = PIZ_ALGORITHM_TYPE_NEURAL_GAS;
         x->algorithm.add        = pizNeuralGasAdd;
         x->algorithm.clear      = pizNeuralGasClear;
         x->algorithm.proceed    = pizNeuralGasProceed;

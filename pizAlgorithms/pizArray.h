@@ -62,6 +62,7 @@ PIZArray    *pizArrayNew                 (long size);
 void        pizArrayFree                 (PIZArray *x);
 
 PIZError    pizArrayAppend               (PIZArray *x, long value); //
+
 void        pizArrayClear                (PIZArray *x);
 void        pizArraySetValueAtIndex      (PIZArray *x, long index, long value);
 long        pizArrayValueAtIndex         (const PIZArray *x, long index);
@@ -69,7 +70,6 @@ long        pizArrayCount                (const PIZArray *x);
 long        *pizArrayPtr                 (const PIZArray *x); 
 
 void        pizArrayRemoveIndex          (PIZArray *x, long index);
-
 void        pizArrayRemoveLastValue      (PIZArray *x);
 long        pizArrayFirstIndexOfValue    (const PIZArray *x, long value);
 bool        pizArrayContainsValue        (const PIZArray *x, long value);

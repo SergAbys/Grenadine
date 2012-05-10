@@ -77,7 +77,6 @@ PIZFactorOracle *pizFactorOracleNew (long argc, long *argv)
             x->straightRatio        = PIZ_DEFAULT_STRAIGHT_RATIO;
             x->seed                 = (unsigned int)time(NULL);
             
-            x->algorithm.type       = PIZ_ALGORITHM_TYPE_FACTOR_ORACLE;
             x->algorithm.add        = pizFactorOracleAdd;
             x->algorithm.clear      = pizFactorOracleClear;
             x->algorithm.proceed    = pizFactorOracleProceed;

@@ -190,12 +190,32 @@ PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
     return err;
 }   
 
-//PIZError pizSequenceSetPattern (PIZSequence *x, const PIZArray *a)
 PIZError pizSequenceSetPattern (PIZSequence *x, const PIZEvent *event)
 {
-    // return pizArrayCopy (x->pattern, a);
+    long       argc;
+    long       *argv = NULL;
+    PIZError   err = PIZ_ERROR;
+
+    if (!(pizEventPtr (event, &argc, &argv))) {
+    //
+    long i;
     
-    return PIZ_GOOD;
+    err = PIZ_GOOD;
+    
+    pizArrayClear (x->pattern);
+        
+    for (i = 0; i < argc; i++) {
+        err |= pizArrayAppend (x->pattern, argv[i]);
+    }
+    
+    if (!err) {
+        x->flags |= PIZ_SEQUENCE_FLAG_PATTERN;
+    }
+        
+    //
+    }
+    
+    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------

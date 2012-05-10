@@ -77,7 +77,6 @@ PIZMarkovModel *pizMarkovModelNew (long argc, long *argv)
     x->graphSize     = PIZ_DEFAULT_GRAPH_SIZE;
     x->persistence   = PIZ_DEFAULT_PERSISTENCE;
     
-    x->algorithm.type       = PIZ_ALGORITHM_TYPE_MARKOV_MODEL;
     x->algorithm.add        = pizMarkovModelAdd;
     x->algorithm.clear      = pizMarkovModelClear;
     x->algorithm.proceed    = pizMarkovModelProceed;
