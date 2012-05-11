@@ -58,8 +58,8 @@ PIZAgent *pizAgentNew (void)
     //
     long err = PIZ_GOOD;
     
-    x->flags            = PIZ_AGENT_FLAG_INIT; 
     x->bpm              = PIZ_DEFAULT_BPM;  
+    x->flags            = PIZ_AGENT_FLAG_INIT; 
     x->run              = pizLinklistNew ( );
     x->graphic          = pizLinklistNew ( );
     x->transform        = pizLinklistNew ( );

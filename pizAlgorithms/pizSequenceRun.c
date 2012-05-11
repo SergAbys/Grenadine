@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceRun.c
  * \author  Jean Sapristi
- * \date    May 10, 2012.
+ * \date    May 11, 2012.
  */
  
 /*
@@ -66,7 +66,7 @@ void pizSequenceGoToStart (PIZSequence *x)
     x->index = x->start;
 }
 
-PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *q, long bpm)
+PIZError pizSequenceStep (PIZSequence *x, PIZLinklist *q, long bpm)
 {
     PIZError err = PIZ_ERROR;
     
@@ -142,7 +142,7 @@ PIZError pizSequenceProceedStep (PIZSequence *x, PIZLinklist *q, long bpm)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizSequenceNotifications (PIZSequence *x, PIZLinklist *q)
+PIZError pizSequenceRefresh (PIZSequence *x, PIZLinklist *q)
 {
     long     i;
     PIZError err = PIZ_GOOD;

@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	May 7, 2012.
+ * \date	May 11, 2012.
  */
  
 /*
@@ -215,7 +215,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         PIZ_AGENT_LOCK_NOTIFICATION
         
         count = pizLinklistCount (x->notification);
-        err   = pizSequenceProceedStep (x->sequence, x->notification, x->bpm);
+        err   = pizSequenceStep (x->sequence, x->notification, x->bpm);
         count -= pizLinklistCount (x->notification);
         
         if (count) { 
@@ -226,7 +226,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         }
 
     } else {
-        err = pizSequenceProceedStep (x->sequence, NULL, x->bpm); 
+        err = pizSequenceStep (x->sequence, NULL, x->bpm); 
     }
     
     if (err == PIZ_GOOD) {
@@ -263,7 +263,7 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     PIZ_AGENT_LOCK_NOTIFICATION
     
     count = pizLinklistCount (x->notification);
-    err   = pizSequenceNotifications (x->sequence, x->notification);
+    err   = pizSequenceRefresh (x->sequence, x->notification);
     count -= pizLinklistCount (x->notification);
      
     if (!err && count) {

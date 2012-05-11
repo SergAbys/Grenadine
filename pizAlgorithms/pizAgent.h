@@ -103,8 +103,8 @@ typedef struct _PIZObserver {
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZAgent {
-    ulong               flags;
     long                bpm;
+    ulong               flags;
     PIZNano             grainSize;
     PIZTime             grainStart;
     PIZTime             grainEnd;

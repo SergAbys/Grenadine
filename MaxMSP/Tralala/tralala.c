@@ -77,6 +77,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 
     if (x = (t_tralala *)object_alloc (tralala_class)) {
         if (x->agent = pizAgentNew ( )) {
+        
             x->rightOutlet          = bangout ((t_object *)x);
             x->middleRightOutlet    = bangout ((t_object *)x);
             x->middleLeftOutlet     = listout ((t_object *)x); 
@@ -141,8 +142,6 @@ void tralala_notify (void *ptr, PIZEvent *event)
     } else if (name == PIZ_EVENT_WILL_END) {
         outlet_bang (x->rightOutlet);
     }
-    
-    DEBUGEVENT
     
     pizEventFree (event);
 }
@@ -258,6 +257,7 @@ void tralala_pattern (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     if (argc) {
     //
     long values[argc];
+    
     if (!(atom_getlong_array (argc, argv, argc, values))) {
         TRALALA_ARGS (PIZ_EVENT_PATTERN, argc, values)
     }
