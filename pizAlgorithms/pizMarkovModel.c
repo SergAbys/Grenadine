@@ -1,7 +1,7 @@
 /*
  * \file    pizMarkovModel.c
  * \author  Jean Sapristi
- * \date    April 23, 2012.
+ * \date    May 12, 2012.
  */
  
 /*
@@ -76,11 +76,6 @@ PIZMarkovModel *pizMarkovModelNew (long argc, long *argv)
     x->vectorSize    = PIZ_DEFAULT_VECTOR_SIZE;
     x->graphSize     = PIZ_DEFAULT_GRAPH_SIZE;
     x->persistence   = PIZ_DEFAULT_PERSISTENCE;
-    
-    x->algorithm.add        = pizMarkovModelAdd;
-    x->algorithm.clear      = pizMarkovModelClear;
-    x->algorithm.proceed    = pizMarkovModelProceed;
-    x->algorithm.count      = pizMarkovModelCount;
     
     if (argc && ((argv[0] > 0)  && (argv[0] <= PIZ_MAXIMUM_GRAPH_SIZE))) {
         x->graphSize = argv[0];

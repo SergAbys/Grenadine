@@ -1,7 +1,7 @@
 /*
  * \file    pizFiniteState.c
  * \author  Jean Sapristi
- * \date    April 23, 2012.
+ * \date    May 12, 2012.
  */
  
 /*
@@ -79,11 +79,6 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
             x->shuttle      = -1;
             x->jumpChance   = 0;
             x->threshold    = PIZ_DEFAULT_THRESHOLD;
-            
-            x->algorithm.add        = pizFiniteStateAdd;
-            x->algorithm.clear      = pizFiniteStateClear;
-            x->algorithm.proceed    = pizFiniteStateProceed;
-            x->algorithm.count      = pizFiniteStateCount;
             
             x->seed = (unsigned int)time(NULL);
                 

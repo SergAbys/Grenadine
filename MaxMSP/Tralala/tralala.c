@@ -6,7 +6,7 @@
  */
  
 /*
- *  May 10, 2012.
+ *  May 12, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -55,6 +55,7 @@ int main (void)
     class_addmethod (c, (method)tralala_chance,    "chance",    A_LONG, 0);
     class_addmethod (c, (method)tralala_velocity,  "velocity",  A_LONG, 0);
     class_addmethod (c, (method)tralala_channel,   "channel",   A_LONG, 0);
+    class_addmethod (c, (method)tralala_transpose, "transpose", A_LONG, 0);
     class_addmethod (c, (method)tralala_cell,      "cell",      A_GIMME, 0);
     class_addmethod (c, (method)tralala_scale,     "scale",     A_GIMME, 0);
     class_addmethod (c, (method)tralala_pattern,   "pattern",   A_GIMME, 0);
@@ -121,20 +122,19 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
 
 void tralala_notify (void *ptr, PIZEvent *event)
 {
+    long         argc = 0;
+    long         *argv = NULL;
+    t_tralala    *x = NULL;
     PIZEventName name;
-    t_tralala *x = (t_tralala *)ptr;
     
+    x = (t_tralala *)ptr;
     pizEventName (event, &name);
     
     if (name == PIZ_EVENT_NOTE_PLAYED) {
-        long    argc = 0;
-        long    *argv = NULL;
-        t_atom  notePlayed[4];
-        
         pizEventPtr (event, &argc, &argv);
         
-        atom_setlong_array (4, notePlayed, argc - 1, argv + 1);
-        outlet_list (x->leftOutlet, NULL, 4, notePlayed); 
+        atom_setlong_array (4, x->notePlayed, argc - 1, argv + 1);
+        outlet_list (x->leftOutlet, NULL, 4, x->notePlayed); 
     
     } else if (name == PIZ_EVENT_END) {
         outlet_bang (x->middleRightOutlet);
@@ -142,6 +142,8 @@ void tralala_notify (void *ptr, PIZEvent *event)
     } else if (name == PIZ_EVENT_WILL_END) {
         outlet_bang (x->rightOutlet);
     }
+    
+    DEBUGEVENT
     
     pizEventFree (event);
 }
@@ -281,6 +283,7 @@ void tralala_note (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     if (argc > 1) {
     //
     long values[ ] = { 0, 0, 0, 0, 0 };
+    
     if (!(atom_getlong_array (argc, argv, 5, values))) {
         values[0] = (long)(values[0] / TICKS_PER_STEP);
         values[3] = (long)(values[3] / TICKS_PER_STEP);
@@ -288,6 +291,15 @@ void tralala_note (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     }
     //
     }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void tralala_transpose (t_tralala *x, long n)
+{
+    TRALALA_ARGS (PIZ_EVENT_TRANSPOSE, 1, &n)
 }
 
 // -------------------------------------------------------------------------------------------------------------

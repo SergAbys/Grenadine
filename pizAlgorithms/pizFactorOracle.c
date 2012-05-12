@@ -1,7 +1,7 @@
 /*
  * \file    pizFactorOracle.c
  * \author  Jean Sapristi
- * \date    April 8, 2012.
+ * \date    May 12, 2012.
  */
  
 /*
@@ -76,11 +76,6 @@ PIZFactorOracle *pizFactorOracleNew (long argc, long *argv)
             x->backwardThreshold    = PIZ_DEFAULT_BACKWARD_THRESHOLD;
             x->straightRatio        = PIZ_DEFAULT_STRAIGHT_RATIO;
             x->seed                 = (unsigned int)time(NULL);
-            
-            x->algorithm.add        = pizFactorOracleAdd;
-            x->algorithm.clear      = pizFactorOracleClear;
-            x->algorithm.proceed    = pizFactorOracleProceed;
-            x->algorithm.count      = pizFactorOracleCount;
             
             x->nodes[0].referTo = -1;
             x->nodes[0].lengthRepeatedSuffix = 0;

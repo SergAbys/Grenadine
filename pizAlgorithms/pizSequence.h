@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    May 10, 2012.
+ * \date    May 12, 2012.
  */
  
 /*
@@ -57,6 +57,8 @@
 #include "pizLinklist.h"
 #include "pizItemset128.h"
 #include "pizBoundedHashTable.h"
+#include "pizFactorOracle.h"
+#include "pizGaloisLattice.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -66,7 +68,6 @@
                                         
 #define PIZ_SEQUENCE_INIT_TEMP_SIZE         128
 #define PIZ_SEQUENCE_INIT_LOOKUP_SIZE       19
-
 #define PIZ_SEQUENCE_DEFAULT_SIZE           288 
 #define PIZ_SEQUENCE_DEFAULT_VELOCITY       80
 
@@ -112,8 +113,8 @@ enum {
     };
 
 enum {
-    PIZ_KEY_C = 0,
-    PIZ_KEY_C_SHARP,
+    PIZ_KEY_C                       = 0,
+    PIZ_KEY_C_SHARP                 = 1,
     PIZ_KEY_D,
     PIZ_KEY_D_SHARP,
     PIZ_KEY_E,
@@ -129,7 +130,7 @@ enum {
 enum {
     PIZ_SCALE_NONE                  = -1,
     PIZ_IONIAN                      =  0,
-    PIZ_DORIAN,
+    PIZ_DORIAN                      =  1,
     PIZ_PHRYGIAN,
     PIZ_LYDIAN,
     PIZ_MIXOLYDIAN,
@@ -155,13 +156,17 @@ enum {
     PIZ_SEVENTH_FLAT_FIVE
     };
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
+enum {
+    PIZ_VALUE_PITCH                 = 0,
+    PIZ_VALUE_VELOCITY              = 1,
+    PIZ_VALUE_DURATION              = 2,
+    PIZ_VALUE_CHANNEL               = 3
+    };
 
-#define PIZ_VALUE_PITCH         0
-#define PIZ_VALUE_VELOCITY      1
-#define PIZ_VALUE_DURATION      2
-#define PIZ_VALUE_CHANNEL       3
+enum {
+    PIZ_FACTOR_ORACLE               = 0,
+    PIZ_GALOIS_LATTICE 
+    };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -187,6 +192,8 @@ typedef struct _PIZSequence {
     PIZBoundedHashTable     *lookup;
     PIZArray                *scale;
     PIZArray                *pattern;
+    PIZFactorOracle         *factorOracle;
+    PIZGaloisLattice        *galoisLattice;
     PIZItemset128           usedNotes;
     PIZItemset128           addedNotes;
     PIZItemset128           changedNotes;

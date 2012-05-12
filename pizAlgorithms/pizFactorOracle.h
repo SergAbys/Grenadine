@@ -1,7 +1,7 @@
 /**
  * \file    pizFactorOracle.h
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    May 12, 2012.
  */
 
 /*
@@ -57,7 +57,6 @@ typedef struct _PIZFactorOracleNode {
     } PIZFactorOracleNode;
        
 typedef struct _PIZFactorOracle {
-    PIZAlgorithm        algorithm;
     long                size;
     long                peak;
     long                index;

@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceLibrary.c
  * \author	Jean Sapristi
- * \date	May 8, 2012.
+ * \date	May 12, 2012.
  */
  
 /*
@@ -94,6 +94,19 @@ void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event
     PIZ_TAG   (&x->removedNotes, tag);
     PIZ_UNTAG (&x->addedNotes, tag);
     PIZ_UNTAG (&x->changedNotes, tag);
+}
+
+void pizSequenceTransposeNote (PIZSequence *x, PIZNote *note, const PIZEvent *event)
+{
+    long n;
+    
+    if (!(pizEventValue (event, &n))) {
+        long temp = CLAMP (note->values[PIZ_VALUE_PITCH] + n, 0, PIZ_MAGIC_PITCH);
+        if (note->values[PIZ_VALUE_PITCH] != temp) {
+            note->values[PIZ_VALUE_PITCH] = temp;
+            PIZ_TAG (&x->changedNotes, note->tag);
+        }
+    }
 }
 
 void pizSequenceFillTempHash (PIZSequence *x, PIZNote *note, const PIZEvent *event)

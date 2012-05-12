@@ -1,7 +1,7 @@
 /**
  * \file    pizMarkovModel.h
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    May 12, 2012.
  */
 
 /*
@@ -50,7 +50,6 @@
 // -------------------------------------------------------------------------------------------------------------
  
 typedef struct _PIZMarkovModel {
-    PIZAlgorithm    algorithm;
     long            count;
     long            vectorSize;
     long            graphSize;

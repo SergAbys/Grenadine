@@ -1,7 +1,7 @@
 /*
  * \file    pizKohonenMap.c
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    May 12, 2012.
  */
  
 /*
@@ -73,11 +73,6 @@ PIZKohonenMap *pizKohonenMapNew (long argc, long *argv)
         x->range         = PIZ_DEFAULT_RANGE;
         x->training      = PIZ_DEFAULT_TRAINING;
         x->step          = PIZ_DEFAULT_STEP;
-        
-        x->algorithm.add        = pizKohonenMapAdd;
-        x->algorithm.clear      = pizKohonenMapClear;
-        x->algorithm.proceed    = pizKohonenMapProceed;
-        x->algorithm.count      = pizKohonenMapCount;
         
         if (argc && ((argv[0] > 0) && (argv[0] <= PIZ_MAXIMUM_MAP_SIZE))) {
             x->mapSize  = argv[0];

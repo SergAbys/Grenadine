@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	May 11, 2012.
+ * \date	May 12, 2012.
  */
  
 /*
@@ -387,6 +387,7 @@ long pizAgentEventLoopMethod (const PIZEvent *event, PIZMethodError *f)
         case PIZ_EVENT_BPM          : *f = pizAgentBPM;             return PIZ_PTR_AGENT;
         case PIZ_EVENT_NOTE         : *f = pizSequenceNote;         return PIZ_PTR_SEQUENCE;
         case PIZ_EVENT_CLEAR        : *f = pizSequenceClear;        return PIZ_PTR_SEQUENCE;
+        case PIZ_EVENT_TRANSPOSE    : *f = pizSequenceTranspose;    return PIZ_PTR_SEQUENCE;
         case PIZ_EVENT_CHANCE       : *f = pizSequenceSetChance;    return PIZ_PTR_SEQUENCE;
         case PIZ_EVENT_VELOCITY     : *f = pizSequenceSetVelocity;  return PIZ_PTR_SEQUENCE;
         case PIZ_EVENT_CHANNEL      : *f = pizSequenceSetChannel;   return PIZ_PTR_SEQUENCE;
@@ -432,39 +433,15 @@ void pizAgentNotificationLoopNotify (PIZAgent *x)
     PIZ_AGENT_UNLOCK_NOTIFICATION   
     
     if (event) {
-    //
-    PIZ_AGENT_LOCK_OBSERVER
-    
-    if (pizLinklistCount (x->observer)) {
-    //
-    PIZObserver *ptr = NULL;
-    PIZObserver *nextPtr = NULL;
-    
-    pizLinklistPtrAtIndex (x->observer, 0, (void **)&ptr);
-    
-    while (ptr) {
-        PIZEvent  *newEvent = NULL;
-        PIZMethod f = NULL;
+
+        PIZ_AGENT_LOCK_OBSERVER
         
-        pizLinklistNextByPtr (x->observer, (void *)ptr, (void **)&nextPtr);
-        
-        if (newEvent = pizEventNewCopy (event)) {
-            if (f = ptr->notify) {
-                (*f)(ptr->observer, newEvent);
-            }
-        } else {
-            PIZ_AGENT_MEMORY
+        if (x->observer && x->notify) {
+            (*x->notify)(x->observer, event);
         }
         
-        ptr = nextPtr;
-    }
-    //
-    }
-    
-    PIZ_AGENT_UNLOCK_OBSERVER
-        
-    pizEventFree (event);
-    //
+        PIZ_AGENT_UNLOCK_OBSERVER
+
     }
 } 
 

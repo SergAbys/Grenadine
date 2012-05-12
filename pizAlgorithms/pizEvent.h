@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	May 10, 2012.
+ * \date	May 12, 2012.
  */
 
 /*
@@ -170,7 +170,6 @@ typedef struct _PIZEvent {
 // -------------------------------------------------------------------------------------------------------------
 
 PIZEvent *pizEventNew           (PIZEventName name, long tag, long argc, const long *argv);
-PIZEvent *pizEventNewCopy       (PIZEvent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -189,11 +188,6 @@ void     pizEventNameAsString   (const PIZEvent *x, const char **name);
 // -------------------------------------------------------------------------------------------------------------
 
 #ifdef PIZ_EXTERN_INLINE
-
-PIZ_EXTERN PIZEvent *pizEventNewCopy (PIZEvent *x)
-{
-    return pizEventNew (x->name, x->tag, x->size, x->data);
-}
 
 PIZ_EXTERN void pizEventFree (PIZEvent *x)
 {

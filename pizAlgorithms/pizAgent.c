@@ -1,7 +1,7 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	May 5, 2012.
+ * \date	May 12, 2012.
  */
  
 /*
@@ -64,10 +64,9 @@ PIZAgent *pizAgentNew (void)
     x->graphic          = pizLinklistNew ( );
     x->transform        = pizLinklistNew ( );
     x->notification     = pizLinklistNew ( );    
-    x->observer         = pizLinklistNew ( );
-    x->sequence         = pizSequenceNew      (0);
-    x->factorOracle     = pizFactorOracleNew  (0, NULL);
-    x->galoisLattice    = pizGaloisLatticeNew (0, NULL);
+    x->sequence         = pizSequenceNew (0);
+    x->observer         = NULL;
+    x->notify           = NULL;
     x->err1             = PIZ_ERROR;
     x->err2             = PIZ_ERROR;
     
@@ -75,10 +74,7 @@ PIZAgent *pizAgentNew (void)
         x->graphic      &&
         x->transform    &&
         x->notification && 
-        x->observer     &&
-        x->sequence     &&
-        x->factorOracle &&
-        x->galoisLattice)) {
+        x->sequence     )) {
         
         err |= PIZ_MEMORY;
     }
@@ -154,12 +150,8 @@ void pizAgentFree (PIZAgent *x)
     pizLinklistFree (x->graphic);
     pizLinklistFree (x->transform);
     pizLinklistFree (x->notification);
-    pizLinklistFree (x->observer);
     
     pizSequenceFree (x->sequence);
-    
-    pizFactorOracleFree   (x->factorOracle);
-    pizGaloisLatticeFree  (x->galoisLattice);
     //
     }
 }
@@ -173,31 +165,15 @@ PIZError pizAgentAttach (PIZAgent *x, void *observer, PIZMethod f)
     PIZError err = PIZ_ERROR;
     
     if (observer && f) {
-    //
-    PIZObserver *newObserver = NULL;
-    
-    if (newObserver = (PIZObserver *)malloc (sizeof(PIZObserver))) {
-    //
-    err = PIZ_GOOD;
-    
-    newObserver->observer = observer;
-    newObserver->notify = f;
-    
-    PIZ_AGENT_LOCK_OBSERVER
-    
-    err = pizLinklistAppend (x->observer, newObserver);
         
-    PIZ_AGENT_UNLOCK_OBSERVER
+        PIZ_AGENT_LOCK_OBSERVER
     
-    //
-    } else {
-        err = PIZ_MEMORY;
-    }
+        x->observer = observer;
+        x->notify   = f;
     
-    if (err == PIZ_MEMORY) {
-        PIZ_AGENT_MEMORY
-    }
-    //
+        PIZ_AGENT_UNLOCK_OBSERVER
+        
+        err = PIZ_GOOD;
     }
     
     return err;
@@ -205,27 +181,14 @@ PIZError pizAgentAttach (PIZAgent *x, void *observer, PIZMethod f)
 
 PIZError pizAgentDetach (PIZAgent *x, void *observer)
 {
-    PIZError    err = PIZ_ERROR;
-    PIZObserver *ptr = NULL;
-    PIZObserver *nextPtr = NULL;
-    
     PIZ_AGENT_LOCK_OBSERVER
     
-    pizLinklistPtrAtIndex (x->observer, 0, (void **)&ptr);
-    
-    while (ptr) {
-        pizLinklistNextByPtr (x->observer, (void *)ptr, (void **)&nextPtr);
-        
-        if (ptr->observer == observer) {
-            err = pizLinklistRemoveByPtr (x->observer, (void *)ptr);
-        }
-        
-        ptr = nextPtr;
-    }
+    x->observer = NULL;
+    x->notify   = NULL;
     
     PIZ_AGENT_UNLOCK_OBSERVER
     
-    return err;
+    return PIZ_GOOD;
 }
 
 // -------------------------------------------------------------------------------------------------------------

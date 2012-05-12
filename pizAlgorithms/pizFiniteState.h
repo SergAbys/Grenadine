@@ -1,7 +1,7 @@
 /**
  * \file    pizFiniteState.h
  * \author  Jean Sapristi
- * \date    April 8, 2012.
+ * \date    May 12, 2012.
  */
 
 /*
@@ -59,7 +59,6 @@ typedef struct _PIZFiniteStateNode {
     } PIZFiniteStateNode;
 
 typedef struct _PIZFiniteState {
-    PIZAlgorithm        algorithm;
     long                count;
     long                shuttle;
     long                lotteryIndex;

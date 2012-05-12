@@ -1,7 +1,7 @@
 /**
  * \file	pizAgent.h
  * \author	Jean Sapristi
- * \date	May 7, 2012.
+ * \date	May 12, 2012.
  */
 
 /*
@@ -46,8 +46,6 @@
 
 #include "pizEvent.h"
 #include "pizSequence.h"
-#include "pizFactorOracle.h"
-#include "pizGaloisLattice.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -94,14 +92,6 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-typedef struct _PIZObserver {
-    void        *observer;
-    PIZMethod   notify;
-    } PIZObserver;
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 typedef struct _PIZAgent {
     long                bpm;
     ulong               flags;
@@ -112,8 +102,9 @@ typedef struct _PIZAgent {
     PIZLinklist         *graphic;
     PIZLinklist         *transform;
     PIZLinklist         *notification;
-    PIZLinklist         *observer;
     PIZSequence         *sequence;
+    void                *observer;
+    PIZMethod           notify;
     PIZFactorOracle     *factorOracle;
     PIZGaloisLattice    *galoisLattice;
     pthread_attr_t      attr;

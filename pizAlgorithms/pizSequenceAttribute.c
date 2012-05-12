@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceAttribute.c
  * \author  Jean Sapristi
- * \date    May 9, 2012.
+ * \date    May 12, 2012.
  */
  
 /*
@@ -85,7 +85,7 @@ PIZError pizSequenceSetChance (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
-        if ((value >= 0) && (value <= 100) && (value != x->chance)) {
+        if ((value >= 0) && (value <= 100)) {
             x->chance = value;
             x->flags |= PIZ_SEQUENCE_FLAG_CHANCE;
         }
@@ -99,10 +99,8 @@ PIZError pizSequenceSetVelocity (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
-        if (value != x->velocity) {
-            x->velocity = value;
-            x->flags |= PIZ_SEQUENCE_FLAG_VELOCITY;
-        }
+        x->velocity = value;
+        x->flags |= PIZ_SEQUENCE_FLAG_VELOCITY;
     }
     
     return PIZ_GOOD;
@@ -113,7 +111,7 @@ PIZError pizSequenceSetChannel (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
-        if ((value >= 0) && (value <= PIZ_MAGIC_CHANNEL) && (value != x->channel)) {
+        if ((value >= 0) && (value <= PIZ_MAGIC_CHANNEL)) {
             x->channel = value;
             x->flags |= PIZ_SEQUENCE_FLAG_CHANNEL;
         }
@@ -127,7 +125,7 @@ PIZError pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
-        if ((value != x->cell) && (pizSequenceIsValidNoteValue (value))) {
+        if (pizSequenceIsValidNoteValue (value)) {
             x->cell = value;
             x->flags |= PIZ_SEQUENCE_FLAG_CELL;
         }
@@ -141,7 +139,7 @@ PIZError pizSequenceSetNoteValue (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
-        if ((value != x->noteValue) && (pizSequenceIsValidNoteValue (value))) {
+        if (pizSequenceIsValidNoteValue (value)) {
             x->noteValue = value;
             x->flags |= PIZ_SEQUENCE_FLAG_NOTE_VALUE;
         }

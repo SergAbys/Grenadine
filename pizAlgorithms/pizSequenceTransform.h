@@ -53,6 +53,7 @@
 PIZ_LOCAL PIZError  pizSequenceNote            (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceClear           (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceTranspose       (PIZSequence *x, const PIZEvent *event);
+
 PIZ_LOCAL PIZError  pizSequenceLearn           (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceAlgorithm       (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceNovember        (PIZSequence *x, const PIZEvent *event); //

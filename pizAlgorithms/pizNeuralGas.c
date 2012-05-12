@@ -1,7 +1,7 @@
 /*
  * \file    pizNeuralGas.c
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    May 12, 2012.
  */
  
 /*
@@ -85,11 +85,6 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
         x->alpha         = PIZ_DEFAULT_ALPHA;
         x->beta          = PIZ_DEFAULT_BETA;
         x->kappa         = PIZ_DEFAULT_KAPPA;
-        
-        x->algorithm.add        = pizNeuralGasAdd;
-        x->algorithm.clear      = pizNeuralGasClear;
-        x->algorithm.proceed    = pizNeuralGasProceed;
-        x->algorithm.count      = pizNeuralGasCount;
         
         x->seed = (unsigned int)time(NULL);
         

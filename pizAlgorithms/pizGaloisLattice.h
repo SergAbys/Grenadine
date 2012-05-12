@@ -1,7 +1,7 @@
 /**
  * \file    pizGaloisLattice.h
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    May 12, 2012.
  */
 
 /*
@@ -59,7 +59,6 @@ typedef struct _PIZGaloisLatticeConcept {
     } PIZGaloisLatticeConcept;
 
 typedef struct _PIZGaloisLattice {
-    PIZAlgorithm            algorithm;
     PIZItemset128           toBeAdded;
     PIZItemset128           intersection;
     long                    count;

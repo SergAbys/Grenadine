@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceTransform.c
  * \author  Jean Sapristi
- * \date    May 8, 2012.
+ * \date    May 12, 2012.
  */
  
 /*
@@ -159,47 +159,24 @@ PIZError pizSequenceClear (PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-//PIZError pizSequenceTranspose (PIZSequence *x, long n)
 PIZError pizSequenceTranspose (PIZSequence *x, const PIZEvent *event)
-{/*
-    long i, a, b;
-        
-    a = CLAMP (x->down + n, 0, PIZ_MAGIC_PITCH);
-    b = CLAMP (x->up + n, 0, PIZ_MAGIC_PITCH);
+{
+    long n;
     
-    if (x->down != a) {
-        x->down = a;
+    if (!(pizEventValue (event, &n))) {
+        x->down = CLAMP (x->down + n, 0, PIZ_MAGIC_PITCH);
+        x->up   = CLAMP (x->up + n, 0, PIZ_MAGIC_PITCH);
+        
         x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
+        
+        pizSequenceForEach (x, pizSequenceTransposeNote, event);
     }
     
-    if (x->up != b) {
-        x->up = b;
-        x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
-    }
-    
-    for (i = 0; i < pizArrayCount (x->map); i++) {   
-        PIZNote *note       = NULL;
-        PIZNote *nextNote   = NULL;
-        
-        long p = pizArrayValueAtIndex (x->map, i);
-        
-        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-        
-        while (note) {
-            long temp; 
-            
-            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-            
-            temp = CLAMP (note->values[PIZ_VALUE_PITCH] + n, 0, PIZ_MAGIC_PITCH);
-            if (note->values[PIZ_VALUE_PITCH] != temp) {
-                note->values[PIZ_VALUE_PITCH] = temp;
-                PIZ_TAG (&x->changedNotes, note->tag);
-            }
-            
-            note = nextNote;
-        }
-    }*/
-    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceLearn (PIZSequence *x, const PIZEvent *event)
+{
     return PIZ_GOOD;
 }
 

@@ -1,7 +1,7 @@
 /*
  * \file    pizSequence.c
  * \author  Jean Sapristi
- * \date    May 4, 2012.
+ * \date    May 12, 2012.
  */
  
 /*
@@ -39,6 +39,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizSequence.h"
+#include "pizEvent.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -72,12 +73,14 @@ PIZSequence *pizSequenceNew (long size)
     
     x->map           = pizArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
     x->scale         = pizArrayNew (PIZ_MAGIC_SCALE);
-    x->pattern       = pizArrayNew (0);
+    x->pattern       = pizArrayNew (PIZ_EVENT_DATA_SIZE);
     x->tempValues    = (long *)malloc (sizeof(long) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
     x->tempNotes1    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
     x->tempNotes2    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
     x->tempHash      = pizBoundedHashTableNew (2, argv1);
     x->lookup        = pizBoundedHashTableNew (2, argv2);
+    x->factorOracle  = pizFactorOracleNew  (0, NULL);
+    x->galoisLattice = pizGaloisLatticeNew (0, NULL);
     
     if (x->map           && 
         x->scale         &&
@@ -87,6 +90,8 @@ PIZSequence *pizSequenceNew (long size)
         x->tempNotes2    &&
         x->tempHash      &&
         x->lookup        &&
+        x->factorOracle  &&
+        x->galoisLattice &&
         (x->timeline = (PIZLinklist **)calloc (x->size, sizeof(PIZLinklist **)))) {
 
         x->flags = PIZ_SEQUENCE_FLAG_NONE;
@@ -143,6 +148,9 @@ void pizSequenceFree (PIZSequence *x)
     
     pizBoundedHashTableFree (x->tempHash);
     pizBoundedHashTableFree (x->lookup);
+    
+    pizFactorOracleFree  (x->factorOracle);
+    pizGaloisLatticeFree (x->galoisLattice);
     
     if (x->tempValues) {
         free (x->tempValues);

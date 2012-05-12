@@ -1,7 +1,7 @@
 /*
  * \file    pizGaloisLattice.c
  * \author  Jean Sapristi
- * \date    April 23, 2012.
+ * \date    May 12, 2012.
  */
  
 /*
@@ -82,11 +82,6 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
     x->targetedConcept      = -1;
     x->shuttle              = -1;
     x->previousShuttle      = -1;
-    
-    x->algorithm.add        = pizGaloisLatticeAdd;
-    x->algorithm.clear      = pizGaloisLatticeClear;
-    x->algorithm.proceed    = pizGaloisLatticeProceed;
-    x->algorithm.count      = pizGaloisLatticeCount;
     
     x->seed = (unsigned int)time(NULL);
         

@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	May 6, 2012.
+ * \date	May 12, 2012.
  */
  
 /*
@@ -163,11 +163,6 @@ PIZEvent *pizEventNew (PIZEventName name, long tag, long argc, const long *argv)
     }
     
     return x;
-}
-
-PIZEvent *pizEventNewCopy (PIZEvent *x)
-{
-    return pizEventNew (x->name, x->tag, x->size, x->data);
 }
 
 // -------------------------------------------------------------------------------------------------------------
