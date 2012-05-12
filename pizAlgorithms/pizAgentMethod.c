@@ -50,6 +50,11 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+PIZError pizAgentInit (PIZAgent *x, PIZEvent *event)
+{
+    return PIZ_GOOD;
+}
+
 PIZError pizAgentPlay (PIZAgent *x, PIZEvent *event)
 {
     if (x->flags & PIZ_AGENT_FLAG_RUNNING) {

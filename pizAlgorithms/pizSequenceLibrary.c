@@ -81,6 +81,42 @@ void pizSequenceForEach (PIZSequence *x, PIZMethod f, const PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+void pizSequenceCleanNote (PIZSequence *x, PIZNote *note, const PIZEvent *event)
+{
+    long value;
+    
+    if (!(pizEventValue (event, &value))) {
+    //
+    bool death = false;
+    long j, m, n;
+    long scale = pizArrayCount (x->scale);
+    long pitch = note->values[PIZ_VALUE_PITCH];
+    
+    value = CLAMP (value, 0, PIZ_MAGIC_PITCH);
+            
+    if (scale) {
+        pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
+    }
+    
+    m = CLAMP ((pitch - value), 0, PIZ_MAGIC_PITCH);
+    n = CLAMP ((pitch + value), 0, PIZ_MAGIC_PITCH);
+    
+    for (j = m; j <= n; j++) {
+        if (x->tempValues[j] == (note->position + 1)) {
+            death = true;
+        }
+    }
+    
+    if (death) {
+        x->tempNotes1[x->tempIndex] = note;
+        x->tempIndex ++;
+    } else {
+        x->tempValues[pitch] = (note->position + 1);
+    }
+    //
+    }
+}
+
 void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event) 
 {
     long p = note->position;
@@ -96,7 +132,7 @@ void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event
     PIZ_UNTAG (&x->changedNotes, tag);
 }
 
-void pizSequenceTransposeNote (PIZSequence *x, PIZNote *note, const PIZEvent *event)
+void pizSequenceChangeNote (PIZSequence *x, PIZNote *note, const PIZEvent *event)
 {
     long n;
     

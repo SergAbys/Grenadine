@@ -1,7 +1,6 @@
 _pizArrayAppend
 _pizArrayClear
 _pizArrayContainsValue
-_pizArrayCopy
 _pizArrayCount
 _pizArrayFirstIndexOfValue
 _pizArrayFree

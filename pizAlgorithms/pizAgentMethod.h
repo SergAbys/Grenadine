@@ -49,6 +49,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+PIZ_LOCAL PIZError pizAgentInit       (PIZAgent *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizAgentPlay       (PIZAgent *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizAgentStop       (PIZAgent *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizAgentLoop       (PIZAgent *x, PIZEvent *event);

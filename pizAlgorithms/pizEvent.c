@@ -52,12 +52,12 @@ static const long pizEventTypes[ ]   = {    PIZ_EVENT_RUN,                  // P
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_NOTE
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CLEAR
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_TRANSPOSE
+                                            PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CLEAN
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_LEARN
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_ZOULOU
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_ROMEO
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_NOVEMBER
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_JULIET
-                                            PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CLEAN
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_ROTATE
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_SCRAMBLE
                                             PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_SORT
@@ -95,16 +95,24 @@ static const char *pizEventNames[ ]  = {    "Init",
                                             "Loop",
                                             "Unloop",
                                             "Bpm",
+                                            //
+                                            "Chance",
+                                            "Velocity",
+                                            "Channel",
+                                            "Cell",
+                                            "Note Value",
+                                            "Scale",
+                                            "Pattern",
                                             // 
                                             "Note",
                                             "Clear",
                                             "Transpose",
+                                            "Clean",
                                             "Learn",
                                             "Zoulou",
                                             "Romeo",
                                             "November",
                                             "Juliet",
-                                            "Clean",
                                             "Rotate",
                                             "Scramble",
                                             "Sort",
@@ -114,15 +122,6 @@ static const char *pizEventNames[ ]  = {    "Init",
                                             "Kill",
                                             "Cycle",
                                             //
-                                            
-                                            //
-                                            "Chance",
-                                            "Velocity",
-                                            "Channel",
-                                            "Cell",
-                                            "Note Value",
-                                            "Scale",
-                                            "Pattern", 
                                             //
                                             "Changed Bpm",
                                             "Changed Chance",

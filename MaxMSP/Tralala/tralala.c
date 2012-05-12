@@ -44,22 +44,23 @@ int main (void)
 
     c = class_new ("tralala", (method)tralala_new, (method)tralala_free, sizeof(t_tralala), 0L, A_GIMME, 0);
 
-    class_addmethod (c, (method)tralala_assist,    "assist",    A_CANT, 0);
-    class_addmethod (c, (method)tralala_bang,      "bang",      0);
-    class_addmethod (c, (method)tralala_play,      "play",      0);
-    class_addmethod (c, (method)tralala_stop,      "stop",      0);
-    class_addmethod (c, (method)tralala_loop,      "loop",      0);
-    class_addmethod (c, (method)tralala_unloop,    "unloop",    0);
-    class_addmethod (c, (method)tralala_clear,     "clear",     0);
-    class_addmethod (c, (method)tralala_bpm,       "bpm",       A_LONG, 0);
-    class_addmethod (c, (method)tralala_chance,    "chance",    A_LONG, 0);
-    class_addmethod (c, (method)tralala_velocity,  "velocity",  A_LONG, 0);
-    class_addmethod (c, (method)tralala_channel,   "channel",   A_LONG, 0);
-    class_addmethod (c, (method)tralala_transpose, "transpose", A_LONG, 0);
-    class_addmethod (c, (method)tralala_cell,      "cell",      A_GIMME, 0);
-    class_addmethod (c, (method)tralala_scale,     "scale",     A_GIMME, 0);
-    class_addmethod (c, (method)tralala_pattern,   "pattern",   A_GIMME, 0);
-    class_addmethod (c, (method)tralala_note,      "note",      A_GIMME, 0);
+    class_addmethod (c, (method)tralala_assist,     "assist",       A_CANT, 0);
+    class_addmethod (c, (method)tralala_bang,       "bang",         0);
+    class_addmethod (c, (method)tralala_play,       "play",         0);
+    class_addmethod (c, (method)tralala_stop,       "stop",         0);
+    class_addmethod (c, (method)tralala_loop,       "loop",         0);
+    class_addmethod (c, (method)tralala_unloop,     "unloop",       0);
+    class_addmethod (c, (method)tralala_clear,      "clear",        0);
+    class_addmethod (c, (method)tralala_bpm,        "bpm",          A_LONG, 0);
+    class_addmethod (c, (method)tralala_chance,     "chance",       A_LONG, 0);
+    class_addmethod (c, (method)tralala_velocity,   "velocity",     A_LONG, 0);
+    class_addmethod (c, (method)tralala_channel,    "channel",      A_LONG, 0);
+    class_addmethod (c, (method)tralala_transpose,  "transpose",    A_LONG, 0);
+    class_addmethod (c, (method)tralala_clean,      "clean",        A_LONG, 0);
+    class_addmethod (c, (method)tralala_cell,       "cell",         A_GIMME, 0);
+    class_addmethod (c, (method)tralala_scale,      "scale",        A_GIMME, 0);
+    class_addmethod (c, (method)tralala_pattern,    "pattern",      A_GIMME, 0);
+    class_addmethod (c, (method)tralala_note,       "note",         A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
 
@@ -293,13 +294,15 @@ void tralala_note (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     }
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 void tralala_transpose (t_tralala *x, long n)
 {
-    TRALALA_ARGS (PIZ_EVENT_TRANSPOSE, 1, &n)
+    long values[ ] = { n, PIZ_VALUE_PITCH };
+    TRALALA_ARGS (PIZ_EVENT_TRANSPOSE, 2, values)
+}
+
+void tralala_clean (t_tralala *x, long n)
+{
+    TRALALA_ARGS (PIZ_EVENT_CLEAN, 1, &n)
 }
 
 // -------------------------------------------------------------------------------------------------------------

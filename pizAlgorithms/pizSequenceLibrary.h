@@ -51,8 +51,9 @@
 // -------------------------------------------------------------------------------------------------------------
 
 PIZ_LOCAL void      pizSequenceForEach               (PIZSequence *x, PIZMethod f,   const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceCleanNote             (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 PIZ_LOCAL void      pizSequenceRemoveNote            (PIZSequence *x, PIZNote *note, const PIZEvent *event);
-PIZ_LOCAL void      pizSequenceTransposeNote         (PIZSequence *x, PIZNote *note, const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceChangeNote            (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 PIZ_LOCAL void      pizSequenceFillTempHash          (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 PIZ_LOCAL void      pizSequenceFillTempNotes         (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 

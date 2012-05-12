@@ -53,15 +53,17 @@
 PIZ_LOCAL PIZError  pizSequenceNote            (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceClear           (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceTranspose       (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceClean           (PIZSequence *x, const PIZEvent *event);
 
 PIZ_LOCAL PIZError  pizSequenceLearn           (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceAlgorithm       (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceNovember        (PIZSequence *x, const PIZEvent *event); //
 PIZ_LOCAL PIZError  pizSequenceJuliet          (PIZSequence *x, const PIZEvent *event); //
-PIZ_LOCAL PIZError  pizSequenceClean           (PIZSequence *x, const PIZEvent *event);
+
 PIZ_LOCAL PIZError  pizSequenceRotate          (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceScramble        (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceSort            (PIZSequence *x, const PIZEvent *event);
+
 PIZ_LOCAL PIZError  pizSequenceChange          (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceFill            (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceRandom          (PIZSequence *x, const PIZEvent *event);

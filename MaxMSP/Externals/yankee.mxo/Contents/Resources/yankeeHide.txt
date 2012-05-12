@@ -1,6 +1,5 @@
 _pizArrayAppend
 _pizArrayClear
-_pizArrayCopy
 _pizArrayCount
 _pizArrayFree
 _pizArrayNew

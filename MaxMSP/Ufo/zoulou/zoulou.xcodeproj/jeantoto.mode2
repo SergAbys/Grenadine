@@ -424,8 +424,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96DE7817155C056E0050DC86</string>
-				<string>96DE7818155C056E0050DC86</string>
+				<string>96D9C9BA155EAE750026B981</string>
+				<string>96D9C9BB155EAE750026B981</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -458,6 +458,7 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/MaxMSP/Ufo/zoulou/zoulou.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -675,7 +676,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96EAB309155BE78C00A7E5C7</string>
+				<string>96D9C9BC155EAE750026B981</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
