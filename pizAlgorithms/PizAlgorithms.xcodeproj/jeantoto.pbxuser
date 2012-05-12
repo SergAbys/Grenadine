@@ -11,8 +11,8 @@
 		breakpointsGroup = 9699A8E613D9A57300D9A0AD /* XCBreakpointsBucket */;
 		codeSenseManager = 96CFCDA713D7F01D004431BB /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 358525709;
-			PBXWorkspaceStateSaveDate = 358525709;
+			PBXPerProjectTemplateStateSaveDate = 358530350;
+			PBXWorkspaceStateSaveDate = 358530350;
 		};
 		sourceControlManager = 96CFCDA613D7F01D004431BB /* Source Control */;
 		userBuildSettings = {
@@ -84,17 +84,17 @@
 	};
 	968C6BBE1528B80E00AB45D3 /* pizSequenceLibrary.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 1850}}";
-			sepNavSelRange = "{2657, 0}";
-			sepNavVisRect = "{{0, 1205}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 1850}}";
+			sepNavSelRange = "{2510, 9}";
+			sepNavVisRect = "{{403, 1292}, {826.797, 94}}";
 			sepNavWindowFrame = "{{-1, 1}, {1280, 774}}";
 		};
 	};
 	968C6BBF1528B80E00AB45D3 /* pizSequenceLibrary.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 7950}}";
-			sepNavSelRange = "{4449, 0}";
-			sepNavVisRect = "{{0, 0}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 7950}}";
+			sepNavSelRange = "{2832, 9}";
+			sepNavVisRect = "{{0, 1416}, {827, 94}}";
 			sepNavWindowFrame = "{{0, 2}, {1280, 774}}";
 		};
 	};
@@ -132,7 +132,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1236, 25175}}";
 			sepNavSelRange = "{7482, 0}";
-			sepNavVisRect = "{{0, 3651}, {1236, 645}}";
+			sepNavVisRect = "{{0, 23179}, {1236, 645}}";
 			sepNavWindowFrame = "{{-4, 4}, {1281, 774}}";
 		};
 	};
@@ -206,17 +206,17 @@
 	};
 	96D67643151C892100AFA120 /* pizAgentLoop.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 1925}}";
-			sepNavSelRange = "{3189, 0}";
-			sepNavVisRect = "{{0, 787}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 1875}}";
+			sepNavSelRange = "{3257, 0}";
+			sepNavVisRect = "{{0, 1230}, {1235, 645}}";
 			sepNavWindowFrame = "{{-5, 4}, {1280, 774}}";
 		};
 	};
 	96D67644151C892100AFA120 /* pizAgentLoop.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 11275}}";
-			sepNavSelRange = "{5654, 23}";
-			sepNavVisRect = "{{0, 3}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 10150}}";
+			sepNavSelRange = "{5225, 0}";
+			sepNavVisRect = "{{0, 4452}, {1235, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1280, 774}}";
 		};
 	};
@@ -232,7 +232,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1235, 2800}}";
 			sepNavSelRange = "{2508, 0}";
-			sepNavVisRect = "{{0, 1045}, {1235, 645}}";
+			sepNavVisRect = "{{0, 2155}, {1235, 645}}";
 			sepNavWindowFrame = "{{2, 4}, {1280, 774}}";
 		};
 	};
@@ -254,33 +254,33 @@
 	};
 	96D796C5151716AC00109654 /* pizEvent.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 5150}}";
-			sepNavSelRange = "{6837, 0}";
-			sepNavVisRect = "{{0, 977}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 5450}}";
+			sepNavSelRange = "{9768, 0}";
+			sepNavVisRect = "{{0, 3941}, {1235, 645}}";
 			sepNavWindowFrame = "{{0, 4}, {1280, 774}}";
 		};
 	};
 	96D796C6151716AC00109654 /* pizEvent.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 5350}}";
-			sepNavSelRange = "{1887, 0}";
-			sepNavVisRect = "{{0, 925}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 6950}}";
+			sepNavSelRange = "{9436, 0}";
+			sepNavVisRect = "{{0, 5411}, {1235, 645}}";
 			sepNavWindowFrame = "{{3, 4}, {1280, 774}}";
 		};
 	};
 	96D8682814FF5A8B00849A50 /* pizAgent.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 3450}}";
-			sepNavSelRange = "{2180, 0}";
-			sepNavVisRect = "{{0, 907}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 3450}}";
+			sepNavSelRange = "{5333, 9}";
+			sepNavVisRect = "{{0, 2616}, {827, 94}}";
 			sepNavWindowFrame = "{{2, 3}, {1280, 774}}";
 		};
 	};
 	96D8682914FF5A8B00849A50 /* pizAgent.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 5450}}";
-			sepNavSelRange = "{5187, 0}";
-			sepNavVisRect = "{{0, 4805}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 5450}}";
+			sepNavSelRange = "{5500, 9}";
+			sepNavVisRect = "{{0, 4016}, {827, 94}}";
 			sepNavWindowFrame = "{{2, 4}, {1280, 774}}";
 		};
 	};

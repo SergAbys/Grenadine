@@ -119,7 +119,6 @@ typedef enum _PIZEventName {
     PIZ_EVENT_CLEAR,
     PIZ_EVENT_TRANSPOSE,
     PIZ_EVENT_CLEAN,
-    PIZ_EVENT_LEARN,
     PIZ_EVENT_ZOULOU,
     PIZ_EVENT_ROMEO,
     PIZ_EVENT_NOVEMBER,
@@ -133,7 +132,7 @@ typedef enum _PIZEventName {
     PIZ_EVENT_KILL,
     PIZ_EVENT_CYCLE,        
     // GRAPHIC     
-    
+    PIZ_EVENT_LEARN,
     // NOTIFICATION 
     PIZ_EVENT_CHANGED_BPM,
     PIZ_EVENT_CHANGED_CHANCE,
@@ -164,6 +163,7 @@ typedef struct _PIZEvent {
     long            tag;
     long            size;
     long            data[PIZ_EVENT_DATA_SIZE];
+    PIZMethodError  method;
     } PIZEvent;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -176,6 +176,8 @@ PIZEvent *pizEventNew           (PIZEventName name, long tag, long argc, const l
 
 void     pizEventFree           (PIZEvent *x);
 void     pizEventName           (const PIZEvent *x, PIZEventName *name);
+void     pizEventType           (const PIZEvent *x, PIZEventType *type);
+void     pizEventMethod         (const PIZEvent *x, PIZMethodError *f);
 PIZError pizEventValue          (const PIZEvent *x, long *value);
 PIZError pizEventPtr            (const PIZEvent *x, long *argc, long **argv);
 
@@ -197,6 +199,16 @@ PIZ_EXTERN void pizEventFree (PIZEvent *x)
 PIZ_EXTERN void pizEventName (const PIZEvent *x, PIZEventName *name)
 {
     (*name) = x->name;
+}
+
+PIZ_EXTERN void pizEventType (const PIZEvent *x, PIZEventType *type)
+{
+    (*type) = x->type;
+}
+
+PIZ_EXTERN void pizEventMethod (const PIZEvent *x, PIZMethodError *f)
+{
+    (*f) = x->method;
 }
 
 #endif // PIZ_EXTERN_INLINE

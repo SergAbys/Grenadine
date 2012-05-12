@@ -39,10 +39,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizAgentLoop.h"
-#include "pizAgentMethod.h"
 #include "pizSequenceRun.h"
-#include "pizSequenceTransform.h"
-#include "pizSequenceAttribute.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -53,13 +50,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #define PIZ_EXIT (x->flags & PIZ_AGENT_FLAG_EXIT)
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZ_PTR_NONE        0
-#define PIZ_PTR_AGENT       1
-#define PIZ_PTR_SEQUENCE    2
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -158,9 +148,9 @@ void *pizAgentNotificationLoop (void *agent)
 
 PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q) 
 {
-    long            k;
     PIZError        err = PIZ_GOOD;
-    PIZMethodError  f  = NULL;
+    PIZEventType    type;
+    PIZMethodError  f = NULL;
     PIZEvent        *event = NULL;
     void            *o = NULL;
             
@@ -178,18 +168,17 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q)
     
     if (event) {
     //
+    pizEventType (event, &type);
+    pizEventMethod (event, &f);
+        
+    if (type == PIZ_EVENT_RUN) {
+        o = x;
+    } else {
+        o = x->sequence;
+    }
     
-    if (k = pizAgentEventLoopMethod (event, &f)) {
-        
-        if (k == PIZ_PTR_AGENT) {
-            o = x;
-        } else {
-            o = x->sequence;
-        }
-        
-        if ((*f)(o, event) == PIZ_MEMORY) {
-            PIZ_AGENT_MEMORY
-        }
+    if (f && ((*f)(o, event) == PIZ_MEMORY)) {
+        PIZ_AGENT_MEMORY
     }
     
     DEBUGEVENT
@@ -366,40 +355,6 @@ bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
     }
     
     return isWorkTime;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-long pizAgentEventLoopMethod (const PIZEvent *event, PIZMethodError *f)
-{
-    long         k = PIZ_PTR_NONE;
-    PIZEventName name;
-    
-    pizEventName (event, &name);
-    
-    switch (name) {
-        case PIZ_EVENT_INIT         : *f = pizAgentInit;            return PIZ_PTR_AGENT;
-        case PIZ_EVENT_PLAY         : *f = pizAgentPlay;            return PIZ_PTR_AGENT;
-        case PIZ_EVENT_STOP         : *f = pizAgentStop;            return PIZ_PTR_AGENT;
-        case PIZ_EVENT_LOOP         : *f = pizAgentLoop;            return PIZ_PTR_AGENT;
-        case PIZ_EVENT_UNLOOP       : *f = pizAgentUnloop;          return PIZ_PTR_AGENT;
-        case PIZ_EVENT_BPM          : *f = pizAgentBPM;             return PIZ_PTR_AGENT;
-        case PIZ_EVENT_CHANCE       : *f = pizSequenceSetChance;    return PIZ_PTR_SEQUENCE;
-        case PIZ_EVENT_VELOCITY     : *f = pizSequenceSetVelocity;  return PIZ_PTR_SEQUENCE;
-        case PIZ_EVENT_CHANNEL      : *f = pizSequenceSetChannel;   return PIZ_PTR_SEQUENCE;
-        case PIZ_EVENT_CELL         : *f = pizSequenceSetCell;      return PIZ_PTR_SEQUENCE;
-        case PIZ_EVENT_NOTE_VALUE   : *f = pizSequenceSetNoteValue; return PIZ_PTR_SEQUENCE;
-        case PIZ_EVENT_SCALE        : *f = pizSequenceSetScale;     return PIZ_PTR_SEQUENCE;
-        case PIZ_EVENT_PATTERN      : *f = pizSequenceSetPattern;   return PIZ_PTR_SEQUENCE;  
-        case PIZ_EVENT_NOTE         : *f = pizSequenceNote;         return PIZ_PTR_SEQUENCE;
-        case PIZ_EVENT_CLEAR        : *f = pizSequenceClear;        return PIZ_PTR_SEQUENCE;
-        case PIZ_EVENT_TRANSPOSE    : *f = pizSequenceTranspose;    return PIZ_PTR_SEQUENCE;
-        case PIZ_EVENT_CLEAN        : *f = pizSequenceClean;        return PIZ_PTR_SEQUENCE;
-    }
-    
-    return k;
 }
 
 // -------------------------------------------------------------------------------------------------------------
