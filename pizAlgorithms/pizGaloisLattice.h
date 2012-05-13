@@ -45,22 +45,22 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizArray.h"
-#include "pizItemset128.h"
-#include "pizBoundedStack.h"
+#include "pizItemset.h"
+#include "pizStack.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZGaloisLatticeConcept {
-    long            cardinal;
-    PIZItemset128   itemset;
-    PIZItemset128   parents;
-    PIZItemset128   childs;
+    long        cardinal;
+    PIZItemset  itemset;
+    PIZItemset  parents;
+    PIZItemset  childs;
     } PIZGaloisLatticeConcept;
 
 typedef struct _PIZGaloisLattice {
-    PIZItemset128           toBeAdded;
-    PIZItemset128           intersection;
+    PIZItemset              toBeAdded;
+    PIZItemset              intersection;
     long                    count;
     long                    threshold;
     long                    targetedConcept;
@@ -73,7 +73,7 @@ typedef struct _PIZGaloisLattice {
     unsigned int            seed;
     PIZArray                **map;
     PIZArray                **tempMap;
-    PIZBoundedStack         *ticketMachine;
+    PIZStack                *ticketMachine;
     PIZGaloisLatticeConcept *stock;
     } PIZGaloisLattice;
 
@@ -81,6 +81,7 @@ typedef struct _PIZGaloisLattice {
 // -------------------------------------------------------------------------------------------------------------
 
 PIZGaloisLattice    *pizGaloisLatticeNew        (long argc, long *argv);
+
 void                pizGaloisLatticeFree        (PIZGaloisLattice *x);
 PIZError            pizGaloisLatticeAdd         (PIZGaloisLattice *x, long argc, long *argv); //
 PIZError            pizGaloisLatticeClear       (PIZGaloisLattice *x);

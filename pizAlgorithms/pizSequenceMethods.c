@@ -1,5 +1,5 @@
 /*
- * \file    pizSequenceTransform.c
+ * \file    pizSequenceMethods.c
  * \author  Jean Sapristi
  * \date    May 12, 2012.
  */
@@ -39,7 +39,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizSequenceLibrary.h"
-#include "pizSequenceTransform.h"
+#include "pizSequenceMethods.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -57,22 +57,22 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const long pizSequenceNeighbors[ ]       = { -256, 
-                                                    -130, 
-                                                    -129, 
-                                                    -128, 
-                                                    -127, 
-                                                    -126, 
-                                                     126, 
-                                                     127, 
-                                                     128, 
-                                                     129, 
-                                                     130, 
-                                                     256, 
-                                                      -2, 
-                                                      -1, 
-                                                       1, 
-                                                       2  };
+PIZ_LONG pizSequenceNeighbors[ ]    = { -256, 
+                                        -130, 
+                                        -129, 
+                                        -128, 
+                                        -127, 
+                                        -126, 
+                                         126, 
+                                         127, 
+                                         128, 
+                                         129, 
+                                         130, 
+                                         256, 
+                                          -2, 
+                                          -1, 
+                                           1, 
+                                           2    };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ static const long pizSequenceNeighbors[ ]       = { -256,
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const long   pizSequenceDivisions[ ]     = { 2, 3, 4, 5, 7 };
+PIZ_LONG pizSequenceDivisions[ ]    = { 2, 3, 4, 5, 7 };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -93,11 +93,11 @@ static const long   pizSequenceDivisions[ ]     = { 2, 3, 4, 5, 7 };
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const double pizSequenceProbability2[ ]  = { 0.75, 1. };
-static const double pizSequenceDistribution3[ ] = { 0.68, 0.85, 1. };
-static const double pizSequenceDistribution4[ ] = { 0.63, 0.75, 0.87, 1. };
-static const double pizSequenceDistribution5[ ] = { 0.60, 0.70, 0.80, 0.90, 1. };
-static const double pizSequenceDistribution7[ ] = { 0.56, 0.63, 0.70, 0.77, 0.84, 0.91, 1. };
+PIZ_DOUBLE pizSequenceProbability2[ ]  = { 0.75, 1. };
+PIZ_DOUBLE pizSequenceDistribution3[ ] = { 0.68, 0.85, 1. };
+PIZ_DOUBLE pizSequenceDistribution4[ ] = { 0.63, 0.75, 0.87, 1. };
+PIZ_DOUBLE pizSequenceDistribution5[ ] = { 0.60, 0.70, 0.80, 0.90, 1. };
+PIZ_DOUBLE pizSequenceDistribution7[ ] = { 0.56, 0.63, 0.70, 0.77, 0.84, 0.91, 1. };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -111,7 +111,7 @@ static const double pizSequenceDistribution7[ ] = { 0.56, 0.63, 0.70, 0.77, 0.84
 #define PIZ_FILL_NOTES              pizSequenceFillNotes (x, selector, 0);
 #define PIZ_FILL_NOTES_REVERSE      pizSequenceFillNotes (x, selector, 1);
 
-#define PIZ_TAG                     pizItemset128SetAtIndex 
+#define PIZ_TAG                     pizItemsetSetAtIndex 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -261,7 +261,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
     bool haveChanged = false;
     
     x->tempError = PIZ_GOOD;
-    pizBoundedHashTableClear (x->tempHash);
+    pizHashTableClear (x->tempHash);
     pizSequenceForEach (x, pizSequenceFillTempHash, NULL);
     err1 = x->tempError;
 
@@ -305,7 +305,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
         if (!err2) {
             for (j = 0; j < PIZ_NEIGHBORS_DEATH_SIZE; j++) {
                 long key = hCenter + pizSequenceNeighbors[j];
-                if (pizBoundedHashTableContainsKey (x->tempHash, key)) {
+                if (pizHashTableContainsKey (x->tempHash, key)) {
                     neighbors ++;
                 }
             }
@@ -407,11 +407,11 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
         
         for (j = 0; j < PIZ_NOVEMBER_H_SIZE; j++) {
             if ((hPat[j] >= 0) &&   
-                !(pizBoundedHashTableContainsKey (x->tempHash, hPat[j] - 2)) &&
-                !(pizBoundedHashTableContainsKey (x->tempHash, hPat[j] - 1)) &&
-                !(pizBoundedHashTableContainsKey (x->tempHash, hPat[j]))     &&
-                !(pizBoundedHashTableContainsKey (x->tempHash, hPat[j] + 1)) &&
-                !(pizBoundedHashTableContainsKey (x->tempHash, hPat[j] + 2))) {
+                !(pizHashTableContainsKey (x->tempHash, hPat[j] - 2)) &&
+                !(pizHashTableContainsKey (x->tempHash, hPat[j] - 1)) &&
+                !(pizHashTableContainsKey (x->tempHash, hPat[j]))     &&
+                !(pizHashTableContainsKey (x->tempHash, hPat[j] + 1)) &&
+                !(pizHashTableContainsKey (x->tempHash, hPat[j] + 2))) {
                 long    t;
                 PIZNote *ptr = NULL;
                 PIZNote *noteToCopy = NULL;
@@ -420,7 +420,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
         
                 for (t = 0; t < PIZ_NEIGHBORS_BIRTH_SIZE; t++)  {
                     long key = hPat[j] + pizSequenceNeighbors[t];
-                    if (!(pizBoundedHashTablePtrByKey (x->tempHash, key, (void **)&ptr))) {
+                    if (!(pizHashTablePtrByKey (x->tempHash, key, (void **)&ptr))) {
                         neighbors ++;
                         noteToCopy = ptr;
                     }
@@ -437,7 +437,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
                 PIZNote *newNote = pizSequenceNewNote (x, -1, values, PIZ_SEQUENCE_FLAG_CLIP);
                 
                 if (newNote) {
-                    err1 |= pizBoundedHashTableAdd (x->tempHash, hPat[j], (void *)newNote);
+                    err1 |= pizHashTableAdd (x->tempHash, hPat[j], (void *)newNote);
                     haveChanged = true;
                     k ++;
                 } 
@@ -449,7 +449,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
         }
             
         if (death) {
-            pizBoundedHashTableRemoveByKey (x->tempHash, hCenter, (void *)note);
+            pizHashTableRemoveByKey (x->tempHash, hCenter, (void *)note);
             pizSequenceRemoveNote (x, note, NULL);
             haveChanged = true;
         }
@@ -504,7 +504,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
     long scale = pizArrayCount (x->scale);
      
     x->tempError = PIZ_GOOD;
-    pizBoundedHashTableClear (x->tempHash);
+    pizHashTableClear (x->tempHash);
     pizSequenceForEach (x, pizSequenceFillTempHash, NULL);
     err = x->tempError;
     
@@ -566,7 +566,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
                 
     newKey = (newPosition * (PIZ_MAGIC_PITCH + 1)) + note1->values[PIZ_VALUE_PITCH] + offset;
     
-    if (!(pizBoundedHashTableContainsKey (x->tempHash, newKey))) {
+    if (!(pizHashTableContainsKey (x->tempHash, newKey))) {
     //
         long values[ ] = { newPosition * x->cell,
                            note1->values[PIZ_VALUE_PITCH] + offset,
@@ -577,14 +577,14 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
         note2 = pizSequenceNewNote (x, -1, values, PIZ_SEQUENCE_FLAG_CLIP);
         
         if (note2) {
-            err |= pizBoundedHashTableAdd (x->tempHash, newKey, (void *)note2);
+            err |= pizHashTableAdd (x->tempHash, newKey, (void *)note2);
             haveChanged = true;
             k ++;
         } 
     //
-    } else if (!(pizBoundedHashTablePtrByKey (x->tempHash, newKey, (void **)&note2))) {
+    } else if (!(pizHashTablePtrByKey (x->tempHash, newKey, (void **)&note2))) {
         if (note2 != note1) {
-            pizBoundedHashTableRemoveByKey (x->tempHash, newKey, (void *)note2);
+            pizHashTableRemoveByKey (x->tempHash, newKey, (void *)note2);
             pizSequenceRemoveNote (x, note2, NULL);
             haveChanged = true;
             k ++;

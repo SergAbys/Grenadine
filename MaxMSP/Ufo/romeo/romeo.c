@@ -6,7 +6,7 @@
  */
  
 /*
- *  April 11, 2012.
+ *  May 13, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -241,7 +241,7 @@ PIZ_INLINE PIZError pizGaloisLatticeEncodeToArray (const PIZGaloisLattice *x, lo
 {
     PIZError err = PIZ_ERROR;
     
-    if ((n > 0) && (n < PIZ_ITEMSET128_SIZE) && a) {
+    if ((n > 0) && (n < PIZ_ITEMSET_SIZE) && a) {
         long i, count = pizArrayCount (x->map[n]);
         
         err = PIZ_GOOD;
@@ -251,8 +251,8 @@ PIZ_INLINE PIZError pizGaloisLatticeEncodeToArray (const PIZGaloisLattice *x, lo
         for (i = 0; i < count; i++) {
             long j, p = pizArrayValueAtIndex (x->map[n], i);
             
-            for (j = 0; j < PIZ_ITEMSET128_SIZE; j++) {
-                if (pizItemset128IsSetAtIndex (&(x->stock[p].itemset), j)) {
+            for (j = 0; j < PIZ_ITEMSET_SIZE; j++) {
+                if (pizItemsetIsSetAtIndex (&(x->stock[p].itemset), j)) {
                     err |= pizArrayAppend (a, j);
                 }
             }

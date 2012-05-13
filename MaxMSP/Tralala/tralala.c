@@ -126,21 +126,21 @@ void tralala_notify (void *ptr, PIZEvent *event)
     long         argc = 0;
     long         *argv = NULL;
     t_tralala    *x = NULL;
-    PIZEventName name;
+    PIZEventCode code;
     
     x = (t_tralala *)ptr;
-    pizEventName (event, &name);
+    pizEventCode (event, &code);
     
-    if (name == PIZ_EVENT_NOTE_PLAYED) {
+    if (code == PIZ_EVENT_NOTE_PLAYED) {
         pizEventPtr (event, &argc, &argv);
         
         atom_setlong_array (4, x->notePlayed, argc - 1, argv + 1);
         outlet_list (x->leftOutlet, NULL, 4, x->notePlayed); 
     
-    } else if (name == PIZ_EVENT_END) {
+    } else if (code == PIZ_EVENT_END) {
         outlet_bang (x->middleRightOutlet);
 
-    } else if (name == PIZ_EVENT_WILL_END) {
+    } else if (code == PIZ_EVENT_WILL_END) {
         outlet_bang (x->rightOutlet);
     }
     

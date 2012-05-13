@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceLibrary.c
  * \author	Jean Sapristi
- * \date	May 12, 2012.
+ * \date	May 13, 2012.
  */
  
 /*
@@ -43,8 +43,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_TAG     pizItemset128SetAtIndex 
-#define PIZ_UNTAG   pizItemset128UnsetAtIndex 
+#define PIZ_TAG     pizItemsetSetAtIndex 
+#define PIZ_UNTAG   pizItemsetUnsetAtIndex 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -80,6 +80,7 @@ void pizSequenceForEach (PIZSequence *x, PIZMethod f, const PIZEvent *event)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void pizSequenceCleanNote (PIZSequence *x, PIZNote *note, const PIZEvent *event)
 {
@@ -122,8 +123,8 @@ void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event
     long p = note->position;
     long tag = note->tag;
     
-    pizBoundedHashTableRemoveByKey (x->lookup, tag, note);
-    pizItemset128UnsetAtIndex (&x->usedNotes, tag);
+    pizHashTableRemoveByKey (x->lookup, tag, note);
+    pizItemsetUnsetAtIndex (&x->usedNotes, tag);
     pizLinklistRemoveByPtr (x->timeline[p], (void *)note);
     x->count --; 
     
@@ -156,7 +157,7 @@ void pizSequenceFillTempHash (PIZSequence *x, PIZNote *note, const PIZEvent *eve
     key = ((long)(note->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1));
     key += note->values[PIZ_VALUE_PITCH] + offset;
     
-    x->tempError |= pizBoundedHashTableAdd (x->tempHash, key, (void *)note);*/
+    x->tempError |= pizHashTableAdd (x->tempHash, key, (void *)note);*/
 }
 
 void pizSequenceFillTempNotes (PIZSequence *x, PIZNote *note, const PIZEvent *event)
@@ -218,7 +219,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
             }
         }
         
-        err |= pizBoundedHashTableAdd (x->lookup, newNote->tag, newNote);
+        err |= pizHashTableAdd (x->lookup, newNote->tag, newNote);
                                 
         if (!err && !(pizLinklistInsert (x->timeline[newNote->position], (void *)newNote))) {
             x->count ++; 
@@ -226,8 +227,8 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
             PIZ_UNTAG (&x->changedNotes, newNote->tag);
             
         } else {
-            pizBoundedHashTableRemoveByKey (x->lookup, newNote->tag, newNote);
-            pizItemset128UnsetAtIndex (&x->usedNotes, tag);
+            pizHashTableRemoveByKey (x->lookup, newNote->tag, newNote);
+            pizItemsetUnsetAtIndex (&x->usedNotes, tag);
             free (newNote);
             newNote = NULL;
         }
@@ -240,6 +241,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void pizSequenceMakeMap (PIZSequence *x)
 {
@@ -291,15 +293,15 @@ PIZ_INLINE PIZError pizSequenceGetTag (PIZSequence *x, long tag, long *ptr)
     long     i, k = -1;
     PIZError err = PIZ_ERROR;
     
-    if ((tag >= 0) && (tag < PIZ_ITEMSET128_SIZE) && !(pizItemset128IsSetAtIndex (&x->usedNotes, tag))) {
-        pizItemset128SetAtIndex (&x->usedNotes, tag);
+    if ((tag >= 0) && (tag < PIZ_ITEMSET_SIZE) && !(pizItemsetIsSetAtIndex (&x->usedNotes, tag))) {
+        pizItemsetSetAtIndex (&x->usedNotes, tag);
         k = tag;
     } 
     
     if (k == -1) {
-        for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-            if (!(pizItemset128IsSetAtIndex (&x->usedNotes, i))) {
-                pizItemset128SetAtIndex (&x->usedNotes, i);
+        for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+            if (!(pizItemsetIsSetAtIndex (&x->usedNotes, i))) {
+                pizItemsetSetAtIndex (&x->usedNotes, i);
                 k = i;
                 break;
             }

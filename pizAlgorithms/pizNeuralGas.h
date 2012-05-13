@@ -44,23 +44,23 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizItemset128.h"
-#include "pizBoundedStack.h"
+#include "pizStack.h"
+#include "pizItemset.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZNeuralGasHead {
-    double          error;
-    double          utility;
-    PIZItemset128   arcs;
+    double      error;
+    double      utility;
+    PIZItemset  arcs;
     }PIZNeuralGasHead;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZNeuralGas {
-    PIZItemset128       map;
+    PIZItemset          map;
     long                count;
     long                vectorSize;
     long                mapSize;
@@ -74,13 +74,14 @@ typedef struct _PIZNeuralGas {
     double              *vectorStock;
     unsigned int        seed;
     PIZNeuralGasHead    *headStock;
-    PIZBoundedStack     *ticketMachine;
+    PIZStack            *ticketMachine;
     } PIZNeuralGas;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 PIZNeuralGas    *pizNeuralGasNew        (long argc, long *argv);
+
 void            pizNeuralGasFree        (PIZNeuralGas *x);
 PIZError        pizNeuralGasAdd         (PIZNeuralGas *x, long argc, long *argv);
 PIZError        pizNeuralGasClear       (PIZNeuralGas *x);

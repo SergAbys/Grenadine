@@ -59,17 +59,16 @@ typedef struct _PIZArray {
 // -------------------------------------------------------------------------------------------------------------
 
 PIZArray    *pizArrayNew                 (long size);
+long        *pizArrayPtr                 (const PIZArray *x); 
+
 void        pizArrayFree                 (PIZArray *x);
-
 PIZError    pizArrayAppend               (PIZArray *x, long value); //
-
 void        pizArrayClear                (PIZArray *x);
 void        pizArraySetValueAtIndex      (PIZArray *x, long index, long value);
 long        pizArrayValueAtIndex         (const PIZArray *x, long index);
 long        pizArrayCount                (const PIZArray *x);
-long        *pizArrayPtr                 (const PIZArray *x); 
 
-void        pizArrayRemoveIndex          (PIZArray *x, long index);
+void        pizArrayRemoveAtIndex        (PIZArray *x, long index);
 void        pizArrayRemoveLastValue      (PIZArray *x);
 long        pizArrayFirstIndexOfValue    (const PIZArray *x, long value);
 bool        pizArrayContainsValue        (const PIZArray *x, long value);
@@ -78,6 +77,11 @@ bool        pizArrayContainsValue        (const PIZArray *x, long value);
 // -------------------------------------------------------------------------------------------------------------
 
 #ifdef PIZ_EXTERN_INLINE
+
+PIZ_EXTERN long *pizArrayPtr (const PIZArray *x)
+{
+    return x->values;
+}
 
 PIZ_EXTERN void pizArrayClear (PIZArray *x)
 {
@@ -97,11 +101,6 @@ PIZ_EXTERN long pizArrayValueAtIndex (const PIZArray *x, long index)
 PIZ_EXTERN long pizArrayCount (const PIZArray *x)
 {
     return x->index;
-}
-
-PIZ_EXTERN long *pizArrayPtr (const PIZArray *x)
-{
-    return x->values;
 }
 
 PIZ_EXTERN void pizArrayRemoveLastValue (PIZArray *x)

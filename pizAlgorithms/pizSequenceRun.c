@@ -44,13 +44,13 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #define PIZ_CONSTANT_DURATION   2500.
-#define PIZ_UNTAG               pizItemset128UnsetAtIndex 
+#define PIZ_UNTAG               pizItemsetUnsetAtIndex 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL PIZError pizSequenceAddNotification (PIZLinklist *q, PIZEventName n, long tag, long ac, long *av);
+PIZ_LOCAL PIZError pizSequenceAddNotification (PIZLinklist *q, PIZEventCode n, long tag, long ac, long *av);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -183,23 +183,23 @@ PIZError pizSequenceRefresh (PIZSequence *x, PIZLinklist *q)
     //
     }
     
-    if (pizItemset128Count (&x->removedNotes)) {
+    if (pizItemsetCount (&x->removedNotes)) {
     //
-    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-        if (pizItemset128IsSetAtIndex (&x->removedNotes, i)) { 
+    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+        if (pizItemsetIsSetAtIndex (&x->removedNotes, i)) { 
             err |= pizSequenceAddNotification (q, PIZ_EVENT_NOTE_REMOVED, i, 0, NULL);
         } 
     }
     
-    pizItemset128Clear (&x->removedNotes);
+    pizItemsetClear (&x->removedNotes);
     //
     }
     
-    if (pizItemset128Count (&x->addedNotes)) {
+    if (pizItemsetCount (&x->addedNotes)) {
     //
-    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-        if (pizItemset128IsSetAtIndex (&x->addedNotes, i)) {
-            if (!(pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note))) {
+    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+        if (pizItemsetIsSetAtIndex (&x->addedNotes, i)) {
+            if (!(pizHashTablePtrByKey (x->lookup, i, (void **)&note))) {
             
                 long a[ ] = { note->position, 
                               note->values[PIZ_VALUE_PITCH],
@@ -213,15 +213,15 @@ PIZError pizSequenceRefresh (PIZSequence *x, PIZLinklist *q)
         } 
     }
 
-    pizItemset128Clear (&x->addedNotes);
+    pizItemsetClear (&x->addedNotes);
     //
     }
     
-    if (pizItemset128Count (&x->changedNotes)) {
+    if (pizItemsetCount (&x->changedNotes)) {
     //
-    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-        if (pizItemset128IsSetAtIndex (&x->changedNotes, i)) {
-            if (!(pizBoundedHashTablePtrByKey (x->lookup, i, (void **)&note))) {
+    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+        if (pizItemsetIsSetAtIndex (&x->changedNotes, i)) {
+            if (!(pizHashTablePtrByKey (x->lookup, i, (void **)&note))) {
             
                 long a[ ] = { note->position,
                               note->values[PIZ_VALUE_PITCH],
@@ -234,7 +234,7 @@ PIZError pizSequenceRefresh (PIZSequence *x, PIZLinklist *q)
         } 
     }
     
-    pizItemset128Clear (&x->changedNotes);
+    pizItemsetClear (&x->changedNotes);
     //
     }
         
@@ -245,7 +245,7 @@ PIZError pizSequenceRefresh (PIZSequence *x, PIZLinklist *q)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizSequenceAddNotification (PIZLinklist *q, PIZEventName n, long tag, long ac, long *av)
+PIZError pizSequenceAddNotification (PIZLinklist *q, PIZEventCode n, long tag, long ac, long *av)
 {
     PIZEvent *notification = NULL;
     PIZError err = PIZ_GOOD;

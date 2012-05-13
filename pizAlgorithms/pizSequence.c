@@ -77,8 +77,8 @@ PIZSequence *pizSequenceNew (long size)
     x->tempValues    = (long *)malloc (sizeof(long) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
     x->tempNotes1    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
     x->tempNotes2    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
-    x->tempHash      = pizBoundedHashTableNew (2, argv1);
-    x->lookup        = pizBoundedHashTableNew (2, argv2);
+    x->tempHash      = pizHashTableNew (2, argv1);
+    x->lookup        = pizHashTableNew (2, argv2);
     x->factorOracle  = pizFactorOracleNew  (0, NULL);
     x->galoisLattice = pizGaloisLatticeNew (0, NULL);
     
@@ -96,10 +96,10 @@ PIZSequence *pizSequenceNew (long size)
 
         x->flags = PIZ_SEQUENCE_FLAG_NONE;
         
-        pizItemset128Clear (&x->usedNotes);
-        pizItemset128Clear (&x->addedNotes);
-        pizItemset128Clear (&x->removedNotes);
-        pizItemset128Clear (&x->changedNotes);
+        pizItemsetClear (&x->usedNotes);
+        pizItemsetClear (&x->addedNotes);
+        pizItemsetClear (&x->removedNotes);
+        pizItemsetClear (&x->changedNotes);
         
         x->seed = (unsigned int)time(NULL);
         
@@ -146,8 +146,8 @@ void pizSequenceFree (PIZSequence *x)
     pizArrayFree (x->scale);
     pizArrayFree (x->pattern);
     
-    pizBoundedHashTableFree (x->tempHash);
-    pizBoundedHashTableFree (x->lookup);
+    pizHashTableFree (x->tempHash);
+    pizHashTableFree (x->lookup);
     
     pizFactorOracleFree  (x->factorOracle);
     pizGaloisLatticeFree (x->galoisLattice);

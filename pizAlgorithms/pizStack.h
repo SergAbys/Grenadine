@@ -1,7 +1,7 @@
 /**
- * \file    pizSequenceAttribute.h
+ * \file    pizStack.h
  * \author  Jean Sapristi
- * \date    May 11, 2012.
+ * \date    May 13, 2012.
  */
  
 /*
@@ -34,30 +34,63 @@
  *  The fact that you are presently reading this means that you have had
  *  knowledge of the CeCILL-C license and that you accept its terms.
  */
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#ifndef PIZ_STACK_H
+#define PIZ_STACK_H
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#include "pizTypes.h"
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
  
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#ifndef PIZ_SEQUENCE_ATTRIBUTE_H
-#define PIZ_SEQUENCE_ATTRIBUTE_H
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#include "pizEvent.h"
-#include "pizSequence.h"
+typedef struct _PIZStack {
+    long size;
+    long index;
+    long poppedValue;
+    long *values;
+    } PIZStack; 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZError  pizSequenceSetChance        (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetVelocity      (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetChannel       (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetCell          (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetNoteValue     (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetScale         (PIZSequence *x, const PIZEvent *event); //
-PIZ_LOCAL PIZError  pizSequenceSetPattern       (PIZSequence *x, const PIZEvent *event); //
+PIZStack    *pizStackNew         (long size);
+
+void        pizStackFree         (PIZStack *x);
+void        pizStackClear        (PIZStack *x);
+PIZError    pizStackPush         (PIZStack *x, long value);
+PIZError    pizStackPop          (PIZStack *x);
+long        pizStackCount        (const PIZStack *x);
+long        pizStackPoppedValue  (const PIZStack *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_ATTRIBUTE_H
+
+#ifdef PIZ_EXTERN_INLINE
+
+PIZ_EXTERN void pizStackClear (PIZStack *x)
+{
+    x->index       = 0;
+    x->poppedValue = -1;
+}
+
+PIZ_EXTERN long pizStackCount (const PIZStack *x)
+{
+    return x->index;
+}
+
+PIZ_EXTERN long pizStackPoppedValue (const PIZStack *x)
+{
+    return x->poppedValue;
+}
+
+#endif // PIZ_EXTERN_INLINE
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#endif // PIZ_STACK_H

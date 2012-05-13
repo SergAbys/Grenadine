@@ -1,7 +1,7 @@
-/**
- * \file    pizBoundedQueue.h
+/*
+ * \file    pizItemset.c
  * \author  Jean Sapristi
- * \date    May 10, 2012.
+ * \date    May 13, 2012.
  */
  
 /*
@@ -34,69 +34,130 @@
  *  The fact that you are presently reading this means that you have had
  *  knowledge of the CeCILL-C license and that you accept its terms.
  */
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#ifndef PIZ_BOUNDED_QUEUE_H
-#define PIZ_BOUNDED_QUEUE_H
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#include "pizTypes.h"
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
  
-typedef struct _PIZBoundedQueue {
-    long count;
-    long size;
-    long head;
-    long tail;
-    long poppedValue;
-    long *values;
-    } PIZBoundedQueue; 
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZBoundedQueue     *pizBoundedQueueNew             (long size);
-void                pizBoundedQueueFree             (PIZBoundedQueue *x);
-
-void                pizBoundedQueueClear            (PIZBoundedQueue *x);
-PIZError            pizBoundedQueueAppend           (PIZBoundedQueue *x, long value);
-PIZError            pizBoundedQueuePop              (PIZBoundedQueue *x);
-PIZError            pizBoundedQueuePopLastValue     (PIZBoundedQueue *x);
-long                pizBoundedQueueCount            (const PIZBoundedQueue *x);
-long                pizBoundedQueuePoppedValue      (const PIZBoundedQueue *x);
+#include "pizItemset.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
-#ifdef PIZ_EXTERN_INLINE
-
-PIZ_EXTERN void pizBoundedQueueClear (PIZBoundedQueue *x)
+void pizItemsetSetAtIndex (PIZItemset *itemset, long index)
 {
-    x->head        = 0;
-    x->tail        = 0;
-    x->count       = 0;
-    x->poppedValue = -1;
+    long  i, p;
+    ulong m;
+    
+    i = index / 32;
+    p = index % 32;
+    
+    m = 1UL << p;
+    
+    itemset->items[i] |= m;
 }
 
-PIZ_EXTERN long pizBoundedQueueCount (const PIZBoundedQueue *x)
+void pizItemsetUnsetAtIndex (PIZItemset *itemset, long index) 
 {
-    return x->count;
+    long  i, p;
+    ulong m;
+    
+    i = index / 32;
+    p = index % 32;
+    
+    m = 1UL << p;
+    
+    itemset->items[i] &= ~m;
 }
 
-
-PIZ_EXTERN long pizBoundedQueuePoppedValue (const PIZBoundedQueue *x)
+void pizItemsetClear (PIZItemset *itemset)  
 {
-    return x->poppedValue;
+    long i;
+    
+    for (i = 0; i < 4; i++) {
+        itemset->items[i] = 0UL;
+    }
 }
 
-#endif // PIZ_EXTERN_INLINE
+long pizItemsetCount (const PIZItemset *itemset)
+{
+    long i, k = 0;
+    
+    for (i = 0; i < 4; i++) {
+        ulong n = itemset->items[i];
+            
+        while (n != 0UL) {
+            k += (n & 1UL);
+            n >>= 1;
+        }
+    }
+    
+    return k;
+}
+
+bool pizItemsetIsSetAtIndex (const PIZItemset *itemset, long index) 
+{
+    long  i, p;
+    ulong k = 0;
+
+    i = index / 32;
+    p = index % 32;
+    
+    k = itemset->items[i];
+
+    k >>= p;
+    k  &= 1UL;
+    
+    return (k != 0UL);
+}
+
+void pizItemsetUnion (const PIZItemset *a, const PIZItemset *b, PIZItemset *r) 
+{
+    long i;
+    
+    for (i = 0; i < 4; i++) {
+        r->items[i] = a->items[i] | b->items[i];
+    }
+}
+
+void pizItemsetIntersection (const PIZItemset *a, const PIZItemset *b, PIZItemset *r) 
+{
+    long i;
+    
+    for (i = 0; i < 4; i++) {
+        r->items[i] = a->items[i] & b->items[i];
+    }
+}
+
+bool pizItemsetIsIncluded (const PIZItemset *a, const PIZItemset *b)
+{
+    long i;
+    bool k = true;
+            
+    for (i = 0; i < 4; i++) {
+        if (b->items[i] != (b->items[i] | a->items[i])) {
+            k = false;
+            break;
+        }
+    }
+        
+    return k;
+}
+
+bool pizItemsetIsEqual (const PIZItemset *a, const PIZItemset *b)
+{
+    long i;
+    bool k = true;
+            
+    for (i = 0; i < 4; i++) {
+        if (a->items[i] != b->items[i]) {
+            k = false;
+            break;
+        }
+    }
+        
+    return k;
+}
 
 // -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_BOUNDED_QUEUE_H
+// -----------------------------------------------------------------------------------------------------------:x

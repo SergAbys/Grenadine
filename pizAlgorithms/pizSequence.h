@@ -39,7 +39,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 /* 
- *  PIZ_SEQUENCE_MAXIMUM_NOTES   = PIZ_ITEMSET128_SIZE 
+ *  PIZ_SEQUENCE_MAXIMUM_NOTES   = PIZ_ITEMSET_SIZE 
  *  PIZ_SEQUENCE_INIT_TEMP_SIZE  = MAX (MAXIMUM_NOTES, MAXIMUM_DURATION, PIZ_MAGIC_PITCH + 1) 
  */
 
@@ -55,8 +55,8 @@
 #include "pizTypes.h"
 #include "pizArray.h"
 #include "pizLinklist.h"
-#include "pizItemset128.h"
-#include "pizBoundedHashTable.h"
+#include "pizItemset.h"
+#include "pizHashTable.h"
 #include "pizFactorOracle.h"
 #include "pizGaloisLattice.h"
 
@@ -181,46 +181,46 @@ typedef struct _PIZNote {
 // -------------------------------------------------------------------------------------------------------------
     
 typedef struct _PIZSequence {
-    long                    tempIndex;
-    PIZError                tempError;
-    long                    *tempValues;
-    PIZBoundedHashTable     *tempHash;
-    PIZNote                 **tempNotes1;
-    PIZNote                 **tempNotes2;
-    PIZArray                *map;
-    PIZLinklist             **timeline;
-    PIZBoundedHashTable     *lookup;
-    PIZArray                *scale;
-    PIZArray                *pattern;
-    PIZFactorOracle         *factorOracle;
-    PIZGaloisLattice        *galoisLattice;
-    PIZItemset128           usedNotes;
-    PIZItemset128           addedNotes;
-    PIZItemset128           changedNotes;
-    PIZItemset128           removedNotes;
-    ulong                   flags;
-    long                    size;
-    long                    start;
-    long                    end;
-    long                    down;
-    long                    up;
-    long                    count;
-    long                    index;
-    long                    chance;
-    long                    channel;
-    long                    velocity;
-    long                    key;
-    long                    type;
-    long                    cell;
-    long                    noteValue;
-    unsigned int            seed;
+    long                tempIndex;
+    PIZError            tempError;
+    long                *tempValues;
+    PIZHashTable        *tempHash;
+    PIZNote             **tempNotes1;
+    PIZNote             **tempNotes2;
+    PIZArray            *map;
+    PIZLinklist         **timeline;
+    PIZHashTable        *lookup;
+    PIZArray            *scale;
+    PIZArray            *pattern;
+    PIZFactorOracle     *factorOracle;
+    PIZGaloisLattice    *galoisLattice;
+    PIZItemset          usedNotes;
+    PIZItemset          addedNotes;
+    PIZItemset          changedNotes;
+    PIZItemset          removedNotes;
+    ulong               flags;
+    long                size;
+    long                start;
+    long                end;
+    long                down;
+    long                up;
+    long                count;
+    long                index;
+    long                chance;
+    long                channel;
+    long                velocity;
+    long                key;
+    long                type;
+    long                cell;
+    long                noteValue;
+    unsigned int        seed;
     } PIZSequence;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZSequence       *pizSequenceNew (long size);
-PIZ_LOCAL void              pizSequenceFree (PIZSequence *x);
+PIZ_LOCAL PIZSequence   *pizSequenceNew (long size);
+PIZ_LOCAL void          pizSequenceFree (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

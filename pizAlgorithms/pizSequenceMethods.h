@@ -1,7 +1,7 @@
-/*
- * \file    pizBoundedQueue.c
+/**
+ * \file    pizSequenceMethods.h
  * \author  Jean Sapristi
- * \date    May 10, 2012.
+ * \date    May 11, 2012.
  */
  
 /*
@@ -38,126 +38,38 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizBoundedQueue.h"
+#ifndef PIZ_SEQUENCE_METHODS_H
+#define PIZ_SEQUENCE_METHODS_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
-PIZBoundedQueue *pizBoundedQueueNew (long size)
-{
-    PIZBoundedQueue *x = NULL;
-    
-    if (size > 0 && (x = (PIZBoundedQueue *)malloc (sizeof(PIZBoundedQueue)))) {
-        if (x->values = (long *)malloc ((size + 1) * sizeof(long))) {
-            x->count        = 0;
-            x->size         = size;
-            x->head         = 0;
-            x->tail         = 0;
-            x->poppedValue  = -1;
-        } else {
-            free (x);
-            x = NULL;
-        }
-    }
-    
-    return x;
-}
-
-void pizBoundedQueueFree (PIZBoundedQueue *x)
-{
-    if (x) {
-        free (x->values);
-        x->values = NULL;
-            
-        free (x);
-    }
-}
+#include "pizEvent.h"
+#include "pizSequence.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
-void pizBoundedQueueClear (PIZBoundedQueue *x)
-{
-    x->count       = 0;
-    x->head        = 0;
-    x->tail        = 0;
-    x->poppedValue = -1;
-}
+PIZ_LOCAL PIZError  pizSequenceNote            (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceClear           (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceTranspose       (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceClean           (PIZSequence *x, const PIZEvent *event);
 
-PIZError pizBoundedQueueAppend (PIZBoundedQueue *x, long value) 
-{   
-    PIZError err = PIZ_ERROR;
-    
-    if (((x->tail + 1) != x->head) && !((x->tail == x->size) && (x->head == 0))) {
-        err = PIZ_GOOD;
-        
-        x->count ++;
-        
-        x->values[x->tail] = value;
-        
-        if (x->tail == x->size) {
-            x->tail = 0;
-        } else {
-            x->tail ++;
-        }
-    }
-    
-    return err;
-}
+PIZ_LOCAL PIZError  pizSequenceLearn           (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceAlgorithm       (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceNovember        (PIZSequence *x, const PIZEvent *event); //
+PIZ_LOCAL PIZError  pizSequenceJuliet          (PIZSequence *x, const PIZEvent *event); //
 
-PIZError pizBoundedQueuePop (PIZBoundedQueue *x)
-{
-    PIZError err = PIZ_ERROR;
-    
-    if (x->head != x->tail) {
-        err = PIZ_GOOD;
-        
-        x->count --;
-        
-        x->poppedValue = x->values[x->head];
-        
-        if (x->head == x->size) {
-            x->head = 0;
-        } else {
-            x->head ++;
-        }
-    }
-    
-    return err;
-}
+PIZ_LOCAL PIZError  pizSequenceRotate          (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceScramble        (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSort            (PIZSequence *x, const PIZEvent *event);
 
-PIZError pizBoundedQueuePopLastValue (PIZBoundedQueue *x)
-{
-    PIZError err = PIZ_ERROR;
-    
-    if (x->tail != x->head) {
-        err = PIZ_GOOD;
-        
-        if (x->tail == 0) {
-            x->tail = x->size;
-        } else {
-            x->tail --;
-        }
-        
-        x->count --;
-                
-        x->poppedValue = x->values[x->tail];
-    }
-    
-    return err;
-}
-
-long pizBoundedQueueCount (const PIZBoundedQueue *x)
-{
-    return x->count;
-}
-
-long pizBoundedQueuePoppedValue (const PIZBoundedQueue *x)
-{
-    return x->poppedValue;
-}
+PIZ_LOCAL PIZError  pizSequenceChange          (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceFill            (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceRandom          (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceKill            (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceCycle           (PIZSequence *x, const PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
-// -----------------------------------------------------------------------------------------------------------:x
+// -------------------------------------------------------------------------------------------------------------
+#endif // PIZ_SEQUENCE_METHODS_H

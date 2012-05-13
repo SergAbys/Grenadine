@@ -64,6 +64,7 @@ typedef struct _PIZKohonenMap {
 // -------------------------------------------------------------------------------------------------------------
 
 PIZKohonenMap   *pizKohonenMapNew       (long argc, long *argv);
+
 void            pizKohonenMapFree       (PIZKohonenMap *x);
 PIZError        pizKohonenMapAdd        (PIZKohonenMap *x, long argc, long *argv);
 PIZError        pizKohonenMapClear      (PIZKohonenMap *x);

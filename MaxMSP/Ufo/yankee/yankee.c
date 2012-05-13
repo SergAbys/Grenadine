@@ -425,8 +425,8 @@ PIZ_INLINE PIZError pizNeuralGasEncodeToArray (const PIZNeuralGas *x, long n, PI
         
         err = PIZ_GOOD;
         
-        for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-            if (pizItemset128IsSetAtIndex (&x->map, i)) {
+        for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+            if (pizItemsetIsSetAtIndex (&x->map, i)) {
                 if (k == n) {
                     for (j = 0; j < x->vectorSize; j++) {
                         t = (long)(((*(x->vectorStock + (n * x->vectorSize) + j)) + 0.5));

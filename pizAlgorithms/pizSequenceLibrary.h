@@ -50,7 +50,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void      pizSequenceForEach               (PIZSequence *x, PIZMethod f,   const PIZEvent *event);
+PIZ_LOCAL void      pizSequenceForEach               (PIZSequence *x, PIZMethod f, const PIZEvent *event);
+
 PIZ_LOCAL void      pizSequenceCleanNote             (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 PIZ_LOCAL void      pizSequenceRemoveNote            (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 PIZ_LOCAL void      pizSequenceChangeNote            (PIZSequence *x, PIZNote *note, const PIZEvent *event);
@@ -61,9 +62,6 @@ PIZ_LOCAL void      pizSequenceFillTempNotes         (PIZSequence *x, PIZNote *n
 // -------------------------------------------------------------------------------------------------------------
 
 PIZ_LOCAL PIZNote   *pizSequenceNewNote              (PIZSequence *x, long tag, long *argv, ulong flags);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 
 PIZ_LOCAL void      pizSequenceMakeMap               (PIZSequence *x);
 PIZ_LOCAL long      pizSequenceMovePitchToAmbitus    (PIZSequence *x, long pitch);

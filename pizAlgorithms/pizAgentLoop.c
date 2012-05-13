@@ -40,6 +40,9 @@
 
 #include "pizAgentLoop.h"
 #include "pizSequenceRun.h"
+#include "pizAgentMethods.h"
+#include "pizSequenceMethods.h"
+#include "pizSequenceAttributes.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -51,6 +54,56 @@
 
 #define PIZ_EXIT (x->flags & PIZ_AGENT_FLAG_EXIT)
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZ_METHOD pizEventMethods[ ]   = { pizAgentInit,                   // PIZ_EVENT_INIT
+                                    pizAgentPlay,                   // PIZ_EVENT_PLAY
+                                    pizAgentStop,                   // PIZ_EVENT_STOP
+                                    pizAgentLoop,                   // PIZ_EVENT_LOOP
+                                    pizAgentUnloop,                 // PIZ_EVENT_UNLOOP
+                                    pizAgentBPM,                    // PIZ_EVENT_BPM
+                                    pizSequenceSetChance,           // PIZ_EVENT_CHANCE
+                                    pizSequenceSetVelocity,         // PIZ_EVENT_VELOCITY
+                                    pizSequenceSetChannel,          // PIZ_EVENT_CHANNEL
+                                    pizSequenceSetCell,             // PIZ_EVENT_CELL
+                                    pizSequenceSetNoteValue,        // PIZ_EVENT_NOTE_VALUE
+                                    pizSequenceSetScale,            // PIZ_EVENT_SCALE
+                                    pizSequenceSetPattern,          // PIZ_EVENT_PATTERN
+                                    pizSequenceNote,                // PIZ_EVENT_NOTE
+                                    pizSequenceClear,               // PIZ_EVENT_CLEAR
+                                    pizSequenceTranspose,           // PIZ_EVENT_TRANSPOSE
+                                    pizSequenceClean,               // PIZ_EVENT_CLEAN
+                                    NULL,                           // PIZ_EVENT_ZOULOU
+                                    NULL,                           // PIZ_EVENT_ROMEO
+                                    NULL,                           // PIZ_EVENT_NOVEMBER
+                                    NULL,                           // PIZ_EVENT_JULIET
+                                    NULL,                           // PIZ_EVENT_ROTATE
+                                    NULL,                           // PIZ_EVENT_SCRAMBLE
+                                    NULL,                           // PIZ_EVENT_SORT
+                                    NULL,                           // PIZ_EVENT_CHANGE
+                                    NULL,                           // PIZ_EVENT_FILL
+                                    NULL,                           // PIZ_EVENT_RANDOM
+                                    NULL,                           // PIZ_EVENT_KILL
+                                    NULL,                           // PIZ_EVENT_CYCLE        
+                                    NULL,                           // PIZ_EVENT_LEARN
+                                    NULL,                           // PIZ_EVENT_CHANGED_BPM
+                                    NULL,                           // PIZ_EVENT_CHANGED_CHANCE
+                                    NULL,                           // PIZ_EVENT_CHANGED_VELOCITY
+                                    NULL,                           // PIZ_EVENT_CHANGED_CHANNEL
+                                    NULL,                           // PIZ_EVENT_CHANGED_CELL
+                                    NULL,                           // PIZ_EVENT_CHANGED_NOTE_VALUE
+                                    NULL,                           // PIZ_EVENT_CHANGED_SCALE
+                                    NULL,                           // PIZ_EVENT_CHANGED_PATTERN
+                                    NULL,                           // PIZ_EVENT_CHANGED_ZONE
+                                    NULL,                           // PIZ_EVENT_NOTE_ADDED
+                                    NULL,                           // PIZ_EVENT_NOTE_CHANGED
+                                    NULL,                           // PIZ_EVENT_NOTE_REMOVED
+                                    NULL,                           // PIZ_EVENT_NOTE_PLAYED
+                                    NULL,                           // PIZ_EVENT_END
+                                    NULL    };                      // PIZ_EVENT_WILL_END
+    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -150,6 +203,7 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q)
 {
     PIZError        err = PIZ_GOOD;
     PIZEventType    type;
+    PIZEventCode    code;
     PIZMethodError  f = NULL;
     PIZEvent        *event = NULL;
     void            *o = NULL;
@@ -169,13 +223,15 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q)
     if (event) {
     //
     pizEventType (event, &type);
-    pizEventMethod (event, &f);
+    pizEventCode (event, &code);
         
     if (type == PIZ_EVENT_RUN) {
         o = x;
     } else {
         o = x->sequence;
     }
+    
+    f = pizEventMethods[code];
     
     if (f && ((*f)(o, event) == PIZ_MEMORY)) {
         PIZ_AGENT_MEMORY
@@ -361,7 +417,7 @@ bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizAgentAddNotification (PIZAgent *x, PIZEventName n, long tag, long ac, long *av)
+void pizAgentAddNotification (PIZAgent *x, PIZEventCode n, long tag, long ac, long *av)
 {
     PIZEvent *notification = NULL;
 

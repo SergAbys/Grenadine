@@ -1,7 +1,7 @@
 /**
  * \file    pizHashTable.h
  * \author  Jean Sapristi
- * \date    April 6, 2012.
+ * \date    May 13, 2012.
  */
  
 /*
@@ -45,13 +45,13 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizTypes.h"
-#include "pizLinklist.h"
+#include "pizArray.h"
+#include "pizStack.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_HASHTABLE_FLAG_NONE             0UL
-#define PIZ_HASHTABLE_FLAG_FREE_MEMORY      1UL
+#define PIZ_HASHTABLE_FLAG_NONE     0UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -60,38 +60,33 @@ typedef struct _PIZHashTableElement {
     long key;
     void *ptr;
     } PIZHashTableElement;
- 
+    
 typedef struct _PIZHashTable {
-    ulong           flags;
-    long            count;
-    long            size;
-    PIZLinklist     **hashTable;
+    long                    count;
+    long                    hashSize;
+    long                    poolSize;
+    PIZStack                *ticketMachine;
+    PIZHashTableElement     *pool;
+    PIZArray                **hashTable;
     } PIZHashTable;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZHashTable    *pizHashTableNew                (long size);
-void            pizHashTableFree                (PIZHashTable *x);
+PIZHashTable    *pizHashTableNew         (long argc, long *argv);
 
-PIZError        pizHashTableAdd                 (PIZHashTable *x, long key, void *ptr); //
-
-void            pizHashTableSetFlags            (PIZHashTable *x, ulong flags);
-void            pizHashTableClear               (PIZHashTable *x);
-PIZError        pizHashTableRemoveKey           (PIZHashTable *x, long key, void *ptr);
-PIZError        pizHashTablePtrKey              (const PIZHashTable *x, long key, void **ptr);
-bool            pizHashTableContainsKey         (const PIZHashTable *x, long key);
-long            pizHashTableCount               (const PIZHashTable *x);
+void            pizHashTableFree         (PIZHashTable *x);
+PIZError        pizHashTableAdd          (PIZHashTable *x, long key, void *ptr); //
+void            pizHashTableClear        (PIZHashTable *x);
+PIZError        pizHashTableRemoveByKey  (PIZHashTable *x, long key, void *ptr);
+PIZError        pizHashTablePtrByKey     (const PIZHashTable *x, long key, void **ptr);
+bool            pizHashTableContainsKey  (const PIZHashTable *x, long key);
+long            pizHashTableCount        (const PIZHashTable *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #ifdef PIZ_EXTERN_INLINE
-
-PIZ_EXTERN void pizHashTableSetFlags (PIZHashTable *x, ulong flags)
-{
-    x->flags = flags;
-}
 
 PIZ_EXTERN long pizHashTableCount (const PIZHashTable *x)
 {

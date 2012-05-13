@@ -6,14 +6,10 @@ _pizArrayFirstIndexOfValue
 _pizArrayFree
 _pizArrayNew
 _pizArrayPtr
-_pizArrayRemoveIndex
+_pizArrayRemoveAtIndex
 _pizArrayRemoveLastValue
 _pizArraySetValueAtIndex
 _pizArrayValueAtIndex
-_pizArrayContainsValue
-_pizArrayFirstIndexOfValue
-_pizArrayRemoveIndex
-_pizArrayRemoveLastValue
 _pizFactorOracleAdd
 _pizFactorOracleClear
 _pizFactorOracleCount

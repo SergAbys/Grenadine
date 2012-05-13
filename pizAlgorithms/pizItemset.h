@@ -1,7 +1,7 @@
 /**
- * \file    pizBoundedHashTable.h
+ * \file    pizItemset.h
  * \author  Jean Sapristi
- * \date    May 10, 2012.
+ * \date    May 13, 2012.
  */
  
 /*
@@ -38,64 +38,162 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_BOUNDED_HASHTABLE_H
-#define PIZ_BOUNDED_HASHTABLE_H
+#ifndef PIZ_ITEMSET_H
+#define PIZ_ITEMSET_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizTypes.h"
-#include "pizArray.h"
-#include "pizBoundedStack.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_BOUNDED_HASHTABLE_FLAG_NONE     0UL
+#define PIZ_ITEMSET_SIZE 128
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-typedef struct _PIZBoundedHashTableElement {
-    long key;
-    void *ptr;
-    } PIZBoundedHashTableElement;
+typedef struct _PIZItemset {
+    ulong items[4];
+    } PIZItemset;
     
-typedef struct _PIZBoundedHashTable {
-    ulong                       flags;
-    long                        count;
-    long                        hashSize;
-    long                        poolSize;
-    PIZBoundedStack             *ticketMachine;
-    PIZBoundedHashTableElement  *pool;
-    PIZArray                    **hashTable;
-    } PIZBoundedHashTable;
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZBoundedHashTable *pizBoundedHashTableNew         (long argc, long *argv);
-void                pizBoundedHashTableFree         (PIZBoundedHashTable *x);
+void pizItemsetSetAtIndex    (PIZItemset *itemset, long index);
+void pizItemsetUnsetAtIndex  (PIZItemset *itemset, long index);
+void pizItemsetClear         (PIZItemset *itemset);
+long pizItemsetCount         (const PIZItemset *itemset);
+bool pizItemsetIsSetAtIndex  (const PIZItemset *itemset, long index);
 
-PIZError            pizBoundedHashTableAdd          (PIZBoundedHashTable *x, long key, void *ptr); //
-void                pizBoundedHashTableClear        (PIZBoundedHashTable *x);
-PIZError            pizBoundedHashTableRemoveByKey  (PIZBoundedHashTable *x, long key, void *ptr);
-PIZError            pizBoundedHashTablePtrByKey     (const PIZBoundedHashTable *x, long key, void **ptr);
-bool                pizBoundedHashTableContainsKey  (const PIZBoundedHashTable *x, long key);
-long                pizBoundedHashTableCount        (const PIZBoundedHashTable *x);
+void pizItemsetUnion         (const PIZItemset *a, const PIZItemset *b, PIZItemset *r);
+void pizItemsetIntersection  (const PIZItemset *a, const PIZItemset *b, PIZItemset *r);
+bool pizItemsetIsIncluded    (const PIZItemset *a, const PIZItemset *b);
+bool pizItemsetIsEqual       (const PIZItemset *a, const PIZItemset *b);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN long pizBoundedHashTableCount (const PIZBoundedHashTable *x)
+PIZ_EXTERN void pizItemsetSetAtIndex (PIZItemset *itemset, long index)
 {
-    return x->count;
+    long  i, p;
+    ulong m;
+    
+    i = index / 32;
+    p = index % 32;
+    
+    m = 1UL << p;
+    
+    itemset->items[i] |= m;
+}
+
+PIZ_EXTERN void pizItemsetUnsetAtIndex (PIZItemset *itemset, long index) 
+{
+    long  i, p;
+    ulong m;
+    
+    i = index / 32;
+    p = index % 32;
+    
+    m = 1UL << p;
+    
+    itemset->items[i] &= ~m;
+}
+
+PIZ_EXTERN void pizItemsetClear (PIZItemset *itemset)  
+{
+    long i;
+    
+    for (i = 0; i < 4; i++) {
+        itemset->items[i] = 0UL;
+    }
+}
+
+PIZ_EXTERN long pizItemsetCount (const PIZItemset *itemset)
+{
+    long i, k = 0;
+    
+    for (i = 0; i < 4; i++) {
+        ulong n = itemset->items[i];
+            
+        while (n != 0UL) {
+            k += (n & 1UL);
+            n >>= 1;
+        }
+    }
+    
+    return k;
+}
+
+PIZ_EXTERN bool pizItemsetIsSetAtIndex (const PIZItemset *itemset, long index) 
+{
+    long  i, p;
+    ulong k = 0;
+
+    i = index / 32;
+    p = index % 32;
+    
+    k = itemset->items[i];
+
+    k >>= p;
+    k  &= 1UL;
+    
+    return (k != 0UL);
+}
+
+PIZ_EXTERN void pizItemsetUnion (const PIZItemset *a, const PIZItemset *b, PIZItemset *r) 
+{
+    long i;
+    
+    for (i = 0; i < 4; i++) {
+        r->items[i] = a->items[i] | b->items[i];
+    }
+}
+
+PIZ_EXTERN void pizItemsetIntersection (const PIZItemset *a, const PIZItemset *b, PIZItemset *r) 
+{
+    long i;
+    
+    for (i = 0; i < 4; i++) {
+        r->items[i] = a->items[i] & b->items[i];
+    }
+}
+
+PIZ_EXTERN bool pizItemsetIsIncluded (const PIZItemset *a, const PIZItemset *b)
+{
+    long i;
+    bool k = true;
+            
+    for (i = 0; i < 4; i++) {
+        if (b->items[i] != (b->items[i] | a->items[i])) {
+            k = false;
+            break;
+        }
+    }
+        
+    return k;
+}
+
+PIZ_EXTERN bool pizItemsetIsEqual (const PIZItemset *a, const PIZItemset *b)
+{
+    long i;
+    bool k = true;
+            
+    for (i = 0; i < 4; i++) {
+        if (a->items[i] != b->items[i]) {
+            k = false;
+            break;
+        }
+    }
+        
+    return k;
 }
 
 #endif // PIZ_EXTERN_INLINE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_BOUNDED_HASHTABLE_H
+#endif // PIZ_ITEMSET_H

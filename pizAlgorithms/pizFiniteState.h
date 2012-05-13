@@ -44,18 +44,18 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizItemset128.h"
-#include "pizBoundedStack.h"
-#include "pizBoundedQueue.h"
+#include "pizStack.h"
+#include "pizQueue.h"
+#include "pizItemset.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZFiniteStateNode {
-    long            value;
-    bool            final;
-    PIZItemset128   parents;
-    PIZItemset128   childs;
+    long         value;
+    bool         final;
+    PIZItemset   parents;
+    PIZItemset   childs;
     } PIZFiniteStateNode;
 
 typedef struct _PIZFiniteState {
@@ -66,8 +66,8 @@ typedef struct _PIZFiniteState {
     long                threshold; 
     long                *lottery; 
     unsigned int        seed;
-    PIZBoundedQueue     **mapByValue;
-    PIZBoundedStack     *ticketMachine; 
+    PIZQueue            **mapByValue;
+    PIZStack            *ticketMachine; 
     PIZFiniteStateNode  *stock;
     } PIZFiniteState;
     
@@ -75,6 +75,7 @@ typedef struct _PIZFiniteState {
 // -------------------------------------------------------------------------------------------------------------
 
 PIZFiniteState  *pizFiniteStateNew      (long argc, long *argv);
+
 void            pizFiniteStateFree      (PIZFiniteState *x);
 PIZError        pizFiniteStateAdd       (PIZFiniteState *x, long argc, long *argv);
 PIZError        pizFiniteStateClear     (PIZFiniteState *x);

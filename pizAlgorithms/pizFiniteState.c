@@ -74,11 +74,11 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
         long     i;
         PIZError err = PIZ_GOOD;
         
-        if (x->stock = (PIZFiniteStateNode *)malloc (PIZ_ITEMSET128_SIZE * sizeof(PIZFiniteStateNode))) {
-            x->count        = 0;
-            x->shuttle      = -1;
-            x->jumpChance   = 0;
-            x->threshold    = PIZ_DEFAULT_THRESHOLD;
+        if (x->stock = (PIZFiniteStateNode *)malloc (PIZ_ITEMSET_SIZE * sizeof(PIZFiniteStateNode))) {
+            x->count       = 0;
+            x->shuttle     = -1;
+            x->jumpChance  = 0;
+            x->threshold   = PIZ_DEFAULT_THRESHOLD;
             
             x->seed = (unsigned int)time(NULL);
                 
@@ -86,23 +86,23 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
                 x->threshold = argv[0];
             }
             
-            if (x->ticketMachine = pizBoundedStackNew (PIZ_ITEMSET128_SIZE)) {
-                for (i = (PIZ_ITEMSET128_SIZE - 1); i >= 0; i--) {
-                     pizBoundedStackPush (x->ticketMachine, i);
+            if (x->ticketMachine = pizStackNew (PIZ_ITEMSET_SIZE)) {
+                for (i = (PIZ_ITEMSET_SIZE - 1); i >= 0; i--) {
+                     pizStackPush (x->ticketMachine, i);
                  }
             } else {
                 err = PIZ_MEMORY;
             }
             
-            if (x->lottery = (long *)malloc ((MAX (PIZ_ALPHABET_SIZE, PIZ_ITEMSET128_SIZE)) * sizeof(long))) {
+            if (x->lottery = (long *)malloc ((MAX (PIZ_ALPHABET_SIZE, PIZ_ITEMSET_SIZE)) * sizeof(long))) {
                 x->lotteryIndex = 0;
             } else {
                 err = PIZ_MEMORY;
             }
                 
-            if (x->mapByValue = (PIZBoundedQueue **)malloc (PIZ_ALPHABET_SIZE * sizeof(PIZBoundedQueue *))) {
+            if (x->mapByValue = (PIZQueue **)malloc (PIZ_ALPHABET_SIZE * sizeof(PIZQueue *))) {
                 for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
-                    if (!(x->mapByValue[i] = pizBoundedQueueNew (PIZ_INIT_QUEUE_SIZE))) {
+                    if (!(x->mapByValue[i] = pizQueueNew (PIZ_INIT_QUEUE_SIZE))) {
                         err = PIZ_MEMORY;
                     }
                 }
@@ -131,7 +131,7 @@ void pizFiniteStateFree (PIZFiniteState *x)
             long i;
 
             for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
-                pizBoundedQueueFree (x->mapByValue[i]);
+                pizQueueFree (x->mapByValue[i]);
                 x->mapByValue[i] = NULL;
             }
             
@@ -139,7 +139,7 @@ void pizFiniteStateFree (PIZFiniteState *x)
             x->mapByValue = NULL;
         }
 
-        pizBoundedStackFree (x->ticketMachine);
+        pizStackFree (x->ticketMachine);
         x->ticketMachine = NULL;
         
         free (x->lottery);
@@ -163,49 +163,49 @@ PIZError pizFiniteStateAdd (PIZFiniteState *x, long argc, long *argv)
     //
     err1 = PIZ_GOOD;            
 
-    if (!(pizBoundedStackPop (x->ticketMachine))) {
-        long i, nextNode, firstNode = pizBoundedStackPoppedValue (x->ticketMachine);
+    if (!(pizStackPop (x->ticketMachine))) {
+        long i, nextNode, firstNode = pizStackPoppedValue (x->ticketMachine);
         long k = CLAMP (argv[0], 0, (PIZ_ALPHABET_SIZE - 1));
         
-        if (!(pizBoundedQueueAppend (x->mapByValue[k], firstNode))) {
+        if (!(pizQueueAppend (x->mapByValue[k], firstNode))) {
             x->count ++;
             
             x->stock[firstNode].value = k;
             x->stock[firstNode].final = true;
-            pizItemset128Clear (&(x->stock[firstNode].parents));
-            pizItemset128Clear (&(x->stock[firstNode].childs));
+            pizItemsetClear (&(x->stock[firstNode].parents));
+            pizItemsetClear (&(x->stock[firstNode].childs));
             
             for (i = 1; i < argc; i++) {
-                if (!(pizBoundedStackPop (x->ticketMachine))) {
+                if (!(pizStackPop (x->ticketMachine))) {
                 
-                    nextNode = pizBoundedStackPoppedValue (x->ticketMachine);
+                    nextNode = pizStackPoppedValue (x->ticketMachine);
                     k = CLAMP (argv[i], 0, (PIZ_ALPHABET_SIZE - 1));
                             
-                    if (!(pizBoundedQueueAppend (x->mapByValue[k], nextNode))) {
+                    if (!(pizQueueAppend (x->mapByValue[k], nextNode))) {
                         x->count ++;
                         
                         x->stock[nextNode].value = k;
                         x->stock[nextNode].final = true;
                         
-                        pizItemset128Clear (&(x->stock[nextNode].parents));
-                        pizItemset128Clear (&(x->stock[nextNode].childs));
+                        pizItemsetClear (&(x->stock[nextNode].parents));
+                        pizItemsetClear (&(x->stock[nextNode].childs));
                         
-                        pizItemset128SetAtIndex (&(x->stock[nextNode].parents), firstNode);
+                        pizItemsetSetAtIndex (&(x->stock[nextNode].parents), firstNode);
                         
                         x->stock[firstNode].final = false;
                         
-                        pizItemset128SetAtIndex (&(x->stock[firstNode].childs), nextNode);
+                        pizItemsetSetAtIndex (&(x->stock[firstNode].childs), nextNode);
                         
                         firstNode = nextNode;
                         
                     } else {
-                        pizBoundedStackPush (x->ticketMachine, nextNode);
+                        pizStackPush (x->ticketMachine, nextNode);
                         err1 = PIZ_MEMORY;
                     }
                 }
             }
         } else {
-            pizBoundedStackPush (x->ticketMachine, firstNode);
+            pizStackPush (x->ticketMachine, firstNode);
             err1 = PIZ_MEMORY;
         }
     }
@@ -224,17 +224,17 @@ PIZError pizFiniteStateClear (PIZFiniteState *x)
     long i;
     
     for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
-        pizBoundedQueueClear (x->mapByValue[i]);
+        pizQueueClear (x->mapByValue[i]);
     }
         
-    x->count        = 0;
-    x->shuttle      = -1;
-    x->jumpChance   = 0;
+    x->count      = 0;
+    x->shuttle    = -1;
+    x->jumpChance = 0;
     
-    pizBoundedStackClear (x->ticketMachine);
+    pizStackClear (x->ticketMachine);
     
-    for (i = (PIZ_ITEMSET128_SIZE - 1); i >= 0; i--) {
-        pizBoundedStackPush (x->ticketMachine, i);
+    for (i = (PIZ_ITEMSET_SIZE - 1); i >= 0; i--) {
+        pizStackPush (x->ticketMachine, i);
     }
     
     return PIZ_GOOD;
@@ -259,7 +259,7 @@ PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)
             x->lotteryIndex = 0;
 
             for (j = 0; j < PIZ_ALPHABET_SIZE; j++) {
-                if (pizBoundedQueueCount (x->mapByValue[j])) {
+                if (pizQueueCount (x->mapByValue[j])) {
                     x->lottery[x->lotteryIndex] = j;
                     x->lotteryIndex ++;
                 }
@@ -267,10 +267,10 @@ PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)
             
             h = (long)(x->lotteryIndex * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
 
-            pizBoundedQueuePop (x->mapByValue[x->lottery[h]]);
-            a = pizBoundedQueuePoppedValue (x->mapByValue[x->lottery[h]]);
+            pizQueuePop (x->mapByValue[x->lottery[h]]);
+            a = pizQueuePoppedValue (x->mapByValue[x->lottery[h]]);
             x->shuttle = a;
-            pizBoundedQueueAppend ((x->mapByValue[x->lottery[h]]), a);
+            pizQueueAppend ((x->mapByValue[x->lottery[h]]), a);
         }
         
         argv[k] = x->stock[x->shuttle].value;
@@ -283,8 +283,8 @@ PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)
         jump = ((100 * (rand_r (&x->seed) / (RAND_MAX + 1.0))) < x->jumpChance);
         
         if (!jump) {
-            for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-                if (pizItemset128IsSetAtIndex (&(x->stock[x->shuttle].childs), i)) {
+            for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+                if (pizItemsetIsSetAtIndex (&(x->stock[x->shuttle].childs), i)) {
                     x->lottery[x->lotteryIndex] = i;
                     x->lotteryIndex ++;
                 }
@@ -327,9 +327,9 @@ PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x)
     x->lotteryIndex = 0;
     
     for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
-        if (pizBoundedQueueCount (x->mapByValue[i])) {
+        if (pizQueueCount (x->mapByValue[i])) {
             long j;
-            for (j = 0; j < pizBoundedQueueCount (x->mapByValue[i]); j++) {
+            for (j = 0; j < pizQueueCount (x->mapByValue[i]); j++) {
                 x->lottery[x->lotteryIndex] = i;
                 x->lotteryIndex ++;
             }
@@ -339,25 +339,25 @@ PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x)
     if (x->lotteryIndex) {
         long h = (long)(x->lotteryIndex * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
         
-        if (pizBoundedQueueCount (x->mapByValue[x->lottery[h]]) == 1) {
+        if (pizQueueCount (x->mapByValue[x->lottery[h]]) == 1) {
             long j, a;
             
             x->count --;
             
-            pizBoundedQueuePop (x->mapByValue[x->lottery[h]]);
-            a = pizBoundedQueuePoppedValue (x->mapByValue[x->lottery[h]]);
+            pizQueuePop (x->mapByValue[x->lottery[h]]);
+            a = pizQueuePoppedValue (x->mapByValue[x->lottery[h]]);
             
-            for (j = 0; j < PIZ_ITEMSET128_SIZE; j++) {
-                if (pizItemset128IsSetAtIndex (&(x->stock[a].parents), j)) {
-                    pizItemset128UnsetAtIndex (&(x->stock[j].childs), a);
+            for (j = 0; j < PIZ_ITEMSET_SIZE; j++) {
+                if (pizItemsetIsSetAtIndex (&(x->stock[a].parents), j)) {
+                    pizItemsetUnsetAtIndex (&(x->stock[j].childs), a);
                 }
                 
-                if (pizItemset128IsSetAtIndex (&(x->stock[a].childs), j)) {
-                    pizItemset128UnsetAtIndex (&(x->stock[j].parents), a);
+                if (pizItemsetIsSetAtIndex (&(x->stock[a].childs), j)) {
+                    pizItemsetUnsetAtIndex (&(x->stock[j].parents), a);
                 }
             }
             
-            pizBoundedStackPush (x->ticketMachine, a);
+            pizStackPush (x->ticketMachine, a);
             
             if (x->shuttle == a) {
                 x->shuttle = -1;
@@ -366,43 +366,43 @@ PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x)
             err = PIZ_GOOD;
             
         } else {
-            long            j, a, b;
-            PIZItemset128   tempChilds;
-            PIZItemset128   tempParents;
+            long        j, a, b;
+            PIZItemset  tempChilds;
+            PIZItemset  tempParents;
             
             x->count --;
             
-            pizBoundedQueuePop (x->mapByValue[x->lottery[h]]);
-            a = pizBoundedQueuePoppedValue (x->mapByValue[x->lottery[h]]);
-            pizBoundedQueuePopLastValue (x->mapByValue[x->lottery[h]]);
-            b = pizBoundedQueuePoppedValue (x->mapByValue[x->lottery[h]]);
+            pizQueuePop (x->mapByValue[x->lottery[h]]);
+            a = pizQueuePoppedValue (x->mapByValue[x->lottery[h]]);
+            pizQueuePopLastValue (x->mapByValue[x->lottery[h]]);
+            b = pizQueuePoppedValue (x->mapByValue[x->lottery[h]]);
             
-            pizItemset128Union (&(x->stock[a].childs), &(x->stock[b].childs), &tempChilds);
-            pizItemset128Union (&(x->stock[a].parents), &(x->stock[b].parents), &tempParents);
+            pizItemsetUnion (&(x->stock[a].childs), &(x->stock[b].childs), &tempChilds);
+            pizItemsetUnion (&(x->stock[a].parents), &(x->stock[b].parents), &tempParents);
             
             x->stock[a].final   = x->stock[a].final || x->stock[b].final;
             
             x->stock[a].childs  = tempChilds;
             x->stock[a].parents = tempParents;
             
-            for (j = 0; j < PIZ_ITEMSET128_SIZE; j++) {
-                if (pizItemset128IsSetAtIndex (&(x->stock[b].parents), j)) {
-                    pizItemset128UnsetAtIndex (&(x->stock[j].childs), b);
-                    pizItemset128SetAtIndex (&(x->stock[j].childs), a);
+            for (j = 0; j < PIZ_ITEMSET_SIZE; j++) {
+                if (pizItemsetIsSetAtIndex (&(x->stock[b].parents), j)) {
+                    pizItemsetUnsetAtIndex (&(x->stock[j].childs), b);
+                    pizItemsetSetAtIndex   (&(x->stock[j].childs), a);
                 }
                 
-                if (pizItemset128IsSetAtIndex (&(x->stock[b].childs), j)) {
-                    pizItemset128UnsetAtIndex (&(x->stock[j].parents), b);
-                    pizItemset128SetAtIndex (&(x->stock[j].parents), a);
+                if (pizItemsetIsSetAtIndex (&(x->stock[b].childs), j)) {
+                    pizItemsetUnsetAtIndex (&(x->stock[j].parents), b);
+                    pizItemsetSetAtIndex   (&(x->stock[j].parents), a);
                 }
             }
             
-            pizItemset128UnsetAtIndex (&(x->stock[a].parents), a);
-            pizItemset128UnsetAtIndex (&(x->stock[a].childs), a);
+            pizItemsetUnsetAtIndex (&(x->stock[a].parents), a);
+            pizItemsetUnsetAtIndex (&(x->stock[a].childs), a);
             
-            pizBoundedQueueAppend (x->mapByValue[x->lottery[h]], a);
+            pizQueueAppend (x->mapByValue[x->lottery[h]], a);
             
-            pizBoundedStackPush (x->ticketMachine, b);
+            pizStackPush (x->ticketMachine, b);
             
             if (x->shuttle == b) {
                 x->shuttle = a;

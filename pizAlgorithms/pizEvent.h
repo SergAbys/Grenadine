@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	May 12, 2012.
+ * \date	May 13, 2012.
  */
 
 /*
@@ -64,7 +64,7 @@ if (event) {                                                                    
                                                                                                             \
     pizTimeSet (&t);                                                                                        \
     t = t / 1000000.;                                                                                       \
-    pizEventNameAsString (event, &name);                                                                    \
+    pizEventName (event, &name);                                                                            \
                                                                                                             \
     if (!(pizEventPtr (event, &argc, &argv))) {                                                             \
                                                                                                             \
@@ -98,15 +98,15 @@ typedef enum _PIZEventType {
     PIZ_EVENT_NOTIFICATION
     } PIZEventType;
 
-typedef enum _PIZEventName {
-    // RUN
+typedef enum _PIZEventCode {
+    //
     PIZ_EVENT_INIT            = 0,
     PIZ_EVENT_PLAY            = 1,
     PIZ_EVENT_STOP,
     PIZ_EVENT_LOOP,
     PIZ_EVENT_UNLOOP,
     PIZ_EVENT_BPM,
-    // ATTRIBUTE 
+    //
     PIZ_EVENT_CHANCE,
     PIZ_EVENT_VELOCITY,
     PIZ_EVENT_CHANNEL,
@@ -114,7 +114,7 @@ typedef enum _PIZEventName {
     PIZ_EVENT_NOTE_VALUE,
     PIZ_EVENT_SCALE,
     PIZ_EVENT_PATTERN,
-    // TRANSFORM 
+    //
     PIZ_EVENT_NOTE,
     PIZ_EVENT_CLEAR,
     PIZ_EVENT_TRANSPOSE,
@@ -131,9 +131,9 @@ typedef enum _PIZEventName {
     PIZ_EVENT_RANDOM,
     PIZ_EVENT_KILL,
     PIZ_EVENT_CYCLE,        
-    // GRAPHIC     
+    //     
     PIZ_EVENT_LEARN,
-    // NOTIFICATION 
+    // 
     PIZ_EVENT_CHANGED_BPM,
     PIZ_EVENT_CHANGED_CHANCE,
     PIZ_EVENT_CHANGED_VELOCITY,
@@ -152,39 +152,30 @@ typedef enum _PIZEventName {
     PIZ_EVENT_END,
     PIZ_EVENT_WILL_END
      //
-    } PIZEventName;
+    } PIZEventCode;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZEvent {
-    PIZEventName    name;
+    PIZEventCode    code;
     PIZEventType    type;
     long            tag;
     long            size;
     long            data[PIZ_EVENT_DATA_SIZE];
-    PIZMethodError  method;
     } PIZEvent;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent *pizEventNew           (PIZEventName name, long tag, long argc, const long *argv);
+PIZEvent    *pizEventNew       (PIZEventCode code, long tag, long argc, const long *argv);
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void     pizEventFree           (PIZEvent *x);
-void     pizEventName           (const PIZEvent *x, PIZEventName *name);
-void     pizEventType           (const PIZEvent *x, PIZEventType *type);
-void     pizEventMethod         (const PIZEvent *x, PIZMethodError *f);
-PIZError pizEventValue          (const PIZEvent *x, long *value);
-PIZError pizEventPtr            (const PIZEvent *x, long *argc, long **argv);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void     pizEventNameAsString   (const PIZEvent *x, const char **name);
+void        pizEventFree       (PIZEvent *x);
+void        pizEventCode       (const PIZEvent *x, PIZEventCode *code);
+void        pizEventType       (const PIZEvent *x, PIZEventType *type);
+PIZError    pizEventValue      (const PIZEvent *x, long *value);
+PIZError    pizEventPtr        (const PIZEvent *x, long *argc, long **argv);
+void        pizEventName       (const PIZEvent *x, const char **name);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -196,19 +187,14 @@ PIZ_EXTERN void pizEventFree (PIZEvent *x)
     free (x);
 }
 
-PIZ_EXTERN void pizEventName (const PIZEvent *x, PIZEventName *name)
+PIZ_EXTERN void pizEventCode (const PIZEvent *x, PIZEventCode *code)
 {
-    (*name) = x->name;
+    (*code) = x->code;
 }
 
 PIZ_EXTERN void pizEventType (const PIZEvent *x, PIZEventType *type)
 {
     (*type) = x->type;
-}
-
-PIZ_EXTERN void pizEventMethod (const PIZEvent *x, PIZMethodError *f)
-{
-    (*f) = x->method;
 }
 
 #endif // PIZ_EXTERN_INLINE

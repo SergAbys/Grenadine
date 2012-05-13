@@ -1,7 +1,7 @@
-/**
- * \file    pizBoundedStack.h
+/*
+ * \file    pizQueue.c
  * \author  Jean Sapristi
- * \date    May 10, 2012.
+ * \date    May 13, 2012.
  */
  
 /*
@@ -38,59 +38,121 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_BOUNDED_STACK_H
-#define PIZ_BOUNDED_STACK_H
+#include "pizQueue.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
-#include "pizTypes.h"
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
- 
-typedef struct _PIZBoundedStack {
-    long size;
-    long index;
-    long poppedValue;
-    long *values;
-    } PIZBoundedStack; 
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZBoundedStack     *pizBoundedStackNew         (long size);
-void                pizBoundedStackFree         (PIZBoundedStack *x);
-
-void                pizBoundedStackClear        (PIZBoundedStack *x);
-PIZError            pizBoundedStackPush         (PIZBoundedStack *x, long value);
-PIZError            pizBoundedStackPop          (PIZBoundedStack *x);
-long                pizBoundedStackCount        (const PIZBoundedStack *x);
-long                pizBoundedStackPoppedValue  (const PIZBoundedStack *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#ifdef PIZ_EXTERN_INLINE
-
-PIZ_EXTERN void pizBoundedStackClear (PIZBoundedStack *x)
+PIZQueue *pizQueueNew (long size)
 {
-    x->index       = 0;
+    PIZQueue *x = NULL;
+    
+    if ((size > 0) && (x = (PIZQueue *)malloc (sizeof(PIZQueue)))) {
+        if (x->values = (long *)malloc ((size + 1) * sizeof(long))) {
+            x->count       = 0;
+            x->size        = size;
+            x->head        = 0;
+            x->tail        = 0;
+            x->poppedValue = -1;
+        } else {
+            free (x);
+            x = NULL;
+        }
+    }
+    
+    return x;
+}
+
+void pizQueueFree (PIZQueue *x)
+{
+    if (x) {
+        free (x->values);
+        x->values = NULL;
+            
+        free (x);
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizQueueClear (PIZQueue *x)
+{
+    x->count       = 0;
+    x->head        = 0;
+    x->tail        = 0;
     x->poppedValue = -1;
 }
 
-PIZ_EXTERN long pizBoundedStackCount (const PIZBoundedStack *x)
-{
-    return x->index;
+PIZError pizQueueAppend (PIZQueue *x, long value) 
+{   
+    PIZError err = PIZ_ERROR;
+    
+    if (((x->tail + 1) != x->head) && !((x->tail == x->size) && (x->head == 0))) {
+        err = PIZ_GOOD;
+        x->count ++;
+        x->values[x->tail] = value;
+        
+        if (x->tail == x->size) {
+            x->tail = 0;
+        } else {
+            x->tail ++;
+        }
+    }
+    
+    return err;
 }
 
-PIZ_EXTERN long pizBoundedStackPoppedValue (const PIZBoundedStack *x)
+PIZError pizQueuePop (PIZQueue *x)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if (x->head != x->tail) {
+        err = PIZ_GOOD;
+        x->count --;
+        x->poppedValue = x->values[x->head];
+        
+        if (x->head == x->size) {
+            x->head = 0;
+        } else {
+            x->head ++;
+        }
+    }
+    
+    return err;
+}
+
+PIZError pizQueuePopLastValue (PIZQueue *x)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if (x->tail != x->head) {
+        err = PIZ_GOOD;
+        
+        if (x->tail == 0) {
+            x->tail = x->size;
+        } else {
+            x->tail --;
+        }
+        
+        x->count --;
+        x->poppedValue = x->values[x->tail];
+    }
+    
+    return err;
+}
+
+long pizQueueCount (const PIZQueue *x)
+{
+    return x->count;
+}
+
+long pizQueuePoppedValue (const PIZQueue *x)
 {
     return x->poppedValue;
 }
 
-#endif // PIZ_EXTERN_INLINE
-
 // -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_BOUNDED_STACK_H
+// -----------------------------------------------------------------------------------------------------------:x

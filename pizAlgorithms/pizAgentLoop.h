@@ -67,7 +67,7 @@ PIZ_LOCAL bool      pizAgentEventLoopIsWorkTime     (PIZAgent *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void      pizAgentAddNotification         (PIZAgent *x, PIZEventName n, long tag, long ac, long *av);
+PIZ_LOCAL void      pizAgentAddNotification         (PIZAgent *x, PIZEventCode n, long tag, long ac, long *av);
 PIZ_LOCAL void      pizAgentNotificationLoopNotify  (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------

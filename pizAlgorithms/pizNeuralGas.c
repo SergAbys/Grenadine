@@ -73,7 +73,7 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
     //
     PIZError err = PIZ_GOOD;
     
-    if (x->headStock = (PIZNeuralGasHead *)malloc (PIZ_ITEMSET128_SIZE * sizeof(PIZNeuralGasHead))) {
+    if (x->headStock = (PIZNeuralGasHead *)malloc (PIZ_ITEMSET_SIZE * sizeof(PIZNeuralGasHead))) {
         long k, i;
         
         x->count         = 0;
@@ -88,7 +88,7 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
         
         x->seed = (unsigned int)time(NULL);
         
-        if (argc && ((argv[0] > 1)  && (argv[0] <= PIZ_ITEMSET128_SIZE))) {
+        if (argc && ((argv[0] > 1)  && (argv[0] <= PIZ_ITEMSET_SIZE))) {
             x->maximumSize = argv[0];
         }
         
@@ -96,15 +96,15 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
             x->vectorSize = argv[1];
         }
         
-        k = PIZ_ITEMSET128_SIZE * x->vectorSize;
+        k = PIZ_ITEMSET_SIZE * x->vectorSize;
         
         if (!(x->vectorStock = (double *)malloc (k * sizeof(double)))) {
             err = PIZ_MEMORY;
         }
             
-        if (x->ticketMachine = pizBoundedStackNew (PIZ_ITEMSET128_SIZE)) {
-            for (i = (PIZ_ITEMSET128_SIZE - 1); i > 1; i--) {
-                pizBoundedStackPush (x->ticketMachine, i);
+        if (x->ticketMachine = pizStackNew (PIZ_ITEMSET_SIZE)) {
+            for (i = (PIZ_ITEMSET_SIZE - 1); i > 1; i--) {
+                pizStackPush (x->ticketMachine, i);
             }
         } else {
             err = PIZ_MEMORY;
@@ -120,16 +120,16 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
             x->headStock[1].error   = 0.;
             x->headStock[1].utility = 1.;
             
-            pizItemset128Clear (&x->headStock[0].arcs);
-            pizItemset128Clear (&x->headStock[1].arcs);
+            pizItemsetClear (&x->headStock[0].arcs);
+            pizItemsetClear (&x->headStock[1].arcs);
             
-            pizItemset128SetAtIndex (&x->headStock[0].arcs, 1);
-            pizItemset128SetAtIndex (&x->headStock[1].arcs, 0);
+            pizItemsetSetAtIndex (&x->headStock[0].arcs, 1);
+            pizItemsetSetAtIndex (&x->headStock[1].arcs, 0);
             
-            pizItemset128Clear (&x->map);
+            pizItemsetClear (&x->map);
             
-            pizItemset128SetAtIndex (&x->map, 0);
-            pizItemset128SetAtIndex (&x->map, 1);
+            pizItemsetSetAtIndex (&x->map, 0);
+            pizItemsetSetAtIndex (&x->map, 1);
             
             x->mapSize = 2;
             
@@ -150,7 +150,7 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
 void pizNeuralGasFree (PIZNeuralGas *x)
 {
     if (x) {
-        pizBoundedStackFree (x->ticketMachine);
+        pizStackFree (x->ticketMachine);
         x->ticketMachine = NULL;
         
         free (x->headStock);
@@ -191,10 +191,10 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
     double dist1 = 0.;
     double dist2 = 0.;
     
-    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
+    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
         double e = 0.;
         
-        if (pizItemset128IsSetAtIndex (&x->map, i)) {
+        if (pizItemsetIsSetAtIndex (&x->map, i)) {
             for (j = 0; j < x->vectorSize; j++) {
                 e += pow (x->vectorStock[(i * x->vectorSize) + j] - argv[(t * x->vectorSize) + j], 2);
             }
@@ -219,8 +219,8 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
         x->vectorStock[(winner1 * x->vectorSize) + i] += x->epsilon1 * temp;
     }
     
-    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-        if (pizItemset128IsSetAtIndex (&x->headStock[winner1].arcs, i)) {
+    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+        if (pizItemsetIsSetAtIndex (&x->headStock[winner1].arcs, i)) {
             for (j = 0; j < x->vectorSize; j++) {
                 double temp = (argv[(t * x->vectorSize) + j] - x->vectorStock[(i * x->vectorSize) + j]);
                 x->vectorStock[(i * x->vectorSize) + j] += x->epsilon2 * temp;
@@ -236,8 +236,8 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
         double  maxError2Value = 0.;
         double  minUtilityValue = 0.;
         
-        for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-            if (pizItemset128IsSetAtIndex (&x->map, i)) {
+        for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+            if (pizItemsetIsSetAtIndex (&x->map, i)) {
                 if ((x->headStock[i].error > maxError1Value) || (maxError1 == -1)) {
                     maxError1       = i;
                     maxError1Value  = x->headStock[i].error;
@@ -250,8 +250,8 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
             }
         }
         
-        for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-            if (pizItemset128IsSetAtIndex (&x->headStock[maxError1].arcs, i)) {
+        for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+            if (pizItemsetIsSetAtIndex (&x->headStock[maxError1].arcs, i)) {
                 if ((x->headStock[i].error > maxError2Value) || (maxError2 == -1)) {
                     maxError2       = i;
                     maxError2Value  = x->headStock[i].error;
@@ -259,10 +259,10 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
             }
         }
         
-        if ((x->mapSize < x->maximumSize) && !(pizBoundedStackPop (x->ticketMachine))) {
-            long p = pizBoundedStackPoppedValue (x->ticketMachine);
+        if ((x->mapSize < x->maximumSize) && !(pizStackPop (x->ticketMachine))) {
+            long p = pizStackPoppedValue (x->ticketMachine);
             
-            pizItemset128Clear (&x->headStock[p].arcs);
+            pizItemsetClear (&x->headStock[p].arcs);
 
             for (i = 0; i < x->vectorSize; i++) {
                 double temp1 = x->vectorStock[(maxError1 * x->vectorSize) + i];
@@ -270,13 +270,13 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
                 x->vectorStock[(p * x->vectorSize) + i] = (temp1 + temp2) / 2.;
             }
 
-            pizItemset128UnsetAtIndex (&x->headStock[maxError1].arcs, maxError2);
-            pizItemset128UnsetAtIndex (&x->headStock[maxError2].arcs, maxError1);
+            pizItemsetUnsetAtIndex (&x->headStock[maxError1].arcs, maxError2);
+            pizItemsetUnsetAtIndex (&x->headStock[maxError2].arcs, maxError1);
             
-            pizItemset128SetAtIndex (&x->headStock[maxError1].arcs, p);
-            pizItemset128SetAtIndex (&x->headStock[maxError2].arcs, p);
-            pizItemset128SetAtIndex (&x->headStock[p].arcs, maxError1);
-            pizItemset128SetAtIndex (&x->headStock[p].arcs, maxError2);
+            pizItemsetSetAtIndex (&x->headStock[maxError1].arcs, p);
+            pizItemsetSetAtIndex (&x->headStock[maxError2].arcs, p);
+            pizItemsetSetAtIndex (&x->headStock[p].arcs, maxError1);
+            pizItemsetSetAtIndex (&x->headStock[p].arcs, maxError2);
             
             x->headStock[maxError1].error = x->alpha * x->headStock[maxError1].error;
             x->headStock[maxError2].error = x->alpha * x->headStock[maxError2].error;
@@ -284,36 +284,36 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
             x->headStock[p].error = (x->headStock[maxError1].error + x->headStock[maxError2].error) / 2.;
             x->headStock[p].utility = (x->headStock[maxError1].utility + x->headStock[maxError2].utility) / 2.;
             
-            pizItemset128SetAtIndex (&x->map, p);
+            pizItemsetSetAtIndex (&x->map, p);
             
             x->mapSize ++;
         }
         
         if ((maxError1Value / minUtilityValue) > x->kappa) {
-            for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-                if (pizItemset128IsSetAtIndex (&x->headStock[minUtility].arcs, i)) {
-                    pizItemset128UnsetAtIndex (&x->headStock[i].arcs, minUtility);
+            for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+                if (pizItemsetIsSetAtIndex (&x->headStock[minUtility].arcs, i)) {
+                    pizItemsetUnsetAtIndex (&x->headStock[i].arcs, minUtility);
                 }
             }
             
-            pizItemset128UnsetAtIndex (&x->map, minUtility);
+            pizItemsetUnsetAtIndex (&x->map, minUtility);
             x->mapSize --;
-            pizBoundedStackPush (x->ticketMachine, minUtility);
+            pizStackPush (x->ticketMachine, minUtility);
         }
         
-        for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-            if (pizItemset128IsSetAtIndex (&x->map, i)) {
-                if (!(pizItemset128Count (&x->headStock[i].arcs))) {
-                    pizItemset128UnsetAtIndex (&x->map, i);
+        for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+            if (pizItemsetIsSetAtIndex (&x->map, i)) {
+                if (!(pizItemsetCount (&x->headStock[i].arcs))) {
+                    pizItemsetUnsetAtIndex (&x->map, i);
                     x->mapSize --;
-                    pizBoundedStackPush (x->ticketMachine, i);
+                    pizStackPush (x->ticketMachine, i);
                 }
             }
         }
     }
     
-    for (i = 0; i < PIZ_ITEMSET128_SIZE; i++) {
-        if (pizItemset128IsSetAtIndex (&x->map, i)) {
+    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+        if (pizItemsetIsSetAtIndex (&x->map, i)) {
             x->headStock[i].error   -= x->beta * x->headStock[i].error;
             x->headStock[i].utility -= x->beta * x->headStock[i].utility;
         }
@@ -347,21 +347,21 @@ PIZError pizNeuralGasClear (PIZNeuralGas *x)
     x->headStock[1].error   = 0.;
     x->headStock[1].utility = 1.;
     
-    pizItemset128Clear (&x->headStock[0].arcs);
-    pizItemset128Clear (&x->headStock[1].arcs);
+    pizItemsetClear (&x->headStock[0].arcs);
+    pizItemsetClear (&x->headStock[1].arcs);
     
-    pizItemset128SetAtIndex (&x->headStock[0].arcs, 1);
-    pizItemset128SetAtIndex (&x->headStock[1].arcs, 0);
+    pizItemsetSetAtIndex (&x->headStock[0].arcs, 1);
+    pizItemsetSetAtIndex (&x->headStock[1].arcs, 0);
     
-    pizItemset128Clear (&x->map);
+    pizItemsetClear (&x->map);
     
-    pizItemset128SetAtIndex (&x->map, 0);
-    pizItemset128SetAtIndex (&x->map, 1);
+    pizItemsetSetAtIndex (&x->map, 0);
+    pizItemsetSetAtIndex (&x->map, 1);
     
-    pizBoundedStackClear (x->ticketMachine);
+    pizStackClear (x->ticketMachine);
     
-    for (i = (PIZ_ITEMSET128_SIZE - 1); i > 1; i--) {
-        pizBoundedStackPush (x->ticketMachine, i);
+    for (i = (PIZ_ITEMSET_SIZE - 1); i > 1; i--) {
+        pizStackPush (x->ticketMachine, i);
     }
     
     x->mapSize = 2;
@@ -383,8 +383,8 @@ PIZError pizNeuralGasProceed (PIZNeuralGas *x, long argc, long *argv)
             long j, p = -1;
             long h = (long)(x->mapSize * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
             
-            for (j = 0; j < PIZ_ITEMSET128_SIZE; j++) {
-                if (pizItemset128IsSetAtIndex (&x->map, j)) {
+            for (j = 0; j < PIZ_ITEMSET_SIZE; j++) {
+                if (pizItemsetIsSetAtIndex (&x->map, j)) {
                     if (!h) {
                         p = j;
                         break;

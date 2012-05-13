@@ -71,6 +71,7 @@ typedef struct _PIZFactorOracle {
 // -------------------------------------------------------------------------------------------------------------
 
 PIZFactorOracle     *pizFactorOracleNew         (long argc, long *argv);
+
 void                pizFactorOracleFree         (PIZFactorOracle *x);
 PIZError            pizFactorOracleAdd          (PIZFactorOracle *x, long argc, long *argv); //
 PIZError            pizFactorOracleClear        (PIZFactorOracle *x);

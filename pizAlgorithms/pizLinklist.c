@@ -48,12 +48,12 @@ PIZLinklist *pizLinklistNew (void)
 {
     PIZLinklist *x = NULL;
         
-    if (x = (PIZLinklist *)malloc (sizeof(PIZLinklist)))  {
-        x->flags    = PIZ_LINKLIST_FLAG_FREE_MEMORY;
-        x->count    = 0;
-        x->head     = NULL;
-        x->tail     = NULL;
-        x->cache    = NULL;
+    if (x = (PIZLinklist *)malloc (sizeof(PIZLinklist))) {
+        x->flags = PIZ_LINKLIST_FLAG_FREE_MEMORY;
+        x->count = 0;
+        x->head  = NULL;
+        x->tail  = NULL;
+        x->cache = NULL;
     }
     
     return x;
@@ -67,43 +67,51 @@ void pizLinklistFree (PIZLinklist *x)
     }
 }
 
+void pizLinklistSetFlags (PIZLinklist *x, ulong flags)
+{
+    x->flags = flags;
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 PIZError pizLinklistAppend (PIZLinklist *x, void *ptr)
 {
-    PIZError            err = PIZ_ERROR;
-    PIZLinklistElement  *newElement = NULL;
+    PIZError           err = PIZ_ERROR;
+    PIZLinklistElement *newElement = NULL;
     
     if (ptr) {
-        err = PIZ_MEMORY;
+    //
+    err = PIZ_MEMORY;
+    
+    if (newElement = (PIZLinklistElement *)malloc (sizeof(PIZLinklistElement))) {
+    //
+    err = PIZ_GOOD;
+    
+    if (x->count) {
+        newElement->ptr      = ptr;
+        newElement->previous = x->tail;
+        newElement->next     = NULL;
         
-        if (newElement = (PIZLinklistElement *)malloc (sizeof(PIZLinklistElement))) {
-            err = PIZ_GOOD;
-            
-            if (x->count) {
-                newElement->ptr      = ptr;
-                newElement->previous = x->tail;
-                newElement->next     = NULL;
-                
-                x->count ++;
-                
-                x->tail->next = newElement;
-                x->tail       = newElement;
-                
-            } else {
-            
-                newElement->ptr      = ptr;
-                newElement->previous = NULL;
-                newElement->next     = NULL;
-                
-                x->count ++;
-                
-                x->head = newElement;
-                x->tail = newElement;
-            }
-        }
+        x->count ++;
+        
+        x->tail->next = newElement;
+        x->tail       = newElement;
+        
+    } else {
+        newElement->ptr      = ptr;
+        newElement->previous = NULL;
+        newElement->next     = NULL;
+        
+        x->count ++;
+        
+        x->head = newElement;
+        x->tail = newElement;
+    }
+    //
+    }
+    //
     }
     
     return err;
@@ -111,49 +119,43 @@ PIZError pizLinklistAppend (PIZLinklist *x, void *ptr)
 
 PIZError pizLinklistInsert (PIZLinklist *x, void *ptr)
 {
-    PIZError            err = PIZ_ERROR;
-    PIZLinklistElement  *newElement = NULL;
+    PIZError           err = PIZ_ERROR;
+    PIZLinklistElement *newElement = NULL;
     
     if (ptr) {
-        err = PIZ_MEMORY;
+    //
+    err = PIZ_MEMORY;
+    
+    if (newElement = (PIZLinklistElement *)malloc (sizeof(PIZLinklistElement))) {
+    //
+    err = PIZ_GOOD;
+    
+    if (x->count) {
+        newElement->ptr      = ptr;
+        newElement->previous = NULL;
+        newElement->next     = x->head;
         
-        if (newElement = (PIZLinklistElement *)malloc (sizeof(PIZLinklistElement))) {
-            err = PIZ_GOOD;
-            
-            if (x->count) {
-                newElement->ptr      = ptr;
-                newElement->previous = NULL;
-                newElement->next     = x->head;
-                
-                x->count ++;
-                
-                x->head->previous = newElement;
-                x->head           = newElement;
-                
-            } else {
-            
-                newElement->ptr      = ptr;
-                newElement->previous = NULL;
-                newElement->next     = NULL;
-                
-                x->count ++;
-                
-                x->head = newElement;
-                x->tail = newElement;
-            }
-        }
+        x->count ++;
+        
+        x->head->previous = newElement;
+        x->head           = newElement;
+        
+    } else {
+        newElement->ptr      = ptr;
+        newElement->previous = NULL;
+        newElement->next     = NULL;
+        
+        x->count ++;
+        
+        x->head = newElement;
+        x->tail = newElement;
+    }
+    //
+    }
+    //
     }
     
     return err;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void pizLinklistSetFlags (PIZLinklist *x, ulong flags)
-{
-    x->flags = flags;
 }
 
 void pizLinklistClear (PIZLinklist *x)
@@ -161,17 +163,17 @@ void pizLinklistClear (PIZLinklist *x)
     PIZLinklistElement *theElement = x->head;
     
     while (theElement) {
-        PIZLinklistElement *elementToBeRemoved = NULL;
+        PIZLinklistElement *toBeRemoved = NULL;
 
-        elementToBeRemoved  = theElement;
-        theElement          = elementToBeRemoved->next;
+        toBeRemoved = theElement;
+        theElement  = toBeRemoved->next;
 
         if (x->flags & PIZ_LINKLIST_FLAG_FREE_MEMORY) {
-            free (elementToBeRemoved->ptr);
+            free (toBeRemoved->ptr);
         } 
             
-        free (elementToBeRemoved);
-        elementToBeRemoved = NULL;
+        free (toBeRemoved);
+        toBeRemoved = NULL;
     }
     
     x->count = 0;
@@ -180,11 +182,15 @@ void pizLinklistClear (PIZLinklist *x)
     x->cache = NULL;
 }
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr)
 {
-    long                i = 0;
-    PIZError            err = PIZ_ERROR;
-    PIZLinklistElement  *theElement = NULL;
+    long               i = 0;
+    PIZError           err = PIZ_ERROR;
+    PIZLinklistElement *theElement = NULL;
     
     if (*ptr) {
         (*ptr) = NULL;
@@ -196,10 +202,9 @@ PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr)
         PIZLinklistElement *tempElement = NULL;
 
         if (i == index) {
-            (*ptr)      = theElement->ptr;
-            x->cache    = theElement;
-            
-            err = PIZ_GOOD;
+            (*ptr)   = theElement->ptr;
+            x->cache = theElement;
+            err      = PIZ_GOOD;
             break;
         }
         
@@ -214,8 +219,8 @@ PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr)
 
 PIZError pizLinklistNextByPtr (PIZLinklist *x, void *ptr, void **nextPtr)
 {
-    PIZError            err = PIZ_ERROR;
-    PIZLinklistElement  *matchedElement = NULL;
+    PIZError           err = PIZ_ERROR;
+    PIZLinklistElement *matchedElement = NULL;
     
     if (*nextPtr) {
         (*nextPtr) = NULL;
@@ -223,6 +228,7 @@ PIZError pizLinklistNextByPtr (PIZLinklist *x, void *ptr, void **nextPtr)
         
     if (x->cache && (x->cache->ptr == ptr)) {
         matchedElement = x->cache;
+        
     } else {
         PIZLinklistElement *theElement = x->head;
 
@@ -240,10 +246,9 @@ PIZError pizLinklistNextByPtr (PIZLinklist *x, void *ptr, void **nextPtr)
     }
         
     if (matchedElement && matchedElement->next) {
-        err = PIZ_GOOD;
-            
+        err        = PIZ_GOOD;
         (*nextPtr) = matchedElement->next->ptr;
-        x->cache = matchedElement->next;
+        x->cache   = matchedElement->next;
     }
             
     return err;
@@ -251,14 +256,16 @@ PIZError pizLinklistNextByPtr (PIZLinklist *x, void *ptr, void **nextPtr)
 
 PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr)
 {
-    PIZError            err = PIZ_ERROR;
-    PIZLinklistElement  *elementToBeRemoved = NULL;
+    PIZError           err = PIZ_ERROR;
+    PIZLinklistElement *toBeRemoved = NULL;
     
     if (x->cache && x->cache->previous && (x->cache->previous->ptr == ptr)) {
-        elementToBeRemoved = x->cache->previous;
+        toBeRemoved = x->cache->previous;
+        
     } else if (x->cache && (x->cache->ptr == ptr)) {
-        elementToBeRemoved  = x->cache;
+        toBeRemoved = x->cache;
         x->cache = NULL;
+        
     } else {
         PIZLinklistElement *theElement = x->head;
 
@@ -266,7 +273,7 @@ PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr)
             PIZLinklistElement *tempElement = NULL;
             
             if (theElement->ptr == ptr) {
-                elementToBeRemoved = theElement;    
+                toBeRemoved = theElement;    
                 break;                      
             }
             
@@ -275,31 +282,36 @@ PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr)
         }
     }
         
-    if (elementToBeRemoved) {
-        if (x->count == 1) {
-            x->head = NULL;
-            x->tail = NULL;
-        } else if (elementToBeRemoved == x->tail) {
-            x->tail = elementToBeRemoved->previous;
-            elementToBeRemoved->previous->next = NULL;
-        } else if (elementToBeRemoved == x->head) {
-            x->head = elementToBeRemoved->next;
-            elementToBeRemoved->next->previous = NULL;
-        } else {
-            elementToBeRemoved->next->previous = elementToBeRemoved->previous;
-            elementToBeRemoved->previous->next = elementToBeRemoved->next;
-        }
+    if (toBeRemoved) {
+    //
+    if (x->count == 1) {
+        x->head = NULL;
+        x->tail = NULL;
         
-        if (x->flags & PIZ_LINKLIST_FLAG_FREE_MEMORY) {
-            free (elementToBeRemoved->ptr);
-        }
-            
-        free (elementToBeRemoved);
-        elementToBeRemoved = NULL;
+    } else if (toBeRemoved == x->tail) {
+        x->tail = toBeRemoved->previous;
+        toBeRemoved->previous->next = NULL;
         
-        x->count --;
+    } else if (toBeRemoved == x->head) {
+        x->head = toBeRemoved->next;
+        toBeRemoved->next->previous = NULL;
         
-        err = PIZ_GOOD;
+    } else {
+        toBeRemoved->next->previous = toBeRemoved->previous;
+        toBeRemoved->previous->next = toBeRemoved->next;
+    }
+    
+    if (x->flags & PIZ_LINKLIST_FLAG_FREE_MEMORY) {
+        free (toBeRemoved->ptr);
+    }
+        
+    free (toBeRemoved);
+    toBeRemoved = NULL;
+    
+    x->count --;
+    
+    err = PIZ_GOOD;
+    //
     }
             
     return err;
@@ -307,14 +319,16 @@ PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr)
 
 PIZError pizLinklistChuckByPtr (PIZLinklist *x, void *ptr)
 {
-    PIZError            err = PIZ_ERROR;
-    PIZLinklistElement  *elementToBeChucked = NULL;
+    PIZError           err = PIZ_ERROR;
+    PIZLinklistElement *toBeChucked = NULL;
     
     if (x->cache && x->cache->previous && (x->cache->previous->ptr == ptr)) {
-        elementToBeChucked = x->cache->previous;
+        toBeChucked = x->cache->previous;
+        
     } else if (x->cache && (x->cache->ptr == ptr)) {
-        elementToBeChucked = x->cache;
+        toBeChucked = x->cache;
         x->cache = NULL;
+        
     } else {
         PIZLinklistElement *theElement = x->head;
 
@@ -322,7 +336,7 @@ PIZError pizLinklistChuckByPtr (PIZLinklist *x, void *ptr)
             PIZLinklistElement *tempElement = NULL;
             
             if (theElement->ptr == ptr) {
-                elementToBeChucked = theElement;    
+                toBeChucked = theElement;    
                 break;                      
             }
             
@@ -331,24 +345,29 @@ PIZError pizLinklistChuckByPtr (PIZLinklist *x, void *ptr)
         }
     }
         
-    if (elementToBeChucked) {
-        if (x->count == 1) {
-            x->head = NULL;
-            x->tail = NULL;
-        } else if (elementToBeChucked == x->tail) {
-            x->tail = elementToBeChucked->previous;
-            elementToBeChucked->previous->next = NULL;
-        } else if (elementToBeChucked == x->head) {
-            x->head = elementToBeChucked->next;
-            elementToBeChucked->next->previous = NULL;
-        } else {
-            elementToBeChucked->next->previous = elementToBeChucked->previous;
-            elementToBeChucked->previous->next = elementToBeChucked->next;
-        }
+    if (toBeChucked) {
+    //
+    if (x->count == 1) {
+        x->head = NULL;
+        x->tail = NULL;
         
-        x->count --;
+    } else if (toBeChucked == x->tail) {
+        x->tail = toBeChucked->previous;
+        toBeChucked->previous->next = NULL;
         
-        err = PIZ_GOOD;
+    } else if (toBeChucked == x->head) {
+        x->head = toBeChucked->next;
+        toBeChucked->next->previous = NULL;
+        
+    } else {
+        toBeChucked->next->previous = toBeChucked->previous;
+        toBeChucked->previous->next = toBeChucked->next;
+    }
+    
+    x->count --;
+    
+    err = PIZ_GOOD;
+    //
     }
             
     return err;

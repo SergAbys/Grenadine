@@ -1,7 +1,7 @@
 /*
- * \file    pizItemset128.c
+ * \file    pizStack.c
  * \author  Jean Sapristi
- * \date    April 8, 2012.
+ * \date    May 13, 2012.
  */
  
 /*
@@ -34,130 +34,89 @@
  *  The fact that you are presently reading this means that you have had
  *  knowledge of the CeCILL-C license and that you accept its terms.
  */
- 
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizItemset128.h"
+#include "pizStack.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizItemset128SetAtIndex (PIZItemset128 *itemset, long index)
+PIZStack *pizStackNew (long size)
 {
-    long  i, p;
-    ulong m;
+    PIZStack *x = NULL;
     
-    i = index / 32;
-    p = index % 32;
-    
-    m = 1UL << p;
-    
-    itemset->items[i] |= m;
-}
-
-void pizItemset128UnsetAtIndex (PIZItemset128 *itemset, long index) 
-{
-    long  i, p;
-    ulong m;
-    
-    i = index / 32;
-    p = index % 32;
-    
-    m = 1UL << p;
-    
-    itemset->items[i] &= ~m;
-}
-
-void pizItemset128Clear (PIZItemset128 *itemset)  
-{
-    long i;
-    
-    for (i = 0; i < 4; i++) {
-        itemset->items[i] = 0UL;
-    }
-}
-
-long pizItemset128Count (const PIZItemset128 *itemset)
-{
-    long i, k = 0;
-    
-    for (i = 0; i < 4; i++) {
-        ulong n = itemset->items[i];
-            
-        while (n != 0UL) {
-            k += (n & 1UL);
-            n >>= 1;
+    if (size > 0 && (x = (PIZStack *)malloc (sizeof(PIZStack)))) {
+        if (x->values = (long *)malloc (size * sizeof(long))) {
+            x->size        = size;
+            x->index       = 0;
+            x->poppedValue = -1;
+        } else {
+            free (x);
+            x = NULL;
         }
     }
     
-    return k;
+    return x;
 }
 
-bool pizItemset128IsSetAtIndex (const PIZItemset128 *itemset, long index) 
+void pizStackFree (PIZStack *x)
 {
-    long  i, p;
-    ulong k = 0;
-
-    i = index / 32;
-    p = index % 32;
-    
-    k = itemset->items[i];
-
-    k >>= p;
-    k  &= 1UL;
-    
-    return (k != 0UL);
-}
-
-void pizItemset128Union (const PIZItemset128 *a, const PIZItemset128 *b, PIZItemset128 *r) 
-{
-    long i;
-    
-    for (i = 0; i < 4; i++) {
-        r->items[i] = a->items[i] | b->items[i];
-    }
-}
-
-void pizItemset128Intersection (const PIZItemset128 *a, const PIZItemset128 *b, PIZItemset128 *r) 
-{
-    long i;
-    
-    for (i = 0; i < 4; i++) {
-        r->items[i] = a->items[i] & b->items[i];
-    }
-}
-
-bool pizItemset128IsIncluded (const PIZItemset128 *a, const PIZItemset128 *b)
-{
-    long i;
-    bool k = true;
+    if (x) {
+        free (x->values);
+        x->values = NULL;
             
-    for (i = 0; i < 4; i++) {
-        if (b->items[i] != (b->items[i] | a->items[i])) {
-            k = false;
-            break;
-        }
+        free (x);
     }
-        
-    return k;
 }
 
-bool pizItemset128IsEqual (const PIZItemset128 *a, const PIZItemset128 *b)
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizStackClear (PIZStack *x)
 {
-    long i;
-    bool k = true;
-            
-    for (i = 0; i < 4; i++) {
-        if (a->items[i] != b->items[i]) {
-            k = false;
-            break;
-        }
-    }
-        
-    return k;
+    x->index       = 0;
+    x->poppedValue = -1;
 }
+
+PIZError pizStackPush (PIZStack *x, long value) 
+{   
+    PIZError err = PIZ_ERROR;
+    
+    if (x->index < x->size)  {
+        err = PIZ_GOOD;
+        x->values[x->index] = value;
+        x->index ++;
+    }
+    
+    return err;
+}
+
+PIZError pizStackPop (PIZStack *x)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if (x->index) {
+        err = PIZ_GOOD;
+        x->poppedValue = x->values[x->index - 1];
+        x->index --;
+    }
+    
+    return err;
+}
+
+long pizStackCount (const PIZStack *x)
+{
+    return x->index;
+}
+
+long pizStackPoppedValue (const PIZStack *x)
+{
+    return x->poppedValue;
+}   
 
 // -------------------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------:x

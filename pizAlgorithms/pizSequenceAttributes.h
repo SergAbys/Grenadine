@@ -1,7 +1,7 @@
-/*
- * \file    pizBoundedStack.c
+/**
+ * \file    pizSequenceAttributes.h
  * \author  Jean Sapristi
- * \date    May 10, 2012.
+ * \date    May 11, 2012.
  */
  
 /*
@@ -34,91 +34,30 @@
  *  The fact that you are presently reading this means that you have had
  *  knowledge of the CeCILL-C license and that you accept its terms.
  */
+ 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#ifndef PIZ_SEQUENCE_ATTRIBUTES_H
+#define PIZ_SEQUENCE_ATTRIBUTES_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizBoundedStack.h"
+#include "pizEvent.h"
+#include "pizSequence.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
-PIZBoundedStack *pizBoundedStackNew (long size)
-{
-    PIZBoundedStack *x = NULL;
-    
-    if (size > 0 && (x = (PIZBoundedStack *)malloc (sizeof(PIZBoundedStack)))) {
-        if (x->values = (long *)malloc (size * sizeof(long))) {
-            x->size         = size;
-            x->index        = 0;
-            x->poppedValue  = -1;
-        } else {
-            free (x);
-            x = NULL;
-        }
-    }
-    
-    return x;
-}
-
-void pizBoundedStackFree (PIZBoundedStack *x)
-{
-    if (x) {
-        free (x->values);
-        x->values = NULL;
-            
-        free (x);
-    }
-}
+PIZ_LOCAL PIZError  pizSequenceSetChance        (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSetVelocity      (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSetChannel       (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSetCell          (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSetNoteValue     (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSetScale         (PIZSequence *x, const PIZEvent *event); //
+PIZ_LOCAL PIZError  pizSequenceSetPattern       (PIZSequence *x, const PIZEvent *event); //
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void pizBoundedStackClear (PIZBoundedStack *x)
-{
-    x->index       = 0;
-    x->poppedValue = -1;
-}
-
-PIZError pizBoundedStackPush (PIZBoundedStack *x, long value) 
-{   
-    PIZError err = PIZ_ERROR;
-    
-    if (x->index < x->size)  {
-        err = PIZ_GOOD;
-        
-        x->values[x->index] = value;
-        x->index ++;
-    }
-    
-    return err;
-}
-
-PIZError pizBoundedStackPop (PIZBoundedStack *x)
-{
-    PIZError err = PIZ_ERROR;
-    
-    if (x->index) {
-        err = PIZ_GOOD;
-        
-        x->poppedValue = x->values[x->index - 1];
-        x->index --;
-    }
-    
-    return err;
-}
-
-long pizBoundedStackCount (const PIZBoundedStack *x)
-{
-    return x->index;
-}
-
-long pizBoundedStackPoppedValue (const PIZBoundedStack *x)
-{
-    return x->poppedValue;
-}   
-
-// -------------------------------------------------------------------------------------------------------------
-// -----------------------------------------------------------------------------------------------------------:x
+#endif // PIZ_SEQUENCE_ATTRIBUTES_H

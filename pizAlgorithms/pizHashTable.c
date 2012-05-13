@@ -1,7 +1,7 @@
 /*
  * \file    pizHashTable.c
  * \author  Jean Sapristi
- * \date    April 8, 2012.
+ * \date    May 13, 2012.
  */
  
 /*
@@ -43,34 +43,46 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include <stdlib.h>
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 #define PIZ_DEFAULT_HASH_SIZE   157
+#define PIZ_DEFAULT_POOL_SIZE   128
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZHashTable *pizHashTableNew (long size)
+PIZHashTable *pizHashTableNew (long argc, long *argv)
 {
     PIZHashTable *x = NULL;
         
     if (x = (PIZHashTable *)malloc (sizeof(PIZHashTable))) {
-        x->flags = PIZ_HASHTABLE_FLAG_NONE;
-        x->count = 0;
-        x->size  = PIZ_DEFAULT_HASH_SIZE;
-        
-        if (size > 0) {
-            x->size = size;
+    //
+    x->count    = 0;
+    x->hashSize = PIZ_DEFAULT_HASH_SIZE;
+    x->poolSize = PIZ_DEFAULT_POOL_SIZE;
+    
+    if (argc && argv[0] > 0) {
+        x->hashSize = argv[0];
+    }
+    
+    if ((argc > 1) && argv[1] > 0) {
+        x->poolSize = argv[1];
+    }
+    
+    x->ticketMachine = pizStackNew (x->poolSize);
+    
+    x->pool = (PIZHashTableElement *)malloc (x->poolSize * sizeof(PIZHashTableElement));
+    x->hashTable = (PIZArray **)calloc (x->hashSize, sizeof(PIZArray *));
+    
+    if (x->ticketMachine && x->pool && x->hashTable) {
+        long j;
+        for (j = (x->poolSize - 1); j >= 0; j--) {
+            pizStackPush (x->ticketMachine, j);
         }
-        
-        if (!(x->hashTable = (PIZLinklist **)calloc (x->size, sizeof(PIZLinklist *)))) {
-            free (x);
-            x = NULL;
-        }
+    } else {
+        pizHashTableFree (x);
+        x = NULL;
+    }
+    //
     }
     
     return x;
@@ -79,20 +91,27 @@ PIZHashTable *pizHashTableNew (long size)
 void pizHashTableFree (PIZHashTable *x)
 {
     if (x) {
+    //
+    pizStackFree (x->ticketMachine);
+    
+    if (x->pool) {
+        free (x->pool);
+        x->pool = NULL;
+    }
+        
+    if (x->hashTable) {
         long i;
-        
-        pizHashTableClear (x);
-        
-        for (i = 0; i < x->size; i++) {
-            if (x->hashTable[i]) {
-                pizLinklistFree (x->hashTable[i]);
-            }
+
+        for (i = 0; i < x->hashSize; i++) {
+            pizArrayFree (x->hashTable[i]);
         }
-            
+
         free (x->hashTable);
         x->hashTable = NULL;
-        
-        free (x);
+    }
+    
+    free (x);
+    //
     }
 }
 
@@ -105,35 +124,35 @@ PIZError pizHashTableAdd (PIZHashTable *x, long key, void *ptr)
     PIZError err = PIZ_ERROR;
     
     if (ptr && (key >= 0)) {
-        long                p = key % x->size;
-        PIZHashTableElement *element = NULL;
-        
-        err = PIZ_GOOD;
-        
-        if (!x->hashTable[p]) {
-            x->hashTable[p] = pizLinklistNew ( );
-        }
-        
-        if (x->hashTable[p]) {
-            if (element = (PIZHashTableElement *)malloc(sizeof(PIZHashTableElement))) {
-                element->key = key;
-                element->ptr = ptr;
+    //
+    long p = key % x->hashSize;
                 
-                err |= pizLinklistAppend (x->hashTable[p], element);
+    if (!x->hashTable[p]) {
+        x->hashTable[p] = pizArrayNew (0);
+    }
+    
+    if (x->hashTable[p]) {
+        if (!(pizStackPop (x->ticketMachine))) {
+            long index = pizStackPoppedValue (x->ticketMachine);
+
+            err = PIZ_GOOD;
+            err |= pizArrayAppend (x->hashTable[p], index);
+        
+            if (!err) {                           
+                x->pool[index].key = key;
+                x->pool[index].ptr = ptr;
+                    
+                x->count ++;
                 
-                if (err) {
-                    free (element);
-                    element = NULL;
-                } else {
-                    x->count ++;
-                }
             } else {
-                err |= PIZ_MEMORY;
+                pizStackPush (x->ticketMachine, index);
             }
-            
-        } else {
-            err |= PIZ_MEMORY;
         }
+        
+    } else {
+        err |= PIZ_MEMORY;
+    }
+    //
     }
     
     return err;
@@ -143,75 +162,63 @@ PIZError pizHashTableAdd (PIZHashTable *x, long key, void *ptr)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizHashTableSetFlags (PIZHashTable *x, ulong flags)
-{
-    x->flags = flags;
-}
-
 void pizHashTableClear (PIZHashTable *x)
 {
     long i;
     
-    for (i = 0; i < x->size; i++) {
+    pizStackClear (x->ticketMachine);
+    
+    for (i = (x->poolSize - 1); i >= 0; i--) {
+        pizStackPush (x->ticketMachine, i);
+    }
+    
+    for (i = 0; i < x->hashSize; i++) {
         if (x->hashTable[i]) {
-            if (x->flags & PIZ_HASHTABLE_FLAG_FREE_MEMORY) {
-                PIZHashTableElement *element = NULL;
-                PIZHashTableElement *nextElement = NULL;
-                
-                pizLinklistPtrAtIndex (x->hashTable[i], 0, (void **)&element);
-                
-                while (element) {
-                    pizLinklistNextByPtr (x->hashTable[i], (void *)element, (void **)&nextElement);
-                    free (element->ptr);
-                    element->ptr = NULL;
-                    element = nextElement;
-                }
-            }
-
-            pizLinklistClear (x->hashTable[i]);
+            pizArrayClear (x->hashTable[i]);
         }
     }
     
     x->count = 0;
 }
 
-PIZError pizHashTableRemoveKey (PIZHashTable *x, long key, void *ptr)
+PIZError pizHashTableRemoveByKey (PIZHashTable *x, long key, void *ptr)
 {
     PIZError err = PIZ_ERROR;
     
     if (ptr && (key >= 0)) {
-        long p = key % x->size;
-        
-        if (x->hashTable[p]) {
-            PIZHashTableElement *element = NULL;
-            PIZHashTableElement *nextElement = NULL;
-                            
-            pizLinklistPtrAtIndex (x->hashTable[p], 0, (void **)&element);
-                            
-            while (element) {
-                pizLinklistNextByPtr (x->hashTable[p], (void *)element, (void **)&nextElement);
-                
-                if ((element->key == key) && (element->ptr == ptr)) {
-                    err = PIZ_GOOD;
-                    
-                    if (x->flags & PIZ_HASHTABLE_FLAG_FREE_MEMORY) {
-                        free (element->ptr);
-                        element->ptr = NULL;
-                    }
-                        
-                    err |= pizLinklistRemoveByPtr (x->hashTable[p], element);
-                    break;
-                }
-                    
-                element = nextElement;
+    //
+    long p = key % x->hashSize;
+    
+    if (x->hashTable[p]) { 
+    //  
+    long count, i, index;
+    
+    if (count = pizArrayCount (x->hashTable[p])) {
+        for (i = 0; i < count; i++) {
+            index = pizArrayValueAtIndex (x->hashTable[p], i);
+            
+            if ((x->pool[index].key == key) && (x->pool[index].ptr == ptr)) {
+                err = PIZ_GOOD;
+                pizArrayRemoveAtIndex (x->hashTable[p], i);
+                pizStackPush (x->ticketMachine, index);
+                break;
             }
         }
+    }
+    //
+    }
+    //
     }
     
     return err;
 }
 
-PIZError pizHashTablePtrKey (const PIZHashTable *x, long key, void **ptr)
+long pizHashTableCount (const PIZHashTable *x)
+{
+    return x->count;
+}
+
+PIZError pizHashTablePtrByKey (const PIZHashTable *x, long key, void **ptr)
 {
     PIZError err = PIZ_ERROR;
     
@@ -220,28 +227,29 @@ PIZError pizHashTablePtrKey (const PIZHashTable *x, long key, void **ptr)
     }
     
     if (key >= 0) {
-        long p = key % x->size;
-        
-        if (x->hashTable[p]) {
-            PIZHashTableElement *element = NULL;
-            PIZHashTableElement *nextElement = NULL;
-                            
-            pizLinklistPtrAtIndex (x->hashTable[p], 0, (void **)&element);
-                            
-            while (element) {
-                pizLinklistNextByPtr (x->hashTable[p], (void *)element, (void **)&nextElement);
-                
-                if (element->key == key) {
-                    (*ptr) = element->ptr;
-                    err = PIZ_GOOD;
-                    break; 
-                }
-                    
-                element = nextElement;
+    //
+    long p = key % x->hashSize;
+    
+    if (x->hashTable[p]) { 
+    //  
+    long count, i, index;
+    
+    if (count = pizArrayCount (x->hashTable[p])) {
+        for (i = 0; i < count; i++) {
+            index = pizArrayValueAtIndex (x->hashTable[p], i);
+            
+            if (x->pool[index].key == key) {
+                (*ptr) = x->pool[index].ptr;
+                err = PIZ_GOOD;
+                break;
             }
         }
     }
-    
+    //
+    }
+    //
+    }
+
     return err;
 }
 
@@ -250,33 +258,29 @@ bool pizHashTableContainsKey (const PIZHashTable *x, long key)
     bool k = false;
     
     if (key >= 0) {
-        long p = key % x->size;
-        
-        if (x->hashTable[p]) {
-            PIZHashTableElement *element = NULL;
-            PIZHashTableElement *nextElement = NULL;
-                            
-            pizLinklistPtrAtIndex (x->hashTable[p], 0, (void **)&element);
-                            
-            while (element) {
-                pizLinklistNextByPtr (x->hashTable[p], (void *)element, (void **)&nextElement);
-                
-                if (element->key == key) {
-                    k = true;
-                    break; 
-                }
-                    
-                element = nextElement;
+    //
+    long p = key % x->hashSize;
+    
+    if (x->hashTable[p]) {
+    //
+    long count, i, index;
+    
+    if (count = pizArrayCount (x->hashTable[p])) {
+        for (i = 0; i < count; i++) {
+            index = pizArrayValueAtIndex (x->hashTable[p], i);
+            
+            if (x->pool[index].key == key) {
+                k = true;
+                break;
             }
         }
     }
+    //
+    }
+    //
+    }
     
     return k;
-}
-
-long pizHashTableCount (const PIZHashTable *x)
-{
-    return x->count;
 }
 
 // -------------------------------------------------------------------------------------------------------------

@@ -73,13 +73,13 @@ typedef struct _PIZLinklist {
 // -------------------------------------------------------------------------------------------------------------
 
 PIZLinklist *pizLinklistNew             (void);
-void        pizLinklistFree             (PIZLinklist *x);
 
+void        pizLinklistFree             (PIZLinklist *x);
+void        pizLinklistSetFlags         (PIZLinklist *x, ulong flags);
 PIZError    pizLinklistAppend           (PIZLinklist *x, void *ptr); //
 PIZError    pizLinklistInsert           (PIZLinklist *x, void *ptr); //
-
-void        pizLinklistSetFlags         (PIZLinklist *x, ulong flags);
 void        pizLinklistClear            (PIZLinklist *x);
+
 PIZError    pizLinklistPtrAtIndex       (PIZLinklist *x, long index, void **ptr);
 PIZError    pizLinklistNextByPtr        (PIZLinklist *x, void *ptr, void **nextPtr);
 PIZError    pizLinklistRemoveByPtr      (PIZLinklist *x, void *ptr);

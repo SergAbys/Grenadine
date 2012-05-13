@@ -71,6 +71,7 @@ typedef struct _PIZMarkovModel {
 // -------------------------------------------------------------------------------------------------------------
 
 PIZMarkovModel      *pizMarkovModelNew          (long argc, long *argv);
+
 void                pizMarkovModelFree          (PIZMarkovModel *x);
 PIZError            pizMarkovModelAdd           (PIZMarkovModel *x, long argc, long *argv);
 PIZError            pizMarkovModelClear         (PIZMarkovModel *x);

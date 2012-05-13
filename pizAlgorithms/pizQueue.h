@@ -1,7 +1,7 @@
 /**
- * \file    pizSequenceTransform.h
+ * \file    pizQueue.h
  * \author  Jean Sapristi
- * \date    May 11, 2012.
+ * \date    May 13, 2012.
  */
  
 /*
@@ -38,38 +38,65 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_SEQUENCE_TRANSFORM_H
-#define PIZ_SEQUENCE_TRANSFORM_H
+#ifndef PIZ_QUEUE_H
+#define PIZ_QUEUE_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizEvent.h"
-#include "pizSequence.h"
+#include "pizTypes.h"
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+ 
+typedef struct _PIZQueue {
+    long count;
+    long size;
+    long head;
+    long tail;
+    long poppedValue;
+    long *values;
+    } PIZQueue; 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZError  pizSequenceNote            (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceClear           (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceTranspose       (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceClean           (PIZSequence *x, const PIZEvent *event);
+PIZQueue    *pizQueueNew            (long size);
 
-PIZ_LOCAL PIZError  pizSequenceLearn           (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceAlgorithm       (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceNovember        (PIZSequence *x, const PIZEvent *event); //
-PIZ_LOCAL PIZError  pizSequenceJuliet          (PIZSequence *x, const PIZEvent *event); //
-
-PIZ_LOCAL PIZError  pizSequenceRotate          (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceScramble        (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSort            (PIZSequence *x, const PIZEvent *event);
-
-PIZ_LOCAL PIZError  pizSequenceChange          (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceFill            (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceRandom          (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceKill            (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceCycle           (PIZSequence *x, const PIZEvent *event);
+void        pizQueueFree            (PIZQueue *x);
+void        pizQueueClear           (PIZQueue *x);
+PIZError    pizQueueAppend          (PIZQueue *x, long value);
+PIZError    pizQueuePop             (PIZQueue *x);
+PIZError    pizQueuePopLastValue    (PIZQueue *x);
+long        pizQueueCount           (const PIZQueue *x);
+long        pizQueuePoppedValue     (const PIZQueue *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_TRANSFORM_H
+
+#ifdef PIZ_EXTERN_INLINE
+
+PIZ_EXTERN void pizQueueClear (PIZQueue *x)
+{
+    x->head        = 0;
+    x->tail        = 0;
+    x->count       = 0;
+    x->poppedValue = -1;
+}
+
+PIZ_EXTERN long pizQueueCount (const PIZQueue *x)
+{
+    return x->count;
+}
+
+
+PIZ_EXTERN long pizQueuePoppedValue (const PIZQueue *x)
+{
+    return x->poppedValue;
+}
+
+#endif // PIZ_EXTERN_INLINE
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#endif // PIZ_QUEUE_H

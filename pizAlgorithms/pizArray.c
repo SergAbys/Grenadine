@@ -130,6 +130,10 @@ long pizArrayCount (const PIZArray *x)
     return x->index;
 }
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 long *pizArrayPtr (const PIZArray *array)
 {
     return array->values;
@@ -139,7 +143,7 @@ long *pizArrayPtr (const PIZArray *array)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizArrayRemoveIndex (PIZArray *array, long index)
+void pizArrayRemoveAtIndex (PIZArray *array, long index)
 {
     long i;
             
