@@ -78,7 +78,7 @@ PIZHashTable    *pizHashTableNew         (long argc, long *argv);
 void            pizHashTableFree         (PIZHashTable *x);
 PIZError        pizHashTableAdd          (PIZHashTable *x, long key, void *ptr); //
 void            pizHashTableClear        (PIZHashTable *x);
-PIZError        pizHashTableRemoveByKey  (PIZHashTable *x, long key, void *ptr);
+PIZError        pizHashTableRemove       (PIZHashTable *x, long key, void *ptr);
 PIZError        pizHashTablePtrByKey     (const PIZHashTable *x, long key, void **ptr);
 bool            pizHashTableContainsKey  (const PIZHashTable *x, long key);
 long            pizHashTableCount        (const PIZHashTable *x);

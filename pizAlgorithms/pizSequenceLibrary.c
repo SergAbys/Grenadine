@@ -87,7 +87,7 @@ void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event
     long p = note->position;
     long tag = note->tag;
     
-    pizHashTableRemoveByKey (x->lookup, tag, note);
+    pizHashTableRemove (x->lookup, tag, note);
     pizItemsetUnsetAtIndex (&x->usedNotes, tag);
     pizLinklistRemoveByPtr (x->timeline[p], (void *)note);
     x->count --; 
@@ -225,13 +225,13 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
         
         err |= pizHashTableAdd (x->lookup, newNote->tag, newNote);
                                 
-        if (!err && !(pizLinklistInsert (x->timeline[newNote->position], (void *)newNote))) {
+        if (!err && !(pizLinklistAppend (x->timeline[newNote->position], (void *)newNote))) {
             x->count ++; 
             PIZ_TAG   (&x->addedNotes, newNote->tag);
             PIZ_UNTAG (&x->changedNotes, newNote->tag);
             
         } else {
-            pizHashTableRemoveByKey (x->lookup, newNote->tag, newNote);
+            pizHashTableRemove (x->lookup, newNote->tag, newNote);
             pizItemsetUnsetAtIndex (&x->usedNotes, tag);
             free (newNote);
             newNote = NULL;

@@ -124,7 +124,7 @@ PIZError pizQueuePop (PIZQueue *x)
     return err;
 }
 
-PIZError pizQueuePopLastValue (PIZQueue *x)
+PIZError pizQueuePopLast (PIZQueue *x)
 {
     PIZError err = PIZ_ERROR;
     

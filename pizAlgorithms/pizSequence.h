@@ -83,11 +83,11 @@
 #define PIZ_SEQUENCE_FLAG_CHANCE            2UL
 #define PIZ_SEQUENCE_FLAG_VELOCITY          4UL
 #define PIZ_SEQUENCE_FLAG_CHANNEL           8UL
-#define PIZ_SEQUENCE_FLAG_CELL              16UL
-#define PIZ_SEQUENCE_FLAG_NOTE_VALUE        32UL
-#define PIZ_SEQUENCE_FLAG_SCALE             64UL
-#define PIZ_SEQUENCE_FLAG_PATTERN           128UL
-#define PIZ_SEQUENCE_FLAG_UNIQUE            256UL
+#define PIZ_SEQUENCE_FLAG_CHORD             16UL
+#define PIZ_SEQUENCE_FLAG_CELL              32UL
+#define PIZ_SEQUENCE_FLAG_NOTE_VALUE        64UL
+#define PIZ_SEQUENCE_FLAG_SCALE             128UL
+#define PIZ_SEQUENCE_FLAG_PATTERN           256UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -208,12 +208,13 @@ typedef struct _PIZSequence {
     long                count;
     long                index;
     long                chance;
-    long                channel;
     long                velocity;
+    long                channel;
     long                key;
     long                type;
     long                cell;
     long                noteValue;
+    bool                chord;
     unsigned int        seed;
     } PIZSequence;
 

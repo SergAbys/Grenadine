@@ -67,6 +67,7 @@ PIZ_METHOD pizEventMethods[ ]   = { pizAgentInit,                   // PIZ_EVENT
                                     pizSequenceSetChance,           // PIZ_EVENT_CHANCE
                                     pizSequenceSetVelocity,         // PIZ_EVENT_VELOCITY
                                     pizSequenceSetChannel,          // PIZ_EVENT_CHANNEL
+                                    pizSequenceSetChord,            // PIZ_EVENT_CHORD
                                     pizSequenceSetCell,             // PIZ_EVENT_CELL
                                     pizSequenceSetNoteValue,        // PIZ_EVENT_NOTE_VALUE
                                     pizSequenceSetScale,            // PIZ_EVENT_SCALE
@@ -96,6 +97,7 @@ PIZ_METHOD pizEventMethods[ ]   = { pizAgentInit,                   // PIZ_EVENT
                                     NULL,                           // PIZ_EVENT_CHANGED_NOTE_VALUE
                                     NULL,                           // PIZ_EVENT_CHANGED_SCALE
                                     NULL,                           // PIZ_EVENT_CHANGED_PATTERN
+                                    NULL,                           // PIZ_EVENT_CHANGED_CHORD
                                     NULL,                           // PIZ_EVENT_CHANGED_ZONE
                                     NULL,                           // PIZ_EVENT_NOTE_ADDED
                                     NULL,                           // PIZ_EVENT_NOTE_CHANGED

@@ -67,11 +67,6 @@ void pizLinklistFree (PIZLinklist *x)
     }
 }
 
-void pizLinklistSetFlags (PIZLinklist *x, ulong flags)
-{
-    x->flags = flags;
-}
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -117,6 +112,7 @@ PIZError pizLinklistAppend (PIZLinklist *x, void *ptr)
     return err;
 }
 
+/*
 PIZError pizLinklistInsert (PIZLinklist *x, void *ptr)
 {
     PIZError           err = PIZ_ERROR;
@@ -157,6 +153,7 @@ PIZError pizLinklistInsert (PIZLinklist *x, void *ptr)
     
     return err;
 }
+*/
 
 void pizLinklistClear (PIZLinklist *x)
 {

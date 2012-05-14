@@ -49,8 +49,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
  
-#define PIZ_LINKLIST_FLAG_NONE              0UL
-#define PIZ_LINKLIST_FLAG_FREE_MEMORY       1UL
+#define PIZ_LINKLIST_FLAG_FREE_MEMORY   1UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -72,29 +71,22 @@ typedef struct _PIZLinklist {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZLinklist *pizLinklistNew             (void);
+PIZLinklist     *pizLinklistNew             (void);
 
-void        pizLinklistFree             (PIZLinklist *x);
-void        pizLinklistSetFlags         (PIZLinklist *x, ulong flags);
-PIZError    pizLinklistAppend           (PIZLinklist *x, void *ptr); //
-PIZError    pizLinklistInsert           (PIZLinklist *x, void *ptr); //
-void        pizLinklistClear            (PIZLinklist *x);
+void            pizLinklistFree             (PIZLinklist *x);
+PIZError        pizLinklistAppend           (PIZLinklist *x, void *ptr); //
+void            pizLinklistClear            (PIZLinklist *x);
 
-PIZError    pizLinklistPtrAtIndex       (PIZLinklist *x, long index, void **ptr);
-PIZError    pizLinklistNextByPtr        (PIZLinklist *x, void *ptr, void **nextPtr);
-PIZError    pizLinklistRemoveByPtr      (PIZLinklist *x, void *ptr);
-PIZError    pizLinklistChuckByPtr       (PIZLinklist *x, void *ptr);
-long        pizLinklistCount            (const PIZLinklist *x);
+PIZError        pizLinklistPtrAtIndex       (PIZLinklist *x, long index, void **ptr);
+PIZError        pizLinklistNextByPtr        (PIZLinklist *x, void *ptr, void **nextPtr);
+PIZError        pizLinklistRemoveByPtr      (PIZLinklist *x, void *ptr);
+PIZError        pizLinklistChuckByPtr       (PIZLinklist *x, void *ptr);
+long            pizLinklistCount            (const PIZLinklist *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #ifdef PIZ_EXTERN_INLINE
-
-PIZ_EXTERN void pizLinklistSetFlags (PIZLinklist *x, ulong flags)
-{
-    x->flags = flags;
-}
 
 PIZ_EXTERN long pizLinklistCount (const PIZLinklist *x)
 {

@@ -55,6 +55,7 @@ int main (void)
     class_addmethod (c, (method)tralala_chance,     "chance",       A_LONG, 0);
     class_addmethod (c, (method)tralala_velocity,   "velocity",     A_LONG, 0);
     class_addmethod (c, (method)tralala_channel,    "channel",      A_LONG, 0);
+    class_addmethod (c, (method)tralala_chord,      "chord",        A_LONG, 0);
     class_addmethod (c, (method)tralala_transpose,  "transpose",    A_LONG, 0);
     class_addmethod (c, (method)tralala_clean,      "clean",        A_LONG, 0);
     class_addmethod (c, (method)tralala_cell,       "cell",         A_GIMME, 0);
@@ -200,6 +201,11 @@ void tralala_velocity (t_tralala *x, long n)
 void tralala_channel (t_tralala *x, long n) 
 {   
     tralala_send (x, PIZ_EVENT_CHANNEL, 1, &n);
+}
+
+void tralala_chord (t_tralala *x, long n) 
+{   
+    tralala_send (x, PIZ_EVENT_CHORD, 1, &n);
 }
 
 void tralala_cell (t_tralala *x, t_symbol *s, long argc, t_atom *argv)

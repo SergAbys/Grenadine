@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceRun.c
  * \author  Jean Sapristi
- * \date    May 11, 2012.
+ * \date    May 14, 2012.
  */
  
 /*
@@ -80,12 +80,18 @@ PIZError pizSequenceStep (PIZSequence *x, PIZLinklist *q, long bpm)
     
     if (q) {
     //
-    if (x->timeline[x->index] && pizLinklistCount (x->timeline[x->index])) {
-        long    scale;
-        PIZNote *note       = NULL;
-        PIZNote *nextNote   = NULL;
+    long count;
+    
+    if (x->timeline[x->index] && (count = pizLinklistCount (x->timeline[x->index]))) {
+        long    i = 0;
+        long    h = -1;
+        long    scale = pizArrayCount (x->scale);
+        PIZNote *note = NULL;
+        PIZNote *nextNote = NULL;
         
-        scale = pizArrayCount (x->scale);
+        if (!x->chord) { 
+             h = (long)(count * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
+        }
         
         pizLinklistPtrAtIndex (x->timeline[x->index], 0, (void **)&note);
         
@@ -112,7 +118,7 @@ PIZError pizSequenceStep (PIZSequence *x, PIZLinklist *q, long bpm)
             channel = x->channel;
         }
             
-        if ((pitch >= x->down) && (pitch <= x->up)) {
+        if ((x->chord || (i == h)) && (pitch >= x->down) && (pitch <= x->up)) {
         //
         long a[ ] = { note->position, 
                       CLAMP (pitch, 0, PIZ_MAGIC_PITCH),
@@ -125,6 +131,7 @@ PIZError pizSequenceStep (PIZSequence *x, PIZLinklist *q, long bpm)
         }
         
         note = nextNote;
+        i++;
         //
         }
     }
@@ -162,6 +169,9 @@ PIZError pizSequenceRefresh (PIZSequence *x, PIZLinklist *q)
     }
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANNEL) {
         err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_CHANNEL,    -1, 1, &x->channel);
+    }
+    if (x->flags & PIZ_SEQUENCE_FLAG_CHORD) {
+        err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_CHORD,      -1, 1, &x->chord);
     }
     if (x->flags & PIZ_SEQUENCE_FLAG_CELL) {
         err |= pizSequenceAddNotification (q, PIZ_EVENT_CHANGED_CELL,       -1, 1, &x->cell);

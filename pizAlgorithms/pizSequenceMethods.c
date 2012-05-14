@@ -840,7 +840,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
         }
             
         if (death) {
-            pizHashTableRemoveByKey (x->tempHash, hCenter, (void *)note);
+            pizHashTableRemove (x->tempHash, hCenter, (void *)note);
             pizSequenceRemoveNote (x, note, NULL);
             haveChanged = true;
         }
@@ -975,7 +975,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
     //
     } else if (!(pizHashTablePtrByKey (x->tempHash, newKey, (void **)&note2))) {
         if (note2 != note1) {
-            pizHashTableRemoveByKey (x->tempHash, newKey, (void *)note2);
+            pizHashTableRemove (x->tempHash, newKey, (void *)note2);
             pizSequenceRemoveNote (x, note2, NULL);
             haveChanged = true;
             k ++;

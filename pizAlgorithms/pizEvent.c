@@ -52,6 +52,7 @@ PIZ_LONG pizEventTypes[ ]   = { PIZ_EVENT_RUN,                  // PIZ_EVENT_INI
                                 PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_CHANCE
                                 PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_VELOCITY
                                 PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_CHANNEL
+                                PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_CHORD
                                 PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_CELL
                                 PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_NOTE_VALUE
                                 PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_SCALE
@@ -77,6 +78,7 @@ PIZ_LONG pizEventTypes[ ]   = { PIZ_EVENT_RUN,                  // PIZ_EVENT_INI
                                 PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_CHANCE
                                 PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_VELOCITY
                                 PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_CHANNEL
+                                PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_CHORD
                                 PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_CELL
                                 PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_NOTE_VALUE
                                 PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_SCALE
@@ -99,6 +101,7 @@ PIZ_CHAR pizEventNames[ ]   = { "Init",
                                 "Chance",
                                 "Velocity",
                                 "Channel",
+                                "Chord",
                                 "Cell",
                                 "Note Value",
                                 "Scale",
@@ -127,6 +130,7 @@ PIZ_CHAR pizEventNames[ ]   = { "Init",
                                 "Changed Chance",
                                 "Changed Velocity ",
                                 "Changed Channel",
+                                "Changed Chord",
                                 "Changed Cell",
                                 "Changed Note Value",
                                 "Changed Scale",

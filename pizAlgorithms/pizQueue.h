@@ -67,7 +67,7 @@ void        pizQueueFree            (PIZQueue *x);
 void        pizQueueClear           (PIZQueue *x);
 PIZError    pizQueueAppend          (PIZQueue *x, long value);
 PIZError    pizQueuePop             (PIZQueue *x);
-PIZError    pizQueuePopLastValue    (PIZQueue *x);
+PIZError    pizQueuePopLast         (PIZQueue *x);
 long        pizQueueCount           (const PIZQueue *x);
 long        pizQueuePoppedValue     (const PIZQueue *x);
 

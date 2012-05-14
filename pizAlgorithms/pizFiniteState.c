@@ -374,7 +374,7 @@ PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x)
             
             pizQueuePop (x->mapByValue[x->lottery[h]]);
             a = pizQueuePoppedValue (x->mapByValue[x->lottery[h]]);
-            pizQueuePopLastValue (x->mapByValue[x->lottery[h]]);
+            pizQueuePopLast (x->mapByValue[x->lottery[h]]);
             b = pizQueuePoppedValue (x->mapByValue[x->lottery[h]]);
             
             pizItemsetUnion (&(x->stock[a].childs), &(x->stock[b].childs), &tempChilds);

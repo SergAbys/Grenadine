@@ -181,7 +181,7 @@ void pizHashTableClear (PIZHashTable *x)
     x->count = 0;
 }
 
-PIZError pizHashTableRemoveByKey (PIZHashTable *x, long key, void *ptr)
+PIZError pizHashTableRemove (PIZHashTable *x, long key, void *ptr)
 {
     PIZError err = PIZ_ERROR;
     

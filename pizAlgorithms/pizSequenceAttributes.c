@@ -119,6 +119,18 @@ PIZError pizSequenceSetChannel (PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
+PIZError  pizSequenceSetChord (PIZSequence *x, const PIZEvent *event)
+{
+    long value;
+    
+    if (!(pizEventValue (event, &value))) {
+        x->chord = !!(value);
+        x->flags |= PIZ_SEQUENCE_FLAG_CHORD;
+    }
+    
+    return PIZ_GOOD;
+}
+
 PIZError pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
 {
     long value;
