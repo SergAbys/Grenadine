@@ -82,7 +82,39 @@ void pizSequenceForEach (PIZSequence *x, PIZMethod f, const PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizSequenceCleanNote (PIZSequence *x, PIZNote *note, const PIZEvent *event)
+void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event) 
+{
+    long p = note->position;
+    long tag = note->tag;
+    
+    pizHashTableRemoveByKey (x->lookup, tag, note);
+    pizItemsetUnsetAtIndex (&x->usedNotes, tag);
+    pizLinklistRemoveByPtr (x->timeline[p], (void *)note);
+    x->count --; 
+    
+    PIZ_TAG   (&x->removedNotes, tag);
+    PIZ_UNTAG (&x->addedNotes, tag);
+    PIZ_UNTAG (&x->changedNotes, tag);
+}
+
+void pizSequenceChangeNote (PIZSequence *x, PIZNote *note, const PIZEvent *event)
+{
+    long n;
+    
+    if (!(pizEventValue (event, &n))) {
+        long temp = CLAMP (note->values[PIZ_VALUE_PITCH] + n, 0, PIZ_MAGIC_PITCH);
+        if (note->values[PIZ_VALUE_PITCH] != temp) {
+            note->values[PIZ_VALUE_PITCH] = temp;
+            PIZ_TAG (&x->changedNotes, note->tag);
+        }
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizSequenceNearby (PIZSequence *x, PIZNote *note, const PIZEvent *event)
 {
     long value;
     
@@ -115,34 +147,6 @@ void pizSequenceCleanNote (PIZSequence *x, PIZNote *note, const PIZEvent *event)
         x->tempValues[pitch] = (note->position + 1);
     }
     //
-    }
-}
-
-void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event) 
-{
-    long p = note->position;
-    long tag = note->tag;
-    
-    pizHashTableRemoveByKey (x->lookup, tag, note);
-    pizItemsetUnsetAtIndex (&x->usedNotes, tag);
-    pizLinklistRemoveByPtr (x->timeline[p], (void *)note);
-    x->count --; 
-    
-    PIZ_TAG   (&x->removedNotes, tag);
-    PIZ_UNTAG (&x->addedNotes, tag);
-    PIZ_UNTAG (&x->changedNotes, tag);
-}
-
-void pizSequenceChangeNote (PIZSequence *x, PIZNote *note, const PIZEvent *event)
-{
-    long n;
-    
-    if (!(pizEventValue (event, &n))) {
-        long temp = CLAMP (note->values[PIZ_VALUE_PITCH] + n, 0, PIZ_MAGIC_PITCH);
-        if (note->values[PIZ_VALUE_PITCH] != temp) {
-            note->values[PIZ_VALUE_PITCH] = temp;
-            PIZ_TAG (&x->changedNotes, note->tag);
-        }
     }
 }
 

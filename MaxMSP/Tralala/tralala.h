@@ -6,7 +6,7 @@
  */
  
 /*
- *  May 7, 2012.
+ *  May 14, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -27,11 +27,9 @@
 
 typedef struct _tralala {
 	t_object    ob;
+    t_atom      a[4];
     PIZAgent    *agent;
-    t_atom      notePlayed[4];
 	void        *leftOutlet;
-    void        *middleLeftOutlet;
-    void        *middleRightOutlet;
     void        *rightOutlet;
 	} t_tralala;
 
@@ -39,9 +37,9 @@ typedef struct _tralala {
 // -------------------------------------------------------------------------------------------------------------
 
 void *tralala_new               (t_symbol *s, long argc, t_atom *argv);
+
 void tralala_free               (t_tralala *x);
 void tralala_assist             (t_tralala *x, void *b, long m, long a, char *s);
-
 void tralala_notify             (void *ptr, PIZEvent *event);
 
 void tralala_bang               (t_tralala *x);

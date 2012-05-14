@@ -87,6 +87,7 @@
 #define PIZ_SEQUENCE_FLAG_NOTE_VALUE        32UL
 #define PIZ_SEQUENCE_FLAG_SCALE             64UL
 #define PIZ_SEQUENCE_FLAG_PATTERN           128UL
+#define PIZ_SEQUENCE_FLAG_UNIQUE            256UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

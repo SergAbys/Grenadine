@@ -1,22 +1,26 @@
 /*
- *  tralalaSymbol.c
+ *  tralalaSymbols.c
  *
  *  nicolas.danet@free.fr
  *
  */
  
 /*
- *  May 9, 2012.
+ *  May 14, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "tralalaSymbol.h"
+#include "tralalaSymbols.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+static t_symbol *tll_pitch                 = NULL;
+static t_symbol *tll_velocity              = NULL;
+static t_symbol *tll_duration              = NULL;
+static t_symbol *tll_channel               = NULL;
 static t_symbol *tll_c                     = NULL;
 static t_symbol *tll_cSharp                = NULL;
 static t_symbol *tll_d                     = NULL;
@@ -77,6 +81,10 @@ static t_symbol *tll_sixteenthDotted       = NULL;
 
 void tralala_symbolsInit ( )
 {
+    tll_pitch                 = gensym ("pitch");
+    tll_velocity              = gensym ("velocity");
+    tll_duration              = gensym ("duration");
+    tll_channel               = gensym ("channel");
     tll_c                     = gensym ("C");
     tll_cSharp                = gensym ("C#");
     tll_d                     = gensym ("D");
@@ -135,6 +143,26 @@ void tralala_symbolsInit ( )
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+PIZError tralala_selectorWithSymbol  (const t_symbol *s, long *value)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if (s && value) {
+    //
+    err = PIZ_GOOD;
+    
+    if      (s == tll_pitch)    { *value = PIZ_VALUE_PITCH;     } 
+    else if (s == tll_velocity) { *value = PIZ_VALUE_VELOCITY;  } 
+    else if (s == tll_duration) { *value = PIZ_VALUE_DURATION;  } 
+    else if (s == tll_channel)  { *value = PIZ_VALUE_CHANNEL;   }  
+    
+    else { err = PIZ_ERROR; }
+    //
+    }
+            
+    return err;
+}
 
 PIZError tralala_keyWithSymbol (const t_symbol *s, long *value)
 {

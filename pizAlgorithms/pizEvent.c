@@ -60,10 +60,6 @@ PIZ_LONG pizEventTypes[ ]   = { PIZ_EVENT_RUN,                  // PIZ_EVENT_INI
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CLEAR
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_TRANSPOSE
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CLEAN
-                                PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_ZOULOU
-                                PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_ROMEO
-                                PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_NOVEMBER
-                                PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_JULIET
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_ROTATE
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_SCRAMBLE
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_SORT
@@ -71,7 +67,11 @@ PIZ_LONG pizEventTypes[ ]   = { PIZ_EVENT_RUN,                  // PIZ_EVENT_INI
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_FILL
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_RANDOM
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_KILL
-                                PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CYCLE        
+                                PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CYCLE
+                                PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_ZOULOU
+                                PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_ROMEO
+                                PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_NOVEMBER
+                                PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_JULIET        
                                 PIZ_EVENT_GRAPHIC,              // PIZ_EVENT_LEARN
                                 PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_BPM
                                 PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_CHANCE
@@ -108,10 +108,6 @@ PIZ_CHAR pizEventNames[ ]   = { "Init",
                                 "Clear",
                                 "Transpose",
                                 "Clean",
-                                "Zoulou",
-                                "Romeo",
-                                "November",
-                                "Juliet",
                                 "Rotate",
                                 "Scramble",
                                 "Sort",
@@ -120,6 +116,10 @@ PIZ_CHAR pizEventNames[ ]   = { "Init",
                                 "Random",
                                 "Kill",
                                 "Cycle",
+                                "Zoulou",
+                                "Romeo",
+                                "November",
+                                "Juliet",
                                 //
                                 "Learn",
                                 //

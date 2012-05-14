@@ -75,18 +75,18 @@ PIZ_METHOD pizEventMethods[ ]   = { pizAgentInit,                   // PIZ_EVENT
                                     pizSequenceClear,               // PIZ_EVENT_CLEAR
                                     pizSequenceTranspose,           // PIZ_EVENT_TRANSPOSE
                                     pizSequenceClean,               // PIZ_EVENT_CLEAN
-                                    NULL,                           // PIZ_EVENT_ZOULOU
-                                    NULL,                           // PIZ_EVENT_ROMEO
-                                    NULL,                           // PIZ_EVENT_NOVEMBER
-                                    NULL,                           // PIZ_EVENT_JULIET
-                                    NULL,                           // PIZ_EVENT_ROTATE
+                                    pizSequenceRotate,              // PIZ_EVENT_ROTATE
                                     NULL,                           // PIZ_EVENT_SCRAMBLE
                                     NULL,                           // PIZ_EVENT_SORT
                                     NULL,                           // PIZ_EVENT_CHANGE
                                     NULL,                           // PIZ_EVENT_FILL
                                     NULL,                           // PIZ_EVENT_RANDOM
                                     NULL,                           // PIZ_EVENT_KILL
-                                    NULL,                           // PIZ_EVENT_CYCLE        
+                                    NULL,                           // PIZ_EVENT_CYCLE 
+                                    NULL,                           // PIZ_EVENT_ZOULOU
+                                    NULL,                           // PIZ_EVENT_ROMEO
+                                    NULL,                           // PIZ_EVENT_NOVEMBER
+                                    NULL,                           // PIZ_EVENT_JULIET       
                                     NULL,                           // PIZ_EVENT_LEARN
                                     NULL,                           // PIZ_EVENT_CHANGED_BPM
                                     NULL,                           // PIZ_EVENT_CHANGED_CHANCE

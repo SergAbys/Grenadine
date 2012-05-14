@@ -206,6 +206,7 @@ PIZError pizSequenceSetPattern (PIZSequence *x, const PIZEvent *event)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 bool pizSequenceIsValidNoteValue (long value) 
 {
