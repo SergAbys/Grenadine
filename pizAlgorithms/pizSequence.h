@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    May 12, 2012.
+ * \date    May 15, 2012.
  */
  
 /*
@@ -210,11 +210,11 @@ typedef struct _PIZSequence {
     long                chance;
     long                velocity;
     long                channel;
+    long                chord;
     long                key;
     long                type;
     long                cell;
     long                noteValue;
-    bool                chord;
     unsigned int        seed;
     } PIZSequence;
 

@@ -72,7 +72,7 @@ PIZ_LONG pizSequenceNeighbors[ ]    = { -256,
                                           -2, 
                                           -1, 
                                            1, 
-                                           2    };
+                                           2  };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -93,7 +93,7 @@ PIZ_LONG pizSequenceDivisions[ ]    = { 2, 3, 4, 5, 7 };
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_DOUBLE pizSequenceProbability2[ ]  = { 0.75, 1. };
+PIZ_DOUBLE pizSequenceDistribution2[ ] = { 0.75, 1. };
 PIZ_DOUBLE pizSequenceDistribution3[ ] = { 0.68, 0.85, 1. };
 PIZ_DOUBLE pizSequenceDistribution4[ ] = { 0.63, 0.75, 0.87, 1. };
 PIZ_DOUBLE pizSequenceDistribution5[ ] = { 0.60, 0.70, 0.80, 0.90, 1. };
@@ -110,8 +110,6 @@ PIZ_DOUBLE pizSequenceDistribution7[ ] = { 0.56, 0.63, 0.70, 0.77, 0.84, 0.91, 1
                         
 #define PIZ_FILL_NOTES              pizSequenceFillNotes (x, selector, 0);
 #define PIZ_FILL_NOTES_REVERSE      pizSequenceFillNotes (x, selector, 1);
-
-#define PIZ_TAG                     pizItemsetSetAtIndex 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -358,7 +356,7 @@ PIZError pizSequenceChange (PIZSequence *x, const PIZEvent *event)
     
     if (note->values[selector] != t) {
         note->values[selector] = t;
-        PIZ_TAG (&x->changedNotes, note->tag);
+        pizItemsetSetAtIndex (&x->changedNotes, note->tag);
     }
     //
     }
@@ -404,7 +402,7 @@ PIZError pizSequenceFill (PIZSequence *x, const PIZEvent *event)
         
         if (note->values[selector] != t) {
             note->values[selector] = t;
-            PIZ_TAG (&x->changedNotes, note->tag);
+            pizItemsetSetAtIndex (&x->changedNotes, note->tag);
         }
     }
     
@@ -461,7 +459,7 @@ PIZError pizSequenceRandom (PIZSequence *x, const PIZEvent *event)
     
     if (note->values[selector] != t) {
         note->values[selector] = t;
-        PIZ_TAG (&x->changedNotes, note->tag);
+        pizItemsetSetAtIndex (&x->changedNotes, note->tag);
     }
     //
     }
@@ -568,7 +566,7 @@ PIZError pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
     
             if (pitch != (note->values[PIZ_VALUE_PITCH] + offset)) {
                 note->values[PIZ_VALUE_PITCH] = CLAMP (pitch, 0, PIZ_MAGIC_PITCH);
-                PIZ_TAG (&x->changedNotes, note->tag);
+                pizItemsetSetAtIndex (&x->changedNotes, note->tag);
             }
         }
 
@@ -1017,7 +1015,7 @@ void pizSequenceFillNotes (PIZSequence *x, long selector, bool reverse)
     
     if (x->tempNotes1[i]->values[selector] != t) {
         x->tempNotes1[i]->values[selector] = t;
-        PIZ_TAG (&x->changedNotes, x->tempNotes1[i]->tag);
+        pizItemsetSetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
     }
     //
     }

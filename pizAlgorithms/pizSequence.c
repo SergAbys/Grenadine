@@ -112,11 +112,11 @@ PIZSequence *pizSequenceNew (long size)
         x->chance    = PIZ_DEFAULT_CHANCE;
         x->velocity  = 0;
         x->channel   = PIZ_DEFAULT_CHANNEL;
+        x->chord     = 0;
         x->key       = PIZ_KEY_C;
         x->type      = PIZ_SCALE_NONE;
         x->cell      = PIZ_EIGHTH_NOTE;
         x->noteValue = PIZ_EIGHTH_NOTE;
-        x->chord     = true;
             
     } else {
         pizSequenceFree (x);

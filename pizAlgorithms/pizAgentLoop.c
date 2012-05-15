@@ -262,7 +262,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         PIZ_AGENT_LOCK_NOTIFICATION
         
         count = pizLinklistCount (x->notification);
-        err   = pizSequenceStep (x->sequence, x->notification, x->bpm);
+        err   = pizSequenceStep (x->sequence, x);
         count -= pizLinklistCount (x->notification);
         
         if (count) { 
@@ -273,7 +273,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         }
 
     } else {
-        err = pizSequenceStep (x->sequence, NULL, x->bpm); 
+        err = pizSequenceStep (x->sequence, NULL); 
     }
     
     if (err == PIZ_GOOD) {
@@ -310,7 +310,7 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     PIZ_AGENT_LOCK_NOTIFICATION
     
     count = pizLinklistCount (x->notification);
-    err   = pizSequenceRefresh (x->sequence, x->notification);
+    err   = pizSequenceRefresh (x->sequence, x);
     count -= pizLinklistCount (x->notification);
      
     if (!err && count) {
@@ -338,7 +338,7 @@ void pizAgentEventLoopInit (PIZAgent *x)
         pizTimeCopy (&x->grainStart, &x->grainEnd);
     }
     
-    pizTimeSetNano (&x->grainSize, PIZ_AGENT_CONSTANT_BPM / x->bpm);
+    pizTimeSetNano (&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);
     pizTimeCopy    (&x->grainEnd, &x->grainStart);
     pizTimeAddNano (&x->grainEnd, &x->grainSize);
 }
@@ -448,15 +448,15 @@ void pizAgentNotificationLoopNotify (PIZAgent *x)
     PIZ_AGENT_UNLOCK_NOTIFICATION   
     
     if (event) {
-
-        PIZ_AGENT_LOCK_OBSERVER
-        
-        if (x->observer && x->notify) {
-            (*x->notify)(x->observer, event);
-        }
-        
-        PIZ_AGENT_UNLOCK_OBSERVER
-
+    //
+    PIZ_AGENT_LOCK_OBSERVER
+    
+    if (x->observer && x->notify) {
+        (*x->notify)(x->observer, event);
+    }
+    
+    PIZ_AGENT_UNLOCK_OBSERVER
+    //
     }
 } 
 

@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceRun.h
  * \author  Jean Sapristi
- * \date    May 5, 2012.
+ * \date    May 15, 2012.
  */
  
 /*
@@ -44,16 +44,16 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizEvent.h"
-#include "pizSequence.h"
+#include "pizAgent.h"
       
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 PIZ_LOCAL bool      pizSequenceIsAtEnd      (PIZSequence *x);
 PIZ_LOCAL void      pizSequenceGoToStart    (PIZSequence *x);
-PIZ_LOCAL PIZError  pizSequenceStep         (PIZSequence *x, PIZLinklist *q, long bpm); //
-PIZ_LOCAL PIZError  pizSequenceRefresh      (PIZSequence *x, PIZLinklist *q); //
+
+PIZ_LOCAL PIZError  pizSequenceStep         (PIZSequence *x, PIZAgent *agent); //
+PIZ_LOCAL PIZError  pizSequenceRefresh      (PIZSequence *x, PIZAgent *agent); //
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

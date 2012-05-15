@@ -42,12 +42,6 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-#define PIZ_TAG     pizItemsetSetAtIndex 
-#define PIZ_UNTAG   pizItemsetUnsetAtIndex 
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 PIZ_INLINE PIZError pizSequenceGetTag (PIZSequence *x, long tag, long *ptr);
@@ -92,9 +86,9 @@ void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event
     pizLinklistRemoveByPtr (x->timeline[p], (void *)note);
     x->count --; 
     
-    PIZ_TAG   (&x->removedNotes, tag);
-    PIZ_UNTAG (&x->addedNotes, tag);
-    PIZ_UNTAG (&x->changedNotes, tag);
+    pizItemsetSetAtIndex   (&x->removedNotes, tag);
+    pizItemsetUnsetAtIndex (&x->addedNotes, tag);
+    pizItemsetUnsetAtIndex (&x->changedNotes, tag);
 }
 
 void pizSequenceChangeNote (PIZSequence *x, PIZNote *note, const PIZEvent *event)
@@ -105,7 +99,7 @@ void pizSequenceChangeNote (PIZSequence *x, PIZNote *note, const PIZEvent *event
         long temp = CLAMP (note->values[PIZ_VALUE_PITCH] + n, 0, PIZ_MAGIC_PITCH);
         if (note->values[PIZ_VALUE_PITCH] != temp) {
             note->values[PIZ_VALUE_PITCH] = temp;
-            PIZ_TAG (&x->changedNotes, note->tag);
+            pizItemsetSetAtIndex (&x->changedNotes, note->tag);
         }
     }
 }
@@ -227,8 +221,8 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
                                 
         if (!err && !(pizLinklistAppend (x->timeline[newNote->position], (void *)newNote))) {
             x->count ++; 
-            PIZ_TAG   (&x->addedNotes, newNote->tag);
-            PIZ_UNTAG (&x->changedNotes, newNote->tag);
+            pizItemsetSetAtIndex   (&x->addedNotes, newNote->tag);
+            pizItemsetUnsetAtIndex (&x->changedNotes, newNote->tag);
             
         } else {
             pizHashTableRemove (x->lookup, newNote->tag, newNote);
