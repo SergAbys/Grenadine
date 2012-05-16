@@ -1,7 +1,7 @@
 /*
  * \file    pizItemset.c
  * \author  Jean Sapristi
- * \date    May 13, 2012.
+ * \date    May 16, 2012.
  */
  
 /*
@@ -49,8 +49,8 @@ void pizItemsetSetAtIndex (PIZItemset *itemset, long index)
     long  i, p;
     ulong m;
     
-    i = index / 32;
-    p = index % 32;
+    i = index / PIZ_MAGIC_ULONG;
+    p = index % PIZ_MAGIC_ULONG;
     
     m = 1UL << p;
     
@@ -62,8 +62,8 @@ void pizItemsetUnsetAtIndex (PIZItemset *itemset, long index)
     long  i, p;
     ulong m;
     
-    i = index / 32;
-    p = index % 32;
+    i = index / PIZ_MAGIC_ULONG;
+    p = index % PIZ_MAGIC_ULONG;
     
     m = 1UL << p;
     
@@ -87,8 +87,8 @@ long pizItemsetCount (const PIZItemset *itemset)
         ulong n = itemset->items[i];
             
         while (n != 0UL) {
-            k += (n & 1UL);
-            n >>= 1;
+            k ++;
+            n &= n - 1UL;
         }
     }
     
@@ -100,8 +100,8 @@ bool pizItemsetIsSetAtIndex (const PIZItemset *itemset, long index)
     long  i, p;
     ulong k = 0;
 
-    i = index / 32;
-    p = index % 32;
+    i = index / PIZ_MAGIC_ULONG;
+    p = index % PIZ_MAGIC_ULONG;
     
     k = itemset->items[i];
 

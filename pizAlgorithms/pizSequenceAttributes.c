@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceAttributes.c
  * \author  Jean Sapristi
- * \date    May 15, 2012.
+ * \date    May 16, 2012.
  */
  
 /*
@@ -124,7 +124,7 @@ PIZError pizSequenceSetChord (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
-        x->chord = CLAMP (value, 0, PIZ_SEQUENCE_MAXIMUM_NOTES);
+        x->chord = (MAX (value, 0)) % PIZ_MAGIC_ULONG;
         x->flags |= PIZ_SEQUENCE_FLAG_CHORD;
     }
     

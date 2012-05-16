@@ -6,7 +6,7 @@
  */
  
 /*
- *  April 20, 2012.
+ *  May 16, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -330,16 +330,16 @@ PIZ_INLINE PIZError pizFactorOracleEncodeToArray (const PIZFactorOracle *x, long
     if ((node < x->index) && a) {
             err = PIZ_GOOD;
             
-            err |= pizArrayAppend (a, x->nodes[node].referTo);
-            err |= pizArrayAppend (a, x->nodes[node].lengthRepeatedSuffix);
-            err |= pizArrayAppend (a, (count = pizArrayCount (x->nodes[node].arcDestinations)));
+            err |= pizArrayAppend (a, x->nodes[node].refer);
+            err |= pizArrayAppend (a, x->nodes[node].lrs);
+            err |= pizArrayAppend (a, (count = pizArrayCount (x->nodes[node].destinations)));
             
             for (i = 0; i < count; i++) {
-                err |= pizArrayAppend (a, pizArrayValueAtIndex (x->nodes[node].arcDestinations, i));
+                err |= pizArrayAppend (a, pizArrayValueAtIndex (x->nodes[node].destinations, i));
             }
             
             for (i = 0; i < count; i++) {
-                err |= pizArrayAppend (a, pizArrayValueAtIndex (x->nodes[node].arcValues, i));
+                err |= pizArrayAppend (a, pizArrayValueAtIndex (x->nodes[node].values, i));
             }
         }
     

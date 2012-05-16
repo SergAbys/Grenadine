@@ -79,15 +79,15 @@
 #define PIZ_SEQUENCE_FLAG_AMBITUS           2UL
 #define PIZ_SEQUENCE_FLAG_CLIP              4UL
 
-#define PIZ_SEQUENCE_FLAG_ZONE              1UL
-#define PIZ_SEQUENCE_FLAG_CHANCE            2UL
-#define PIZ_SEQUENCE_FLAG_VELOCITY          4UL
-#define PIZ_SEQUENCE_FLAG_CHANNEL           8UL
-#define PIZ_SEQUENCE_FLAG_CHORD             16UL
-#define PIZ_SEQUENCE_FLAG_CELL              32UL
-#define PIZ_SEQUENCE_FLAG_NOTE_VALUE        64UL
-#define PIZ_SEQUENCE_FLAG_SCALE             128UL
-#define PIZ_SEQUENCE_FLAG_PATTERN           256UL
+#define PIZ_SEQUENCE_FLAG_ZONE              (1UL << 0)
+#define PIZ_SEQUENCE_FLAG_CHANCE            (1UL << 1)
+#define PIZ_SEQUENCE_FLAG_VELOCITY          (1UL << 2)
+#define PIZ_SEQUENCE_FLAG_CHANNEL           (1UL << 3)
+#define PIZ_SEQUENCE_FLAG_CHORD             (1UL << 4)
+#define PIZ_SEQUENCE_FLAG_CELL              (1UL << 5)
+#define PIZ_SEQUENCE_FLAG_NOTE_VALUE        (1UL << 6)
+#define PIZ_SEQUENCE_FLAG_SCALE             (1UL << 8)
+#define PIZ_SEQUENCE_FLAG_PATTERN           (1UL << 9)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

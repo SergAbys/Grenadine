@@ -1,7 +1,7 @@
 /**
  * \file    pizFactorOracle.h
  * \author  Jean Sapristi
- * \date    May 12, 2012.
+ * \date    May 16, 2012.
  */
 
 /*
@@ -50,10 +50,10 @@
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZFactorOracleNode {
-    long         referTo;
-    long         lengthRepeatedSuffix;
-    PIZArray     *arcDestinations;
-    PIZArray     *arcValues;
+    long        refer;
+    long        lrs;
+    PIZArray    *destinations;
+    PIZArray    *values;
     } PIZFactorOracleNode;
        
 typedef struct _PIZFactorOracle {

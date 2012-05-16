@@ -1,7 +1,7 @@
 /**
  * \file    pizTypes.h
  * \author  Jean Sapristi
- * \date    May 12, 2012.
+ * \date    May 16, 2012.
  */
  
 /*
@@ -76,7 +76,8 @@ typedef enum {
     PIZ_MAGIC_SCALE      = 12,
     PIZ_MAGIC_CHANNEL    = 16,
     PIZ_MAGIC_VELOCITY   = 127,
-    PIZ_MAGIC_PITCH      = 127
+    PIZ_MAGIC_PITCH      = 127,
+    PIZ_MAGIC_ULONG      = 32
     }PIZMagic;
 
 // -------------------------------------------------------------------------------------------------------------
