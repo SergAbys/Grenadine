@@ -211,7 +211,7 @@
 			<array>
 				<dict>
 					<key>Proportion</key>
-					<string>667pt</string>
+					<string>718pt</string>
 					<key>Tabs</key>
 					<array>
 						<dict>
@@ -231,7 +231,7 @@
 								<dict>
 									<key>PBXSmartGroupTreeModuleColumnWidthsKey</key>
 									<array>
-										<real>544</real>
+										<real>595</real>
 										<real>20</real>
 										<real>43</real>
 										<real>43</real>
@@ -250,17 +250,23 @@
 									<array>
 										<string>08FB7794FE84155DC02AAC07</string>
 										<string>08FB7795FE84155DC02AAC07</string>
+										<string>96D425811529D3170055F6A9</string>
+										<string>96AF1B7E148CFBF7001358AB</string>
+										<string>96D8682714FF5A4B00849A50</string>
 										<string>C6A0FF2B0290797F04C91782</string>
 										<string>1AB674ADFE9D54B511CA2CBB</string>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
+											<integer>19</integer>
+											<integer>9</integer>
+											<integer>2</integer>
 											<integer>0</integer>
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 0}, {650, 550}}</string>
+									<string>{{0, 0}, {701, 550}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -270,11 +276,11 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{10, 27}, {667, 568}}</string>
+								<string>{{10, 27}, {718, 568}}</string>
 								<key>GroupTreeTableConfiguration</key>
 								<array>
 									<string>MainColumn</string>
-									<real>544</real>
+									<real>595</real>
 									<string>FileBuiltColumn</string>
 									<real>20</real>
 									<string>ErrorsColumn</string>
@@ -283,7 +289,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>238 105 667 636 0 0 1280 778 </string>
+								<string>198 120 718 636 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -420,8 +426,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96DDD65C156403080039921B</string>
-				<string>96DDD65D156403080039921B</string>
+				<string>96D917BC1564FEF200718751</string>
+				<string>96D917BD1564FEF200718751</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -458,7 +464,7 @@
 		<string>/Users/jeantoto/Dev/Grenadine/pizAlgorithms/PizAlgorithms.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>238 105 667 636 0 0 1280 778 </string>
+	<string>198 120 718 636 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -672,7 +678,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96DDD65E156403080039921B</string>
+				<string>96D917BE1564FEF200718751</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -812,14 +818,12 @@
 							<key>Dock</key>
 							<array>
 								<dict>
-									<key>BecomeActive</key>
-									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>pizTypes.h</string>
+										<string>pizSequenceRun.c</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -840,6 +844,8 @@
 							<string>324pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -875,8 +881,8 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>96DDD5F61563F5DE0039921B</string>
-				<string>96DDD5F71563F5DE0039921B</string>
+				<string>96D9176F1564F96900718751</string>
+				<string>96D917701564F96900718751</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>

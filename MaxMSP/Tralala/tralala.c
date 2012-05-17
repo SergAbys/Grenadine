@@ -62,6 +62,7 @@ int main (void)
     class_addmethod (c, (method)tralala_scale,      "scale",        A_GIMME, 0);
     class_addmethod (c, (method)tralala_pattern,    "pattern",      A_GIMME, 0);
     class_addmethod (c, (method)tralala_note,       "note",         A_GIMME, 0);
+    class_addmethod (c, (method)tralala_rotate,     "rotate",       A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
 
@@ -309,6 +310,11 @@ void tralala_transpose (t_tralala *x, long n)
 void tralala_clean (t_tralala *x, long n)
 {
     tralala_send (x, PIZ_EVENT_CLEAN, 1, &n);
+}
+
+void tralala_rotate (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    ;
 }
 
 // -------------------------------------------------------------------------------------------------------------

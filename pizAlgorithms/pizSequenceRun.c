@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceRun.c
  * \author  Jean Sapristi
- * \date    May 16, 2012.
+ * \date    May 17, 2012.
  */
  
 /*
@@ -44,8 +44,8 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL  ulong    pizSequenceStepMask         (PIZSequence *x, long m, long count);
-PIZ_LOCAL  PIZError pizSequenceAddNotification  (PIZAgent *agent, PIZEventCode n, long tag, long ac, long *av);
+PIZ_LOCAL ulong    pizSequenceStepMask         (PIZSequence *x, long n, long count);
+PIZ_LOCAL PIZError pizSequenceAddNotification  (PIZAgent *agent, PIZEventCode n, long tag, long ac, long *av);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ PIZError pizSequenceStep (PIZSequence *x, PIZAgent *agent)
         PIZNote *note = NULL;
         PIZNote *nextNote = NULL;
         
-        if (x->chord) {
+        if (x->chord && (x->chord < count)) {
             mask = pizSequenceStepMask (x, x->chord, count);
         }
         
@@ -256,17 +256,20 @@ PIZError pizSequenceRefresh (PIZSequence *x, PIZAgent *agent)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-ulong pizSequenceStepMask (PIZSequence *x, long m, long count)
+PIZ_LOCAL ulong pizSequenceStepMask (PIZSequence *x, long n, long count)
 {
-    long  j;
-    ulong mask = (1UL << m) - 1UL;
+    long  i;
+    ulong mask = (1UL << n) - 1UL;
     
-    for (j = count; j > 1; j--)  {
-        //long h = (j * (rand_r (&x->seed) / (RAND_MAX + 1.0))) + 1;
+    for (i = (count - 1); i > 0; i--)  {
+        long j = (i + 1) * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+        
+        if (j != i) {
+            ulong t = ((mask >> i) ^ (mask >> j)) & 1UL; 
+            mask ^= (t << i) | (t << j);
+        }
     }
         
-    post ("%lu", mask);    
-    
     return mask;
 }
 

@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceMethods.c
  * \author  Jean Sapristi
- * \date    May 12, 2012.
+ * \date    May 17, 2012.
  */
  
 /*
@@ -50,66 +50,52 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_NOVEMBER_H_SIZE         6
-#define PIZ_JULIET_MAXIMUM_OFFSET   6
-#define PIZ_MAXIMUM_LOOP            20
+#define PIZ_NOVEMBER_H_SIZE             6
+#define PIZ_JULIET_MAXIMUM_OFFSET       6
+#define PIZ_MAXIMUM_LOOP                20
+#define PIZ_NEIGHBORS_BIRTH_SIZE        12
+#define PIZ_NEIGHBORS_DEATH_SIZE        16
+#define PIZ_DIVISIONS_SIZE              5
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZ_LONG    pizSequenceNeighbors[ ]     = { -256, 
+                                            -130, 
+                                            -129, 
+                                            -128, 
+                                            -127, 
+                                            -126, 
+                                             126, 
+                                             127, 
+                                             128, 
+                                             129, 
+                                             130, 
+                                             256, 
+                                              -2, 
+                                              -1, 
+                                               1, 
+                                               2  };
+
+PIZ_LONG    pizSequenceDivisions[ ]     = { 2, 3, 4, 5, 7 };
+PIZ_DOUBLE  pizSequenceDistribution2[ ] = { 0.75, 1. };
+PIZ_DOUBLE  pizSequenceDistribution3[ ] = { 0.68, 0.85, 1. };
+PIZ_DOUBLE  pizSequenceDistribution4[ ] = { 0.63, 0.75, 0.87, 1. };
+PIZ_DOUBLE  pizSequenceDistribution5[ ] = { 0.60, 0.70, 0.80, 0.90, 1. };
+PIZ_DOUBLE  pizSequenceDistribution7[ ] = { 0.56, 0.63, 0.70, 0.77, 0.84, 0.91, 1. };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LONG pizSequenceNeighbors[ ]    = { -256, 
-                                        -130, 
-                                        -129, 
-                                        -128, 
-                                        -127, 
-                                        -126, 
-                                         126, 
-                                         127, 
-                                         128, 
-                                         129, 
-                                         130, 
-                                         256, 
-                                          -2, 
-                                          -1, 
-                                           1, 
-                                           2  };
+#define PIZ_CEIL(a,b)                   (((a)%(b))==0?(a)/(b):(a)/(b)+1)
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZ_NEIGHBORS_BIRTH_SIZE    12
-#define PIZ_NEIGHBORS_DEATH_SIZE    16
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_LONG pizSequenceDivisions[ ]    = { 2, 3, 4, 5, 7 };
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZ_DIVISIONS_SIZE          5
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_DOUBLE pizSequenceDistribution2[ ] = { 0.75, 1. };
-PIZ_DOUBLE pizSequenceDistribution3[ ] = { 0.68, 0.85, 1. };
-PIZ_DOUBLE pizSequenceDistribution4[ ] = { 0.63, 0.75, 0.87, 1. };
-PIZ_DOUBLE pizSequenceDistribution5[ ] = { 0.60, 0.70, 0.80, 0.90, 1. };
-PIZ_DOUBLE pizSequenceDistribution7[ ] = { 0.56, 0.63, 0.70, 0.77, 0.84, 0.91, 1. };
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define PIZ_CEIL(a,b)               (((a)%(b))==0?(a)/(b):(a)/(b)+1)
-
-#define PIZ_PICKUP_NOTES            x->tempIndex = 0;                                           \
-                                    pizSequenceForEach (x, pizSequenceFillTempNotes, NULL);     \
-                                    k = x->tempIndex;
+#define PIZ_PICKUP_NOTES                x->tempIndex = 0;                                           \
+                                        pizSequenceForEach (x, pizSequenceFillTempNotes, NULL);     \
+                                        k = x->tempIndex;
                         
-#define PIZ_FILL_NOTES              pizSequenceFillNotes (x, selector, 0);
-#define PIZ_FILL_NOTES_REVERSE      pizSequenceFillNotes (x, selector, 1);
+#define PIZ_FILL_NOTES                  pizSequenceFillNotes (x, selector, 0);
+#define PIZ_FILL_NOTES_REVERSE          pizSequenceFillNotes (x, selector, 1);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

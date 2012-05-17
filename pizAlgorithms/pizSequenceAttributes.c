@@ -124,8 +124,10 @@ PIZError pizSequenceSetChord (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
-        x->chord = (MAX (value, 0)) % PIZ_MAGIC_ULONG;
-        x->flags |= PIZ_SEQUENCE_FLAG_CHORD;
+        if ((value >= 0) && (value < PIZ_MAGIC_ULONG)) {
+            x->chord = value;
+            x->flags |= PIZ_SEQUENCE_FLAG_CHORD;
+        }
     }
     
     return PIZ_GOOD;
