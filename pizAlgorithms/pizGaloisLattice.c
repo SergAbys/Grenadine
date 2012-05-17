@@ -218,7 +218,7 @@ PIZError pizGaloisLatticeAdd (PIZGaloisLattice *x, long argc, long *argv)
     //
     long j;
     for (j = 0; j < pizArrayCount (x->map[i]); j++) {   
-        long g = pizArrayValueAtIndex (x->map[i], j);
+        long g = pizArrayAtIndex (x->map[i], j);
         
         if (pizItemsetIsEqual (&(x->stock[g].itemset), &(x->toBeAdded))) {
             goto end;
@@ -243,7 +243,7 @@ PIZError pizGaloisLatticeAdd (PIZGaloisLattice *x, long argc, long *argv)
                 generator = true;
                 
                 for (t = 0; t < pizArrayCount (x->tempMap [x->intersectionCardinal]); t++) {
-                    long p = pizArrayValueAtIndex (x->tempMap[x->intersectionCardinal], t);
+                    long p = pizArrayAtIndex (x->tempMap[x->intersectionCardinal], t);
                     
                     if (pizItemsetIsEqual (&(x->stock[p].itemset), &(x->intersection))) {
                         generator = false;
@@ -423,7 +423,7 @@ PIZ_INLINE void pizGaloisLatticeReconnect (PIZGaloisLattice *x, long g, long n)
     for (i = 0; i < x->intersectionCardinal; i++) {
         long j;
         for (j = 0; j < pizArrayCount (x->tempMap[i]); j++) {
-            long p = pizArrayValueAtIndex (x->tempMap[i], j);
+            long p = pizArrayAtIndex (x->tempMap[i], j);
             
             if (pizItemsetIsIncluded (&(x->stock[p].itemset), &(x->intersection))) {
                 long t, isParentOfGenerator = true;

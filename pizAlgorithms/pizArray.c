@@ -115,12 +115,12 @@ void pizArrayClear (PIZArray *x)
     x->index = 0;
 }
 
-void pizArraySetValueAtIndex (PIZArray *x, long index, long value)
+void pizArraySetAtIndex (PIZArray *x, long index, long value)
 {
     x->values[index] = value;
 }
 
-long pizArrayValueAtIndex (const PIZArray *x, long index)
+long pizArrayAtIndex (const PIZArray *x, long index)
 {   
     return x->values[index];
 }
@@ -154,12 +154,12 @@ void pizArrayRemoveAtIndex (PIZArray *array, long index)
     array->index --;
 }
 
-void pizArrayRemoveLastValue (PIZArray *x)
+void pizArrayRemoveLast (PIZArray *x)
 {
     x->index --;
 }
 
-long pizArrayFirstIndexOfValue (const PIZArray *x, long value)
+long pizArrayIndexOfValue (const PIZArray *x, long value)
 {
     long i, k = -1;
     

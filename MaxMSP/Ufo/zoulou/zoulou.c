@@ -276,9 +276,9 @@ void zoulou_dump (t_zoulou *x, long n)
         long    i, k, ref, lrs;
         t_atom  result[4];
         
-        ref = pizArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_REFER);
-        lrs = pizArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_LRS);
-        k   = pizArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_ARCS);
+        ref = pizArrayAtIndex (values, PIZ_FACTOR_ORACLE_REFER);
+        lrs = pizArrayAtIndex (values, PIZ_FACTOR_ORACLE_LRS);
+        k   = pizArrayAtIndex (values, PIZ_FACTOR_ORACLE_ARCS);
         
         atom_setlong        (result, n);
         atom_setsym         (result + 1, zoulou_sym_ref);
@@ -292,8 +292,8 @@ void zoulou_dump (t_zoulou *x, long n)
         atom_setsym         (result + 1, zoulou_sym_arc);
         
         for (i = 0; i < k; i++) {
-            atom_setlong (result + 2, pizArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i));
-            atom_setlong (result + 3, pizArrayValueAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i + k));
+            atom_setlong (result + 2, pizArrayAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i));
+            atom_setlong (result + 3, pizArrayAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i + k));
     
             outlet_anything (x->rightOutlet, zoulou_sym_node, 4, result);
         }
@@ -335,11 +335,11 @@ PIZ_INLINE PIZError pizFactorOracleEncodeToArray (const PIZFactorOracle *x, long
             err |= pizArrayAppend (a, (count = pizArrayCount (x->nodes[node].destinations)));
             
             for (i = 0; i < count; i++) {
-                err |= pizArrayAppend (a, pizArrayValueAtIndex (x->nodes[node].destinations, i));
+                err |= pizArrayAppend (a, pizArrayAtIndex (x->nodes[node].destinations, i));
             }
             
             for (i = 0; i < count; i++) {
-                err |= pizArrayAppend (a, pizArrayValueAtIndex (x->nodes[node].values, i));
+                err |= pizArrayAppend (a, pizArrayAtIndex (x->nodes[node].values, i));
             }
         }
     

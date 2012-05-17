@@ -256,7 +256,7 @@ PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
             long pitch = x->tempNotes1[i]->values[PIZ_VALUE_PITCH];
                             
             if (scale) {
-                pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
+                pitch += pizArrayAtIndex (x->scale, pitch % scale);
             }
                 
             x->tempValues[CLAMP (pitch, 0, PIZ_MAGIC_PITCH)] ++; 
@@ -276,7 +276,7 @@ PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
             long pitch = x->tempNotes1[i]->values[PIZ_VALUE_PITCH];
                                 
             if (scale) {
-                pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
+                pitch += pizArrayAtIndex (x->scale, pitch % scale);
             }
                 
             x->tempNotes2[x->tempValues[CLAMP (pitch, 0, PIZ_MAGIC_PITCH)] - 1] = x->tempNotes1[i];
@@ -316,7 +316,7 @@ PIZError pizSequenceChange (PIZSequence *x, const PIZEvent *event)
     PIZNote *note       = NULL;
     PIZNote *nextNote   = NULL;
     
-    long p = pizArrayValueAtIndex (x->map, i);
+    long p = pizArrayAtIndex (x->map, i);
     
     pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
     
@@ -366,7 +366,7 @@ PIZError pizSequenceFill (PIZSequence *x, const PIZEvent *event)
     PIZNote *note       = NULL;
     PIZNote *nextNote   = NULL;
     
-    long p = pizArrayValueAtIndex (x->map, i);
+    long p = pizArrayAtIndex (x->map, i);
     
     pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
     
@@ -419,7 +419,7 @@ PIZError pizSequenceRandom (PIZSequence *x, const PIZEvent *event)
     PIZNote *note       = NULL;
     PIZNote *nextNote   = NULL;
     
-    long p = pizArrayValueAtIndex (x->map, i);
+    long p = pizArrayAtIndex (x->map, i);
     
     pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
     
@@ -469,7 +469,7 @@ PIZError pizSequenceKill (PIZSequence *x, const PIZEvent *event)
         PIZNote *note       = NULL;
         PIZNote *nextNote   = NULL;
         
-        long p = pizArrayValueAtIndex (x->map, i);
+        long p = pizArrayAtIndex (x->map, i);
         
         pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
         
@@ -507,12 +507,12 @@ PIZError pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
     long m, n, o, temp;
     long scale = pizArrayCount (x->scale);
     
-    temp = pizArrayValueAtIndex (a, 0);
+    temp = pizArrayAtIndex (a, 0);
     m = CLAMP (temp, 0, PIZ_MAGIC_SCALE - 1);
     o = m;
     
     for (i = 1; i < count; i++) {
-        temp = pizArrayValueAtIndex (a, i);
+        temp = pizArrayAtIndex (a, i);
         n = CLAMP (temp, 0, PIZ_MAGIC_SCALE - 1);
         t[m] = n - m;
         m = n;
@@ -529,7 +529,7 @@ PIZError pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
     PIZNote *note       = NULL;
     PIZNote *nextNote   = NULL;
     
-    long p = pizArrayValueAtIndex (x->map, i);
+    long p = pizArrayAtIndex (x->map, i);
     
     pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
     
@@ -544,7 +544,7 @@ PIZError pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
             pitch = note->values[PIZ_VALUE_PITCH];
             
             if (scale) {
-                offset += pizArrayValueAtIndex (x->scale, pitch % scale);
+                offset += pizArrayAtIndex (x->scale, pitch % scale);
             }
             
             pitch = CLAMP (pitch + offset, 0, PIZ_MAGIC_PITCH);
@@ -655,7 +655,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
         PIZNote *note = NULL;
 
         while (q == -1) {
-            p = pizArrayValueAtIndex (x->map, (long)(mapCount * (rand_r (&x->seed) / (RAND_MAX + 1.0))));
+            p = pizArrayAtIndex (x->map, (long)(mapCount * (rand_r (&x->seed) / (RAND_MAX + 1.0))));
             if (pizLinklistCount (x->timeline[p])) {
                 q = (long)(pizLinklistCount (x->timeline[p]) * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
             } 
@@ -664,7 +664,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
         pizLinklistPtrAtIndex (x->timeline[p], q, (void **)&note);
         
         if (scale) {
-            offset = pizArrayValueAtIndex (x->scale, note->values[PIZ_VALUE_PITCH] % scale);
+            offset = pizArrayAtIndex (x->scale, note->values[PIZ_VALUE_PITCH] % scale);
         }
         
         pitch = note->values[PIZ_VALUE_PITCH] + offset;
@@ -703,8 +703,8 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
         }
         
         if (patternSize) {  
-            previous += pizArrayValueAtIndex (x->pattern, previous % patternSize);
-            next     += pizArrayValueAtIndex (x->pattern, next % patternSize);
+            previous += pizArrayAtIndex (x->pattern, previous % patternSize);
+            next     += pizArrayAtIndex (x->pattern, next % patternSize);
         }
 
         if (previous != here) {
@@ -715,7 +715,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
                     long n, t = pitch - j;
                     long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
                     
-                    n = pizArrayValueAtIndex (x->scale, b % scale);
+                    n = pizArrayAtIndex (x->scale, b % scale);
                     
                     if ((b + n) != pitch) {
                         hPat[0] = hPat[1] - j + n;
@@ -727,7 +727,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
                     long n, t = pitch + j;
                     long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
                     
-                    n = pizArrayValueAtIndex (x->scale, b % scale);
+                    n = pizArrayAtIndex (x->scale, b % scale);
                     
                     if ((b + n) != pitch) {
                         hPat[2] = hPat[1] + j + n;
@@ -748,7 +748,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
                     long n, t = pitch - j;
                     long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
                     
-                    n = pizArrayValueAtIndex (x->scale, b % scale);
+                    n = pizArrayAtIndex (x->scale, b % scale);
                     
                     if ((b + n) != pitch) {
                         hPat[3] = hPat[4] - j + n;
@@ -760,7 +760,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
                     long n, t = pitch + j;
                     long b = CLAMP (t, 0, PIZ_MAGIC_PITCH);
                     
-                    n = pizArrayValueAtIndex (x->scale, b % scale);
+                    n = pizArrayAtIndex (x->scale, b % scale);
                     
                     if ((b + n) != pitch) {
                         hPat[5] = hPat[4] + j + n;
@@ -898,7 +898,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
     mapCount = pizArrayCount (x->map);
 
     while (q == -1) {
-        p = pizArrayValueAtIndex (x->map, (long)(mapCount * (rand_r (&x->seed) / (RAND_MAX + 1.0))));
+        p = pizArrayAtIndex (x->map, (long)(mapCount * (rand_r (&x->seed) / (RAND_MAX + 1.0))));
         if (pizLinklistCount (x->timeline[p])) {
             q = (long)(pizLinklistCount (x->timeline[p]) * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
         } 
@@ -932,11 +932,11 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
     }
     
     if (patternSize = pizArrayCount (x->pattern)) {
-        newPosition += pizArrayValueAtIndex (x->pattern, newPosition % patternSize);
+        newPosition += pizArrayAtIndex (x->pattern, newPosition % patternSize);
     }
     
     if (scale) {
-        offset = pizArrayValueAtIndex (x->scale, note1->values[PIZ_VALUE_PITCH] % scale);
+        offset = pizArrayAtIndex (x->scale, note1->values[PIZ_VALUE_PITCH] % scale);
     }
                 
     newKey = (newPosition * (PIZ_MAGIC_PITCH + 1)) + note1->values[PIZ_VALUE_PITCH] + offset;

@@ -98,7 +98,7 @@ PIZError pizAgentBPM (PIZAgent *x, PIZEvent *event)
         x->bpm = value;
         pizAgentAddNotification (x, PIZ_EVENT_CHANGED_BPM, -1, 1, &value);
             
-        pizTimeSetNano (&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);    
+        pizNanoSet     (&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);    
         pizTimeCopy    (&x->grainEnd, &x->grainStart);
         pizTimeAddNano (&x->grainEnd, &x->grainSize);
     }

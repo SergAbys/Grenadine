@@ -104,7 +104,7 @@ PIZError pizSequenceStep (PIZSequence *x, PIZAgent *agent)
         pizLinklistNextByPtr (x->timeline[x->index], (void *)note, (void **)&nextNote);
         
         if (scale) {
-            pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
+            pitch += pizArrayAtIndex (x->scale, pitch % scale);
         }
 
         if (velocity) {

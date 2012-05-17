@@ -266,15 +266,15 @@ void foxtrot_dump (t_foxtrot *x, long n)
     UNLOCK
     
     if (!err) {
-        long t = pizArrayValueAtIndex (values, PIZ_MARKOV_MODEL_TRANSITIONS);
-        long e = pizArrayValueAtIndex (values, PIZ_MARKOV_MODEL_EMISSIONS);
+        long t = pizArrayAtIndex (values, PIZ_MARKOV_MODEL_TRANSITIONS);
+        long e = pizArrayAtIndex (values, PIZ_MARKOV_MODEL_EMISSIONS);
 
         size = MAX (t, e);
         
         if (atom_alloc_array (size, &argc, &argv, &alloc) == MAX_ERR_NONE) {
             long *ptr = pizArrayPtr (values);
 
-            atom_setlong (argv, pizArrayValueAtIndex (values, PIZ_MARKOV_MODEL_START));
+            atom_setlong (argv, pizArrayAtIndex (values, PIZ_MARKOV_MODEL_START));
             outlet_anything (x->rightOutlet, foxtrot_sym_start, 1, argv);
             
             atom_setlong_array (t, argv, t, ptr + PIZ_MARKOV_MODEL_DATA);

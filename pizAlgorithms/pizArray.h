@@ -1,7 +1,7 @@
 /**
  * \file    pizArray.h
  * \author  Jean Sapristi
- * \date    May 10, 2012.
+ * \date    May 17, 2012.
  */
  
 /*
@@ -64,13 +64,13 @@ long        *pizArrayPtr                 (const PIZArray *x);
 void        pizArrayFree                 (PIZArray *x);
 PIZError    pizArrayAppend               (PIZArray *x, long value); //
 void        pizArrayClear                (PIZArray *x);
-void        pizArraySetValueAtIndex      (PIZArray *x, long index, long value);
-long        pizArrayValueAtIndex         (const PIZArray *x, long index);
+void        pizArraySetAtIndex           (PIZArray *x, long index, long value);
+long        pizArrayAtIndex              (const PIZArray *x, long index);
 long        pizArrayCount                (const PIZArray *x);
 
 void        pizArrayRemoveAtIndex        (PIZArray *x, long index);
-void        pizArrayRemoveLastValue      (PIZArray *x);
-long        pizArrayFirstIndexOfValue    (const PIZArray *x, long value);
+void        pizArrayRemoveLast           (PIZArray *x);
+long        pizArrayIndexOfValue         (const PIZArray *x, long value);
 bool        pizArrayContainsValue        (const PIZArray *x, long value);
 
 // -------------------------------------------------------------------------------------------------------------
@@ -88,12 +88,12 @@ PIZ_EXTERN void pizArrayClear (PIZArray *x)
     x->index = 0;
 }
 
-PIZ_EXTERN void pizArraySetValueAtIndex (PIZArray *x, long index, long value)
+PIZ_EXTERN void pizArraySetAtIndex (PIZArray *x, long index, long value)
 {
     x->values[index] = value;
 }
 
-PIZ_EXTERN long pizArrayValueAtIndex (const PIZArray *x, long index)
+PIZ_EXTERN long pizArrayAtIndex (const PIZArray *x, long index)
 {   
     return x->values[index];
 }
@@ -103,7 +103,7 @@ PIZ_EXTERN long pizArrayCount (const PIZArray *x)
     return x->index;
 }
 
-PIZ_EXTERN void pizArrayRemoveLastValue (PIZArray *x)
+PIZ_EXTERN void pizArrayRemoveLast (PIZArray *x)
 {
     x->index --;
 }

@@ -1,7 +1,7 @@
 /*
  * \file	pizTime.c
  * \author	Jean Sapristi
- * \date	March 26, 2012.
+ * \date	May 17, 2012.
  */
  
 /*
@@ -53,6 +53,11 @@ void pizTimeSet (PIZTime *t)
     (*t) = mach_absolute_time ( );
 }
 
+void pizNanoSet (PIZNano *ns, double f)
+{
+    (*ns) = (PIZNano)f;
+}
+
 void pizTimeCopy (PIZTime *t, const PIZTime *toCopy)
 {
     (*t) = (*toCopy);
@@ -91,11 +96,6 @@ void pizTimespecWithNano (struct timespec *t, const PIZNano *ns)
 {
     t->tv_sec  = (time_t)(*ns / PIZ_TIME_NANO_PER_SECOND);
     t->tv_nsec = (long)(*ns % PIZ_TIME_NANO_PER_SECOND);
-}
-
-void pizTimeSetNano (PIZNano *ns, double f)
-{
-    (*ns) = (PIZNano)f;
 }
 
 #endif // __MACH__

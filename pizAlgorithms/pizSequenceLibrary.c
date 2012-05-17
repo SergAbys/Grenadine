@@ -58,7 +58,7 @@ void pizSequenceForEach (PIZSequence *x, PIZMethod f, const PIZEvent *event)
         PIZNote *note       = NULL;
         PIZNote *nextNote   = NULL;
         
-        long p = pizArrayValueAtIndex (x->map, i);
+        long p = pizArrayAtIndex (x->map, i);
         
         pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
         
@@ -122,7 +122,7 @@ void pizSequenceNearby (PIZSequence *x, PIZNote *note, const PIZEvent *event)
     value = CLAMP (value, 0, PIZ_MAGIC_PITCH);
             
     if (scale) {
-        pitch += pizArrayValueAtIndex (x->scale, pitch % scale);
+        pitch += pizArrayAtIndex (x->scale, pitch % scale);
     }
     
     m = CLAMP ((pitch - value), 0, PIZ_MAGIC_PITCH);
@@ -149,7 +149,7 @@ void pizSequenceFillTempHash (PIZSequence *x, PIZNote *note, const PIZEvent *eve
     long key, scale, offset = 0;
     
     if (scale = pizArrayCount (x->scale)) {
-        offset = pizArrayValueAtIndex (x->scale, note->values[PIZ_VALUE_PITCH] % scale);
+        offset = pizArrayAtIndex (x->scale, note->values[PIZ_VALUE_PITCH] % scale);
     }
     
     key = ((long)(note->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1));
@@ -277,7 +277,7 @@ long pizSequenceSnapPositionToPattern (PIZSequence *x, long position)
     long s, j = (long)(position / (double)x->cell);
     
     if (s = pizArrayCount (x->pattern)) {
-        j += pizArrayValueAtIndex (x->pattern, j % s);
+        j += pizArrayAtIndex (x->pattern, j % s);
     }
 
     return (j * x->cell);

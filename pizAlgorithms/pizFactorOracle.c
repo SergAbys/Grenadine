@@ -188,7 +188,7 @@ PIZError pizFactorOracleAdd (PIZFactorOracle *x, long argc, long *argv)
         while ((j > -1) && !(pizArrayContainsValue (x->nodes[j].values, argv[i]))) {
             if (!(pizArrayAppend (x->nodes[j].values, argv[i]))) {
                 if (pizArrayAppend (x->nodes[j].destinations, p)) {
-                    pizArrayRemoveLastValue (x->nodes[j].values);
+                    pizArrayRemoveLast (x->nodes[j].values);
                     err = PIZ_MEMORY;
                 }
             } else {
@@ -200,8 +200,8 @@ PIZError pizFactorOracleAdd (PIZFactorOracle *x, long argc, long *argv)
         }
         
         if (j != -1) {   
-            long destinationIndex = pizArrayFirstIndexOfValue (x->nodes[j].values, argv[i]);
-            w = pizArrayValueAtIndex (x->nodes[j].destinations, destinationIndex);
+            long destinationIndex = pizArrayIndexOfValue (x->nodes[j].values, argv[i]);
+            w = pizArrayAtIndex (x->nodes[j].destinations, destinationIndex);
         }
             
         x->nodes[p].refer = w;
@@ -273,14 +273,14 @@ PIZError pizFactorOracleProceed (PIZFactorOracle *x, long argc, long *argv)
                 p = x->nodes + x->shuttle;
             } else if (pizArrayCount (p->values) > 1) {
                 long i = (pizArrayCount (p->values) - 1) * (rand_r (&x->seed) / (RAND_MAX + 1.0));
-                argv[k]     = pizArrayValueAtIndex (p->values, (i + 1));
-                x->shuttle  = pizArrayValueAtIndex (p->destinations, (i + 1));
+                argv[k]     = pizArrayAtIndex (p->values, (i + 1));
+                x->shuttle  = pizArrayAtIndex (p->destinations, (i + 1));
                 t = true;
             }
         }
         
         if (!t) {
-            argv[k] = pizArrayValueAtIndex (p->values, 0);
+            argv[k] = pizArrayAtIndex (p->values, 0);
             x->shuttle ++;
         }
         

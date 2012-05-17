@@ -10,7 +10,7 @@ _pizQueueCount
 _pizQueueFree
 _pizQueueNew
 _pizQueuePop
-_pizQueuePopLastValue
+_pizQueuePopLast
 _pizQueuePoppedValue
 _pizStackClear
 _pizStackCount

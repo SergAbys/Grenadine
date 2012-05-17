@@ -219,7 +219,7 @@ void romeo_dump (t_romeo *x, long n)
         UNLOCK
 
         if (!err) {
-            long i, count = pizArrayValueAtIndex (values, PIZ_GALOIS_LATTICE_CONCEPTS);
+            long i, count = pizArrayAtIndex (values, PIZ_GALOIS_LATTICE_CONCEPTS);
             long *ptr  = pizArrayPtr (values);
                                 
             for (i = 0; i < count; i++) {
@@ -249,7 +249,7 @@ PIZ_INLINE PIZError pizGaloisLatticeEncodeToArray (const PIZGaloisLattice *x, lo
         err |= pizArrayAppend (a, count);
         
         for (i = 0; i < count; i++) {
-            long j, p = pizArrayValueAtIndex (x->map[n], i);
+            long j, p = pizArrayAtIndex (x->map[n], i);
             
             for (j = 0; j < PIZ_ITEMSET_SIZE; j++) {
                 if (pizItemsetIsSetAtIndex (&(x->stock[p].itemset), j)) {

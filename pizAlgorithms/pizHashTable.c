@@ -195,7 +195,7 @@ PIZError pizHashTableRemove (PIZHashTable *x, long key, void *ptr)
     
     if (count = pizArrayCount (x->hashTable[p])) {
         for (i = 0; i < count; i++) {
-            index = pizArrayValueAtIndex (x->hashTable[p], i);
+            index = pizArrayAtIndex (x->hashTable[p], i);
             
             if ((x->pool[index].key == key) && (x->pool[index].ptr == ptr)) {
                 err = PIZ_GOOD;
@@ -236,7 +236,7 @@ PIZError pizHashTablePtrByKey (const PIZHashTable *x, long key, void **ptr)
     
     if (count = pizArrayCount (x->hashTable[p])) {
         for (i = 0; i < count; i++) {
-            index = pizArrayValueAtIndex (x->hashTable[p], i);
+            index = pizArrayAtIndex (x->hashTable[p], i);
             
             if (x->pool[index].key == key) {
                 (*ptr) = x->pool[index].ptr;
@@ -267,7 +267,7 @@ bool pizHashTableContainsKey (const PIZHashTable *x, long key)
     
     if (count = pizArrayCount (x->hashTable[p])) {
         for (i = 0; i < count; i++) {
-            index = pizArrayValueAtIndex (x->hashTable[p], i);
+            index = pizArrayAtIndex (x->hashTable[p], i);
             
             if (x->pool[index].key == key) {
                 k = true;
