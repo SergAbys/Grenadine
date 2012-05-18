@@ -6,7 +6,7 @@
  */
  
 /*
- *  May 14, 2012.
+ *  May 18, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -143,26 +143,7 @@ void tralala_symbolsInit ( )
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-PIZError tralala_selectorWithSymbol  (const t_symbol *s, long *value)
-{
-    PIZError err = PIZ_ERROR;
-    
-    if (s && value) {
-    //
-    err = PIZ_GOOD;
-    
-    if      (s == tll_pitch)    { *value = PIZ_VALUE_PITCH;     } 
-    else if (s == tll_velocity) { *value = PIZ_VALUE_VELOCITY;  } 
-    else if (s == tll_duration) { *value = PIZ_VALUE_DURATION;  } 
-    else if (s == tll_channel)  { *value = PIZ_VALUE_CHANNEL;   }  
-    
-    else { err = PIZ_ERROR; }
-    //
-    }
-            
-    return err;
-}
+#pragma mark -
 
 PIZError tralala_keyWithSymbol (const t_symbol *s, long *value)
 {
@@ -198,7 +179,6 @@ PIZError tralala_scaleWithSymbol (const t_symbol *s, long *value)
     
     if (s && value) {
     //
-    
     err = PIZ_GOOD;
     
     if      (s == tll_ionian)                   { *value = PIZ_IONIAN;                   } 
@@ -234,13 +214,32 @@ PIZError tralala_scaleWithSymbol (const t_symbol *s, long *value)
     return err;
 }
 
+PIZError tralala_selectorWithSymbol  (const t_symbol *s, long *value)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if (s && value) {
+    //
+    err = PIZ_GOOD;
+    
+    if      (s == tll_pitch)    { *value = PIZ_VALUE_PITCH;     } 
+    else if (s == tll_velocity) { *value = PIZ_VALUE_VELOCITY;  } 
+    else if (s == tll_duration) { *value = PIZ_VALUE_DURATION;  } 
+    else if (s == tll_channel)  { *value = PIZ_VALUE_CHANNEL;   }  
+    
+    else { err = PIZ_ERROR; }
+    //
+    }
+            
+    return err;
+}
+
 PIZError tralala_noteValueWithSymbol (const t_symbol *s, long *value)
 {
     PIZError err = PIZ_ERROR;
     
     if (s && value) {
     //
-    
     err = PIZ_GOOD;
     
     if      (s == tll_whole)                { *value = PIZ_WHOLE_NOTE;                  } 

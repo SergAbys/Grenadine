@@ -189,16 +189,16 @@ PIZError pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
-    
+        
     if (!(pizEventPtr (event, &argc, &argv))) {
     //
     long i, k;
     long shift    = argv[0];
     long selector = CLAMP (argv[1], PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
-                
+    
     PIZ_PICKUP_NOTES
     
-    if (k && shift < 0) {
+    if (k && (shift < 0)) {
         shift = k - ((-shift) % k);
     }
 
