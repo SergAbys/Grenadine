@@ -15,7 +15,8 @@ Robert Godin, Rokia Missaoui, Hassan Alaoui :
 
 T. Brouard, M. Slimane, J.-P Asselin de Beauville, G. Venturini :
     "Apprentissage d'une chaine de Markov cachee. Problemes numeriques 
-     lies a l'application a l'image", 1998.
+     lies a l'application a l'image", Revue de Statistique Appliquee, 46
+     no. 2 (1998), p. 83-108. 
 
 Jim Holmstrom :
     "Growing Neural Gas, Experiments with GNG, GNG with Utility and 
