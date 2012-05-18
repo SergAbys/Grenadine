@@ -11,8 +11,8 @@
 		breakpointsGroup = 9699A8E613D9A57300D9A0AD /* XCBreakpointsBucket */;
 		codeSenseManager = 96CFCDA713D7F01D004431BB /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 359047652;
-			PBXWorkspaceStateSaveDate = 359047652;
+			PBXPerProjectTemplateStateSaveDate = 359049079;
+			PBXWorkspaceStateSaveDate = 359049079;
 		};
 		sourceControlManager = 96CFCDA613D7F01D004431BB /* Source Control */;
 		userBuildSettings = {
@@ -22,7 +22,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1233, 2075}}";
 			sepNavSelRange = "{2848, 0}";
-			sepNavVisRect = "{{0, 1430}, {1233, 645}}";
+			sepNavVisRect = "{{0, 470}, {1233, 645}}";
 			sepNavWindowFrame = "{{2, 3}, {1278, 774}}";
 		};
 	};
@@ -30,7 +30,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1233, 2325}}";
 			sepNavSelRange = "{2895, 0}";
-			sepNavVisRect = "{{0, 51}, {1233, 645}}";
+			sepNavVisRect = "{{0, 1680}, {1233, 645}}";
 			sepNavWindowFrame = "{{3, 4}, {1278, 774}}";
 		};
 	};
@@ -46,7 +46,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1233, 2175}}";
 			sepNavSelRange = "{3407, 0}";
-			sepNavVisRect = "{{0, 1386}, {1233, 645}}";
+			sepNavVisRect = "{{0, 1530}, {1233, 645}}";
 			sepNavWindowFrame = "{{0, 4}, {1278, 774}}";
 		};
 	};
@@ -108,15 +108,15 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1234, 2075}}";
 			sepNavSelRange = "{3257, 0}";
-			sepNavVisRect = "{{0, 1396}, {1234, 645}}";
+			sepNavVisRect = "{{0, 1430}, {1234, 645}}";
 			sepNavWindowFrame = "{{0, 3}, {1279, 774}}";
 		};
 	};
 	9699D9DF1413A0F900F86BD8 /* pizMarkovModel.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 11400}}";
-			sepNavSelRange = "{2541, 2}";
-			sepNavVisRect = "{{0, 1192}, {1233, 292}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1240.6, 11450}}";
+			sepNavSelRange = "{76, 0}";
+			sepNavVisRect = "{{0, 0}, {1234, 645}}";
 			sepNavWindowFrame = "{{3, 2}, {1279, 774}}";
 		};
 	};
@@ -164,7 +164,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1234, 1900}}";
 			sepNavSelRange = "{3061, 0}";
-			sepNavVisRect = "{{0, 1211}, {1234, 645}}";
+			sepNavVisRect = "{{0, 646}, {1234, 645}}";
 			sepNavWindowFrame = "{{3, 4}, {1279, 774}}";
 		};
 	};
@@ -192,7 +192,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1234, 2325}}";
 			sepNavSelRange = "{3714, 0}";
-			sepNavVisRect = "{{0, 1383}, {1234, 645}}";
+			sepNavVisRect = "{{0, 456}, {1234, 645}}";
 			sepNavWindowFrame = "{{6, 4}, {1279, 774}}";
 		};
 	};

@@ -1,7 +1,7 @@
 /*
  * \file    pizMarkovModel.c
  * \author  Jean Sapristi
- * \date    May 12, 2012.
+ * \date    May 18, 2012.
  */
  
 /*
@@ -61,7 +61,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 PIZ_INLINE void pizMarkovModelBaumWelch             (PIZMarkovModel *x, long argc, long *argv);
-PIZ_LOCAL void  pizMarkovModelFillStochastically    (PIZMarkovModel *x, long argc, double *argv);
+PIZ_LOCAL  void pizMarkovModelFillStochastically    (PIZMarkovModel *x, long argc, double *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -73,9 +73,9 @@ PIZMarkovModel *pizMarkovModelNew (long argc, long *argv)
 
     if (x = (PIZMarkovModel *)malloc (sizeof(PIZMarkovModel))) {
     //
-    x->vectorSize    = PIZ_DEFAULT_VECTOR_SIZE;
-    x->graphSize     = PIZ_DEFAULT_GRAPH_SIZE;
-    x->persistence   = PIZ_DEFAULT_PERSISTENCE;
+    x->vectorSize  = PIZ_DEFAULT_VECTOR_SIZE;
+    x->graphSize   = PIZ_DEFAULT_GRAPH_SIZE;
+    x->persistence = PIZ_DEFAULT_PERSISTENCE;
     
     if (argc && ((argv[0] > 0)  && (argv[0] <= PIZ_MAXIMUM_GRAPH_SIZE))) {
         x->graphSize = argv[0];
@@ -373,38 +373,40 @@ PIZ_INLINE void pizMarkovModelBaumWelch (PIZMarkovModel *x, long argc, long *arg
     }
                         
     for (i = 0; i < x->graphSize; i++) {
-        double tab[PIZ_MAXIMUM_GRAPH_SIZE];
+        double memo[PIZ_MAXIMUM_GRAPH_SIZE];
         
         s = 0.;
         
         for (j = 0; j < x->graphSize; j++) {
-            tab[j] = 0.;
+            memo[j] = 0.;
             
             for (n = 0; n < (argc - 1); n++) {
-                tab[j] += x->alpha[(i * x->vectorSize) + n] 
+                memo[j] += x->alpha[(i * x->vectorSize) + n] 
                         * x->transition[(i * x->graphSize) + j]
                         * x->emission[(j * PIZ_ALPHABET_SIZE) + argv[n + 1]]
                         * x->beta[(j * x->vectorSize) + n + 1];
             }
             
-            s += tab[j];
+            s += memo[j];
         }
             
         for (j = 0; j < x->graphSize; j++) {
             if (s) {
-                x->tempTransition[(i * x->graphSize) + j] = tab[j] / s;
+                x->tempTransition[(i * x->graphSize) + j] = memo[j] / s;
             }
         }
     }
     
     for (i = 0; i < x->graphSize; i++) {
-        double tab[PIZ_MAXIMUM_VECTOR_SIZE];
+        double memo[PIZ_MAXIMUM_VECTOR_SIZE];
         
         s = 0.;
         
         for (j = 0; j < argc; j++) {
-            tab[j] = (x->alpha[(i * x->vectorSize) + j] * x->beta[(i * x->vectorSize) + j]) / x->coefficient[j];
-            s += tab[j];
+        //
+        memo[j] = (x->alpha[(i * x->vectorSize) + j] * x->beta[(i * x->vectorSize) + j]) / x->coefficient[j];
+        s += memo[j];
+        //
         }
             
         if (s) {
@@ -413,7 +415,7 @@ PIZ_INLINE void pizMarkovModelBaumWelch (PIZMarkovModel *x, long argc, long *arg
                 
                 for (n = 0; n < argc; n++) {
                     if (argv[n] == j) {
-                        k += tab[n];   
+                        k += memo[n];   
                     }
                 }
             
