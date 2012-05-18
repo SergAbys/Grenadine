@@ -69,6 +69,7 @@
 #define PIZ_SEQUENCE_INIT_TEMP_SIZE         128
 #define PIZ_SEQUENCE_INIT_LOOKUP_SIZE       19
 #define PIZ_SEQUENCE_DEFAULT_SIZE           288 
+#define PIZ_SEQUENCE_DEFAULT_PITCH          60
 #define PIZ_SEQUENCE_DEFAULT_VELOCITY       80
 
 // -------------------------------------------------------------------------------------------------------------

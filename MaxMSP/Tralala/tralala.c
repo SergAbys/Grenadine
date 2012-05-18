@@ -65,6 +65,7 @@ int main (void)
     class_addmethod (c, (method)tralala_pattern,    "pattern",      A_GIMME, 0);
     class_addmethod (c, (method)tralala_note,       "note",         A_GIMME, 0);
     class_addmethod (c, (method)tralala_rotate,     "rotate",       A_GIMME, 0);
+    class_addmethod (c, (method)tralala_scramble,   "scramble",     A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
 
@@ -281,11 +282,6 @@ void tralala_pattern (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_clear (t_tralala *x) 
-{   
-    tralala_send (x, PIZ_EVENT_CLEAR, 0, NULL);
-}
-
 void tralala_note (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
     if (argc > 1) {
@@ -299,16 +295,24 @@ void tralala_note (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     }
 }
 
-void tralala_transpose (t_tralala *x, long n)
-{
-    long values[ ] = { n, PIZ_VALUE_PITCH };
-    tralala_send (x, PIZ_EVENT_TRANSPOSE, 2, values);
+void tralala_clear (t_tralala *x) 
+{   
+    tralala_send (x, PIZ_EVENT_CLEAR, 0, NULL);
 }
 
 void tralala_clean (t_tralala *x, long n)
 {
     tralala_send (x, PIZ_EVENT_CLEAN, 1, &n);
 }
+
+void tralala_transpose (t_tralala *x, long n)
+{
+    tralala_send (x, PIZ_EVENT_TRANSPOSE, 1, &n);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void tralala_rotate (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
@@ -319,6 +323,17 @@ void tralala_rotate (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     }
     
     tralala_send  (x, PIZ_EVENT_ROTATE, 2, values);
+}
+
+void tralala_scramble (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    long values[ ] = { 0, PIZ_VALUE_PITCH };
+    
+    if (argc && argv) {
+        tralala_parse (argc, argv, values);
+    }
+    
+    tralala_send  (x, PIZ_EVENT_SCRAMBLE, 2, values);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -332,6 +347,7 @@ void tralala_parse (long argc, t_atom *argv, long *values)
     for (i = 0; i < argc; i++) {
         if ((atom_gettype (argv + i)) == A_LONG) {
             (*values) = atom_getlong (argv + i);
+            
         } else if (atom_gettype (argv + i) == A_SYM) {
             tralala_selectorWithSymbol (atom_getsym (argv + i), values + 1);
         }

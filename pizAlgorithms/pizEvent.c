@@ -59,8 +59,8 @@ PIZ_LONG pizEventTypes[ ]   = { PIZ_EVENT_RUN,                  // PIZ_EVENT_INI
                                 PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_PATTERN
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_NOTE
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CLEAR
-                                PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_TRANSPOSE
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CLEAN
+                                PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_TRANSPOSE
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_ROTATE
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_SCRAMBLE
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_SORT
@@ -109,8 +109,8 @@ PIZ_CHAR pizEventNames[ ]   = { "Init",
                                 // 
                                 "Note",
                                 "Clear",
-                                "Transpose",
                                 "Clean",
+                                "Transpose",
                                 "Rotate",
                                 "Scramble",
                                 "Sort",

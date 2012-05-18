@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	May 12, 2012.
+ * \date	May 18, 2012.
  */
  
 /*
@@ -74,10 +74,10 @@ PIZ_METHOD pizEventMethods[ ]   = { pizAgentInit,                   // PIZ_EVENT
                                     pizSequenceSetPattern,          // PIZ_EVENT_PATTERN
                                     pizSequenceNote,                // PIZ_EVENT_NOTE
                                     pizSequenceClear,               // PIZ_EVENT_CLEAR
-                                    pizSequenceTranspose,           // PIZ_EVENT_TRANSPOSE
                                     pizSequenceClean,               // PIZ_EVENT_CLEAN
+                                    pizSequenceTranspose,           // PIZ_EVENT_TRANSPOSE
                                     pizSequenceRotate,              // PIZ_EVENT_ROTATE
-                                    NULL,                           // PIZ_EVENT_SCRAMBLE
+                                    pizSequenceScramble,            // PIZ_EVENT_SCRAMBLE
                                     NULL,                           // PIZ_EVENT_SORT
                                     NULL,                           // PIZ_EVENT_CHANGE
                                     NULL,                           // PIZ_EVENT_FILL

@@ -116,7 +116,7 @@ PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
         long  i;
         ulong flags = PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS;
         long  values[ ] = { -1,
-                             0, 
+                             PIZ_SEQUENCE_DEFAULT_PITCH, 
                              PIZ_SEQUENCE_DEFAULT_VELOCITY, 
                              x->noteValue, 
                              0 };
@@ -147,22 +147,6 @@ PIZError pizSequenceClear (PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceTranspose (PIZSequence *x, const PIZEvent *event)
-{
-    long value;
-    
-    if (!(pizEventValue (event, &value))) {
-        x->down = CLAMP (x->down + value, 0, PIZ_MAGIC_PITCH);
-        x->up   = CLAMP (x->up + value, 0, PIZ_MAGIC_PITCH);
-        
-        x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
-        
-        pizSequenceForEach (x, pizSequenceChangeNote, event);
-    }
-    
-    return PIZ_GOOD;
-}
-
 PIZError pizSequenceClean (PIZSequence *x, const PIZEvent *event)
 {
     long i;
@@ -180,6 +164,22 @@ PIZError pizSequenceClean (PIZSequence *x, const PIZEvent *event)
             pizSequenceRemoveNote (x, x->tempNotes1[i], NULL);
         }
         pizSequenceMakeMap (x);
+    }
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceTranspose (PIZSequence *x, const PIZEvent *event)
+{
+    long value;
+    
+    if (!(pizEventValue (event, &value))) {
+        x->down = CLAMP (x->down + value, 0, PIZ_MAGIC_PITCH);
+        x->up   = CLAMP (x->up + value, 0, PIZ_MAGIC_PITCH);
+        
+        x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
+        
+        pizSequenceForEach (x, pizSequenceChangeNote, event);
     }
     
     return PIZ_GOOD;
@@ -213,9 +213,42 @@ PIZError pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
+PIZError pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
+{
+    long argc;
+    long *argv = NULL;
+        
+    if (!(pizEventPtr (event, &argc, &argv))) {
+    //
+    long i, k;
+    long selector = CLAMP (argv[1], PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
+        
+    PIZ_PICKUP_NOTES
+    
+    for (i = 0; i < k; i++) {
+        x->tempValues[i] = x->tempNotes1[i]->values[selector];
+    }
+        
+    for (i = (k - 1); i > 0; i--) {
+        long    h = (i + 1) * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+        PIZNote *temp = NULL;
+            
+        temp = x->tempNotes1[h];
+        x->tempNotes1[h] = x->tempNotes1[i];
+        x->tempNotes1[i] = temp;
+    }
+            
+    PIZ_FILL_NOTES
+    //
+    }
+    
+    return PIZ_GOOD;
+}
+
+/*
 //PIZError pizSequenceScramble (PIZSequence *x, PIZMidiSelector selector)
 PIZError pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
-{/*
+{
     long i, k;
         
     PIZ_PICKUP_NOTES
@@ -233,10 +266,10 @@ PIZError pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
         x->tempNotes1[i] = temp;
     }
             
-    PIZ_FILL_NOTES*/
+    PIZ_FILL_NOTES
     
     return PIZ_GOOD;
-}
+}*/
 
 //PIZError pizSequenceSort (PIZSequence *x, PIZMidiSelector selector, bool down)
 PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
