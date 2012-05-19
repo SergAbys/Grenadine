@@ -1,7 +1,7 @@
 /*
  * \file	pizSequenceLibrary.c
  * \author	Jean Sapristi
- * \date	May 13, 2012.
+ * \date	May 19, 2012.
  */
  
 /*
@@ -91,7 +91,7 @@ void pizSequenceRemoveNote (PIZSequence *x, PIZNote *note, const PIZEvent *event
     pizItemsetUnsetAtIndex (&x->changedNotes, tag);
 }
 
-void pizSequenceChangeNote (PIZSequence *x, PIZNote *note, const PIZEvent *event)
+void pizSequenceTransposeNote (PIZSequence *x, PIZNote *note, const PIZEvent *event)
 {
     long n;
     
@@ -104,47 +104,38 @@ void pizSequenceChangeNote (PIZSequence *x, PIZNote *note, const PIZEvent *event
     }
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void pizSequenceNearby (PIZSequence *x, PIZNote *note, const PIZEvent *event)
+void pizSequenceChangeNote (PIZSequence *x, PIZNote *note, const PIZEvent *event)
 {
-    long value;
-    
-    if (!(pizEventValue (event, &value))) {
+    long argc;
+    long *argv = NULL;
+        
+    if (!(pizEventPtr (event, &argc, &argv))) {
     //
-    bool death = false;
-    long j, m, n;
-    long scale = pizArrayCount (x->scale);
-    long pitch = note->values[PIZ_VALUE_PITCH];
-    
-    value = CLAMP (value, 0, PIZ_MAGIC_PITCH);
-            
-    if (scale) {
-        pitch += pizArrayAtIndex (x->scale, pitch % scale);
-    }
-    
-    m = CLAMP ((pitch - value), 0, PIZ_MAGIC_PITCH);
-    n = CLAMP ((pitch + value), 0, PIZ_MAGIC_PITCH);
-    
-    for (j = m; j <= n; j++) {
-        if (x->tempValues[j] == (note->position + 1)) {
-            death = true;
+    long t;
+    long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+    long v = argv[0];
+    long s = CLAMP (argv[1], PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
+        
+    if (h < x->chance) {
+        t = note->values[s] + v;
+        
+        switch (s) {
+            case PIZ_VALUE_PITCH    : t = CLAMP (t, 0, PIZ_MAGIC_PITCH);    break;
+            case PIZ_VALUE_VELOCITY : t = CLAMP (t, 0, PIZ_MAGIC_VELOCITY); break;
+            case PIZ_VALUE_DURATION : t = CLAMP (t, 1, PIZ_SEQUENCE_MAXIMUM_DURATION); break;
+            case PIZ_VALUE_CHANNEL  : t = CLAMP (t, 0, PIZ_MAGIC_CHANNEL);  break;                           
         }
-    }
-    
-    if (death) {
-        x->tempNotes1[x->tempIndex] = note;
-        x->tempIndex ++;
-    } else {
-        x->tempValues[pitch] = (note->position + 1);
+        
+        if (note->values[s] != t) {
+            note->values[s] = t;
+            pizItemsetSetAtIndex (&x->changedNotes, note->tag);
+        }
     }
     //
     }
 }
 
-void pizSequenceFillTempHash (PIZSequence *x, PIZNote *note, const PIZEvent *event)
+void pizSequenceTempHashWithAllNotes (PIZSequence *x, PIZNote *note, const PIZEvent *event)
 {   /*
     long key, scale, offset = 0;
     
@@ -158,10 +149,42 @@ void pizSequenceFillTempHash (PIZSequence *x, PIZNote *note, const PIZEvent *eve
     x->tempError |= pizHashTableAdd (x->tempHash, key, (void *)note);*/
 }
 
-void pizSequenceFillTempNotes (PIZSequence *x, PIZNote *note, const PIZEvent *event)
+void pizSequenceTempNotesWithAllNotes (PIZSequence *x, PIZNote *note, const PIZEvent *event)
 {
     x->tempNotes1[x->tempIndex] = note;
     x->tempIndex ++;
+}
+
+void pizSequenceTempNotesWithNearbyNotes (PIZSequence *x, PIZNote *note, const PIZEvent *event)
+{
+    long value;
+    
+    if (!(pizEventValue (event, &value))) {
+    //
+    bool death = false;
+    long j, m, n;
+    long pitch = note->values[PIZ_VALUE_PITCH];
+    
+    value = CLAMP (value, 0, PIZ_MAGIC_PITCH);
+    
+    m = CLAMP ((pitch - value), 0, PIZ_MAGIC_PITCH);
+    n = CLAMP ((pitch + value), 0, PIZ_MAGIC_PITCH);
+    
+    for (j = m; j <= n; j++) {
+        if (x->tempValues[j] == (note->position + 1)) {
+            death = true;
+        }
+    }
+    
+    if (death) {
+        x->tempNotes1[x->tempIndex] = note;
+        x->tempIndex ++;
+        
+    } else {
+        x->tempValues[pitch] = (note->position + 1);
+    }
+    //
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------

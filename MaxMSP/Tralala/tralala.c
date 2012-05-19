@@ -6,7 +6,7 @@
  */
  
 /*
- *  May 18, 2012.
+ *  May 19, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -66,6 +66,8 @@ int main (void)
     class_addmethod (c, (method)tralala_note,       "note",         A_GIMME, 0);
     class_addmethod (c, (method)tralala_rotate,     "rotate",       A_GIMME, 0);
     class_addmethod (c, (method)tralala_scramble,   "scramble",     A_GIMME, 0);
+    class_addmethod (c, (method)tralala_sort,       "sort",         A_GIMME, 0);
+    class_addmethod (c, (method)tralala_change,     "change",       A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
 
@@ -334,6 +336,28 @@ void tralala_scramble (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     }
     
     tralala_send  (x, PIZ_EVENT_SCRAMBLE, 2, values);
+}
+
+void tralala_sort (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    long values[ ] = { 0, PIZ_VALUE_PITCH };
+    
+    if (argc && argv) {
+        tralala_parse (argc, argv, values);
+    }
+    
+    tralala_send  (x, PIZ_EVENT_SORT, 2, values);
+}
+
+void tralala_change (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    long values[ ] = { 0, PIZ_VALUE_PITCH };
+    
+    if (argc && argv) {
+        tralala_parse (argc, argv, values);
+    }
+    
+    tralala_send  (x, PIZ_EVENT_CHANGE, 2, values);
 }
 
 // -------------------------------------------------------------------------------------------------------------

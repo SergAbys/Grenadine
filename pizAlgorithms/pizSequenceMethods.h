@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceMethods.h
  * \author  Jean Sapristi
- * \date    May 11, 2012.
+ * \date    May 19, 2012.
  */
  
 /*

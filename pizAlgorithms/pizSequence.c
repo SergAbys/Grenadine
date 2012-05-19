@@ -63,7 +63,7 @@ PIZSequence *pizSequenceNew (long size)
     if (x = (PIZSequence *)malloc (sizeof(PIZSequence))) {
     //
     long argv1[ ] = { 0, PIZ_SEQUENCE_MAXIMUM_NOTES };
-    long argv2[ ] = { PIZ_SEQUENCE_INIT_LOOKUP_SIZE, PIZ_SEQUENCE_MAXIMUM_NOTES };
+    long argv2[ ] = { PIZ_SEQUENCE_LOOKUP_SIZE, PIZ_SEQUENCE_MAXIMUM_NOTES };
     
     if (size > 0) {
         x->size = size;
@@ -74,9 +74,9 @@ PIZSequence *pizSequenceNew (long size)
     x->map           = pizArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
     x->scale         = pizArrayNew (PIZ_MAGIC_SCALE);
     x->pattern       = pizArrayNew (PIZ_EVENT_DATA_SIZE);
-    x->tempValues    = (long *)malloc (sizeof(long) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
-    x->tempNotes1    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
-    x->tempNotes2    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_INIT_TEMP_SIZE);
+    x->tempValues    = (long *)malloc (sizeof(long) * PIZ_SEQUENCE_TEMP_SIZE);
+    x->tempNotes1    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_TEMP_SIZE);
+    x->tempNotes2    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_TEMP_SIZE);
     x->tempHash      = pizHashTableNew (2, argv1);
     x->lookup        = pizHashTableNew (2, argv2);
     x->factorOracle  = pizFactorOracleNew  (0, NULL);
