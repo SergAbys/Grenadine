@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    May 15, 2012.
+ * \date    May 20, 2012.
  */
  
 /*
@@ -79,7 +79,7 @@
 #define PIZ_SEQUENCE_FLAG_NONE              0UL
 #define PIZ_SEQUENCE_FLAG_SNAP              1UL
 #define PIZ_SEQUENCE_FLAG_AMBITUS           2UL
-#define PIZ_SEQUENCE_FLAG_CLIP              4UL
+#define PIZ_SEQUENCE_FLAG_CLIP              4UL 
 
 #define PIZ_SEQUENCE_FLAG_ZONE              (1UL << 0)
 #define PIZ_SEQUENCE_FLAG_CHANCE            (1UL << 1)
