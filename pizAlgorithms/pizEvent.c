@@ -66,7 +66,6 @@ PIZ_LONG pizEventTypes[ ]   = { PIZ_EVENT_RUN,                  // PIZ_EVENT_INI
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_SORT
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CHANGE
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_FILL
-                                PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_RANDOM
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_KILL
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CYCLE
                                 PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_ZOULOU
@@ -116,7 +115,6 @@ PIZ_CHAR pizEventNames[ ]   = { "Init",
                                 "Sort",
                                 "Change",
                                 "Fill",
-                                "Random",
                                 "Kill",
                                 "Cycle",
                                 "Zoulou",

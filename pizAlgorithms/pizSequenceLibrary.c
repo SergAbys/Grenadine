@@ -135,6 +135,35 @@ void pizSequenceChangeNote (PIZSequence *x, PIZNote *note, const PIZEvent *event
     }
 }
 
+void pizSequenceFillNote (PIZSequence *x, PIZNote *note, const PIZEvent *event)
+{
+    long argc;
+    long *argv = NULL;
+        
+    if (!(pizEventPtr (event, &argc, &argv))) {
+    //
+    long t;
+    long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+    long v = argv[0];
+    long s = CLAMP (argv[1], PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
+        
+    if (h < x->chance) {
+        switch (s) {
+            case PIZ_VALUE_PITCH    : t = CLAMP (v, 0, PIZ_MAGIC_PITCH);    break;
+            case PIZ_VALUE_VELOCITY : t = CLAMP (v, 0, PIZ_MAGIC_VELOCITY); break;
+            case PIZ_VALUE_DURATION : t = CLAMP (v, 1, PIZ_SEQUENCE_MAXIMUM_DURATION); break;
+            case PIZ_VALUE_CHANNEL  : t = CLAMP (v, 0, PIZ_MAGIC_CHANNEL);  break;                           
+        }
+        
+        if (note->values[s] != t) {
+            note->values[s] = t;
+            pizItemsetSetAtIndex (&x->changedNotes, note->tag);
+        }
+    }
+    //
+    }
+}
+
 void pizSequenceTempHashWithAllNotes (PIZSequence *x, PIZNote *note, const PIZEvent *event)
 {   /*
     long key, scale, offset = 0;

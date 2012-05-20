@@ -80,8 +80,7 @@ PIZ_METHOD pizEventMethods[ ]   = { pizAgentInit,                   // PIZ_EVENT
                                     pizSequenceScramble,            // PIZ_EVENT_SCRAMBLE
                                     pizSequenceSort,                // PIZ_EVENT_SORT
                                     pizSequenceChange,              // PIZ_EVENT_CHANGE
-                                    NULL,                           // PIZ_EVENT_FILL
-                                    NULL,                           // PIZ_EVENT_RANDOM
+                                    pizSequenceFill,                // PIZ_EVENT_FILL
                                     NULL,                           // PIZ_EVENT_KILL
                                     NULL,                           // PIZ_EVENT_CYCLE 
                                     NULL,                           // PIZ_EVENT_ZOULOU
