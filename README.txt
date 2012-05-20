@@ -14,8 +14,8 @@ Robert Godin, Rokia Missaoui, Hassan Alaoui :
      November 11, 1995.
 
 T. Brouard, M. Slimane, J.-P Asselin de Beauville, G. Venturini :
-    "Apprentissage d'une chaine de Markov cachee", 
-     Revue de Statistique Appliquee, tome 46, no. 2 (1998), p. 83-108. 
+    "Apprentissage d'une chaîne de Markov cachée", 
+     Revue de Statistique Appliquée, tome 46, no. 2 (1998), p. 83-108. 
 
 Jim Holmstrom :
     "Growing Neural Gas, GNG with Utility and Supervised GNG", August 30, 2002. 
