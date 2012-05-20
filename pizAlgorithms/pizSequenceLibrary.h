@@ -50,25 +50,25 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void    pizSequenceForEach                    (PIZSequence *x, PIZMethod f, const PIZEvent *event);
+PIZ_LOCAL void    pizSequenceForEach                   (PIZSequence *x, PIZMethod f, const PIZEvent *event);
 
-PIZ_LOCAL void    pizSequenceRemoveNote                 (PIZSequence *x, PIZNote *note, const PIZEvent *event);
-PIZ_LOCAL void    pizSequenceTransposeNote              (PIZSequence *x, PIZNote *note, const PIZEvent *event);
-PIZ_LOCAL void    pizSequenceChangeNote                 (PIZSequence *x, PIZNote *note, const PIZEvent *event);
-PIZ_LOCAL void    pizSequenceFillNote                   (PIZSequence *x, PIZNote *note, const PIZEvent *event);
+PIZ_LOCAL void    pizSequenceRemoveNote                (PIZSequence *x, PIZNote *note, const PIZEvent *event);
+PIZ_LOCAL void    pizSequenceTransposeNote             (PIZSequence *x, PIZNote *note, const PIZEvent *event);
+PIZ_LOCAL void    pizSequenceChangeNote                (PIZSequence *x, PIZNote *note, const PIZEvent *event);
+PIZ_LOCAL void    pizSequenceFillNote                  (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 
-PIZ_LOCAL void    pizSequenceTempHashWithAllNotes       (PIZSequence *x, PIZNote *note, const PIZEvent *event);
-PIZ_LOCAL void    pizSequenceTempNotesWithAllNotes      (PIZSequence *x, PIZNote *note, const PIZEvent *event);
-PIZ_LOCAL void    pizSequenceTempNotesWithNearbyNotes   (PIZSequence *x, PIZNote *note, const PIZEvent *event);
+PIZ_LOCAL void    pizSequenceTempHashWithAllNotes      (PIZSequence *x, PIZNote *note, const PIZEvent *event);
+PIZ_LOCAL void    pizSequenceTempNotesWithAllNotes     (PIZSequence *x, PIZNote *note, const PIZEvent *event);
+PIZ_LOCAL void    pizSequenceTempNotesWithNearbyNotes  (PIZSequence *x, PIZNote *note, const PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZNote *pizSequenceNewNote                   (PIZSequence *x, long tag, long *argv, ulong flags);
+PIZ_LOCAL PIZNote *pizSequenceNewNote                  (PIZSequence *x, long tag, long *argv, ulong flags);
 
-PIZ_LOCAL void    pizSequenceMakeMap                    (PIZSequence *x);
-PIZ_LOCAL long    pizSequenceMovePitchToAmbitus         (PIZSequence *x, long pitch);
-PIZ_LOCAL long    pizSequenceSnapPositionToPattern      (PIZSequence *x, long position);
+PIZ_LOCAL void    pizSequenceMakeMap                   (PIZSequence *x);
+PIZ_LOCAL long    pizSequenceMovePitchToAmbitus        (PIZSequence *x, long pitch);
+PIZ_LOCAL long    pizSequenceSnapPositionToPattern     (PIZSequence *x, long position);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

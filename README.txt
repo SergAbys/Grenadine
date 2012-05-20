@@ -18,5 +18,4 @@ T. Brouard, M. Slimane, J.-P Asselin de Beauville, G. Venturini :
      Revue de Statistique Appliquee, tome 46, no. 2 (1998), p. 83-108. 
 
 Jim Holmstrom :
-    "Growing Neural Gas, GNG with Utility and Supervised GNG", 
-     August 30, 2002. 
+    "Growing Neural Gas, GNG with Utility and Supervised GNG", August 30, 2002. 
