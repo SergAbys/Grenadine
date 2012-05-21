@@ -1,7 +1,7 @@
-/**
- * \file    pizSequenceAttributes.h
+/*
+ * \file    pizSequenceGraphic.c
  * \author  Jean Sapristi
- * \date    May 14, 2012.
+ * \date    May 21, 2012.
  */
  
 /*
@@ -34,31 +34,13 @@
  *  The fact that you are presently reading this means that you have had
  *  knowledge of the CeCILL-C license and that you accept its terms.
  */
- 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#ifndef PIZ_SEQUENCE_ATTRIBUTES_H
-#define PIZ_SEQUENCE_ATTRIBUTES_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizEvent.h"
-#include "pizSequence.h"
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 // -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_LOCAL PIZError  pizSequenceSetChance        (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetVelocity      (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetChannel       (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetChord         (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetCell          (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetNoteValue     (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetScale         (PIZSequence *x, const PIZEvent *event); //
-PIZ_LOCAL PIZError  pizSequenceSetPattern       (PIZSequence *x, const PIZEvent *event); //
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_ATTRIBUTES_H
+// -----------------------------------------------------------------------------------------------------------:x

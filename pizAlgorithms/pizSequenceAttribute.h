@@ -1,7 +1,7 @@
 /**
- * \file    pizSequenceMethods.h
+ * \file    pizSequenceAttribute.h
  * \author  Jean Sapristi
- * \date    May 20, 2012.
+ * \date    May 14, 2012.
  */
  
 /*
@@ -34,12 +34,12 @@
  *  The fact that you are presently reading this means that you have had
  *  knowledge of the CeCILL-C license and that you accept its terms.
  */
-
+ 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_SEQUENCE_METHODS_H
-#define PIZ_SEQUENCE_METHODS_H
+#ifndef PIZ_SEQUENCE_ATTRIBUTE_H
+#define PIZ_SEQUENCE_ATTRIBUTE_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -50,23 +50,15 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZError  pizSequenceNote            (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceClear           (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceClean           (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceTranspose       (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceRotate          (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceScramble        (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSort            (PIZSequence *x, const PIZEvent *event);
-
-PIZ_LOCAL PIZError  pizSequenceChange          (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceFill            (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceKill            (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceCycle           (PIZSequence *x, const PIZEvent *event);
-
-PIZ_LOCAL PIZError  pizSequenceAlgorithm       (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceNovember        (PIZSequence *x, const PIZEvent *event); //
-PIZ_LOCAL PIZError  pizSequenceJuliet          (PIZSequence *x, const PIZEvent *event); //
+PIZ_LOCAL PIZError  pizSequenceSetChance        (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSetVelocity      (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSetChannel       (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSetChord         (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSetCell          (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSetNoteValue     (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSetScale         (PIZSequence *x, const PIZEvent *event); //
+PIZ_LOCAL PIZError  pizSequenceSetPattern       (PIZSequence *x, const PIZEvent *event); //
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_METHODS_H
+#endif // PIZ_SEQUENCE_ATTRIBUTE_H

@@ -252,11 +252,6 @@ PIZError pizSequenceRefresh (PIZSequence *x, PIZAgent *agent)
     return err;
 }
 
-PIZError pizSequenceLearn (PIZSequence *x, const PIZEvent *event)
-{
-    return PIZ_GOOD;
-}
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -

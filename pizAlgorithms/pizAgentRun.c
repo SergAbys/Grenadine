@@ -1,9 +1,9 @@
-/**
- * \file	pizAgentMethods.h
+/*
+ * \file	pizAgentRun.c
  * \author	Jean Sapristi
- * \date	May 5, 2012.
+ * \date	May 4, 2012.
  */
-
+ 
 /*
  *  Copyright (c) 2012, Jean Sapristi & Tom Javel, 
  *  "nicolas.danet@free.fr".
@@ -38,24 +38,75 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_AGENT_METHODS_H
-#define PIZ_AGENT_METHODS_H
+#include "pizAgentRun.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizAgent.h"
+#define PIZ_MINIMUM_BPM     40
+#define PIZ_MAXIMUM_BPM     300
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
-PIZ_LOCAL PIZError pizAgentInit       (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentPlay       (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentStop       (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentLoop       (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentUnloop     (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentBPM        (PIZAgent *x, PIZEvent *event);
+PIZError pizAgentInit (PIZAgent *x, PIZEvent *event)
+{
+    return PIZ_GOOD;
+}
+
+PIZError pizAgentPlay (PIZAgent *x, PIZEvent *event)
+{
+    if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
+        x->flags |= PIZ_AGENT_FLAG_REPLAY;
+    } else {
+        pizSequenceGoToStart (x->sequence);
+        x->flags |= PIZ_AGENT_FLAG_RUNNING; 
+    }
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizAgentStop (PIZAgent *x, PIZEvent *event)
+{
+    x->flags &= ~(PIZ_AGENT_FLAG_LOOPED | PIZ_AGENT_FLAG_REPLAY | PIZ_AGENT_FLAG_RUNNING);
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizAgentLoop (PIZAgent *x, PIZEvent *event)
+{
+    x->flags |= PIZ_AGENT_FLAG_LOOPED;
+    
+    return (pizAgentPlay (x, event));
+}
+
+PIZError pizAgentUnloop (PIZAgent *x, PIZEvent *event)
+{
+    x->flags &= ~PIZ_AGENT_FLAG_LOOPED;
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizAgentBPM (PIZAgent *x, PIZEvent *event)
+{
+    long value;
+    
+    if (!(pizEventValue (event, &value))) {
+    //
+    if ((value >= PIZ_MINIMUM_BPM) && (value <= PIZ_MAXIMUM_BPM) && (value != x->bpm)) {
+        x->bpm = value;
+        pizAgentAddNotification (x, PIZ_EVENT_CHANGED_BPM, -1, 1, &value);
+            
+        pizNanoSet     (&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);    
+        pizTimeCopy    (&x->grainEnd, &x->grainStart);
+        pizTimeAddNano (&x->grainEnd, &x->grainSize);
+    }
+    //
+    }
+    
+    return PIZ_GOOD;
+}
 
 // -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_AGENT_METHODS_H
+// -----------------------------------------------------------------------------------------------------------:x

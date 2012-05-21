@@ -1,7 +1,7 @@
 /**
- * \file    pizSequenceRun.h
+ * \file    pizSequenceGraphic.h
  * \author  Jean Sapristi
- * \date    May 15, 2012.
+ * \date    May 21, 2012.
  */
  
 /*
@@ -38,40 +38,15 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_SEQUENCE_RUN_H
-#define PIZ_SEQUENCE_RUN_H
+#ifndef PIZ_SEQUENCE_GRAPHIC_H
+#define PIZ_SEQUENCE_GRAPHIC_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizAgent.h"
-      
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL bool      pizSequenceIsAtEnd      (PIZSequence *x);
-PIZ_LOCAL void      pizSequenceGoToStart    (PIZSequence *x);
-
-PIZ_LOCAL PIZError  pizSequenceStep         (PIZSequence *x, PIZAgent *agent); //
-PIZ_LOCAL PIZError  pizSequenceRefresh      (PIZSequence *x, PIZAgent *agent); //
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-#ifdef PIZ_EXTERN_INLINE
-
-PIZ_EXTERN bool pizSequenceIsAtEnd (PIZSequence *x)
-{
-    return (x->index >= x->end);
-}
-
-PIZ_EXTERN void pizSequenceGoToStart (PIZSequence *x)
-{
-    x->index = x->start;
-}
-
-#endif // PIZ_EXTERN_INLINE
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_RUN_H
+#endif // PIZ_SEQUENCE_GRAPHIC_H

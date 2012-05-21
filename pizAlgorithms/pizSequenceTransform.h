@@ -1,7 +1,7 @@
 /**
- * \file    pizSequenceRun.h
+ * \file    pizSequenceTransform.h
  * \author  Jean Sapristi
- * \date    May 15, 2012.
+ * \date    May 20, 2012.
  */
  
 /*
@@ -34,44 +34,41 @@
  *  The fact that you are presently reading this means that you have had
  *  knowledge of the CeCILL-C license and that you accept its terms.
  */
- 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#ifndef PIZ_SEQUENCE_RUN_H
-#define PIZ_SEQUENCE_RUN_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizAgent.h"
-      
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_LOCAL bool      pizSequenceIsAtEnd      (PIZSequence *x);
-PIZ_LOCAL void      pizSequenceGoToStart    (PIZSequence *x);
-
-PIZ_LOCAL PIZError  pizSequenceStep         (PIZSequence *x, PIZAgent *agent); //
-PIZ_LOCAL PIZError  pizSequenceRefresh      (PIZSequence *x, PIZAgent *agent); //
+#ifndef PIZ_SEQUENCE_TRANSFORM_H
+#define PIZ_SEQUENCE_TRANSFORM_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifdef PIZ_EXTERN_INLINE
-
-PIZ_EXTERN bool pizSequenceIsAtEnd (PIZSequence *x)
-{
-    return (x->index >= x->end);
-}
-
-PIZ_EXTERN void pizSequenceGoToStart (PIZSequence *x)
-{
-    x->index = x->start;
-}
-
-#endif // PIZ_EXTERN_INLINE
+#include "pizEvent.h"
+#include "pizSequence.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_RUN_H
+
+PIZ_LOCAL PIZError  pizSequenceNote            (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceClear           (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceClean           (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceTranspose       (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceRotate          (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceScramble        (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSort            (PIZSequence *x, const PIZEvent *event);
+
+PIZ_LOCAL PIZError  pizSequenceChange          (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceFill            (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceKill            (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceCycle           (PIZSequence *x, const PIZEvent *event);
+
+PIZ_LOCAL PIZError  pizSequenceAlgorithm       (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceNovember        (PIZSequence *x, const PIZEvent *event); //
+PIZ_LOCAL PIZError  pizSequenceJuliet          (PIZSequence *x, const PIZEvent *event); //
+
+PIZ_LOCAL PIZError  pizSequenceLearn           (PIZSequence *x, const PIZEvent *event);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#endif // PIZ_SEQUENCE_TRANSFORM_H
