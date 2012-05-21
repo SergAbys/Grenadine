@@ -61,6 +61,7 @@ int main (void)
     class_addmethod (c, (method)tralala_chord,      "chord",        A_LONG, 0);
     class_addmethod (c, (method)tralala_transpose,  "transpose",    A_LONG, 0);
     class_addmethod (c, (method)tralala_clean,      "clean",        A_LONG, 0);
+    class_addmethod (c, (method)tralala_int,        "int",          A_LONG, 0);
     class_addmethod (c, (method)tralala_cell,       "cell",         A_GIMME, 0);
     class_addmethod (c, (method)tralala_scale,      "scale",        A_GIMME, 0);
     class_addmethod (c, (method)tralala_pattern,    "pattern",      A_GIMME, 0);
@@ -395,6 +396,15 @@ void tralala_cycle (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     }
     //
     }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void tralala_int (t_tralala *x, long n)
+{
+    tralala_send (x, PIZ_EVENT_LEARN, 1, &n);
 }
 
 // -------------------------------------------------------------------------------------------------------------

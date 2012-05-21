@@ -386,40 +386,39 @@ PIZError pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-//PIZError pizSequenceAlgorithm (PIZSequence *x, PIZAlgorithm *algorithm)
 PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
 {
-    PIZError        err = PIZ_GOOD; /*
-    long            k;
-    PIZMethodLong   count = NULL;
-    PIZMethodError  proceed = NULL;
-    PIZMidiSelector selector = PIZ_VALUE_PITCH;
+    long         k;
+    PIZError     err = PIZ_GOOD;
+    PIZEventCode code;
     
+    pizEventCode (event, &code);
     k = pizSequenceFillTemporary (x);
-
-    count = algorithm->count;
-    proceed = algorithm->proceed;
     
-    if ((*count)(algorithm)) {
-        err = (*proceed)(algorithm, k, x->tempValues);
+    if (code == PIZ_EVENT_ZOULOU) {
+        err = pizFactorOracleProceed (x->factorOracle, k, x->tempValues);
+    } else {
+        err = pizGaloisLatticeProceed (x->galoisLattice, k, x->tempValues);
     }
     
     if (!err) {
-        long i, h;  
-        
-        for (i = 0; i < k; i++) {
-            x->tempValues[i] = pizSequenceToAmbitus (x, x->tempValues[i]);
-        }
-        
-        for (i = 0; i < k; i++) {        
-            h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
-            if (h >= x->chance) {
-                x->tempValues[i] = x->tempNotes1[i]->values[selector];
-            } 
-        }
-        
-        pizSequenceWithTemporary (x, selector, 0);
-    }*/
+    //
+    long i;  
+    
+    for (i = 0; i < k; i++) {
+        x->tempValues[i] = pizSequenceToAmbitus (x, x->tempValues[i]);
+    }
+    
+    for (i = 0; i < k; i++) {        
+        long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+        if (h >= x->chance) {
+            x->tempValues[i] = x->tempNotes1[i]->values[PIZ_VALUE_PITCH];
+        } 
+    }
+    
+    pizSequenceWithTemporary (x, PIZ_VALUE_PITCH, 0);
+    //
+    }
     
     return err;
 }
@@ -784,11 +783,6 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
     }*/
                         
     return err;
-}
-
-PIZError pizSequenceLearn (PIZSequence *x, const PIZEvent *event)
-{
-    return PIZ_GOOD;
 }
 
 // -------------------------------------------------------------------------------------------------------------

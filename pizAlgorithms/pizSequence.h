@@ -1,7 +1,7 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    May 20, 2012.
+ * \date    May 21, 2012.
  */
  
 /*
@@ -195,6 +195,7 @@ typedef struct _PIZSequence {
     PIZHashTable        *lookup;
     PIZArray            *scale;
     PIZArray            *pattern;
+    PIZArray            *toBeLearned;
     PIZFactorOracle     *factorOracle;
     PIZGaloisLattice    *galoisLattice;
     PIZItemset          usedNotes;

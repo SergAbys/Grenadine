@@ -79,6 +79,7 @@ PIZSequence *pizSequenceNew (long size)
     x->tempNotes2    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_TEMP_SIZE);
     x->tempHash      = pizHashTableNew (2, argv1);
     x->lookup        = pizHashTableNew (2, argv2);
+    x->toBeLearned   = pizArrayNew (0);
     x->factorOracle  = pizFactorOracleNew  (0, NULL);
     x->galoisLattice = pizGaloisLatticeNew (0, NULL);
     
@@ -90,6 +91,7 @@ PIZSequence *pizSequenceNew (long size)
         x->tempNotes2    &&
         x->tempHash      &&
         x->lookup        &&
+        x->toBeLearned   &&
         x->factorOracle  &&
         x->galoisLattice &&
         (x->timeline = (PIZLinklist **)calloc (x->size, sizeof(PIZLinklist **)))) {
@@ -146,6 +148,7 @@ void pizSequenceFree (PIZSequence *x)
     pizArrayFree (x->map);
     pizArrayFree (x->scale);
     pizArrayFree (x->pattern);
+    pizArrayFree (x->toBeLearned);
     
     pizHashTableFree (x->tempHash);
     pizHashTableFree (x->lookup);

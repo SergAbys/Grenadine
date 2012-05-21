@@ -38,11 +38,12 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#include "pizAgentRun.h"
 #include "pizAgentLoop.h"
 #include "pizSequenceRun.h"
-#include "pizAgentRun.h"
 #include "pizSequenceTransform.h"
 #include "pizSequenceAttribute.h"
+#include "pizSequenceGraphic.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -83,11 +84,11 @@ PIZ_METHOD pizEventMethods[ ]   = { pizAgentInit,                   // PIZ_EVENT
                                     pizSequenceFill,                // PIZ_EVENT_FILL
                                     pizSequenceKill,                // PIZ_EVENT_KILL
                                     pizSequenceCycle,               // PIZ_EVENT_CYCLE 
-                                    NULL,                           // PIZ_EVENT_ZOULOU
-                                    NULL,                           // PIZ_EVENT_ROMEO
+                                    pizSequenceAlgorithm,           // PIZ_EVENT_ZOULOU
+                                    pizSequenceAlgorithm,           // PIZ_EVENT_ROMEO
                                     NULL,                           // PIZ_EVENT_NOVEMBER
                                     NULL,                           // PIZ_EVENT_JULIET       
-                                    NULL,                           // PIZ_EVENT_LEARN
+                                    pizSequenceLearn,               // PIZ_EVENT_LEARN
                                     NULL,                           // PIZ_EVENT_CHANGED_BPM
                                     NULL,                           // PIZ_EVENT_CHANGED_CHANCE
                                     NULL,                           // PIZ_EVENT_CHANGED_VELOCITY
