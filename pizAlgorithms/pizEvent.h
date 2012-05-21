@@ -1,7 +1,7 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	May 13, 2012.
+ * \date	May 21, 2012.
  */
 
 /*
@@ -49,43 +49,37 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_EVENT_DATA_SIZE  12
+#define PIZ_EVENT_DATA_SIZE  14
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define DEBUGEVENT                                                                                          \
-                                                                                                            \
-if (event) {                                                                                                \
-    long        i, argc;                                                                                    \
-    long        *argv = NULL;                                                                               \
-    const char  *name = NULL;                                                                               \
-    PIZTime     t;                                                                                          \
-                                                                                                            \
-    pizTimeSet (&t);                                                                                        \
-    t = t / 1000000.;                                                                                       \
-    pizEventName (event, &name);                                                                            \
-                                                                                                            \
-    if (!(pizEventPtr (event, &argc, &argv))) {                                                             \
-                                                                                                            \
-    long a[ ] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };                                                     \
-                                                                                                            \
-    for (i = 0; i < argc; i++) {                                                                            \
-        a[i] = argv[i];                                                                                     \
-    }                                                                                                       \
-                                                                                                            \
-    post ("                     %llu / %s / %s / %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld",          \
-                                t, name, __FUNCTION__,                                                      \
-                                a[0],  a[1], a[2],  a[3],                                                   \
-                                a[4],  a[5], a[6],  a[7],                                                   \
-                                a[8],  a[9], a[10], a[11] );                                                \
-                                                                                                            \
-    } else {                                                                                                \
-                                                                                                            \
-    post ("                     %llu / %s / %s", t, name, __FUNCTION__);                                    \
-                                                                                                            \
-    }                                                                                                       \
-}
+#define DEBUGEVENT  if (event) {                                            \
+                        const char *name = NULL;                            \
+                        PIZTime t;                                          \
+                        pizTimeSet (&t);                                    \
+                        pizEventName (event, &name);                        \
+                        post ("%llu / %s / %s", t, name, __FUNCTION__);     \
+                        DEBUGDATA                                           \
+                    }
+
+#define DEBUGDATA   if (event) {                                                            \
+                        post ("%ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld",    \
+                        event->data[0],                                                     \
+                        event->data[1],                                                     \
+                        event->data[2],                                                     \
+                        event->data[3],                                                     \
+                        event->data[4],                                                     \
+                        event->data[5],                                                     \
+                        event->data[6],                                                     \
+                        event->data[7],                                                     \
+                        event->data[8],                                                     \
+                        event->data[9],                                                     \
+                        event->data[10],                                                    \
+                        event->data[11],                                                    \
+                        event->data[12],                                                    \
+                        event->data[13]);                                                   \
+                    }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -169,14 +163,14 @@ typedef struct _PIZEvent {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent    *pizEventNew       (PIZEventCode code, long tag, long argc, const long *argv);
+PIZEvent    *pizEventNew    (PIZEventCode code, long tag, long argc, const long *argv);
 
-void        pizEventFree       (PIZEvent *x);
-void        pizEventCode       (const PIZEvent *x, PIZEventCode *code);
-void        pizEventType       (const PIZEvent *x, PIZEventType *type);
-PIZError    pizEventValue      (const PIZEvent *x, long *value);
-PIZError    pizEventPtr        (const PIZEvent *x, long *argc, long **argv);
-void        pizEventName       (const PIZEvent *x, const char **name);
+void        pizEventFree    (PIZEvent *x);
+void        pizEventCode    (const PIZEvent *x, PIZEventCode *code);
+void        pizEventType    (const PIZEvent *x, PIZEventType *type);
+PIZError    pizEventValue   (const PIZEvent *x, long *value);
+PIZError    pizEventPtr     (const PIZEvent *x, long *argc, long **argv);
+void        pizEventName    (const PIZEvent *x, const char **name);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceMethods.c
  * \author  Jean Sapristi
- * \date    May 20, 2012.
+ * \date    May 21, 2012.
  */
  
 /*
@@ -100,6 +100,7 @@ PIZ_DOUBLE  pizSequenceDistribution7[ ] = { 0.56, 0.63, 0.70, 0.77, 0.84, 0.91, 
 PIZ_LOCAL void pizSequenceForEach           (PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod method);
 PIZ_LOCAL void pizSequenceEachRemove        (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
 PIZ_LOCAL void pizSequenceEachChange        (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
+PIZ_LOCAL void pizSequenceEachCycle         (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
 PIZ_LOCAL void pizSequenceEachTempHash      (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
 PIZ_LOCAL void pizSequenceEachTempNotes     (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
 
@@ -114,6 +115,7 @@ PIZ_LOCAL void      pizSequenceMakeMap      (PIZSequence *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 #pragma mark -
 
 PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
@@ -317,111 +319,65 @@ PIZError pizSequenceFill (PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-//PIZError pizSequenceKill (PIZSequence *x)
 PIZError pizSequenceKill (PIZSequence *x, const PIZEvent *event)
-{/*
-    long i;
-    bool haveChanged = false;
+{
+    long count = x->count;
+     
+    if (count) {
+        pizSequenceForEach (x, NULL, PIZ_FLAG_RANDOM, pizSequenceEachRemove);
         
-    for (i = 0; i < pizArrayCount (x->map); i++) {   
-        PIZNote *note       = NULL;
-        PIZNote *nextNote   = NULL;
-        
-        long p = pizArrayAtIndex (x->map, i);
-        
-        pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-        
-        while (note) {
-            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-            
-            if (100 * (rand_r (&x->seed) / (RAND_MAX + 1.0)) < x->chance) {
-                pizSequenceEachRemove (x, NULL, PIZ_FLAG_NONE, note);
-                haveChanged = true;
-            }
-                
-            note = nextNote;
+        if (x->count != count) { 
+            pizSequenceMakeMap (x); 
         }
     }
-    
-    if (haveChanged) {
-        pizSequenceMakeMap (x);
-    }*/
     
     return PIZ_GOOD;
 }
 
-//PIZError pizSequenceCycle (PIZSequence *x, PIZScaleKey key, const PIZArray *a)
 PIZError pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
-{/*
-    if (a) {
+{   
+    long argc;
+    long *argv = NULL;
+        
+    if (!(pizEventPtr (event, &argc, &argv))) {
     //
-    long count = pizArrayCount (a);
-                
-    if (count > 1) {
-    //
-    long i;
-    long t[PIZ_MAGIC_SCALE] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    long s[PIZ_MAGIC_SCALE];
-    long m, n, o, temp;
-    long scale = pizArrayCount (x->scale);
+    ulong mask = 0UL;
+    long  i, m, n, o, k = 0;
+    long  a[ ] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    long  t[ ] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    long  key = CLAMP (argv[0], PIZ_KEY_C, PIZ_KEY_B);
     
-    temp = pizArrayAtIndex (a, 0);
-    m = CLAMP (temp, 0, PIZ_MAGIC_SCALE - 1);
+    for (i = 0; i < (argc - 1); i++) {
+        long j = CLAMP (argv[i + 1], 0, PIZ_MAGIC_SCALE - 1);
+        if (!((1UL << j) & mask)) {
+            mask |= (1UL << j);
+            a[k] = j;
+            k ++;
+        }
+    }
+    
+    if (k > 1) {
+    //
+    m = a[0];
     o = m;
     
-    for (i = 1; i < count; i++) {
-        temp = pizArrayAtIndex (a, i);
-        n = CLAMP (temp, 0, PIZ_MAGIC_SCALE - 1);
+    for (i = 1; i < k; i++) {
+        n    = a[i];
         t[m] = n - m;
-        m = n;
+        m    = n;
     }
     
     t[m] = o - m;
     
     for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
-        s[i] = t[(PIZ_MAGIC_SCALE - key + i) % PIZ_MAGIC_SCALE];
+        x->tempValues[i] = t[(PIZ_MAGIC_SCALE - key + i) % PIZ_MAGIC_SCALE];
     }
-        
-    for (i = 0; i < pizArrayCount (x->map); i++) {   
+    
+    pizSequenceForEach (x, NULL, PIZ_FLAG_RANDOM, pizSequenceEachCycle);
     //
-    PIZNote *note       = NULL;
-    PIZNote *nextNote   = NULL;
-    
-    long p = pizArrayAtIndex (x->map, i);
-    
-    pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
-    
-    while (note) {
-        long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
-        
-        pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
-        
-        if (h < x->chance) {
-            long pitch, offset = 0;
-            
-            pitch = note->values[PIZ_VALUE_PITCH];
-            
-            if (scale) {
-                offset += pizArrayAtIndex (x->scale, pitch % scale);
-            }
-            
-            pitch = CLAMP (pitch + offset, 0, PIZ_MAGIC_PITCH);
-            pitch += s[pitch % PIZ_MAGIC_SCALE];
-    
-            if (pitch != (note->values[PIZ_VALUE_PITCH] + offset)) {
-                note->values[PIZ_VALUE_PITCH] = CLAMP (pitch, 0, PIZ_MAGIC_PITCH);
-                pizItemsetSetAtIndex (&x->changedNotes, note->tag);
-            }
-        }
-
-        note = nextNote;
     }
     //
     }
-    //    
-    }
-    //    
-    }*/
     
     return PIZ_GOOD;
 }
@@ -429,11 +385,6 @@ PIZError pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-
-PIZError pizSequenceLearn (PIZSequence *x, const PIZEvent *event)
-{
-    return PIZ_GOOD;
-}
 
 //PIZError pizSequenceAlgorithm (PIZSequence *x, PIZAlgorithm *algorithm)
 PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
@@ -838,6 +789,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+#pragma mark -
 
 void pizSequenceForEach (PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod method)
 {
@@ -923,6 +875,28 @@ void pizSequenceEachChange (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote 
         pizItemsetSetAtIndex (&x->changedNotes, n->tag);
     }
     //
+    }
+    //
+    }
+}
+ 
+void pizSequenceEachCycle (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n)
+{
+    long t, h = -1;
+    
+    if (f & PIZ_FLAG_RANDOM) {
+        h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+    }
+          
+    if ((h == -1) || (h < x->chance)) {
+    //
+    t = n->values[PIZ_VALUE_PITCH];
+    t += x->tempValues[t % PIZ_MAGIC_SCALE];
+    t = CLAMP (t, 0, PIZ_MAGIC_PITCH);
+    
+    if (n->values[PIZ_VALUE_PITCH] != t) {
+        n->values[PIZ_VALUE_PITCH] = t;
+        pizItemsetSetAtIndex (&x->changedNotes, n->tag);
     }
     //
     }

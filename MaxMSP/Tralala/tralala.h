@@ -6,7 +6,7 @@
  */
  
 /*
- *  May 19, 2012.
+ *  May 21, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -66,6 +66,8 @@ void tralala_scramble           (t_tralala *x, t_symbol *s, long argc, t_atom *a
 void tralala_sort               (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_change             (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_fill               (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_kill               (t_tralala *x);
+void tralala_cycle              (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
                                 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -81,8 +81,8 @@ PIZ_METHOD pizEventMethods[ ]   = { pizAgentInit,                   // PIZ_EVENT
                                     pizSequenceSort,                // PIZ_EVENT_SORT
                                     pizSequenceChange,              // PIZ_EVENT_CHANGE
                                     pizSequenceFill,                // PIZ_EVENT_FILL
-                                    NULL,                           // PIZ_EVENT_KILL
-                                    NULL,                           // PIZ_EVENT_CYCLE 
+                                    pizSequenceKill,                // PIZ_EVENT_KILL
+                                    pizSequenceCycle,               // PIZ_EVENT_CYCLE 
                                     NULL,                           // PIZ_EVENT_ZOULOU
                                     NULL,                           // PIZ_EVENT_ROMEO
                                     NULL,                           // PIZ_EVENT_NOVEMBER

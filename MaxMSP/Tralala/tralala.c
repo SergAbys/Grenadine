@@ -6,7 +6,7 @@
  */
  
 /*
- *  May 19, 2012.
+ *  May 21, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -53,6 +53,7 @@ int main (void)
     class_addmethod (c, (method)tralala_loop,       "loop",         0);
     class_addmethod (c, (method)tralala_unloop,     "unloop",       0);
     class_addmethod (c, (method)tralala_clear,      "clear",        0);
+    class_addmethod (c, (method)tralala_kill,       "kill",         0);
     class_addmethod (c, (method)tralala_bpm,        "bpm",          A_LONG, 0);
     class_addmethod (c, (method)tralala_chance,     "chance",       A_LONG, 0);
     class_addmethod (c, (method)tralala_velocity,   "velocity",     A_LONG, 0);
@@ -69,6 +70,7 @@ int main (void)
     class_addmethod (c, (method)tralala_sort,       "sort",         A_GIMME, 0);
     class_addmethod (c, (method)tralala_change,     "change",       A_GIMME, 0);
     class_addmethod (c, (method)tralala_fill,       "fill",         A_GIMME, 0);
+    class_addmethod (c, (method)tralala_cycle,      "cycle",        A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
 
@@ -367,6 +369,31 @@ void tralala_fill (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     if (argc && argv) {
         tralala_parse (argc, argv, values);
         tralala_send (x, PIZ_EVENT_FILL, 2, values);
+    }
+}
+
+void tralala_kill (t_tralala *x)
+{
+    tralala_send (x, PIZ_EVENT_KILL, 0, NULL);
+}
+
+void tralala_cycle (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    if (argc > 1) {
+    //
+    if (atom_gettype (argv) == A_SYM) {
+        long values[argc];
+        PIZError err = PIZ_GOOD;
+
+        err |= tralala_keyWithSymbol (atom_getsym (argv), values);
+
+        if (!err) {
+            if (!(atom_getlong_array (argc - 1, argv + 1, argc - 1, values + 1))) {
+                tralala_send (x, PIZ_EVENT_CYCLE, argc, values);
+            }
+        }
+    }
+    //
     }
 }
 

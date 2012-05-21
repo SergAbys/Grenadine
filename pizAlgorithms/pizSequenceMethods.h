@@ -1,7 +1,7 @@
 /**
  * \file    pizSequenceMethods.h
  * \author  Jean Sapristi
- * \date    May 19, 2012.
+ * \date    May 20, 2012.
  */
  
 /*
@@ -63,9 +63,7 @@ PIZ_LOCAL PIZError  pizSequenceFill            (PIZSequence *x, const PIZEvent *
 PIZ_LOCAL PIZError  pizSequenceKill            (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceCycle           (PIZSequence *x, const PIZEvent *event);
 
-PIZ_LOCAL PIZError  pizSequenceLearn           (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceAlgorithm       (PIZSequence *x, const PIZEvent *event);
-
 PIZ_LOCAL PIZError  pizSequenceNovember        (PIZSequence *x, const PIZEvent *event); //
 PIZ_LOCAL PIZError  pizSequenceJuliet          (PIZSequence *x, const PIZEvent *event); //
 

@@ -252,11 +252,16 @@ PIZError pizSequenceRefresh (PIZSequence *x, PIZAgent *agent)
     return err;
 }
 
+PIZError pizSequenceLearn (PIZSequence *x, const PIZEvent *event)
+{
+    return PIZ_GOOD;
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL ulong pizSequenceStepMask (PIZSequence *x, long n, long count)
+ulong pizSequenceStepMask (PIZSequence *x, long n, long count)
 {
     long  i;
     ulong mask = (1UL << n) - 1UL;
