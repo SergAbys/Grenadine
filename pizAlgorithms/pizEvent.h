@@ -54,31 +54,28 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define DEBUGEVENT  if (event) {                                            \
-                        const char *name = NULL;                            \
-                        PIZTime t;                                          \
-                        pizTimeSet (&t);                                    \
-                        pizEventName (event, &name);                        \
-                        post ("%llu / %s / %s", t, name, __FUNCTION__);     \
-                        DEBUGDATA                                           \
-                    }
-
-#define DEBUGDATA   if (event) {                                                            \
-                        post ("%ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld",    \
-                        event->data[0],                                                     \
-                        event->data[1],                                                     \
-                        event->data[2],                                                     \
-                        event->data[3],                                                     \
-                        event->data[4],                                                     \
-                        event->data[5],                                                     \
-                        event->data[6],                                                     \
-                        event->data[7],                                                     \
-                        event->data[8],                                                     \
-                        event->data[9],                                                     \
-                        event->data[10],                                                    \
-                        event->data[11],                                                    \
-                        event->data[12],                                                    \
-                        event->data[13]);                                                   \
+#define DEBUGEVENT  if (event) {                                                                            \
+                        const char *name = NULL;                                                            \
+                        PIZTime t;                                                                          \
+                        pizTimeSet (&t);                                                                    \
+                        t = t / 1000000.;                                                                   \
+                        pizEventName (event, &name);                                                        \
+                        post ("%llu / %s / %s / %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld",   \
+                        t, name, __FUNCTION__,                                                              \
+                        event->data[0],     \
+                        event->data[1],     \
+                        event->data[2],     \
+                        event->data[3],     \
+                        event->data[4],     \
+                        event->data[5],     \
+                        event->data[6],     \
+                        event->data[7],     \
+                        event->data[8],     \
+                        event->data[9],     \
+                        event->data[10],    \
+                        event->data[11],    \
+                        event->data[12],    \
+                        event->data[13]);   \
                     }
 
 // -------------------------------------------------------------------------------------------------------------

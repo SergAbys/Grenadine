@@ -56,21 +56,21 @@ PIZError pizSequenceLearn (PIZSequence *x, const PIZEvent *event)
         
     if (!(pizEventPtr (event, &argc, &argv))) {
     //
-    long i;
-    long h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+    long i, h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+    
+    pizFactorOracleAdd (x->factorOracle, argc, argv);
     
     for (i = 0; i < argc; i++) {
         pizArrayAppend (x->toBeLearned, argv[i]);
     }
     
     if (h < (pizArrayCount (x->toBeLearned) * PIZ_SEQUENCE_LEARN_FACTOR)) {
-        post ("!!! %ld", pizArrayCount (x->toBeLearned));
+        pizGaloisLatticeAdd (x->galoisLattice, pizArrayCount (x->toBeLearned), pizArrayPtr (x->toBeLearned));
         pizArrayClear (x->toBeLearned);
     }
-    
     //
     }
-    
+        
     return PIZ_GOOD;
 }
 

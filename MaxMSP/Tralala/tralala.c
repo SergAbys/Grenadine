@@ -6,7 +6,7 @@
  */
  
 /*
- *  May 21, 2012.
+ *  May 22, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -54,6 +54,8 @@ int main (void)
     class_addmethod (c, (method)tralala_unloop,     "unloop",       0);
     class_addmethod (c, (method)tralala_clear,      "clear",        0);
     class_addmethod (c, (method)tralala_kill,       "kill",         0);
+    class_addmethod (c, (method)tralala_zoulou,     "zoulou",       0);
+    class_addmethod (c, (method)tralala_romeo,      "romeo",        0);
     class_addmethod (c, (method)tralala_bpm,        "bpm",          A_LONG, 0);
     class_addmethod (c, (method)tralala_chance,     "chance",       A_LONG, 0);
     class_addmethod (c, (method)tralala_velocity,   "velocity",     A_LONG, 0);
@@ -62,6 +64,7 @@ int main (void)
     class_addmethod (c, (method)tralala_transpose,  "transpose",    A_LONG, 0);
     class_addmethod (c, (method)tralala_clean,      "clean",        A_LONG, 0);
     class_addmethod (c, (method)tralala_int,        "int",          A_LONG, 0);
+    class_addmethod (c, (method)tralala_list,       "list",         A_GIMME, 0);
     class_addmethod (c, (method)tralala_cell,       "cell",         A_GIMME, 0);
     class_addmethod (c, (method)tralala_scale,      "scale",        A_GIMME, 0);
     class_addmethod (c, (method)tralala_pattern,    "pattern",      A_GIMME, 0);
@@ -402,9 +405,27 @@ void tralala_cycle (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    if (argv && atom_gettype (argv) == A_LONG) {
+        long n = atom_getlong (argv);
+        tralala_send (x, PIZ_EVENT_LEARN, 1, &n);
+    }
+}
+
 void tralala_int (t_tralala *x, long n)
 {
     tralala_send (x, PIZ_EVENT_LEARN, 1, &n);
+}
+
+void tralala_zoulou (t_tralala *x)
+{
+    tralala_send (x, PIZ_EVENT_ZOULOU, 0, NULL);
+}
+
+void tralala_romeo (t_tralala *x)
+{
+    tralala_send (x, PIZ_EVENT_ROMEO, 0, NULL);
 }
 
 // -------------------------------------------------------------------------------------------------------------
