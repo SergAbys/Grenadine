@@ -1,7 +1,7 @@
 /*
  * \file	pizEvent.c
  * \author	Jean Sapristi
- * \date	May 12, 2012.
+ * \date	May 22, 2012.
  */
  
 /*
@@ -189,7 +189,7 @@ PIZError pizEventValue (const PIZEvent *x, long *value)
 {
     PIZError err = PIZ_ERROR;
     
-    if (x->size) {
+    if (x->size == 1) {
         err = PIZ_GOOD;
         (*value) = x->data[0];
     } 

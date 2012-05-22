@@ -86,7 +86,7 @@ PIZ_METHOD pizEventMethods[ ]   = { pizAgentInit,                   // PIZ_EVENT
                                     pizSequenceCycle,               // PIZ_EVENT_CYCLE 
                                     pizSequenceAlgorithm,           // PIZ_EVENT_ZOULOU
                                     pizSequenceAlgorithm,           // PIZ_EVENT_ROMEO
-                                    NULL,                           // PIZ_EVENT_NOVEMBER
+                                    pizSequenceNovember,            // PIZ_EVENT_NOVEMBER
                                     NULL,                           // PIZ_EVENT_JULIET       
                                     pizSequenceLearn,               // PIZ_EVENT_LEARN
                                     NULL,                           // PIZ_EVENT_CHANGED_BPM

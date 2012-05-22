@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceGraphic.c
  * \author  Jean Sapristi
- * \date    May 21, 2012.
+ * \date    May 22, 2012.
  */
  
 /*
@@ -43,7 +43,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_LEARN_FACTOR   5
+#define PIZ_SEQUENCE_CONSTANT_LEARN   5
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ PIZError pizSequenceLearn (PIZSequence *x, const PIZEvent *event)
         pizArrayAppend (x->toBeLearned, argv[i]);
     }
     
-    if (h < (pizArrayCount (x->toBeLearned) * PIZ_SEQUENCE_LEARN_FACTOR)) {
+    if (h < (pizArrayCount (x->toBeLearned) * PIZ_SEQUENCE_CONSTANT_LEARN)) {
         pizGaloisLatticeAdd (x->galoisLattice, pizArrayCount (x->toBeLearned), pizArrayPtr (x->toBeLearned));
         pizArrayClear (x->toBeLearned);
     }
