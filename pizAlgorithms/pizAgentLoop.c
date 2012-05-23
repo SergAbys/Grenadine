@@ -59,52 +59,36 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_METHOD pizEventMethods[ ]   = { pizAgentInit,                   // PIZ_EVENT_INIT
-                                    pizAgentPlay,                   // PIZ_EVENT_PLAY
-                                    pizAgentStop,                   // PIZ_EVENT_STOP
-                                    pizAgentLoop,                   // PIZ_EVENT_LOOP
-                                    pizAgentUnloop,                 // PIZ_EVENT_UNLOOP
-                                    pizAgentBPM,                    // PIZ_EVENT_BPM
-                                    pizSequenceSetChance,           // PIZ_EVENT_CHANCE
-                                    pizSequenceSetVelocity,         // PIZ_EVENT_VELOCITY
-                                    pizSequenceSetChannel,          // PIZ_EVENT_CHANNEL
-                                    pizSequenceSetChord,            // PIZ_EVENT_CHORD
-                                    pizSequenceSetCell,             // PIZ_EVENT_CELL
-                                    pizSequenceSetNoteValue,        // PIZ_EVENT_NOTE_VALUE
-                                    pizSequenceSetScale,            // PIZ_EVENT_SCALE
-                                    pizSequenceSetPattern,          // PIZ_EVENT_PATTERN
-                                    pizSequenceNote,                // PIZ_EVENT_NOTE
-                                    pizSequenceClear,               // PIZ_EVENT_CLEAR
-                                    pizSequenceClean,               // PIZ_EVENT_CLEAN
-                                    pizSequenceTranspose,           // PIZ_EVENT_TRANSPOSE
-                                    pizSequenceRotate,              // PIZ_EVENT_ROTATE
-                                    pizSequenceScramble,            // PIZ_EVENT_SCRAMBLE
-                                    pizSequenceSort,                // PIZ_EVENT_SORT
-                                    pizSequenceChange,              // PIZ_EVENT_CHANGE
-                                    pizSequenceFill,                // PIZ_EVENT_FILL
-                                    pizSequenceKill,                // PIZ_EVENT_KILL
-                                    pizSequenceCycle,               // PIZ_EVENT_CYCLE 
-                                    pizSequenceAlgorithm,           // PIZ_EVENT_ZOULOU
-                                    pizSequenceAlgorithm,           // PIZ_EVENT_ROMEO
-                                    pizSequenceNovember,            // PIZ_EVENT_NOVEMBER
-                                    NULL,                           // PIZ_EVENT_JULIET       
-                                    pizSequenceLearn,               // PIZ_EVENT_LEARN
-                                    NULL,                           // PIZ_EVENT_CHANGED_BPM
-                                    NULL,                           // PIZ_EVENT_CHANGED_CHANCE
-                                    NULL,                           // PIZ_EVENT_CHANGED_VELOCITY
-                                    NULL,                           // PIZ_EVENT_CHANGED_CHANNEL
-                                    NULL,                           // PIZ_EVENT_CHANGED_CELL
-                                    NULL,                           // PIZ_EVENT_CHANGED_NOTE_VALUE
-                                    NULL,                           // PIZ_EVENT_CHANGED_SCALE
-                                    NULL,                           // PIZ_EVENT_CHANGED_PATTERN
-                                    NULL,                           // PIZ_EVENT_CHANGED_CHORD
-                                    NULL,                           // PIZ_EVENT_CHANGED_ZONE
-                                    NULL,                           // PIZ_EVENT_NOTE_ADDED
-                                    NULL,                           // PIZ_EVENT_NOTE_CHANGED
-                                    NULL,                           // PIZ_EVENT_NOTE_REMOVED
-                                    NULL,                           // PIZ_EVENT_NOTE_PLAYED
-                                    NULL,                           // PIZ_EVENT_END
-                                    NULL    };                      // PIZ_EVENT_WILL_END
+static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,                   // PIZ_EVENT_INIT
+                                                    pizAgentPlay,                   // PIZ_EVENT_PLAY
+                                                    pizAgentStop,                   // PIZ_EVENT_STOP
+                                                    pizAgentLoop,                   // PIZ_EVENT_LOOP
+                                                    pizAgentUnloop,                 // PIZ_EVENT_UNLOOP
+                                                    pizAgentBPM,                    // PIZ_EVENT_BPM
+                                                    pizSequenceSetChance,           // PIZ_EVENT_CHANCE
+                                                    pizSequenceSetVelocity,         // PIZ_EVENT_VELOCITY
+                                                    pizSequenceSetChannel,          // PIZ_EVENT_CHANNEL
+                                                    pizSequenceSetChord,            // PIZ_EVENT_CHORD
+                                                    pizSequenceSetCell,             // PIZ_EVENT_CELL
+                                                    pizSequenceSetNoteValue,        // PIZ_EVENT_NOTE_VALUE
+                                                    pizSequenceSetScale,            // PIZ_EVENT_SCALE
+                                                    pizSequenceSetPattern,          // PIZ_EVENT_PATTERN
+                                                    pizSequenceNote,                // PIZ_EVENT_NOTE
+                                                    pizSequenceClear,               // PIZ_EVENT_CLEAR
+                                                    pizSequenceClean,               // PIZ_EVENT_CLEAN
+                                                    pizSequenceTranspose,           // PIZ_EVENT_TRANSPOSE
+                                                    pizSequenceRotate,              // PIZ_EVENT_ROTATE
+                                                    pizSequenceScramble,            // PIZ_EVENT_SCRAMBLE
+                                                    pizSequenceSort,                // PIZ_EVENT_SORT
+                                                    pizSequenceChange,              // PIZ_EVENT_CHANGE
+                                                    pizSequenceFill,                // PIZ_EVENT_FILL
+                                                    pizSequenceKill,                // PIZ_EVENT_KILL
+                                                    pizSequenceCycle,               // PIZ_EVENT_CYCLE 
+                                                    pizSequenceAlgorithm,           // PIZ_EVENT_ZOULOU
+                                                    pizSequenceAlgorithm,           // PIZ_EVENT_ROMEO
+                                                    pizSequenceNovember,            // PIZ_EVENT_NOVEMBER
+                                                    NULL,                           // PIZ_EVENT_JULIET       
+                                                    pizSequenceLearn };             // PIZ_EVENT_WILL_END
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -229,13 +213,11 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q)
         
     if (type == PIZ_EVENT_RUN) {
         o = x;
-    } else {
+    } else if (type != PIZ_EVENT_NOTIFICATION) {
         o = x->sequence;
     }
     
-    f = pizEventMethods[code];
-    
-    if (f && ((*f)(o, event) == PIZ_MEMORY)) {
+    if (o && (f = pizEventMethods[code]) && ((*f)(o, event) == PIZ_MEMORY)) {
         PIZ_AGENT_MEMORY
     }
     

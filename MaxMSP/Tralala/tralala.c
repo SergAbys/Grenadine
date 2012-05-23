@@ -6,7 +6,7 @@
  */
  
 /*
- *  May 22, 2012.
+ *  May 23, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -64,6 +64,7 @@ int main (void)
     class_addmethod (c, (method)tralala_transpose,  "transpose",    A_LONG, 0);
     class_addmethod (c, (method)tralala_clean,      "clean",        A_LONG, 0);
     class_addmethod (c, (method)tralala_int,        "int",          A_LONG, 0);
+    class_addmethod (c, (method)tralala_november,   "november",     A_LONG, 0);
     class_addmethod (c, (method)tralala_list,       "list",         A_GIMME, 0);
     class_addmethod (c, (method)tralala_cell,       "cell",         A_GIMME, 0);
     class_addmethod (c, (method)tralala_scale,      "scale",        A_GIMME, 0);
@@ -426,6 +427,11 @@ void tralala_zoulou (t_tralala *x)
 void tralala_romeo (t_tralala *x)
 {
     tralala_send (x, PIZ_EVENT_ROMEO, 0, NULL);
+}
+
+void tralala_november (t_tralala *x, long n)
+{
+    tralala_send (x, PIZ_EVENT_NOVEMBER, 1, &n);
 }
 
 // -------------------------------------------------------------------------------------------------------------
