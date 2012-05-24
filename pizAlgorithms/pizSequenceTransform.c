@@ -1,7 +1,7 @@
 /*
  * \file    pizSequenceTransform.c
  * \author  Jean Sapristi
- * \date    May 23, 2012.
+ * \date    May 24, 2012.
  */
  
 /*
@@ -428,9 +428,9 @@ PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
 {
-    //long     iterate;
+    long     iterate;
     PIZError hashErr = PIZ_GOOD;
-    /*
+    
     if (!(pizEventValue (event, &iterate)) && (x->cell != PIZ_NOTE_VALUE_NONE)) {
     //
     long k       = 0;
@@ -494,7 +494,11 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
         hPat[3] = hPat[4] - 1;
         hPat[5] = hPat[4] + 1;
     }
-        
+    
+    post ("Birth ? : %ld", center);
+    
+    post ("H : %ld %ld %ld %ld %ld %ld", hPat[0], hPat[1], hPat[2], hPat[3], hPat[4], hPat[5]);
+            
     for (j = (PIZ_H - 1); j > 0; j--)  {
         long h    = (j + 1) * (rand_r (&x->seed) / (RAND_MAX + 1.0));
         long temp = hPat[h];
@@ -502,6 +506,8 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
         hPat[j]   = temp;
     }
 
+    post ("H : %ld %ld %ld %ld %ld %ld", hPat[0], hPat[1], hPat[2], hPat[3], hPat[4], hPat[5]);
+    
     err |= (note->position < x->start);
     err |= (note->position >= x->end);
     err |= (pitch < x->down);
@@ -519,7 +525,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
     }
     //
     }
-    
+    /*
     for (j = 0; j < PIZ_H; j++) {
         if ((hPat[j] >= 0) && 
             !(pizHashTableContainsKey (x->tempHash, hPat[j] - 2)) &&
@@ -559,12 +565,14 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
             //
             }
         }
-    }
+    }*/
         
     if (death) {
+        post ("Death : %ld", center);
+        /*
         pizHashTableRemove (x->tempHash, center, (void *)note);
         pizSequenceEachRemove (x, NULL, PIZ_FLAG_NONE, note);
-        haveChanged = true;
+        haveChanged = true;*/
     }
     //    
     } else {
@@ -579,7 +587,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
         pizSequenceMakeMap (x);
     }
     //
-    }*/
+    }
     
     return hashErr;
 }
@@ -838,6 +846,9 @@ void pizSequenceEachCycle (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *
 void pizSequenceEachTempHash (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n)
 {   
     long key = ((long)(n->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1)) + n->values[PIZ_VALUE_PITCH];
+    
+    post ("Key : %ld", key);
+    
     x->tempError |= pizHashTableAdd (x->tempHash, key, (void *)n);
 }
 

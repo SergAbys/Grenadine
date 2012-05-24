@@ -11,8 +11,8 @@
 		breakpointsGroup = 9699A8E613D9A57300D9A0AD /* XCBreakpointsBucket */;
 		codeSenseManager = 96CFCDA713D7F01D004431BB /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 359565452;
-			PBXWorkspaceStateSaveDate = 359565452;
+			PBXPerProjectTemplateStateSaveDate = 359569027;
+			PBXWorkspaceStateSaveDate = 359569027;
 		};
 		sourceControlManager = 96CFCDA613D7F01D004431BB /* Source Control */;
 		userBuildSettings = {
@@ -70,7 +70,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1233, 7175}}";
 			sepNavSelRange = "{6385, 20}";
-			sepNavVisRect = "{{0, 5613}, {1233, 292}}";
+			sepNavVisRect = "{{0, 5721}, {1233, 292}}";
 			sepNavWindowFrame = "{{2, 2}, {1279, 774}}";
 		};
 	};
@@ -114,9 +114,9 @@
 	};
 	96A16F77148CF839008268A6 /* pizSequenceTransform.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1236, 26600}}";
-			sepNavSelRange = "{2651, 0}";
-			sepNavVisRect = "{{0, 11780}, {1236, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1236, 26875}}";
+			sepNavSelRange = "{16438, 0}";
+			sepNavVisRect = "{{0, 12471}, {1236, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1281, 774}}";
 		};
 	};
@@ -131,7 +131,7 @@
 	96A16F7D148CF856008268A6 /* pizSequenceTransform.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1234, 1800}}";
-			sepNavSelRange = "{3446, 0}";
+			sepNavSelRange = "{3136, 0}";
 			sepNavVisRect = "{{0, 1155}, {1234, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1279, 774}}";
 		};
@@ -238,9 +238,9 @@
 	};
 	96D796C5151716AC00109654 /* pizEvent.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 4900}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 4900}}";
 			sepNavSelRange = "{6728, 0}";
-			sepNavVisRect = "{{0, 4008}, {1233, 292}}";
+			sepNavVisRect = "{{0, 3909}, {1235, 645}}";
 			sepNavWindowFrame = "{{0, 4}, {1280, 774}}";
 		};
 	};
@@ -248,7 +248,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1235, 5450}}";
 			sepNavSelRange = "{9273, 0}";
-			sepNavVisRect = "{{0, 3340}, {1235, 645}}";
+			sepNavVisRect = "{{0, 4805}, {1235, 645}}";
 			sepNavWindowFrame = "{{3, 4}, {1280, 774}}";
 		};
 	};
