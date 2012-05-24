@@ -525,7 +525,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
     }
     //
     }
-    /*
+    
     for (j = 0; j < PIZ_H; j++) {
         if ((hPat[j] >= 0) && 
             !(pizHashTableContainsKey (x->tempHash, hPat[j] - 2)) &&
@@ -534,18 +534,22 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
             !(pizHashTableContainsKey (x->tempHash, hPat[j] + 1)) &&
             !(pizHashTableContainsKey (x->tempHash, hPat[j] + 2))) {
             long    t;
+            PIZNote *temp = NULL;
             PIZNote *toCopy = NULL;
             PIZNote *newNote = NULL;
             
             neighbors = 0;
-    
+            
             for (t = 0; t < PIZ_BIRTH; t++) {
             //
-            if (!(pizHashTablePtrByKey (x->tempHash, hPat[j] + pizSequenceNeighbors[t], (void **)&toCopy))) {
+            if (!(pizHashTablePtrByKey (x->tempHash, hPat[j] + pizSequenceNeighbors[t], (void **)&temp))) {
+                toCopy = temp;
                 neighbors ++;
             }
             //
             }
+            
+            post ("- %ld / neighbors : %ld", hPat[j], neighbors);
             
             if (neighbors == 1) {
             //
@@ -555,17 +559,22 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
                                toCopy->values[PIZ_VALUE_DURATION],
                                toCopy->values[PIZ_VALUE_CHANNEL] };
             
+            post ("new : %ld %ld %ld %ld %ld", values[0], values[1], values[2], values[3], values[4]);
+            
+            /*
             if (newNote = pizSequenceNewNote (x, -1, values, PIZ_SEQUENCE_FLAG_CLIP)) {
                 hashErr |= pizHashTableAdd (x->tempHash, hPat[j], (void *)newNote);
                 haveChanged = true;
                 k ++;
-            } 
+            } */
             
             break;
             //
             }
+        } else {
+            post ("- %ld / countains", hPat[j]);
         }
-    }*/
+    }
         
     if (death) {
         post ("Death : %ld", center);
