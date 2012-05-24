@@ -6,7 +6,7 @@
  */
  
 /*
- *  May 23, 2012.
+ *  May 24, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -19,15 +19,33 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TICKS_PER_STEP  20
+#define TICKS_PER_STEP              20
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_parse (long argc, t_atom *argv, long *values);
-void tralala_send  (t_tralala *x, PIZEventCode code, long argc, long *argv);
+#define SEND(code)                  PIZEvent *event = NULL;                                 \
+                                    if (event = pizEventNew ((code), -1, 0, NULL)) {        \
+                                        pizAgentAddEvent (x->agent, event);                 \
+                                    }
+                                    
+#define SEND_VALUE(code, n)         PIZEvent *event = NULL;                                 \
+                                    if (event = pizEventNew ((code), -1, 1, &(n))) {        \
+                                        pizAgentAddEvent (x->agent, event);                 \
+                                    }
+                                    
+#define SEND_ARGS(code, ac, av)     PIZEvent *event = NULL;                                 \
+                                    if (event = pizEventNew ((code), -1, (ac), (av))) {     \
+                                        pizAgentAddEvent (x->agent, event);                 \
+                                    }
+    
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
+void tralala_parse (long argc, t_atom *argv, long *values);
+    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -64,7 +82,6 @@ int main (void)
     class_addmethod (c, (method)tralala_transpose,  "transpose",    A_LONG, 0);
     class_addmethod (c, (method)tralala_clean,      "clean",        A_LONG, 0);
     class_addmethod (c, (method)tralala_int,        "int",          A_LONG, 0);
-    class_addmethod (c, (method)tralala_november,   "november",     A_LONG, 0);
     class_addmethod (c, (method)tralala_list,       "list",         A_GIMME, 0);
     class_addmethod (c, (method)tralala_cell,       "cell",         A_GIMME, 0);
     class_addmethod (c, (method)tralala_scale,      "scale",        A_GIMME, 0);
@@ -76,6 +93,7 @@ int main (void)
     class_addmethod (c, (method)tralala_change,     "change",       A_GIMME, 0);
     class_addmethod (c, (method)tralala_fill,       "fill",         A_GIMME, 0);
     class_addmethod (c, (method)tralala_cycle,      "cycle",        A_GIMME, 0);
+    class_addmethod (c, (method)tralala_november,   "november",     A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
 
@@ -169,27 +187,27 @@ void tralala_notify (void *ptr, PIZEvent *event)
 
 void tralala_bang (t_tralala *x) 
 {   
-    tralala_send (x, PIZ_EVENT_PLAY, 0, NULL);
+    SEND (PIZ_EVENT_PLAY)
 }
 
 void tralala_play (t_tralala *x) 
 {   
-    tralala_send (x, PIZ_EVENT_PLAY, 0, NULL);
+    SEND (PIZ_EVENT_PLAY)
 }
 
 void tralala_stop (t_tralala *x) 
 {   
-    tralala_send (x, PIZ_EVENT_STOP, 0, NULL);
+    SEND (PIZ_EVENT_STOP)
 }
 
 void tralala_loop (t_tralala *x) 
 {   
-    tralala_send (x, PIZ_EVENT_LOOP, 0, NULL);
+    SEND (PIZ_EVENT_LOOP)
 }
 
 void tralala_unloop (t_tralala *x) 
 {   
-    tralala_send (x, PIZ_EVENT_UNLOOP, 0, NULL);
+    SEND (PIZ_EVENT_UNLOOP)
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -198,50 +216,49 @@ void tralala_unloop (t_tralala *x)
 
 void tralala_bpm (t_tralala *x, long n) 
 {   
-    tralala_send (x, PIZ_EVENT_BPM, 1, &n);
+    SEND_VALUE (PIZ_EVENT_BPM, n)
 }
 
 void tralala_chance (t_tralala *x, long n) 
 {   
-    tralala_send (x, PIZ_EVENT_CHANCE, 1, &n);
+    SEND_VALUE (PIZ_EVENT_CHANCE, n)
 }
 
 void tralala_velocity (t_tralala *x, long n) 
 {   
-    tralala_send (x, PIZ_EVENT_VELOCITY, 1, &n);
+    SEND_VALUE (PIZ_EVENT_VELOCITY, n)
 }
 
 void tralala_channel (t_tralala *x, long n) 
 {   
-    tralala_send (x, PIZ_EVENT_CHANNEL, 1, &n);
+    SEND_VALUE (PIZ_EVENT_CHANNEL, n)
 }
 
 void tralala_chord (t_tralala *x, long n) 
 {   
-    tralala_send (x, PIZ_EVENT_CHORD, 1, &n);
+    SEND_VALUE (PIZ_EVENT_CHORD, n)
 }
 
 void tralala_cell (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    PIZError err = PIZ_GOOD;
-    long     value = PIZ_NOTE_VALUE_NONE;
-    
     if (argc) {
     //
-    long size = 0;
-    char *string = NULL;
+    long     n, size = 0;
+    char     *string = NULL;
+    PIZError err = PIZ_GOOD;
 
     atom_gettext (argc, argv, &size, &string, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
     
     if (string) {
-        err |= tralala_noteValueWithSymbol ((gensym (string)), &value);
+        err = tralala_noteValueWithSymbol ((gensym (string)), &n);
+        
+        if (!err) {
+            SEND_VALUE (PIZ_EVENT_CELL, n)
+        }
+        
         sysmem_freeptr (string);
     }
     //
-    }
-    
-    if (!err) {
-        tralala_send (x, PIZ_EVENT_CELL, 1, &value);
     }
 }
 
@@ -265,26 +282,27 @@ void tralala_scale (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
         if (!err) {
             long values[ ] = { key, type };
-            tralala_send (x, PIZ_EVENT_SCALE, 2, values);
+            SEND_ARGS (PIZ_EVENT_SCALE, 2, values)
         }
     }
     //
     } else {
-        tralala_send (x, PIZ_EVENT_SCALE, 0, NULL);
+        SEND (PIZ_EVENT_SCALE)
     }
 }
 
 void tralala_pattern (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
     if (argc) {
-        long values[argc];
-        
-        if (!(atom_getlong_array (argc, argv, argc, values))) {
-            tralala_send (x, PIZ_EVENT_PATTERN, argc, values);
-        }
-
+    //
+    long values[argc];
+    
+    if (!(atom_getlong_array (argc, argv, argc, values))) {
+        SEND_ARGS (PIZ_EVENT_PATTERN, argc, values)
+    }
+    //
     } else {
-        tralala_send (x, PIZ_EVENT_PATTERN, 0, NULL);
+        SEND (PIZ_EVENT_PATTERN)
     }
 }
 
@@ -295,29 +313,31 @@ void tralala_pattern (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 void tralala_note (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
     if (argc > 1) {
-        long values[ ] = { 0, 0, 0, 0, 0 };
-        
-        if (!(atom_getlong_array (argc, argv, 5, values))) {
-            values[0] = (long)(values[0] / TICKS_PER_STEP);
-            values[3] = (long)(values[3] / TICKS_PER_STEP);
-            tralala_send (x, PIZ_EVENT_NOTE, argc, values);
-        }
+    //
+    long values[ ] = { 0, 0, 0, 0, 0 };
+    
+    if (!(atom_getlong_array (argc, argv, 5, values))) {
+        values[0] = (long)(values[0] / TICKS_PER_STEP);
+        values[3] = (long)(values[3] / TICKS_PER_STEP);
+        SEND_ARGS (PIZ_EVENT_NOTE, argc, values)
+    }
+    //
     }
 }
 
 void tralala_clear (t_tralala *x) 
 {   
-    tralala_send (x, PIZ_EVENT_CLEAR, 0, NULL);
+    SEND (PIZ_EVENT_CLEAR)
 }
 
 void tralala_clean (t_tralala *x, long n)
 {
-    tralala_send (x, PIZ_EVENT_CLEAN, 1, &n);
+    SEND_VALUE (PIZ_EVENT_CLEAN, n)
 }
 
 void tralala_transpose (t_tralala *x, long n)
 {
-    tralala_send (x, PIZ_EVENT_TRANSPOSE, 1, &n);
+    SEND_VALUE (PIZ_EVENT_TRANSPOSE, n)
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -332,7 +352,7 @@ void tralala_rotate (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         tralala_parse (argc, argv, values);
     }
     
-    tralala_send (x, PIZ_EVENT_ROTATE, 2, values);
+    SEND_ARGS (PIZ_EVENT_ROTATE, 2, values)
 }
 
 void tralala_scramble (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
@@ -343,7 +363,7 @@ void tralala_scramble (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         tralala_parse (argc, argv, values);
     }
     
-    tralala_send (x, PIZ_EVENT_SCRAMBLE, 2, values);
+    SEND_ARGS (PIZ_EVENT_SCRAMBLE, 2, values)
 }
 
 void tralala_sort (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
@@ -354,7 +374,7 @@ void tralala_sort (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         tralala_parse (argc, argv, values);
     }
     
-    tralala_send (x, PIZ_EVENT_SORT, 2, values);
+    SEND_ARGS (PIZ_EVENT_SORT, 2, values)
 }
 
 void tralala_change (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
@@ -363,7 +383,7 @@ void tralala_change (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     
     if (argc && argv) {
         tralala_parse (argc, argv, values);
-        tralala_send (x, PIZ_EVENT_CHANGE, 2, values);
+        SEND_ARGS (PIZ_EVENT_CHANGE, 2, values)
     }
 }
 
@@ -373,13 +393,13 @@ void tralala_fill (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     
     if (argc && argv) {
         tralala_parse (argc, argv, values);
-        tralala_send (x, PIZ_EVENT_FILL, 2, values);
+        SEND_ARGS (PIZ_EVENT_FILL, 2, values)
     }
 }
 
 void tralala_kill (t_tralala *x)
 {
-    tralala_send (x, PIZ_EVENT_KILL, 0, NULL);
+    SEND (PIZ_EVENT_KILL)
 }
 
 void tralala_cycle (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
@@ -387,16 +407,18 @@ void tralala_cycle (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     if (argc > 1) {
     //
     if (atom_gettype (argv) == A_SYM) {
-        long values[argc];
-        PIZError err = PIZ_GOOD;
+    //
+    long     values[argc];
+    PIZError err = PIZ_GOOD;
 
-        err |= tralala_keyWithSymbol (atom_getsym (argv), values);
+    err |= tralala_keyWithSymbol (atom_getsym (argv), values);
 
-        if (!err) {
-            if (!(atom_getlong_array (argc - 1, argv + 1, argc - 1, values + 1))) {
-                tralala_send (x, PIZ_EVENT_CYCLE, argc, values);
-            }
+    if (!err) {
+        if (!(atom_getlong_array (argc - 1, argv + 1, argc - 1, values + 1))) {
+            SEND_ARGS (PIZ_EVENT_CYCLE, argc, values)
         }
+    }
+    //
     }
     //
     }
@@ -408,30 +430,36 @@ void tralala_cycle (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    if (argv && atom_gettype (argv) == A_LONG) {
+    if (argc && (atom_gettype (argv) == A_LONG)) {
         long n = atom_getlong (argv);
-        tralala_send (x, PIZ_EVENT_LEARN, 1, &n);
+        SEND_VALUE (PIZ_EVENT_LEARN, n)
     }
 }
 
 void tralala_int (t_tralala *x, long n)
 {
-    tralala_send (x, PIZ_EVENT_LEARN, 1, &n);
+    SEND_VALUE (PIZ_EVENT_LEARN, n)
 }
 
 void tralala_zoulou (t_tralala *x)
 {
-    tralala_send (x, PIZ_EVENT_ZOULOU, 0, NULL);
+    SEND (PIZ_EVENT_ZOULOU)
 }
 
 void tralala_romeo (t_tralala *x)
 {
-    tralala_send (x, PIZ_EVENT_ROMEO, 0, NULL);
+    SEND (PIZ_EVENT_ROMEO)
 }
 
-void tralala_november (t_tralala *x, long n)
+void tralala_november (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    tralala_send (x, PIZ_EVENT_NOVEMBER, 1, &n);
+    long n = 1;
+    
+    if (argc && (atom_gettype (argv) == A_LONG)) {
+        n = atom_getlong (argv);
+    } 
+    
+    SEND_VALUE (PIZ_EVENT_NOVEMBER, n)
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -451,15 +479,6 @@ void tralala_parse (long argc, t_atom *argv, long *values)
         }
     }
 } 
-
-void tralala_send (t_tralala *x, PIZEventCode code, long argc, long *argv)
-{
-    PIZEvent *event = NULL;
-    
-    if (event = pizEventNew (code, -1, argc, argv)) {
-        pizAgentAddEvent (x->agent, event);
-    }
-}
 
 // -------------------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------:x

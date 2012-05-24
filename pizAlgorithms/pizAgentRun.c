@@ -96,7 +96,7 @@ PIZError pizAgentBPM (PIZAgent *x, PIZEvent *event)
     //
     if ((value >= PIZ_MINIMUM_BPM) && (value <= PIZ_MAXIMUM_BPM) && (value != x->bpm)) {
         x->bpm = value;
-        pizAgentAddNotification (x, PIZ_EVENT_CHANGED_BPM, -1, 1, &value);
+        pizAgentAddNotification (x, PIZ_EVENT_CHANGED_BPM, -1, 1, &x->bpm);
             
         pizNanoSet     (&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);    
         pizTimeCopy    (&x->grainEnd, &x->grainStart);

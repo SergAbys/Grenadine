@@ -206,6 +206,8 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q)
     
     PIZ_AGENT_UNLOCK_EVENT
     
+    DEBUGEVENT
+    
     if (event) {
     //
     pizEventType (event, &type);
@@ -221,8 +223,6 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q)
         PIZ_AGENT_MEMORY
     }
     
-    DEBUGEVENT    
-                
     pizEventFree (event);
     //
     }

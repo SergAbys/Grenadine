@@ -6,7 +6,7 @@
  */
  
 /*
- *  May 18, 2012.
+ *  May 24, 2012.
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -58,6 +58,7 @@ static t_symbol *tll_seventhDiminished     = NULL;
 static t_symbol *tll_seventhSuspended      = NULL;
 static t_symbol *tll_seventhSharpFive      = NULL;
 static t_symbol *tll_seventhFlatFive       = NULL;
+static t_symbol *tll_none                  = NULL;
 static t_symbol *tll_whole                 = NULL;
 static t_symbol *tll_half                  = NULL;
 static t_symbol *tll_quarter               = NULL;
@@ -122,6 +123,7 @@ void tralala_symbolsInit ( )
     tll_seventhSuspended      = gensym ("7th dominant suspended");
     tll_seventhSharpFive      = gensym ("7th dominant sharp five");
     tll_seventhFlatFive       = gensym ("7th dominant flat five");
+    tll_none                  = gensym ("none");
     tll_whole                 = gensym ("whole");
     tll_half                  = gensym ("half");
     tll_quarter               = gensym ("quarter");
@@ -259,6 +261,7 @@ PIZError tralala_noteValueWithSymbol (const t_symbol *s, long *value)
     else if (s == tll_quarterDotted)        { *value = PIZ_QUARTER_NOTE_DOTTED;         } 
     else if (s == tll_eighthDotted)         { *value = PIZ_EIGHTH_NOTE_DOTTED;          } 
     else if (s == tll_sixteenthDotted)      { *value = PIZ_SIXTEENTH_NOTE_DOTTED;       } 
+    else if (s == tll_none)                 { *value = PIZ_NOTE_VALUE_NONE;             }
     
     else { err = PIZ_ERROR; }
     //
