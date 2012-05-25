@@ -47,6 +47,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 #define PIZ_SIZE_ALPHABET           128
 #define PIZ_MAXIMUM_SIZE_GRAPH      32
@@ -58,12 +59,15 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZ_INLINE void pizMarkovModelBaumWelch             (PIZMarkovModel *x, long argc, long *argv);
 PIZ_LOCAL  void pizMarkovModelFillStochastically    (PIZMarkovModel *x, long argc, double *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark Public
 #pragma mark -
 
 PIZMarkovModel *pizMarkovModelNew (long argc, long *argv)
@@ -292,6 +296,9 @@ long pizMarkovModelCount (const PIZMarkovModel *x)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark Private
+#pragma mark -
 
 PIZ_INLINE void pizMarkovModelBaumWelch (PIZMarkovModel *x, long argc, long *argv)
 {

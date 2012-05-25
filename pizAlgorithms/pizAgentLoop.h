@@ -48,26 +48,13 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void      *pizAgentEventLoop              (void *agent);
-PIZ_LOCAL void      *pizAgentNotificationLoop       (void *agent);
+PIZ_LOCAL void  *pizAgentEventLoop          (void *agent);
+PIZ_LOCAL void  *pizAgentNotificationLoop   (void *agent);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZError  pizAgentEventLoopDoEvent        (PIZAgent *x, PIZLinklist *q);
-PIZ_LOCAL void      pizAgentEventLoopDoStep         (PIZAgent *x, bool blank);
-PIZ_LOCAL void      pizAgentEventLoopDoRefresh      (PIZAgent *x);
-
-PIZ_LOCAL void      pizAgentEventLoopInit           (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopSleep          (PIZAgent *x);
-PIZ_LOCAL bool      pizAgentEventLoopIsCondition    (PIZAgent *x);
-PIZ_LOCAL bool      pizAgentEventLoopIsWorkTime     (PIZAgent *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_LOCAL void      pizAgentAddNotification         (PIZAgent *x, PIZEventCode n, long tag, long ac, long *av);
-PIZ_LOCAL void      pizAgentNotificationLoopNotify  (PIZAgent *x);
+PIZ_LOCAL void  pizAgentAddNotification     (PIZAgent *x, PIZEventCode n, long tag, long ac, long *av);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

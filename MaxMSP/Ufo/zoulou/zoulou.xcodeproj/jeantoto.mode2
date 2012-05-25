@@ -424,8 +424,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96E70B71156FD7FA003B7284</string>
-				<string>96E70B72156FD7FA003B7284</string>
+				<string>96E70CC7156FE0E3003B7284</string>
+				<string>96E70CC8156FE0E3003B7284</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -676,7 +676,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96E70B73156FD7FA003B7284</string>
+				<string>96E70CC9156FE0E3003B7284</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

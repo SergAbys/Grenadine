@@ -156,39 +156,42 @@ void *yankee_new (t_symbol *s, long argc, t_atom *argv)
     t_yankee *x = NULL;
     
     if (x = (t_yankee *)object_alloc (yankee_class)) {
-        long k[2] = {0, 0};
-        
-        if (argc && atom_gettype (argv) == A_LONG) {
-            k[0] = atom_getlong (argv);
-                
-            if (argc == 2 && atom_gettype (argv + 1) == A_LONG) {
-                k[1] = atom_getlong (argv + 1);
-            }
-        }
-        
-        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
-        x->neuralGas = pizNeuralGasNew (2, k);
-                                
-        if (x->values && x->neuralGas) {
-            x->lambda       = DEFAULT_LAMBDA;
-            x->epsilon1     = DEFAULT_EPSILON1;
-            x->epsilon2     = DEFAULT_EPSILON2;
-            x->alpha        = DEFAULT_ALPHA;
-            x->beta         = DEFAULT_BETA;
-            x->kappa        = DEFAULT_KAPPA;
+    //
+    long k[2] = {0, 0};
+    
+    if (argc && atom_gettype (argv) == A_LONG) {
+        k[0] = atom_getlong (argv);
             
-            x->rightOutlet  = outlet_new (x, NULL);
-            object_obex_store ((void *)x, gensym ("dumpout"), (t_object *)x->rightOutlet);
-            x->leftOutlet = listout ((t_object *)x);
-                    
-            systhread_mutex_new (&x->algorithmMutex, SYSTHREAD_MUTEX_NORMAL);
-            
-            attr_args_process (x, argc, argv);
-                
-        } else {
-            object_free (x);
-            x = NULL;
+        if (argc == 2 && atom_gettype (argv + 1) == A_LONG) {
+            k[1] = atom_getlong (argv + 1);
         }
+    }
+    
+    x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
+    x->neuralGas = pizNeuralGasNew (2, k);
+                            
+    if (x->values && x->neuralGas) {
+    
+        x->lambda       = DEFAULT_LAMBDA;
+        x->epsilon1     = DEFAULT_EPSILON1;
+        x->epsilon2     = DEFAULT_EPSILON2;
+        x->alpha        = DEFAULT_ALPHA;
+        x->beta         = DEFAULT_BETA;
+        x->kappa        = DEFAULT_KAPPA;
+        
+        x->rightOutlet  = outlet_new (x, NULL);
+        object_obex_store ((void *)x, gensym ("dumpout"), (t_object *)x->rightOutlet);
+        x->leftOutlet = listout ((t_object *)x);
+                
+        systhread_mutex_new (&x->algorithmMutex, SYSTHREAD_MUTEX_NORMAL);
+        
+        attr_args_process (x, argc, argv);
+            
+    } else {
+        object_free (x);
+        x = NULL;
+    }
+    //
     }
             
     return x;
@@ -214,6 +217,7 @@ void yankee_assist (t_yankee *x, void *b, long m, long a, char *s)
 {
     if (m == ASSIST_INLET) { 
         sprintf (s, "(int) learn clear dump");
+        
     } else {   
         switch (a) {
             case 0 : sprintf (s, "(list) Navigate"); break;
@@ -307,23 +311,25 @@ void yankee_int (t_yankee *x, long n)
     long    argc = 0;
 
     if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
-        PIZError err = PIZ_ERROR;
-            
-        LOCK
-
-        if (pizNeuralGasCount (x->neuralGas)) {
-            if (!(err = pizNeuralGasProceed (x->neuralGas, argc, x->values))) {
-                atom_setlong_array (argc, argv, argc, x->values);
-            }
-        }
+    //
+    PIZError err = PIZ_ERROR;
         
-        UNLOCK
+    LOCK
 
-        if (!err) {
-            outlet_list (x->leftOutlet, NULL, argc, argv);
+    if (pizNeuralGasCount (x->neuralGas)) {
+        if (!(err = pizNeuralGasProceed (x->neuralGas, argc, x->values))) {
+            atom_setlong_array (argc, argv, argc, x->values);
         }
-            
-        sysmem_freeptr (argv);
+    }
+    
+    UNLOCK
+
+    if (!err) {
+        outlet_list (x->leftOutlet, NULL, argc, argv);
+    }
+        
+    sysmem_freeptr (argv);
+    //
     }
 }
     
@@ -418,22 +424,24 @@ PIZ_INLINE PIZError pizNeuralGasEncodeToArray (const PIZNeuralGas *x, long n, PI
     PIZError err = PIZ_ERROR;
     
     if ((n >= 0) && (n < x->mapSize) && a) {
-        long i, j, t, k = 0;
-        
-        err = PIZ_GOOD;
-        
-        for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
-            if (pizItemsetIsSetAtIndex (&x->map, i)) {
-                if (k == n) {
-                    for (j = 0; j < x->vectorSize; j++) {
-                        t = (long)(((*(x->vectorStock + (n * x->vectorSize) + j)) + 0.5));
-                        err |= pizArrayAppend (a, t);
-                    }
+    //
+    long i, j, t, k = 0;
+    
+    err = PIZ_GOOD;
+    
+    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+        if (pizItemsetIsSetAtIndex (&x->map, i)) {
+            if (k == n) {
+                for (j = 0; j < x->vectorSize; j++) {
+                    t = (long)(((*(x->vectorStock + (n * x->vectorSize) + j)) + 0.5));
+                    err |= pizArrayAppend (a, t);
                 }
-                
-                k ++;
             }
+            
+            k ++;
         }
+    }
+    //
     }
     
     return err;

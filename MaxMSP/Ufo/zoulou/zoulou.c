@@ -90,25 +90,25 @@ int main (void)
     
     c = class_new ("zoulou", (method)zoulou_new, (method)zoulou_free, (long)sizeof(t_zoulou), 0L, A_GIMME, 0);
 
-    class_addmethod (c, (method)zoulou_assist,              "assist",   A_CANT, 0); 
-    class_addmethod (c, (method)zoulou_learn,               "learn",    A_GIMME, 0);
-    class_addmethod (c, (method)zoulou_int,                 "int",      A_LONG, 0);
-    class_addmethod (c, (method)zoulou_dump,                "dump",     A_DEFLONG, 0);
-    class_addmethod (c, (method)zoulou_clear,               "clear",    0);
-    class_addmethod (c, (method)object_obex_dumpout,        "dumpout",  A_CANT, 0); 
+    class_addmethod (c, (method)zoulou_assist,          "assist",   A_CANT, 0); 
+    class_addmethod (c, (method)zoulou_learn,           "learn",    A_GIMME, 0);
+    class_addmethod (c, (method)zoulou_int,             "int",      A_LONG, 0);
+    class_addmethod (c, (method)zoulou_dump,            "dump",     A_DEFLONG, 0);
+    class_addmethod (c, (method)zoulou_clear,           "clear",    0);
+    class_addmethod (c, (method)object_obex_dumpout,    "dumpout",  A_CANT, 0); 
 
-    CLASS_ATTR_DOUBLE       (c, "straightratio",     0, t_zoulou, straightRatio);
-    CLASS_ATTR_LABEL        (c, "straightratio",     0, "Straight Ratio");
-    CLASS_ATTR_ACCESSORS    (c, "straightratio",     NULL, zoulou_setStraightRatio);
-    CLASS_ATTR_FILTER_CLIP  (c, "straightratio",     0., 1.);
+    CLASS_ATTR_DOUBLE       (c, "straightratio",        0, t_zoulou, straightRatio);
+    CLASS_ATTR_LABEL        (c, "straightratio",        0, "Straight Ratio");
+    CLASS_ATTR_ACCESSORS    (c, "straightratio",        NULL, zoulou_setStraightRatio);
+    CLASS_ATTR_FILTER_CLIP  (c, "straightratio",        0., 1.);
     
-    CLASS_ATTR_LONG         (c, "backwardthreshold", 0, t_zoulou, backwardThreshold);
-    CLASS_ATTR_LABEL        (c, "backwardthreshold", 0, "Backward Threshold");
-    CLASS_ATTR_ACCESSORS    (c, "backwardthreshold", NULL, zoulou_setBackwardThreshold);
-    CLASS_ATTR_FILTER_MIN   (c, "backwardthreshold", 0);
+    CLASS_ATTR_LONG         (c, "backwardthreshold",    0, t_zoulou, backwardThreshold);
+    CLASS_ATTR_LABEL        (c, "backwardthreshold",    0, "Backward Threshold");
+    CLASS_ATTR_ACCESSORS    (c, "backwardthreshold",    NULL, zoulou_setBackwardThreshold);
+    CLASS_ATTR_FILTER_MIN   (c, "backwardthreshold",    0);
     
-    CLASS_ATTR_ORDER        (c, "straightratio",     0, "1");
-    CLASS_ATTR_ORDER        (c, "backwardthreshold", 0, "2");
+    CLASS_ATTR_ORDER        (c, "straightratio",        0, "1");
+    CLASS_ATTR_ORDER        (c, "backwardthreshold",    0, "2");
 
     zoulou_sym_dumpout      = gensym ("dumpout");
     zoulou_sym_node         = gensym ("node");
@@ -132,25 +132,28 @@ void *zoulou_new (t_symbol *s, long argc, t_atom *argv)
     t_zoulou *x = NULL;
 
     if (x = (t_zoulou *)object_alloc (zoulou_class)) {
-        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
-        x->factorOracle = pizFactorOracleNew (0, NULL);
+    //
+    x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
+    x->factorOracle = pizFactorOracleNew (0, NULL);
+    
+    if (x->values && x->factorOracle) {
+    
+        x->straightRatio     = DEFAULT_STRAIGHT;
+        x->backwardThreshold = DEFAULT_BACKWARD;
         
-        if (x->values && x->factorOracle) {
-            x->straightRatio        = DEFAULT_STRAIGHT;
-            x->backwardThreshold    = DEFAULT_BACKWARD;
-            
-            x->rightOutlet  = outlet_new (x, NULL);
-            object_obex_store ((void *)x, zoulou_sym_dumpout, (t_object *)x->rightOutlet);
-            x->leftOutlet = listout ((t_object *)x);
-                    
-            systhread_mutex_new (&x->algorithmMutex, SYSTHREAD_MUTEX_NORMAL);
-            
-            attr_args_process (x, argc, argv);
+        x->rightOutlet  = outlet_new (x, NULL);
+        object_obex_store ((void *)x, zoulou_sym_dumpout, (t_object *)x->rightOutlet);
+        x->leftOutlet = listout ((t_object *)x);
                 
-        } else {
-            object_free (x);
-            x = NULL;
-        }
+        systhread_mutex_new (&x->algorithmMutex, SYSTHREAD_MUTEX_NORMAL);
+        
+        attr_args_process (x, argc, argv);
+            
+    } else {
+        object_free (x);
+        x = NULL;
+    }
+    //
     }
             
     return x;
@@ -176,6 +179,7 @@ void zoulou_assist (t_zoulou *x, void *b, long m, long a, char *s)
 {
     if (m == ASSIST_INLET) { 
         sprintf (s, "(int) learn clear dump");
+        
     } else {   
         switch (a) {
             case 0 : sprintf (s, "(list) Navigate"); break;
@@ -229,23 +233,25 @@ void zoulou_int (t_zoulou *x, long n)
     long    argc = 0;
 
     if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
-        PIZError err = PIZ_ERROR;
-            
-        LOCK
-
-        if (pizFactorOracleCount (x->factorOracle)) {
-            if (!(err = pizFactorOracleProceed (x->factorOracle, argc, x->values))) {
-                atom_setlong_array (argc, argv, argc, x->values);
-            }
-        }
+    //
+    PIZError err = PIZ_ERROR;
         
-        UNLOCK
+    LOCK
 
-        if (!err) {
-            outlet_list (x->leftOutlet, NULL, argc, argv);
+    if (pizFactorOracleCount (x->factorOracle)) {
+        if (!(err = pizFactorOracleProceed (x->factorOracle, argc, x->values))) {
+            atom_setlong_array (argc, argv, argc, x->values);
         }
-            
-        sysmem_freeptr (argv);
+    }
+    
+    UNLOCK
+
+    if (!err) {
+        outlet_list (x->leftOutlet, NULL, argc, argv);
+    }
+        
+    sysmem_freeptr (argv);
+    //
     }
 }
     
@@ -270,30 +276,32 @@ void zoulou_dump (t_zoulou *x, long n)
     UNLOCK
     
     if (!err) {
-        long    i, k, ref, lrs;
-        t_atom  result[4];
-        
-        ref = pizArrayAtIndex (values, PIZ_FACTOR_ORACLE_REFER);
-        lrs = pizArrayAtIndex (values, PIZ_FACTOR_ORACLE_LRS);
-        k   = pizArrayAtIndex (values, PIZ_FACTOR_ORACLE_ARCS);
-        
-        atom_setlong        (result, n);
-        atom_setsym         (result + 1, zoulou_sym_ref);
-        atom_setlong        (result + 2, ref);
-        outlet_anything     (x->rightOutlet, zoulou_sym_node, 3, result);
-        
-        atom_setsym         (result + 1, zoulou_sym_lrs);
-        atom_setlong        (result + 2, lrs);
-        outlet_anything     (x->rightOutlet, zoulou_sym_node, 3, result);
-        
-        atom_setsym         (result + 1, zoulou_sym_arc);
-        
-        for (i = 0; i < k; i++) {
-            atom_setlong (result + 2, pizArrayAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i));
-            atom_setlong (result + 3, pizArrayAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i + k));
+    //
+    long    i, k, ref, lrs;
+    t_atom  result[4];
     
-            outlet_anything (x->rightOutlet, zoulou_sym_node, 4, result);
-        }
+    ref = pizArrayAtIndex (values, PIZ_FACTOR_ORACLE_REFER);
+    lrs = pizArrayAtIndex (values, PIZ_FACTOR_ORACLE_LRS);
+    k   = pizArrayAtIndex (values, PIZ_FACTOR_ORACLE_ARCS);
+    
+    atom_setlong        (result, n);
+    atom_setsym         (result + 1, zoulou_sym_ref);
+    atom_setlong        (result + 2, ref);
+    outlet_anything     (x->rightOutlet, zoulou_sym_node, 3, result);
+    
+    atom_setsym         (result + 1, zoulou_sym_lrs);
+    atom_setlong        (result + 2, lrs);
+    outlet_anything     (x->rightOutlet, zoulou_sym_node, 3, result);
+    
+    atom_setsym         (result + 1, zoulou_sym_arc);
+    
+    for (i = 0; i < k; i++) {
+        atom_setlong (result + 2, pizArrayAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i));
+        atom_setlong (result + 3, pizArrayAtIndex (values, PIZ_FACTOR_ORACLE_DATA + i + k));
+
+        outlet_anything (x->rightOutlet, zoulou_sym_node, 4, result);
+    }
+    //
     }
     
     pizArrayFree (values);
@@ -325,20 +333,22 @@ PIZ_INLINE PIZError pizFactorOracleEncodeToArray (const PIZFactorOracle *x, long
     PIZError err = PIZ_ERROR;
     
     if ((node < x->index) && a) {
-            err = PIZ_GOOD;
-            
-            err |= pizArrayAppend (a, x->nodes[node].refer);
-            err |= pizArrayAppend (a, x->nodes[node].lrs);
-            err |= pizArrayAppend (a, (count = pizArrayCount (x->nodes[node].destinations)));
-            
-            for (i = 0; i < count; i++) {
-                err |= pizArrayAppend (a, pizArrayAtIndex (x->nodes[node].destinations, i));
-            }
-            
-            for (i = 0; i < count; i++) {
-                err |= pizArrayAppend (a, pizArrayAtIndex (x->nodes[node].values, i));
-            }
-        }
+    //
+    err = PIZ_GOOD;
+    
+    err |= pizArrayAppend (a, x->nodes[node].refer);
+    err |= pizArrayAppend (a, x->nodes[node].lrs);
+    err |= pizArrayAppend (a, (count = pizArrayCount (x->nodes[node].destinations)));
+    
+    for (i = 0; i < count; i++) {
+        err |= pizArrayAppend (a, pizArrayAtIndex (x->nodes[node].destinations, i));
+    }
+    
+    for (i = 0; i < count; i++) {
+        err |= pizArrayAppend (a, pizArrayAtIndex (x->nodes[node].values, i));
+    }
+    //
+    }
     
     return err;
 }

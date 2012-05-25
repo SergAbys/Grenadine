@@ -95,26 +95,29 @@ void *romeo_new (t_symbol *s, long argc, t_atom *argv)
     t_romeo *x = NULL;
     
     if (x = (t_romeo *)object_alloc (romeo_class)) {
-        long k = 0;
+    //
+    long k = 0;
+    
+    if (argc && atom_gettype (argv) == A_LONG) {
+        k = atom_getlong (argv);
+    }
+    
+    x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
+    x->galoisLattice = pizGaloisLatticeNew (1, &k);
+                            
+    if (x->values && x->galoisLattice) {
+    
+        x->rightOutlet  = outlet_new (x, NULL);
+        object_obex_store ((void *)x, gensym ("dumpout"), (t_object *)x->rightOutlet);
+        x->leftOutlet = listout ((t_object *)x);
+                
+        systhread_mutex_new (&x->algorithmMutex, SYSTHREAD_MUTEX_NORMAL);
         
-        if (argc && atom_gettype (argv) == A_LONG) {
-            k = atom_getlong (argv);
-        }
-        
-        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
-        x->galoisLattice = pizGaloisLatticeNew (1, &k);
-                                
-        if (x->values && x->galoisLattice) {
-            x->rightOutlet  = outlet_new (x, NULL);
-            object_obex_store ((void *)x, gensym ("dumpout"), (t_object *)x->rightOutlet);
-            x->leftOutlet = listout ((t_object *)x);
-                    
-            systhread_mutex_new (&x->algorithmMutex, SYSTHREAD_MUTEX_NORMAL);
-            
-        } else {
-            object_free (x);
-            x = NULL;
-        }
+    } else {
+        object_free (x);
+        x = NULL;
+    }
+    //
     }
             
     return x;
@@ -140,6 +143,7 @@ void romeo_assist (t_romeo *x, void *b, long m, long a, char *s)
 {
     if (m == ASSIST_INLET) { 
         sprintf (s, "(int) learn clear dump");
+        
     } else {   
         switch (a) {
             case 0 : sprintf (s, "(list) Navigate"); break;
@@ -169,23 +173,25 @@ void romeo_int (t_romeo *x, long n)
     long    argc = 0;
 
     if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
-        PIZError err = PIZ_ERROR;
-            
-        LOCK
-
-        if (pizGaloisLatticeCount (x->galoisLattice)) {
-            if (!(err = pizGaloisLatticeProceed (x->galoisLattice, argc, x->values))) {
-                atom_setlong_array (argc, argv, argc, x->values);
-            }
-        }
+    //
+    PIZError err = PIZ_ERROR;
         
-        UNLOCK
+    LOCK
 
-        if (!err) {
-            outlet_list (x->leftOutlet, NULL, argc, argv);
+    if (pizGaloisLatticeCount (x->galoisLattice)) {
+        if (!(err = pizGaloisLatticeProceed (x->galoisLattice, argc, x->values))) {
+            atom_setlong_array (argc, argv, argc, x->values);
         }
-            
-        sysmem_freeptr (argv);
+    }
+    
+    UNLOCK
+
+    if (!err) {
+        outlet_list (x->leftOutlet, NULL, argc, argv);
+    }
+        
+    sysmem_freeptr (argv);
+    //
     }
 }
     
@@ -205,27 +211,29 @@ void romeo_dump (t_romeo *x, long n)
     long    argc = 0;
 
     if (atom_alloc_array (n, &argc, &argv, &alloc) == MAX_ERR_NONE) {
-        PIZError err = PIZ_GOOD;
-        PIZArray *values = pizArrayNew (4);
+    //
+    PIZError err = PIZ_GOOD;
+    PIZArray *values = pizArrayNew (4);
 
-        LOCK
-        
-        err = pizGaloisLatticeEncodeToArray (x->galoisLattice, n, values);
-        
-        UNLOCK
+    LOCK
+    
+    err = pizGaloisLatticeEncodeToArray (x->galoisLattice, n, values);
+    
+    UNLOCK
 
-        if (!err) {
-            long i, count = pizArrayAtIndex (values, PIZ_GALOIS_LATTICE_CONCEPTS);
-            long *ptr  = pizArrayPtr (values);
-                                
-            for (i = 0; i < count; i++) {
-                atom_setlong_array (argc, argv, argc, ptr + PIZ_GALOIS_LATTICE_DATA + (n * i));
-                outlet_list (x->rightOutlet, NULL, argc, argv);
-            }
+    if (!err) {
+        long i, count = pizArrayAtIndex (values, PIZ_GALOIS_LATTICE_CONCEPTS);
+        long *ptr  = pizArrayPtr (values);
+                            
+        for (i = 0; i < count; i++) {
+            atom_setlong_array (argc, argv, argc, ptr + PIZ_GALOIS_LATTICE_DATA + (n * i));
+            outlet_list (x->rightOutlet, NULL, argc, argv);
         }
-            
-        sysmem_freeptr (argv);
-        pizArrayFree (values);
+    }
+        
+    sysmem_freeptr (argv);
+    pizArrayFree (values);
+    //
     }
 }
 
@@ -238,21 +246,23 @@ PIZ_INLINE PIZError pizGaloisLatticeEncodeToArray (const PIZGaloisLattice *x, lo
     PIZError err = PIZ_ERROR;
     
     if ((n > 0) && (n < PIZ_ITEMSET_SIZE) && a) {
-        long i, count = pizArrayCount (x->map[n]);
+    //
+    long i, count = pizArrayCount (x->map[n]);
+    
+    err = PIZ_GOOD;
+    
+    err |= pizArrayAppend (a, count);
+    
+    for (i = 0; i < count; i++) {
+        long j, p = pizArrayAtIndex (x->map[n], i);
         
-        err = PIZ_GOOD;
-        
-        err |= pizArrayAppend (a, count);
-        
-        for (i = 0; i < count; i++) {
-            long j, p = pizArrayAtIndex (x->map[n], i);
-            
-            for (j = 0; j < PIZ_ITEMSET_SIZE; j++) {
-                if (pizItemsetIsSetAtIndex (&(x->stock[p].itemset), j)) {
-                    err |= pizArrayAppend (a, j);
-                }
+        for (j = 0; j < PIZ_ITEMSET_SIZE; j++) {
+            if (pizItemsetIsSetAtIndex (&(x->stock[p].itemset), j)) {
+                err |= pizArrayAppend (a, j);
             }
         }
+    }
+    //
     }
     
     return err;

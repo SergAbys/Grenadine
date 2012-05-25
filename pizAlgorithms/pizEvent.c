@@ -143,6 +143,8 @@ static const char *pizEventNames[ ] = { "Init",
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+#pragma mark Public
+#pragma mark -
 
 PIZEvent *pizEventNew (PIZEventCode code, long tag, long argc, const long *argv)
 {

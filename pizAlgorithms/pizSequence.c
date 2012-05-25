@@ -42,6 +42,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 #define PIZ_DEFAULT_START           0
 #define PIZ_DEFAULT_END             96
@@ -53,6 +54,8 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark Public
 #pragma mark -
 
 PIZSequence *pizSequenceNew (long size)
@@ -67,7 +70,7 @@ PIZSequence *pizSequenceNew (long size)
     if (size > 0) {
         x->size = size;
     } else {
-        x->size = PIZ_SEQUENCE_DEFAULT_SIZE;
+        x->size = PIZ_SEQUENCE_DEFAULT_SIZE_TIMELINE;
     }
     
     x->map           = pizArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);

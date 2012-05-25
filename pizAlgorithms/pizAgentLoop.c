@@ -52,12 +52,6 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_EXIT (x->flags & PIZ_AGENT_FLAG_EXIT)
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,                   // PIZ_EVENT_INIT
                                                     pizAgentPlay,                   // PIZ_EVENT_PLAY
                                                     pizAgentStop,                   // PIZ_EVENT_STOP
@@ -88,9 +82,32 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizSequenceNovember,            // PIZ_EVENT_NOVEMBER
                                                     pizSequenceJuliet,              // PIZ_EVENT_JULIET       
                                                     pizSequenceLearn };             // PIZ_EVENT_LEARN
-    
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+#define PIZ_EXIT (x->flags & PIZ_AGENT_FLAG_EXIT)
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZ_LOCAL PIZError  pizAgentEventLoopDoEvent        (PIZAgent *x, PIZLinklist *q);
+PIZ_LOCAL void      pizAgentEventLoopDoStep         (PIZAgent *x, bool blank);
+PIZ_LOCAL void      pizAgentEventLoopDoRefresh      (PIZAgent *x);
+
+PIZ_LOCAL void      pizAgentEventLoopInit           (PIZAgent *x);
+PIZ_LOCAL void      pizAgentEventLoopSleep          (PIZAgent *x);
+PIZ_LOCAL bool      pizAgentEventLoopIsCondition    (PIZAgent *x);
+PIZ_LOCAL bool      pizAgentEventLoopIsWorkTime     (PIZAgent *x);
+
+PIZ_LOCAL void      pizAgentNotificationLoopNotify  (PIZAgent *x);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark Public
 #pragma mark -
 
 void *pizAgentEventLoop (void *agent) 
@@ -182,6 +199,28 @@ void *pizAgentNotificationLoop (void *agent)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void pizAgentAddNotification (PIZAgent *x, PIZEventCode n, long tag, long ac, long *av)
+{
+    PIZEvent *notification = NULL;
+
+    if (notification = pizEventNew (n, tag, ac, av)) {
+    
+        PIZ_AGENT_LOCK_NOTIFICATION
+        PIZ_AGENT_QUEUE (x->notification, notification)
+        PIZ_AGENT_UNLOCK_NOTIFICATION
+        pthread_cond_signal (&x->notificationCondition);
+        
+    } else {
+        PIZ_AGENT_MEMORY
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark Private
 #pragma mark -
 
 PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q) 
@@ -399,22 +438,6 @@ bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-
-void pizAgentAddNotification (PIZAgent *x, PIZEventCode n, long tag, long ac, long *av)
-{
-    PIZEvent *notification = NULL;
-
-    if (notification = pizEventNew (n, tag, ac, av)) {
-    
-        PIZ_AGENT_LOCK_NOTIFICATION
-        PIZ_AGENT_QUEUE (x->notification, notification)
-        PIZ_AGENT_UNLOCK_NOTIFICATION
-        pthread_cond_signal (&x->notificationCondition);
-        
-    } else {
-        PIZ_AGENT_MEMORY
-    }
-}
 
 void pizAgentNotificationLoopNotify (PIZAgent *x)
 {

@@ -103,8 +103,8 @@ PIZ_LOCAL void pizSequenceEachCycle         (PIZSequence *x, const PIZEvent *e, 
 PIZ_LOCAL void pizSequenceEachTempHash      (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
 PIZ_LOCAL void pizSequenceEachTempNotes     (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
 
-PIZ_LOCAL long pizSequenceFillTemporary     (PIZSequence *x);
-PIZ_LOCAL void pizSequenceWithTemporary     (PIZSequence *x, long selector, bool reverse);
+PIZ_LOCAL long pizSequenceFillTempNotes     (PIZSequence *x);
+PIZ_LOCAL void pizSequenceWithTempNotes    (PIZSequence *x, long selector, bool reverse);
 
 PIZ_LOCAL PIZNote   *pizSequenceNewNote     (PIZSequence *x, long tag, long *argv, ulong flags);
 PIZ_LOCAL PIZError  pizSequenceGetTag       (PIZSequence *x, long tag, long *ptr);
@@ -115,6 +115,7 @@ PIZ_LOCAL void      pizSequenceMakeMap      (PIZSequence *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+#pragma mark Public
 #pragma mark -
 
 PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
@@ -206,7 +207,7 @@ PIZError pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
     long shift    = argv[0];
     long selector = CLAMP (argv[1], PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
     
-    k = pizSequenceFillTemporary (x);
+    k = pizSequenceFillTempNotes (x);
     
     if (k && (shift < 0)) {
         shift = k - ((-shift) % k);
@@ -216,7 +217,7 @@ PIZError pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
         x->tempValues[i] = x->tempNotes1[(i + shift) % k]->values[selector];
     }
                 
-    pizSequenceWithTemporary (x, selector, 0);
+    pizSequenceWithTempNotes (x, selector, 0);
     //
     }
     
@@ -233,7 +234,7 @@ PIZError pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
     long i, k;
     long selector = CLAMP (argv[1], PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
         
-    k = pizSequenceFillTemporary (x);
+    k = pizSequenceFillTempNotes (x);
     
     for (i = 0; i < k; i++) {
         x->tempValues[i] = x->tempNotes1[i]->values[selector];
@@ -248,7 +249,7 @@ PIZError pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
         x->tempNotes1[i] = temp;
     }
             
-    pizSequenceWithTemporary (x, selector, 0);
+    pizSequenceWithTempNotes (x, selector, 0);
     //
     }
     
@@ -266,7 +267,7 @@ PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
     long down = argv[0];
     long selector = CLAMP (argv[1], PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
         
-    k = pizSequenceFillTemporary (x);
+    k = pizSequenceFillTempNotes (x);
     
     for (i = 0; i < PIZ_SEQUENCE_SIZE_TEMP; i++) {
         x->tempValues[i] = 0;
@@ -290,9 +291,9 @@ PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
     }
      
     if (down) {
-        pizSequenceWithTemporary (x, selector, 1);
+        pizSequenceWithTempNotes (x, selector, 1);
     } else {
-        pizSequenceWithTemporary (x, selector, 0);
+        pizSequenceWithTempNotes (x, selector, 0);
     }
     //
     }
@@ -393,7 +394,7 @@ PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
     PIZEventCode code;
     
     pizEventCode (event, &code);
-    k = pizSequenceFillTemporary (x);
+    k = pizSequenceFillTempNotes (x);
     
     if (code == PIZ_EVENT_ZOULOU) {
         err = pizFactorOracleProceed (x->factorOracle, k, x->tempValues);
@@ -416,7 +417,7 @@ PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
         } 
     }
     
-    pizSequenceWithTemporary (x, PIZ_VALUE_PITCH, 0);
+    pizSequenceWithTempNotes (x, PIZ_VALUE_PITCH, 0);
     //
     }
     
@@ -721,6 +722,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+#pragma mark Private
 #pragma mark -
 
 void pizSequenceForEach (PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod method)
@@ -883,7 +885,7 @@ void pizSequenceEachTempNotes (PIZSequence *x, const PIZEvent *e, ulong f, PIZNo
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-long pizSequenceFillTemporary (PIZSequence *x)
+long pizSequenceFillTempNotes (PIZSequence *x)
 {
     x->tempIndex = 0;
     pizSequenceForEach (x, NULL, PIZ_FLAG_NONE, pizSequenceEachTempNotes);
@@ -891,7 +893,7 @@ long pizSequenceFillTemporary (PIZSequence *x)
     return x->tempIndex;
 }
 
-void pizSequenceWithTemporary (PIZSequence *x, long selector, bool reverse)
+void pizSequenceWithTempNotes (PIZSequence *x, long selector, bool reverse)
 {
     long i;
     

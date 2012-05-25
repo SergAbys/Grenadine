@@ -47,6 +47,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 #define PIZ_MAXIMUM_THRESHOLD   100
 
@@ -55,6 +56,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZ_INLINE void     pizGaloisLatticeReconnect       (PIZGaloisLattice *x, long g, long n);
 PIZ_LOCAL PIZError  pizGaloisLatticeMakeMap         (PIZGaloisLattice *x);
@@ -62,6 +64,8 @@ PIZ_LOCAL void      pizGaloisLatticeKillConcept     (PIZGaloisLattice *x, long n
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark Public
 #pragma mark -
 
 PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
@@ -413,6 +417,9 @@ long pizGaloisLatticeCount (const PIZGaloisLattice *x)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark Private
+#pragma mark -
 
 PIZ_INLINE void pizGaloisLatticeReconnect (PIZGaloisLattice *x, long g, long n)
 {

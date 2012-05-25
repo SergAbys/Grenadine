@@ -122,34 +122,37 @@ void *foxtrot_new (t_symbol *s, long argc, t_atom *argv)
     t_foxtrot *x = NULL;
     
     if (x = (t_foxtrot *)object_alloc (foxtrot_class)) {
-        long k[2] = {0, 0};
+    //
+    long k[2] = {0, 0};
+    
+    if (argc && atom_gettype (argv) == A_LONG) {
+        k[0] = atom_getlong (argv);
+            
+        if (argc == 2 && atom_gettype (argv + 1) == A_LONG) {
+            k[1] = atom_getlong (argv + 1);
+        }
+    }
+    
+    x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
+    x->markovModel = pizMarkovModelNew (2, k);
+                            
+    if (x->values && x->markovModel) {
+    
+        x->persistence = DEFAULT_PERSISTENCE;
         
-        if (argc && atom_gettype (argv) == A_LONG) {
-            k[0] = atom_getlong (argv);
+        x->rightOutlet  = outlet_new (x, NULL);
+        object_obex_store ((void *)x, foxtrot_sym_dumpout, (t_object *)x->rightOutlet);
+        x->leftOutlet = listout ((t_object *)x);
                 
-            if (argc == 2 && atom_gettype (argv + 1) == A_LONG) {
-                k[1] = atom_getlong (argv + 1);
-            }
-        }
+        systhread_mutex_new (&x->algorithmMutex, SYSTHREAD_MUTEX_NORMAL);
         
-        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
-        x->markovModel = pizMarkovModelNew (2, k);
-                                
-        if (x->values && x->markovModel) {
-            x->persistence = DEFAULT_PERSISTENCE;
-            
-            x->rightOutlet  = outlet_new (x, NULL);
-            object_obex_store ((void *)x, foxtrot_sym_dumpout, (t_object *)x->rightOutlet);
-            x->leftOutlet = listout ((t_object *)x);
-                    
-            systhread_mutex_new (&x->algorithmMutex, SYSTHREAD_MUTEX_NORMAL);
-            
-            attr_args_process (x, argc, argv);
-            
-        } else {
-            object_free (x);
-            x = NULL;
-        }
+        attr_args_process (x, argc, argv);
+        
+    } else {
+        object_free (x);
+        x = NULL;
+    }
+    //
     }
             
     return x;
@@ -175,6 +178,7 @@ void foxtrot_assist (t_foxtrot *x, void *b, long m, long a, char *s)
 {
     if (m == ASSIST_INLET) { 
         sprintf (s, "(int) learn clear dump");
+        
     } else {   
         switch (a) {
             case 0 : sprintf (s, "(list) Navigate"); break;
@@ -218,23 +222,25 @@ void foxtrot_int (t_foxtrot *x, long n)
     long    argc = 0;
 
     if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
-        PIZError err = PIZ_ERROR;
-            
-        LOCK
-
-        if (pizMarkovModelCount (x->markovModel)) {
-            if (!(err = pizMarkovModelProceed (x->markovModel, argc, x->values))) {
-                atom_setlong_array (argc, argv, argc, x->values);
-            }
-        }
+    //
+    PIZError err = PIZ_ERROR;
         
-        UNLOCK
+    LOCK
 
-        if (!err) {
-            outlet_list (x->leftOutlet, NULL, argc, argv);
+    if (pizMarkovModelCount (x->markovModel)) {
+        if (!(err = pizMarkovModelProceed (x->markovModel, argc, x->values))) {
+            atom_setlong_array (argc, argv, argc, x->values);
         }
-            
-        sysmem_freeptr (argv);
+    }
+    
+    UNLOCK
+
+    if (!err) {
+        outlet_list (x->leftOutlet, NULL, argc, argv);
+    }
+        
+    sysmem_freeptr (argv);
+    //
     }
 }
     
@@ -263,25 +269,27 @@ void foxtrot_dump (t_foxtrot *x, long n)
     UNLOCK
     
     if (!err) {
-        long t = pizArrayAtIndex (values, PIZ_MARKOV_MODEL_TRANSITIONS);
-        long e = pizArrayAtIndex (values, PIZ_MARKOV_MODEL_EMISSIONS);
+    //
+    long t = pizArrayAtIndex (values, PIZ_MARKOV_MODEL_TRANSITIONS);
+    long e = pizArrayAtIndex (values, PIZ_MARKOV_MODEL_EMISSIONS);
 
-        size = MAX (t, e);
+    size = MAX (t, e);
+    
+    if (atom_alloc_array (size, &argc, &argv, &alloc) == MAX_ERR_NONE) {
+        long *ptr = pizArrayPtr (values);
+
+        atom_setlong (argv, pizArrayAtIndex (values, PIZ_MARKOV_MODEL_START));
+        outlet_anything (x->rightOutlet, foxtrot_sym_start, 1, argv);
         
-        if (atom_alloc_array (size, &argc, &argv, &alloc) == MAX_ERR_NONE) {
-            long *ptr = pizArrayPtr (values);
+        atom_setlong_array (t, argv, t, ptr + PIZ_MARKOV_MODEL_DATA);
+        outlet_anything (x->rightOutlet, foxtrot_sym_transitions, t, argv);
+        
+        atom_setlong_array (e, argv, e, ptr + PIZ_MARKOV_MODEL_DATA + t);
+        outlet_anything (x->rightOutlet, foxtrot_sym_emissions, e, argv);
 
-            atom_setlong (argv, pizArrayAtIndex (values, PIZ_MARKOV_MODEL_START));
-            outlet_anything (x->rightOutlet, foxtrot_sym_start, 1, argv);
-            
-            atom_setlong_array (t, argv, t, ptr + PIZ_MARKOV_MODEL_DATA);
-            outlet_anything (x->rightOutlet, foxtrot_sym_transitions, t, argv);
-            
-            atom_setlong_array (e, argv, e, ptr + PIZ_MARKOV_MODEL_DATA + t);
-            outlet_anything (x->rightOutlet, foxtrot_sym_emissions, e, argv);
-
-            sysmem_freeptr (argv);
-        }
+        sysmem_freeptr (argv);
+    }
+    //
     }
     
     pizArrayFree (values);
@@ -305,21 +313,23 @@ PIZ_INLINE PIZError pizMarkovModelEncodeToArray (const PIZMarkovModel *x, long n
     PIZError err = PIZ_ERROR;
     
     if ((n >= 0) && (n < x->graphSize) && a) {
-        long i;
-        
-        err = PIZ_GOOD;
-        
-        err |= pizArrayAppend (a, (long)(x->start[n] * 100.));
-        err |= pizArrayAppend (a, x->graphSize);
-        err |= pizArrayAppend (a, PIZ_SIZE_ALPHABET);
-        
-        for (i = 0; i < x->graphSize; i++) {
-            err |= pizArrayAppend (a, (long)(x->transition[(n * x->graphSize) + i] * 100.));
-        }
-        
-        for (i = 0; i < PIZ_SIZE_ALPHABET; i++) {
-            err |= pizArrayAppend (a, (long)(x->emission[(n * PIZ_SIZE_ALPHABET) + i] * 100.));
-        }
+    //
+    long i;
+    
+    err = PIZ_GOOD;
+    
+    err |= pizArrayAppend (a, (long)(x->start[n] * 100.));
+    err |= pizArrayAppend (a, x->graphSize);
+    err |= pizArrayAppend (a, PIZ_SIZE_ALPHABET);
+    
+    for (i = 0; i < x->graphSize; i++) {
+        err |= pizArrayAppend (a, (long)(x->transition[(n * x->graphSize) + i] * 100.));
+    }
+    
+    for (i = 0; i < PIZ_SIZE_ALPHABET; i++) {
+        err |= pizArrayAppend (a, (long)(x->emission[(n * PIZ_SIZE_ALPHABET) + i] * 100.));
+    }
+    //
     }
     
     return err;

@@ -128,36 +128,39 @@ void *charlie_new (t_symbol *s, long argc, t_atom *argv)
     t_charlie *x = NULL;
     
     if (x = (t_charlie *)object_alloc (charlie_class)) {
-        long k[2] = {0, 0};
+    //
+    long k[2] = {0, 0};
+    
+    if (argc && atom_gettype (argv) == A_LONG) {
+        k[0] = atom_getlong (argv);
         
-        if (argc && atom_gettype (argv) == A_LONG) {
-            k[0] = atom_getlong (argv);
-            
-            if (argc == 2 && atom_gettype (argv + 1) == A_LONG) {
-                k[1] = atom_getlong (argv + 1);
-            }
+        if (argc == 2 && atom_gettype (argv + 1) == A_LONG) {
+            k[1] = atom_getlong (argv + 1);
         }
+    }
+    
+    x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
+    x->kohonenMap = pizKohonenMapNew (2, k);
+                            
+    if (x->values && x->kohonenMap) {
+    
+        x->range    = DEFAULT_RANGE;
+        x->training = DEFAULT_TRAINING;
+        x->step     = DEFAULT_STEP;
         
-        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
-        x->kohonenMap = pizKohonenMapNew (2, k);
-                                
-        if (x->values && x->kohonenMap) {
-            x->range    = DEFAULT_RANGE;
-            x->training = DEFAULT_TRAINING;
-            x->step     = DEFAULT_STEP;
-            
-            x->rightOutlet  = outlet_new (x, NULL);
-            object_obex_store ((void *)x, gensym ("dumpout"), (t_object *)x->rightOutlet);
-            x->leftOutlet = listout ((t_object *)x);
-                    
-            systhread_mutex_new (&x->algorithmMutex, SYSTHREAD_MUTEX_NORMAL);
-            
-            attr_args_process (x, argc, argv);
-            
-        } else {
-            object_free (x);
-            x = NULL;
-        }
+        x->rightOutlet  = outlet_new (x, NULL);
+        object_obex_store ((void *)x, gensym ("dumpout"), (t_object *)x->rightOutlet);
+        x->leftOutlet = listout ((t_object *)x);
+                
+        systhread_mutex_new (&x->algorithmMutex, SYSTHREAD_MUTEX_NORMAL);
+        
+        attr_args_process (x, argc, argv);
+        
+    } else {
+        object_free (x);
+        x = NULL;
+    }
+    //
     }
             
     return x;
@@ -247,22 +250,23 @@ void charlie_int (t_charlie *x, long n)
     PIZError err = PIZ_ERROR;
     
     if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
+    //
+    LOCK
 
-        LOCK
-
-        if (pizKohonenMapCount (x->kohonenMap)) {
-            if (!(err = pizKohonenMapProceed (x->kohonenMap, argc, x->values))) {
-                atom_setlong_array (argc, argv, argc, x->values);
-            }
+    if (pizKohonenMapCount (x->kohonenMap)) {
+        if (!(err = pizKohonenMapProceed (x->kohonenMap, argc, x->values))) {
+            atom_setlong_array (argc, argv, argc, x->values);
         }
+    }
+    
+    UNLOCK
+
+    if (!err) {
+        outlet_list (x->leftOutlet, NULL, argc, argv);
+    }
         
-        UNLOCK
-
-        if (!err) {
-            outlet_list (x->leftOutlet, NULL, argc, argv);
-        }
-            
-        sysmem_freeptr (argv);
+    sysmem_freeptr (argv);
+    //
     }
 }
     
@@ -335,13 +339,15 @@ PIZ_INLINE PIZError pizKohonenMapEncodeToArray (const PIZKohonenMap *x, long n, 
     PIZError err = PIZ_ERROR;
     
     if ((n >= 0) && (n < x->mapSize) && a) {
-        long i;
-        
-        err = PIZ_GOOD;
-        
-        for (i = 0; i < x->vectorSize; i++) {
-            err |= pizArrayAppend (a, (long)(((*(x->map + (n * x->vectorSize) + i)) + 0.5)));
-        }
+    //
+    long i;
+    
+    err = PIZ_GOOD;
+    
+    for (i = 0; i < x->vectorSize; i++) {
+        err |= pizArrayAppend (a, (long)(((*(x->map + (n * x->vectorSize) + i)) + 0.5)));
+    }
+    //
     }
     
     return err;

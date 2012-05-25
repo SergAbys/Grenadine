@@ -69,19 +69,21 @@ void *quebec_new (t_symbol *s, long argc, t_atom *argv)
 {
     t_quebec *x = NULL;
     
-    if (x = (t_quebec *)object_alloc (quebec_class)) {       
-        x->patcher      = NULL;
-        x->firstview    = NULL;
-        x->title        = NULL;
-        
-        x->rightOutlet  = outlet_new ((t_object *)x, NULL);
-        x->leftOutlet   = bangout ((t_object *)x);
-        
-        object_obex_lookup (x, gensym ("#P"), &x->patcher); 
-        
-        if (x->patcher) {
-            object_attach_byptr_register (x, x->patcher, CLASS_NOBOX);
-        }
+    if (x = (t_quebec *)object_alloc (quebec_class)) { 
+    //      
+    x->patcher      = NULL;
+    x->firstview    = NULL;
+    x->title        = NULL;
+    
+    x->rightOutlet  = outlet_new ((t_object *)x, NULL);
+    x->leftOutlet   = bangout ((t_object *)x);
+    
+    object_obex_lookup (x, gensym ("#P"), &x->patcher); 
+    
+    if (x->patcher) {
+        object_attach_byptr_register (x, x->patcher, CLASS_NOBOX);
+    }
+    //
     }
             
     return x;
@@ -102,6 +104,7 @@ void quebec_assist (t_quebec *x, void *b, long m, long a, char *s)
 {
     if (m == ASSIST_INLET) { 
         sprintf (s, "(bang)");
+        
     } else {   
         switch (a) {
             case 0 : sprintf (s, "(bang) Resized"); break;
@@ -117,22 +120,26 @@ void quebec_assist (t_quebec *x, void *b, long m, long a, char *s)
 void quebec_notify (t_quebec *x, t_symbol *s, t_symbol *msg, void *sender, void *data)
 {
     if (msg == gensym ("attr_modified")) { 
-        t_symbol *attr_name = NULL;
-                
-        attr_name = (t_symbol *)object_method (data, gensym ("getname"));
-                
-        if (sender == x->patcher) {
-            if (attr_name == gensym ("name")) {
-                quebec_dumpTitle (x);
-            }
-        } else if (sender == x->firstview) {
-            if (attr_name == gensym ("locked")) {
-                quebec_dumpLocked (x);
-            }
-            if (attr_name == gensym ("rect")) {
-                outlet_bang (x->leftOutlet);
-            }
+    //
+    t_symbol *attr_name = NULL;
+            
+    attr_name = (t_symbol *)object_method (data, gensym ("getname"));
+            
+    if (sender == x->patcher) {
+        if (attr_name == gensym ("name")) {
+            quebec_dumpTitle (x);
         }
+        
+    } else if (sender == x->firstview) {
+        if (attr_name == gensym ("locked")) {
+            quebec_dumpLocked (x);
+        }
+        
+        if (attr_name == gensym ("rect")) {
+            outlet_bang (x->leftOutlet);
+        }
+    }
+    //
     }
 }
 
@@ -165,26 +172,30 @@ void quebec_dumpTitle (t_quebec *x)
     t_object *box = NULL;
                     
     if ((box = jpatcher_get_box (x->patcher)) && (object_classname (box) == gensym ("newobj"))) {
-        t_object *textfield = NULL;
-        
-        if (textfield = object_attr_getobj (box, gensym ("textfield"))) {
-            long argc = 0;
-            long textSize = 0;
-            t_atom *argv = NULL;
-            char *text = NULL;
-            
-            object_method (textfield, gensym ("gettextptr"), &text, &textSize);
-            atom_setparse (&argc, &argv, text);
-            
-            if (argc && argv) {
-                if ((atom_gettype (argv + 1) == A_SYM) && (x->title != atom_getsym (argv + 1))) {
-                    x->title = atom_getsym (argv + 1);
-                    outlet_anything  (x->rightOutlet, gensym ("title"), 1, argv + 1);
-                }
-            
-                sysmem_freeptr (argv);
-            }
+    //
+    t_object *textfield = NULL;
+    
+    if (textfield = object_attr_getobj (box, gensym ("textfield"))) {
+    //
+    long argc = 0;
+    long textSize = 0;
+    t_atom *argv = NULL;
+    char *text = NULL;
+    
+    object_method (textfield, gensym ("gettextptr"), &text, &textSize);
+    atom_setparse (&argc, &argv, text);
+    
+    if (argc && argv) {
+        if ((atom_gettype (argv + 1) == A_SYM) && (x->title != atom_getsym (argv + 1))) {
+            x->title = atom_getsym (argv + 1);
+            outlet_anything  (x->rightOutlet, gensym ("title"), 1, argv + 1);
         }
+    
+        sysmem_freeptr (argv);
+    }
+    //
+    }
+    //
     }
 }
 
