@@ -1,7 +1,6 @@
 /**
  * \file	pizAgentLoop.h
  * \author	Jean Sapristi
- * \date	May 4, 2012.
  */
 
 /*

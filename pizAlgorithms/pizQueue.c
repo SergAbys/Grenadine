@@ -1,7 +1,6 @@
 /*
  * \file    pizQueue.c
  * \author  Jean Sapristi
- * \date    May 13, 2012.
  */
  
 /*

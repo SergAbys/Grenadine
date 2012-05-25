@@ -1,7 +1,6 @@
 /**
  * \file	pizEvent.h
  * \author	Jean Sapristi
- * \date	May 24, 2012.
  */
 
 /*

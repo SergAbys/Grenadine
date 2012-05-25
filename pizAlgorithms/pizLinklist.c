@@ -1,7 +1,6 @@
 /*
  * \file    pizLinklist.c
  * \author  Jean Sapristi
- * \date    May 10, 2012.
  */
  
 /*

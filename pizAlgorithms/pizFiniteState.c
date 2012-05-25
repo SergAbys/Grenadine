@@ -1,7 +1,6 @@
 /*
  * \file    pizFiniteState.c
  * \author  Jean Sapristi
- * \date    May 12, 2012.
  */
  
 /*
@@ -43,12 +42,12 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_ALPHABET_SIZE       128
+#define PIZ_SIZE_ALPHABET       128
 #define PIZ_MAXIMUM_THRESHOLD   100
 #define PIZ_INCREMENT_JUMP      1   
 #define PIZ_INCREMENT_FINAL     5 
 
-#define PIZ_INIT_QUEUE_SIZE     4
+#define PIZ_INIT_SIZE_QUEUE     4
 #define PIZ_DEFAULT_THRESHOLD   35
 
 // -------------------------------------------------------------------------------------------------------------
@@ -94,15 +93,15 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
                 err = PIZ_MEMORY;
             }
             
-            if (x->lottery = (long *)malloc ((MAX (PIZ_ALPHABET_SIZE, PIZ_ITEMSET_SIZE)) * sizeof(long))) {
+            if (x->lottery = (long *)malloc ((MAX (PIZ_SIZE_ALPHABET, PIZ_ITEMSET_SIZE)) * sizeof(long))) {
                 x->lotteryIndex = 0;
             } else {
                 err = PIZ_MEMORY;
             }
                 
-            if (x->mapByValue = (PIZQueue **)malloc (PIZ_ALPHABET_SIZE * sizeof(PIZQueue *))) {
-                for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
-                    if (!(x->mapByValue[i] = pizQueueNew (PIZ_INIT_QUEUE_SIZE))) {
+            if (x->mapByValue = (PIZQueue **)malloc (PIZ_SIZE_ALPHABET * sizeof(PIZQueue *))) {
+                for (i = 0; i < PIZ_SIZE_ALPHABET; i++) {
+                    if (!(x->mapByValue[i] = pizQueueNew (PIZ_INIT_SIZE_QUEUE))) {
                         err = PIZ_MEMORY;
                     }
                 }
@@ -130,7 +129,7 @@ void pizFiniteStateFree (PIZFiniteState *x)
         if (x->mapByValue) {
             long i;
 
-            for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
+            for (i = 0; i < PIZ_SIZE_ALPHABET; i++) {
                 pizQueueFree (x->mapByValue[i]);
                 x->mapByValue[i] = NULL;
             }
@@ -165,7 +164,7 @@ PIZError pizFiniteStateAdd (PIZFiniteState *x, long argc, long *argv)
 
     if (!(pizStackPop (x->ticketMachine))) {
         long i, nextNode, firstNode = pizStackPoppedValue (x->ticketMachine);
-        long k = CLAMP (argv[0], 0, (PIZ_ALPHABET_SIZE - 1));
+        long k = CLAMP (argv[0], 0, (PIZ_SIZE_ALPHABET - 1));
         
         if (!(pizQueueAppend (x->mapByValue[k], firstNode))) {
             x->count ++;
@@ -179,7 +178,7 @@ PIZError pizFiniteStateAdd (PIZFiniteState *x, long argc, long *argv)
                 if (!(pizStackPop (x->ticketMachine))) {
                 
                     nextNode = pizStackPoppedValue (x->ticketMachine);
-                    k = CLAMP (argv[i], 0, (PIZ_ALPHABET_SIZE - 1));
+                    k = CLAMP (argv[i], 0, (PIZ_SIZE_ALPHABET - 1));
                             
                     if (!(pizQueueAppend (x->mapByValue[k], nextNode))) {
                         x->count ++;
@@ -223,7 +222,7 @@ PIZError pizFiniteStateClear (PIZFiniteState *x)
 {
     long i;
     
-    for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
+    for (i = 0; i < PIZ_SIZE_ALPHABET; i++) {
         pizQueueClear (x->mapByValue[i]);
     }
         
@@ -258,7 +257,7 @@ PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)
             
             x->lotteryIndex = 0;
 
-            for (j = 0; j < PIZ_ALPHABET_SIZE; j++) {
+            for (j = 0; j < PIZ_SIZE_ALPHABET; j++) {
                 if (pizQueueCount (x->mapByValue[j])) {
                     x->lottery[x->lotteryIndex] = j;
                     x->lotteryIndex ++;
@@ -326,7 +325,7 @@ PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x)
     
     x->lotteryIndex = 0;
     
-    for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
+    for (i = 0; i < PIZ_SIZE_ALPHABET; i++) {
         if (pizQueueCount (x->mapByValue[i])) {
             long j;
             for (j = 0; j < pizQueueCount (x->mapByValue[i]); j++) {

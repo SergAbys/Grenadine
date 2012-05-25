@@ -424,8 +424,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D9C9E6155EAEF50026B981</string>
-				<string>96D9C9E7155EAEF50026B981</string>
+				<string>96E70BA0156FD88E003B7284</string>
+				<string>96E70BA1156FD88E003B7284</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -458,7 +458,6 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/MaxMSP/Ufo/quebec/quebec.xcodeproj</string>
 	</array>
 	<key>WindowString</key>

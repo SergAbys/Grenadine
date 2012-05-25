@@ -1,7 +1,6 @@
 /**
  * \file    pizStack.h
  * \author  Jean Sapristi
- * \date    May 13, 2012.
  */
  
 /*

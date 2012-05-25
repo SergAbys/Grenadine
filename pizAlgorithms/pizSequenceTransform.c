@@ -1,7 +1,6 @@
 /*
  * \file    pizSequenceTransform.c
  * \author  Jean Sapristi
- * \date    May 25, 2012.
  */
  
 /*
@@ -49,17 +48,17 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_H               6
-#define PIZ_BIRTH           12
-#define PIZ_DEATH           16
-#define PIZ_DIVISIONS       5
-#define PIZ_OFFSET          6
-#define PIZ_SAFE            20
+#define PIZ_SAFE                20
+#define PIZ_SIZE_H              6
+#define PIZ_SIZE_BIRTH          12
+#define PIZ_SIZE_DEATH          16
+#define PIZ_SIZE_DIVISIONS      5
+#define PIZ_MAXIMUM_OFFSET      6
 
-#define PIZ_FLAG_NONE       0UL
-#define PIZ_FLAG_RANDOM     1UL
-#define PIZ_FLAG_FILL       2UL
-#define PIZ_FLAG_NEARBY     4UL
+#define PIZ_FLAG_NONE           0UL
+#define PIZ_FLAG_RANDOM         1UL
+#define PIZ_FLAG_FILL           2UL
+#define PIZ_FLAG_NEARBY         4UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -269,7 +268,7 @@ PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
         
     k = pizSequenceFillTemporary (x);
     
-    for (i = 0; i < PIZ_SEQUENCE_TEMP_SIZE; i++) {
+    for (i = 0; i < PIZ_SEQUENCE_SIZE_TEMP; i++) {
         x->tempValues[i] = 0;
     }
     
@@ -277,7 +276,7 @@ PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
         x->tempValues[x->tempNotes1[i]->values[selector]] ++; 
     }   
         
-    for (i = 1; i < PIZ_SEQUENCE_TEMP_SIZE; i++) {
+    for (i = 1; i < PIZ_SEQUENCE_SIZE_TEMP; i++) {
         x->tempValues[i] += x->tempValues[i - 1];
     }
                 
@@ -451,7 +450,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
     long    j, pitch, here, previous, next, center;
     long    q = -1;
     long    p = -1;
-    long    hPat[PIZ_H] = { -1, -1, -1, -1, -1, -1 };
+    long    hPat[PIZ_SIZE_H] = { -1, -1, -1, -1, -1, -1 };
     long    neighbors = 0;
     long    err = PIZ_GOOD;
     long    size = pizArrayCount (x->pattern);
@@ -493,7 +492,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
         hPat[5] = hPat[4] + 1;
     }
                 
-    for (j = (PIZ_H - 1); j > 0; j--)  {
+    for (j = (PIZ_SIZE_H - 1); j > 0; j--)  {
         long h    = (j + 1) * (rand_r (&x->seed) / (RAND_MAX + 1.0));
         long temp = hPat[h];
         hPat[h]   = hPat[j];
@@ -507,7 +506,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
     
     if (!err) {
     //
-    for (j = 0; j < PIZ_DEATH; j++) {
+    for (j = 0; j < PIZ_SIZE_DEATH; j++) {
         if (pizHashTableContainsKey (x->tempHash, (center + pizSequenceNeighbors[j]))) {
             neighbors ++;
         }
@@ -518,7 +517,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
     //
     }
     
-    for (j = 0; j < PIZ_H; j++) {
+    for (j = 0; j < PIZ_SIZE_H; j++) {
         if ((hPat[j] >= 0) && 
             !(pizHashTableContainsKey (x->tempHash, hPat[j] - 2)) &&
             !(pizHashTableContainsKey (x->tempHash, hPat[j] - 1)) &&
@@ -532,7 +531,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
             
             neighbors = 0;
             
-            for (t = 0; t < PIZ_BIRTH; t++) {
+            for (t = 0; t < PIZ_SIZE_BIRTH; t++) {
             //
             if (!(pizHashTablePtrByKey (x->tempHash, hPat[j] + pizSequenceNeighbors[t], (void **)&temp))) {
                 toCopy = temp;
@@ -598,7 +597,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
     long end   = PIZ_CEIL (x->end, x->cell); 
     
     if (size = (end - start)) {
-        for (i = 0; i < PIZ_DIVISIONS; i++) {
+        for (i = 0; i < PIZ_SIZE_DIVISIONS; i++) {
             if (!(size % pizSequenceDivisions[i])) {
                 b = pizSequenceDivisions[i];
                 if (b == division) {
@@ -644,7 +643,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
 
     pizLinklistPtrAtIndex (x->timeline[p], q, (void **)&note1);     
     
-    step = MIN (a, PIZ_OFFSET) * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+    step = MIN (a, PIZ_MAXIMUM_OFFSET) * (rand_r (&x->seed) / (RAND_MAX + 1.0));
     step *= b;
     
     switch (b) {

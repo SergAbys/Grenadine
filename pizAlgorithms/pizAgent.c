@@ -1,7 +1,6 @@
 /*
  * \file	pizAgent.c
  * \author	Jean Sapristi
- * \date	May 12, 2012.
  */
  
 /*

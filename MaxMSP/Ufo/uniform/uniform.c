@@ -4,10 +4,6 @@
  *  nicolas.danet@free.fr
  *
  */
- 
-/*
- *  April 11, 2012.
- */
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -24,7 +20,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define MAXIMUM_LIST_SIZE   256
+#define MAXIMUM_SIZE_LIST   256
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -97,7 +93,7 @@ void *uniform_new (t_symbol *s, long argc, t_atom *argv)
             k = atom_getlong (argv);
         }
         
-        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_LIST_SIZE);
+        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
         x->finiteState = pizFiniteStateNew (1, &k);
                                 
         if (x->values && x->finiteState) {
@@ -152,8 +148,8 @@ void uniform_learn (t_uniform *x, t_symbol *s, long argc, t_atom *argv)
 {   
     LOCK
     
-    atom_getlong_array (argc, argv, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
-    pizFiniteStateAdd (x->finiteState, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
+    atom_getlong_array (argc, argv, MIN (MAXIMUM_SIZE_LIST, argc), x->values);
+    pizFiniteStateAdd (x->finiteState, MIN (MAXIMUM_SIZE_LIST, argc), x->values);
     
     UNLOCK
 }
@@ -164,7 +160,7 @@ void uniform_int (t_uniform *x, long n)
     t_atom  *argv = NULL;
     long    argc = 0;
 
-    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
+    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
         PIZError err = PIZ_ERROR;
             
         LOCK

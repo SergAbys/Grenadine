@@ -1,7 +1,6 @@
 /**
  * \file    pizSequence.h
  * \author  Jean Sapristi
- * \date    May 21, 2012.
  */
  
 /*
@@ -40,7 +39,7 @@
 
 /* 
  *  PIZ_SEQUENCE_MAXIMUM_NOTES   = PIZ_ITEMSET_SIZE 
- *  PIZ_SEQUENCE_TEMP_SIZE       = MAX (MAXIMUM_NOTES, MAXIMUM_DURATION, PIZ_MAGIC_PITCH + 1) 
+ *  PIZ_SEQUENCE_SIZE_TEMP       = MAX (MAXIMUM_NOTES, MAXIMUM_DURATION, PIZ_MAGIC_PITCH + 1) 
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -66,8 +65,8 @@
 #define PIZ_SEQUENCE_MAXIMUM_NOTES          128
 #define PIZ_SEQUENCE_MAXIMUM_DURATION       96
                                         
-#define PIZ_SEQUENCE_TEMP_SIZE              128
-#define PIZ_SEQUENCE_LOOKUP_SIZE            19
+#define PIZ_SEQUENCE_SIZE_TEMP              128
+#define PIZ_SEQUENCE_SIZE_LOOKUP            19
 
 #define PIZ_SEQUENCE_DEFAULT_SIZE           288 
 #define PIZ_SEQUENCE_DEFAULT_PITCH          60

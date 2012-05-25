@@ -1,7 +1,6 @@
 /**
  * \file	pizAgentRun.h
  * \author	Jean Sapristi
- * \date	May 5, 2012.
  */
 
 /*

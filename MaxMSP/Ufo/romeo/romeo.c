@@ -4,10 +4,6 @@
  *  nicolas.danet@free.fr
  *
  */
- 
-/*
- *  May 13, 2012.
- */
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -24,7 +20,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define MAXIMUM_LIST_SIZE               256
+#define MAXIMUM_SIZE_LIST               256
 
 #define PIZ_GALOIS_LATTICE_CONCEPTS     0
 #define PIZ_GALOIS_LATTICE_DATA         1
@@ -105,7 +101,7 @@ void *romeo_new (t_symbol *s, long argc, t_atom *argv)
             k = atom_getlong (argv);
         }
         
-        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_LIST_SIZE);
+        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
         x->galoisLattice = pizGaloisLatticeNew (1, &k);
                                 
         if (x->values && x->galoisLattice) {
@@ -160,8 +156,8 @@ void romeo_learn (t_romeo *x, t_symbol *s, long argc, t_atom *argv)
 {   
     LOCK
     
-    atom_getlong_array (argc, argv, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
-    pizGaloisLatticeAdd (x->galoisLattice, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
+    atom_getlong_array (argc, argv, MIN (MAXIMUM_SIZE_LIST, argc), x->values);
+    pizGaloisLatticeAdd (x->galoisLattice, MIN (MAXIMUM_SIZE_LIST, argc), x->values);
     
     UNLOCK
 }
@@ -172,7 +168,7 @@ void romeo_int (t_romeo *x, long n)
     t_atom  *argv = NULL;
     long    argc = 0;
 
-    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
+    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
         PIZError err = PIZ_ERROR;
             
         LOCK

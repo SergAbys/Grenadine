@@ -1,7 +1,6 @@
 /**
  * \file    pizFactorOracle.h
  * \author  Jean Sapristi
- * \date    May 16, 2012.
  */
 
 /*

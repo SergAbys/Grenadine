@@ -1,7 +1,6 @@
 /*
  * \file    pizGaloisLattice.c
  * \author  Jean Sapristi
- * \date    May 12, 2012.
  */
  
 /*
@@ -49,10 +48,9 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_ALPHABET_SIZE       128
 #define PIZ_MAXIMUM_THRESHOLD   100
 
-#define PIZ_INIT_ARRAY_SIZE     4
+#define PIZ_INIT_SIZE_ARRAY     4
 #define PIZ_DEFAULT_THRESHOLD   50
 
 // -------------------------------------------------------------------------------------------------------------
@@ -109,7 +107,7 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
         
     if (x->map = (PIZArray **)malloc ((PIZ_ITEMSET_SIZE + 1) * sizeof(PIZArray *))) {
         for (i = 0; i < (PIZ_ITEMSET_SIZE + 1); i++) {
-            if (!(x->map[i] = pizArrayNew (PIZ_INIT_ARRAY_SIZE))) {
+            if (!(x->map[i] = pizArrayNew (PIZ_INIT_SIZE_ARRAY))) {
                 err = PIZ_MEMORY;
             }
         }
@@ -119,7 +117,7 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
     
     if (x->tempMap = (PIZArray **)malloc ((PIZ_ITEMSET_SIZE + 1) * sizeof(PIZArray *))) {
         for (i = 0; i < (PIZ_ITEMSET_SIZE + 1); i++) {
-            if (!(x->tempMap[i] = pizArrayNew (PIZ_INIT_ARRAY_SIZE))) {
+            if (!(x->tempMap[i] = pizArrayNew (PIZ_INIT_SIZE_ARRAY))) {
                 err = PIZ_MEMORY;
             }
         }

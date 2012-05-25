@@ -1,7 +1,6 @@
 /**
  * \file    pizSequenceRun.h
  * \author  Jean Sapristi
- * \date    May 15, 2012.
  */
  
 /*

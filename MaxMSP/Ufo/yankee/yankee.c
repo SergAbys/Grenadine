@@ -4,10 +4,6 @@
  *  nicolas.danet@free.fr
  *
  */
- 
-/*
- *  April 11, 2012.
- */
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -25,7 +21,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define MAXIMUM_LIST_SIZE       256
+#define MAXIMUM_SIZE_LIST       256
+
 #define DEFAULT_LAMBDA          2
 #define DEFAULT_ALPHA           0.5
 #define DEFAULT_BETA            0.1
@@ -169,7 +166,7 @@ void *yankee_new (t_symbol *s, long argc, t_atom *argv)
             }
         }
         
-        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_LIST_SIZE);
+        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
         x->neuralGas = pizNeuralGasNew (2, k);
                                 
         if (x->values && x->neuralGas) {
@@ -297,8 +294,8 @@ void yankee_learn (t_yankee *x, t_symbol *s, long argc, t_atom *argv)
 {   
     LOCK
     
-    atom_getlong_array (argc, argv, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
-    pizNeuralGasAdd (x->neuralGas, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
+    atom_getlong_array (argc, argv, MIN (MAXIMUM_SIZE_LIST, argc), x->values);
+    pizNeuralGasAdd (x->neuralGas, MIN (MAXIMUM_SIZE_LIST, argc), x->values);
     
     UNLOCK
 }
@@ -309,7 +306,7 @@ void yankee_int (t_yankee *x, long n)
     t_atom  *argv = NULL;
     long    argc = 0;
 
-    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
+    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
         PIZError err = PIZ_ERROR;
             
         LOCK

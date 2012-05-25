@@ -1,7 +1,6 @@
 /*
  * \file    pizNeuralGas.c
  * \author  Jean Sapristi
- * \date    May 12, 2012.
  */
  
 /*
@@ -49,10 +48,10 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_ALPHABET_SIZE               128
-#define PIZ_MAXIMUM_VECTOR_SIZE         256
+#define PIZ_SIZE_ALPHABET               128
+#define PIZ_MAXIMUM_SIZE_VECTOR         256
 
-#define PIZ_DEFAULT_VECTOR_SIZE         4
+#define PIZ_DEFAULT_SIZE_VECTOR         4
 #define PIZ_DEFAULT_MAXIMUM_SIZE        20
 #define PIZ_DEFAULT_LAMBDA              2
 #define PIZ_DEFAULT_ALPHA               0.5
@@ -77,7 +76,7 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
         long k, i;
         
         x->count         = 0;
-        x->vectorSize    = PIZ_DEFAULT_VECTOR_SIZE;
+        x->vectorSize    = PIZ_DEFAULT_SIZE_VECTOR;
         x->maximumSize   = PIZ_DEFAULT_MAXIMUM_SIZE;
         x->lambda        = PIZ_DEFAULT_LAMBDA;
         x->epsilon1      = PIZ_DEFAULT_EPSILON1;
@@ -92,7 +91,7 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
             x->maximumSize = argv[0];
         }
         
-        if ((argc > 1) && ((argv[1] > 0)  && (argv[1] <= PIZ_MAXIMUM_VECTOR_SIZE))) {
+        if ((argc > 1) && ((argv[1] > 0)  && (argv[1] <= PIZ_MAXIMUM_SIZE_VECTOR))) {
             x->vectorSize = argv[1];
         }
         
@@ -112,7 +111,7 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
         
         if (!err) {
             for (i = 0; i < (x->vectorSize * 2); i++) {
-                x->vectorStock[i] = PIZ_ALPHABET_SIZE * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+                x->vectorStock[i] = PIZ_SIZE_ALPHABET * (rand_r (&x->seed) / (RAND_MAX + 1.0));
             }
             
             x->headStock[0].error   = 0.;
@@ -180,7 +179,7 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
     err = PIZ_GOOD;
     
     for (t = 0; t < argc; t++) {
-        argv[t] = CLAMP (argv[t], 0, PIZ_ALPHABET_SIZE - 1); 
+        argv[t] = CLAMP (argv[t], 0, PIZ_SIZE_ALPHABET - 1); 
     }
                 
     for (t = 0; t < k; t++) {
@@ -339,7 +338,7 @@ PIZError pizNeuralGasClear (PIZNeuralGas *x)
     x->count = 0;
     
     for (i = 0; i < (x->vectorSize * 2); i++) {
-        x->vectorStock[i] = PIZ_ALPHABET_SIZE * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+        x->vectorStock[i] = PIZ_SIZE_ALPHABET * (rand_r (&x->seed) / (RAND_MAX + 1.0));
     }
     
     x->headStock[0].error   = 0.;

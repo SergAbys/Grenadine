@@ -1,7 +1,6 @@
 /*
  * \file    pizItemset.c
  * \author  Jean Sapristi
- * \date    May 16, 2012.
  */
  
 /*

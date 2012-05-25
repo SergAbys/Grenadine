@@ -4,10 +4,6 @@
  *  nicolas.danet@free.fr
  *
  */
- 
-/*
- *  May 12, 2012.
- */
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -25,7 +21,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define MAXIMUM_LIST_SIZE       256
+#define MAXIMUM_SIZE_LIST       256
+
 #define DEFAULT_RANGE           10
 #define DEFAULT_TRAINING        60
 #define DEFAULT_STEP            1.
@@ -141,7 +138,7 @@ void *charlie_new (t_symbol *s, long argc, t_atom *argv)
             }
         }
         
-        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_LIST_SIZE);
+        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
         x->kohonenMap = pizKohonenMapNew (2, k);
                                 
         if (x->values && x->kohonenMap) {
@@ -236,8 +233,8 @@ void charlie_learn (t_charlie *x, t_symbol *s, long argc, t_atom *argv)
 {   
     LOCK
     
-    atom_getlong_array (argc, argv, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
-    pizKohonenMapAdd (x->kohonenMap, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
+    atom_getlong_array (argc, argv, MIN (MAXIMUM_SIZE_LIST, argc), x->values);
+    pizKohonenMapAdd (x->kohonenMap, MIN (MAXIMUM_SIZE_LIST, argc), x->values);
     
     UNLOCK
 }
@@ -249,7 +246,7 @@ void charlie_int (t_charlie *x, long n)
     long     argc = 0;
     PIZError err = PIZ_ERROR;
     
-    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
+    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
 
         LOCK
 

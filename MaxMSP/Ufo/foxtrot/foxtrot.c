@@ -4,10 +4,6 @@
  *  nicolas.danet@free.fr
  *
  */
- 
-/*
- *  April 11, 2012.
- */
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -25,10 +21,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define MAXIMUM_LIST_SIZE                   256
-#define DEFAULT_PERSISTENCE                 0.5
-#define PIZ_ALPHABET_SIZE                   128
+#define MAXIMUM_SIZE_LIST                   256
 
+#define DEFAULT_PERSISTENCE                 0.5
+
+#define PIZ_SIZE_ALPHABET                   128
 #define PIZ_MARKOV_MODEL_START              0
 #define PIZ_MARKOV_MODEL_TRANSITIONS        1
 #define PIZ_MARKOV_MODEL_EMISSIONS          2
@@ -135,7 +132,7 @@ void *foxtrot_new (t_symbol *s, long argc, t_atom *argv)
             }
         }
         
-        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_LIST_SIZE);
+        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
         x->markovModel = pizMarkovModelNew (2, k);
                                 
         if (x->values && x->markovModel) {
@@ -208,8 +205,8 @@ void foxtrot_learn (t_foxtrot *x, t_symbol *s, long argc, t_atom *argv)
 {   
     LOCK
     
-    atom_getlong_array (argc, argv, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
-    pizMarkovModelAdd (x->markovModel, MIN (MAXIMUM_LIST_SIZE, argc), x->values);
+    atom_getlong_array (argc, argv, MIN (MAXIMUM_SIZE_LIST, argc), x->values);
+    pizMarkovModelAdd (x->markovModel, MIN (MAXIMUM_SIZE_LIST, argc), x->values);
     
     UNLOCK
 }
@@ -220,7 +217,7 @@ void foxtrot_int (t_foxtrot *x, long n)
     t_atom  *argv = NULL;
     long    argc = 0;
 
-    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
+    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
         PIZError err = PIZ_ERROR;
             
         LOCK
@@ -314,14 +311,14 @@ PIZ_INLINE PIZError pizMarkovModelEncodeToArray (const PIZMarkovModel *x, long n
         
         err |= pizArrayAppend (a, (long)(x->start[n] * 100.));
         err |= pizArrayAppend (a, x->graphSize);
-        err |= pizArrayAppend (a, PIZ_ALPHABET_SIZE);
+        err |= pizArrayAppend (a, PIZ_SIZE_ALPHABET);
         
         for (i = 0; i < x->graphSize; i++) {
             err |= pizArrayAppend (a, (long)(x->transition[(n * x->graphSize) + i] * 100.));
         }
         
-        for (i = 0; i < PIZ_ALPHABET_SIZE; i++) {
-            err |= pizArrayAppend (a, (long)(x->emission[(n * PIZ_ALPHABET_SIZE) + i] * 100.));
+        for (i = 0; i < PIZ_SIZE_ALPHABET; i++) {
+            err |= pizArrayAppend (a, (long)(x->emission[(n * PIZ_SIZE_ALPHABET) + i] * 100.));
         }
     }
     

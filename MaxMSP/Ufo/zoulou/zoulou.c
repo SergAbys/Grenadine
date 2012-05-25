@@ -4,10 +4,6 @@
  *  nicolas.danet@free.fr
  *
  */
- 
-/*
- *  May 16, 2012.
- */
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -24,14 +20,15 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define MAXIMUM_LIST_SIZE               256
-#define DEFAULT_BACKWARD_THRESHOLD      2
-#define DEFAULT_STRAIGHT_RATIO          0.25
+#define MAXIMUM_SIZE_LIST           256
 
-#define PIZ_FACTOR_ORACLE_REFER         0
-#define PIZ_FACTOR_ORACLE_LRS           1
-#define PIZ_FACTOR_ORACLE_ARCS          2
-#define PIZ_FACTOR_ORACLE_DATA          3
+#define DEFAULT_BACKWARD            2
+#define DEFAULT_STRAIGHT            0.25
+
+#define PIZ_FACTOR_ORACLE_REFER     0
+#define PIZ_FACTOR_ORACLE_LRS       1
+#define PIZ_FACTOR_ORACLE_ARCS      2
+#define PIZ_FACTOR_ORACLE_DATA      3
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -135,12 +132,12 @@ void *zoulou_new (t_symbol *s, long argc, t_atom *argv)
     t_zoulou *x = NULL;
 
     if (x = (t_zoulou *)object_alloc (zoulou_class)) {
-        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_LIST_SIZE);
+        x->values = (long *)sysmem_newptr (sizeof(long) * MAXIMUM_SIZE_LIST);
         x->factorOracle = pizFactorOracleNew (0, NULL);
         
         if (x->values && x->factorOracle) {
-            x->straightRatio        = DEFAULT_STRAIGHT_RATIO;
-            x->backwardThreshold    = DEFAULT_BACKWARD_THRESHOLD;
+            x->straightRatio        = DEFAULT_STRAIGHT;
+            x->backwardThreshold    = DEFAULT_BACKWARD;
             
             x->rightOutlet  = outlet_new (x, NULL);
             object_obex_store ((void *)x, zoulou_sym_dumpout, (t_object *)x->rightOutlet);
@@ -219,8 +216,8 @@ void zoulou_learn (t_zoulou *x, t_symbol *s, long argc, t_atom *argv)
 {   
     LOCK
     
-    atom_getlong_array (argc, argv, MIN (argc, MAXIMUM_LIST_SIZE), x->values);
-    pizFactorOracleAdd (x->factorOracle, MIN (argc, MAXIMUM_LIST_SIZE), x->values);
+    atom_getlong_array (argc, argv, MIN (argc, MAXIMUM_SIZE_LIST), x->values);
+    pizFactorOracleAdd (x->factorOracle, MIN (argc, MAXIMUM_SIZE_LIST), x->values);
     
     UNLOCK
 }
@@ -231,7 +228,7 @@ void zoulou_int (t_zoulou *x, long n)
     t_atom  *argv = NULL;
     long    argc = 0;
 
-    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_LIST_SIZE), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
+    if ((n > 0) && (atom_alloc_array (MIN (n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
         PIZError err = PIZ_ERROR;
             
         LOCK

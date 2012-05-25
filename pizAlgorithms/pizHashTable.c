@@ -1,7 +1,6 @@
 /*
  * \file    pizHashTable.c
  * \author  Jean Sapristi
- * \date    May 13, 2012.
  */
  
 /*
@@ -43,8 +42,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_DEFAULT_HASH_SIZE   157
-#define PIZ_DEFAULT_POOL_SIZE   128
+#define PIZ_DEFAULT_SIZE_HASH   157
+#define PIZ_DEFAULT_SIZE_POOL   128
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -57,8 +56,8 @@ PIZHashTable *pizHashTableNew (long argc, long *argv)
     if (x = (PIZHashTable *)malloc (sizeof(PIZHashTable))) {
     //
     x->count    = 0;
-    x->hashSize = PIZ_DEFAULT_HASH_SIZE;
-    x->poolSize = PIZ_DEFAULT_POOL_SIZE;
+    x->hashSize = PIZ_DEFAULT_SIZE_HASH;
+    x->poolSize = PIZ_DEFAULT_SIZE_POOL;
     
     if (argc && argv[0] > 0) {
         x->hashSize = argv[0];

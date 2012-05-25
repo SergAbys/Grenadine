@@ -1,7 +1,6 @@
 /*
  * \file    pizKohonenMap.c
  * \author  Jean Sapristi
- * \date    May 12, 2012.
  */
  
 /*
@@ -49,12 +48,12 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_ALPHABET_SIZE               128
-#define PIZ_MAXIMUM_MAP_SIZE            100
-#define PIZ_MAXIMUM_VECTOR_SIZE         256
+#define PIZ_SIZE_ALPHABET               128
+#define PIZ_MAXIMUM_SIZE_MAP            100
+#define PIZ_MAXIMUM_SIZE_VECTOR         256
 
-#define PIZ_DEFAULT_MAP_SIZE            20
-#define PIZ_DEFAULT_VECTOR_SIZE         4
+#define PIZ_DEFAULT_SIZE_MAP            20
+#define PIZ_DEFAULT_SIZE_VECTOR         4
 #define PIZ_DEFAULT_RANGE               10
 #define PIZ_DEFAULT_TRAINING            60
 #define PIZ_DEFAULT_STEP                1.
@@ -68,17 +67,17 @@ PIZKohonenMap *pizKohonenMapNew (long argc, long *argv)
     PIZKohonenMap *x = NULL;
 
     if (x = (PIZKohonenMap *)calloc (1, sizeof(PIZKohonenMap))) {
-        x->mapSize       = PIZ_DEFAULT_MAP_SIZE;
-        x->vectorSize    = PIZ_DEFAULT_VECTOR_SIZE;
+        x->mapSize       = PIZ_DEFAULT_SIZE_MAP;
+        x->vectorSize    = PIZ_DEFAULT_SIZE_VECTOR;
         x->range         = PIZ_DEFAULT_RANGE;
         x->training      = PIZ_DEFAULT_TRAINING;
         x->step          = PIZ_DEFAULT_STEP;
         
-        if (argc && ((argv[0] > 0) && (argv[0] <= PIZ_MAXIMUM_MAP_SIZE))) {
+        if (argc && ((argv[0] > 0) && (argv[0] <= PIZ_MAXIMUM_SIZE_MAP))) {
             x->mapSize  = argv[0];
         }
         
-        if ((argc == 2) && ((argv[1] > 0) && (argv[1] <= PIZ_MAXIMUM_VECTOR_SIZE))) {
+        if ((argc == 2) && ((argv[1] > 0) && (argv[1] <= PIZ_MAXIMUM_SIZE_VECTOR))) {
             x->vectorSize = argv[1];
         }
         
@@ -90,7 +89,7 @@ PIZKohonenMap *pizKohonenMapNew (long argc, long *argv)
             x->count = 0;
             
             for (i = 0; i < (x->mapSize * x->vectorSize); i++) {
-                x->map[i] = PIZ_ALPHABET_SIZE * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+                x->map[i] = PIZ_SIZE_ALPHABET * (rand_r (&x->seed) / (RAND_MAX + 1.0));
             }
         } else {
             pizKohonenMapFree (x);
@@ -127,7 +126,7 @@ PIZError pizKohonenMapAdd (PIZKohonenMap *x, long argc, long *argv)
     err = PIZ_GOOD;
     
     for (t = 0; t < argc; t++) {
-        argv[t] = CLAMP (argv[t], 0, PIZ_ALPHABET_SIZE - 1); 
+        argv[t] = CLAMP (argv[t], 0, PIZ_SIZE_ALPHABET - 1); 
     }
                 
     for (t = 0; t < k; t++) {
@@ -184,7 +183,7 @@ PIZError pizKohonenMapClear (PIZKohonenMap *x)
     x->count = 0;
     
     for (i = 0; i < (x->mapSize * x->vectorSize); i++) {
-        x->map[i] = PIZ_ALPHABET_SIZE * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+        x->map[i] = PIZ_SIZE_ALPHABET * (rand_r (&x->seed) / (RAND_MAX + 1.0));
     }
     
     return PIZ_GOOD;
