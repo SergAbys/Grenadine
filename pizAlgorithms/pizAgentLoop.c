@@ -1,7 +1,7 @@
 /*
  * \file	pizAgentLoop.c
  * \author	Jean Sapristi
- * \date	May 18, 2012.
+ * \date	May 25, 2012.
  */
  
 /*
@@ -87,7 +87,7 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizSequenceAlgorithm,           // PIZ_EVENT_ZOULOU
                                                     pizSequenceAlgorithm,           // PIZ_EVENT_ROMEO
                                                     pizSequenceNovember,            // PIZ_EVENT_NOVEMBER
-                                                    NULL,                           // PIZ_EVENT_JULIET       
+                                                    pizSequenceJuliet,              // PIZ_EVENT_JULIET       
                                                     pizSequenceLearn };             // PIZ_EVENT_WILL_END
     
 // -------------------------------------------------------------------------------------------------------------
