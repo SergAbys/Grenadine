@@ -27,7 +27,8 @@ void tralala_symbolsInit ( );
 
 PIZError tralala_keyWithSymbol          (const t_symbol *s, long *value);
 PIZError tralala_scaleWithSymbol        (const t_symbol *s, long *value);
-PIZError tralala_selectorWithSymbol     (const t_symbol *s, long *value);
+PIZError tralala_valueWithSymbol        (const t_symbol *s, long *value);
+PIZError tralala_optionWithSymbol       (const t_symbol *s, long *value);
 PIZError tralala_noteValueWithSymbol    (const t_symbol *s, long *value);
 
 // -------------------------------------------------------------------------------------------------------------

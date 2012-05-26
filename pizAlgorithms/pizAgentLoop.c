@@ -107,7 +107,7 @@ PIZ_LOCAL void      pizAgentNotificationLoopNotify  (PIZAgent *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-#pragma mark Public
+#pragma mark ---
 #pragma mark -
 
 void *pizAgentEventLoop (void *agent) 
@@ -220,7 +220,7 @@ void pizAgentAddNotification (PIZAgent *x, PIZEventCode n, long tag, long ac, lo
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-#pragma mark Private
+#pragma mark ---
 #pragma mark -
 
 PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q) 

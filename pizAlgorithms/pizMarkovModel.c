@@ -67,7 +67,7 @@ PIZ_LOCAL  void pizMarkovModelFillStochastically    (PIZMarkovModel *x, long arg
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-#pragma mark Public
+#pragma mark ---
 #pragma mark -
 
 PIZMarkovModel *pizMarkovModelNew (long argc, long *argv)
@@ -297,7 +297,7 @@ long pizMarkovModelCount (const PIZMarkovModel *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-#pragma mark Private
+#pragma mark ---
 #pragma mark -
 
 PIZ_INLINE void pizMarkovModelBaumWelch (PIZMarkovModel *x, long argc, long *argv)

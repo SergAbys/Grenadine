@@ -65,7 +65,7 @@ PIZ_LOCAL void      pizGaloisLatticeKillConcept     (PIZGaloisLattice *x, long n
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-#pragma mark Public
+#pragma mark ---
 #pragma mark -
 
 PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
@@ -418,7 +418,7 @@ long pizGaloisLatticeCount (const PIZGaloisLattice *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-#pragma mark Private
+#pragma mark ---
 #pragma mark -
 
 PIZ_INLINE void pizGaloisLatticeReconnect (PIZGaloisLattice *x, long g, long n)

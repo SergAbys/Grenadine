@@ -48,12 +48,13 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SAFE                20
 #define PIZ_SIZE_H              6
 #define PIZ_SIZE_BIRTH          12
 #define PIZ_SIZE_DEATH          16
 #define PIZ_SIZE_DIVISIONS      5
+
 #define PIZ_MAXIMUM_OFFSET      6
+#define PIZ_MAXIMUM_LOOP        20
 
 #define PIZ_FLAG_NONE           0UL
 #define PIZ_FLAG_RANDOM         1UL
@@ -104,7 +105,7 @@ PIZ_LOCAL void pizSequenceEachTempHash      (PIZSequence *x, const PIZEvent *e, 
 PIZ_LOCAL void pizSequenceEachTempNotes     (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
 
 PIZ_LOCAL long pizSequenceFillTempNotes     (PIZSequence *x);
-PIZ_LOCAL void pizSequenceWithTempNotes    (PIZSequence *x, long selector, bool reverse);
+PIZ_LOCAL void pizSequenceWithTempNotes     (PIZSequence *x, long selector, bool reverse);
 
 PIZ_LOCAL PIZNote   *pizSequenceNewNote     (PIZSequence *x, long tag, long *argv, ulong flags);
 PIZ_LOCAL PIZError  pizSequenceGetTag       (PIZSequence *x, long tag, long *ptr);
@@ -115,7 +116,7 @@ PIZ_LOCAL void      pizSequenceMakeMap      (PIZSequence *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-#pragma mark Public
+#pragma mark ---
 #pragma mark -
 
 PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
@@ -143,10 +144,6 @@ PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
     
     return PIZ_GOOD;
 }
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
 PIZError pizSequenceClear (PIZSequence *x, const PIZEvent *event)
 {
@@ -301,10 +298,6 @@ PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 PIZError pizSequenceChange (PIZSequence *x, const PIZEvent *event)
 {
     pizSequenceForEach (x, event, PIZ_FLAG_RANDOM, pizSequenceEachChange);
@@ -383,10 +376,6 @@ PIZError pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
 {
     long         k;
@@ -444,7 +433,7 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
     pizSequenceForEach (x, NULL, PIZ_FLAG_NONE, pizSequenceEachTempHash);
     hashErr = x->tempError;
     
-    while (!hashErr && (k < iterate) && (loop < PIZ_SAFE)) {
+    while (!hashErr && (k < iterate) && (loop < PIZ_MAXIMUM_LOOP)) {
     //
     if (x->count) {
     //
@@ -621,7 +610,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
     pizSequenceForEach (x, NULL, PIZ_FLAG_NONE, pizSequenceEachTempHash);
     err = x->tempError;
     
-    while (!err && x->count && (k < iterate) && (loop < PIZ_SAFE)) {
+    while (!err && x->count && (k < iterate) && (loop < PIZ_MAXIMUM_LOOP)) {
     //
     long    j, patternSize, step, newKey, newPosition;
     long    q = -1;
@@ -719,10 +708,145 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
     return err;
 }
 
+/*PIZError pizSequenceJuliet (PIZSequence *x, long iterate, long division)
+PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
+{
+    PIZError err = PIZ_GOOD;
+    bool     haveChanged = false;
+    
+    if (x->cell != PIZ_NOTE_VALUE_NONE) {
+    //
+    long i, size;
+    long b = 0;
+    long start = PIZ_CEIL (x->start, x->cell);
+    long end   = PIZ_CEIL (x->end, x->cell); 
+    
+    if (size = (end - start)) {
+        for (i = 0; i < PIZ_SIZE_DIVISIONS; i++) {
+            if (!(size % pizSequenceDivisions[i])) {
+                b = pizSequenceDivisions[i];
+                if (b == division) {
+                    break;
+                }
+            }
+        }
+    }
+    
+    if (b) {
+    //
+    long k = 0;
+    long loop = 0;
+    long a = size / b;
+    long mapCount = pizArrayCount (x->map);
+    long scale = pizArrayCount (x->scale);
+     
+    x->tempError = PIZ_GOOD;
+    pizHashTableClear (x->tempHash);
+    pizSequenceForEach (x, NULL, PIZ_FLAG_NONE, pizSequenceEachTempHash);
+    err = x->tempError;
+    
+    while (!err && x->count && (k < iterate) && (loop < PIZ_MAXIMUM_LOOP)) {
+    //
+    long    j, patternSize, step, newKey, newPosition;
+    long    q = -1;
+    long    p = -1;
+    long    offset = 0;
+    double  h = rand_r (&x->seed) / (RAND_MAX + 1.0);
+    PIZNote *note1 = NULL;
+    PIZNote *note2 = NULL;
+    
+    const double *distribution = NULL;
+
+    mapCount = pizArrayCount (x->map);
+
+    while (q == -1) {
+        p = pizArrayAtIndex (x->map, (long)(mapCount * (rand_r (&x->seed) / (RAND_MAX + 1.0))));
+        if (pizLinklistCount (x->timeline[p])) {
+            q = (long)(pizLinklistCount (x->timeline[p]) * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
+        } 
+    }                           
+
+    pizLinklistPtrAtIndex (x->timeline[p], q, (void **)&note1);     
+    
+    step = MIN (a, PIZ_MAXIMUM_OFFSET) * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+    step *= b;
+    
+    switch (b) {
+        case 2  :   distribution = pizSequenceDistribution2;   break;
+        case 3  :   distribution = pizSequenceDistribution3;   break;
+        case 4  :   distribution = pizSequenceDistribution4;   break;
+        case 5  :   distribution = pizSequenceDistribution5;   break;
+        case 7  :   distribution = pizSequenceDistribution7;   break;
+    }
+    
+    for (j = 0; j < (b - 1); j++) {
+        if (h < distribution[j]) {
+            break;
+        }
+    }
+    
+    step += j;
+    
+    newPosition = ((long)(note1->position / (double)x->cell)) + step;
+    
+    if (newPosition >= end) {
+        newPosition = (newPosition - end) + start;
+    }
+    
+    if (patternSize = pizArrayCount (x->pattern)) {
+        newPosition += pizArrayAtIndex (x->pattern, newPosition % patternSize);
+    }
+    
+    if (scale) {
+        offset = pizArrayAtIndex (x->scale, note1->values[PIZ_VALUE_PITCH] % scale);
+    }
+                
+    newKey = (newPosition * (PIZ_MAGIC_PITCH + 1)) + note1->values[PIZ_VALUE_PITCH] + offset;
+    
+    if (!(pizHashTableContainsKey (x->tempHash, newKey))) {
+    //
+        long values[ ] = { newPosition * x->cell,
+                           note1->values[PIZ_VALUE_PITCH] + offset,
+                           note1->values[PIZ_VALUE_VELOCITY],
+                           note1->values[PIZ_VALUE_DURATION],
+                           note1->values[PIZ_VALUE_CHANNEL] };
+
+        note2 = pizSequenceNewNote (x, -1, values, PIZ_SEQUENCE_FLAG_CLIP);
+        
+        if (note2) {
+            err |= pizHashTableAdd (x->tempHash, newKey, (void *)note2);
+            haveChanged = true;
+            k ++;
+        } 
+    //
+    } else if (!(pizHashTablePtrByKey (x->tempHash, newKey, (void **)&note2))) {
+        if (note2 != note1) {
+            pizHashTableRemove (x->tempHash, newKey, (void *)note2);
+            pizSequenceEachRemove (x, NULL, PIZ_FLAG_NONE, note);
+            haveChanged = true;
+            k ++;
+        }
+    }
+
+    loop ++;
+    //    
+    }
+    //
+    }
+    
+    if (haveChanged) {
+        pizSequenceMakeMap (x);
+    }
+    //
+    }
+                        
+    return err;
+}*/
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-#pragma mark Private
+#pragma mark ---
 #pragma mark -
 
 void pizSequenceForEach (PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod method)

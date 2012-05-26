@@ -66,7 +66,7 @@ PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-#pragma mark Public
+#pragma mark ---
 #pragma mark -
 
 PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
@@ -322,7 +322,7 @@ long pizFiniteStateCount (const PIZFiniteState *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-#pragma mark Private
+#pragma mark ---
 #pragma mark -
 
 PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x)

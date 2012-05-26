@@ -49,7 +49,7 @@ PIZ_LOCAL PIZError pizSequenceAddNotification  (PIZAgent *agent, PIZEventCode n,
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-#pragma mark Public
+#pragma mark ---
 #pragma mark -
 
 bool pizSequenceIsAtEnd (PIZSequence *x)
@@ -256,7 +256,7 @@ PIZError pizSequenceRefresh (PIZSequence *x, PIZAgent *agent)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-#pragma mark Private
+#pragma mark ---
 #pragma mark -
 
 ulong pizSequenceStepMask (PIZSequence *x, long n, long count)

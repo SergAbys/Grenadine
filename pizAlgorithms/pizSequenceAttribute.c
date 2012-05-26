@@ -77,7 +77,7 @@ PIZ_LOCAL bool pizSequenceIsValidNoteValue (long value);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-#pragma mark Public
+#pragma mark ---
 #pragma mark -
 
 PIZError pizSequenceSetChance (PIZSequence *x, const PIZEvent *event)
@@ -222,7 +222,7 @@ PIZError pizSequenceSetPattern (PIZSequence *x, const PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-#pragma mark Private
+#pragma mark ---
 #pragma mark -
 
 bool pizSequenceIsValidNoteValue (long value) 
