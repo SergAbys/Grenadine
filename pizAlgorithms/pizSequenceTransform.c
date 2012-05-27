@@ -573,12 +573,18 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
     return hashErr;
 }
 
-//PIZError pizSequenceJuliet (PIZSequence *x, long iterate, long division)
 PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
-{
-    PIZError err = PIZ_GOOD;/*
-    bool     haveChanged = false;
-    
+{/*
+    long     argc;
+    long     *argv = NULL;
+    PIZError err = PIZ_GOOD;
+        
+    if (!(pizEventPtr (event, &argc, &argv))) {
+    //
+    long iterate  = argv[0];
+    long division = argv[1];
+    bool haveChanged = false;
+        
     if (x->cell != PIZ_NOTE_VALUE_NONE) {
     //
     long i, size;
@@ -703,9 +709,13 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
         pizSequenceMakeMap (x);
     }
     //
-    }*/
+    }
+    //
+    }
                         
-    return err;
+    return err;*/
+    
+    return PIZ_GOOD;
 }
 
 /*PIZError pizSequenceJuliet (PIZSequence *x, long iterate, long division)
@@ -1063,7 +1073,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
     }
                 
     err |= (position < 0);
-    err |= (position > (x->size - 1));
+    err |= (position > (PIZ_SEQUENCE_SIZE_TIMELINE - 1));
     err |= (x->count >= PIZ_SEQUENCE_MAXIMUM_NOTES);
     
     if (flags & PIZ_SEQUENCE_FLAG_CLIP) {
@@ -1178,7 +1188,7 @@ void pizSequenceMakeMap (PIZSequence *x)
             
     pizArrayClear (x->map);
                             
-    for (i = 0; i < x->size; i++) {
+    for (i = 0; i < PIZ_SEQUENCE_SIZE_TIMELINE; i++) {
         if (x->timeline[i] && pizLinklistCount (x->timeline[i])) {
             pizArrayAppend (x->map, i);
         }

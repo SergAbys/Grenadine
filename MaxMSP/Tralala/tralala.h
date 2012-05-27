@@ -53,6 +53,9 @@ void tralala_cell               (t_tralala *x, t_symbol *s, long argc, t_atom *a
 void tralala_scale              (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_pattern            (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 
+void tralala_int                (t_tralala *x, long n);
+void tralala_list               (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+
 void tralala_note               (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_clear              (t_tralala *x);
 void tralala_clean              (t_tralala *x, long n);
@@ -64,13 +67,10 @@ void tralala_change             (t_tralala *x, t_symbol *s, long argc, t_atom *a
 void tralala_fill               (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_kill               (t_tralala *x);
 void tralala_cycle              (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-
-void tralala_int                (t_tralala *x, long n);
 void tralala_zoulou             (t_tralala *x);
 void tralala_romeo              (t_tralala *x);
 void tralala_november           (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-void tralala_list               (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-                                
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // PIZ_TRALALA_H

@@ -37,6 +37,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#include "pizAgent.h"
 #include "pizSequenceRun.h"
 
 // -------------------------------------------------------------------------------------------------------------
@@ -44,7 +45,7 @@
 #pragma mark -
 
 PIZ_LOCAL ulong    pizSequenceStepMask         (PIZSequence *x, long n, long count);
-PIZ_LOCAL PIZError pizSequenceAddNotification  (PIZAgent *agent, PIZEventCode n, long tag, long ac, long *av);
+PIZ_LOCAL PIZError pizSequenceAddNotification  (PIZSequence *x, PIZEventCode n, long tag, long ac, long *av);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -62,11 +63,23 @@ void pizSequenceGoToStart (PIZSequence *x)
     x->index = x->start;
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
+PIZError pizSequenceStepBlank (PIZSequence *x)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if (x->index < x->start) {
+        x->index = x->start;
+    }
+        
+    if (x->index < x->end) {
+        err = PIZ_GOOD;
+        x->index ++;    
+    }
+    
+    return err;
+}
 
-PIZError pizSequenceStep (PIZSequence *x, PIZAgent *agent)
+PIZError pizSequenceStep (PIZSequence *x)
 {
     PIZError err = PIZ_ERROR;
     
@@ -76,11 +89,9 @@ PIZError pizSequenceStep (PIZSequence *x, PIZAgent *agent)
         
     if (x->index < x->end) {
     //
-    err = PIZ_GOOD;
-    
-    if (agent) {
-    //
     long count;
+        
+    err = PIZ_GOOD;
     
     if (x->timeline[x->index] && (count = pizLinklistCount (x->timeline[x->index]))) {
         long    i = 0;
@@ -121,10 +132,10 @@ PIZError pizSequenceStep (PIZSequence *x, PIZAgent *agent)
         long a[ ] = { note->position, 
                       CLAMP (pitch, 0, PIZ_MAGIC_PITCH),
                       CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY),
-                      (long)(duration * (PIZ_AGENT_CONSTANT_BPM_MS / agent->bpm)), 
+                      (long)(duration * (PIZ_AGENT_CONSTANT_BPM_MS / x->agent->bpm)), 
                       channel };
         
-        err |= pizSequenceAddNotification (agent, PIZ_EVENT_NOTE_PLAYED, note->tag, 5, a);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_PLAYED, note->tag, 5, a);
         //
         }
         
@@ -132,8 +143,6 @@ PIZError pizSequenceStep (PIZSequence *x, PIZAgent *agent)
         i++;
         //
         }
-    }
-    //
     }
     
     x->index ++;
@@ -143,7 +152,7 @@ PIZError pizSequenceStep (PIZSequence *x, PIZAgent *agent)
     return err;
 }
 
-PIZError pizSequenceRefresh (PIZSequence *x, PIZAgent *agent)
+PIZError pizSequenceRefresh (PIZSequence *x)
 {
     long     i;
     PIZNote  *note = NULL;
@@ -153,42 +162,42 @@ PIZError pizSequenceRefresh (PIZSequence *x, PIZAgent *agent)
     //
     if (x->flags & PIZ_SEQUENCE_FLAG_ZONE) {
         long a[ ] = { x->start, x->end, x->down, x->up };
-        err |= pizSequenceAddNotification (agent, PIZ_EVENT_CHANGED_ZONE, -1, 4, a);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_ZONE, -1, 4, a);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANCE) {
-        err |= pizSequenceAddNotification (agent, PIZ_EVENT_CHANGED_CHANCE, -1, 1, &x->chance);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHANCE, -1, 1, &x->chance);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_VELOCITY) {
-        err |= pizSequenceAddNotification (agent, PIZ_EVENT_CHANGED_VELOCITY, -1, 1, &x->velocity);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_VELOCITY, -1, 1, &x->velocity);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANNEL) {
-        err |= pizSequenceAddNotification (agent, PIZ_EVENT_CHANGED_CHANNEL, -1, 1, &x->channel);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHANNEL, -1, 1, &x->channel);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CHORD) {
-        err |= pizSequenceAddNotification (agent, PIZ_EVENT_CHANGED_CHORD, -1, 1, &x->chord);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHORD, -1, 1, &x->chord);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CELL) {
-        err |= pizSequenceAddNotification (agent, PIZ_EVENT_CHANGED_CELL, -1, 1, &x->cell);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CELL, -1, 1, &x->cell);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_NOTE_VALUE) {
-        err |= pizSequenceAddNotification (agent, PIZ_EVENT_CHANGED_NOTE_VALUE, -1, 1, &x->noteValue);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_NOTE_VALUE, -1, 1, &x->noteValue);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_SCALE) {
         long a[ ] = { x->key, x->type };
-        err |= pizSequenceAddNotification (agent, PIZ_EVENT_CHANGED_SCALE, -1, 2, a);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_SCALE, -1, 2, a);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_PATTERN) {
         long argc  = pizArrayCount (x->pattern);
         long *argv = pizArrayPtr (x->pattern);
-        err |= pizSequenceAddNotification (agent, PIZ_EVENT_CHANGED_PATTERN, -1, argc, argv);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_PATTERN, -1, argc, argv);
     }
     
     x->flags = PIZ_SEQUENCE_FLAG_NONE;
@@ -199,7 +208,7 @@ PIZError pizSequenceRefresh (PIZSequence *x, PIZAgent *agent)
     //
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
         if (pizItemsetIsSetAtIndex (&x->removedNotes, i)) { 
-            err |= pizSequenceAddNotification (agent, PIZ_EVENT_NOTE_REMOVED, i, 0, NULL);
+            err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_REMOVED, i, 0, NULL);
         } 
     }
     
@@ -219,7 +228,7 @@ PIZError pizSequenceRefresh (PIZSequence *x, PIZAgent *agent)
                               note->values[PIZ_VALUE_DURATION], 
                               note->values[PIZ_VALUE_CHANNEL] };
                 
-                err |= pizSequenceAddNotification (agent, PIZ_EVENT_NOTE_ADDED, i, 5, a);
+                err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_ADDED, i, 5, a);
             }
             pizItemsetUnsetAtIndex (&x->changedNotes, i);
         } 
@@ -241,7 +250,7 @@ PIZError pizSequenceRefresh (PIZSequence *x, PIZAgent *agent)
                               note->values[PIZ_VALUE_DURATION], 
                               note->values[PIZ_VALUE_CHANNEL] };
                 
-                err |= pizSequenceAddNotification (agent, PIZ_EVENT_NOTE_CHANGED, i, 5, a);
+                err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_CHANGED, i, 5, a);
             }
         } 
     }
@@ -276,13 +285,13 @@ ulong pizSequenceStepMask (PIZSequence *x, long n, long count)
     return mask;
 }
 
-PIZError pizSequenceAddNotification (PIZAgent *agent, PIZEventCode n, long tag, long ac, long *av)
+PIZError pizSequenceAddNotification (PIZSequence *x, PIZEventCode n, long tag, long ac, long *av)
 {
     PIZEvent *notification = NULL;
     PIZError err = PIZ_GOOD;
     
     if (notification = pizEventNew (n, tag, ac, av)) {
-        if (err |= pizLinklistAppend (agent->notification, notification)) {       
+        if (err |= pizLinklistAppend (x->agent->notification, notification)) {       
             pizEventFree (notification);  
         }
     } else {

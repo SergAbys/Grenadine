@@ -67,6 +67,7 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizSequenceSetScale,            // PIZ_EVENT_SCALE
                                                     pizSequenceSetPattern,          // PIZ_EVENT_PATTERN
                                                     pizSequenceNote,                // PIZ_EVENT_NOTE
+                                                    NULL,                           // PIZ_EVENT_ZONE
                                                     pizSequenceClear,               // PIZ_EVENT_CLEAR
                                                     pizSequenceClean,               // PIZ_EVENT_CLEAN
                                                     pizSequenceTranspose,           // PIZ_EVENT_TRANSPOSE
@@ -77,11 +78,15 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizSequenceFill,                // PIZ_EVENT_FILL
                                                     pizSequenceKill,                // PIZ_EVENT_KILL
                                                     pizSequenceCycle,               // PIZ_EVENT_CYCLE 
-                                                    pizSequenceAlgorithm,           // PIZ_EVENT_ZOULOU
-                                                    pizSequenceAlgorithm,           // PIZ_EVENT_ROMEO
+                                                    NULL,                           // PIZ_EVENT_ZOULOU
+                                                    NULL,                           // PIZ_EVENT_ROMEO
                                                     pizSequenceNovember,            // PIZ_EVENT_NOVEMBER
-                                                    pizSequenceJuliet,              // PIZ_EVENT_JULIET       
-                                                    pizSequenceLearn };             // PIZ_EVENT_LEARN
+                                                    pizSequenceJuliet,              // PIZ_EVENT_JULIET 
+                                                    NULL,                           // PIZ_EVENT_COUNT
+                                                    NULL,                           // PIZ_EVENT_DUMP
+                                                    NULL,                           // PIZ_EVENT_LEARN
+                                                    NULL,                           // PIZ_EVENT_FORGET
+                                                    };             
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -282,7 +287,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         PIZ_AGENT_LOCK_NOTIFICATION
         
         count = pizLinklistCount (x->notification);
-        err   = pizSequenceStep (x->sequence, x);
+        err   = pizSequenceStep (x->sequence);
         count -= pizLinklistCount (x->notification);
         
         if (count) { 
@@ -293,7 +298,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         }
 
     } else {
-        err = pizSequenceStep (x->sequence, NULL); 
+        err = pizSequenceStepBlank (x->sequence); 
     }
     
     if (err == PIZ_GOOD) {
@@ -330,7 +335,7 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     PIZ_AGENT_LOCK_NOTIFICATION
     
     count = pizLinklistCount (x->notification);
-    err   = pizSequenceRefresh (x->sequence, x);
+    err   = pizSequenceRefresh (x->sequence);
     count -= pizLinklistCount (x->notification);
      
     if (!err && count) {

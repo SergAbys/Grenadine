@@ -66,7 +66,7 @@ PIZAgent *pizAgentNew (void)
     x->graphic          = pizLinklistNew ( );
     x->transform        = pizLinklistNew ( );
     x->notification     = pizLinklistNew ( );    
-    x->sequence         = pizSequenceNew (0);
+    x->sequence         = pizSequenceNew (x);
     x->observer         = NULL;
     x->notify           = NULL;
     x->err1             = PIZ_ERROR;

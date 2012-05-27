@@ -316,7 +316,7 @@ PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)
 
 long pizFiniteStateCount (const PIZFiniteState *x)
 {
-    return (x->count);
+    return x->count;
 }
 
 // -------------------------------------------------------------------------------------------------------------

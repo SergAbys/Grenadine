@@ -58,7 +58,7 @@
 #pragma mark ---
 #pragma mark -
 
-PIZSequence *pizSequenceNew (long size)
+PIZSequence *pizSequenceNew (struct _PIZAgent *agent)
 {
     PIZSequence *x = NULL;
     
@@ -67,12 +67,7 @@ PIZSequence *pizSequenceNew (long size)
     long argv1[ ] = { 0, PIZ_SEQUENCE_MAXIMUM_NOTES };
     long argv2[ ] = { PIZ_SEQUENCE_SIZE_LOOKUP, PIZ_SEQUENCE_MAXIMUM_NOTES };
     
-    if (size > 0) {
-        x->size = size;
-    } else {
-        x->size = PIZ_SEQUENCE_DEFAULT_SIZE_TIMELINE;
-    }
-    
+    x->agent         = agent;
     x->map           = pizArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
     x->scale         = pizArrayNew (PIZ_MAGIC_SCALE);
     x->pattern       = pizArrayNew (PIZ_EVENT_DATA_SIZE);
@@ -96,7 +91,8 @@ PIZSequence *pizSequenceNew (long size)
         x->toBeLearned   &&
         x->factorOracle  &&
         x->galoisLattice &&
-        (x->timeline = (PIZLinklist **)calloc (x->size, sizeof(PIZLinklist **)))) {
+        x->agent         &&
+        (x->timeline = (PIZLinklist **)calloc (PIZ_SEQUENCE_SIZE_TIMELINE, sizeof(PIZLinklist **)))) {
 
         x->flags = PIZ_SEQUENCE_FLAG_NONE;
         
@@ -139,7 +135,7 @@ void pizSequenceFree (PIZSequence *x)
     if (x->timeline) {
         long i;
         
-        for (i = 0; i < x->size; i++) {
+        for (i = 0; i < PIZ_SEQUENCE_SIZE_TIMELINE; i++) {
             pizLinklistFree (x->timeline[i]);
         }
             

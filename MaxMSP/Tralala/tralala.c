@@ -15,12 +15,6 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TICKS_PER_STEP              20
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 #define SEND(code)                  PIZEvent *event = NULL;                                 \
                                     if (event = pizEventNew ((code), -1, 0, NULL)) {        \
                                         pizAgentAddEvent (x->agent, event);                 \
@@ -305,6 +299,22 @@ void tralala_pattern (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+void tralala_int (t_tralala *x, long n)
+{
+    SEND_VALUE (PIZ_EVENT_LEARN, n)
+}
+
+void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    if (argc && (atom_gettype (argv) == A_LONG)) { 
+        tralala_int (x, atom_getlong (argv));
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 void tralala_note (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
     if (argc > 1) {
@@ -312,8 +322,6 @@ void tralala_note (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     long values[ ] = { 0, 0, 0, 0, 0 };
     
     if (!(atom_getlong_array (argc, argv, 5, values))) {
-        values[0] = (long)(values[0] / TICKS_PER_STEP);
-        values[3] = (long)(values[3] / TICKS_PER_STEP);
         SEND_ARGS (PIZ_EVENT_NOTE, argc, values)
     }
     //
@@ -413,15 +421,6 @@ void tralala_cycle (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     }
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void tralala_int (t_tralala *x, long n)
-{
-    SEND_VALUE (PIZ_EVENT_LEARN, n)
-}
-
 void tralala_zoulou (t_tralala *x)
 {
     SEND (PIZ_EVENT_ZOULOU)
@@ -443,13 +442,6 @@ void tralala_november (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     SEND_VALUE (PIZ_EVENT_NOVEMBER, n)
 }
 
-void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
-{
-    if (argc && (atom_gettype (argv) == A_LONG)) { 
-        tralala_int (x, atom_getlong (argv));
-    }
-}
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -459,21 +451,21 @@ void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 long tralala_parse (long argc, t_atom *argv, long *values)
 {
     long i;
-    bool v = false;
-    bool o = false;
+    long v = 0;
+    long o = 0;
     
     for (i = 0; i < argc; i++) {
     //
     if ((atom_gettype (argv + i)) == A_LONG) {
         (*values) = atom_getlong (argv + i); 
-        v = true;
+        v = 1;
         
     } else if (atom_gettype (argv + i) == A_SYM) {
         if (!(tralala_valueWithSymbol (atom_getsym (argv + i), values))) { 
-            v = true; 
+            v = 1; 
         }
         if (!(tralala_optionWithSymbol (atom_getsym (argv + i), values + 1))) { 
-            o = true; 
+            o = 1; 
         }
     }
     //

@@ -57,6 +57,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,                  // PIZ_E
                                         PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_SCALE
                                         PIZ_EVENT_ATTRIBUTE,            // PIZ_EVENT_PATTERN
                                         PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_NOTE
+                                        PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_ZONE
                                         PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CLEAR
                                         PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_CLEAN
                                         PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_TRANSPOSE
@@ -70,8 +71,11 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,                  // PIZ_E
                                         PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_ZOULOU
                                         PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_ROMEO
                                         PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_NOVEMBER
-                                        PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_JULIET        
+                                        PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_JULIET 
+                                        PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_COUNT 
+                                        PIZ_EVENT_TRANSFORM,            // PIZ_EVENT_DUMP        
                                         PIZ_EVENT_GRAPHIC,              // PIZ_EVENT_LEARN
+                                        PIZ_EVENT_GRAPHIC,              // PIZ_EVENT_FORGET
                                         PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_BPM
                                         PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_CHANCE
                                         PIZ_EVENT_NOTIFICATION,         // PIZ_EVENT_CHANGED_VELOCITY
@@ -106,6 +110,7 @@ static const char *pizEventNames[ ] = { "Init",
                                         "Pattern",
                                         // 
                                         "Note",
+                                        "Zone",
                                         "Clear",
                                         "Clean",
                                         "Transpose",
@@ -120,8 +125,11 @@ static const char *pizEventNames[ ] = { "Init",
                                         "Romeo",
                                         "November",
                                         "Juliet",
+                                        "Count",
+                                        "Dump",
                                         //
                                         "Learn",
+                                        "Forget",
                                         //
                                         "Changed Bpm",
                                         "Changed Chance",
