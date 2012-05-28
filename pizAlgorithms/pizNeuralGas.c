@@ -43,7 +43,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include <math.h>   
-#include <time.h>
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -88,7 +87,7 @@ PIZNeuralGas *pizNeuralGasNew (long argc, long *argv)
         x->beta          = PIZ_DEFAULT_BETA;
         x->kappa         = PIZ_DEFAULT_KAPPA;
         
-        x->seed = (unsigned int)time(NULL);
+        x->seed = PIZ_SEED;
         
         if (argc && ((argv[0] > 1)  && (argv[0] <= PIZ_ITEMSET_SIZE))) {
             x->maximumSize = argv[0];

@@ -74,7 +74,7 @@ PIZAgent *pizAgentNew (void)
     x->notify           = NULL;
     x->err1             = PIZ_ERROR;
     x->err2             = PIZ_ERROR;
-    x->seed             = (unsigned int)time(NULL);
+    x->seed             = PIZ_SEED;
     
     if (!(x->run         &&  
         x->low           &&

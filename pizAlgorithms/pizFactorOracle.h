@@ -62,7 +62,7 @@ typedef struct _PIZFactorOracle {
     long                shuttle;
     long                backwardThreshold;
     double              straightRatio;
-    unsigned int        seed;
+    uint                seed;
     PIZFactorOracleNode *nodes;            
     } PIZFactorOracle;
 

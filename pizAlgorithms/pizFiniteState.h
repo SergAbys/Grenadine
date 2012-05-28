@@ -64,7 +64,7 @@ typedef struct _PIZFiniteState {
     long                jumpChance;
     long                threshold; 
     long                *lottery; 
-    unsigned int        seed;
+    uint                seed;
     PIZQueue            **mapByValue;
     PIZStack            *ticketMachine; 
     PIZFiniteStateNode  *stock;

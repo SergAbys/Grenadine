@@ -118,7 +118,7 @@ typedef struct _PIZAgent {
     pthread_t           notificationLoop;
     PIZError            err1;
     PIZError            err2;
-    unsigned int        seed;
+    uint                seed;
     } PIZAgent;  
 
 // -------------------------------------------------------------------------------------------------------------

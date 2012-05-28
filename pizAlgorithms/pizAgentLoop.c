@@ -57,8 +57,8 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizAgentLoop,                   // PIZ_EVENT_LOOP
                                                     pizAgentUnloop,                 // PIZ_EVENT_UNLOOP
                                                     pizAgentBPM,                    // PIZ_EVENT_BPM
-                                                    NULL,                           // PIZ_EVENT_LEARN
-                                                    NULL,                           // PIZ_EVENT_FORGET
+                                                    pizAgentLearn,                  // PIZ_EVENT_LEARN
+                                                    //
                                                     pizSequenceSetChance,           // PIZ_EVENT_CHANCE
                                                     pizSequenceSetVelocity,         // PIZ_EVENT_VELOCITY
                                                     pizSequenceSetChannel,          // PIZ_EVENT_CHANNEL
@@ -83,10 +83,8 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizSequenceAlgorithm,           // PIZ_EVENT_ROMEO
                                                     pizSequenceNovember,            // PIZ_EVENT_NOVEMBER
                                                     pizSequenceJuliet,              // PIZ_EVENT_JULIET 
-                                                    NULL,                           // PIZ_EVENT_COUNT
-                                                    NULL,                           // PIZ_EVENT_DUMP
                                                     };             
-
+                                                    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -230,7 +228,6 @@ void pizAgentAddNotification (PIZAgent *x, PIZEventCode n, long tag, long ac, lo
 PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q) 
 {
     PIZError        err = PIZ_GOOD;
-    PIZEventType    type;
     PIZEventCode    code;
     PIZMethodError  f = NULL;
     PIZEvent        *event = NULL;
@@ -252,12 +249,11 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q)
     
     if (event) {
     //
-    pizEventType (event, &type);
     pizEventCode (event, &code);
         
-    if (type == PIZ_EVENT_RUN) {
+    if (code <= PIZ_EVENT_LEARN) {
         o = x;
-    } else if (type != PIZ_EVENT_NOTIFICATION) {
+    } else {
         o = x->sequence;
     }
     

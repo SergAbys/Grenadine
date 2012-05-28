@@ -71,7 +71,7 @@ typedef struct _PIZNeuralGas {
     double              beta;
     double              kappa;
     double              *vectorStock;
-    unsigned int        seed;
+    uint                seed;
     PIZNeuralGasHead    *headStock;
     PIZStack            *ticketMachine;
     } PIZNeuralGas;

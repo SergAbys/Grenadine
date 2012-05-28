@@ -56,7 +56,7 @@ typedef struct _PIZKohonenMap {
     long            training;
     double          step;
     double          *map;
-    unsigned int    seed;
+    uint            seed;
     } PIZKohonenMap;
 
 // -------------------------------------------------------------------------------------------------------------

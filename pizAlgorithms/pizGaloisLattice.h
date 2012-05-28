@@ -69,7 +69,7 @@ typedef struct _PIZGaloisLattice {
     long                    mapPeak;
     long                    tempMapPeak;
     bool                    needToMakeMap;
-    unsigned int            seed;
+    uint                    seed;
     PIZArray                **map;
     PIZArray                **tempMap;
     PIZStack                *ticketMachine;

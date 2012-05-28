@@ -41,12 +41,6 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-#include <math.h>
-#include <time.h>
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 #define PIZ_INIT_SIZE_ARRAY     4
@@ -77,7 +71,7 @@ PIZFactorOracle *pizFactorOracleNew (long argc, long *argv)
             x->shuttle           = 0;
             x->backwardThreshold = PIZ_DEFAULT_BACKWARD;
             x->straightRatio     = PIZ_DEFAULT_STRAIGHT;
-            x->seed              = (unsigned int)time(NULL);
+            x->seed              = PIZ_SEED;
             
             x->nodes[0].refer = -1;
             x->nodes[0].lrs   = 0;

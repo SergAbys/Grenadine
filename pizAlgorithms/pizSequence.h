@@ -215,7 +215,7 @@ typedef struct _PIZSequence {
     long                type;
     long                cell;
     long                noteValue;
-    unsigned int        seed;
+    uint                seed;
     struct _PIZAgent    *agent;
     } PIZSequence;
 

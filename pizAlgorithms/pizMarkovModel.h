@@ -63,7 +63,7 @@ typedef struct _PIZMarkovModel {
     double          *tempAlpha;
     double          *beta;
     double          *coefficient;
-    unsigned int    seed;
+    uint            seed;
     } PIZMarkovModel;
 
 // -------------------------------------------------------------------------------------------------------------

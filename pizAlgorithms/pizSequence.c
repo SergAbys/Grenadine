@@ -110,7 +110,7 @@ PIZSequence *pizSequenceNew (struct _PIZAgent *agent)
         x->cell      = PIZ_EIGHTH_NOTE;
         x->noteValue = PIZ_EIGHTH_NOTE;
         
-        x->seed = (unsigned int)time(NULL);
+        x->seed = PIZ_SEED;
             
     } else {
         pizSequenceFree (x);
