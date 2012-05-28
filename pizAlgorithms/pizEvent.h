@@ -81,17 +81,16 @@
 // -------------------------------------------------------------------------------------------------------------
 
 typedef enum _PIZEventType {
-    PIZ_EVENT_RUN             = 1,
-    PIZ_EVENT_TRANSFORM,
-    PIZ_EVENT_GRAPHIC,
-    PIZ_EVENT_ATTRIBUTE, 
+    PIZ_EVENT_RUN               = 1,
+    PIZ_EVENT_LOW,
+    PIZ_EVENT_HIGH,
     PIZ_EVENT_NOTIFICATION
     } PIZEventType;
 
 typedef enum _PIZEventCode {
     //
-    PIZ_EVENT_INIT            = 0,
-    PIZ_EVENT_PLAY            = 1,
+    PIZ_EVENT_INIT              = 0,
+    PIZ_EVENT_PLAY              = 1,
     PIZ_EVENT_STOP,
     PIZ_EVENT_LOOP,
     PIZ_EVENT_UNLOOP,

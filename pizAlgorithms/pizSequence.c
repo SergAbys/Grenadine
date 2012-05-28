@@ -76,9 +76,6 @@ PIZSequence *pizSequenceNew (struct _PIZAgent *agent)
     x->tempNotes2    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMP);
     x->tempHash      = pizHashTableNew (2, argv1);
     x->lookup        = pizHashTableNew (2, argv2);
-    x->toBeLearned   = pizArrayNew (0);
-    x->factorOracle  = pizFactorOracleNew  (0, NULL);
-    x->galoisLattice = pizGaloisLatticeNew (0, NULL);
     
     if (x->map           && 
         x->scale         &&
@@ -88,9 +85,6 @@ PIZSequence *pizSequenceNew (struct _PIZAgent *agent)
         x->tempNotes2    &&
         x->tempHash      &&
         x->lookup        &&
-        x->toBeLearned   &&
-        x->factorOracle  &&
-        x->galoisLattice &&
         x->agent         &&
         (x->timeline = (PIZLinklist **)calloc (PIZ_SEQUENCE_SIZE_TIMELINE, sizeof(PIZLinklist **)))) {
 
@@ -100,9 +94,7 @@ PIZSequence *pizSequenceNew (struct _PIZAgent *agent)
         pizItemsetClear (&x->addedNotes);
         pizItemsetClear (&x->removedNotes);
         pizItemsetClear (&x->changedNotes);
-        
-        x->seed = (unsigned int)time(NULL);
-        
+                
         x->start     = PIZ_DEFAULT_START;
         x->end       = PIZ_DEFAULT_END;
         x->down      = PIZ_DEFAULT_DOWN;
@@ -117,6 +109,8 @@ PIZSequence *pizSequenceNew (struct _PIZAgent *agent)
         x->type      = PIZ_SCALE_NONE;
         x->cell      = PIZ_EIGHTH_NOTE;
         x->noteValue = PIZ_EIGHTH_NOTE;
+        
+        x->seed = (unsigned int)time(NULL);
             
     } else {
         pizSequenceFree (x);
@@ -133,26 +127,24 @@ void pizSequenceFree (PIZSequence *x)
     if (x) {
     //
     if (x->timeline) {
-        long i;
+    //
+    long i;
+    
+    for (i = 0; i < PIZ_SEQUENCE_SIZE_TIMELINE; i++) {
+        pizLinklistFree (x->timeline[i]);
+    }
         
-        for (i = 0; i < PIZ_SEQUENCE_SIZE_TIMELINE; i++) {
-            pizLinklistFree (x->timeline[i]);
-        }
-            
-        free (x->timeline);
-        x->timeline = NULL;
+    free (x->timeline);
+    x->timeline = NULL;
+    //
     }
     
     pizArrayFree (x->map);
     pizArrayFree (x->scale);
     pizArrayFree (x->pattern);
-    pizArrayFree (x->toBeLearned);
     
     pizHashTableFree (x->tempHash);
     pizHashTableFree (x->lookup);
-    
-    pizFactorOracleFree  (x->factorOracle);
-    pizGaloisLatticeFree (x->galoisLattice);
     
     if (x->tempValues) {
         free (x->tempValues);

@@ -63,20 +63,27 @@ PIZAgent *pizAgentNew (void)
     x->bpm              = PIZ_DEFAULT_BPM;  
     x->flags            = PIZ_AGENT_FLAG_INIT; 
     x->run              = pizLinklistNew ( );
-    x->graphic          = pizLinklistNew ( );
-    x->transform        = pizLinklistNew ( );
+    x->low              = pizLinklistNew ( );
+    x->high             = pizLinklistNew ( );
     x->notification     = pizLinklistNew ( );    
     x->sequence         = pizSequenceNew (x);
+    x->toBeLearned      = pizArrayNew (0);
+    x->factorOracle     = pizFactorOracleNew  (0, NULL);
+    x->galoisLattice    = pizGaloisLatticeNew (0, NULL);
     x->observer         = NULL;
     x->notify           = NULL;
     x->err1             = PIZ_ERROR;
     x->err2             = PIZ_ERROR;
+    x->seed             = (unsigned int)time(NULL);
     
-    if (!(x->run        &&  
-        x->graphic      &&
-        x->transform    &&
-        x->notification && 
-        x->sequence     )) {
+    if (!(x->run         &&  
+        x->low           &&
+        x->high          &&
+        x->notification  && 
+        x->sequence      &&
+        x->toBeLearned   &&
+        x->factorOracle  &&
+        x->galoisLattice )) {
         
         err |= PIZ_MEMORY;
     }
@@ -148,12 +155,17 @@ void pizAgentFree (PIZAgent *x)
     pthread_cond_destroy  (&x->eventCondition);
     pthread_cond_destroy  (&x->notificationCondition);
     
-    pizLinklistFree (x->run);
-    pizLinklistFree (x->graphic);
-    pizLinklistFree (x->transform);
-    pizLinklistFree (x->notification);
     
-    pizSequenceFree (x->sequence);
+    pizLinklistFree       (x->run);
+    pizLinklistFree       (x->low);
+    pizLinklistFree       (x->high);
+    pizLinklistFree       (x->notification);
+    
+    pizArrayFree          (x->toBeLearned);
+    pizFactorOracleFree   (x->factorOracle);
+    pizGaloisLatticeFree  (x->galoisLattice);
+    
+    pizSequenceFree       (x->sequence);
     //
     }
 }
@@ -202,10 +214,9 @@ void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
     PIZLinklist *q = NULL;
     
     switch (event->type) {
-        case PIZ_EVENT_RUN       : q = x->run;         break;
-        case PIZ_EVENT_TRANSFORM : q = x->transform;   break;
-        case PIZ_EVENT_ATTRIBUTE : q = x->transform;   break;
-        case PIZ_EVENT_GRAPHIC   : q = x->graphic;     break;
+        case PIZ_EVENT_RUN  : q = x->run;   break;
+        case PIZ_EVENT_LOW  : q = x->low;   break;
+        case PIZ_EVENT_HIGH : q = x->high;  break;
     }
     
     if (q) {

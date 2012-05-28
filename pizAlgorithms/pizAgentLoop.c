@@ -37,12 +37,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizAgentRun.h"
 #include "pizAgentLoop.h"
+#include "pizAgentMethods.h"
 #include "pizSequenceRun.h"
-#include "pizSequenceTransform.h"
+#include "pizSequenceMethods.h"
 #include "pizSequenceAttribute.h"
-#include "pizSequenceGraphic.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -58,6 +57,8 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizAgentLoop,                   // PIZ_EVENT_LOOP
                                                     pizAgentUnloop,                 // PIZ_EVENT_UNLOOP
                                                     pizAgentBPM,                    // PIZ_EVENT_BPM
+                                                    NULL,                           // PIZ_EVENT_LEARN
+                                                    NULL,                           // PIZ_EVENT_FORGET
                                                     pizSequenceSetChance,           // PIZ_EVENT_CHANCE
                                                     pizSequenceSetVelocity,         // PIZ_EVENT_VELOCITY
                                                     pizSequenceSetChannel,          // PIZ_EVENT_CHANNEL
@@ -78,14 +79,12 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizSequenceFill,                // PIZ_EVENT_FILL
                                                     pizSequenceKill,                // PIZ_EVENT_KILL
                                                     pizSequenceCycle,               // PIZ_EVENT_CYCLE 
-                                                    NULL,                           // PIZ_EVENT_ZOULOU
-                                                    NULL,                           // PIZ_EVENT_ROMEO
+                                                    pizSequenceAlgorithm,           // PIZ_EVENT_ZOULOU
+                                                    pizSequenceAlgorithm,           // PIZ_EVENT_ROMEO
                                                     pizSequenceNovember,            // PIZ_EVENT_NOVEMBER
                                                     pizSequenceJuliet,              // PIZ_EVENT_JULIET 
                                                     NULL,                           // PIZ_EVENT_COUNT
                                                     NULL,                           // PIZ_EVENT_DUMP
-                                                    NULL,                           // PIZ_EVENT_LEARN
-                                                    NULL,                           // PIZ_EVENT_FORGET
                                                     };             
 
 // -------------------------------------------------------------------------------------------------------------
@@ -146,7 +145,7 @@ void *pizAgentEventLoop (void *agent)
     }
     
     while (pizAgentEventLoopIsWorkTime (x)) {
-        if (pizAgentEventLoopDoEvent (x, x->transform)) {
+        if (pizAgentEventLoopDoEvent (x, x->high)) {
             break;
         } 
     }
@@ -160,7 +159,7 @@ void *pizAgentEventLoop (void *agent)
     }
     
     while (pizAgentEventLoopIsWorkTime (x)) {
-        if (pizAgentEventLoopDoEvent (x, x->graphic)) {
+        if (pizAgentEventLoopDoEvent (x, x->low)) {
             pizAgentEventLoopDoRefresh (x);
             break;
         } 
@@ -411,9 +410,9 @@ bool pizAgentEventLoopIsCondition (PIZAgent *x)
 {
     bool condition = false;
     
-    if (pizLinklistCount (x->transform)     ||
-        pizLinklistCount (x->run)           ||
-        pizLinklistCount (x->graphic)       ||
+    if (pizLinklistCount (x->run)           ||
+        pizLinklistCount (x->low)           ||
+        pizLinklistCount (x->high)          ||
         (x->flags & PIZ_AGENT_FLAG_RUNNING)) {
         condition = true;
     }
@@ -429,7 +428,7 @@ bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
     PIZNano timeOut;
     
     pizTimeSet  (&now);
-    pizNanoSet  (&timeOut, PIZ_AGENT_CONSTANT_WORK_RATIO / x->bpm);
+    pizNanoSet  (&timeOut, PIZ_AGENT_CONSTANT_RATIO_WORK / x->bpm);
     
     if (!(pizTimeElapsedNano (&x->grainStart, &now, &elapsed))) {
         if (elapsed < timeOut) {

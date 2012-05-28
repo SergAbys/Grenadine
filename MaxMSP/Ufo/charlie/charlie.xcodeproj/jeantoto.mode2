@@ -425,8 +425,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96E70D0F156FE310003B7284</string>
-				<string>96E70D10156FE310003B7284</string>
+				<string>961C747515734EA8000D3957</string>
+				<string>961C747615734EA8000D3957</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -459,7 +459,6 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/MaxMSP/Ufo/charlie/charlie.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -677,7 +676,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96E70D11156FE310003B7284</string>
+				<string>961C73E215734BBA000D3957</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

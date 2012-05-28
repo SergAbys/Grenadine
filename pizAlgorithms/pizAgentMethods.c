@@ -1,8 +1,8 @@
-/**
- * \file	pizAgentRun.h
+/*
+ * \file	pizAgentRun.c
  * \author	Jean Sapristi
  */
-
+ 
 /*
  *  Copyright (c) 2012, Jean Sapristi & Tom Javel, 
  *  "nicolas.danet@free.fr".
@@ -37,24 +37,104 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_AGENT_RUN_H
-#define PIZ_AGENT_RUN_H
+#include "pizAgentMethods.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
-#include "pizAgent.h"
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZ_LOCAL PIZError pizAgentInit       (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentPlay       (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentStop       (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentLoop       (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentUnloop     (PIZAgent *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentBPM        (PIZAgent *x, PIZEvent *event);
+#define PIZ_MINIMUM_BPM     40
+#define PIZ_MAXIMUM_BPM     300
+#define PIZ_CONSTANT_LEARN  5
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_AGENT_RUN_H
+#pragma mark -
+#pragma mark ---
+#pragma mark -
+
+PIZError pizAgentInit (PIZAgent *x, const PIZEvent *event)
+{
+    return PIZ_GOOD;
+}
+
+PIZError pizAgentPlay (PIZAgent *x, const PIZEvent *event)
+{
+    if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
+        x->flags |= PIZ_AGENT_FLAG_REPLAY;
+    } else {
+        pizSequenceGoToStart (x->sequence);
+        x->flags |= PIZ_AGENT_FLAG_RUNNING; 
+    }
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizAgentStop (PIZAgent *x, const PIZEvent *event)
+{
+    x->flags &= ~(PIZ_AGENT_FLAG_LOOPED | PIZ_AGENT_FLAG_REPLAY | PIZ_AGENT_FLAG_RUNNING);
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizAgentLoop (PIZAgent *x, const PIZEvent *event)
+{
+    x->flags |= PIZ_AGENT_FLAG_LOOPED;
+    
+    return (pizAgentPlay (x, event));
+}
+
+PIZError pizAgentUnloop (PIZAgent *x, const PIZEvent *event)
+{
+    x->flags &= ~PIZ_AGENT_FLAG_LOOPED;
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizAgentBPM (PIZAgent *x, const PIZEvent *event)
+{
+    long value;
+    
+    if (!(pizEventValue (event, &value))) {
+    //
+    if ((value >= PIZ_MINIMUM_BPM) && (value <= PIZ_MAXIMUM_BPM) && (value != x->bpm)) {
+        x->bpm = value;
+        pizAgentAddNotification (x, PIZ_EVENT_CHANGED_BPM, -1, 1, &x->bpm);
+            
+        pizNanoSet     (&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);    
+        pizTimeCopy    (&x->grainEnd, &x->grainStart);
+        pizTimeAddNano (&x->grainEnd, &x->grainSize);
+    }
+    //
+    }
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizAgentLearn (PIZAgent *x, const PIZEvent *event)
+{
+    long argc;
+    long *argv = NULL;
+        
+    if (!(pizEventPtr (event, &argc, &argv))) {
+    //
+    long i, h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+    
+    pizFactorOracleAdd (x->factorOracle, argc, argv);
+    
+    for (i = 0; i < argc; i++) {
+        pizArrayAppend (x->toBeLearned, argv[i]);
+    }
+    
+    if (h < (pizArrayCount (x->toBeLearned) * PIZ_CONSTANT_LEARN)) {
+        pizGaloisLatticeAdd (x->galoisLattice, pizArrayCount (x->toBeLearned), pizArrayPtr (x->toBeLearned));
+        pizArrayClear (x->toBeLearned);
+    }
+    //
+    }
+        
+    return PIZ_GOOD;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------------------:x

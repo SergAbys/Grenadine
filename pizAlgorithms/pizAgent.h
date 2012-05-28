@@ -56,7 +56,7 @@
 
 #define PIZ_AGENT_CONSTANT_BPM_NS           25.E8
 #define PIZ_AGENT_CONSTANT_BPM_MS           25.E2
-#define PIZ_AGENT_CONSTANT_WORK_RATIO       25.E8 * 0.75
+#define PIZ_AGENT_CONSTANT_RATIO_WORK       25.E8 * 0.75
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -99,14 +99,15 @@ typedef struct _PIZAgent {
     PIZTime             grainStart;
     PIZTime             grainEnd;
     PIZLinklist         *run;
-    PIZLinklist         *graphic;
-    PIZLinklist         *transform;
+    PIZLinklist         *low;
+    PIZLinklist         *high;
     PIZLinklist         *notification;
     PIZSequence         *sequence;
-    void                *observer;
-    PIZMethod           notify;
+    PIZArray            *toBeLearned;
     PIZFactorOracle     *factorOracle;
     PIZGaloisLattice    *galoisLattice;
+    void                *observer;
+    PIZMethod           notify;
     pthread_attr_t      attr;
     pthread_cond_t      eventCondition;
     pthread_cond_t      notificationCondition;
@@ -117,6 +118,7 @@ typedef struct _PIZAgent {
     pthread_t           notificationLoop;
     PIZError            err1;
     PIZError            err2;
+    unsigned int        seed;
     } PIZAgent;  
 
 // -------------------------------------------------------------------------------------------------------------

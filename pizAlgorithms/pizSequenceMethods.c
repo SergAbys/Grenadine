@@ -1,5 +1,5 @@
 /*
- * \file    pizSequenceTransform.c
+ * \file    pizSequenceMethods.c
  * \author  Jean Sapristi
  */
  
@@ -37,7 +37,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizSequenceTransform.h"
+#include "pizAgent.h"
+#include "pizSequenceMethods.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -386,9 +387,9 @@ PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
     k = pizSequenceFillTempNotes (x);
     
     if (code == PIZ_EVENT_ZOULOU) {
-        err = pizFactorOracleProceed (x->factorOracle, k, x->tempValues);
+        err = pizFactorOracleProceed (((PIZAgent *)(x->agent))->factorOracle, k, x->tempValues);
     } else {
-        err = pizGaloisLatticeProceed (x->galoisLattice, k, x->tempValues);
+        err = pizGaloisLatticeProceed (((PIZAgent *)(x->agent))->galoisLattice, k, x->tempValues);
     }
     
     if (!err) {

@@ -50,8 +50,8 @@
 
 PIZ_LOCAL bool      pizSequenceIsAtEnd      (PIZSequence *x);
 PIZ_LOCAL void      pizSequenceGoToStart    (PIZSequence *x);
-PIZ_LOCAL PIZError  pizSequenceStepBlank    (PIZSequence *x);
 PIZ_LOCAL PIZError  pizSequenceStep         (PIZSequence *x); //
+PIZ_LOCAL PIZError  pizSequenceStepBlank    (PIZSequence *x);
 PIZ_LOCAL PIZError  pizSequenceRefresh      (PIZSequence *x); //
 
 // -------------------------------------------------------------------------------------------------------------

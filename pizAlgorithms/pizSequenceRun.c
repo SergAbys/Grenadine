@@ -63,22 +63,6 @@ void pizSequenceGoToStart (PIZSequence *x)
     x->index = x->start;
 }
 
-PIZError pizSequenceStepBlank (PIZSequence *x)
-{
-    PIZError err = PIZ_ERROR;
-    
-    if (x->index < x->start) {
-        x->index = x->start;
-    }
-        
-    if (x->index < x->end) {
-        err = PIZ_GOOD;
-        x->index ++;    
-    }
-    
-    return err;
-}
-
 PIZError pizSequenceStep (PIZSequence *x)
 {
     PIZError err = PIZ_ERROR;
@@ -147,6 +131,22 @@ PIZError pizSequenceStep (PIZSequence *x)
     
     x->index ++;
     //    
+    }
+    
+    return err;
+}
+
+PIZError pizSequenceStepBlank (PIZSequence *x)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if (x->index < x->start) {
+        x->index = x->start;
+    }
+        
+    if (x->index < x->end) {
+        err = PIZ_GOOD;
+        x->index ++;    
     }
     
     return err;

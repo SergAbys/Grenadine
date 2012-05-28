@@ -153,10 +153,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 96CF9325154C40F60027BB96 /* tralala.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				ARCHS = i386;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../c74support/max-includes\"";
@@ -189,10 +186,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 96CF9325154C40F60027BB96 /* tralala.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					i386,
-					ppc,
-				);
+				ARCHS = i386;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)/**",
@@ -217,7 +211,8 @@
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../pizAlgorithms/build/Debug\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../pizAlgorithms/build/Release\"";
-				PREBINDING = YES;
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
 				PRODUCT_NAME = tralala;
 				UNEXPORTED_SYMBOLS_FILE = tralalaHide.txt;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
