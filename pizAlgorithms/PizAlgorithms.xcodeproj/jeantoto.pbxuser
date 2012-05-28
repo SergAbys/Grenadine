@@ -14,6 +14,12 @@
 			PBXPerProjectTemplateStateSaveDate = 359911717;
 			PBXWorkspaceStateSaveDate = 359911717;
 		};
+		perUserProjectItems = {
+			96DE6E401573D46A00398726 /* PBXTextBookmark */ = 96DE6E401573D46A00398726 /* PBXTextBookmark */;
+			96DE6E411573D46A00398726 /* PBXTextBookmark */ = 96DE6E411573D46A00398726 /* PBXTextBookmark */;
+			96DE6E441573D47100398726 /* PBXTextBookmark */ = 96DE6E441573D47100398726 /* PBXTextBookmark */;
+			96DE6E451573D47100398726 /* PBXTextBookmark */ = 96DE6E451573D47100398726 /* PBXTextBookmark */;
+		};
 		sourceControlManager = 96CFCDA613D7F01D004431BB /* Source Control */;
 		userBuildSettings = {
 		};
@@ -114,9 +120,9 @@
 	};
 	96A16F77148CF839008268A6 /* pizSequenceMethods.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 30000}}";
-			sepNavSelRange = "{1930, 0}";
-			sepNavVisRect = "{{0, 867}, {1233, 292}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1233, 29950}}";
+			sepNavSelRange = "{18670, 30}";
+			sepNavVisRect = "{{0, 14461}, {1233, 404}}";
 			sepNavWindowFrame = "{{1, 4}, {1281, 774}}";
 		};
 	};
@@ -199,8 +205,8 @@
 	96D67644151C892100AFA120 /* pizAgentLoop.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1235, 11700}}";
-			sepNavSelRange = "{3241, 0}";
-			sepNavVisRect = "{{0, 1590}, {1235, 645}}";
+			sepNavSelRange = "{9962, 24}";
+			sepNavVisRect = "{{0, 6432}, {1235, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1280, 774}}";
 		};
 	};
@@ -238,9 +244,9 @@
 	};
 	96D796C5151716AC00109654 /* pizEvent.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 4775}}";
-			sepNavSelRange = "{5298, 0}";
-			sepNavVisRect = "{{0, 2900}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 4850}}";
+			sepNavSelRange = "{5345, 0}";
+			sepNavVisRect = "{{0, 3289}, {1235, 645}}";
 			sepNavWindowFrame = "{{0, 4}, {1280, 774}}";
 		};
 	};
@@ -355,6 +361,42 @@
 			sepNavVisRect = "{{0, 0}, {1234, 645}}";
 			sepNavWindowFrame = "{{0, 3}, {1279, 774}}";
 		};
+	};
+	96DE6E401573D46A00398726 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "error: parse error before 'return'";
+		fRef = 96A16F77148CF839008268A6 /* pizSequenceMethods.c */;
+		rLen = 1;
+		rLoc = 716;
+		rType = 1;
+	};
+	96DE6E411573D46A00398726 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96A16F77148CF839008268A6 /* pizSequenceMethods.c */;
+		name = "pizSequenceMethods.c: 588";
+		rLen = 0;
+		rLoc = 18710;
+		rType = 0;
+		vrLen = 405;
+		vrLoc = 20828;
+	};
+	96DE6E441573D47100398726 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "warning: unused variable 'haveChanged'";
+		fRef = 96A16F77148CF839008268A6 /* pizSequenceMethods.c */;
+		rLen = 1;
+		rLoc = 586;
+		rType = 1;
+	};
+	96DE6E451573D47100398726 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96A16F77148CF839008268A6 /* pizSequenceMethods.c */;
+		name = "bool haveChanged = false;";
+		rLen = 30;
+		rLoc = 18670;
+		rType = 0;
+		vrLen = 417;
+		vrLoc = 18475;
 	};
 	96F915071538024D00202438 /* pizSequenceAttribute.c */ = {
 		uiCtxt = {

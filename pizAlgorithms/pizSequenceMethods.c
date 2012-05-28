@@ -575,17 +575,17 @@ PIZError pizSequenceNovember (PIZSequence *x, const PIZEvent *event)
 }
 
 PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
-{/*
+{
     long     argc;
     long     *argv = NULL;
     PIZError err = PIZ_GOOD;
-        
+      
     if (!(pizEventPtr (event, &argc, &argv))) {
     //
     long iterate  = argv[0];
     long division = argv[1];
     bool haveChanged = false;
-        
+    /*    
     if (x->cell != PIZ_NOTE_VALUE_NONE) {
     //
     long i, size;
@@ -710,13 +710,11 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
         pizSequenceMakeMap (x);
     }
     //
-    }
+    }*/
     //
     }
                         
-    return err;*/
-    
-    return PIZ_GOOD;
+    return err;
 }
 
 /*PIZError pizSequenceJuliet (PIZSequence *x, long iterate, long division)
