@@ -410,9 +410,9 @@ bool pizAgentEventLoopIsCondition (PIZAgent *x)
 {
     bool condition = false;
     
-    if (pizLinklistCount (x->run)           ||
-        pizLinklistCount (x->low)           ||
-        pizLinklistCount (x->high)          ||
+    if (pizLinklistCount (x->run)   ||
+        pizLinklistCount (x->low)   ||
+        pizLinklistCount (x->high)  ||
         (x->flags & PIZ_AGENT_FLAG_RUNNING)) {
         condition = true;
     }
