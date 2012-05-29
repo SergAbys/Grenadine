@@ -207,7 +207,7 @@ void pizAgentAddNotification (PIZAgent *x, PIZEventCode n, long ac, long *av)
 {
     PIZEvent *notification = NULL;
 
-    if (notification = pizEventNew (n, -1, ac, av)) {
+    if (notification = pizEventNew (n, -1, 0, ac, av)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
         PIZ_AGENT_QUEUE (x->notification, notification)

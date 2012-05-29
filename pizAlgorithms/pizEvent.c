@@ -98,7 +98,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
 #pragma mark ---
 #pragma mark -
 
-PIZEvent *pizEventNew (PIZEventCode code, long tag, long argc, const long *argv)
+PIZEvent *pizEventNew (PIZEventCode code, long tag, long option, long argc, const long *argv)
 {
     PIZEvent *x = NULL;
     
@@ -136,6 +136,11 @@ void pizEventCode (const PIZEvent *x, PIZEventCode *code)
 void pizEventType (const PIZEvent *x, PIZEventType *type)
 {
     (*type) = x->type;
+}
+
+void pizEventOption (const PIZEvent *x, long *option)
+{
+    (*option) = x->option;
 }
 
 PIZError pizEventValue (const PIZEvent *x, long *value)

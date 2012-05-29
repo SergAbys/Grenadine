@@ -16,22 +16,12 @@
 
 #include "ext.h"
 #include "pizEvent.h"
-#include "pizSequence.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 void tralala_symbolsInit    ( );
 void tralala_parseToEvent   (PIZEvent *event);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-PIZError tralala_keyWithSymbol          (const t_symbol *s, long *value);
-PIZError tralala_scaleWithSymbol        (const t_symbol *s, long *value);
-PIZError tralala_valueWithSymbol        (const t_symbol *s, long *value);
-PIZError tralala_optionWithSymbol       (const t_symbol *s, long *value);
-PIZError tralala_noteValueWithSymbol    (const t_symbol *s, long *value);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -9,6 +9,14 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "tralalaSymbols.h"
+#include "pizSequence.h"
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZError tralala_parseValue     (const t_symbol *s, long *value);
+PIZError tralala_parseOption    (const t_symbol *s, long *value);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -77,6 +85,9 @@ static t_symbol *tll_sixteenthDotted       = NULL;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark ---
+#pragma mark -
 
 void tralala_symbolsInit ( )
 {
@@ -143,11 +154,18 @@ void tralala_symbolsInit ( )
     tll_sixteenthDotted       = gensym ("sixteenth dotted");
 }
 
+void tralala_parseToEvent (PIZEvent *event) 
+{
+    ;
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+#pragma mark ---
+#pragma mark -
 
-PIZError tralala_keyWithSymbol (const t_symbol *s, long *value)
+PIZError tralala_parseValue (const t_symbol *s, long *value)
 {
     PIZError err = PIZ_ERROR;
     
@@ -155,18 +173,51 @@ PIZError tralala_keyWithSymbol (const t_symbol *s, long *value)
     //
     err = PIZ_GOOD;
     
-    if      (s == tll_c)        { *value = PIZ_KEY_C;        } 
-    else if (s == tll_cSharp)   { *value = PIZ_KEY_C_SHARP;  } 
-    else if (s == tll_d)        { *value = PIZ_KEY_D;        } 
-    else if (s == tll_dSharp)   { *value = PIZ_KEY_D_SHARP;  } 
-    else if (s == tll_e)        { *value = PIZ_KEY_E;        } 
-    else if (s == tll_f)        { *value = PIZ_KEY_F;        } 
-    else if (s == tll_fSharp)   { *value = PIZ_KEY_F_SHARP;  }
-    else if (s == tll_g)        { *value = PIZ_KEY_G;        } 
-    else if (s == tll_gSharp)   { *value = PIZ_KEY_G_SHARP;  } 
-    else if (s == tll_a)        { *value = PIZ_KEY_A;        } 
-    else if (s == tll_aSharp)   { *value = PIZ_KEY_A_SHARP;  } 
-    else if (s == tll_b)        { *value = PIZ_KEY_B;        } 
+    if      (s == tll_up)                       { *value = 0; } 
+    else if (s == tll_down)                     { *value = 1; } 
+    else if (s == tll_whole)                    { *value = PIZ_WHOLE_NOTE;                  } 
+    else if (s == tll_half)                     { *value = PIZ_HALF_NOTE;                   } 
+    else if (s == tll_quarter)                  { *value = PIZ_QUARTER_NOTE;                } 
+    else if (s == tll_eighth)                   { *value = PIZ_EIGHTH_NOTE;                 } 
+    else if (s == tll_sixteenth)                { *value = PIZ_SIXTEENTH_NOTE;              } 
+    else if (s == tll_thirtySecond)             { *value = PIZ_THIRTY_SECOND_NOTE;          } 
+    else if (s == tll_wholeTriplet)             { *value = PIZ_WHOLE_NOTE_TRIPLET;          } 
+    else if (s == tll_halfTriplet)              { *value = PIZ_HALF_NOTE_TRIPLET;           } 
+    else if (s == tll_quarterTriplet)           { *value = PIZ_QUARTER_NOTE_TRIPLET;        }
+    else if (s == tll_eighthTriplet)            { *value = PIZ_EIGHTH_NOTE_TRIPLET;         }
+    else if (s == tll_sixteenthTriplet)         { *value = PIZ_SIXTEENTH_NOTE_TRIPLET;      }
+    else if (s == tll_thirtySecondTriplet)      { *value = PIZ_THIRTY_SECOND_NOTE_TRIPLET;  } 
+    else if (s == tll_wholeDotted)              { *value = PIZ_WHOLE_NOTE_DOTTED;           } 
+    else if (s == tll_halfDotted)               { *value = PIZ_HALF_NOTE_DOTTED;            } 
+    else if (s == tll_quarterDotted)            { *value = PIZ_QUARTER_NOTE_DOTTED;         } 
+    else if (s == tll_eighthDotted)             { *value = PIZ_EIGHTH_NOTE_DOTTED;          } 
+    else if (s == tll_sixteenthDotted)          { *value = PIZ_SIXTEENTH_NOTE_DOTTED;       } 
+    else if (s == tll_none)                     { *value = PIZ_NOTE_VALUE_NONE;             } 
+    else if (s == tll_ionian)                   { *value = PIZ_IONIAN;                      } 
+    else if (s == tll_dorian)                   { *value = PIZ_DORIAN;                      } 
+    else if (s == tll_phrygian)                 { *value = PIZ_PHRYGIAN;                    } 
+    else if (s == tll_lydian)                   { *value = PIZ_LYDIAN;                      } 
+    else if (s == tll_mixolydian)               { *value = PIZ_MIXOLYDIAN;                  } 
+    else if (s == tll_aeolian)                  { *value = PIZ_AEOLIAN;                     } 
+    else if (s == tll_locrian)                  { *value = PIZ_LOCRIAN;                     }
+    else if (s == tll_natural)                  { *value = PIZ_NATURAL;                     } 
+    else if (s == tll_harmonic)                 { *value = PIZ_HARMONIC;                    } 
+    else if (s == tll_melodic)                  { *value = PIZ_MELODIC;                     } 
+    else if (s == tll_wholeTone)                { *value = PIZ_WHOLE_TONE;                  } 
+    else if (s == tll_pentatonicMajor)          { *value = PIZ_PENTATONIC_MAJOR;            } 
+    else if (s == tll_pentatonicMinor)          { *value = PIZ_PENTATONIC_MINOR;            } 
+    else if (s == tll_octatonicHalfWhole)       { *value = PIZ_OCTATONIC_HALF_WHOLE;        } 
+    else if (s == tll_octatonicWholeHalf)       { *value = PIZ_OCTATONIC_WHOLE_HALF;        } 
+    else if (s == tll_seventhMajor)             { *value = PIZ_SEVENTH_MAJOR;               } 
+    else if (s == tll_seventhDominant)          { *value = PIZ_SEVENTH_DOMINANT;            } 
+    else if (s == tll_seventhMinor)             { *value = PIZ_SEVENTH_MINOR;               } 
+    else if (s == tll_seventhMajorSixth)        { *value = PIZ_SEVENTH_MAJOR_SIXTH;         } 
+    else if (s == tll_seventhMinorSixth)        { *value = PIZ_SEVENTH_MINOR_SIXTH;         }
+    else if (s == tll_seventhHalfDiminished)    { *value = PIZ_SEVENTH_HALF_DIMINISHED;     } 
+    else if (s == tll_seventhDiminished)        { *value = PIZ_SEVENTH_DIMINISHED;          } 
+    else if (s == tll_seventhSuspended)         { *value = PIZ_SEVENTH_SUSPENDED;           } 
+    else if (s == tll_seventhSharpFive)         { *value = PIZ_SEVENTH_SHARP_FIVE;          } 
+    else if (s == tll_seventhFlatFive)          { *value = PIZ_SEVENTH_FLAT_FIVE;           } 
     
     else { err = PIZ_ERROR; }
     //
@@ -175,7 +226,7 @@ PIZError tralala_keyWithSymbol (const t_symbol *s, long *value)
     return err;
 }
 
-PIZError tralala_scaleWithSymbol (const t_symbol *s, long *value)
+PIZError tralala_parseOption (const t_symbol *s, long *value)
 {
     PIZError err = PIZ_ERROR;
     
@@ -183,103 +234,22 @@ PIZError tralala_scaleWithSymbol (const t_symbol *s, long *value)
     //
     err = PIZ_GOOD;
     
-    if      (s == tll_ionian)                   { *value = PIZ_IONIAN;                   } 
-    else if (s == tll_dorian)                   { *value = PIZ_DORIAN;                   } 
-    else if (s == tll_phrygian)                 { *value = PIZ_PHRYGIAN;                 } 
-    else if (s == tll_lydian)                   { *value = PIZ_LYDIAN;                   } 
-    else if (s == tll_mixolydian)               { *value = PIZ_MIXOLYDIAN;               } 
-    else if (s == tll_aeolian)                  { *value = PIZ_AEOLIAN;                  } 
-    else if (s == tll_locrian)                  { *value = PIZ_LOCRIAN;                  }
-    else if (s == tll_natural)                  { *value = PIZ_NATURAL;                  } 
-    else if (s == tll_harmonic)                 { *value = PIZ_HARMONIC;                 } 
-    else if (s == tll_melodic)                  { *value = PIZ_MELODIC;                  } 
-    else if (s == tll_wholeTone)                { *value = PIZ_WHOLE_TONE;               } 
-    else if (s == tll_pentatonicMajor)          { *value = PIZ_PENTATONIC_MAJOR;         } 
-    else if (s == tll_pentatonicMinor)          { *value = PIZ_PENTATONIC_MINOR;         } 
-    else if (s == tll_octatonicHalfWhole)       { *value = PIZ_OCTATONIC_HALF_WHOLE;     } 
-    else if (s == tll_octatonicWholeHalf)       { *value = PIZ_OCTATONIC_WHOLE_HALF;     } 
-    else if (s == tll_seventhMajor)             { *value = PIZ_SEVENTH_MAJOR;            } 
-    else if (s == tll_seventhDominant)          { *value = PIZ_SEVENTH_DOMINANT;         } 
-    else if (s == tll_seventhMinor)             { *value = PIZ_SEVENTH_MINOR;            } 
-    else if (s == tll_seventhMajorSixth)        { *value = PIZ_SEVENTH_MAJOR_SIXTH;      } 
-    else if (s == tll_seventhMinorSixth)        { *value = PIZ_SEVENTH_MINOR_SIXTH;      }
-    else if (s == tll_seventhHalfDiminished)    { *value = PIZ_SEVENTH_HALF_DIMINISHED;  } 
-    else if (s == tll_seventhDiminished)        { *value = PIZ_SEVENTH_DIMINISHED;       } 
-    else if (s == tll_seventhSuspended)         { *value = PIZ_SEVENTH_SUSPENDED;        } 
-    else if (s == tll_seventhSharpFive)         { *value = PIZ_SEVENTH_SHARP_FIVE;       } 
-    else if (s == tll_seventhFlatFive)          { *value = PIZ_SEVENTH_FLAT_FIVE;        } 
-    
-    else { err = PIZ_ERROR; }
-    //
-    }
-    
-    return err;
-}
-
-PIZError tralala_valueWithSymbol (const t_symbol *s, long *value)
-{
-    PIZError err = PIZ_ERROR;
-    
-    if (s && value) {
-    //
-    err = PIZ_GOOD;
-    
-    if      (s == tll_up)       { *value = 0; } 
-    else if (s == tll_down)     { *value = 1; }  
-    
-    else { err = PIZ_ERROR; }
-    //
-    }
-            
-    return err;
-}
-
-PIZError tralala_optionWithSymbol (const t_symbol *s, long *value)
-{
-    PIZError err = PIZ_ERROR;
-    
-    if (s && value) {
-    //
-    err = PIZ_GOOD;
-    
-    if      (s == tll_pitch)    { *value = PIZ_VALUE_PITCH;     } 
-    else if (s == tll_velocity) { *value = PIZ_VALUE_VELOCITY;  } 
-    else if (s == tll_duration) { *value = PIZ_VALUE_DURATION;  } 
-    else if (s == tll_channel)  { *value = PIZ_VALUE_CHANNEL;   }  
-    
-    else { err = PIZ_ERROR; }
-    //
-    }
-            
-    return err;
-}
-
-PIZError tralala_noteValueWithSymbol (const t_symbol *s, long *value)
-{
-    PIZError err = PIZ_ERROR;
-    
-    if (s && value) {
-    //
-    err = PIZ_GOOD;
-    
-    if      (s == tll_whole)                { *value = PIZ_WHOLE_NOTE;                  } 
-    else if (s == tll_half)                 { *value = PIZ_HALF_NOTE;                   } 
-    else if (s == tll_quarter)              { *value = PIZ_QUARTER_NOTE;                } 
-    else if (s == tll_eighth)               { *value = PIZ_EIGHTH_NOTE;                 } 
-    else if (s == tll_sixteenth)            { *value = PIZ_SIXTEENTH_NOTE;              } 
-    else if (s == tll_thirtySecond)         { *value = PIZ_THIRTY_SECOND_NOTE;          } 
-    else if (s == tll_wholeTriplet)         { *value = PIZ_WHOLE_NOTE_TRIPLET;          } 
-    else if (s == tll_halfTriplet)          { *value = PIZ_HALF_NOTE_TRIPLET;           } 
-    else if (s == tll_quarterTriplet)       { *value = PIZ_QUARTER_NOTE_TRIPLET;        }
-    else if (s == tll_eighthTriplet)        { *value = PIZ_EIGHTH_NOTE_TRIPLET;         }
-    else if (s == tll_sixteenthTriplet)     { *value = PIZ_SIXTEENTH_NOTE_TRIPLET;      }
-    else if (s == tll_thirtySecondTriplet)  { *value = PIZ_THIRTY_SECOND_NOTE_TRIPLET;  } 
-    else if (s == tll_wholeDotted)          { *value = PIZ_WHOLE_NOTE_DOTTED;           } 
-    else if (s == tll_halfDotted)           { *value = PIZ_HALF_NOTE_DOTTED;            } 
-    else if (s == tll_quarterDotted)        { *value = PIZ_QUARTER_NOTE_DOTTED;         } 
-    else if (s == tll_eighthDotted)         { *value = PIZ_EIGHTH_NOTE_DOTTED;          } 
-    else if (s == tll_sixteenthDotted)      { *value = PIZ_SIXTEENTH_NOTE_DOTTED;       } 
-    else if (s == tll_none)                 { *value = PIZ_NOTE_VALUE_NONE;             }
+    if      (s == tll_pitch)        { *value = PIZ_VALUE_PITCH;     } 
+    else if (s == tll_velocity)     { *value = PIZ_VALUE_VELOCITY;  } 
+    else if (s == tll_duration)     { *value = PIZ_VALUE_DURATION;  } 
+    else if (s == tll_channel)      { *value = PIZ_VALUE_CHANNEL;   }  
+    else if (s == tll_c)            { *value = PIZ_KEY_C;           } 
+    else if (s == tll_cSharp)       { *value = PIZ_KEY_C_SHARP;     } 
+    else if (s == tll_d)            { *value = PIZ_KEY_D;           } 
+    else if (s == tll_dSharp)       { *value = PIZ_KEY_D_SHARP;     } 
+    else if (s == tll_e)            { *value = PIZ_KEY_E;           } 
+    else if (s == tll_f)            { *value = PIZ_KEY_F;           } 
+    else if (s == tll_fSharp)       { *value = PIZ_KEY_F_SHARP;     }
+    else if (s == tll_g)            { *value = PIZ_KEY_G;           } 
+    else if (s == tll_gSharp)       { *value = PIZ_KEY_G_SHARP;     } 
+    else if (s == tll_a)            { *value = PIZ_KEY_A;           } 
+    else if (s == tll_aSharp)       { *value = PIZ_KEY_A_SHARP;     } 
+    else if (s == tll_b)            { *value = PIZ_KEY_B;           }
     
     else { err = PIZ_ERROR; }
     //

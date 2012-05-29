@@ -146,18 +146,20 @@ typedef struct _PIZEvent {
     PIZEventCode    code;
     PIZEventType    type;
     long            tag;
-    long            size;
+    long            option;
     long            data[PIZ_EVENT_DATA_SIZE];
+    long            size;
     } PIZEvent;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent    *pizEventNew    (PIZEventCode code, long tag, long argc, const long *argv);
+PIZEvent    *pizEventNew    (PIZEventCode code, long tag, long option, long argc, const long *argv);
 
 void        pizEventFree    (PIZEvent *x);
 void        pizEventCode    (const PIZEvent *x, PIZEventCode *code);
 void        pizEventType    (const PIZEvent *x, PIZEventType *type);
+void        pizEventOption  (const PIZEvent *x, long *option);
 PIZError    pizEventValue   (const PIZEvent *x, long *value);
 PIZError    pizEventPtr     (const PIZEvent *x, long *argc, long **argv);
 
@@ -179,6 +181,11 @@ PIZ_EXTERN void pizEventCode (const PIZEvent *x, PIZEventCode *code)
 PIZ_EXTERN void pizEventType (const PIZEvent *x, PIZEventType *type)
 {
     (*type) = x->type;
+}
+
+PIZ_EXTERN void pizEventOption (const PIZEvent *x, long *option)
+{
+    (*option) = x->option;
 }
 
 #endif // PIZ_EXTERN_INLINE
