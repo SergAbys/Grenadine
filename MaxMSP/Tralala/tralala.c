@@ -63,6 +63,7 @@ int main (void)
     class_addmethod (c, (method)tralala_kill,       "kill",         0);
     class_addmethod (c, (method)tralala_zoulou,     "zoulou",       0);
     class_addmethod (c, (method)tralala_romeo,      "romeo",        0);
+    class_addmethod (c, (method)tralala_forget,     "forget",       0);
     class_addmethod (c, (method)tralala_bpm,        "bpm",          A_LONG, 0);
     class_addmethod (c, (method)tralala_chance,     "chance",       A_LONG, 0);
     class_addmethod (c, (method)tralala_velocity,   "velocity",     A_LONG, 0);
@@ -82,7 +83,7 @@ int main (void)
     class_addmethod (c, (method)tralala_change,     "change",       A_GIMME, 0);
     class_addmethod (c, (method)tralala_fill,       "fill",         A_GIMME, 0);
     class_addmethod (c, (method)tralala_cycle,      "cycle",        A_GIMME, 0);
-    class_addmethod (c, (method)tralala_november,   "november",     A_GIMME, 0);
+    class_addmethod (c, (method)tralala_juliet,     "juliet",       A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
 
@@ -311,6 +312,11 @@ void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     }
 }
 
+void tralala_forget (t_tralala *x)
+{
+    SEND (PIZ_EVENT_FORGET)
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -431,7 +437,7 @@ void tralala_romeo (t_tralala *x)
     SEND (PIZ_EVENT_ROMEO)
 }
 
-void tralala_november (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+void tralala_juliet (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
     long n = 1;
     
@@ -439,7 +445,7 @@ void tralala_november (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         n = atom_getlong (argv);
     } 
     
-    SEND_VALUE (PIZ_EVENT_NOVEMBER, n)
+    SEND_VALUE (PIZ_EVENT_JULIET, n)
 }
 
 // -------------------------------------------------------------------------------------------------------------

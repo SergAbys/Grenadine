@@ -58,6 +58,7 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizAgentUnloop,                 // PIZ_EVENT_UNLOOP
                                                     pizAgentBPM,                    // PIZ_EVENT_BPM
                                                     pizAgentLearn,                  // PIZ_EVENT_LEARN
+                                                    pizAgentForget,                 // PIZ_EVENT_FORGET
                                                     //
                                                     pizSequenceSetChance,           // PIZ_EVENT_CHANCE
                                                     pizSequenceSetVelocity,         // PIZ_EVENT_VELOCITY
@@ -81,8 +82,7 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizSequenceCycle,               // PIZ_EVENT_CYCLE 
                                                     pizSequenceAlgorithm,           // PIZ_EVENT_ZOULOU
                                                     pizSequenceAlgorithm,           // PIZ_EVENT_ROMEO
-                                                    pizSequenceNovember,            // PIZ_EVENT_NOVEMBER
-                                                    pizSequenceJuliet,              // PIZ_EVENT_JULIET 
+                                                    pizSequenceJuliet,              // PIZ_EVENT_JULIET
                                                     };             
                                                     
 // -------------------------------------------------------------------------------------------------------------
@@ -251,7 +251,7 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q)
     //
     pizEventCode (event, &code);
         
-    if (code <= PIZ_EVENT_LEARN) {
+    if (code < PIZ_EVENT_CHANCE) {
         o = x;
     } else {
         o = x->sequence;

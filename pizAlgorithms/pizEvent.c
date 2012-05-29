@@ -49,6 +49,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_RUN,              // PIZ_EVENT_UNLOOP
                                         PIZ_EVENT_RUN,              // PIZ_EVENT_BPM
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_LEARN
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_FORGET
                                         //
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CHANCE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_VELOCITY
@@ -72,8 +73,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CYCLE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_ZOULOU
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_ROMEO
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_NOVEMBER
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_JULIET   
+                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_JULIET
                                         //    
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_BPM
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_CHANCE
@@ -99,6 +99,7 @@ static const char *pizEventNames[ ] = { "Init",
                                         "Unloop",
                                         "Bpm",
                                         "Learn",
+                                        "Forget",
                                         //
                                         "Chance",
                                         "Velocity",
@@ -122,7 +123,6 @@ static const char *pizEventNames[ ] = { "Init",
                                         "Cycle",
                                         "Zoulou",
                                         "Romeo",
-                                        "November",
                                         "Juliet",
                                         //
                                         "Changed Bpm",

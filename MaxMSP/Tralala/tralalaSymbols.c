@@ -19,8 +19,6 @@ static t_symbol *tll_pitch                 = NULL;
 static t_symbol *tll_velocity              = NULL;
 static t_symbol *tll_duration              = NULL;
 static t_symbol *tll_channel               = NULL;
-static t_symbol *tll_binary                = NULL;
-static t_symbol *tll_ternary               = NULL;
 static t_symbol *tll_c                     = NULL;
 static t_symbol *tll_cSharp                = NULL;
 static t_symbol *tll_d                     = NULL;
@@ -88,8 +86,6 @@ void tralala_symbolsInit ( )
     tll_velocity              = gensym ("velocity");
     tll_duration              = gensym ("duration");
     tll_channel               = gensym ("channel");
-    tll_binary                = gensym ("binary");
-    tll_ternary               = gensym ("ternary");
     tll_c                     = gensym ("C");
     tll_cSharp                = gensym ("C#");
     tll_d                     = gensym ("D");
@@ -250,8 +246,6 @@ PIZError tralala_optionWithSymbol (const t_symbol *s, long *value)
     else if (s == tll_velocity) { *value = PIZ_VALUE_VELOCITY;  } 
     else if (s == tll_duration) { *value = PIZ_VALUE_DURATION;  } 
     else if (s == tll_channel)  { *value = PIZ_VALUE_CHANNEL;   }  
-    else if (s == tll_binary)   { *value = 2;  } 
-    else if (s == tll_ternary)  { *value = 3;  } 
     
     else { err = PIZ_ERROR; }
     //

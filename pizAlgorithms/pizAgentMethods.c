@@ -111,6 +111,14 @@ PIZError pizAgentBPM (PIZAgent *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
+PIZError pizAgentForget (PIZAgent *x, const PIZEvent *event)
+{
+    pizFactorOracleClear  (x->factorOracle);
+    pizGaloisLatticeClear (x->galoisLattice);
+        
+    return PIZ_GOOD;
+}
+
 PIZError pizAgentLearn (PIZAgent *x, const PIZEvent *event)
 {
     long argc;
