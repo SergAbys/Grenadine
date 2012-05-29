@@ -48,19 +48,17 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_EVENT_DATA_SIZE  14
+#define PIZ_EVENT_DATA_SIZE  12
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define DEBUGEVENT  if (event) {                                                                            \
-                        const char *name = NULL;                                                            \
-                        PIZTime t;                                                                          \
-                        pizTimeSet (&t);                                                                    \
-                        t = t / 1000000.;                                                                   \
-                        pizEventName (event, &name);                                                        \
-                        post ("%llu / %s / %s / %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld",   \
-                        t, name, __FUNCTION__,                                                              \
+#define DEBUGEVENT  if (event) {            \
+                        PIZTime t;          \
+                        pizTimeSet (&t);    \
+                        t = t / 1000000.;   \
+                        post ("%llu / %ld / %s / %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld",  \
+                        t, event->code, __FUNCTION__,                                               \
                         event->data[0],     \
                         event->data[1],     \
                         event->data[2],     \
@@ -72,9 +70,7 @@
                         event->data[8],     \
                         event->data[9],     \
                         event->data[10],    \
-                        event->data[11],    \
-                        event->data[12],    \
-                        event->data[13]);   \
+                        event->data[11]);   \
                     }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -164,7 +160,6 @@ void        pizEventCode    (const PIZEvent *x, PIZEventCode *code);
 void        pizEventType    (const PIZEvent *x, PIZEventType *type);
 PIZError    pizEventValue   (const PIZEvent *x, long *value);
 PIZError    pizEventPtr     (const PIZEvent *x, long *argc, long **argv);
-void        pizEventName    (const PIZEvent *x, const char **name);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

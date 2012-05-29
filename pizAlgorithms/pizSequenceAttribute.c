@@ -81,7 +81,7 @@ PIZ_LOCAL bool pizSequenceIsValidNoteValue (long value);
 #pragma mark -
 
 PIZError pizSequenceSetChance (PIZSequence *x, const PIZEvent *event)
-{
+{/*
     long value;
     
     if (!(pizEventValue (event, &value))) {
@@ -89,7 +89,7 @@ PIZError pizSequenceSetChance (PIZSequence *x, const PIZEvent *event)
             x->chance = value;
             x->flags |= PIZ_SEQUENCE_FLAG_CHANCE;
         }
-    }
+    }*/
     
     return PIZ_GOOD;
 }
@@ -107,7 +107,7 @@ PIZError pizSequenceSetVelocity (PIZSequence *x, const PIZEvent *event)
 }
 
 PIZError pizSequenceSetChannel (PIZSequence *x, const PIZEvent *event)
-{
+{/*
     long value;
     
     if (!(pizEventValue (event, &value))) {
@@ -115,13 +115,13 @@ PIZError pizSequenceSetChannel (PIZSequence *x, const PIZEvent *event)
             x->channel = value;
             x->flags |= PIZ_SEQUENCE_FLAG_CHANNEL;
         }
-    }
+    }*/
     
     return PIZ_GOOD;
 }
 
 PIZError pizSequenceSetChord (PIZSequence *x, const PIZEvent *event)
-{
+{/*
     long value;
     
     if (!(pizEventValue (event, &value))) {
@@ -129,13 +129,13 @@ PIZError pizSequenceSetChord (PIZSequence *x, const PIZEvent *event)
             x->chord = value;
             x->flags |= PIZ_SEQUENCE_FLAG_CHORD;
         }
-    }
+    }*/
     
     return PIZ_GOOD;
 }
 
 PIZError pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
-{
+{/*
     long value;
     
     if (!(pizEventValue (event, &value))) {
@@ -143,13 +143,13 @@ PIZError pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
             x->cell = value;
             x->flags |= PIZ_SEQUENCE_FLAG_CELL;
         }
-    }
+    }*/
     
     return PIZ_GOOD;
 }
 
 PIZError pizSequenceSetNoteValue (PIZSequence *x, const PIZEvent *event)
-{
+{/*
     long value;
     
     if (!(pizEventValue (event, &value))) {
@@ -157,7 +157,7 @@ PIZError pizSequenceSetNoteValue (PIZSequence *x, const PIZEvent *event)
             x->noteValue = value;
             x->flags |= PIZ_SEQUENCE_FLAG_NOTE_VALUE;
         }
-    }
+    }*/
     
     return PIZ_GOOD;
 }
@@ -167,10 +167,10 @@ PIZError pizSequenceSetNoteValue (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
 {
-    long     argc;
-    long     *argv = NULL;
+    //long     argc;
+    //long     *argv = NULL;
     PIZError err = PIZ_GOOD;
-
+    /*
     pizArrayClear (x->scale);
     
     if (!(pizEventPtr (event, &argc, &argv))) {
@@ -194,17 +194,17 @@ PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
         x->type = PIZ_SCALE_NONE;
     }
     
-    x->flags |= PIZ_SEQUENCE_FLAG_SCALE;
+    x->flags |= PIZ_SEQUENCE_FLAG_SCALE;*/
     
     return err;
 }   
 
 PIZError pizSequenceSetPattern (PIZSequence *x, const PIZEvent *event)
 {
-    long     argc;
-    long     *argv = NULL;
+    //long     argc;
+    //long     *argv = NULL;
     PIZError err = PIZ_GOOD;
-
+    /*
     pizArrayClear (x->pattern);
     
     if (!(pizEventPtr (event, &argc, &argv))) {
@@ -214,7 +214,7 @@ PIZError pizSequenceSetPattern (PIZSequence *x, const PIZEvent *event)
         }
     }
     
-    x->flags |= PIZ_SEQUENCE_FLAG_PATTERN;
+    x->flags |= PIZ_SEQUENCE_FLAG_PATTERN;*/
     
     return err;
 }

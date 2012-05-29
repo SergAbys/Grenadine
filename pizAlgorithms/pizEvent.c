@@ -91,56 +91,6 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_NOTE_PLAYED
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_END
                                         PIZ_EVENT_NOTIFICATION };   // PIZ_EVENT_WILL_END
-
-static const char *pizEventNames[ ] = { "Init",
-                                        "Play",
-                                        "Stop",
-                                        "Loop",
-                                        "Unloop",
-                                        "Bpm",
-                                        "Learn",
-                                        "Forget",
-                                        //
-                                        "Chance",
-                                        "Velocity",
-                                        "Channel",
-                                        "Chord",
-                                        "Cell",
-                                        "Note Value",
-                                        "Scale",
-                                        "Pattern",
-                                        "Note",
-                                        "Zone",
-                                        "Clear",
-                                        "Clean",
-                                        "Transpose",
-                                        "Rotate",
-                                        "Scramble",
-                                        "Sort",
-                                        "Change",
-                                        "Fill",
-                                        "Kill",
-                                        "Cycle",
-                                        "Zoulou",
-                                        "Romeo",
-                                        "Juliet",
-                                        //
-                                        "Changed Bpm",
-                                        "Changed Chance",
-                                        "Changed Velocity ",
-                                        "Changed Channel",
-                                        "Changed Chord",
-                                        "Changed Cell",
-                                        "Changed Note Value",
-                                        "Changed Scale",
-                                        "Changed Pattern",
-                                        "Changed Zone",
-                                        "Note Added",
-                                        "Note Changed",
-                                        "Note Removed",
-                                        "Note Played",
-                                        "End",
-                                        "Will End" };
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -210,11 +160,6 @@ PIZError pizEventPtr (const PIZEvent *x, long *argc, long **argv)
     }
     
     return err;
-}
-
-void pizEventName (const PIZEvent *x, const char **name)
-{
-    (*name) = pizEventNames[x->code];
 }
 
 // -------------------------------------------------------------------------------------------------------------

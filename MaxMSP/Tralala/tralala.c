@@ -8,44 +8,58 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "tralala.h"  
+#include "ext.h"
+#include "ext_obex.h"
+#include "pizAgent.h"
 #include "tralalaSymbols.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define SEND(code)                  PIZEvent *event = NULL;                                 \
-                                    if (event = pizEventNew ((code), -1, 0, NULL)) {        \
-                                        pizAgentAddEvent (x->agent, event);                 \
-                                    }
-#define SEND_VALUE(code, n)         PIZEvent *event = NULL;                                 \
-                                    if (event = pizEventNew ((code), -1, 1, &(n))) {        \
-                                        pizAgentAddEvent (x->agent, event);                 \
-                                    }
-#define SEND_ARGS(code, ac, av)     PIZEvent *event = NULL;                                 \
-                                    if (event = pizEventNew ((code), -1, (ac), (av))) {     \
-                                        pizAgentAddEvent (x->agent, event);                 \
-                                    }
-    
+typedef struct _tralala {
+	t_object    ob;
+    t_atom      a[4];
+    PIZAgent    *agent;
+	void        *leftOutlet;
+    void        *rightOutlet;
+	} t_tralala;
+                    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-long tralala_parse (long argc, t_atom *argv, long *values);
-    
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
+void *tralala_new       (t_symbol *s, long argc, t_atom *argv);
 
-static t_symbol *tll_end = NULL; 
-static t_symbol *tll_willEnd = NULL; 
-static t_class  *tralala_class = NULL;
-    
+void tralala_free       (t_tralala *x);
+void tralala_assist     (t_tralala *x, void *b, long m, long a, char *s);
+void tralala_notify     (void *ptr, PIZEvent *event);
+
+void tralala_bang       (t_tralala *x);
+void tralala_play       (t_tralala *x);
+void tralala_stop       (t_tralala *x);
+void tralala_loop       (t_tralala *x);
+void tralala_unloop     (t_tralala *x);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+#define SEND(code)      PIZEvent *event = NULL;                                 \
+                        if (event = pizEventNew ((code), -1, 0, NULL)) {        \
+                            pizAgentAddEvent (x->agent, event);                 \
+                        }
+                    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 #pragma mark ---
 #pragma mark -
+
+static t_class  *tralala_class;
+
+static t_symbol *tll_end; 
+static t_symbol *tll_willEnd; 
 
 int main (void)
 {	
@@ -53,37 +67,11 @@ int main (void)
     
     c = class_new ("tralala", (method)tralala_new, (method)tralala_free, sizeof(t_tralala), 0L, A_GIMME, 0);
 
-    class_addmethod (c, (method)tralala_assist,     "assist",       A_CANT, 0);
-    class_addmethod (c, (method)tralala_bang,       "bang",         0);
-    class_addmethod (c, (method)tralala_play,       "play",         0);
-    class_addmethod (c, (method)tralala_stop,       "stop",         0);
-    class_addmethod (c, (method)tralala_loop,       "loop",         0);
-    class_addmethod (c, (method)tralala_unloop,     "unloop",       0);
-    class_addmethod (c, (method)tralala_clear,      "clear",        0);
-    class_addmethod (c, (method)tralala_kill,       "kill",         0);
-    class_addmethod (c, (method)tralala_zoulou,     "zoulou",       0);
-    class_addmethod (c, (method)tralala_romeo,      "romeo",        0);
-    class_addmethod (c, (method)tralala_forget,     "forget",       0);
-    class_addmethod (c, (method)tralala_bpm,        "bpm",          A_LONG, 0);
-    class_addmethod (c, (method)tralala_chance,     "chance",       A_LONG, 0);
-    class_addmethod (c, (method)tralala_velocity,   "velocity",     A_LONG, 0);
-    class_addmethod (c, (method)tralala_channel,    "channel",      A_LONG, 0);
-    class_addmethod (c, (method)tralala_chord,      "chord",        A_LONG, 0);
-    class_addmethod (c, (method)tralala_transpose,  "transpose",    A_LONG, 0);
-    class_addmethod (c, (method)tralala_clean,      "clean",        A_LONG, 0);
-    class_addmethod (c, (method)tralala_int,        "int",          A_LONG, 0);
-    class_addmethod (c, (method)tralala_list,       "list",         A_GIMME, 0);
-    class_addmethod (c, (method)tralala_cell,       "cell",         A_GIMME, 0);
-    class_addmethod (c, (method)tralala_scale,      "scale",        A_GIMME, 0);
-    class_addmethod (c, (method)tralala_pattern,    "pattern",      A_GIMME, 0);
-    class_addmethod (c, (method)tralala_note,       "note",         A_GIMME, 0);
-    class_addmethod (c, (method)tralala_rotate,     "rotate",       A_GIMME, 0);
-    class_addmethod (c, (method)tralala_scramble,   "scramble",     A_GIMME, 0);
-    class_addmethod (c, (method)tralala_sort,       "sort",         A_GIMME, 0);
-    class_addmethod (c, (method)tralala_change,     "change",       A_GIMME, 0);
-    class_addmethod (c, (method)tralala_fill,       "fill",         A_GIMME, 0);
-    class_addmethod (c, (method)tralala_cycle,      "cycle",        A_GIMME, 0);
-    class_addmethod (c, (method)tralala_juliet,     "juliet",       A_GIMME, 0);
+    class_addmethod (c, (method)tralala_bang,       "bang",     0);
+    class_addmethod (c, (method)tralala_play,       "play",     0);
+    class_addmethod (c, (method)tralala_stop,       "stop",     0);
+    class_addmethod (c, (method)tralala_loop,       "loop",     0);
+    class_addmethod (c, (method)tralala_unloop,     "unloop",   0);
 
     class_register (CLASS_BOX, c);
 
@@ -106,16 +94,19 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
     t_tralala *x = NULL;
 
     if (x = (t_tralala *)object_alloc (tralala_class)) {
-        if (x->agent = pizAgentNew ( )) {
+    //
+    if (x->agent = pizAgentNew ( )) {
+    
+        x->rightOutlet = outlet_new ((t_object *)x, NULL);
+        x->leftOutlet  = listout ((t_object *)x);
         
-            x->rightOutlet = outlet_new ((t_object *)x, NULL);
-            x->leftOutlet  = listout ((t_object *)x);
-            pizAgentAttach (x->agent, (void *)x, tralala_notify);
-            
-        } else {
-            object_free (x);
-            x = NULL;
-        }
+        pizAgentAttach (x->agent, (void *)x, tralala_notify);
+        
+    } else {
+        object_free (x);
+        x = NULL;
+    }
+    //
     }	
 	
 	return x;
@@ -135,7 +126,7 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
     } else {	
         switch (a) {
             case 0 : sprintf (s, "(List) Notes Played"); break;
-            case 1 : sprintf (s, "(Anything) Messages"); break;
+            case 1 : sprintf (s, "Messages"); break;
         }
     }
 }
@@ -155,10 +146,11 @@ void tralala_notify (void *ptr, PIZEvent *event)
     pizEventCode (event, &code);
     
     if (code == PIZ_EVENT_NOTE_PLAYED) {
-        pizEventPtr (event, &argc, &argv);
-        atom_setlong_array (4, x->a, argc - 1, argv + 1);
-        outlet_list (x->leftOutlet, NULL, 4, x->a); 
-    
+    //
+    pizEventPtr (event, &argc, &argv);
+    atom_setlong_array (4, x->a, argc - 1, argv + 1);
+    outlet_list (x->leftOutlet, NULL, 4, x->a); 
+    //
     } else if (code == PIZ_EVENT_END) {
         outlet_anything (x->rightOutlet, tll_end, 0, NULL); 
 
@@ -204,6 +196,7 @@ void tralala_unloop (t_tralala *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+/*
 void tralala_bpm (t_tralala *x, long n) 
 {   
     SEND_VALUE (PIZ_EVENT_BPM, n)
@@ -448,12 +441,6 @@ void tralala_juliet (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     SEND_VALUE (PIZ_EVENT_JULIET, n)
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-#pragma mark ---
-#pragma mark -
-
 long tralala_parse (long argc, t_atom *argv, long *values)
 {
     long i;
@@ -478,7 +465,7 @@ long tralala_parse (long argc, t_atom *argv, long *values)
     }
     
     return (v + o);
-} 
+} */
 
 // -------------------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------:x

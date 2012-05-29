@@ -203,11 +203,11 @@ void *pizAgentNotificationLoop (void *agent)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizAgentAddNotification (PIZAgent *x, PIZEventCode n, long tag, long ac, long *av)
+void pizAgentAddNotification (PIZAgent *x, PIZEventCode n, long ac, long *av)
 {
     PIZEvent *notification = NULL;
 
-    if (notification = pizEventNew (n, tag, ac, av)) {
+    if (notification = pizEventNew (n, -1, ac, av)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
         PIZ_AGENT_QUEUE (x->notification, notification)
@@ -298,7 +298,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
     
     if (err == PIZ_GOOD) {
         if (pizSequenceIsAtEnd (x->sequence)) {
-            pizAgentAddNotification (x, PIZ_EVENT_WILL_END, -1, 0, NULL);
+            pizAgentAddNotification (x, PIZ_EVENT_WILL_END, 0, NULL);
         }
         k = false;  
         
@@ -312,7 +312,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         }
         
         pizSequenceGoToStart (x->sequence);
-        pizAgentAddNotification (x, PIZ_EVENT_END, -1, 0, NULL);
+        pizAgentAddNotification (x, PIZ_EVENT_END, 0, NULL);
   
     } else if (err == PIZ_MEMORY) { 
         PIZ_AGENT_MEMORY 

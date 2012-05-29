@@ -92,35 +92,35 @@ PIZError pizAgentUnloop (PIZAgent *x, const PIZEvent *event)
 }
 
 PIZError pizAgentBPM (PIZAgent *x, const PIZEvent *event)
-{
+{/*
     long value;
     
     if (!(pizEventValue (event, &value))) {
     //
     if ((value >= PIZ_MINIMUM_BPM) && (value <= PIZ_MAXIMUM_BPM) && (value != x->bpm)) {
         x->bpm = value;
-        pizAgentAddNotification (x, PIZ_EVENT_CHANGED_BPM, -1, 1, &x->bpm);
+        pizAgentAddNotification (x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
             
         pizNanoSet     (&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);    
         pizTimeCopy    (&x->grainEnd, &x->grainStart);
         pizTimeAddNano (&x->grainEnd, &x->grainSize);
     }
     //
-    }
+    }*/
     
     return PIZ_GOOD;
 }
 
 PIZError pizAgentForget (PIZAgent *x, const PIZEvent *event)
-{
+{/*
     pizFactorOracleClear  (x->factorOracle);
-    pizGaloisLatticeClear (x->galoisLattice);
+    pizGaloisLatticeClear (x->galoisLattice);*/
         
     return PIZ_GOOD;
 }
 
 PIZError pizAgentLearn (PIZAgent *x, const PIZEvent *event)
-{
+{/*
     long argc;
     long *argv = NULL;
         
@@ -139,7 +139,7 @@ PIZError pizAgentLearn (PIZAgent *x, const PIZEvent *event)
         pizArrayClear (x->toBeLearned);
     }
     //
-    }
+    }*/
         
     return PIZ_GOOD;
 }
