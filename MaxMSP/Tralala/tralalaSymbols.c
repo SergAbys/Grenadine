@@ -9,7 +9,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "tralalaSymbols.h"
-#include "pizSequence.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -17,6 +16,13 @@
 
 PIZError tralala_parseValue     (const t_symbol *s, long *value);
 PIZError tralala_parseOption    (const t_symbol *s, long *value);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+static t_dictionary *tll_code;
+static t_dictionary *tll_value;
+static t_dictionary *tll_option;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -91,8 +97,6 @@ static t_symbol *tll_sixteenthDotted       = NULL;
 
 void tralala_symbolsInit ( )
 {
-    tll_up                    = gensym ("up");
-    tll_down                  = gensym ("down");
     tll_pitch                 = gensym ("pitch");
     tll_velocity              = gensym ("velocity");
     tll_duration              = gensym ("duration");
@@ -109,6 +113,9 @@ void tralala_symbolsInit ( )
     tll_a                     = gensym ("A");
     tll_aSharp                = gensym ("A#");
     tll_b                     = gensym ("B");
+    
+    tll_up                    = gensym ("up");
+    tll_down                  = gensym ("down");
     tll_ionian                = gensym ("ionian");
     tll_dorian                = gensym ("dorian");
     tll_phrygian              = gensym ("phrygian");

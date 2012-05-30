@@ -19,7 +19,7 @@
 
 typedef struct _tralala {
 	t_object    ob;
-    t_atom      a[4];
+    t_atom      temp[4];
     PIZAgent    *agent;
 	void        *leftOutlet;
     void        *rightOutlet;
@@ -148,8 +148,8 @@ void tralala_notify (void *ptr, PIZEvent *event)
     if (code == PIZ_EVENT_NOTE_PLAYED) {
     //
     pizEventPtr (event, &argc, &argv);
-    atom_setlong_array (4, x->a, argc - 1, argv + 1);
-    outlet_list (x->leftOutlet, NULL, 4, x->a); 
+    atom_setlong_array (4, x->temp, argc - 1, argv + 1);
+    outlet_list (x->leftOutlet, NULL, 4, x->temp); 
     //
     } else if (code == PIZ_EVENT_END) {
         outlet_anything (x->rightOutlet, tll_end, 0, NULL); 
