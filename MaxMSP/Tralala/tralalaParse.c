@@ -1,5 +1,5 @@
 /*
- *  tralalaSymbols.c
+ *  tralalaParse.c
  *
  *  nicolas.danet@free.fr
  *
@@ -8,19 +8,16 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "tralalaSymbols.h"
+#include "tralalaParse.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError tralala_parseValue     (const t_symbol *s, long *value);
-PIZError tralala_parseOption    (const t_symbol *s, long *value);
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-//static t_dictionary *tll_code;
+static t_dictionary *tll_code;
 static t_dictionary *tll_value;
 static t_dictionary *tll_option;
 
@@ -30,10 +27,39 @@ static t_dictionary *tll_option;
 #pragma mark ---
 #pragma mark -
 
-void tralala_symbolsInit ( )
+void tralala_parseInit ( )
 {
+    tll_code   = dictionary_new ( );
     tll_value  = dictionary_new ( );
     tll_option = dictionary_new ( );
+    
+    dictionary_appendlong (tll_code, gensym ("bpm"),        PIZ_EVENT_BPM); 
+    dictionary_appendlong (tll_code, gensym ("learn"),      PIZ_EVENT_LEARN); 
+    dictionary_appendlong (tll_code, gensym ("list"),       PIZ_EVENT_LEARN);
+    dictionary_appendlong (tll_code, gensym ("forget"),     PIZ_EVENT_FORGET);
+    dictionary_appendlong (tll_code, gensym ("count"),      PIZ_EVENT_COUNT); 
+    dictionary_appendlong (tll_code, gensym ("dump"),       PIZ_EVENT_DUMP); 
+    dictionary_appendlong (tll_code, gensym ("chance"),     PIZ_EVENT_CHANCE);
+    dictionary_appendlong (tll_code, gensym ("velocity"),   PIZ_EVENT_VELOCITY);
+    dictionary_appendlong (tll_code, gensym ("channel"),    PIZ_EVENT_CHANNEL); 
+    dictionary_appendlong (tll_code, gensym ("chord"),      PIZ_EVENT_CHORD); 
+    dictionary_appendlong (tll_code, gensym ("cell"),       PIZ_EVENT_CELL);
+    dictionary_appendlong (tll_code, gensym ("value"),      PIZ_EVENT_NOTE_VALUE);
+    dictionary_appendlong (tll_code, gensym ("pattern"),    PIZ_EVENT_PATTERN); 
+    dictionary_appendlong (tll_code, gensym ("zone"),       PIZ_EVENT_ZONE); 
+    dictionary_appendlong (tll_code, gensym ("clear"),      PIZ_EVENT_CLEAR);
+    dictionary_appendlong (tll_code, gensym ("clean"),      PIZ_EVENT_CLEAN);
+    dictionary_appendlong (tll_code, gensym ("transpose"),  PIZ_EVENT_TRANSPOSE); 
+    dictionary_appendlong (tll_code, gensym ("rotate"),     PIZ_EVENT_ROTATE); 
+    dictionary_appendlong (tll_code, gensym ("scramble"),   PIZ_EVENT_SCRAMBLE);
+    dictionary_appendlong (tll_code, gensym ("sort"),       PIZ_EVENT_SORT);
+    dictionary_appendlong (tll_code, gensym ("change"),     PIZ_EVENT_CHANGE); 
+    dictionary_appendlong (tll_code, gensym ("fill"),       PIZ_EVENT_FILL); 
+    dictionary_appendlong (tll_code, gensym ("kill"),       PIZ_EVENT_KILL);
+    dictionary_appendlong (tll_code, gensym ("cycle"),      PIZ_EVENT_CYCLE);
+    dictionary_appendlong (tll_code, gensym ("zoulou"),     PIZ_EVENT_ZOULOU); 
+    dictionary_appendlong (tll_code, gensym ("romeo"),      PIZ_EVENT_ROMEO);
+    dictionary_appendlong (tll_code, gensym ("juliet"),     PIZ_EVENT_JULIET); 
     
     dictionary_appendlong (tll_option, gensym ("C"),        PIZ_KEY_C); 
     dictionary_appendlong (tll_option, gensym ("C#"),       PIZ_KEY_C_SHARP); 
@@ -99,29 +125,28 @@ void tralala_symbolsInit ( )
     dictionary_appendlong (tll_value,  gensym ("sixteenth dotted"),         PIZ_SIXTEENTH_NOTE_DOTTED);
 }
 
-void tralala_parseToEvent (PIZEvent *event) 
+void tralala_parseToAgent (t_symbol *s, long argc, t_atom *argv)
 {
-    ;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-#pragma mark ---
-#pragma mark -
-
-PIZError tralala_parseValue (const t_symbol *s, long *value)
-{
-    PIZError err = PIZ_ERROR;
+    long i, k = 0;
+    long option = 0;
+    //long code = 0;
+    long data[PIZ_EVENT_DATA_SIZE];
     
-    return err;
-}
-
-PIZError tralala_parseOption (const t_symbol *s, long *value)
-{
-    PIZError err = PIZ_ERROR;
-    
-    return err;
+    for (i = 0; i < argc; i++) {
+    //
+    if ((atom_gettype (argv + i) == A_LONG) && (k < PIZ_EVENT_DATA_SIZE)) {
+        data[k] = atom_getlong (argv + i);
+        k ++;
+        
+    } else if (atom_gettype (argv + i) == A_SYM) {
+        dictionary_getlong (tll_option, atom_getsym (argv + i), &option);
+        
+        if (dictionary_getlong (tll_value, atom_getsym (argv + i), data) == MAX_ERR_NONE) {
+            k = MAX (1, k);
+        }
+    }
+    //
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------

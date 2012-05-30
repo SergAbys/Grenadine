@@ -8,10 +8,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "ext.h"
-#include "ext_obex.h"
-#include "pizAgent.h"
-#include "tralalaSymbols.h"
+#include "tralalaParse.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -50,7 +47,6 @@ void tralala_stop       (t_tralala *x);
 void tralala_loop       (t_tralala *x);
 void tralala_unloop     (t_tralala *x);
 
-void tralala_int        (t_tralala *x, long n);
 void tralala_list       (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_anything   (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
                     
@@ -76,7 +72,6 @@ int main (void)
     class_addmethod (c, (method)tralala_stop,       "stop",     0);
     class_addmethod (c, (method)tralala_loop,       "loop",     0);
     class_addmethod (c, (method)tralala_unloop,     "unloop",   0);
-    class_addmethod (c, (method)tralala_int,        "int",      0);
     class_addmethod (c, (method)tralala_list,       "list",     A_GIMME, 0);
     class_addmethod (c, (method)tralala_anything,   "anything", A_GIMME, 0);
 
@@ -84,7 +79,7 @@ int main (void)
 
     tralala_class = c;
     
-    tralala_symbolsInit ( );
+    tralala_parseInit ( );
     
     tll_end     = gensym ("end");
     tll_willEnd = gensym ("will");
@@ -203,23 +198,14 @@ void tralala_unloop (t_tralala *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_int (t_tralala *x, long n)
-{
-
-}
-
 void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    if (s) {
-        post ("%s", s->s_name);
-    }
+    tralala_parseToAgent (s, argc, argv);
 }
 
 void tralala_anything (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    if (s) {
-        post ("%s", s->s_name);
-    }
+    tralala_parseToAgent (s, argc, argv);
 }
 
 // -------------------------------------------------------------------------------------------------------------

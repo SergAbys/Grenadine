@@ -59,6 +59,8 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizAgentBPM,                    // PIZ_EVENT_BPM
                                                     pizAgentLearn,                  // PIZ_EVENT_LEARN
                                                     pizAgentForget,                 // PIZ_EVENT_FORGET
+                                                    NULL,                           // PIZ_EVENT_COUNT
+                                                    NULL,                           // PIZ_EVENT_DUMP
                                                     //
                                                     pizSequenceSetChance,           // PIZ_EVENT_CHANCE
                                                     pizSequenceSetVelocity,         // PIZ_EVENT_VELOCITY

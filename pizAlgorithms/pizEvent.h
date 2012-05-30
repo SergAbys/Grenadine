@@ -93,8 +93,8 @@ typedef enum _PIZEventCode {
     PIZ_EVENT_BPM,
     PIZ_EVENT_LEARN,
     PIZ_EVENT_FORGET,
-    //PIZ_EVENT_COUNT,
-    //PIZ_EVENT_DUMP,
+    PIZ_EVENT_COUNT,
+    PIZ_EVENT_DUMP,
     //
     PIZ_EVENT_CHANCE,
     PIZ_EVENT_VELOCITY,
