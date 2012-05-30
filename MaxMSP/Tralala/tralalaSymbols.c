@@ -20,74 +20,9 @@ PIZError tralala_parseOption    (const t_symbol *s, long *value);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static t_dictionary *tll_code;
+//static t_dictionary *tll_code;
 static t_dictionary *tll_value;
 static t_dictionary *tll_option;
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-static t_symbol *tll_up                    = NULL;
-static t_symbol *tll_down                  = NULL;
-static t_symbol *tll_pitch                 = NULL;
-static t_symbol *tll_velocity              = NULL;
-static t_symbol *tll_duration              = NULL;
-static t_symbol *tll_channel               = NULL;
-static t_symbol *tll_c                     = NULL;
-static t_symbol *tll_cSharp                = NULL;
-static t_symbol *tll_d                     = NULL;
-static t_symbol *tll_dSharp                = NULL;
-static t_symbol *tll_e                     = NULL;
-static t_symbol *tll_f                     = NULL;
-static t_symbol *tll_fSharp                = NULL;
-static t_symbol *tll_g                     = NULL;
-static t_symbol *tll_gSharp                = NULL;
-static t_symbol *tll_a                     = NULL;
-static t_symbol *tll_aSharp                = NULL;
-static t_symbol *tll_b                     = NULL;
-static t_symbol *tll_ionian                = NULL;
-static t_symbol *tll_dorian                = NULL;
-static t_symbol *tll_phrygian              = NULL;
-static t_symbol *tll_lydian                = NULL;
-static t_symbol *tll_mixolydian            = NULL;
-static t_symbol *tll_aeolian               = NULL;
-static t_symbol *tll_locrian               = NULL;
-static t_symbol *tll_natural               = NULL;
-static t_symbol *tll_harmonic              = NULL;
-static t_symbol *tll_melodic               = NULL;
-static t_symbol *tll_wholeTone             = NULL;
-static t_symbol *tll_pentatonicMajor       = NULL;
-static t_symbol *tll_pentatonicMinor       = NULL;
-static t_symbol *tll_octatonicHalfWhole    = NULL;
-static t_symbol *tll_octatonicWholeHalf    = NULL;
-static t_symbol *tll_seventhMajor          = NULL;
-static t_symbol *tll_seventhMinor          = NULL;
-static t_symbol *tll_seventhDominant       = NULL;
-static t_symbol *tll_seventhMajorSixth     = NULL;
-static t_symbol *tll_seventhMinorSixth     = NULL;
-static t_symbol *tll_seventhHalfDiminished = NULL;
-static t_symbol *tll_seventhDiminished     = NULL;
-static t_symbol *tll_seventhSuspended      = NULL;
-static t_symbol *tll_seventhSharpFive      = NULL;
-static t_symbol *tll_seventhFlatFive       = NULL;
-static t_symbol *tll_none                  = NULL;
-static t_symbol *tll_whole                 = NULL;
-static t_symbol *tll_half                  = NULL;
-static t_symbol *tll_quarter               = NULL;
-static t_symbol *tll_eighth                = NULL;
-static t_symbol *tll_sixteenth             = NULL;
-static t_symbol *tll_thirtySecond          = NULL;
-static t_symbol *tll_wholeTriplet          = NULL;
-static t_symbol *tll_halfTriplet           = NULL;
-static t_symbol *tll_quarterTriplet        = NULL;
-static t_symbol *tll_eighthTriplet         = NULL;
-static t_symbol *tll_sixteenthTriplet      = NULL;
-static t_symbol *tll_thirtySecondTriplet   = NULL;
-static t_symbol *tll_wholeDotted           = NULL;
-static t_symbol *tll_halfDotted            = NULL;
-static t_symbol *tll_quarterDotted         = NULL;
-static t_symbol *tll_eighthDotted          = NULL;
-static t_symbol *tll_sixteenthDotted       = NULL;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -97,68 +32,71 @@ static t_symbol *tll_sixteenthDotted       = NULL;
 
 void tralala_symbolsInit ( )
 {
-    tll_pitch                 = gensym ("pitch");
-    tll_velocity              = gensym ("velocity");
-    tll_duration              = gensym ("duration");
-    tll_channel               = gensym ("channel");
-    tll_c                     = gensym ("C");
-    tll_cSharp                = gensym ("C#");
-    tll_d                     = gensym ("D");
-    tll_dSharp                = gensym ("D#");
-    tll_e                     = gensym ("E");
-    tll_f                     = gensym ("F");
-    tll_fSharp                = gensym ("F#");
-    tll_g                     = gensym ("G");
-    tll_gSharp                = gensym ("G#");
-    tll_a                     = gensym ("A");
-    tll_aSharp                = gensym ("A#");
-    tll_b                     = gensym ("B");
+    tll_value  = dictionary_new ( );
+    tll_option = dictionary_new ( );
     
-    tll_up                    = gensym ("up");
-    tll_down                  = gensym ("down");
-    tll_ionian                = gensym ("ionian");
-    tll_dorian                = gensym ("dorian");
-    tll_phrygian              = gensym ("phrygian");
-    tll_lydian                = gensym ("lydian");
-    tll_mixolydian            = gensym ("mixolydian");
-    tll_aeolian               = gensym ("aeolian");
-    tll_locrian               = gensym ("locrian");
-    tll_natural               = gensym ("natural");
-    tll_harmonic              = gensym ("harmonic");
-    tll_melodic               = gensym ("melodic");
-    tll_wholeTone             = gensym ("whole tone");
-    tll_pentatonicMajor       = gensym ("pentatonic major");
-    tll_pentatonicMinor       = gensym ("pentatonic minor");
-    tll_octatonicHalfWhole    = gensym ("octatonic half/whole");
-    tll_octatonicWholeHalf    = gensym ("octatonic whole/half");
-    tll_seventhMajor          = gensym ("7th major");
-    tll_seventhMinor          = gensym ("7th minor");
-    tll_seventhDominant       = gensym ("7th dominant");
-    tll_seventhMajorSixth     = gensym ("7th major sixth");
-    tll_seventhMinorSixth     = gensym ("7th minor sixth");
-    tll_seventhHalfDiminished = gensym ("7th half-diminished");
-    tll_seventhDiminished     = gensym ("7th diminished");
-    tll_seventhSuspended      = gensym ("7th dominant suspended");
-    tll_seventhSharpFive      = gensym ("7th dominant sharp five");
-    tll_seventhFlatFive       = gensym ("7th dominant flat five");
-    tll_none                  = gensym ("none");
-    tll_whole                 = gensym ("whole");
-    tll_half                  = gensym ("half");
-    tll_quarter               = gensym ("quarter");
-    tll_eighth                = gensym ("eighth");
-    tll_sixteenth             = gensym ("sixteenth");
-    tll_thirtySecond          = gensym ("thirty-second");
-    tll_wholeTriplet          = gensym ("whole triplet");
-    tll_halfTriplet           = gensym ("half triplet");
-    tll_quarterTriplet        = gensym ("quarter triplet");
-    tll_eighthTriplet         = gensym ("eighth triplet");
-    tll_sixteenthTriplet      = gensym ("sixteenth triplet");
-    tll_thirtySecondTriplet   = gensym ("thirty-second triplet");
-    tll_wholeDotted           = gensym ("whole dotted");
-    tll_halfDotted            = gensym ("half dotted");
-    tll_quarterDotted         = gensym ("quarter dotted");
-    tll_eighthDotted          = gensym ("eighth dotted");
-    tll_sixteenthDotted       = gensym ("sixteenth dotted");
+    dictionary_appendlong (tll_option, gensym ("C"),        PIZ_KEY_C); 
+    dictionary_appendlong (tll_option, gensym ("C#"),       PIZ_KEY_C_SHARP); 
+    dictionary_appendlong (tll_option, gensym ("D"),        PIZ_KEY_D); 
+    dictionary_appendlong (tll_option, gensym ("D#"),       PIZ_KEY_D_SHARP); 
+    dictionary_appendlong (tll_option, gensym ("E"),        PIZ_KEY_E);
+    dictionary_appendlong (tll_option, gensym ("F"),        PIZ_KEY_F);
+    dictionary_appendlong (tll_option, gensym ("F#"),       PIZ_KEY_F_SHARP);
+    dictionary_appendlong (tll_option, gensym ("G"),        PIZ_KEY_G);
+    dictionary_appendlong (tll_option, gensym ("G#"),       PIZ_KEY_G_SHARP);
+    dictionary_appendlong (tll_option, gensym ("A"),        PIZ_KEY_A);
+    dictionary_appendlong (tll_option, gensym ("A#"),       PIZ_KEY_A_SHARP);
+    dictionary_appendlong (tll_option, gensym ("B"),        PIZ_KEY_B);
+    dictionary_appendlong (tll_option, gensym ("pitch"),    PIZ_VALUE_PITCH); 
+    dictionary_appendlong (tll_option, gensym ("velocity"), PIZ_VALUE_VELOCITY); 
+    dictionary_appendlong (tll_option, gensym ("duration"), PIZ_VALUE_DURATION); 
+    dictionary_appendlong (tll_option, gensym ("channel"),  PIZ_VALUE_CHANNEL); 
+
+    dictionary_appendlong (tll_value,  gensym ("up"),                       0); 
+    dictionary_appendlong (tll_value,  gensym ("down"),                     1);
+    dictionary_appendlong (tll_value,  gensym ("ionian"),                   PIZ_IONIAN);
+    dictionary_appendlong (tll_value,  gensym ("dorian"),                   PIZ_DORIAN);
+    dictionary_appendlong (tll_value,  gensym ("phrygian"),                 PIZ_PHRYGIAN);
+    dictionary_appendlong (tll_value,  gensym ("lydian"),                   PIZ_LYDIAN);
+    dictionary_appendlong (tll_value,  gensym ("mixolydian"),               PIZ_MIXOLYDIAN);
+    dictionary_appendlong (tll_value,  gensym ("aeolian"),                  PIZ_AEOLIAN);
+    dictionary_appendlong (tll_value,  gensym ("locrian"),                  PIZ_LOCRIAN);
+    dictionary_appendlong (tll_value,  gensym ("natural"),                  PIZ_NATURAL);
+    dictionary_appendlong (tll_value,  gensym ("harmonic"),                 PIZ_HARMONIC);
+    dictionary_appendlong (tll_value,  gensym ("melodic"),                  PIZ_MELODIC);
+    dictionary_appendlong (tll_value,  gensym ("whole tone"),               PIZ_WHOLE_TONE);
+    dictionary_appendlong (tll_value,  gensym ("pentatonic major"),         PIZ_PENTATONIC_MAJOR);
+    dictionary_appendlong (tll_value,  gensym ("pentatonic minor"),         PIZ_PENTATONIC_MINOR);
+    dictionary_appendlong (tll_value,  gensym ("octatonic half/whole"),     PIZ_OCTATONIC_HALF_WHOLE);
+    dictionary_appendlong (tll_value,  gensym ("octatonic whole/half"),     PIZ_OCTATONIC_WHOLE_HALF);
+    dictionary_appendlong (tll_value,  gensym ("7th major"),                PIZ_SEVENTH_MAJOR);
+    dictionary_appendlong (tll_value,  gensym ("7th minor"),                PIZ_SEVENTH_MINOR);
+    dictionary_appendlong (tll_value,  gensym ("7th dominant"),             PIZ_SEVENTH_DOMINANT);
+    dictionary_appendlong (tll_value,  gensym ("7th major sixth"),          PIZ_SEVENTH_MAJOR_SIXTH);
+    dictionary_appendlong (tll_value,  gensym ("7th minor sixth"),          PIZ_SEVENTH_MINOR_SIXTH);
+    dictionary_appendlong (tll_value,  gensym ("7th half-diminished"),      PIZ_SEVENTH_HALF_DIMINISHED);
+    dictionary_appendlong (tll_value,  gensym ("7th diminished"),           PIZ_SEVENTH_DIMINISHED);
+    dictionary_appendlong (tll_value,  gensym ("7th dominant suspended"),   PIZ_SEVENTH_SUSPENDED);
+    dictionary_appendlong (tll_value,  gensym ("7th dominant sharp five"),  PIZ_SEVENTH_SHARP_FIVE);
+    dictionary_appendlong (tll_value,  gensym ("7th dominant flat five"),   PIZ_SEVENTH_FLAT_FIVE);
+    dictionary_appendlong (tll_value,  gensym ("none"),                     PIZ_NOTE_VALUE_NONE);
+    dictionary_appendlong (tll_value,  gensym ("whole"),                    PIZ_WHOLE_NOTE);
+    dictionary_appendlong (tll_value,  gensym ("half"),                     PIZ_HALF_NOTE);
+    dictionary_appendlong (tll_value,  gensym ("quarter"),                  PIZ_QUARTER_NOTE);
+    dictionary_appendlong (tll_value,  gensym ("eighth"),                   PIZ_EIGHTH_NOTE);
+    dictionary_appendlong (tll_value,  gensym ("sixteenth"),                PIZ_SIXTEENTH_NOTE);
+    dictionary_appendlong (tll_value,  gensym ("thirty-second"),            PIZ_THIRTY_SECOND_NOTE);
+    dictionary_appendlong (tll_value,  gensym ("whole triplet"),            PIZ_WHOLE_NOTE_TRIPLET);
+    dictionary_appendlong (tll_value,  gensym ("half triplet"),             PIZ_HALF_NOTE_TRIPLET);
+    dictionary_appendlong (tll_value,  gensym ("quarter triplet"),          PIZ_QUARTER_NOTE_TRIPLET);
+    dictionary_appendlong (tll_value,  gensym ("eighth triplet"),           PIZ_EIGHTH_NOTE_TRIPLET);
+    dictionary_appendlong (tll_value,  gensym ("sixteenth triplet"),        PIZ_SIXTEENTH_NOTE_TRIPLET);
+    dictionary_appendlong (tll_value,  gensym ("thirty-second triplet"),    PIZ_THIRTY_SECOND_NOTE_TRIPLET);
+    dictionary_appendlong (tll_value,  gensym ("whole dotted"),             PIZ_WHOLE_NOTE_DOTTED);
+    dictionary_appendlong (tll_value,  gensym ("half dotted"),              PIZ_HALF_NOTE_DOTTED);
+    dictionary_appendlong (tll_value,  gensym ("quarter dotted"),           PIZ_QUARTER_NOTE_DOTTED);
+    dictionary_appendlong (tll_value,  gensym ("eighth dotted"),            PIZ_EIGHTH_NOTE_DOTTED);
+    dictionary_appendlong (tll_value,  gensym ("sixteenth dotted"),         PIZ_SIXTEENTH_NOTE_DOTTED);
 }
 
 void tralala_parseToEvent (PIZEvent *event) 
@@ -176,60 +114,6 @@ PIZError tralala_parseValue (const t_symbol *s, long *value)
 {
     PIZError err = PIZ_ERROR;
     
-    if (s && value) {
-    //
-    err = PIZ_GOOD;
-    
-    if      (s == tll_up)                       { *value = 0; } 
-    else if (s == tll_down)                     { *value = 1; } 
-    else if (s == tll_whole)                    { *value = PIZ_WHOLE_NOTE;                  } 
-    else if (s == tll_half)                     { *value = PIZ_HALF_NOTE;                   } 
-    else if (s == tll_quarter)                  { *value = PIZ_QUARTER_NOTE;                } 
-    else if (s == tll_eighth)                   { *value = PIZ_EIGHTH_NOTE;                 } 
-    else if (s == tll_sixteenth)                { *value = PIZ_SIXTEENTH_NOTE;              } 
-    else if (s == tll_thirtySecond)             { *value = PIZ_THIRTY_SECOND_NOTE;          } 
-    else if (s == tll_wholeTriplet)             { *value = PIZ_WHOLE_NOTE_TRIPLET;          } 
-    else if (s == tll_halfTriplet)              { *value = PIZ_HALF_NOTE_TRIPLET;           } 
-    else if (s == tll_quarterTriplet)           { *value = PIZ_QUARTER_NOTE_TRIPLET;        }
-    else if (s == tll_eighthTriplet)            { *value = PIZ_EIGHTH_NOTE_TRIPLET;         }
-    else if (s == tll_sixteenthTriplet)         { *value = PIZ_SIXTEENTH_NOTE_TRIPLET;      }
-    else if (s == tll_thirtySecondTriplet)      { *value = PIZ_THIRTY_SECOND_NOTE_TRIPLET;  } 
-    else if (s == tll_wholeDotted)              { *value = PIZ_WHOLE_NOTE_DOTTED;           } 
-    else if (s == tll_halfDotted)               { *value = PIZ_HALF_NOTE_DOTTED;            } 
-    else if (s == tll_quarterDotted)            { *value = PIZ_QUARTER_NOTE_DOTTED;         } 
-    else if (s == tll_eighthDotted)             { *value = PIZ_EIGHTH_NOTE_DOTTED;          } 
-    else if (s == tll_sixteenthDotted)          { *value = PIZ_SIXTEENTH_NOTE_DOTTED;       } 
-    else if (s == tll_none)                     { *value = PIZ_NOTE_VALUE_NONE;             } 
-    else if (s == tll_ionian)                   { *value = PIZ_IONIAN;                      } 
-    else if (s == tll_dorian)                   { *value = PIZ_DORIAN;                      } 
-    else if (s == tll_phrygian)                 { *value = PIZ_PHRYGIAN;                    } 
-    else if (s == tll_lydian)                   { *value = PIZ_LYDIAN;                      } 
-    else if (s == tll_mixolydian)               { *value = PIZ_MIXOLYDIAN;                  } 
-    else if (s == tll_aeolian)                  { *value = PIZ_AEOLIAN;                     } 
-    else if (s == tll_locrian)                  { *value = PIZ_LOCRIAN;                     }
-    else if (s == tll_natural)                  { *value = PIZ_NATURAL;                     } 
-    else if (s == tll_harmonic)                 { *value = PIZ_HARMONIC;                    } 
-    else if (s == tll_melodic)                  { *value = PIZ_MELODIC;                     } 
-    else if (s == tll_wholeTone)                { *value = PIZ_WHOLE_TONE;                  } 
-    else if (s == tll_pentatonicMajor)          { *value = PIZ_PENTATONIC_MAJOR;            } 
-    else if (s == tll_pentatonicMinor)          { *value = PIZ_PENTATONIC_MINOR;            } 
-    else if (s == tll_octatonicHalfWhole)       { *value = PIZ_OCTATONIC_HALF_WHOLE;        } 
-    else if (s == tll_octatonicWholeHalf)       { *value = PIZ_OCTATONIC_WHOLE_HALF;        } 
-    else if (s == tll_seventhMajor)             { *value = PIZ_SEVENTH_MAJOR;               } 
-    else if (s == tll_seventhDominant)          { *value = PIZ_SEVENTH_DOMINANT;            } 
-    else if (s == tll_seventhMinor)             { *value = PIZ_SEVENTH_MINOR;               } 
-    else if (s == tll_seventhMajorSixth)        { *value = PIZ_SEVENTH_MAJOR_SIXTH;         } 
-    else if (s == tll_seventhMinorSixth)        { *value = PIZ_SEVENTH_MINOR_SIXTH;         }
-    else if (s == tll_seventhHalfDiminished)    { *value = PIZ_SEVENTH_HALF_DIMINISHED;     } 
-    else if (s == tll_seventhDiminished)        { *value = PIZ_SEVENTH_DIMINISHED;          } 
-    else if (s == tll_seventhSuspended)         { *value = PIZ_SEVENTH_SUSPENDED;           } 
-    else if (s == tll_seventhSharpFive)         { *value = PIZ_SEVENTH_SHARP_FIVE;          } 
-    else if (s == tll_seventhFlatFive)          { *value = PIZ_SEVENTH_FLAT_FIVE;           } 
-    
-    else { err = PIZ_ERROR; }
-    //
-    }
-            
     return err;
 }
 
@@ -237,31 +121,6 @@ PIZError tralala_parseOption (const t_symbol *s, long *value)
 {
     PIZError err = PIZ_ERROR;
     
-    if (s && value) {
-    //
-    err = PIZ_GOOD;
-    
-    if      (s == tll_pitch)        { *value = PIZ_VALUE_PITCH;     } 
-    else if (s == tll_velocity)     { *value = PIZ_VALUE_VELOCITY;  } 
-    else if (s == tll_duration)     { *value = PIZ_VALUE_DURATION;  } 
-    else if (s == tll_channel)      { *value = PIZ_VALUE_CHANNEL;   }  
-    else if (s == tll_c)            { *value = PIZ_KEY_C;           } 
-    else if (s == tll_cSharp)       { *value = PIZ_KEY_C_SHARP;     } 
-    else if (s == tll_d)            { *value = PIZ_KEY_D;           } 
-    else if (s == tll_dSharp)       { *value = PIZ_KEY_D_SHARP;     } 
-    else if (s == tll_e)            { *value = PIZ_KEY_E;           } 
-    else if (s == tll_f)            { *value = PIZ_KEY_F;           } 
-    else if (s == tll_fSharp)       { *value = PIZ_KEY_F_SHARP;     }
-    else if (s == tll_g)            { *value = PIZ_KEY_G;           } 
-    else if (s == tll_gSharp)       { *value = PIZ_KEY_G_SHARP;     } 
-    else if (s == tll_a)            { *value = PIZ_KEY_A;           } 
-    else if (s == tll_aSharp)       { *value = PIZ_KEY_A_SHARP;     } 
-    else if (s == tll_b)            { *value = PIZ_KEY_B;           }
-    
-    else { err = PIZ_ERROR; }
-    //
-    }
-            
     return err;
 }
 

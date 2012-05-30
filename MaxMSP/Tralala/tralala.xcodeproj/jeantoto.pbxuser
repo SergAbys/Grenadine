@@ -145,9 +145,9 @@
 	};
 	9676982513B7784800FE77F4 /* tralala.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 11775}}";
-			sepNavSelRange = "{2965, 0}";
-			sepNavVisRect = "{{0, 11132}, {1233, 643}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1233, 12525}}";
+			sepNavSelRange = "{6579, 0}";
+			sepNavVisRect = "{{0, 5238}, {1233, 643}}";
 			sepNavWindowFrame = "{{0, 6}, {1278, 772}}";
 		};
 	};
@@ -169,9 +169,9 @@
 	};
 	96DC326315581A5500C26797 /* tralalaSymbols.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 6725}}";
-			sepNavSelRange = "{7984, 45}";
-			sepNavVisRect = "{{0, 4010}, {1147, 156}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 2550}}";
+			sepNavSelRange = "{561, 0}";
+			sepNavVisRect = "{{0, 688}, {1147, 156}}";
 			sepNavWindowFrame = "{{7, 4}, {1280, 774}}";
 		};
 	};
@@ -180,7 +180,7 @@
 			sepNavIntBoundsRect = "{{0, 0}, {1235, 750}}";
 			sepNavSelRange = "{636, 0}";
 			sepNavVisRect = "{{0, 105}, {1235, 645}}";
-			sepNavWindowFrame = "{{1, 3}, {1280, 774}}";
+			sepNavWindowFrame = "{{1, 4}, {1280, 774}}";
 		};
 	};
 	96EDD4C813BDCC1A0058E023 /* XCBreakpointsBucket */ = {

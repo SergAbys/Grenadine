@@ -49,6 +49,10 @@ void tralala_play       (t_tralala *x);
 void tralala_stop       (t_tralala *x);
 void tralala_loop       (t_tralala *x);
 void tralala_unloop     (t_tralala *x);
+
+void tralala_int        (t_tralala *x, long n);
+void tralala_list       (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_anything   (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
                     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -72,6 +76,9 @@ int main (void)
     class_addmethod (c, (method)tralala_stop,       "stop",     0);
     class_addmethod (c, (method)tralala_loop,       "loop",     0);
     class_addmethod (c, (method)tralala_unloop,     "unloop",   0);
+    class_addmethod (c, (method)tralala_int,        "int",      0);
+    class_addmethod (c, (method)tralala_list,       "list",     A_GIMME, 0);
+    class_addmethod (c, (method)tralala_anything,   "anything", A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
 
@@ -190,6 +197,29 @@ void tralala_loop (t_tralala *x)
 void tralala_unloop (t_tralala *x) 
 {   
     SEND (PIZ_EVENT_UNLOOP)
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void tralala_int (t_tralala *x, long n)
+{
+
+}
+
+void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    if (s) {
+        post ("%s", s->s_name);
+    }
+}
+
+void tralala_anything (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+{
+    if (s) {
+        post ("%s", s->s_name);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
