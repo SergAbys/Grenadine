@@ -41,6 +41,7 @@ void tralala_parseInit ( )
     dictionary_appendlong (tll_code, gensym ("chord"),      PIZ_EVENT_CHORD); 
     dictionary_appendlong (tll_code, gensym ("cell"),       PIZ_EVENT_CELL);
     dictionary_appendlong (tll_code, gensym ("value"),      PIZ_EVENT_NOTE_VALUE);
+    dictionary_appendlong (tll_code, gensym ("scale"),      PIZ_EVENT_SCALE);
     dictionary_appendlong (tll_code, gensym ("pattern"),    PIZ_EVENT_PATTERN); 
     dictionary_appendlong (tll_code, gensym ("zone"),       PIZ_EVENT_ZONE); 
     dictionary_appendlong (tll_code, gensym ("clear"),      PIZ_EVENT_CLEAR);
@@ -76,6 +77,7 @@ void tralala_parseInit ( )
 
     dictionary_appendlong (tll_value,  gensym ("up"),                       0); 
     dictionary_appendlong (tll_value,  gensym ("down"),                     1);
+    dictionary_appendlong (tll_value,  gensym ("none"),                     PIZ_NONE);
     dictionary_appendlong (tll_value,  gensym ("ionian"),                   PIZ_IONIAN);
     dictionary_appendlong (tll_value,  gensym ("dorian"),                   PIZ_DORIAN);
     dictionary_appendlong (tll_value,  gensym ("phrygian"),                 PIZ_PHRYGIAN);
@@ -101,7 +103,6 @@ void tralala_parseInit ( )
     dictionary_appendlong (tll_value,  gensym ("7th dominant suspended"),   PIZ_SEVENTH_SUSPENDED);
     dictionary_appendlong (tll_value,  gensym ("7th dominant sharp five"),  PIZ_SEVENTH_SHARP_FIVE);
     dictionary_appendlong (tll_value,  gensym ("7th dominant flat five"),   PIZ_SEVENTH_FLAT_FIVE);
-    dictionary_appendlong (tll_value,  gensym ("none"),                     PIZ_NOTE_VALUE_NONE);
     dictionary_appendlong (tll_value,  gensym ("whole"),                    PIZ_WHOLE_NOTE);
     dictionary_appendlong (tll_value,  gensym ("half"),                     PIZ_HALF_NOTE);
     dictionary_appendlong (tll_value,  gensym ("quarter"),                  PIZ_QUARTER_NOTE);

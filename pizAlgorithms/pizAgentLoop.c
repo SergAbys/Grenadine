@@ -209,7 +209,7 @@ void pizAgentAddNotification (PIZAgent *x, PIZEventCode n, long ac, long *av)
 {
     PIZEvent *notification = NULL;
 
-    if (notification = pizEventNew (n, -1, 0, ac, av)) {
+    if (notification = pizEventNew (n, PIZ_NONE, 0, ac, av)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
         PIZ_AGENT_QUEUE (x->notification, notification)
@@ -393,7 +393,7 @@ void pizAgentEventLoopSleep (PIZAgent *x)
     
     pizTimespecWithNano (ptrA, &ns);
     
-    while ((nanosleep (ptrA, ptrB) == -1) && (errno == EINTR)) {
+    while ((nanosleep (ptrA, ptrB) == PIZ_NONE) && (errno == EINTR)) {
         temp = ptrA;
         ptrA = ptrB;
         ptrB = temp;

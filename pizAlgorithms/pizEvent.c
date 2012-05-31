@@ -105,9 +105,10 @@ PIZEvent *pizEventNew (PIZEventCode code, long tag, long option, long argc, cons
     PIZEvent *x = NULL;
     
     if (x = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        x->code = code;
-        x->type = pizEventTypes[code];
-        x->tag  = tag; 
+        x->code    = code;
+        x->type    = pizEventTypes[code];
+        x->tag     = tag;
+        x->option  = option; 
             
         if (argc && argv) {
             long i;
@@ -149,7 +150,7 @@ PIZError pizEventValue (const PIZEvent *x, long *value)
 {
     PIZError err = PIZ_ERROR;
     
-    if (x->size == 1) {
+    if (x->size) {
         err = PIZ_GOOD;
         (*value) = x->data[0];
     } 

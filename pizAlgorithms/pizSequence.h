@@ -96,45 +96,28 @@
 struct _PIZAgent;
 
 enum {
-    PIZ_WHOLE_NOTE_DOTTED           = 144,
-    PIZ_WHOLE_NOTE                  = 96,
-    PIZ_WHOLE_NOTE_TRIPLET          = 64,
-    PIZ_HALF_NOTE_DOTTED            = 72,
-    PIZ_HALF_NOTE                   = 48,
-    PIZ_HALF_NOTE_TRIPLET           = 32,
-    PIZ_QUARTER_NOTE_DOTTED         = 36,
-    PIZ_QUARTER_NOTE                = 24,
-    PIZ_QUARTER_NOTE_TRIPLET        = 16,
-    PIZ_EIGHTH_NOTE_DOTTED          = 18,
-    PIZ_EIGHTH_NOTE                 = 12,
-    PIZ_EIGHTH_NOTE_TRIPLET         = 8,
-    PIZ_SIXTEENTH_NOTE_DOTTED       = 9,
-    PIZ_SIXTEENTH_NOTE              = 6,
-    PIZ_SIXTEENTH_NOTE_TRIPLET      = 4,
-    PIZ_THIRTY_SECOND_NOTE          = 3,
     PIZ_THIRTY_SECOND_NOTE_TRIPLET  = 2,
-    PIZ_NOTE_VALUE_NONE             = 1
+    PIZ_THIRTY_SECOND_NOTE          = 3,
+    PIZ_SIXTEENTH_NOTE_TRIPLET      = 4,
+    PIZ_SIXTEENTH_NOTE              = 6,
+    PIZ_SIXTEENTH_NOTE_DOTTED       = 9,
+    PIZ_EIGHTH_NOTE_TRIPLET         = 8,
+    PIZ_EIGHTH_NOTE                 = 12,
+    PIZ_EIGHTH_NOTE_DOTTED          = 18,
+    PIZ_QUARTER_NOTE_TRIPLET        = 16,
+    PIZ_QUARTER_NOTE                = 24,
+    PIZ_QUARTER_NOTE_DOTTED         = 36,
+    PIZ_HALF_NOTE_TRIPLET           = 32,
+    PIZ_HALF_NOTE                   = 48,
+    PIZ_HALF_NOTE_DOTTED            = 72,
+    PIZ_WHOLE_NOTE_TRIPLET          = 64,
+    PIZ_WHOLE_NOTE                  = 96,
+    PIZ_WHOLE_NOTE_DOTTED           = 144
     };
 
 enum {
-    PIZ_KEY_C                       = 0,
-    PIZ_KEY_C_SHARP                 = 1,
-    PIZ_KEY_D,
-    PIZ_KEY_D_SHARP,
-    PIZ_KEY_E,
-    PIZ_KEY_F,
-    PIZ_KEY_F_SHARP,
-    PIZ_KEY_G,
-    PIZ_KEY_G_SHARP,
-    PIZ_KEY_A,
-    PIZ_KEY_A_SHARP,
-    PIZ_KEY_B
-    };
-    
-enum {
-    PIZ_SCALE_NONE                  = -1,
-    PIZ_IONIAN                      =  0,
-    PIZ_DORIAN                      =  1,
+    PIZ_IONIAN                      = 0,
+    PIZ_DORIAN                      = 1,
     PIZ_PHRYGIAN,
     PIZ_LYDIAN,
     PIZ_MIXOLYDIAN,
@@ -159,17 +142,27 @@ enum {
     PIZ_SEVENTH_SHARP_FIVE,
     PIZ_SEVENTH_FLAT_FIVE
     };
+    
+enum {
+    PIZ_KEY_C                       = 0,
+    PIZ_KEY_C_SHARP                 = 1,
+    PIZ_KEY_D,
+    PIZ_KEY_D_SHARP,
+    PIZ_KEY_E,
+    PIZ_KEY_F,
+    PIZ_KEY_F_SHARP,
+    PIZ_KEY_G,
+    PIZ_KEY_G_SHARP,
+    PIZ_KEY_A,
+    PIZ_KEY_A_SHARP,
+    PIZ_KEY_B
+    };
 
 enum {
     PIZ_VALUE_PITCH                 = 0,
     PIZ_VALUE_VELOCITY              = 1,
     PIZ_VALUE_DURATION              = 2,
     PIZ_VALUE_CHANNEL               = 3
-    };
-
-enum {
-    PIZ_FACTOR_ORACLE               = 0,
-    PIZ_GALOIS_LATTICE 
     };
 
 // -------------------------------------------------------------------------------------------------------------

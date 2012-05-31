@@ -73,7 +73,7 @@ PIZFactorOracle *pizFactorOracleNew (long argc, long *argv)
             x->straightRatio     = PIZ_DEFAULT_STRAIGHT;
             x->seed              = PIZ_SEED;
             
-            x->nodes[0].refer = -1;
+            x->nodes[0].refer = PIZ_NONE;
             x->nodes[0].lrs   = 0;
             
         } else {
@@ -150,8 +150,8 @@ PIZError pizFactorOracleAdd (PIZFactorOracle *x, long argc, long *argv)
     }
     
     if (!err) {
-        x->nodes[p].refer = -1;
-        x->nodes[p].lrs   =  0;
+        x->nodes[p].refer = PIZ_NONE;
+        x->nodes[p].lrs   = 0;
         
         if (p == x->peak) {
             if (x->nodes[p].values = pizArrayNew (PIZ_INIT_SIZE_ARRAY)) {
@@ -181,7 +181,7 @@ PIZError pizFactorOracleAdd (PIZFactorOracle *x, long argc, long *argv)
         t = p - 1;
         j = x->nodes[(p - 1)].refer;
         
-        while ((j > -1) && !(pizArrayContainsValue (x->nodes[j].values, argv[i]))) {
+        while ((j > PIZ_NONE) && !(pizArrayContainsValue (x->nodes[j].values, argv[i]))) {
             if (!(pizArrayAppend (x->nodes[j].values, argv[i]))) {
                 if (pizArrayAppend (x->nodes[j].destinations, p)) {
                     pizArrayRemoveLast (x->nodes[j].values);
@@ -195,7 +195,7 @@ PIZError pizFactorOracleAdd (PIZFactorOracle *x, long argc, long *argv)
             j = x->nodes[j].refer;
         }
         
-        if (j != -1) {   
+        if (j != PIZ_NONE) {   
             long destinationIndex = pizArrayIndexOfValue (x->nodes[j].values, argv[i]);
             w = pizArrayAtIndex (x->nodes[j].destinations, destinationIndex);
         }
@@ -234,7 +234,7 @@ PIZError pizFactorOracleClear (PIZFactorOracle *x)
     x->index   = 1;
     x->shuttle = 0;
     
-    x->nodes[0].refer = -1;
+    x->nodes[0].refer = PIZ_NONE;
     x->nodes[0].lrs   = 0;
     
     pizArrayClear (x->nodes[0].values);

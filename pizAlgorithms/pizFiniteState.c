@@ -73,7 +73,7 @@ PIZFiniteState *pizFiniteStateNew (long argc, long *argv)
         
         if (x->stock = (PIZFiniteStateNode *)malloc (PIZ_ITEMSET_SIZE * sizeof(PIZFiniteStateNode))) {
             x->count       = 0;
-            x->shuttle     = -1;
+            x->shuttle     = PIZ_NONE;
             x->jumpChance  = 0;
             x->threshold   = PIZ_DEFAULT_THRESHOLD;
             
@@ -225,7 +225,7 @@ PIZError pizFiniteStateClear (PIZFiniteState *x)
     }
         
     x->count      = 0;
-    x->shuttle    = -1;
+    x->shuttle    = PIZ_NONE;
     x->jumpChance = 0;
     
     pizStackClear (x->ticketMachine);
@@ -250,7 +250,7 @@ PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)
         long i;
         bool jump = false;
         
-        if (x->shuttle == -1) {
+        if (x->shuttle == PIZ_NONE) {
             long a, j, h ;
             
             x->lotteryIndex = 0;
@@ -298,7 +298,7 @@ PIZError pizFiniteStateProceed (PIZFiniteState *x, long argc, long *argv)
                 x->jumpChance += PIZ_INCREMENT_JUMP;
             }
         } else {
-            x->shuttle      = -1;
+            x->shuttle      = PIZ_NONE;
             x->jumpChance   = 0;
         }
     }
@@ -360,7 +360,7 @@ PIZ_INLINE PIZError pizFiniteStateMergeNodes (PIZFiniteState *x)
             pizStackPush (x->ticketMachine, a);
             
             if (x->shuttle == a) {
-                x->shuttle = -1;
+                x->shuttle = PIZ_NONE;
             }
             
             err = PIZ_GOOD;

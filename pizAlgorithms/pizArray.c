@@ -160,7 +160,7 @@ void pizArrayRemoveLast (PIZArray *x)
 
 long pizArrayIndexOfValue (const PIZArray *x, long value)
 {
-    long i, k = -1;
+    long i, k = PIZ_NONE;
     
     for (i = 0; i < x->index; i++) {
         if (x->values[i] == value) {

@@ -106,7 +106,7 @@ PIZSequence *pizSequenceNew (struct _PIZAgent *agent)
         x->channel   = PIZ_DEFAULT_CHANNEL;
         x->chord     = 0;
         x->key       = PIZ_KEY_C;
-        x->type      = PIZ_SCALE_NONE;
+        x->type      = PIZ_NONE;
         x->cell      = PIZ_EIGHTH_NOTE;
         x->noteValue = PIZ_EIGHTH_NOTE;
         

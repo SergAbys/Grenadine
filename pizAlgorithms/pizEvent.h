@@ -57,8 +57,8 @@
                         PIZTime t;          \
                         pizTimeSet (&t);    \
                         t = t / 1000000.;   \
-                        post ("%llu / %ld / %s / %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld",  \
-                        t, event->code, __FUNCTION__,                                               \
+                        post ("%llu / %ld / %s / %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld / %ld",    \
+                        t, event->code, __FUNCTION__,                                                       \
                         event->data[0],     \
                         event->data[1],     \
                         event->data[2],     \
@@ -70,14 +70,15 @@
                         event->data[8],     \
                         event->data[9],     \
                         event->data[10],    \
-                        event->data[11]);   \
+                        event->data[11],    \
+                        event->option);     \
                     }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 typedef enum _PIZEventType {
-    PIZ_EVENT_RUN               = 1,
+    PIZ_EVENT_RUN                   = 1,
     PIZ_EVENT_LOW,
     PIZ_EVENT_HIGH,
     PIZ_EVENT_NOTIFICATION
@@ -85,58 +86,58 @@ typedef enum _PIZEventType {
 
 typedef enum _PIZEventCode {
     //
-    PIZ_EVENT_INIT              = 0,
-    PIZ_EVENT_PLAY              = 1,
-    PIZ_EVENT_STOP,
-    PIZ_EVENT_LOOP,
-    PIZ_EVENT_UNLOOP,
-    PIZ_EVENT_BPM,
-    PIZ_EVENT_LEARN,
-    PIZ_EVENT_FORGET,
-    PIZ_EVENT_COUNT,
-    PIZ_EVENT_DUMP,
+    PIZ_EVENT_INIT                  = 0,
+    PIZ_EVENT_PLAY                  = 1,
+    PIZ_EVENT_STOP                  = 2,
+    PIZ_EVENT_LOOP                  = 3,
+    PIZ_EVENT_UNLOOP                = 4,
+    PIZ_EVENT_BPM                   = 5,
+    PIZ_EVENT_LEARN                 = 6,
+    PIZ_EVENT_FORGET                = 7,
+    PIZ_EVENT_COUNT                 = 8,
+    PIZ_EVENT_DUMP                  = 9,
     //
-    PIZ_EVENT_CHANCE,
-    PIZ_EVENT_VELOCITY,
-    PIZ_EVENT_CHANNEL,
-    PIZ_EVENT_CHORD,
-    PIZ_EVENT_CELL,
-    PIZ_EVENT_NOTE_VALUE,
-    PIZ_EVENT_SCALE,
-    PIZ_EVENT_PATTERN,
-    PIZ_EVENT_NOTE,
-    PIZ_EVENT_ZONE,
-    PIZ_EVENT_CLEAR,
-    PIZ_EVENT_CLEAN,
-    PIZ_EVENT_TRANSPOSE,
-    PIZ_EVENT_ROTATE,
-    PIZ_EVENT_SCRAMBLE,
-    PIZ_EVENT_SORT,
-    PIZ_EVENT_CHANGE,
-    PIZ_EVENT_FILL,
-    PIZ_EVENT_KILL,
-    PIZ_EVENT_CYCLE, 
-    PIZ_EVENT_ZOULOU,
-    PIZ_EVENT_ROMEO,
-    PIZ_EVENT_JULIET,
+    PIZ_EVENT_CHANCE                = 10,
+    PIZ_EVENT_VELOCITY              = 11,
+    PIZ_EVENT_CHANNEL               = 12,
+    PIZ_EVENT_CHORD                 = 13,
+    PIZ_EVENT_CELL                  = 14,
+    PIZ_EVENT_NOTE_VALUE            = 15,
+    PIZ_EVENT_SCALE                 = 16,
+    PIZ_EVENT_PATTERN               = 17,
+    PIZ_EVENT_NOTE                  = 18,
+    PIZ_EVENT_ZONE                  = 19,
+    PIZ_EVENT_CLEAR                 = 20,
+    PIZ_EVENT_CLEAN                 = 21,
+    PIZ_EVENT_TRANSPOSE             = 22,
+    PIZ_EVENT_ROTATE                = 23,
+    PIZ_EVENT_SCRAMBLE              = 24,
+    PIZ_EVENT_SORT                  = 25,
+    PIZ_EVENT_CHANGE                = 26,
+    PIZ_EVENT_FILL                  = 27,
+    PIZ_EVENT_KILL                  = 28,
+    PIZ_EVENT_CYCLE                 = 29, 
+    PIZ_EVENT_ZOULOU                = 30,
+    PIZ_EVENT_ROMEO                 = 31,
+    PIZ_EVENT_JULIET                = 32,
     //    
-    PIZ_EVENT_CHANGED_BPM,
-    PIZ_EVENT_CHANGED_CHANCE,
-    PIZ_EVENT_CHANGED_VELOCITY,
-    PIZ_EVENT_CHANGED_CHANNEL,
-    PIZ_EVENT_CHANGED_CHORD,
-    PIZ_EVENT_CHANGED_CELL,
-    PIZ_EVENT_CHANGED_NOTE_VALUE,
-    PIZ_EVENT_CHANGED_SCALE,
-    PIZ_EVENT_CHANGED_PATTERN,
-    PIZ_EVENT_CHANGED_ZONE,
-    PIZ_EVENT_NOTE_ADDED,
-    PIZ_EVENT_NOTE_CHANGED,
-    PIZ_EVENT_NOTE_REMOVED,
-    PIZ_EVENT_NOTE_PLAYED,
-    PIZ_EVENT_END,
-    PIZ_EVENT_WILL_END
-     //
+    PIZ_EVENT_CHANGED_BPM           = 33,
+    PIZ_EVENT_CHANGED_CHANCE        = 34,
+    PIZ_EVENT_CHANGED_VELOCITY      = 35,
+    PIZ_EVENT_CHANGED_CHANNEL       = 36,
+    PIZ_EVENT_CHANGED_CHORD         = 37,
+    PIZ_EVENT_CHANGED_CELL          = 38,
+    PIZ_EVENT_CHANGED_NOTE_VALUE    = 39,
+    PIZ_EVENT_CHANGED_SCALE         = 40,
+    PIZ_EVENT_CHANGED_PATTERN       = 41,
+    PIZ_EVENT_CHANGED_ZONE          = 42,
+    PIZ_EVENT_NOTE_ADDED            = 43,
+    PIZ_EVENT_NOTE_CHANGED          = 44,
+    PIZ_EVENT_NOTE_REMOVED          = 45,
+    PIZ_EVENT_NOTE_PLAYED           = 46,
+    PIZ_EVENT_END                   = 47,
+    PIZ_EVENT_WILL_END              = 48
+    //
     } PIZEventCode;
 
 // -------------------------------------------------------------------------------------------------------------

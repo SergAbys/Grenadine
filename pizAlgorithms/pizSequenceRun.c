@@ -63,6 +63,116 @@ void pizSequenceGoToStart (PIZSequence *x)
     x->index = x->start;
 }
 
+PIZError pizSequenceRefresh (PIZSequence *x)
+{
+    long     i;
+    PIZNote  *note = NULL;
+    PIZError err = PIZ_GOOD; 
+    
+    if (x->flags) {
+    //
+    if (x->flags & PIZ_SEQUENCE_FLAG_ZONE) {
+        long a[ ] = { x->start, x->end, x->down, x->up };
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_ZONE, PIZ_NONE, 4, a);
+    }
+    
+    if (x->flags & PIZ_SEQUENCE_FLAG_CHANCE) {
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHANCE, PIZ_NONE, 1, &x->chance);
+    }
+    
+    if (x->flags & PIZ_SEQUENCE_FLAG_VELOCITY) {
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_VELOCITY, PIZ_NONE, 1, &x->velocity);
+    }
+    
+    if (x->flags & PIZ_SEQUENCE_FLAG_CHANNEL) {
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHANNEL, PIZ_NONE, 1, &x->channel);
+    }
+    
+    if (x->flags & PIZ_SEQUENCE_FLAG_CHORD) {
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHORD, PIZ_NONE, 1, &x->chord);
+    }
+    
+    if (x->flags & PIZ_SEQUENCE_FLAG_CELL) {
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CELL, PIZ_NONE, 1, &x->cell);
+    }
+    
+    if (x->flags & PIZ_SEQUENCE_FLAG_NOTE_VALUE) {
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_NOTE_VALUE, PIZ_NONE, 1, &x->noteValue);
+    }
+    
+    if (x->flags & PIZ_SEQUENCE_FLAG_SCALE) {
+        long a[ ] = { x->type, x->key };
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_SCALE, PIZ_NONE, 2, a);
+    }
+    
+    if (x->flags & PIZ_SEQUENCE_FLAG_PATTERN) {
+        long argc  = pizArrayCount (x->pattern);
+        long *argv = pizArrayPtr (x->pattern);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_PATTERN, PIZ_NONE, argc, argv);
+    }
+    
+    x->flags = PIZ_SEQUENCE_FLAG_NONE;
+    //
+    }
+    
+    if (pizItemsetCount (&x->removedNotes)) {
+    //
+    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+        if (pizItemsetIsSetAtIndex (&x->removedNotes, i)) { 
+            err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_REMOVED, i, 0, NULL);
+        } 
+    }
+    
+    pizItemsetClear (&x->removedNotes);
+    //
+    }
+    
+    if (pizItemsetCount (&x->addedNotes)) {
+    //
+    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+        if (pizItemsetIsSetAtIndex (&x->addedNotes, i)) {
+            if (!(pizHashTablePtrByKey (x->lookup, i, (void **)&note))) {
+            
+                long a[ ] = { note->position, 
+                              note->values[PIZ_VALUE_PITCH],
+                              note->values[PIZ_VALUE_VELOCITY],
+                              note->values[PIZ_VALUE_DURATION], 
+                              note->values[PIZ_VALUE_CHANNEL] };
+                
+                err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_ADDED, i, 5, a);
+            }
+            pizItemsetUnsetAtIndex (&x->changedNotes, i);
+        } 
+    }
+
+    pizItemsetClear (&x->addedNotes);
+    //
+    }
+    
+    if (pizItemsetCount (&x->changedNotes)) {
+    //
+    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+        if (pizItemsetIsSetAtIndex (&x->changedNotes, i)) {
+            if (!(pizHashTablePtrByKey (x->lookup, i, (void **)&note))) {
+            
+                long a[ ] = { note->position,
+                              note->values[PIZ_VALUE_PITCH],
+                              note->values[PIZ_VALUE_VELOCITY],
+                              note->values[PIZ_VALUE_DURATION], 
+                              note->values[PIZ_VALUE_CHANNEL] };
+                
+                err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_CHANGED, i, 5, a);
+            }
+        } 
+    }
+    
+    pizItemsetClear (&x->changedNotes);
+    //
+    }
+    
+    return err;
+}
+
 PIZError pizSequenceStep (PIZSequence *x)
 {
     PIZError err = PIZ_ERROR;
@@ -147,116 +257,6 @@ PIZError pizSequenceStepBlank (PIZSequence *x)
     if (x->index < x->end) {
         err = PIZ_GOOD;
         x->index ++;    
-    }
-    
-    return err;
-}
-
-PIZError pizSequenceRefresh (PIZSequence *x)
-{
-    long     i;
-    PIZNote  *note = NULL;
-    PIZError err = PIZ_GOOD; 
-    
-    if (x->flags) {
-    //
-    if (x->flags & PIZ_SEQUENCE_FLAG_ZONE) {
-        long a[ ] = { x->start, x->end, x->down, x->up };
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_ZONE, -1, 4, a);
-    }
-    
-    if (x->flags & PIZ_SEQUENCE_FLAG_CHANCE) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHANCE, -1, 1, &x->chance);
-    }
-    
-    if (x->flags & PIZ_SEQUENCE_FLAG_VELOCITY) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_VELOCITY, -1, 1, &x->velocity);
-    }
-    
-    if (x->flags & PIZ_SEQUENCE_FLAG_CHANNEL) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHANNEL, -1, 1, &x->channel);
-    }
-    
-    if (x->flags & PIZ_SEQUENCE_FLAG_CHORD) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHORD, -1, 1, &x->chord);
-    }
-    
-    if (x->flags & PIZ_SEQUENCE_FLAG_CELL) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CELL, -1, 1, &x->cell);
-    }
-    
-    if (x->flags & PIZ_SEQUENCE_FLAG_NOTE_VALUE) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_NOTE_VALUE, -1, 1, &x->noteValue);
-    }
-    
-    if (x->flags & PIZ_SEQUENCE_FLAG_SCALE) {
-        long a[ ] = { x->key, x->type };
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_SCALE, -1, 2, a);
-    }
-    
-    if (x->flags & PIZ_SEQUENCE_FLAG_PATTERN) {
-        long argc  = pizArrayCount (x->pattern);
-        long *argv = pizArrayPtr (x->pattern);
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_PATTERN, -1, argc, argv);
-    }
-    
-    x->flags = PIZ_SEQUENCE_FLAG_NONE;
-    //
-    }
-    
-    if (pizItemsetCount (&x->removedNotes)) {
-    //
-    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
-        if (pizItemsetIsSetAtIndex (&x->removedNotes, i)) { 
-            err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_REMOVED, i, 0, NULL);
-        } 
-    }
-    
-    pizItemsetClear (&x->removedNotes);
-    //
-    }
-    
-    if (pizItemsetCount (&x->addedNotes)) {
-    //
-    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
-        if (pizItemsetIsSetAtIndex (&x->addedNotes, i)) {
-            if (!(pizHashTablePtrByKey (x->lookup, i, (void **)&note))) {
-            
-                long a[ ] = { note->position, 
-                              note->values[PIZ_VALUE_PITCH],
-                              note->values[PIZ_VALUE_VELOCITY],
-                              note->values[PIZ_VALUE_DURATION], 
-                              note->values[PIZ_VALUE_CHANNEL] };
-                
-                err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_ADDED, i, 5, a);
-            }
-            pizItemsetUnsetAtIndex (&x->changedNotes, i);
-        } 
-    }
-
-    pizItemsetClear (&x->addedNotes);
-    //
-    }
-    
-    if (pizItemsetCount (&x->changedNotes)) {
-    //
-    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
-        if (pizItemsetIsSetAtIndex (&x->changedNotes, i)) {
-            if (!(pizHashTablePtrByKey (x->lookup, i, (void **)&note))) {
-            
-                long a[ ] = { note->position,
-                              note->values[PIZ_VALUE_PITCH],
-                              note->values[PIZ_VALUE_VELOCITY],
-                              note->values[PIZ_VALUE_DURATION], 
-                              note->values[PIZ_VALUE_CHANNEL] };
-                
-                err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_CHANGED, i, 5, a);
-            }
-        } 
-    }
-    
-    pizItemsetClear (&x->changedNotes);
-    //
     }
     
     return err;

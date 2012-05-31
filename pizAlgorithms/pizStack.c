@@ -51,7 +51,7 @@ PIZStack *pizStackNew (long size)
         if (x->values = (long *)malloc (size * sizeof(long))) {
             x->size        = size;
             x->index       = 0;
-            x->poppedValue = -1;
+            x->poppedValue = PIZ_NONE;
         } else {
             free (x);
             x = NULL;
@@ -78,7 +78,7 @@ void pizStackFree (PIZStack *x)
 void pizStackClear (PIZStack *x)
 {
     x->index       = 0;
-    x->poppedValue = -1;
+    x->poppedValue = PIZ_NONE;
 }
 
 PIZError pizStackPush (PIZStack *x, long value) 

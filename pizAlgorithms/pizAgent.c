@@ -146,26 +146,23 @@ void pizAgentFree (PIZAgent *x)
         pthread_join (x->notificationLoop, NULL); 
     }
     
-    pthread_attr_destroy  (&x->attr);
+    pthread_attr_destroy    (&x->attr);
+    pthread_mutex_destroy   (&x->eventLock);
+    pthread_mutex_destroy   (&x->notificationLock);
+    pthread_mutex_destroy   (&x->observerLock);
+    pthread_cond_destroy    (&x->eventCondition);
+    pthread_cond_destroy    (&x->notificationCondition);
     
-    pthread_mutex_destroy (&x->eventLock);
-    pthread_mutex_destroy (&x->notificationLock);
-    pthread_mutex_destroy (&x->observerLock);
+    pizArrayFree            (x->toBeLearned);
+    pizFactorOracleFree     (x->factorOracle);
+    pizGaloisLatticeFree    (x->galoisLattice);
     
-    pthread_cond_destroy  (&x->eventCondition);
-    pthread_cond_destroy  (&x->notificationCondition);
-    
-    
-    pizLinklistFree       (x->run);
-    pizLinklistFree       (x->low);
-    pizLinklistFree       (x->high);
-    pizLinklistFree       (x->notification);
-    
-    pizArrayFree          (x->toBeLearned);
-    pizFactorOracleFree   (x->factorOracle);
-    pizGaloisLatticeFree  (x->galoisLattice);
-    
-    pizSequenceFree       (x->sequence);
+    pizLinklistFree (x->run);
+    pizLinklistFree (x->low);
+    pizLinklistFree (x->high);
+    pizLinklistFree (x->notification);
+
+    pizSequenceFree (x->sequence);
     //
     }
 }

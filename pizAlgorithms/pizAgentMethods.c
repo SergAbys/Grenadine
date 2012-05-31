@@ -92,7 +92,7 @@ PIZError pizAgentUnloop (PIZAgent *x, const PIZEvent *event)
 }
 
 PIZError pizAgentBPM (PIZAgent *x, const PIZEvent *event)
-{/*
+{
     long value;
     
     if (!(pizEventValue (event, &value))) {
@@ -106,40 +106,36 @@ PIZError pizAgentBPM (PIZAgent *x, const PIZEvent *event)
         pizTimeAddNano (&x->grainEnd, &x->grainSize);
     }
     //
-    }*/
+    }
     
     return PIZ_GOOD;
 }
 
 PIZError pizAgentForget (PIZAgent *x, const PIZEvent *event)
-{/*
+{
     pizFactorOracleClear  (x->factorOracle);
-    pizGaloisLatticeClear (x->galoisLattice);*/
+    pizGaloisLatticeClear (x->galoisLattice);
         
     return PIZ_GOOD;
 }
 
 PIZError pizAgentLearn (PIZAgent *x, const PIZEvent *event)
-{/*
-    long argc;
-    long *argv = NULL;
-        
-    if (!(pizEventPtr (event, &argc, &argv))) {
+{   
+    long value;
+    
+    if (!(pizEventValue (event, &value))) {
     //
-    long i, h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
+    long h = (100 * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
     
-    pizFactorOracleAdd (x->factorOracle, argc, argv);
-    
-    for (i = 0; i < argc; i++) {
-        pizArrayAppend (x->toBeLearned, argv[i]);
-    }
+    pizArrayAppend (x->toBeLearned, value);
     
     if (h < (pizArrayCount (x->toBeLearned) * PIZ_CONSTANT_LEARN)) {
+        pizFactorOracleAdd (x->factorOracle, pizArrayCount (x->toBeLearned), pizArrayPtr (x->toBeLearned));
         pizGaloisLatticeAdd (x->galoisLattice, pizArrayCount (x->toBeLearned), pizArrayPtr (x->toBeLearned));
         pizArrayClear (x->toBeLearned);
     }
     //
-    }*/
+    }
         
     return PIZ_GOOD;
 }
