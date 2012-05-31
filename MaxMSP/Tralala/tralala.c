@@ -15,12 +15,12 @@
 #pragma mark -
 
 typedef struct _tralala {
-	t_object    ob;
+    t_object    ob;
     t_atom      temp[4];
     PIZAgent    *agent;
-	void        *leftOutlet;
+    void        *leftOutlet;
     void        *rightOutlet;
-	} t_tralala;
+    } t_tralala;
                 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
