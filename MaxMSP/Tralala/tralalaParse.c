@@ -12,10 +12,6 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 
 static t_dictionary *tll_code;
 static t_dictionary *tll_value;
@@ -125,11 +121,15 @@ void tralala_parseInit ( )
     dictionary_appendlong (tll_value,  gensym ("sixteenth dotted"),         PIZ_SIXTEENTH_NOTE_DOTTED);
 }
 
-void tralala_parseToAgent (t_symbol *s, long argc, t_atom *argv)
+PIZEvent *tralala_parseToEvent (t_symbol *s, long argc, t_atom *argv)
 {
+    long     code = 0;
+    PIZEvent *event = NULL;
+    
+    if ((dictionary_getlong (tll_code, s, &code)) == MAX_ERR_NONE) {
+    //
     long i, k = 0;
     long option = 0;
-    //long code = 0;
     long data[PIZ_EVENT_DATA_SIZE];
     
     for (i = 0; i < argc; i++) {
@@ -147,6 +147,12 @@ void tralala_parseToAgent (t_symbol *s, long argc, t_atom *argv)
     }
     //
     }
+    
+    event = pizEventNew (code, -1, option, k, data);
+    //
+    }
+    
+    return event;
 }
 
 // -------------------------------------------------------------------------------------------------------------
