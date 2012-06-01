@@ -52,7 +52,6 @@
 PIZ_LOCAL PIZError  pizSequenceNote         (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceClear        (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceClean        (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceTranspose    (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceRotate       (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceScramble     (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceSort         (PIZSequence *x, const PIZEvent *event);

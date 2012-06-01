@@ -49,35 +49,35 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SIZE_H              6
-#define PIZ_SIZE_BIRTH          12
-#define PIZ_SIZE_DEATH          16
-#define PIZ_MAXIMUM_LOOP        20
+#define PIZ_SIZE_H          6
+#define PIZ_SIZE_BIRTH      12
+#define PIZ_SIZE_DEATH      16
+#define PIZ_MAXIMUM_LOOP    20
 
-#define PIZ_FLAG_NONE           0UL
-#define PIZ_FLAG_RANDOM         1UL
-#define PIZ_FLAG_FILL           2UL
-#define PIZ_FLAG_NEARBY         4UL
+#define PIZ_FLAG_NONE       0UL
+#define PIZ_FLAG_RANDOM     1UL
+#define PIZ_FLAG_FILL       2UL
+#define PIZ_FLAG_NEARBY     4UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const long   pizSequenceNeighbors[ ]     = { -256, 
-                                                    -130, 
-                                                    -129, 
-                                                    -128, 
-                                                    -127, 
-                                                    -126, 
-                                                     126, 
-                                                     127, 
-                                                     128, 
-                                                     129, 
-                                                     130, 
-                                                     256, 
-                                                      -2, 
-                                                      -1, 
-                                                       1, 
-                                                       2  };
+static const long   pizSequenceNeighbors[ ] = { -256, 
+                                                -130, 
+                                                -129, 
+                                                -128, 
+                                                -127, 
+                                                -126, 
+                                                 126, 
+                                                 127, 
+                                                 128, 
+                                                 129, 
+                                                 130, 
+                                                 256, 
+                                                  -2, 
+                                                  -1, 
+                                                   1, 
+                                                   2  };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -147,14 +147,14 @@ PIZError pizSequenceClear (PIZSequence *x, const PIZEvent *event)
 }
 
 PIZError pizSequenceClean (PIZSequence *x, const PIZEvent *event)
-{/*
+{
     long i;
-    
-    x->tempIndex = 0;
     
     for (i = 0; i < (PIZ_MAGIC_PITCH + 1); i++) {
         x->tempValues[i] = 0;
     }
+    
+    x->tempIndex = 0;
     
     pizSequenceForEach (x, event, PIZ_FLAG_NEARBY, pizSequenceEachTempNotes);
     
@@ -163,23 +163,7 @@ PIZError pizSequenceClean (PIZSequence *x, const PIZEvent *event)
             pizSequenceEachRemove (x, NULL, PIZ_FLAG_NONE, x->tempNotes1[i]);
         }
         pizSequenceMakeMap (x);
-    }*/
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceTranspose (PIZSequence *x, const PIZEvent *event)
-{/*
-    long value;
-    
-    if (!(pizEventValue (event, &value))) {
-        x->down = CLAMP (x->down + value, 0, PIZ_MAGIC_PITCH);
-        x->up   = CLAMP (x->up + value, 0, PIZ_MAGIC_PITCH);
-        
-        x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
-        
-        pizSequenceForEach (x, event, PIZ_FLAG_NONE, pizSequenceEachChange);
-    }*/
+    }
     
     return PIZ_GOOD;
 }
@@ -621,14 +605,14 @@ void pizSequenceEachRemove (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote 
 
 void pizSequenceEachChange (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n)
 {
-    long argc;
-    long *argv = NULL;
+    long v, s;
         
-    if (!(pizEventPtr (e, &argc, &argv))) {
+    if (!(pizEventValue (e, &v))) {
     //
     long t, h = -1;
-    long v = argv[0];
-    long s = CLAMP (argv[1], PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
+ 
+    pizEventOption (e, &s);
+    s = CLAMP (s, PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
     
     if (f & PIZ_FLAG_RANDOM) {
         h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
@@ -688,7 +672,7 @@ void pizSequenceEachTempHash (PIZSequence *x, const PIZEvent *e, ulong f, PIZNot
 }
 
 void pizSequenceEachTempNotes (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n)
-{/*
+{
     if (f & PIZ_FLAG_NEARBY) {
     //
     long value;
@@ -723,7 +707,7 @@ void pizSequenceEachTempNotes (PIZSequence *x, const PIZEvent *e, ulong f, PIZNo
     } else {
         x->tempNotes1[x->tempIndex] = n;
         x->tempIndex ++;
-    }*/
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------

@@ -47,7 +47,6 @@ void tralala_parseInit ( )
     dictionary_appendlong (tll_code, gensym ("zone"),       PIZ_EVENT_ZONE); 
     dictionary_appendlong (tll_code, gensym ("clear"),      PIZ_EVENT_CLEAR);
     dictionary_appendlong (tll_code, gensym ("clean"),      PIZ_EVENT_CLEAN);
-    dictionary_appendlong (tll_code, gensym ("transpose"),  PIZ_EVENT_TRANSPOSE); 
     dictionary_appendlong (tll_code, gensym ("rotate"),     PIZ_EVENT_ROTATE); 
     dictionary_appendlong (tll_code, gensym ("scramble"),   PIZ_EVENT_SCRAMBLE);
     dictionary_appendlong (tll_code, gensym ("sort"),       PIZ_EVENT_SORT);

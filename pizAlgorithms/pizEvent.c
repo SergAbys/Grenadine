@@ -65,7 +65,6 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_ZONE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CLEAR
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CLEAN
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_TRANSPOSE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_ROTATE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_SCRAMBLE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_SORT
