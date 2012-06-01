@@ -74,10 +74,10 @@ PIZGaloisLattice *pizGaloisLatticeNew (long argc, long *argv)
     //
     long i;
     
-    x->threshold            = PIZ_DEFAULT_THRESHOLD;
-    x->targetedConcept      = PIZ_NONE;
-    x->shuttle              = PIZ_NONE;
-    x->previousShuttle      = PIZ_NONE;
+    x->threshold       = PIZ_DEFAULT_THRESHOLD;
+    x->targetedConcept = -1;
+    x->shuttle         = -1;
+    x->previousShuttle = -1;
     
     x->seed = PIZ_SEED;
         
@@ -334,9 +334,9 @@ PIZError pizGaloisLatticeClear (PIZGaloisLattice *x)
         pizStackPush (x->ticketMachine, i);
     }
         
-    x->count            = 0;
-    x->shuttle          = PIZ_NONE;
-    x->previousShuttle  = PIZ_NONE;
+    x->count           = 0;
+    x->shuttle         = -1;
+    x->previousShuttle = -1;
     
     return PIZ_GOOD;
 }
@@ -349,7 +349,7 @@ PIZError pizGaloisLatticeProceed (PIZGaloisLattice *x, long argc, long *argv)
     //
     long k = 0;
     
-    if (x->shuttle == PIZ_NONE) {
+    if (x->shuttle == -1) {
         x->shuttle          = x->targetedConcept;
         x->previousShuttle  = x->targetedConcept;
     }
@@ -449,11 +449,11 @@ PIZ_INLINE void pizGaloisLatticeReconnect (PIZGaloisLattice *x, long g, long n)
 
 PIZError pizGaloisLatticeMakeMap (PIZGaloisLattice *x)
 {
-    long     k = PIZ_NONE;
+    long     k = -1;
     long     i, j = 0;
     PIZError err = PIZ_GOOD;
     
-    x->targetedConcept = PIZ_NONE;
+    x->targetedConcept = -1;
     
     if (x->count) {
         k = (long)(x->count * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
@@ -517,8 +517,8 @@ void pizGaloisLatticeKillConcept (PIZGaloisLattice *x, long n)
     pizStackPush (x->ticketMachine, n);
     
     if (x->shuttle == n) {
-        x->shuttle          = PIZ_NONE;
-        x->previousShuttle  = PIZ_NONE;
+        x->shuttle         = -1;
+        x->previousShuttle = -1;
     }
     //    
     }

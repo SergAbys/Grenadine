@@ -75,7 +75,7 @@ long        pizStackPoppedValue  (const PIZStack *x);
 PIZ_EXTERN void pizStackClear (PIZStack *x)
 {
     x->index       = 0;
-    x->poppedValue = PIZ_NONE;
+    x->poppedValue = -1;
 }
 
 PIZ_EXTERN long pizStackCount (const PIZStack *x)

@@ -69,8 +69,8 @@ long        pizArrayCount                (const PIZArray *x);
 
 void        pizArrayRemoveAtIndex        (PIZArray *x, long index);
 void        pizArrayRemoveLast           (PIZArray *x);
-long        pizArrayIndexOfValue         (const PIZArray *x, long value);
 bool        pizArrayContainsValue        (const PIZArray *x, long value);
+PIZError    pizArrayIndexOfValue         (const PIZArray *x, long value, long *index);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

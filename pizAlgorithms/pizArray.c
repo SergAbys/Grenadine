@@ -158,20 +158,6 @@ void pizArrayRemoveLast (PIZArray *x)
     x->index --;
 }
 
-long pizArrayIndexOfValue (const PIZArray *x, long value)
-{
-    long i, k = PIZ_NONE;
-    
-    for (i = 0; i < x->index; i++) {
-        if (x->values[i] == value) {
-            k = i;
-            break;
-        }
-    }
-    
-    return k;
-}
-
 bool pizArrayContainsValue (const PIZArray *x, long value)
 {
     long i;
@@ -185,6 +171,22 @@ bool pizArrayContainsValue (const PIZArray *x, long value)
     }
         
     return k;
+}
+
+PIZError pizArrayIndexOfValue (const PIZArray *x, long value, long *index)
+{
+    long i;
+    PIZError err = PIZ_ERROR;
+    
+    for (i = 0; i < x->index; i++) {
+        if (x->values[i] == value) {
+            (*index) = i;
+            err = PIZ_GOOD;
+            break;
+        }
+    }
+    
+    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------

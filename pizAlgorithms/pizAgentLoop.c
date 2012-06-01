@@ -393,7 +393,7 @@ void pizAgentEventLoopSleep (PIZAgent *x)
     
     pizTimespecWithNano (ptrA, &ns);
     
-    while ((nanosleep (ptrA, ptrB) == PIZ_NONE) && (errno == EINTR)) {
+    while ((nanosleep (ptrA, ptrB) == -1) && (errno == EINTR)) {
         temp = ptrA;
         ptrA = ptrB;
         ptrB = temp;

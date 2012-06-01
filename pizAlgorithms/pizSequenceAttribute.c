@@ -204,10 +204,10 @@ PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceSetPattern (PIZSequence *x, const PIZEvent *event)
 {
-    //long     argc;
-    //long     *argv = NULL;
+    long     argc;
+    long     *argv = NULL;
     PIZError err = PIZ_GOOD;
-    /*
+
     pizArrayClear (x->pattern);
     
     if (!(pizEventPtr (event, &argc, &argv))) {
@@ -217,7 +217,7 @@ PIZError pizSequenceSetPattern (PIZSequence *x, const PIZEvent *event)
         }
     }
     
-    x->flags |= PIZ_SEQUENCE_FLAG_PATTERN;*/
+    x->flags |= PIZ_SEQUENCE_FLAG_PATTERN;
     
     return err;
 }

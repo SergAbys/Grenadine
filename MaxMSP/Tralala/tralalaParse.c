@@ -149,7 +149,7 @@ PIZEvent *tralala_parseToEvent (t_symbol *s, long argc, t_atom *argv)
     //
     }
     
-    event = pizEventNew (code, -1, option, k, data);
+    event = pizEventNew (code, PIZ_NONE, option, k, data);
     //
     }
     

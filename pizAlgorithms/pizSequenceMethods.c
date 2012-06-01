@@ -429,16 +429,16 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
     if (x->count) {
     //
     long    j, pitch, here, previous, next, center;
-    long    q = PIZ_NONE;
-    long    p = PIZ_NONE;
-    long    hPat[PIZ_SIZE_H] = { PIZ_NONE, PIZ_NONE, PIZ_NONE, PIZ_NONE, PIZ_NONE, PIZ_NONE };
+    long    q = -1;
+    long    p = -1;
+    long    hPat[PIZ_SIZE_H] = { -1, -1, -1, -1, -1, -1 };
     long    neighbors = 0;
     long    err = PIZ_GOOD;
     long    size = pizArrayCount (x->pattern);
     bool    death = false;
     PIZNote *note = NULL;
 
-    while (q == PIZ_NONE) {
+    while (q == -1) {
         p = pizArrayAtIndex (x->map, (long)(count * (rand_r (&x->seed) / (RAND_MAX + 1.0))));
         if (pizLinklistCount (x->timeline[p])) {
             q = (long)(pizLinklistCount (x->timeline[p]) * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
@@ -597,7 +597,7 @@ void pizSequenceForEach (PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod m
 
 void pizSequenceEachRemove (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n) 
 {
-    long h = PIZ_NONE;
+    long h = -1;
     long p = n->position;
     long tag = n->tag;
     
@@ -605,7 +605,7 @@ void pizSequenceEachRemove (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote 
         h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
     }
     
-    if ((h == PIZ_NONE) || ( h < x->chance)) {
+    if ((h == -1) || ( h < x->chance)) {
     //
     pizHashTableRemove (x->lookup, tag, n);
     pizItemsetUnsetAtIndex (&x->usedNotes, tag);
@@ -626,7 +626,7 @@ void pizSequenceEachChange (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote 
         
     if (!(pizEventPtr (e, &argc, &argv))) {
     //
-    long t, h = PIZ_NONE;
+    long t, h = -1;
     long v = argv[0];
     long s = CLAMP (argv[1], PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
     
@@ -634,7 +634,7 @@ void pizSequenceEachChange (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote 
         h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
     }
           
-    if ((h == PIZ_NONE) || (h < x->chance)) {
+    if ((h == -1) || (h < x->chance)) {
     //
     if (f & PIZ_FLAG_FILL) {
         t = v;
@@ -661,13 +661,13 @@ void pizSequenceEachChange (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote 
  
 void pizSequenceEachCycle (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n)
 {/*
-    long t, h = PIZ_NONE;
+    long t, h = -1;
     
     if (f & PIZ_FLAG_RANDOM) {
         h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));
     }
           
-    if ((h == PIZ_NONE || (h < x->chance)) {
+    if ((h == -1 || (h < x->chance)) {
     //
     t = n->values[PIZ_VALUE_PITCH];
     t += x->tempValues[t % PIZ_MAGIC_SCALE];

@@ -53,7 +53,7 @@ PIZQueue *pizQueueNew (long size)
             x->size        = size;
             x->head        = 0;
             x->tail        = 0;
-            x->poppedValue = PIZ_NONE;
+            x->poppedValue = -1;
         } else {
             free (x);
             x = NULL;
@@ -82,7 +82,7 @@ void pizQueueClear (PIZQueue *x)
     x->count       = 0;
     x->head        = 0;
     x->tail        = 0;
-    x->poppedValue = PIZ_NONE;
+    x->poppedValue = -1;
 }
 
 PIZError pizQueueAppend (PIZQueue *x, long value) 

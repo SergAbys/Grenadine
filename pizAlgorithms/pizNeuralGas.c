@@ -187,8 +187,8 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
     for (t = 0; t < k; t++) {
     //   
     long   i, j;
-    long   winner1 = PIZ_NONE;
-    long   winner2 = PIZ_NONE;
+    long   winner1 = -1;
+    long   winner2 = -1;
     double dist1 = 0.;
     double dist2 = 0.;
     
@@ -200,12 +200,12 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
                 e += pow (x->vectorStock[(i * x->vectorSize) + j] - argv[(t * x->vectorSize) + j], 2);
             }
             
-            if ((e < dist1) || (winner1 == PIZ_NONE)) {
+            if ((e < dist1) || (winner1 == -1)) {
                 dist2   = dist1;
                 winner2 = winner1;
                 dist1   = e;
                 winner1 = i;
-            } else if ((e < dist2) || (winner2 == PIZ_NONE)) {
+            } else if ((e < dist2) || (winner2 == -1)) {
                 dist2   = e;
                 winner2 = i;
             }
@@ -230,21 +230,21 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
     }
     
     if (!(x->count % x->lambda)) {
-        long    maxError1 = PIZ_NONE;
-        long    maxError2 = PIZ_NONE;
-        long    minUtility = PIZ_NONE;
-        double  maxError1Value = 0.;
-        double  maxError2Value = 0.;
-        double  minUtilityValue = 0.;
+        long   maxError1 = -1;
+        long   maxError2 = -1;
+        long   minUtility = -1;
+        double maxError1Value = 0.;
+        double maxError2Value = 0.;
+        double minUtilityValue = 0.;
         
         for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
             if (pizItemsetIsSetAtIndex (&x->map, i)) {
-                if ((x->headStock[i].error > maxError1Value) || (maxError1 == PIZ_NONE)) {
+                if ((x->headStock[i].error > maxError1Value) || (maxError1 == -1)) {
                     maxError1       = i;
                     maxError1Value  = x->headStock[i].error;
                 }   
                 
-                if ((x->headStock[i].utility < minUtilityValue) || (minUtility == PIZ_NONE)) {
+                if ((x->headStock[i].utility < minUtilityValue) || (minUtility == -1)) {
                     minUtility      = i;
                     minUtilityValue = x->headStock[i].utility;
                 }
@@ -253,7 +253,7 @@ PIZError pizNeuralGasAdd (PIZNeuralGas *x, long argc, long *argv)
         
         for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
             if (pizItemsetIsSetAtIndex (&x->headStock[maxError1].arcs, i)) {
-                if ((x->headStock[i].error > maxError2Value) || (maxError2 == PIZ_NONE)) {
+                if ((x->headStock[i].error > maxError2Value) || (maxError2 == -1)) {
                     maxError2       = i;
                     maxError2Value  = x->headStock[i].error;
                 }
@@ -381,7 +381,7 @@ PIZError pizNeuralGasProceed (PIZNeuralGas *x, long argc, long *argv)
     
     for (i = 0; i < argc; i++) {
         if ((i % x->vectorSize) == 0) {
-            long j, p = PIZ_NONE;
+            long j, p = -1;
             long h = (long)(x->mapSize * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
             
             for (j = 0; j < PIZ_ITEMSET_SIZE; j++) {

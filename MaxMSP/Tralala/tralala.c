@@ -26,13 +26,13 @@ typedef struct _tralala {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define SEND(code)          PIZEvent *event = NULL;                                 \
-                            if (event = pizEventNew ((code), -1, 0, 0, NULL)) {     \
-                                pizAgentAddEvent (x->agent, event);                 \
+#define SEND(code)          PIZEvent *event = NULL;                                     \
+                            if (event = pizEventNew ((code), PIZ_NONE, 0, 0, NULL)) {   \
+                                pizAgentAddEvent (x->agent, event);                     \
                             }
-#define PARSE(s, ac, av)    PIZEvent *event = NULL;                                 \
-                            if (event = tralala_parseToEvent ((s), (ac), (av))) {   \
-                                pizAgentAddEvent (x->agent, event);                 \
+#define PARSE(s, ac, av)    PIZEvent *event = NULL;                                     \
+                            if (event = tralala_parseToEvent ((s), (ac), (av))) {       \
+                                pizAgentAddEvent (x->agent, event);                     \
                             }
                       
 // -------------------------------------------------------------------------------------------------------------

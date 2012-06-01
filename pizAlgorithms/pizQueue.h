@@ -80,7 +80,7 @@ PIZ_EXTERN void pizQueueClear (PIZQueue *x)
     x->head        = 0;
     x->tail        = 0;
     x->count       = 0;
-    x->poppedValue = PIZ_NONE;
+    x->poppedValue = -1;
 }
 
 PIZ_EXTERN long pizQueueCount (const PIZQueue *x)
