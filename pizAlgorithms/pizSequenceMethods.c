@@ -169,15 +169,15 @@ PIZError pizSequenceClean (PIZSequence *x, const PIZEvent *event)
 }
 
 PIZError pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
-{/*
-    long argc;
-    long *argv = NULL;
+{
+    long shift;
         
-    if (!(pizEventPtr (event, &argc, &argv))) {
+    if (!(pizEventValue (event, &shift))) {
     //
-    long i, k;
-    long shift    = argv[0];
-    long selector = CLAMP (argv[1], PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
+    long i, k, selector;
+
+    pizEventOption (event, &selector);
+    selector = CLAMP (selector, PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
     
     k = pizSequenceFillTempNotes (x);
     
@@ -191,20 +191,17 @@ PIZError pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
                 
     pizSequenceWithTempNotes (x, selector, 0);
     //
-    }*/
+    }
     
     return PIZ_GOOD;
 }
 
 PIZError pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
-{/*
-    long argc;
-    long *argv = NULL;
-        
-    if (!(pizEventPtr (event, &argc, &argv))) {
-    //
-    long i, k;
-    long selector = CLAMP (argv[1], PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
+{
+    long i, k, selector;
+    
+    pizEventOption (event, &selector);
+    selector = CLAMP (selector, PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
         
     k = pizSequenceFillTempNotes (x);
     
@@ -222,22 +219,17 @@ PIZError pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
     }
             
     pizSequenceWithTempNotes (x, selector, 0);
-    //
-    }*/
     
     return PIZ_GOOD;
 }
 
 PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
-{/*
-    long argc;
-    long *argv = NULL;
-        
-    if (!(pizEventPtr (event, &argc, &argv))) {
-    //
-    long i, k;
-    long down = argv[0];
-    long selector = CLAMP (argv[1], PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
+{
+    long i, k, selector, down = 0;
+    
+    pizEventValue (event, &down);
+    pizEventOption (event, &selector);
+    selector = CLAMP (selector, PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
         
     k = pizSequenceFillTempNotes (x);
     
@@ -267,8 +259,6 @@ PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
     } else {
         pizSequenceWithTempNotes (x, selector, 0);
     }
-    //
-    }*/
     
     return PIZ_GOOD;
 }
@@ -666,9 +656,9 @@ void pizSequenceEachCycle (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *
 }
 
 void pizSequenceEachTempHash (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n)
-{   /*
+{   
     long key = ((long)(n->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1)) + n->values[PIZ_VALUE_PITCH];
-    x->tempError |= pizHashTableAdd (x->tempHash, key, (void *)n);*/
+    x->tempError |= pizHashTableAdd (x->tempHash, key, (void *)n);
 }
 
 void pizSequenceEachTempNotes (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n)
@@ -715,15 +705,15 @@ void pizSequenceEachTempNotes (PIZSequence *x, const PIZEvent *e, ulong f, PIZNo
 #pragma mark -
 
 long pizSequenceFillTempNotes (PIZSequence *x)
-{/*
+{
     x->tempIndex = 0;
     pizSequenceForEach (x, NULL, PIZ_FLAG_NONE, pizSequenceEachTempNotes);
-    */
+    
     return x->tempIndex;
 }
 
 void pizSequenceWithTempNotes (PIZSequence *x, long selector, bool reverse)
-{/*
+{
     long i;
     
     for (i = 0; i < x->tempIndex; i++) {
@@ -741,7 +731,7 @@ void pizSequenceWithTempNotes (PIZSequence *x, long selector, bool reverse)
         pizItemsetSetAtIndex (&x->changedNotes, x->tempNotes1[i]->tag);
     }
     //
-    }*/
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
