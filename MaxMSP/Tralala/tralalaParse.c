@@ -40,9 +40,10 @@ void tralala_parseInit ( )
     dictionary_appendlong (tll_code, gensym ("channel"),    PIZ_EVENT_CHANNEL); 
     dictionary_appendlong (tll_code, gensym ("chord"),      PIZ_EVENT_CHORD); 
     dictionary_appendlong (tll_code, gensym ("cell"),       PIZ_EVENT_CELL);
-    dictionary_appendlong (tll_code, gensym ("value"),      PIZ_EVENT_NOTE_VALUE);
+    dictionary_appendlong (tll_code, gensym ("value"),      PIZ_EVENT_VALUE);
     dictionary_appendlong (tll_code, gensym ("scale"),      PIZ_EVENT_SCALE);
     dictionary_appendlong (tll_code, gensym ("pattern"),    PIZ_EVENT_PATTERN); 
+    dictionary_appendlong (tll_code, gensym ("note"),       PIZ_EVENT_NOTE);
     dictionary_appendlong (tll_code, gensym ("zone"),       PIZ_EVENT_ZONE); 
     dictionary_appendlong (tll_code, gensym ("clear"),      PIZ_EVENT_CLEAR);
     dictionary_appendlong (tll_code, gensym ("clean"),      PIZ_EVENT_CLEAN);
@@ -77,7 +78,7 @@ void tralala_parseInit ( )
 
     dictionary_appendlong (tll_value,  gensym ("up"),                       0); 
     dictionary_appendlong (tll_value,  gensym ("down"),                     1);
-    dictionary_appendlong (tll_value,  gensym ("none"),                     PIZ_NONE);
+    dictionary_appendlong (tll_value,  gensym ("none"),                     PIZ_NADA);
     dictionary_appendlong (tll_value,  gensym ("ionian"),                   PIZ_IONIAN);
     dictionary_appendlong (tll_value,  gensym ("dorian"),                   PIZ_DORIAN);
     dictionary_appendlong (tll_value,  gensym ("phrygian"),                 PIZ_PHRYGIAN);
@@ -149,7 +150,7 @@ PIZEvent *tralala_parseToEvent (t_symbol *s, long argc, t_atom *argv)
     //
     }
     
-    event = pizEventNew (code, PIZ_NONE, option, k, data);
+    event = pizEventNew (code, PIZ_NADA, option, k, data);
     //
     }
     

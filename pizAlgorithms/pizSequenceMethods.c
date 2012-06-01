@@ -111,17 +111,17 @@ PIZ_LOCAL void      pizSequenceMakeMap      (PIZSequence *x);
 #pragma mark -
 
 PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
-{/*
+{
     long argc;
     long *argv = NULL;
     
     if (!(pizEventPtr (event, &argc, &argv))) {
         long  i;
         ulong flags = PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS;
-        long  values[ ] = { PIZ_NONE,
+        long  values[ ] = { PIZ_NADA,
                             PIZ_SEQUENCE_DEFAULT_PITCH, 
                             PIZ_SEQUENCE_DEFAULT_VELOCITY, 
-                            ABS(x->noteValue), 
+                            ABS(x->value), 
                             0 };
         
         for (i = 0; i < MIN (argc, 5); i++) {
@@ -131,17 +131,17 @@ PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
         if (pizSequenceNewNote (x, event->tag, values, flags)) {
             pizSequenceMakeMap (x);
         }
-    } */
+    }
     
     return PIZ_GOOD;
 }
 
 PIZError pizSequenceClear (PIZSequence *x, const PIZEvent *event)
-{/*
+{
     if (x->count) {
         pizSequenceForEach (x, NULL, PIZ_FLAG_NONE, pizSequenceEachRemove);
         pizArrayClear (x->map);  
-    }*/
+    }
     
     return PIZ_GOOD;
 }
@@ -409,7 +409,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
     //long     iterate;
     PIZError hashErr = PIZ_GOOD;/*
     
-    if (!(pizEventValue (event, &iterate)) && (x->cell != PIZ_NONE)) {
+    if (!(pizEventValue (event, &iterate)) && (x->cell != PIZ_NADA)) {
     //
     long k       = 0;
     long loop    = 0;
@@ -529,7 +529,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
                                toCopy->values[PIZ_VALUE_DURATION],
                                toCopy->values[PIZ_VALUE_CHANNEL] };
                         
-            if (newNote = pizSequenceNewNote (x, PIZ_NONE, values, PIZ_SEQUENCE_FLAG_CLIP)) {
+            if (newNote = pizSequenceNewNote (x, PIZ_NADA, values, PIZ_SEQUENCE_FLAG_CLIP)) {
                 hashErr |= pizHashTableAdd (x->tempHash, hPat[j], (void *)newNote);
                 haveChanged = true;
                 k ++;
@@ -768,7 +768,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
 {
     PIZNote *newNote = NULL;
     long    err      = PIZ_GOOD;
-    long    k        = PIZ_NONE;
+    long    k        = PIZ_NADA;
     long    position = argv[0];
     long    pitch    = argv[1];
     long    velocity = argv[2];
@@ -835,7 +835,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
 
 PIZError pizSequenceGetTag (PIZSequence *x, long tag, long *ptr)
 {
-    long     i, k = PIZ_NONE;
+    long     i, k = PIZ_NADA;
     PIZError err = PIZ_ERROR;
     
     if ((tag >= 0) && (tag < PIZ_ITEMSET_SIZE) && !(pizItemsetIsSetAtIndex (&x->usedNotes, tag))) {
@@ -843,7 +843,7 @@ PIZError pizSequenceGetTag (PIZSequence *x, long tag, long *ptr)
         k = tag;
     } 
     
-    if (k == PIZ_NONE) {
+    if (k == PIZ_NADA) {
         for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
             if (!(pizItemsetIsSetAtIndex (&x->usedNotes, i))) {
                 pizItemsetSetAtIndex (&x->usedNotes, i);
@@ -853,7 +853,7 @@ PIZError pizSequenceGetTag (PIZSequence *x, long tag, long *ptr)
         }
     }
     
-    if (k != PIZ_NONE) {
+    if (k != PIZ_NADA) {
         (*ptr) = k;
         err = PIZ_GOOD;
     }

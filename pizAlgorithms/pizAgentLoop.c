@@ -67,7 +67,7 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizSequenceSetChannel,          // PIZ_EVENT_CHANNEL
                                                     pizSequenceSetChord,            // PIZ_EVENT_CHORD
                                                     pizSequenceSetCell,             // PIZ_EVENT_CELL
-                                                    pizSequenceSetNoteValue,        // PIZ_EVENT_NOTE_VALUE
+                                                    pizSequenceSetValue,            // PIZ_EVENT_VALUE
                                                     pizSequenceSetScale,            // PIZ_EVENT_SCALE
                                                     pizSequenceSetPattern,          // PIZ_EVENT_PATTERN
                                                     pizSequenceNote,                // PIZ_EVENT_NOTE
@@ -209,7 +209,7 @@ void pizAgentAddNotification (PIZAgent *x, PIZEventCode n, long ac, long *av)
 {
     PIZEvent *notification = NULL;
 
-    if (notification = pizEventNew (n, PIZ_NONE, 0, ac, av)) {
+    if (notification = pizEventNew (n, PIZ_NADA, 0, ac, av)) {
     
         PIZ_AGENT_LOCK_NOTIFICATION
         PIZ_AGENT_QUEUE (x->notification, notification)

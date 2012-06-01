@@ -58,7 +58,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CHANNEL
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CHORD
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CELL
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_NOTE_VALUE
+                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_VALUE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_SCALE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_PATTERN
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_NOTE
@@ -83,7 +83,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_CHANNEL
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_CHORD
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_CELL
-                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_NOTE_VALUE
+                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_VALUE
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_SCALE
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_PATTERN
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_ZONE

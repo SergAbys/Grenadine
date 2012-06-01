@@ -27,7 +27,7 @@ typedef struct _tralala {
 #pragma mark -
 
 #define SEND(code)          PIZEvent *event = NULL;                                     \
-                            if (event = pizEventNew ((code), PIZ_NONE, 0, 0, NULL)) {   \
+                            if (event = pizEventNew ((code), PIZ_NADA, 0, 0, NULL)) {   \
                                 pizAgentAddEvent (x->agent, event);                     \
                             }
 #define PARSE(s, ac, av)    PIZEvent *event = NULL;                                     \

@@ -53,26 +53,28 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define DEBUGEVENT  if (event) {            \
-                        PIZTime t;          \
-                        pizTimeSet (&t);    \
-                        t = t / 1000000.;   \
-                        post ("%llu / %ld / %s / %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld / %ld",    \
-                        t, event->code, __FUNCTION__,                                                       \
-                        event->data[0],     \
-                        event->data[1],     \
-                        event->data[2],     \
-                        event->data[3],     \
-                        event->data[4],     \
-                        event->data[5],     \
-                        event->data[6],     \
-                        event->data[7],     \
-                        event->data[8],     \
-                        event->data[9],     \
-                        event->data[10],    \
-                        event->data[11],    \
-                        event->option);     \
-                    }
+#define DEBUGEVENT      \
+if (event) {            \
+    PIZTime t;          \
+    pizTimeSet (&t);    \
+    t = t / 1000000.;   \
+    post ("%llu / %ld / %s / %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld / %ld / %ld",  \
+    t, event->code, __FUNCTION__,   \
+    event->data[0],     \
+    event->data[1],     \
+    event->data[2],     \
+    event->data[3],     \
+    event->data[4],     \
+    event->data[5],     \
+    event->data[6],     \
+    event->data[7],     \
+    event->data[8],     \
+    event->data[9],     \
+    event->data[10],    \
+    event->data[11],    \
+    event->option,      \
+    event->tag);        \
+}
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -102,7 +104,7 @@ typedef enum _PIZEventCode {
     PIZ_EVENT_CHANNEL               = 12,
     PIZ_EVENT_CHORD                 = 13,
     PIZ_EVENT_CELL                  = 14,
-    PIZ_EVENT_NOTE_VALUE            = 15,
+    PIZ_EVENT_VALUE                 = 15,
     PIZ_EVENT_SCALE                 = 16,
     PIZ_EVENT_PATTERN               = 17,
     PIZ_EVENT_NOTE                  = 18,
@@ -127,7 +129,7 @@ typedef enum _PIZEventCode {
     PIZ_EVENT_CHANGED_CHANNEL       = 36,
     PIZ_EVENT_CHANGED_CHORD         = 37,
     PIZ_EVENT_CHANGED_CELL          = 38,
-    PIZ_EVENT_CHANGED_NOTE_VALUE    = 39,
+    PIZ_EVENT_CHANGED_VALUE         = 39,
     PIZ_EVENT_CHANGED_SCALE         = 40,
     PIZ_EVENT_CHANGED_PATTERN       = 41,
     PIZ_EVENT_CHANGED_ZONE          = 42,
