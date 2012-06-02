@@ -27,7 +27,7 @@ typedef struct _tralala {
 #pragma mark -
 
 #define SEND(code)          PIZEvent *event = NULL;                                     \
-                            if (event = pizEventNew ((code), PIZ_NADA, 0, 0, NULL)) {   \
+                            if (event = pizEventNew (code)) {                           \
                                 pizAgentAddEvent (x->agent, event);                     \
                             }
 #define PARSE(s, ac, av)    PIZEvent *event = NULL;                                     \
@@ -153,7 +153,7 @@ void tralala_notify (void *ptr, PIZEvent *event)
     
     if (code == PIZ_EVENT_NOTE_PLAYED) {
     //
-    pizEventPtr (event, &argc, &argv);
+    pizEventData (event, &argc, &argv);
     atom_setlong_array (4, x->temp, argc - 1, argv + 1);
     outlet_list (x->leftOutlet, NULL, 4, x->temp); 
     //

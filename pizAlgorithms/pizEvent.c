@@ -50,7 +50,6 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_RUN,              // PIZ_EVENT_BPM
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_LEARN
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_FORGET
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_COUNT
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_DUMP
                                         //
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CHANCE
@@ -99,23 +98,14 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
 #pragma mark ---
 #pragma mark -
 
-PIZEvent *pizEventNew (PIZEventCode code, long tag, long option, long argc, const long *argv)
+PIZEvent *pizEventNew (PIZEventCode code)
 {
     PIZEvent *x = NULL;
     
     if (x = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        x->code    = code;
-        x->type    = pizEventTypes[code];
-        x->tag     = tag;
-        x->option  = option; 
-            
-        if (argc && argv) {
-            long i;
-            x->size = MIN (argc, PIZ_EVENT_DATA_SIZE);
-            for (i = 0; i < x->size; i++) {
-                x->data[i] = *(argv + i);
-            }
-        }
+        x->code = code;
+        x->type = pizEventTypes[code];
+        x->tag  = PIZ_NADA;
     }
     
     return x;
@@ -129,6 +119,33 @@ void pizEventFree (PIZEvent *x)
 {
     free (x);
 }
+
+void pizEventSetTag (PIZEvent *x, long tag)
+{
+    x->tag = tag;
+}
+
+void pizEventSetOption (PIZEvent *x, long option)
+{
+    x->option = option;
+}
+
+void pizEventSetData (PIZEvent *x, long argc, const long *argv)
+{
+    if (argc && argv) {
+    //
+    long i;
+    x->size = MIN (argc, PIZ_EVENT_DATA_SIZE);
+    for (i = 0; i < x->size; i++) {
+        x->data[i] = *(argv + i);
+    }
+    //
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void pizEventCode (const PIZEvent *x, PIZEventCode *code)
 {
@@ -157,7 +174,7 @@ PIZError pizEventValue (const PIZEvent *x, long *value)
     return err;
 }
 
-PIZError pizEventPtr (const PIZEvent *x, long *argc, long **argv)
+PIZError pizEventData (const PIZEvent *x, long *argc, long **argv)
 {
     PIZError err = PIZ_ERROR;
     

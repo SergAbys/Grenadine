@@ -294,10 +294,15 @@ PIZError pizSequenceAddNotification (PIZSequence *x, PIZEventCode n, long tag, l
     PIZEvent *notification = NULL;
     PIZError err = PIZ_GOOD;
     
-    if (notification = pizEventNew (n, tag, 0, ac, av)) {
-        if (err |= pizLinklistAppend (x->agent->notification, notification)) {       
-            pizEventFree (notification);  
-        }
+    if (notification = pizEventNew (n)) {
+    //
+    pizEventSetTag (notification, tag);
+    pizEventSetData (notification, ac, av);
+    
+    if (err |= pizLinklistAppend (x->agent->notification, notification)) {       
+        pizEventFree (notification);  
+    }
+    //
     } else {
         err |= PIZ_MEMORY;
     }

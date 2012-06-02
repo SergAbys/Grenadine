@@ -210,7 +210,7 @@ PIZError pizSequenceSetPattern (PIZSequence *x, const PIZEvent *event)
 
     pizArrayClear (x->pattern);
     
-    if (!(pizEventPtr (event, &argc, &argv))) {
+    if (!(pizEventData (event, &argc, &argv))) {
         long i;
         for (i = 0; i < argc; i++) {
             err |= pizArrayAppend (x->pattern, argv[i]);

@@ -33,7 +33,6 @@ void tralala_parseInit ( )
     dictionary_appendlong (tll_code, gensym ("learn"),      PIZ_EVENT_LEARN); 
     dictionary_appendlong (tll_code, gensym ("list"),       PIZ_EVENT_LEARN);
     dictionary_appendlong (tll_code, gensym ("forget"),     PIZ_EVENT_FORGET);
-    dictionary_appendlong (tll_code, gensym ("count"),      PIZ_EVENT_COUNT); 
     dictionary_appendlong (tll_code, gensym ("dump"),       PIZ_EVENT_DUMP); 
     dictionary_appendlong (tll_code, gensym ("chance"),     PIZ_EVENT_CHANCE);
     dictionary_appendlong (tll_code, gensym ("velocity"),   PIZ_EVENT_VELOCITY);
@@ -149,7 +148,10 @@ PIZEvent *tralala_parseToEvent (t_symbol *s, long argc, t_atom *argv)
     //
     }
     
-    event = pizEventNew (code, PIZ_NADA, option, k, data);
+    if (event = pizEventNew (code)) {
+        pizEventSetOption (event, option);
+        pizEventSetData   (event, k, data);
+    }
     //
     }
     

@@ -115,7 +115,7 @@ PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
     long argc;
     long *argv = NULL;
     
-    if (!(pizEventPtr (event, &argc, &argv))) {
+    if (!(pizEventData (event, &argc, &argv))) {
         long  i;
         ulong flags = PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS;
         long  values[ ] = { PIZ_NADA,
@@ -297,7 +297,7 @@ PIZError pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
     long argc;
     long *argv = NULL;
         
-    if (!(pizEventPtr (event, &argc, &argv))) {
+    if (!(pizEventData (event, &argc, &argv))) {
     //
     ulong mask = 0UL;
     long  i, m, n, o, k = 0;

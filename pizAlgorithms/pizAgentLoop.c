@@ -59,7 +59,6 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizAgentBPM,                    // PIZ_EVENT_BPM
                                                     pizAgentLearn,                  // PIZ_EVENT_LEARN
                                                     pizAgentForget,                 // PIZ_EVENT_FORGET
-                                                    NULL,                           // PIZ_EVENT_COUNT
                                                     NULL,                           // PIZ_EVENT_DUMP
                                                     //
                                                     pizSequenceSetChance,           // PIZ_EVENT_CHANCE
@@ -208,13 +207,15 @@ void pizAgentAddNotification (PIZAgent *x, PIZEventCode n, long ac, long *av)
 {
     PIZEvent *notification = NULL;
 
-    if (notification = pizEventNew (n, PIZ_NADA, 0, ac, av)) {
+    if (notification = pizEventNew (n)) {
+    //
+    pizEventSetData (notification, ac, av);
     
-        PIZ_AGENT_LOCK_NOTIFICATION
-        PIZ_AGENT_QUEUE (x->notification, notification)
-        PIZ_AGENT_UNLOCK_NOTIFICATION
-        pthread_cond_signal (&x->notificationCondition);
-        
+    PIZ_AGENT_LOCK_NOTIFICATION
+    PIZ_AGENT_QUEUE (x->notification, notification)
+    PIZ_AGENT_UNLOCK_NOTIFICATION
+    pthread_cond_signal (&x->notificationCondition);
+    //
     } else {
         PIZ_AGENT_MEMORY
     }
