@@ -778,7 +778,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
         newNote->position                   = position;
         newNote->values[PIZ_VALUE_PITCH]    = CLAMP (pitch,    0, PIZ_MAGIC_PITCH);
         newNote->values[PIZ_VALUE_VELOCITY] = CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY);
-        newNote->values[PIZ_VALUE_DURATION] = CLAMP (duration, 0, PIZ_SEQUENCE_MAXIMUM_DURATION);
+        newNote->values[PIZ_VALUE_DURATION] = CLAMP (duration, 1, PIZ_SEQUENCE_MAXIMUM_DURATION);
         newNote->values[PIZ_VALUE_CHANNEL]  = CLAMP (channel,  0, PIZ_MAGIC_CHANNEL);
     
         if (!(x->timeline[newNote->position])) {

@@ -164,7 +164,9 @@ void        pizEventSetData     (PIZEvent *x, long argc, const long *argv);
 
 void        pizEventCode        (const PIZEvent *x, PIZEventCode *code);
 void        pizEventType        (const PIZEvent *x, PIZEventType *type);
+void        pizEventTag         (const PIZEvent *x, long *tag);
 void        pizEventOption      (const PIZEvent *x, long *option);
+
 PIZError    pizEventValue       (const PIZEvent *x, long *value);
 PIZError    pizEventData        (const PIZEvent *x, long *argc, long **argv);
 
@@ -196,6 +198,11 @@ PIZ_EXTERN void pizEventCode (const PIZEvent *x, PIZEventCode *code)
 PIZ_EXTERN void pizEventType (const PIZEvent *x, PIZEventType *type)
 {
     (*type) = x->type;
+}
+
+PIZ_EXTERN void pizEventTag (const PIZEvent *x, long *tag)
+{
+    (*tag) = x->tag;
 }
 
 PIZ_EXTERN void pizEventOption (const PIZEvent *x, long *option)

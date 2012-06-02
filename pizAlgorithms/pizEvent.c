@@ -133,13 +133,11 @@ void pizEventSetOption (PIZEvent *x, long option)
 void pizEventSetData (PIZEvent *x, long argc, const long *argv)
 {
     if (argc && argv) {
-    //
-    long i;
-    x->size = MIN (argc, PIZ_EVENT_DATA_SIZE);
-    for (i = 0; i < x->size; i++) {
-        x->data[i] = *(argv + i);
-    }
-    //
+        long i;
+        x->size = MIN (argc, PIZ_EVENT_DATA_SIZE);
+        for (i = 0; i < x->size; i++) {
+            x->data[i] = *(argv + i);
+        }
     }
 }
 
@@ -155,6 +153,11 @@ void pizEventCode (const PIZEvent *x, PIZEventCode *code)
 void pizEventType (const PIZEvent *x, PIZEventType *type)
 {
     (*type) = x->type;
+}
+
+void pizEventTag (const PIZEvent *x, long *tag)
+{
+    (*tag) = x->tag;
 }
 
 void pizEventOption (const PIZEvent *x, long *option)
