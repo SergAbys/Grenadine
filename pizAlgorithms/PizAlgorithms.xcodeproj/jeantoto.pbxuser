@@ -11,8 +11,8 @@
 		breakpointsGroup = 9699A8E613D9A57300D9A0AD /* XCBreakpointsBucket */;
 		codeSenseManager = 96CFCDA713D7F01D004431BB /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 360343504;
-			PBXWorkspaceStateSaveDate = 360343504;
+			PBXPerProjectTemplateStateSaveDate = 360347968;
+			PBXWorkspaceStateSaveDate = 360347968;
 		};
 		sourceControlManager = 96CFCDA613D7F01D004431BB /* Source Control */;
 		userBuildSettings = {
@@ -114,9 +114,9 @@
 	};
 	96A16F77148CF839008268A6 /* pizSequenceMethods.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1236, 22100}}";
-			sepNavSelRange = "{24226, 0}";
-			sepNavVisRect = "{{0, 18932}, {1236, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1236, 22125}}";
+			sepNavSelRange = "{12480, 0}";
+			sepNavVisRect = "{{0, 9440}, {1236, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1281, 774}}";
 		};
 	};
@@ -124,7 +124,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1234, 4125}}";
 			sepNavSelRange = "{4586, 0}";
-			sepNavVisRect = "{{0, 609}, {1234, 645}}";
+			sepNavVisRect = "{{0, 3480}, {1234, 645}}";
 			sepNavWindowFrame = "{{-2, 3}, {1279, 774}}";
 		};
 	};
@@ -199,8 +199,8 @@
 	96D67644151C892100AFA120 /* pizAgentLoop.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1235, 11750}}";
-			sepNavSelRange = "{9446, 0}";
-			sepNavVisRect = "{{0, 0}, {1235, 645}}";
+			sepNavSelRange = "{3186, 0}";
+			sepNavVisRect = "{{0, 1382}, {1235, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1280, 774}}";
 		};
 	};
@@ -216,7 +216,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1235, 3600}}";
 			sepNavSelRange = "{4417, 0}";
-			sepNavVisRect = "{{0, 1124}, {1235, 645}}";
+			sepNavVisRect = "{{0, 2952}, {1235, 645}}";
 			sepNavWindowFrame = "{{2, 4}, {1280, 774}}";
 		};
 	};
@@ -240,7 +240,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1235, 5425}}";
 			sepNavSelRange = "{6354, 0}";
-			sepNavVisRect = "{{0, 1052}, {1235, 645}}";
+			sepNavVisRect = "{{0, 2721}, {1235, 645}}";
 			sepNavWindowFrame = "{{0, 4}, {1280, 774}}";
 		};
 	};
