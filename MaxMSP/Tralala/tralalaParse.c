@@ -147,29 +147,20 @@ PIZEvent *tralala_parseToEvent (t_symbol *s, long argc, t_atom *argv)
         
     } else if (atom_gettype (argv + i) == A_SYM) {
     //
-    long p = 0;
     t_dictionary *d = NULL;
         
     dictionary_getlong (tll_option, atom_getsym (argv + i), &option);
     
     switch (code) {
-        case PIZ_EVENT_SORT  : d = tll_value;           break;
-        case PIZ_EVENT_SCALE : d = tll_mode;            break;
-        case PIZ_EVENT_CELL  : d = tll_length;          break;
-        case PIZ_EVENT_VALUE : d = tll_length;          break;
-        case PIZ_EVENT_NOTE  : d = tll_length;  p = 3;  break;
+        case PIZ_EVENT_SORT  : d = tll_value;   break;
+        case PIZ_EVENT_SCALE : d = tll_mode;    break;
+        case PIZ_EVENT_CELL  : d = tll_length;  break;
+        case PIZ_EVENT_VALUE : d = tll_length;  break;
     }
     
-    if (d) {
-    //
-    if ((!p) && !(dictionary_getlong (d, atom_getsym (argv + i), data))) {
+    if (d && !(dictionary_getlong (d, atom_getsym (argv + i), data))) {
         k = MAX (1, k);
-        
-    } else if ((k >= p) && !(dictionary_getlong (d, atom_getsym (argv + i), data + p))) {
-        k = MAX (p + 1, k);
-    }
-    //
-    }
+    } 
     //
     }
     //
