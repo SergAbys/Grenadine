@@ -425,8 +425,8 @@ bool pizAgentEventLoopIsWorkTime (PIZAgent *x)
     PIZNano elapsed;
     PIZNano timeOut;
     
-    pizTimeSet  (&now);
-    pizNanoSet  (&timeOut, PIZ_AGENT_CONSTANT_RATIO_WORK / x->bpm);
+    pizTimeSet (&now);
+    pizNanoSet (&timeOut, PIZ_AGENT_CONSTANT_RATIO_WORK / x->bpm);
     
     if (!(pizTimeElapsedNano (&x->grainStart, &now, &elapsed))) {
         if (elapsed < timeOut) {

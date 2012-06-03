@@ -170,12 +170,9 @@ PIZError pizSequenceClean (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
 {
-    long shift;
+    long i, k, selector, shift = 1;
         
-    if (!(pizEventValue (event, &shift))) {
-    //
-    long i, k, selector;
-
+    pizEventValue  (event, &shift);
     pizEventOption (event, &selector);
     selector = CLAMP (selector, PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
     
@@ -190,8 +187,6 @@ PIZError pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
     }
                 
     pizSequenceWithTempNotes (x, selector, 0);
-    //
-    }
     
     return PIZ_GOOD;
 }
@@ -381,10 +376,12 @@ PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
 {
-    //long     iterate;
-    PIZError hashErr = PIZ_GOOD;/*
+    long     iterate = 1;
+    PIZError hashErr = PIZ_GOOD;
     
-    if (!(pizEventValue (event, &iterate)) && (x->cell != PIZ_NADA)) {
+    pizEventValue (event, &iterate); 
+    
+    if (x->cell != PIZ_NADA) {
     //
     long k       = 0;
     long loop    = 0;
@@ -534,7 +531,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
         pizSequenceMakeMap (x);
     }
     //
-    }*/
+    }
     
     return hashErr;
 }
@@ -792,8 +789,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
                                 
         if (!err && !(pizLinklistAppend (x->timeline[newNote->position], (void *)newNote))) {
             x->count ++; 
-            pizItemsetSetAtIndex   (&x->addedNotes, newNote->tag);
-            pizItemsetUnsetAtIndex (&x->changedNotes, newNote->tag);
+            pizItemsetSetAtIndex (&x->addedNotes, newNote->tag);
             
         } else {
             pizHashTableRemove (x->lookup, newNote->tag, newNote);
