@@ -76,6 +76,7 @@ int main (void)
     class_addmethod (c, (method)tralala_stop,       "stop",     0);
     class_addmethod (c, (method)tralala_loop,       "loop",     0);
     class_addmethod (c, (method)tralala_unloop,     "unloop",   0);
+    class_addmethod (c, (method)tralala_assist,     "assist",   A_CANT, 0);
     class_addmethod (c, (method)tralala_list,       "list",     A_GIMME, 0);
     class_addmethod (c, (method)tralala_anything,   "anything", A_GIMME, 0);
 
@@ -131,7 +132,7 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
         
     } else {	
         switch (a) {
-            case 0 : sprintf (s, "(List) Notes Played"); break;
+            case 0 : sprintf (s, "(List) Played"); break;
             case 1 : sprintf (s, "Messages"); break;
         }
     }
