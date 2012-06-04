@@ -295,6 +295,17 @@ void pizSequenceEachCycle (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *
     }
 }
 
+void pizSequenceEachDump (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n)
+{
+    long a[ ] = { n->position, 
+                  n->values[PIZ_VALUE_PITCH],
+                  n->values[PIZ_VALUE_VELOCITY],
+                  n->values[PIZ_VALUE_DURATION], 
+                  n->values[PIZ_VALUE_CHANNEL] };
+                
+    x->tempError |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_DUMPED, n->tag, 5, a);
+}
+
 void pizSequenceEachTempHash (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n)
 {   
     long key = ((long)(n->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1)) + n->values[PIZ_VALUE_PITCH];

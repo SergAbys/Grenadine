@@ -86,12 +86,6 @@ static const long   pizSequenceNeighbors[ ] = { -256,
 #pragma mark ---
 #pragma mark -
 
-PIZError pizSequenceDump (PIZSequence *x, const PIZEvent *event)
-{
-    post ("DUMP");
-    return PIZ_GOOD;
-}
-
 PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
 {
     long argc;

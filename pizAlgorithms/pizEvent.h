@@ -57,7 +57,6 @@
 if (event) {            \
     PIZTime t;          \
     pizTimeSet (&t);    \
-    t = t / 1000000.;   \
     post ("%llu / %ld / %s / %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld / %ld / %ld",  \
     t, event->code, __FUNCTION__,   \
     event->data[0],     \

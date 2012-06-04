@@ -67,6 +67,15 @@ void pizSequenceGoToStart (PIZSequence *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+PIZError pizSequenceDump (PIZSequence *x)
+{
+    x->tempError = PIZ_GOOD; 
+    
+    pizSequenceForEach (x, NULL, PIZ_SEQUENCE_FLAG_NONE, pizSequenceEachDump);
+    
+    return x->tempError;
+}
+
 PIZError pizSequenceRefresh (PIZSequence *x)
 {
     long     i;
