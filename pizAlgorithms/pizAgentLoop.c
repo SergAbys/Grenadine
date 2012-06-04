@@ -70,7 +70,7 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizSequenceSetScale,            // PIZ_EVENT_SCALE
                                                     pizSequenceSetPattern,          // PIZ_EVENT_PATTERN
                                                     pizSequenceNote,                // PIZ_EVENT_NOTE
-                                                    NULL,                           // PIZ_EVENT_ZONE
+                                                    pizSequenceZone,                // PIZ_EVENT_ZONE
                                                     pizSequenceClear,               // PIZ_EVENT_CLEAR
                                                     pizSequenceClean,               // PIZ_EVENT_CLEAN
                                                     pizSequenceRotate,              // PIZ_EVENT_ROTATE

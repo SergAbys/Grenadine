@@ -100,9 +100,11 @@ PIZ_LOCAL void pizSequenceWithTempNotes     (PIZSequence *x, long selector, bool
 
 PIZ_LOCAL PIZNote   *pizSequenceNewNote     (PIZSequence *x, long tag, long *argv, ulong flags);
 PIZ_LOCAL PIZError  pizSequenceGetTag       (PIZSequence *x, long tag, long *ptr);
-PIZ_LOCAL long      pizSequenceToAmbitus    (PIZSequence *x, long pitch);
-PIZ_LOCAL long      pizSequenceToPattern    (PIZSequence *x, long position);
 PIZ_LOCAL void      pizSequenceMakeMap      (PIZSequence *x);
+
+PIZ_INLINE long      pizSequenceToAmbitus   (PIZSequence *x, long pitch);
+PIZ_INLINE long      pizSequenceToPattern   (PIZSequence *x, long position);
+PIZ_INLINE long      pizSequenceToCell      (PIZSequence *x, long position);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -131,6 +133,42 @@ PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
         if (pizSequenceNewNote (x, event->tag, values, flags)) {
             pizSequenceMakeMap (x);
         }
+    }
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceZone (PIZSequence *x, const PIZEvent *event)
+{
+    long argc;
+    long *argv = NULL;
+    
+    if (!(pizEventData (event, &argc, &argv))) {
+    //
+    long i;
+    long v[ ] = { x->start, x->end, x->down, x->up };
+    
+    for (i = 0; i < MIN (argc, 4); i++) {
+        v[i] = argv[i];
+    }
+    
+    v[0] = pizSequenceToCell (x, v[0]);
+    v[1] = pizSequenceToCell (x, v[1]);
+    
+    v[0] = CLAMP (v[0], 0, PIZ_SEQUENCE_SIZE_TIMELINE);
+    v[1] = CLAMP (v[1], 0, PIZ_SEQUENCE_SIZE_TIMELINE);
+    v[2] = CLAMP (v[2], 0, PIZ_MAGIC_PITCH);
+    v[3] = CLAMP (v[3], 0, PIZ_MAGIC_PITCH);
+    
+    if (v[0] != v[1]) {
+    //
+    if (v[0] < v[1]) { x->start = v[0]; x->end = v[1]; } else { x->end = v[0]; x->start = v[1]; }
+    if (v[2] < v[3]) { x->down = v[2]; x->up = v[3]; } else { x->up = v[2]; x->down = v[3]; }
+    //
+    }
+        
+    x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
+    //
     }
     
     return PIZ_GOOD;
@@ -835,7 +873,24 @@ PIZError pizSequenceGetTag (PIZSequence *x, long tag, long *ptr)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-long pizSequenceToAmbitus (PIZSequence *x, long pitch)
+void pizSequenceMakeMap (PIZSequence *x)
+{
+    long i;
+            
+    pizArrayClear (x->map);
+                            
+    for (i = 0; i < PIZ_SEQUENCE_SIZE_TIMELINE; i++) {
+        if (x->timeline[i] && pizLinklistCount (x->timeline[i])) {
+            pizArrayAppend (x->map, i);
+        }
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZ_INLINE long pizSequenceToAmbitus (PIZSequence *x, long pitch)
 {
     if (pitch < x->down) {
         while ((pitch < x->down) && (pitch < PIZ_MAGIC_PITCH)) {
@@ -850,7 +905,7 @@ long pizSequenceToAmbitus (PIZSequence *x, long pitch)
     return (CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
 }
 
-long pizSequenceToPattern (PIZSequence *x, long position)
+PIZ_INLINE long pizSequenceToPattern (PIZSequence *x, long position)
 {
     long s, j = (long)(position / (double)(ABS(x->cell)));
     
@@ -858,23 +913,12 @@ long pizSequenceToPattern (PIZSequence *x, long position)
         j += pizArrayAtIndex (x->pattern, j % s);
     }
 
-    return (j * x->cell);
+    return (j * ABS(x->cell));
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void pizSequenceMakeMap (PIZSequence *x)
+PIZ_INLINE long pizSequenceToCell (PIZSequence *x, long position)
 {
-    long i;
-            
-    pizArrayClear (x->map);
-                            
-    for (i = 0; i < PIZ_SEQUENCE_SIZE_TIMELINE; i++) {
-        if (x->timeline[i] && pizLinklistCount (x->timeline[i])) {
-            pizArrayAppend (x->map, i);
-        }
-    }
+    return (((long)((position / (double)(ABS(x->cell))) + 0.5)) * ABS(x->cell));
 }
 
 // -------------------------------------------------------------------------------------------------------------
