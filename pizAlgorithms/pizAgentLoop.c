@@ -283,8 +283,8 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
         
         PIZ_AGENT_LOCK_NOTIFICATION
         
-        count = pizLinklistCount (x->notification);
-        err   = pizSequenceStep (x->sequence);
+        count  = pizLinklistCount (x->notification);
+        err    = pizSequenceStep  (x->sequence);
         count -= pizLinklistCount (x->notification);
         
         if (count) { 
@@ -331,9 +331,9 @@ void pizAgentEventLoopDoRefresh (PIZAgent *x)
     
     PIZ_AGENT_LOCK_NOTIFICATION
     
-    count = pizLinklistCount (x->notification);
-    err   = pizSequenceRefresh (x->sequence);
-    count -= pizLinklistCount (x->notification);
+    count  = pizLinklistCount   (x->notification);
+    err    = pizSequenceRefresh (x->sequence);
+    count -= pizLinklistCount   (x->notification);
      
     if (!err && count) {
         PIZ_AGENT_UNLOCK_NOTIFICATION

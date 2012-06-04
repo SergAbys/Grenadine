@@ -147,8 +147,8 @@ PIZError pizAgentDump (PIZAgent *x, const PIZEvent *event)
     
     PIZ_AGENT_LOCK_NOTIFICATION
     
-    count = pizLinklistCount (x->notification);
-    err   = pizSequenceDump (x->sequence, event);
+    count  = pizLinklistCount (x->notification);
+    err    = pizSequenceDump  (x->sequence, event);
     count -= pizLinklistCount (x->notification);
      
     if (!err && count) {
