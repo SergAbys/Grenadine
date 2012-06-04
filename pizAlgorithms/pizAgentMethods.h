@@ -56,6 +56,7 @@ PIZ_LOCAL PIZError pizAgentUnloop   (PIZAgent *x, const PIZEvent *event);
 PIZ_LOCAL PIZError pizAgentBPM      (PIZAgent *x, const PIZEvent *event);
 PIZ_LOCAL PIZError pizAgentLearn    (PIZAgent *x, const PIZEvent *event);
 PIZ_LOCAL PIZError pizAgentForget   (PIZAgent *x, const PIZEvent *event);
+PIZ_LOCAL PIZError pizAgentDump     (PIZAgent *x, const PIZEvent *event);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

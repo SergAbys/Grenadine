@@ -39,13 +39,13 @@
 
 #include "pizAgent.h"
 #include "pizSequenceRun.h"
+#include "pizSequenceLibrary.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL ulong    pizSequenceStepMask         (PIZSequence *x, long n, long count);
-PIZ_LOCAL PIZError pizSequenceAddNotification  (PIZSequence *x, PIZEventCode n, long tag, long ac, long *av);
+PIZ_LOCAL ulong pizSequenceStepMask (PIZSequence *x, long n, long count);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -287,27 +287,6 @@ ulong pizSequenceStepMask (PIZSequence *x, long n, long count)
     }
         
     return mask;
-}
-
-PIZError pizSequenceAddNotification (PIZSequence *x, PIZEventCode n, long tag, long ac, long *av)
-{
-    PIZEvent *notification = NULL;
-    PIZError err = PIZ_GOOD;
-    
-    if (notification = pizEventNew (n)) {
-    //
-    pizEventSetTag (notification, tag);
-    pizEventSetData (notification, ac, av);
-    
-    if (err |= pizLinklistAppend (x->agent->notification, notification)) {       
-        pizEventFree (notification);  
-    }
-    //
-    } else {
-        err |= PIZ_MEMORY;
-    }
-    
-    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------

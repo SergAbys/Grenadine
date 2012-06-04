@@ -80,6 +80,10 @@
 #define PIZ_SEQUENCE_FLAG_AMBITUS           2UL
 #define PIZ_SEQUENCE_FLAG_CLIP              4UL 
 
+#define PIZ_SEQUENCE_FLAG_RANDOM            1UL
+#define PIZ_SEQUENCE_FLAG_FILL              2UL
+#define PIZ_SEQUENCE_FLAG_NEARBY            4UL
+
 #define PIZ_SEQUENCE_FLAG_ZONE              (1UL << 0)
 #define PIZ_SEQUENCE_FLAG_CHANCE            (1UL << 1)
 #define PIZ_SEQUENCE_FLAG_VELOCITY          (1UL << 2)

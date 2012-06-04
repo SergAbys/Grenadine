@@ -140,5 +140,30 @@ PIZError pizAgentLearn (PIZAgent *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
+PIZError pizAgentDump (PIZAgent *x, const PIZEvent *event)
+{
+    long     count;
+    PIZError err = PIZ_ERROR;
+    
+    PIZ_AGENT_LOCK_NOTIFICATION
+    
+    count = pizLinklistCount (x->notification);
+    err   = pizSequenceDump (x->sequence, event);
+    count -= pizLinklistCount (x->notification);
+     
+    if (!err && count) {
+        PIZ_AGENT_UNLOCK_NOTIFICATION
+        pthread_cond_signal (&x->notificationCondition);
+    } else {
+        PIZ_AGENT_UNLOCK_NOTIFICATION
+    }
+        
+    if (err == PIZ_MEMORY) {
+        PIZ_AGENT_MEMORY
+    }
+    
+    return PIZ_GOOD;
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------:x

@@ -89,6 +89,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_NOTE_CHANGED
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_NOTE_REMOVED
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_NOTE_PLAYED
+                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_NOTE_DUMPED
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_END
                                         PIZ_EVENT_NOTIFICATION };   // PIZ_EVENT_WILL_END
     
@@ -165,26 +166,26 @@ void pizEventOption (const PIZEvent *x, long *option)
     (*option) = x->option;
 }
 
-PIZError pizEventValue (const PIZEvent *x, long *value)
-{
-    PIZError err = PIZ_ERROR;
-    
-    if (x->size) {
-        err = PIZ_GOOD;
-        (*value) = x->data[0];
-    } 
-    
-    return err;
-}
-
 PIZError pizEventData (const PIZEvent *x, long *argc, long **argv)
 {
     PIZError err = PIZ_ERROR;
     
     if ((*argc) = x->size) {
-        err = PIZ_GOOD;
         (*argv) = (long *)x->data;
+        err = PIZ_GOOD;
     }
+    
+    return err;
+}
+
+PIZError pizEventValue (const PIZEvent *x, long *value)
+{
+    PIZError err = PIZ_ERROR;
+    
+    if (x->size) {
+        (*value) = x->data[0];
+        err = PIZ_GOOD;
+    } 
     
     return err;
 }

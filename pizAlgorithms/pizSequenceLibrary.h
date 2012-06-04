@@ -1,5 +1,5 @@
 /**
- * \file    pizSequenceMethods.h
+ * \file    pizSequence.h
  * \author  Jean Sapristi
  */
  
@@ -37,8 +37,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_SEQUENCE_METHODS_H
-#define PIZ_SEQUENCE_METHODS_H
+#ifndef PIZ_SEQUENCE_LIBRARY_H
+#define PIZ_SEQUENCE_LIBRARY_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -49,21 +49,26 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZError  pizSequenceDump         (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceNote         (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceZone         (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceClear        (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceClean        (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceRotate       (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceScramble     (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSort         (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceChange       (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceFill         (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceKill         (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceCycle        (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceAlgorithm    (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceJuliet       (PIZSequence *x, const PIZEvent *event); //
+PIZ_LOCAL PIZNote   *pizSequenceNewNote         (PIZSequence *x, long tag, long *argv, ulong flags);
+PIZ_LOCAL PIZError  pizSequenceGetTag           (PIZSequence *x, long tag, long *ptr);
+PIZ_LOCAL void      pizSequenceMakeMap          (PIZSequence *x);
+
+PIZ_LOCAL PIZError  pizSequenceAddNotification  (PIZSequence *x, PIZEventCode n, long tag, long ac, long *av);
+
+PIZ_LOCAL void      pizSequenceForEach          (PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod method);
+PIZ_LOCAL void      pizSequenceEachRemove       (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
+PIZ_LOCAL void      pizSequenceEachChange       (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
+PIZ_LOCAL void      pizSequenceEachCycle        (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
+PIZ_LOCAL void      pizSequenceEachTempHash     (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
+PIZ_LOCAL void      pizSequenceEachTempNotes    (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
+
+PIZ_LOCAL long      pizSequenceFillTempNotes    (PIZSequence *x);
+PIZ_LOCAL void      pizSequenceWithTempNotes    (PIZSequence *x, long selector, bool reverse);
+
+PIZ_LOCAL long      pizSequenceToAmbitus        (PIZSequence *x, long pitch);
+PIZ_LOCAL long      pizSequenceToPattern        (PIZSequence *x, long position);
+PIZ_LOCAL long      pizSequenceToCell           (PIZSequence *x, long position);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_METHODS_H
+#endif // PIZ_SEQUENCE_LIBRARY_H

@@ -135,8 +135,9 @@ typedef enum _PIZEventCode {
     PIZ_EVENT_NOTE_CHANGED          = 42,
     PIZ_EVENT_NOTE_REMOVED          = 43,
     PIZ_EVENT_NOTE_PLAYED           = 44,
-    PIZ_EVENT_END                   = 45,
-    PIZ_EVENT_WILL_END              = 46
+    PIZ_EVENT_NOTE_DUMPED           = 45,
+    PIZ_EVENT_END                   = 46,
+    PIZ_EVENT_WILL_END              = 47
     //
     } PIZEventCode;
 
@@ -166,9 +167,8 @@ void        pizEventCode        (const PIZEvent *x, PIZEventCode *code);
 void        pizEventType        (const PIZEvent *x, PIZEventType *type);
 void        pizEventTag         (const PIZEvent *x, long *tag);
 void        pizEventOption      (const PIZEvent *x, long *option);
-
-PIZError    pizEventValue       (const PIZEvent *x, long *value);
 PIZError    pizEventData        (const PIZEvent *x, long *argc, long **argv);
+PIZError    pizEventValue       (const PIZEvent *x, long *value);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
