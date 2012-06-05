@@ -9,6 +9,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "tralalaParse.h"
+#include "ext_quickmap.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -41,6 +42,7 @@ tll_select = quickmap_new ( );
 tll_key    = quickmap_new ( );
 tll_mode   = quickmap_new ( );
 tll_length = quickmap_new ( );
+
 
 quickmap_add (tll_code, gensym ("bpm"),                     (void *)(OFFSET + PIZ_EVENT_BPM));
 quickmap_add (tll_code, gensym ("learn"),                   (void *)(OFFSET + PIZ_EVENT_LEARN));

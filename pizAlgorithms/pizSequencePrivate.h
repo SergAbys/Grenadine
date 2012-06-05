@@ -1,5 +1,5 @@
 /**
- * \file    pizSequence.h
+ * \file    pizSequencePrivate.h
  * \author  Jean Sapristi
  */
  
@@ -37,14 +37,36 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_SEQUENCE_LIBRARY_H
-#define PIZ_SEQUENCE_LIBRARY_H
+#ifndef PIZ_SEQUENCE_PRIVATE_H
+#define PIZ_SEQUENCE_PRIVATE_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizEvent.h"
 #include "pizSequence.h"
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define PIZ_SEQUENCE_FLAG_NONE          0UL
+#define PIZ_SEQUENCE_FLAG_SNAP          1UL
+#define PIZ_SEQUENCE_FLAG_AMBITUS       2UL
+#define PIZ_SEQUENCE_FLAG_CLIP          4UL 
+
+#define PIZ_SEQUENCE_FLAG_RANDOM        1UL
+#define PIZ_SEQUENCE_FLAG_FILL          2UL
+#define PIZ_SEQUENCE_FLAG_NEARBY        4UL
+
+#define PIZ_SEQUENCE_FLAG_ZONE          (1UL << 0)
+#define PIZ_SEQUENCE_FLAG_CHANCE        (1UL << 1)
+#define PIZ_SEQUENCE_FLAG_VELOCITY      (1UL << 2)
+#define PIZ_SEQUENCE_FLAG_CHANNEL       (1UL << 3)
+#define PIZ_SEQUENCE_FLAG_CHORD         (1UL << 4)
+#define PIZ_SEQUENCE_FLAG_CELL          (1UL << 5)
+#define PIZ_SEQUENCE_FLAG_NOTE_VALUE    (1UL << 6)
+#define PIZ_SEQUENCE_FLAG_SCALE         (1UL << 8)
+#define PIZ_SEQUENCE_FLAG_PATTERN       (1UL << 9) 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -72,4 +94,4 @@ PIZ_LOCAL long      pizSequenceToCell           (PIZSequence *x, long position);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_LIBRARY_H
+#endif // PIZ_SEQUENCE_PRIVATE_H
