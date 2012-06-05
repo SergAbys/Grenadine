@@ -15,13 +15,13 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-static t_quickmap   *tll_key;
-static t_quickmap   *tll_mode;
-static t_quickmap   *tll_length;
-static t_quickmap   *tll_value;
-static t_quickmap   *tll_select;
-
-static t_dictionary *tll_code;
+static t_quickmap *tll_code;
+static t_quickmap *tll_key;
+static t_quickmap *tll_mode;
+static t_quickmap *tll_length;
+static t_quickmap *tll_value;
+static t_quickmap *tll_select;
+static t_quickmap *tll_notify;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -37,41 +37,42 @@ static t_dictionary *tll_code;
 void tralala_parseInit ( )
 {
 //
-tll_key     = quickmap_new ( );
-tll_mode    = quickmap_new ( );
-tll_length  = quickmap_new ( );
-tll_value   = quickmap_new ( );
-tll_select  = quickmap_new ( );
+tll_code   = quickmap_new ( );
+tll_key    = quickmap_new ( );
+tll_mode   = quickmap_new ( );
+tll_length = quickmap_new ( );
+tll_value  = quickmap_new ( );
+tll_select = quickmap_new ( );
+tll_notify = quickmap_new ( );
 
-tll_code    = dictionary_new ( );
 
-dictionary_appendlong (tll_code, gensym ("bpm"),            PIZ_EVENT_BPM);
-dictionary_appendlong (tll_code, gensym ("learn"),          PIZ_EVENT_LEARN);
-dictionary_appendlong (tll_code, gensym ("list"),           PIZ_EVENT_LEARN);
-dictionary_appendlong (tll_code, gensym ("forget"),         PIZ_EVENT_FORGET);
-dictionary_appendlong (tll_code, gensym ("dump"),           PIZ_EVENT_DUMP);
-dictionary_appendlong (tll_code, gensym ("chance"),         PIZ_EVENT_CHANCE);
-dictionary_appendlong (tll_code, gensym ("velocity"),       PIZ_EVENT_VELOCITY);
-dictionary_appendlong (tll_code, gensym ("channel"),        PIZ_EVENT_CHANNEL);
-dictionary_appendlong (tll_code, gensym ("chord"),          PIZ_EVENT_CHORD);
-dictionary_appendlong (tll_code, gensym ("cell"),           PIZ_EVENT_CELL);
-dictionary_appendlong (tll_code, gensym ("value"),          PIZ_EVENT_VALUE);
-dictionary_appendlong (tll_code, gensym ("scale"),          PIZ_EVENT_SCALE);
-dictionary_appendlong (tll_code, gensym ("pattern"),        PIZ_EVENT_PATTERN);
-dictionary_appendlong (tll_code, gensym ("note"),           PIZ_EVENT_NOTE);
-dictionary_appendlong (tll_code, gensym ("zone"),           PIZ_EVENT_ZONE);
-dictionary_appendlong (tll_code, gensym ("clear"),          PIZ_EVENT_CLEAR);
-dictionary_appendlong (tll_code, gensym ("clean"),          PIZ_EVENT_CLEAN);
-dictionary_appendlong (tll_code, gensym ("rotate"),         PIZ_EVENT_ROTATE);
-dictionary_appendlong (tll_code, gensym ("scramble"),       PIZ_EVENT_SCRAMBLE);
-dictionary_appendlong (tll_code, gensym ("sort"),           PIZ_EVENT_SORT);
-dictionary_appendlong (tll_code, gensym ("change"),         PIZ_EVENT_CHANGE);
-dictionary_appendlong (tll_code, gensym ("fill"),           PIZ_EVENT_FILL);
-dictionary_appendlong (tll_code, gensym ("kill"),           PIZ_EVENT_KILL);
-dictionary_appendlong (tll_code, gensym ("cycle"),          PIZ_EVENT_CYCLE);
-dictionary_appendlong (tll_code, gensym ("zoulou"),         PIZ_EVENT_ZOULOU);
-dictionary_appendlong (tll_code, gensym ("romeo"),          PIZ_EVENT_ROMEO);
-dictionary_appendlong (tll_code, gensym ("juliet"),         PIZ_EVENT_JULIET);
+quickmap_add (tll_code, gensym ("bpm"),                     (void *)(TINY + PIZ_EVENT_BPM));
+quickmap_add (tll_code, gensym ("learn"),                   (void *)(TINY + PIZ_EVENT_LEARN));
+quickmap_add (tll_code, gensym ("list"),                    (void *)(TINY + PIZ_EVENT_LEARN));
+quickmap_add (tll_code, gensym ("forget"),                  (void *)(TINY + PIZ_EVENT_FORGET));
+quickmap_add (tll_code, gensym ("dump"),                    (void *)(TINY + PIZ_EVENT_DUMP));
+quickmap_add (tll_code, gensym ("chance"),                  (void *)(TINY + PIZ_EVENT_CHANCE));
+quickmap_add (tll_code, gensym ("velocity"),                (void *)(TINY + PIZ_EVENT_VELOCITY));
+quickmap_add (tll_code, gensym ("channel"),                 (void *)(TINY + PIZ_EVENT_CHANNEL));
+quickmap_add (tll_code, gensym ("chord"),                   (void *)(TINY + PIZ_EVENT_CHORD));
+quickmap_add (tll_code, gensym ("cell"),                    (void *)(TINY + PIZ_EVENT_CELL));
+quickmap_add (tll_code, gensym ("value"),                   (void *)(TINY + PIZ_EVENT_VALUE));
+quickmap_add (tll_code, gensym ("scale"),                   (void *)(TINY + PIZ_EVENT_SCALE));
+quickmap_add (tll_code, gensym ("pattern"),                 (void *)(TINY + PIZ_EVENT_PATTERN));
+quickmap_add (tll_code, gensym ("note"),                    (void *)(TINY + PIZ_EVENT_NOTE));
+quickmap_add (tll_code, gensym ("zone"),                    (void *)(TINY + PIZ_EVENT_ZONE));
+quickmap_add (tll_code, gensym ("clear"),                   (void *)(TINY + PIZ_EVENT_CLEAR));
+quickmap_add (tll_code, gensym ("clean"),                   (void *)(TINY + PIZ_EVENT_CLEAN));
+quickmap_add (tll_code, gensym ("rotate"),                  (void *)(TINY + PIZ_EVENT_ROTATE));
+quickmap_add (tll_code, gensym ("scramble"),                (void *)(TINY + PIZ_EVENT_SCRAMBLE));
+quickmap_add (tll_code, gensym ("sort"),                    (void *)(TINY + PIZ_EVENT_SORT));
+quickmap_add (tll_code, gensym ("change"),                  (void *)(TINY + PIZ_EVENT_CHANGE));
+quickmap_add (tll_code, gensym ("fill"),                    (void *)(TINY + PIZ_EVENT_FILL));
+quickmap_add (tll_code, gensym ("kill"),                    (void *)(TINY + PIZ_EVENT_KILL));
+quickmap_add (tll_code, gensym ("cycle"),                   (void *)(TINY + PIZ_EVENT_CYCLE));
+quickmap_add (tll_code, gensym ("zoulou"),                  (void *)(TINY + PIZ_EVENT_ZOULOU));
+quickmap_add (tll_code, gensym ("romeo"),                   (void *)(TINY + PIZ_EVENT_ROMEO));
+quickmap_add (tll_code, gensym ("juliet"),                  (void *)(TINY + PIZ_EVENT_JULIET));
 
 quickmap_add (tll_value,  gensym ("up"),                    (void *)(TINY + 0)); 
 quickmap_add (tll_value,  gensym ("down"),                  (void *)(TINY + 1));
@@ -138,7 +139,42 @@ quickmap_add (tll_length, gensym ("half_dotted"),           (void *)(TINY + PIZ_
 quickmap_add (tll_length, gensym ("quarter_dotted"),        (void *)(TINY + PIZ_QUARTER_NOTE_DOTTED));
 quickmap_add (tll_length, gensym ("eighth_dotted"),         (void *)(TINY + PIZ_EIGHTH_NOTE_DOTTED));
 quickmap_add (tll_length, gensym ("sixteenth_dotted"),      (void *)(TINY + PIZ_SIXTEENTH_NOTE_DOTTED));
+
+quickmap_add (tll_notify, gensym ("bpm"),                   (void *)(TINY + PIZ_EVENT_CHANGED_BPM));
+quickmap_add (tll_notify, gensym ("chance"),                (void *)(TINY + PIZ_EVENT_CHANGED_CHANCE));
+quickmap_add (tll_notify, gensym ("velocity"),              (void *)(TINY + PIZ_EVENT_CHANGED_VELOCITY));
+quickmap_add (tll_notify, gensym ("channel"),               (void *)(TINY + PIZ_EVENT_CHANGED_CHANNEL));
+quickmap_add (tll_notify, gensym ("chord"),                 (void *)(TINY + PIZ_EVENT_CHANGED_CHORD));
+quickmap_add (tll_notify, gensym ("cell"),                  (void *)(TINY + PIZ_EVENT_CHANGED_CELL));
+quickmap_add (tll_notify, gensym ("value"),                 (void *)(TINY + PIZ_EVENT_CHANGED_VALUE));
+quickmap_add (tll_notify, gensym ("scale"),                 (void *)(TINY + PIZ_EVENT_CHANGED_SCALE));
+quickmap_add (tll_notify, gensym ("pattern"),               (void *)(TINY + PIZ_EVENT_CHANGED_PATTERN)); 
 //
+}
+
+void tralala_debugEvent (PIZEvent *event) 
+{
+    PIZTime      t;
+    t_symbol     *s = NULL;
+    char         *n = "?";
+    long         identifier;
+    PIZEventCode code;
+    
+    pizTimeSet (&t);
+    pizEventCode (event, &code);
+    pizEventIdentifier (event, &identifier);
+    
+    code += TINY;
+        
+    if (quickmap_lookup_key2 (tll_code, (void *)code, (void **)&s) != MAX_ERR_NONE) {
+        quickmap_lookup_key2 (tll_notify, (void *)code, (void **)&s);
+    }
+
+    if (s) {
+        n = s->s_name;
+    }
+    
+    post ("%llu / %ld / %s", t, identifier, n);
 }
 
 PIZEvent *tralala_parseToEvent (t_symbol *s, long argc, t_atom *argv)
@@ -146,12 +182,14 @@ PIZEvent *tralala_parseToEvent (t_symbol *s, long argc, t_atom *argv)
     long     code = 0;
     PIZEvent *event = NULL;
     
-    if (!(dictionary_getlong (tll_code, s, &code))) {
+    if (!(quickmap_lookup_key1 (tll_code, (void *)s, (void **)&code))) {
     //
     long i, k = 0;
     long option = TINY;
     long data[PIZ_EVENT_DATA_SIZE];
      
+    code -= TINY;
+    
     for (i = 0; i < argc; i++) {
     //
     if ((atom_gettype (argv + i) == A_LONG) && (k < PIZ_EVENT_DATA_SIZE)) {

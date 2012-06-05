@@ -36,18 +36,9 @@ typedef struct _tralala {
                             if (event = tralala_parseToEvent ((s), (ac), (av))) {       \
                                 pizEventSetIdentifier (event, 0);                       \
                                 pizAgentAddEvent (x->agent, event);                     \
-                                DEBUGEVENT                                              \
+                                tralala_debugEvent (event);                             \
                             }
-                                                
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-                                            
-#define DEBUGEVENT  if (event) {                                                        \
-                        PIZTime t;                                                      \
-                        pizTimeSet (&t);                                                \
-                        t = t / 1000000.;                                               \
-                        post ("%llu / %ld / %ld", t, event->code, event->identifier);   \
-                    }
+                                                                                    
                     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -187,7 +178,7 @@ void tralala_notify (void *ptr, PIZEvent *event)
         outlet_anything (x->rightOutlet, tll_willEnd, 0, NULL);
     }
     
-    DEBUGEVENT
+    tralala_debugEvent (event);
         
     pizEventFree (event);
 }
