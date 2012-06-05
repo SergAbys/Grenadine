@@ -166,8 +166,9 @@ PIZError pizSequenceAddNotification (PIZSequence *x, PIZEventCode n, long tag, l
     
     if (notification = pizEventNew (n)) {
     //
-    pizEventSetTag (notification, tag);
-    pizEventSetData (notification, ac, av);
+    pizEventSetIdentifier (notification, x->agent->identifier);
+    pizEventSetTag        (notification, tag);
+    pizEventSetData       (notification, ac, av);
     
     if (err |= pizLinklistAppend (x->agent->notification, notification)) {       
         pizEventFree (notification);  

@@ -104,9 +104,10 @@ PIZEvent *pizEventNew (PIZEventCode code)
     PIZEvent *x = NULL;
     
     if (x = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        x->code = code;
-        x->type = pizEventTypes[code];
-        x->tag  = PIZ_NADA;
+        x->code       = code;
+        x->type       = pizEventTypes[code];
+        x->tag        = PIZ_NADA;
+        x->identifier = PIZ_NADA;
     }
     
     return x;
@@ -119,6 +120,11 @@ PIZEvent *pizEventNew (PIZEventCode code)
 void pizEventFree (PIZEvent *x)
 {
     free (x);
+}
+
+void pizEventSetIdentifier (PIZEvent *x, long identifier)
+{
+    x->identifier = identifier;
 }
 
 void pizEventSetTag (PIZEvent *x, long tag)
@@ -154,6 +160,11 @@ void pizEventCode (const PIZEvent *x, PIZEventCode *code)
 void pizEventType (const PIZEvent *x, PIZEventType *type)
 {
     (*type) = x->type;
+}
+
+void pizEventIdentifier (const PIZEvent *x, long *identifier)
+{
+    (*identifier) = x->identifier;
 }
 
 void pizEventTag (const PIZEvent *x, long *tag)

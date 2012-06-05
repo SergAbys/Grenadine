@@ -209,7 +209,8 @@ void pizAgentAddNotification (PIZAgent *x, PIZEventCode n, long ac, long *av)
 
     if (notification = pizEventNew (n)) {
     //
-    pizEventSetData (notification, ac, av);
+    pizEventSetIdentifier (notification, x->identifier);
+    pizEventSetData       (notification, ac, av);
     
     PIZ_AGENT_LOCK_NOTIFICATION
     PIZ_AGENT_QUEUE (x->notification, notification)

@@ -29,22 +29,24 @@ typedef struct _tralala {
 
 #define SEND(code)          PIZEvent *event = NULL;                                     \
                             if (event = pizEventNew (code)) {                           \
+                                pizEventSetIdentifier (event, 0);                       \
                                 pizAgentAddEvent (x->agent, event);                     \
                             }
 #define PARSE(s, ac, av)    PIZEvent *event = NULL;                                     \
                             if (event = tralala_parseToEvent ((s), (ac), (av))) {       \
-                                DEBUGEVENT                                              \
+                                pizEventSetIdentifier (event, 0);                       \
                                 pizAgentAddEvent (x->agent, event);                     \
+                                DEBUGEVENT                                              \
                             }
                                                 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
                                                 
-#define DEBUGEVENT  if (event) {                                \
-                        PIZTime t;                              \
-                        pizTimeSet (&t);                        \
-                        t = t / 1000000.;                       \
-                        post ("%llu / %ld", t, event->code);    \
+#define DEBUGEVENT  if (event) {                                                        \
+                        PIZTime t;                                                      \
+                        pizTimeSet (&t);                                                \
+                        t = t / 1000000.;                                               \
+                        post ("%llu / %ld / %ld", t, event->code, event->identifier);   \
                     }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -77,6 +79,8 @@ static t_class  *tralala_class;
 static t_symbol *tll_end; 
 static t_symbol *tll_willEnd; 
 static t_symbol *tll_note;
+
+static long identifier = 1;
 
 int main (void)
 {	
@@ -116,7 +120,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 
     if (x = (t_tralala *)object_alloc (tralala_class)) {
     //
-    if (x->agent = pizAgentNew ( )) {
+    if (x->agent = pizAgentNew (identifier++)) {
     
         x->rightOutlet = outlet_new ((t_object *)x, NULL);
         x->leftOutlet  = listout ((t_object *)x);

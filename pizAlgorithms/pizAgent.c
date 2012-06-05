@@ -52,7 +52,7 @@
 #pragma mark ---
 #pragma mark -
 
-PIZAgent *pizAgentNew (void)
+PIZAgent *pizAgentNew (long identifier)
 {
     PIZAgent *x = NULL;
     
@@ -60,6 +60,7 @@ PIZAgent *pizAgentNew (void)
     //
     long err = PIZ_GOOD;
     
+    x->identifier       = identifier;
     x->bpm              = PIZ_DEFAULT_BPM;  
     x->flags            = PIZ_AGENT_FLAG_INIT; 
     x->run              = pizLinklistNew ( );

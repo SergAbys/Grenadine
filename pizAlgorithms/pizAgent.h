@@ -93,6 +93,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZAgent {
+    long                identifier;
     long                bpm;
     ulong               flags;
     PIZNano             grainSize;
@@ -124,7 +125,7 @@ typedef struct _PIZAgent {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZAgent    *pizAgentNew        (void);
+PIZAgent    *pizAgentNew        (long identifier);
 
 void        pizAgentFree        (PIZAgent *x);
 PIZError    pizAgentAttach      (PIZAgent *x, void *observer, PIZMethod f); 

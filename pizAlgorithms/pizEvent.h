@@ -121,6 +121,7 @@ typedef enum _PIZEventCode {
 typedef struct _PIZEvent {
     PIZEventCode    code;
     PIZEventType    type;
+    long            identifier;
     long            tag;
     long            option;
     long            size;
@@ -130,19 +131,21 @@ typedef struct _PIZEvent {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZEvent    *pizEventNew        (PIZEventCode code);
+PIZEvent    *pizEventNew            (PIZEventCode code);
 
-void        pizEventFree        (PIZEvent *x);
-void        pizEventSetTag      (PIZEvent *x, long tag);
-void        pizEventSetOption   (PIZEvent *x, long option);
-void        pizEventSetData     (PIZEvent *x, long argc, const long *argv);
+void        pizEventFree            (PIZEvent *x);
+void        pizEventSetIdentifier   (PIZEvent *x, long identifier);
+void        pizEventSetTag          (PIZEvent *x, long tag);
+void        pizEventSetOption       (PIZEvent *x, long option);
+void        pizEventSetData         (PIZEvent *x, long argc, const long *argv);
 
-void        pizEventCode        (const PIZEvent *x, PIZEventCode *code);
-void        pizEventType        (const PIZEvent *x, PIZEventType *type);
-void        pizEventTag         (const PIZEvent *x, long *tag);
-void        pizEventOption      (const PIZEvent *x, long *option);
-PIZError    pizEventData        (const PIZEvent *x, long *argc, long **argv);
-PIZError    pizEventValue       (const PIZEvent *x, long *value);
+void        pizEventCode            (const PIZEvent *x, PIZEventCode *code);
+void        pizEventType            (const PIZEvent *x, PIZEventType *type);
+void        pizEventIdentifier      (const PIZEvent *x, long *identifier);
+void        pizEventTag             (const PIZEvent *x, long *tag);
+void        pizEventOption          (const PIZEvent *x, long *option);
+PIZError    pizEventData            (const PIZEvent *x, long *argc, long **argv);
+PIZError    pizEventValue           (const PIZEvent *x, long *value);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -152,6 +155,11 @@ PIZError    pizEventValue       (const PIZEvent *x, long *value);
 PIZ_EXTERN void pizEventFree (PIZEvent *x)
 {
     free (x);
+}
+
+PIZ_EXTERN void pizEventSetIdentifier (PIZEvent *x, long identifier)
+{
+    x->identifier = identifier;
 }
 
 PIZ_EXTERN void pizEventSetTag (PIZEvent *x, long tag)
@@ -172,6 +180,11 @@ PIZ_EXTERN void pizEventCode (const PIZEvent *x, PIZEventCode *code)
 PIZ_EXTERN void pizEventType (const PIZEvent *x, PIZEventType *type)
 {
     (*type) = x->type;
+}
+
+PIZ_EXTERN void pizEventIdentifier (const PIZEvent *x, long *identifier)
+{
+    (*identifier) = x->identifier;
 }
 
 PIZ_EXTERN void pizEventTag (const PIZEvent *x, long *tag)
