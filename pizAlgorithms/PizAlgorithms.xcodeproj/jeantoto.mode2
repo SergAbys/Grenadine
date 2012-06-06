@@ -259,7 +259,7 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>16</integer>
+											<integer>14</integer>
 											<integer>9</integer>
 											<integer>2</integer>
 											<integer>0</integer>
@@ -289,7 +289,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>439 93 592 627 0 0 1280 778 </string>
+								<string>412 116 592 627 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -426,8 +426,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>960CFABC157FA1DF00B982EC</string>
-				<string>960CFABD157FA1DF00B982EC</string>
+				<string>96F522C0157FB60800F046E1</string>
+				<string>96F522C1157FB60800F046E1</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -460,11 +460,10 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/pizAlgorithms/PizAlgorithms.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>439 93 592 627 0 0 1280 778 </string>
+	<string>412 116 592 627 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>

@@ -256,7 +256,7 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>3</integer>
+											<integer>5</integer>
 											<integer>2</integer>
 											<integer>0</integer>
 										</array>
@@ -285,7 +285,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>225 222 420 385 0 0 1280 778 </string>
+								<string>178 223 420 385 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -425,8 +425,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>960CFAD3157FA76300B982EC</string>
-				<string>960CFAD4157FA76300B982EC</string>
+				<string>96F522C9157FB61100F046E1</string>
+				<string>96F522CA157FB61100F046E1</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -459,11 +459,12 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/MaxMSP/Tralala/tralala.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>225 222 420 385 0 0 1280 778 </string>
+	<string>178 223 420 385 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -621,7 +622,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string></string>
+								<string>tralalaParse.c</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -638,10 +639,12 @@
 							<string>257pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 5}, {1205, 327}}</string>
+								<string>{{0, 288}, {1205, 44}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>
@@ -679,7 +682,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>960CFAD5157FA76300B982EC</string>
+				<string>96F522DB157FBDE000F046E1</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -819,12 +822,14 @@
 							<key>Dock</key>
 							<array>
 								<dict>
+									<key>BecomeActive</key>
+									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string></string>
+										<string>tralalaParse.c</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -833,7 +838,7 @@
 										<key>Frame</key>
 										<string>{{0, 0}, {1280, 443}}</string>
 										<key>RubberWindowFrame</key>
-										<string>347 4 1280 774 0 0 1280 778 </string>
+										<string>44 4 1280 774 0 0 1280 778 </string>
 									</dict>
 									<key>Module</key>
 									<string>PBXNavigatorGroup</string>
@@ -845,8 +850,6 @@
 							<string>443pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -859,7 +862,7 @@
 								<key>Frame</key>
 								<string>{{0, 448}, {1280, 285}}</string>
 								<key>RubberWindowFrame</key>
-								<string>347 4 1280 774 0 0 1280 778 </string>
+								<string>44 4 1280 774 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXProjectFindModule</string>
@@ -882,13 +885,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>96E03AD2157E5B7200271B71</string>
-				<string>96E03AD3157E5B7200271B71</string>
+				<string>96F522E3157FBDE000F046E1</string>
+				<string>96F522E4157FBDE000F046E1</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>
 			<key>WindowString</key>
-			<string>347 4 1280 774 0 0 1280 778 </string>
+			<string>44 4 1280 774 0 0 1280 778 </string>
 			<key>WindowToolGUID</key>
 			<string>1C530D57069F1CE1000CFCEE</string>
 			<key>WindowToolIsVisible</key>

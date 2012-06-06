@@ -21,12 +21,18 @@ static t_quickmap *tll_mode;
 static t_quickmap *tll_length;
 static t_quickmap *tll_value;
 static t_quickmap *tll_select;
-static t_quickmap *tll_notify;
+static t_quickmap *tll_notification;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #define TINY 2
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark-
+
+PIZ_INLINE t_symbol *tagToKey (long tag);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -37,14 +43,13 @@ static t_quickmap *tll_notify;
 void tralala_parseInit ( )
 {
 //
-tll_code   = quickmap_new ( );
-tll_key    = quickmap_new ( );
-tll_mode   = quickmap_new ( );
-tll_length = quickmap_new ( );
-tll_value  = quickmap_new ( );
-tll_select = quickmap_new ( );
-tll_notify = quickmap_new ( );
-
+tll_code         = quickmap_new ( );
+tll_key          = quickmap_new ( );
+tll_mode         = quickmap_new ( );
+tll_length       = quickmap_new ( );
+tll_value        = quickmap_new ( );
+tll_select       = quickmap_new ( );
+tll_notification = quickmap_new ( );
 
 quickmap_add (tll_code, gensym ("bpm"),                     (void *)(TINY + PIZ_EVENT_BPM));
 quickmap_add (tll_code, gensym ("learn"),                   (void *)(TINY + PIZ_EVENT_LEARN));
@@ -140,22 +145,21 @@ quickmap_add (tll_length, gensym ("quarter_dotted"),        (void *)(TINY + PIZ_
 quickmap_add (tll_length, gensym ("eighth_dotted"),         (void *)(TINY + PIZ_EIGHTH_NOTE_DOTTED));
 quickmap_add (tll_length, gensym ("sixteenth_dotted"),      (void *)(TINY + PIZ_SIXTEENTH_NOTE_DOTTED));
 
-quickmap_add (tll_notify, gensym ("bpm"),                   (void *)(TINY + PIZ_EVENT_CHANGED_BPM));
-quickmap_add (tll_notify, gensym ("chance"),                (void *)(TINY + PIZ_EVENT_CHANGED_CHANCE));
-quickmap_add (tll_notify, gensym ("velocity"),              (void *)(TINY + PIZ_EVENT_CHANGED_VELOCITY));
-quickmap_add (tll_notify, gensym ("channel"),               (void *)(TINY + PIZ_EVENT_CHANGED_CHANNEL));
-quickmap_add (tll_notify, gensym ("chord"),                 (void *)(TINY + PIZ_EVENT_CHANGED_CHORD));
-quickmap_add (tll_notify, gensym ("cell"),                  (void *)(TINY + PIZ_EVENT_CHANGED_CELL));
-quickmap_add (tll_notify, gensym ("value"),                 (void *)(TINY + PIZ_EVENT_CHANGED_VALUE));
-quickmap_add (tll_notify, gensym ("scale"),                 (void *)(TINY + PIZ_EVENT_CHANGED_SCALE));
-quickmap_add (tll_notify, gensym ("pattern"),               (void *)(TINY + PIZ_EVENT_CHANGED_PATTERN)); 
+quickmap_add (tll_notification, gensym ("bpm"),             (void *)(TINY + PIZ_EVENT_CHANGED_BPM));
+quickmap_add (tll_notification, gensym ("chance"),          (void *)(TINY + PIZ_EVENT_CHANGED_CHANCE));
+quickmap_add (tll_notification, gensym ("velocity"),        (void *)(TINY + PIZ_EVENT_CHANGED_VELOCITY));
+quickmap_add (tll_notification, gensym ("channel"),         (void *)(TINY + PIZ_EVENT_CHANGED_CHANNEL));
+quickmap_add (tll_notification, gensym ("chord"),           (void *)(TINY + PIZ_EVENT_CHANGED_CHORD));
+quickmap_add (tll_notification, gensym ("cell"),            (void *)(TINY + PIZ_EVENT_CHANGED_CELL));
+quickmap_add (tll_notification, gensym ("value"),           (void *)(TINY + PIZ_EVENT_CHANGED_VALUE));
+quickmap_add (tll_notification, gensym ("scale"),           (void *)(TINY + PIZ_EVENT_CHANGED_SCALE));
+quickmap_add (tll_notification, gensym ("pattern"),         (void *)(TINY + PIZ_EVENT_CHANGED_PATTERN)); 
 //
 }
 
-PIZEvent *tralala_parseToEvent (t_symbol *s, long argc, t_atom *argv)
+void tralala_parseMessageToEvent (PIZEvent **event, t_symbol *s, long argc, t_atom *argv)
 {
-    long     code = 0;
-    PIZEvent *event = NULL;
+    long code = 0;
     
     if (!(quickmap_lookup_key1 (tll_code, (void *)s, (void **)&code))) {
     //
@@ -202,14 +206,25 @@ PIZEvent *tralala_parseToEvent (t_symbol *s, long argc, t_atom *argv)
     
     option -= TINY;
     
-    if (event = pizEventNew (code)) {
-        pizEventSetOption (event, option);
-        pizEventSetData   (event, k, data);
+    if ((*event) = pizEventNew (code)) {
+        pizEventSetOption (*event, option);
+        pizEventSetData   (*event, k, data);
     }
     //
     }
-    
-    return event;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark ---
+#pragma mark -
+
+PIZ_INLINE t_symbol *tagToKey (long tag)
+{
+    char string[10];
+    snprintf (string, 10, "note_%ld", tag);
+    return (gensym (string));
 }
 
 // -------------------------------------------------------------------------------------------------------------

@@ -29,16 +29,20 @@ typedef struct _tralala {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define SEND(code)          PIZEvent *event = NULL;                                     \
-                            if (event = pizEventNew (code)) {                           \
-                                pizEventSetIdentifier (event, 0);                       \
-                                pizAgentAddEvent (x->agent, event);                     \
+#define SEND(code)          PIZEvent *event = NULL;                                 \
+                            if (event = pizEventNew (code)) {                       \
+                                DEBUGEVENT                                          \
+                                pizAgentAddEvent (x->agent, event);                 \
                             }
-#define PARSE(s, ac, av)    PIZEvent *event = NULL;                                     \
-                            if (event = tralala_parseToEvent ((s), (ac), (av))) {       \
-                                pizEventSetIdentifier (event, 0);                       \
-                                pizAgentAddEvent (x->agent, event);                     \
+#define PARSE(s, ac, av)    PIZEvent *event = NULL;                                 \
+                            tralala_parseMessageToEvent (&event, (s), (ac), (av));  \
+                            if (event) {                                            \
+                                DEBUGEVENT                                          \
+                                pizAgentAddEvent (x->agent, event);                 \
                             }
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
 #define DEBUGEVENT          if (event) {                                                        \
                                 PIZTime t;                                                      \
@@ -169,6 +173,8 @@ void tralala_notify (void *ptr, PIZEvent *event)
     
     x = (t_tralala *)ptr;
     pizEventCode (event, &code);
+    
+    DEBUGEVENT
     
     switch (code) {
     //
