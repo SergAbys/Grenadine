@@ -152,32 +152,6 @@ quickmap_add (tll_notify, gensym ("pattern"),               (void *)(TINY + PIZ_
 //
 }
 
-void tralala_debugEvent (PIZEvent *event) 
-{
-    PIZTime      t;
-    t_symbol     *s = NULL;
-    char         *n = "?";
-    long         identifier;
-    PIZEventCode code;
-    
-    pizTimeSet (&t);
-    t = t / 100000.;
-    pizEventCode (event, &code);
-    pizEventIdentifier (event, &identifier);
-    
-    code += TINY;
-        
-    if (quickmap_lookup_key2 (tll_code, (void *)code, (void **)&s) != MAX_ERR_NONE) {
-        quickmap_lookup_key2 (tll_notify, (void *)code, (void **)&s);
-    }
-
-    if (s) {
-        n = s->s_name;
-    }
-    
-    post ("%llu / %ld / %s", t, identifier, n);
-}
-
 PIZEvent *tralala_parseToEvent (t_symbol *s, long argc, t_atom *argv)
 {
     long     code = 0;

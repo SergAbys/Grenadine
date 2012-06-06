@@ -69,7 +69,7 @@ void pizSequenceGoToStart (PIZSequence *x)
 
 PIZError pizSequenceDump (PIZSequence *x)
 {
-    x->tempError = PIZ_GOOD; 
+    x->tempError = pizSequenceAddNotification (x, PIZ_EVENT_WILL_DUMP, PIZ_NADA, 0, NULL);
     
     pizSequenceForEach (x, NULL, PIZ_SEQUENCE_FLAG_NONE, pizSequenceEachDump);
     

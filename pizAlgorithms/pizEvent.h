@@ -110,8 +110,9 @@ typedef enum _PIZEventCode {
     PIZ_EVENT_NOTE_REMOVED          = 43,
     PIZ_EVENT_NOTE_PLAYED           = 44,
     PIZ_EVENT_NOTE_DUMPED           = 45,
-    PIZ_EVENT_END                   = 46,
-    PIZ_EVENT_WILL_END              = 47
+    PIZ_EVENT_WILL_DUMP             = 46,
+    PIZ_EVENT_WILL_END              = 47, 
+    PIZ_EVENT_END                   = 48
     //
     } PIZEventCode;
 

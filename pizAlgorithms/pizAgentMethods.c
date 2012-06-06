@@ -142,16 +142,13 @@ PIZError pizAgentLearn (PIZAgent *x, const PIZEvent *event)
 
 PIZError pizAgentDump (PIZAgent *x, const PIZEvent *event)
 {
-    long     count;
     PIZError err = PIZ_ERROR;
     
     PIZ_AGENT_LOCK_NOTIFICATION
     
-    count  = pizLinklistCount (x->notification);
-    err    = pizSequenceDump  (x->sequence);
-    count -= pizLinklistCount (x->notification);
+    err = pizSequenceDump (x->sequence);
      
-    if (!err && count) {
+    if (!err) {
         PIZ_AGENT_UNLOCK_NOTIFICATION
         pthread_cond_signal (&x->notificationCondition);
     } else {

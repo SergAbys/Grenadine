@@ -21,8 +21,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void tralala_parseInit  ( );
-void tralala_debugEvent (PIZEvent *event);
+void tralala_parseInit ( );
 
 PIZEvent *tralala_parseToEvent (t_symbol *s, long argc, t_atom *argv);
 

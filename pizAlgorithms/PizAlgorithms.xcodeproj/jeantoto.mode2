@@ -259,8 +259,8 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>24</integer>
-											<integer>20</integer>
+											<integer>16</integer>
+											<integer>9</integer>
 											<integer>2</integer>
 											<integer>0</integer>
 										</array>
@@ -289,7 +289,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>411 151 592 627 0 0 1280 778 </string>
+								<string>439 93 592 627 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -426,8 +426,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96DC93D5157F2EE500B7ABF3</string>
-				<string>96DC93D6157F2EE500B7ABF3</string>
+				<string>960CFABC157FA1DF00B982EC</string>
+				<string>960CFABD157FA1DF00B982EC</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -464,7 +464,7 @@
 		<string>/Users/jeantoto/Dev/Grenadine/pizAlgorithms/PizAlgorithms.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>411 151 592 627 0 0 1280 778 </string>
+	<string>439 93 592 627 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -678,7 +678,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96DC93D7157F2EE500B7ABF3</string>
+				<string>960CFABE157FA1DF00B982EC</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -823,7 +823,7 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>pizEvent.h</string>
+										<string>pizAgentLoop.c</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -881,8 +881,8 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>96E03AFF157E5DEB00271B71</string>
-				<string>96E03B00157E5DEB00271B71</string>
+				<string>960CFA94157F9D1600B982EC</string>
+				<string>960CFA95157F9D1600B982EC</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>
