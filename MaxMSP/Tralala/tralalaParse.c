@@ -161,6 +161,7 @@ void tralala_debugEvent (PIZEvent *event)
     PIZEventCode code;
     
     pizTimeSet (&t);
+    t = t / 100000.;
     pizEventCode (event, &code);
     pizEventIdentifier (event, &identifier);
     

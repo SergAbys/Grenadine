@@ -117,7 +117,6 @@ PIZAgent *pizAgentNew (long identifier)
         pizAgentFree (x);
         x = NULL;
     }
-
     //
     }
     
@@ -127,7 +126,6 @@ PIZAgent *pizAgentNew (long identifier)
 void pizAgentFree (PIZAgent *x)
 { 
     if (x) {
-
     //
     if (!x->err1) {
         PIZ_AGENT_LOCK_EVENT
@@ -177,15 +175,16 @@ PIZError pizAgentAttach (PIZAgent *x, void *observer, PIZMethod f)
     PIZError err = PIZ_ERROR;
     
     if (observer && f) {
-        
-        PIZ_AGENT_LOCK_OBSERVER
-    
-        x->observer = observer;
-        x->notify   = f;
-    
-        PIZ_AGENT_UNLOCK_OBSERVER
-        
-        err = PIZ_GOOD;
+    //
+    PIZ_AGENT_LOCK_OBSERVER
+
+    x->observer = observer;
+    x->notify   = f;
+
+    PIZ_AGENT_UNLOCK_OBSERVER
+
+    err = PIZ_GOOD;
+    //
     }
     
     return err;
@@ -194,10 +193,10 @@ PIZError pizAgentAttach (PIZAgent *x, void *observer, PIZMethod f)
 PIZError pizAgentDetach (PIZAgent *x, void *observer)
 {
     PIZ_AGENT_LOCK_OBSERVER
-    
+        
     x->observer = NULL;
     x->notify   = NULL;
-    
+        
     PIZ_AGENT_UNLOCK_OBSERVER
     
     return PIZ_GOOD;

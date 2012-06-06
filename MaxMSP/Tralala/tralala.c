@@ -15,12 +15,13 @@
 #pragma mark -
 
 typedef struct _tralala {
-    t_object    ob;
-    t_atom      played[4];
-    t_atom      dumped[5];
-    PIZAgent    *agent;
-    void        *leftOutlet;
-    void        *rightOutlet;
+    t_object        ob;
+    t_atom          played[4];
+    t_atom          dumped[5];
+    t_dictionary    *dictionary;
+    PIZAgent        *agent;
+    void            *leftOutlet;
+    void            *rightOutlet;
     } t_tralala;
                 
 // -------------------------------------------------------------------------------------------------------------
@@ -35,8 +36,8 @@ typedef struct _tralala {
 #define PARSE(s, ac, av)    PIZEvent *event = NULL;                                     \
                             if (event = tralala_parseToEvent ((s), (ac), (av))) {       \
                                 pizEventSetIdentifier (event, 0);                       \
-                                pizAgentAddEvent (x->agent, event);                     \
                                 tralala_debugEvent (event);                             \
+                                pizAgentAddEvent (x->agent, event);                     \
                             }
                                                                                     
                     
@@ -111,7 +112,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 
     if (x = (t_tralala *)object_alloc (tralala_class)) {
     //
-    if (x->agent = pizAgentNew (identifier++)) {
+    if ((x->dictionary = dictionary_new ( )) && (x->agent = pizAgentNew (identifier++))) {
     
         x->rightOutlet = outlet_new ((t_object *)x, NULL);
         x->leftOutlet  = listout ((t_object *)x);
@@ -130,8 +131,12 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 
 void tralala_free (t_tralala *x)
 { 
-    pizAgentDetach (x->agent, (void *)x);
-    pizAgentFree   (x->agent);
+    object_free (x->dictionary);
+    
+    if (x->agent) {
+        pizAgentDetach (x->agent, (void *)x);
+        pizAgentFree   (x->agent);
+    }
 }
 
 void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
@@ -161,24 +166,34 @@ void tralala_notify (void *ptr, PIZEvent *event)
     x = (t_tralala *)ptr;
     pizEventCode (event, &code);
     
-    if (code == PIZ_EVENT_NOTE_PLAYED) {
+    tralala_debugEvent (event);
+    
+    switch (code) {
+    //
+    case PIZ_EVENT_NOTE_PLAYED :
         pizEventData (event, &argc, &argv);
         atom_setlong_array (4, x->played, argc - 1, argv + 1);
         outlet_list (x->leftOutlet, NULL, 4, x->played); 
-    
-    } else if (code == PIZ_EVENT_NOTE_DUMPED) {
+        break;
+        
+    case PIZ_EVENT_NOTE_DUMPED :
         pizEventData (event, &argc, &argv);
         atom_setlong_array (5, x->dumped, argc, argv);
         outlet_anything (x->rightOutlet, tll_note, 5, x->dumped); 
-    
-    } else if (code == PIZ_EVENT_END) {
-        outlet_anything (x->rightOutlet, tll_end, 0, NULL); 
+        break;
 
-    } else if (code == PIZ_EVENT_WILL_END) {
+    case PIZ_EVENT_END :
+        outlet_anything (x->rightOutlet, tll_end, 0, NULL); 
+        break;
+
+    case PIZ_EVENT_WILL_END :
         outlet_anything (x->rightOutlet, tll_willEnd, 0, NULL);
-    }
+        break;
     
-    tralala_debugEvent (event);
+    default :
+        break;
+    //
+    }
         
     pizEventFree (event);
 }
