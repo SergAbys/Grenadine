@@ -19,8 +19,10 @@ typedef struct _tralala {
     t_atom          played[4];
     t_atom          dumped[5];
     PIZAgent        *agent;
-    void            *leftOutlet;
-    void            *rightOutlet;
+    void            *left;
+    void            *middleLeft;
+    void            *middleRight;
+    void            *right;
     } t_tralala;
                 
 // -------------------------------------------------------------------------------------------------------------
@@ -70,14 +72,10 @@ void tralala_anything   (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 #pragma mark ---
 #pragma mark -
 
+static long     identifier = 1;
 static t_class  *tralala_class;
-
-static t_symbol *tll_end; 
-static t_symbol *tll_willEnd; 
 static t_symbol *tll_note;
 static t_symbol *tll_clear;
-
-static long identifier = 1;
 
 int main (void)
 {	
@@ -100,10 +98,8 @@ int main (void)
     
     tralala_parseInit ( );
     
-    tll_end     = gensym ("bang");
-    tll_willEnd = gensym ("will");
-    tll_note    = gensym ("note");
-    tll_clear   = gensym ("clear");
+    tll_note  = gensym ("note");
+    tll_clear = gensym ("clear");
         
     return 0;
 }
@@ -120,8 +116,10 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
     //
     if (x->agent = pizAgentNew (identifier++)) {
     
-        x->rightOutlet = outlet_new ((t_object *)x, NULL);
-        x->leftOutlet  = listout ((t_object *)x);
+        x->right       = bangout ((t_object *)x);
+        x->middleRight = bangout ((t_object *)x);
+        x->middleLeft  = outlet_new ((t_object *)x, NULL);
+        x->left        = listout ((t_object *)x);
         
         pizAgentAttach (x->agent, (void *)x, tralala_notify);
         
@@ -150,8 +148,10 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
         
     } else {	
         switch (a) {
-            case 0 : sprintf (s, "(List) Notes Played"); break;
-            case 1 : sprintf (s, "(Anything) Messages"); break;
+            case 0 : sprintf (s, "(List) Played");   break;
+            case 1 : sprintf (s, "(List) Dumped");   break;
+            case 2 : sprintf (s, "(Bang) End");      break;
+            case 3 : sprintf (s, "(Bang) Will End"); break;
         }
     }
 }
@@ -175,25 +175,25 @@ void tralala_notify (void *ptr, PIZEvent *event)
     case PIZ_EVENT_NOTE_PLAYED :
         pizEventData (event, &argc, &argv);
         atom_setlong_array (4, x->played, argc - 1, argv + 1);
-        outlet_list (x->leftOutlet, NULL, 4, x->played); 
+        outlet_list (x->left, NULL, 4, x->played); 
         break;
         
     case PIZ_EVENT_NOTE_DUMPED :
         pizEventData (event, &argc, &argv);
         atom_setlong_array (5, x->dumped, argc, argv);
-        outlet_anything (x->rightOutlet, tll_note, 5, x->dumped); 
+        outlet_anything (x->middleLeft, tll_note, 5, x->dumped); 
         break;
 
     case PIZ_EVENT_WILL_DUMP :
-        outlet_anything (x->rightOutlet, tll_clear, 0, NULL);
+        outlet_anything (x->middleLeft, tll_clear, 0, NULL);
         break;
 
     case PIZ_EVENT_WILL_END :
-        outlet_anything (x->rightOutlet, tll_willEnd, 0, NULL);
+        outlet_bang (x->right);
         break;
     
     case PIZ_EVENT_END :
-        outlet_anything (x->rightOutlet, tll_end, 0, NULL); 
+        outlet_bang (x->middleRight); 
         break;
     
     default :
