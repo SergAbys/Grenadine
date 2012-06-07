@@ -18,6 +18,7 @@ typedef struct _tralala {
     t_object        ob;
     t_atom          played[4];
     t_atom          dumped[5];
+    t_dictionary    *data;
     PIZAgent        *agent;
     void            *left;
     void            *middleLeft;
@@ -55,20 +56,21 @@ typedef struct _tralala {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void *tralala_new       (t_symbol *s, long argc, t_atom *argv);
+void *tralala_new                   (t_symbol *s, long argc, t_atom *argv);
 
-void tralala_free       (t_tralala *x);
-void tralala_assist     (t_tralala *x, void *b, long m, long a, char *s);
-void tralala_notify     (void *ptr, PIZEvent *event);
+void tralala_free                   (t_tralala *x);
+void tralala_assist                 (t_tralala *x, void *b, long m, long a, char *s);
+void tralala_appendtodictionary     (t_tralala *x, t_dictionary *d);
+void tralala_notify                 (void *ptr, PIZEvent *event);
 
-void tralala_bang       (t_tralala *x);
-void tralala_play       (t_tralala *x);
-void tralala_stop       (t_tralala *x);
-void tralala_loop       (t_tralala *x);
-void tralala_unloop     (t_tralala *x);
+void tralala_bang                   (t_tralala *x);
+void tralala_play                   (t_tralala *x);
+void tralala_stop                   (t_tralala *x);
+void tralala_loop                   (t_tralala *x);
+void tralala_unloop                 (t_tralala *x);
 
-void tralala_list       (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-void tralala_anything   (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_list                   (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_anything               (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
                     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -80,6 +82,7 @@ static long     identifier = 1;
 static t_class  *tralala_class;
 static t_symbol *tll_note;
 static t_symbol *tll_clear;
+static t_symbol *tll_tralala;
 
 int main (void)
 {	
@@ -87,14 +90,15 @@ int main (void)
     
     c = class_new ("tralala", (method)tralala_new, (method)tralala_free, sizeof(t_tralala), 0L, A_GIMME, 0);
 
-    class_addmethod (c, (method)tralala_bang,       "bang",     0);
-    class_addmethod (c, (method)tralala_play,       "play",     0);
-    class_addmethod (c, (method)tralala_stop,       "stop",     0);
-    class_addmethod (c, (method)tralala_loop,       "loop",     0);
-    class_addmethod (c, (method)tralala_unloop,     "unloop",   0);
-    class_addmethod (c, (method)tralala_assist,     "assist",   A_CANT, 0);
-    class_addmethod (c, (method)tralala_list,       "list",     A_GIMME, 0);
-    class_addmethod (c, (method)tralala_anything,   "anything", A_GIMME, 0);
+    class_addmethod (c, (method)tralala_bang,                   "bang",                 0);
+    class_addmethod (c, (method)tralala_play,                   "play",                 0);
+    class_addmethod (c, (method)tralala_stop,                   "stop",                 0);
+    class_addmethod (c, (method)tralala_loop,                   "loop",                 0);
+    class_addmethod (c, (method)tralala_unloop,                 "unloop",               0);
+    class_addmethod (c, (method)tralala_assist,                 "assist",               A_CANT, 0);
+    class_addmethod	(c, (method)tralala_appendtodictionary,     "appendtodictionary",   A_CANT, 0);
+    class_addmethod (c, (method)tralala_list,                   "list",                 A_GIMME, 0);
+    class_addmethod (c, (method)tralala_anything,               "anything",             A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
 
@@ -102,8 +106,9 @@ int main (void)
     
     tralala_parseInit ( );
     
-    tll_note  = gensym ("note");
-    tll_clear = gensym ("clear");
+    tll_note    = gensym ("note");
+    tll_clear   = gensym ("clear");
+    tll_tralala = gensym ("tralala_data");
         
     return 0;
 }
@@ -118,7 +123,20 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 
     if (x = (t_tralala *)object_alloc (tralala_class)) {
     //
-    if (x->agent = pizAgentNew (identifier++)) {
+    t_dictionary *d = NULL; 
+        
+    if (d = (t_dictionary *)gensym ("#D")->s_thing) {
+    
+        if (dictionary_entryisdictionary (d, tll_tralala)) {
+            dictionary_getdictionary (d, tll_tralala, (t_object **)&x->data);
+            dictionary_chuckentry (d, tll_tralala);
+            
+        } else {
+            x->data = dictionary_new ( );
+        }
+    }
+    
+    if (x->data && (x->agent = pizAgentNew (identifier++))) {
     
         x->right       = bangout ((t_object *)x);
         x->middleRight = bangout ((t_object *)x);
@@ -157,6 +175,13 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
             case 2 : sprintf (s, "(Bang) End");      break;
             case 3 : sprintf (s, "(Bang) Will End"); break;
         }
+    }
+}
+
+void tralala_appendtodictionary (t_tralala *x, t_dictionary *d)
+{
+    if (d) {
+         dictionary_appenddictionary (d, tll_tralala, (t_object *)x->data);
     }
 }
 

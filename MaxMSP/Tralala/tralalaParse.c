@@ -157,6 +157,11 @@ quickmap_add (tll_notification, gensym ("pattern"),         (void *)(TINY + PIZ_
 //
 }
 
+void tralala_parseEventToDictionary (t_dictionary *d, PIZEvent *event)
+{
+
+}
+
 void tralala_parseMessageToEvent (PIZEvent **event, t_symbol *s, long argc, t_atom *argv)
 {
     long code = 0;

@@ -90,9 +90,9 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_NOTE_REMOVED
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_NOTE_PLAYED
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_NOTE_DUMPED
-                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_WILL_DUMP
+                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_END
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_WILL_END
-                                        PIZ_EVENT_NOTIFICATION };   // PIZ_EVENT_END
+                                        PIZ_EVENT_NOTIFICATION };   // PIZ_EVENT_WILL_DUMP
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
