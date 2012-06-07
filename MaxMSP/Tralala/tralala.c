@@ -78,11 +78,13 @@ void tralala_anything               (t_tralala *x, t_symbol *s, long argc, t_ato
 #pragma mark ---
 #pragma mark -
 
-static long     identifier = 1;
+static long identifier = 1;
+
 static t_class  *tralala_class;
 static t_symbol *tll_note;
 static t_symbol *tll_clear;
 static t_symbol *tll_tralala;
+static t_symbol *tll_current;
 
 int main (void)
 {	
@@ -108,7 +110,9 @@ int main (void)
     
     tll_note    = gensym ("note");
     tll_clear   = gensym ("clear");
+    
     tll_tralala = gensym ("tralala_data");
+    tll_current = gensym ("current_data");
         
     return 0;
 }
@@ -123,17 +127,21 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 
     if (x = (t_tralala *)object_alloc (tralala_class)) {
     //
-    t_dictionary *d = NULL; 
+    t_dictionary *d = NULL;
+    t_dictionary *sd = NULL; 
         
     if (d = (t_dictionary *)gensym ("#D")->s_thing) {
-    
-        if (dictionary_entryisdictionary (d, tll_tralala)) {
-            dictionary_getdictionary (d, tll_tralala, (t_object **)&x->data);
-            dictionary_chuckentry (d, tll_tralala);
-            
-        } else {
-            x->data = dictionary_new ( );
-        }
+    //
+    if (dictionary_entryisdictionary (d, tll_tralala)) {
+        dictionary_getdictionary (d, tll_tralala, (t_object **)&x->data);
+        dictionary_chuckentry (d, tll_tralala);
+        
+    } else {
+        sd      = dictionary_new ( );
+        x->data = dictionary_new ( );
+        dictionary_appenddictionary (x->data, tll_current, (t_object *)sd);
+    }
+    //
     }
     
     if (x->data && (x->agent = pizAgentNew (identifier++))) {
@@ -170,10 +178,10 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
         
     } else {	
         switch (a) {
-            case 0 : sprintf (s, "(List) Played");   break;
-            case 1 : sprintf (s, "(List) Dumped");   break;
-            case 2 : sprintf (s, "(Bang) End");      break;
-            case 3 : sprintf (s, "(Bang) Will End"); break;
+            case 0 : sprintf (s, "(List) Played");     break;
+            case 1 : sprintf (s, "(Anything) Dumped"); break;
+            case 2 : sprintf (s, "(Bang) End");        break;
+            case 3 : sprintf (s, "(Bang) Will End");   break;
         }
     }
 }
@@ -194,6 +202,7 @@ void tralala_notify (void *ptr, PIZEvent *event)
     long         argc = 0;
     long         *argv = NULL;
     t_tralala    *x = NULL;
+    t_dictionary *d = NULL;
     PIZEventCode code;
     
     x = (t_tralala *)ptr;
@@ -228,7 +237,9 @@ void tralala_notify (void *ptr, PIZEvent *event)
         break;
     
     default :
-        break;
+        if ((dictionary_getdictionary (x->data, tll_current, (t_object **)&d)) == MAX_ERR_NONE) {
+            tralala_parseEventToDictionary (d, event);
+        } break;
     //
     }
     
