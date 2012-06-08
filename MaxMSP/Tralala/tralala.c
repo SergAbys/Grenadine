@@ -10,20 +10,20 @@
 
 #include "tralala.h"
 #include "tralalaParse.h"
-                    
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+t_tralalaSymbols tll_symbolsTable;
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 #pragma mark ---
 #pragma mark -
 
-static long identifier = 1;
-
-static t_class  *tralala_class;
-static t_symbol *tll_note;
-static t_symbol *tll_clear;
-static t_symbol *tll_tralala;
-static t_symbol *tll_current;
+static long    identifier = 1;
+static t_class *tralala_class;
 
 int main (void)
 {	
@@ -45,14 +45,8 @@ int main (void)
 
     tralala_class = c;
     
-    tralala_parseInit ( );
-    
-    tll_note    = gensym ("note");
-    tll_clear   = gensym ("clear");
-    
-    tll_tralala = gensym ("tralala_data");
-    tll_current = gensym ("current_data");
-        
+    tralala_parseInit (&tll_symbolsTable);
+
     return 0;
 }
 

@@ -19,7 +19,15 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void tralala_parseInit              ( );
+#define tll_note    (tll_symbolsTable.sym_note)
+#define tll_clear   (tll_symbolsTable.sym_clear)
+#define tll_tralala (tll_symbolsTable.sym_tralala)
+#define tll_current (tll_symbolsTable.sym_current)
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+void tralala_parseInit              (t_tralalaSymbols *table);
 void tralala_parseEventToDictionary (t_dictionary *d, PIZEvent *event);
 void tralala_parseMessageToEvent    (PIZEvent **event, t_symbol *s, long argc, t_atom *argv);
 

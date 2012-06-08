@@ -15,6 +15,11 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+extern t_tralalaSymbols tll_symbolsTable;
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 static t_quickmap *tll_code;
 static t_quickmap *tll_key;
 static t_quickmap *tll_type;
@@ -40,16 +45,21 @@ PIZ_INLINE t_symbol *tagToKey (long tag);
 #pragma mark ---
 #pragma mark -
 
-void tralala_parseInit ( )
+void tralala_parseInit (t_tralalaSymbols *table)
 {
 //
-tll_code         = quickmap_new ( );
-tll_key          = quickmap_new ( );
-tll_type         = quickmap_new ( );
-tll_length       = quickmap_new ( );
-tll_value        = quickmap_new ( );
-tll_select       = quickmap_new ( );
-tll_notification = quickmap_new ( );
+tll_code           = quickmap_new ( );
+tll_key            = quickmap_new ( );
+tll_type           = quickmap_new ( );
+tll_length         = quickmap_new ( );
+tll_value          = quickmap_new ( );
+tll_select         = quickmap_new ( );
+tll_notification   = quickmap_new ( );
+
+table->sym_note    = gensym ("note");
+table->sym_clear   = gensym ("clear");
+table->sym_tralala = gensym ("tralala_data");
+table->sym_current = gensym ("current_data");
 
 quickmap_add (tll_code, gensym ("bpm"),                     (void *)(TINY + PIZ_EVENT_BPM));
 quickmap_add (tll_code, gensym ("learn"),                   (void *)(TINY + PIZ_EVENT_LEARN));
@@ -198,7 +208,7 @@ void tralala_parseEventToDictionary (t_dictionary *d, PIZEvent *event)
         dictionary_deleteentry (d, s);
         
     } else {
-        atom_setsym (data, gensym ("note"));
+        atom_setsym (data, tll_note);
         dictionary_appendatoms (d, s, k + 1, data);
     }
     //
