@@ -208,7 +208,7 @@ void tralala_parseEventToDictionary (t_dictionary *d, PIZEvent *event)
         dictionary_deleteentry (d, s);
         
     } else {
-        atom_setsym (data, tll_note);
+        atom_setsym (data, TLL_NOTE);
         dictionary_appendatoms (d, s, k + 1, data);
     }
     //

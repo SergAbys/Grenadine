@@ -65,14 +65,14 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
         
     if (d = (t_dictionary *)gensym ("#D")->s_thing) {
     //
-    if (dictionary_entryisdictionary (d, tll_tralala)) {
-        dictionary_getdictionary (d, tll_tralala, (t_object **)&x->data);
-        dictionary_chuckentry (d, tll_tralala);
+    if (dictionary_entryisdictionary (d, TLL_TRALALA)) {
+        dictionary_getdictionary (d, TLL_TRALALA, (t_object **)&x->data);
+        dictionary_chuckentry (d, TLL_TRALALA);
         
     } else {
         sd      = dictionary_new ( );
         x->data = dictionary_new ( );
-        dictionary_appenddictionary (x->data, tll_current, (t_object *)sd);
+        dictionary_appenddictionary (x->data, TLL_CURRENT, (t_object *)sd);
     }
     //
     }
@@ -154,11 +154,11 @@ void tralala_notify (void *ptr, PIZEvent *event)
     case PIZ_EVENT_NOTE_DUMPED :
         pizEventData (event, &argc, &argv);
         atom_setlong_array (5, x->dumped, argc, argv);
-        outlet_anything (x->middleLeft, tll_note, 5, x->dumped); 
+        outlet_anything (x->middleLeft, TLL_NOTE, 5, x->dumped); 
         break;
 
     case PIZ_EVENT_WILL_DUMP :
-        outlet_anything (x->middleLeft, tll_clear, 0, NULL);
+        outlet_anything (x->middleLeft, TLL_CLEAR, 0, NULL);
         break;
 
     case PIZ_EVENT_WILL_END :
@@ -170,7 +170,7 @@ void tralala_notify (void *ptr, PIZEvent *event)
         break;
     
     default :
-        if (!(dictionary_getdictionary (x->data, tll_current, (t_object **)&d))) {
+        if (!(dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&d))) {
             tralala_parseEventToDictionary (d, event);
         } break;
     //
