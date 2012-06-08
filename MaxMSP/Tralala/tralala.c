@@ -205,7 +205,7 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
 void tralala_appendtodictionary (t_tralala *x, t_dictionary *d)
 {
     if (d) {
-         dictionary_appenddictionary (d, tll_tralala, (t_object *)x->data);
+        //dictionary_appenddictionary (d, tll_tralala, (t_object *)x->data);
     }
 }
 

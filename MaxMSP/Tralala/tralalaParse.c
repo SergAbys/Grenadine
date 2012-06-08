@@ -161,59 +161,50 @@ void tralala_parseEventToDictionary (t_dictionary *d, PIZEvent *event)
 {
     long         i, k = 0;
     long         *ptr;
+    t_atom       data[PIZ_EVENT_DATA_SIZE + 1];
+    t_symbol     *s = NULL;
     PIZEventCode code;
     
     pizEventCode (event, &code);
     pizEventData (event, &k, &ptr);
     
-    if (ptr && k) {
-    //
-    t_atom   data[PIZ_EVENT_DATA_SIZE + 1];
-    t_symbol *s = NULL;
-    t_symbol *sym1 = NULL;
-    t_symbol *sym2 = NULL;
-        
+    for (i = 0; i < k; i++) {
+        atom_setlong (data + i + 1, *(ptr + i));
+    }
+    
     if (!(quickmap_lookup_key2 (tll_notification, (void *)(code + TINY), (void **)&s))) {
     //
     if (code == PIZ_EVENT_CHANGED_SCALE) {
-        quickmap_lookup_key2 (tll_type, (void *)((*(ptr + 0)) + TINY), (void **)&sym1);
-        quickmap_lookup_key2 (tll_key,  (void *)((*(ptr + 1)) + TINY), (void **)&sym2);
+    //
+    t_symbol *sym1 = NULL;
+    t_symbol *sym2 = NULL;
+    
+    quickmap_lookup_key2 (tll_type, (void *)((*(ptr + 0)) + TINY), (void **)&sym1);
+    quickmap_lookup_key2 (tll_key,  (void *)((*(ptr + 1)) + TINY), (void **)&sym2);
+    
+    atom_setsym (data + 1, sym1);
+    atom_setsym (data + 2, sym2);
+    //
+    }
+    
+    atom_setsym (data, s);
+    dictionary_appendatoms (d, s, k + 1, data);
+    //
+    } else {
+    //
+    s = tagToKey (event->tag);
         
-        atom_setsym (data + 1, sym1);
-        atom_setsym (data + 2, sym2);
-    
+    if (code == PIZ_EVENT_NOTE_REMOVED) {
+        dictionary_deleteentry (d, s);
+        
     } else {
-        for (i = 0; i < k; i++) {
-            atom_setlong (data + i + 1, *(ptr + i));
-        }
-    }
-    //
-    } else {
-    //
-    sym1 = tagToKey (event->tag);
-    
-    switch (code) {
-        case PIZ_EVENT_NOTE_ADDED :
-            break;
-            
-        case PIZ_EVENT_NOTE_CHANGED : 
-            break;
-            
-        case PIZ_EVENT_NOTE_REMOVED : 
-            break;
-            
-        default : 
-            break;
-    }
-    //
-    }
-    
-    if (s) {
-        atom_setsym (data, s);
+        atom_setsym (data, gensym ("note"));
         dictionary_appendatoms (d, s, k + 1, data);
     }
     //
     }
+    
+    dictionary_dump (d, 1, 0);
 }
 
 void tralala_parseMessageToEvent (PIZEvent **event, t_symbol *s, long argc, t_atom *argv)
