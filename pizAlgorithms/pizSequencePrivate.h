@@ -71,8 +71,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL PIZNote   *pizSequenceNewNote         (PIZSequence *x, long tag, long *argv, ulong flags);
-PIZ_LOCAL PIZError  pizSequenceGetTag           (PIZSequence *x, long tag, long *ptr);
+PIZ_LOCAL PIZNote   *pizSequenceNewNote         (PIZSequence *x, long *argv, ulong flags);
+PIZ_LOCAL PIZError  pizSequenceGetTag           (PIZSequence *x, long *ptr);
 PIZ_LOCAL void      pizSequenceMakeMap          (PIZSequence *x);
 
 PIZ_LOCAL PIZError  pizSequenceAddNotification  (PIZSequence *x, PIZEventCode n, long tag, long ac, long *av);

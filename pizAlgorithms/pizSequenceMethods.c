@@ -104,7 +104,7 @@ PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
             values[i] = argv[i];
         }
         
-        if (pizSequenceNewNote (x, event->tag, values, flags)) {
+        if (pizSequenceNewNote (x, values, flags)) {
             pizSequenceMakeMap (x);
         }
     }
@@ -513,7 +513,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
                                toCopy->values[PIZ_VALUE_DURATION],
                                toCopy->values[PIZ_VALUE_CHANNEL] };
                         
-            if (newNote = pizSequenceNewNote (x, PIZ_NADA, values, PIZ_SEQUENCE_FLAG_CLIP)) {
+            if (newNote = pizSequenceNewNote (x, values, PIZ_SEQUENCE_FLAG_CLIP)) {
                 hashErr |= pizHashTableAdd (x->tempHash, hPat[j], (void *)newNote);
                 haveChanged = true;
                 k ++;

@@ -45,12 +45,28 @@ typedef struct _tralala {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define DEBUGEVENT          if (event) {                                                        \
-                                PIZTime t;                                                      \
-                                pizTimeSet (&t);                                                \
-                                t = t / 100000.;                                                \
-                                post ("%llu / %ld / %ld", t, event->identifier, event->code);   \
-                            }
+#define DEBUGEVENT  if (event) {        \
+                    PIZTime t;          \
+                    pizTimeSet (&t);    \
+                    t = t / 100000.;    \
+                    post ("%llu / %ld / %ld / %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld / %ld / %ld", \
+                        t, event->identifier, event->code,  \
+                        event->data[0], \
+                        event->data[1], \
+                        event->data[2], \
+                        event->data[3], \
+                        event->data[4], \
+                        event->data[5], \
+                        event->data[6], \
+                        event->data[7], \
+                        event->data[8], \
+                        event->data[9], \
+                        event->data[10],\
+                        event->data[11],\
+                        event->tag,     \
+                        event->option   \
+                        );              \
+                    }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -237,7 +253,7 @@ void tralala_notify (void *ptr, PIZEvent *event)
         break;
     
     default :
-        if ((dictionary_getdictionary (x->data, tll_current, (t_object **)&d)) == MAX_ERR_NONE) {
+        if (!(dictionary_getdictionary (x->data, tll_current, (t_object **)&d))) {
             tralala_parseEventToDictionary (d, event);
         } break;
     //

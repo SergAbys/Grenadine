@@ -17,7 +17,7 @@
 
 static t_quickmap *tll_code;
 static t_quickmap *tll_key;
-static t_quickmap *tll_mode;
+static t_quickmap *tll_type;
 static t_quickmap *tll_length;
 static t_quickmap *tll_value;
 static t_quickmap *tll_select;
@@ -45,7 +45,7 @@ void tralala_parseInit ( )
 //
 tll_code         = quickmap_new ( );
 tll_key          = quickmap_new ( );
-tll_mode         = quickmap_new ( );
+tll_type         = quickmap_new ( );
 tll_length       = quickmap_new ( );
 tll_value        = quickmap_new ( );
 tll_select       = quickmap_new ( );
@@ -99,32 +99,32 @@ quickmap_add (tll_key, gensym ("A"),                        (void *)(TINY + PIZ_
 quickmap_add (tll_key, gensym ("A#"),                       (void *)(TINY + PIZ_KEY_A_SHARP));
 quickmap_add (tll_key, gensym ("B"),                        (void *)(TINY + PIZ_KEY_B));
 
-quickmap_add (tll_mode, gensym ("none"),                    (void *)(TINY + PIZ_NADA));
-quickmap_add (tll_mode, gensym ("ionian"),                  (void *)(TINY + PIZ_IONIAN));
-quickmap_add (tll_mode, gensym ("dorian"),                  (void *)(TINY + PIZ_DORIAN));
-quickmap_add (tll_mode, gensym ("phrygian"),                (void *)(TINY + PIZ_PHRYGIAN));
-quickmap_add (tll_mode, gensym ("lydian"),                  (void *)(TINY + PIZ_LYDIAN));
-quickmap_add (tll_mode, gensym ("mixolydian"),              (void *)(TINY + PIZ_MIXOLYDIAN));
-quickmap_add (tll_mode, gensym ("aeolian"),                 (void *)(TINY + PIZ_AEOLIAN));
-quickmap_add (tll_mode, gensym ("locrian"),                 (void *)(TINY + PIZ_LOCRIAN));
-quickmap_add (tll_mode, gensym ("natural"),                 (void *)(TINY + PIZ_NATURAL));
-quickmap_add (tll_mode, gensym ("harmonic"),                (void *)(TINY + PIZ_HARMONIC));
-quickmap_add (tll_mode, gensym ("melodic"),                 (void *)(TINY + PIZ_MELODIC));
-quickmap_add (tll_mode, gensym ("whole_tone"),              (void *)(TINY + PIZ_WHOLE_TONE));
-quickmap_add (tll_mode, gensym ("pentatonic_major"),        (void *)(TINY + PIZ_PENTATONIC_MAJOR));
-quickmap_add (tll_mode, gensym ("pentatonic_minor"),        (void *)(TINY + PIZ_PENTATONIC_MINOR));
-quickmap_add (tll_mode, gensym ("octatonic_half_whole"),    (void *)(TINY + PIZ_OCTATONIC_HALF_WHOLE));
-quickmap_add (tll_mode, gensym ("octatonic_whole_half"),    (void *)(TINY + PIZ_OCTATONIC_WHOLE_HALF));
-quickmap_add (tll_mode, gensym ("7th_major"),               (void *)(TINY + PIZ_SEVENTH_MAJOR));
-quickmap_add (tll_mode, gensym ("7th_minor"),               (void *)(TINY + PIZ_SEVENTH_MINOR));
-quickmap_add (tll_mode, gensym ("7th_dominant"),            (void *)(TINY + PIZ_SEVENTH_DOMINANT));
-quickmap_add (tll_mode, gensym ("7th_major_sixth"),         (void *)(TINY + PIZ_SEVENTH_MAJOR_SIXTH));
-quickmap_add (tll_mode, gensym ("7th_minor_sixth"),         (void *)(TINY + PIZ_SEVENTH_MINOR_SIXTH));
-quickmap_add (tll_mode, gensym ("7th_half_diminished"),     (void *)(TINY + PIZ_SEVENTH_HALF_DIMINISHED));
-quickmap_add (tll_mode, gensym ("7th_diminished"),          (void *)(TINY + PIZ_SEVENTH_DIMINISHED));
-quickmap_add (tll_mode, gensym ("7th_dominant_suspended"),  (void *)(TINY + PIZ_SEVENTH_SUSPENDED));
-quickmap_add (tll_mode, gensym ("7th_dominant_sharp_five"), (void *)(TINY + PIZ_SEVENTH_SHARP_FIVE));
-quickmap_add (tll_mode, gensym ("7th_dominant_flat_five"),  (void *)(TINY + PIZ_SEVENTH_FLAT_FIVE));
+quickmap_add (tll_type, gensym ("none"),                    (void *)(TINY + PIZ_NADA));
+quickmap_add (tll_type, gensym ("ionian"),                  (void *)(TINY + PIZ_IONIAN));
+quickmap_add (tll_type, gensym ("dorian"),                  (void *)(TINY + PIZ_DORIAN));
+quickmap_add (tll_type, gensym ("phrygian"),                (void *)(TINY + PIZ_PHRYGIAN));
+quickmap_add (tll_type, gensym ("lydian"),                  (void *)(TINY + PIZ_LYDIAN));
+quickmap_add (tll_type, gensym ("mixolydian"),              (void *)(TINY + PIZ_MIXOLYDIAN));
+quickmap_add (tll_type, gensym ("aeolian"),                 (void *)(TINY + PIZ_AEOLIAN));
+quickmap_add (tll_type, gensym ("locrian"),                 (void *)(TINY + PIZ_LOCRIAN));
+quickmap_add (tll_type, gensym ("natural"),                 (void *)(TINY + PIZ_NATURAL));
+quickmap_add (tll_type, gensym ("harmonic"),                (void *)(TINY + PIZ_HARMONIC));
+quickmap_add (tll_type, gensym ("melodic"),                 (void *)(TINY + PIZ_MELODIC));
+quickmap_add (tll_type, gensym ("whole_tone"),              (void *)(TINY + PIZ_WHOLE_TONE));
+quickmap_add (tll_type, gensym ("pentatonic_major"),        (void *)(TINY + PIZ_PENTATONIC_MAJOR));
+quickmap_add (tll_type, gensym ("pentatonic_minor"),        (void *)(TINY + PIZ_PENTATONIC_MINOR));
+quickmap_add (tll_type, gensym ("octatonic_half_whole"),    (void *)(TINY + PIZ_OCTATONIC_HALF_WHOLE));
+quickmap_add (tll_type, gensym ("octatonic_whole_half"),    (void *)(TINY + PIZ_OCTATONIC_WHOLE_HALF));
+quickmap_add (tll_type, gensym ("7th_major"),               (void *)(TINY + PIZ_SEVENTH_MAJOR));
+quickmap_add (tll_type, gensym ("7th_minor"),               (void *)(TINY + PIZ_SEVENTH_MINOR));
+quickmap_add (tll_type, gensym ("7th_dominant"),            (void *)(TINY + PIZ_SEVENTH_DOMINANT));
+quickmap_add (tll_type, gensym ("7th_major_sixth"),         (void *)(TINY + PIZ_SEVENTH_MAJOR_SIXTH));
+quickmap_add (tll_type, gensym ("7th_minor_sixth"),         (void *)(TINY + PIZ_SEVENTH_MINOR_SIXTH));
+quickmap_add (tll_type, gensym ("7th_half_diminished"),     (void *)(TINY + PIZ_SEVENTH_HALF_DIMINISHED));
+quickmap_add (tll_type, gensym ("7th_diminished"),          (void *)(TINY + PIZ_SEVENTH_DIMINISHED));
+quickmap_add (tll_type, gensym ("7th_dominant_suspended"),  (void *)(TINY + PIZ_SEVENTH_SUSPENDED));
+quickmap_add (tll_type, gensym ("7th_dominant_sharp_five"), (void *)(TINY + PIZ_SEVENTH_SHARP_FIVE));
+quickmap_add (tll_type, gensym ("7th_dominant_flat_five"),  (void *)(TINY + PIZ_SEVENTH_FLAT_FIVE));
 
 quickmap_add (tll_length, gensym ("none"),                  (void *)(TINY + PIZ_NADA));
 quickmap_add (tll_length, gensym ("whole"),                 (void *)(TINY + PIZ_WHOLE_NOTE));
@@ -159,7 +159,61 @@ quickmap_add (tll_notification, gensym ("pattern"),         (void *)(TINY + PIZ_
 
 void tralala_parseEventToDictionary (t_dictionary *d, PIZEvent *event)
 {
-    post ("???");
+    long         i, k = 0;
+    long         *ptr;
+    PIZEventCode code;
+    
+    pizEventCode (event, &code);
+    pizEventData (event, &k, &ptr);
+    
+    if (ptr && k) {
+    //
+    t_atom   data[PIZ_EVENT_DATA_SIZE + 1];
+    t_symbol *s = NULL;
+    t_symbol *sym1 = NULL;
+    t_symbol *sym2 = NULL;
+        
+    if (!(quickmap_lookup_key2 (tll_notification, (void *)(code + TINY), (void **)&s))) {
+    //
+    if (code == PIZ_EVENT_CHANGED_SCALE) {
+        quickmap_lookup_key2 (tll_type, (void *)((*(ptr + 0)) + TINY), (void **)&sym1);
+        quickmap_lookup_key2 (tll_key,  (void *)((*(ptr + 1)) + TINY), (void **)&sym2);
+        
+        atom_setsym (data + 1, sym1);
+        atom_setsym (data + 2, sym2);
+    
+    } else {
+        for (i = 0; i < k; i++) {
+            atom_setlong (data + i + 1, *(ptr + i));
+        }
+    }
+    //
+    } else {
+    //
+    sym1 = tagToKey (event->tag);
+    
+    switch (code) {
+        case PIZ_EVENT_NOTE_ADDED :
+            break;
+            
+        case PIZ_EVENT_NOTE_CHANGED : 
+            break;
+            
+        case PIZ_EVENT_NOTE_REMOVED : 
+            break;
+            
+        default : 
+            break;
+    }
+    //
+    }
+    
+    if (s) {
+        atom_setsym (data, s);
+        dictionary_appendatoms (d, s, k + 1, data);
+    }
+    //
+    }
 }
 
 void tralala_parseMessageToEvent (PIZEvent **event, t_symbol *s, long argc, t_atom *argv)
@@ -195,7 +249,7 @@ void tralala_parseMessageToEvent (PIZEvent **event, t_symbol *s, long argc, t_at
     
     switch (code) {
         case PIZ_EVENT_SORT  : d = tll_value;   break;
-        case PIZ_EVENT_SCALE : d = tll_mode;    break;
+        case PIZ_EVENT_SCALE : d = tll_type;    break;
         case PIZ_EVENT_CELL  : d = tll_length;  break;
         case PIZ_EVENT_VALUE : d = tll_length;  break;
     }

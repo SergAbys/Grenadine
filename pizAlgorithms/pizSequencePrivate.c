@@ -46,7 +46,7 @@
 #pragma mark ---
 #pragma mark -
 
-PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
+PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
 {
     PIZNote *newNote = NULL;
     long    err      = PIZ_GOOD;
@@ -79,7 +79,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
     if (!err) {
     //
     
-    err |= pizSequenceGetTag (x, tag, &k);
+    err |= pizSequenceGetTag (x, &k);
     
     if (!err && (newNote = (PIZNote *)malloc (sizeof(PIZNote)))) {
         newNote->tag                        = k;
@@ -103,7 +103,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
             
         } else {
             pizHashTableRemove (x->lookup, newNote->tag, newNote);
-            pizItemsetUnsetAtIndex (&x->usedNotes, tag);
+            pizItemsetUnsetAtIndex (&x->usedNotes, newNote->tag);
             free (newNote);
             newNote = NULL;
         }
@@ -114,23 +114,16 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long tag, long *argv, ulong flags)
     return newNote;
 }   
 
-PIZError pizSequenceGetTag (PIZSequence *x, long tag, long *ptr)
+PIZError pizSequenceGetTag (PIZSequence *x, long *ptr)
 {
     long     i, k = PIZ_NADA;
     PIZError err = PIZ_ERROR;
     
-    if ((tag >= 0) && (tag < PIZ_ITEMSET_SIZE) && !(pizItemsetIsSetAtIndex (&x->usedNotes, tag))) {
-        pizItemsetSetAtIndex (&x->usedNotes, tag);
-        k = tag;
-    } 
-    
-    if (k == PIZ_NADA) {
-        for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
-            if (!(pizItemsetIsSetAtIndex (&x->usedNotes, i))) {
-                pizItemsetSetAtIndex (&x->usedNotes, i);
-                k = i;
-                break;
-            }
+    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+        if (!(pizItemsetIsSetAtIndex (&x->usedNotes, i))) {
+            pizItemsetSetAtIndex (&x->usedNotes, i);
+            k = i;
+            break;
         }
     }
     

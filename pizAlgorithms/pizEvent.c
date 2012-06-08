@@ -108,7 +108,6 @@ PIZEvent *pizEventNew (PIZEventCode code)
         x->code       = code;
         x->type       = pizEventTypes[code];
         x->tag        = PIZ_NADA;
-        x->identifier = PIZ_NADA;
     }
     
     return x;
