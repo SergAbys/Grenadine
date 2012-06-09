@@ -56,8 +56,9 @@ tll_notification   = quickmap_new ( );
 
 table->sym_note    = gensym ("note");
 table->sym_clear   = gensym ("clear");
-table->sym_tralala = gensym ("tralala_data");
-table->sym_current = gensym ("current_data");
+table->sym_tralala = gensym ("tralala");
+table->sym_current = gensym ("current");
+table->sym_restore = gensym ("restore");
 
 quickmap_add (tll_code, gensym ("bpm"),                     (void *)(TINY + PIZ_EVENT_BPM));
 quickmap_add (tll_code, gensym ("learn"),                   (void *)(TINY + PIZ_EVENT_LEARN));

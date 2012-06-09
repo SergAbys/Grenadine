@@ -27,6 +27,7 @@ typedef struct _tralalaTable {
     t_symbol *sym_clear;
     t_symbol *sym_tralala;
     t_symbol *sym_current;
+    t_symbol *sym_restore;
     } t_tralalaTable;
 
 typedef struct _tralala {

@@ -61,18 +61,21 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
     if (x = (t_tralala *)object_alloc (tralala_class)) {
     //
     t_dictionary *d = NULL;
-    t_dictionary *sd = NULL; 
         
     if (d = (t_dictionary *)gensym ("#D")->s_thing) {
     //
     if (dictionary_entryisdictionary (d, TLL_TRALALA)) {
+    
         dictionary_getdictionary (d, TLL_TRALALA, (t_object **)&x->data);
-        dictionary_chuckentry (d, TLL_TRALALA);
+        dictionary_chuckentry    (d, TLL_TRALALA);
         
     } else {
-        sd      = dictionary_new ( );
+        t_dictionary *current = dictionary_new ( );
+        t_dictionary *restore = dictionary_new ( );
+        
         x->data = dictionary_new ( );
-        dictionary_appenddictionary (x->data, TLL_CURRENT, (t_object *)sd);
+        dictionary_appenddictionary (x->data, TLL_CURRENT, (t_object *)current);
+        dictionary_appenddictionary (x->data, TLL_RESTORE, (t_object *)restore);
     }
     //
     }
@@ -102,6 +105,8 @@ void tralala_free (t_tralala *x)
         pizAgentDetach (x->agent, (void *)x);
         pizAgentFree   (x->agent);
     }
+    
+    object_free (x->data);
 }
 
 void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
@@ -122,7 +127,20 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
 void tralala_appendtodictionary (t_tralala *x, t_dictionary *d)
 {
     if (d) {
-        //dictionary_appenddictionary (d, tll_tralala, (t_object *)x->data);
+        t_dictionary *temp = NULL;
+        t_dictionary *current = NULL;
+        t_dictionary *restore = NULL;
+        
+        dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&restore);
+        dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&current);
+        
+        dictionary_clear (restore);
+        dictionary_copyunique (restore, current);
+        dictionary_clear (current);
+        
+        temp = dictionary_new ( );
+        dictionary_copyunique (temp, x->data);
+        dictionary_appenddictionary (d, TLL_TRALALA, (t_object *)temp);
     }
 }
 

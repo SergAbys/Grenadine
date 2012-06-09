@@ -24,6 +24,7 @@
 #define TLL_CLEAR       (tll_table.sym_clear)
 #define TLL_TRALALA     (tll_table.sym_tralala)
 #define TLL_CURRENT     (tll_table.sym_current)
+#define TLL_RESTORE     (tll_table.sym_restore)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
