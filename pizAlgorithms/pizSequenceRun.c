@@ -69,7 +69,7 @@ void pizSequenceGoToStart (PIZSequence *x)
 
 PIZError pizSequenceDump (PIZSequence *x)
 {
-    x->tempError = pizSequenceAddNotification (x, PIZ_EVENT_WILL_DUMP, PIZ_NADA, 0, NULL);
+    x->tempError = pizSequenceAddNotification (x, PIZ_EVENT_WILL_DUMP, PIZ_EVENT_NO_TAG, 0, NULL);
     
     pizSequenceForEach (x, NULL, PIZ_SEQUENCE_FLAG_NONE, pizSequenceEachDump);
     
@@ -86,42 +86,42 @@ PIZError pizSequenceRefresh (PIZSequence *x)
     //
     if (x->flags & PIZ_SEQUENCE_FLAG_ZONE) {
         long a[ ] = { x->start, x->end, x->down, x->up };
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_ZONE, PIZ_NADA, 4, a);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_ZONE, PIZ_EVENT_NO_TAG, 4, a);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANCE) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHANCE, PIZ_NADA, 1, &x->chance);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHANCE, PIZ_EVENT_NO_TAG, 1, &x->chance);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_VELOCITY) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_VELOCITY, PIZ_NADA, 1, &x->velocity);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_VELOCITY, PIZ_EVENT_NO_TAG, 1, &x->velocity);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANNEL) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHANNEL, PIZ_NADA, 1, &x->channel);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHANNEL, PIZ_EVENT_NO_TAG, 1, &x->channel);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CHORD) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHORD, PIZ_NADA, 1, &x->chord);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHORD, PIZ_EVENT_NO_TAG, 1, &x->chord);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CELL) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CELL, PIZ_NADA, 1, &x->cell);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CELL, PIZ_EVENT_NO_TAG, 1, &x->cell);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_NOTE_VALUE) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_VALUE, PIZ_NADA, 1, &x->value);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_VALUE, PIZ_EVENT_NO_TAG, 1, &x->value);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_SCALE) {
         long a[ ] = { x->type, x->key };
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_SCALE, PIZ_NADA, 2, a);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_SCALE, PIZ_EVENT_NO_TAG, 2, a);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_PATTERN) {
         long argc  = pizArrayCount (x->pattern);
         long *argv = pizArrayPtr (x->pattern);
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_PATTERN, PIZ_NADA, argc, argv);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_PATTERN, PIZ_EVENT_NO_TAG, argc, argv);
     }
     
     x->flags = PIZ_SEQUENCE_FLAG_NONE;

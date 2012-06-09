@@ -50,7 +50,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
 {
     PIZNote *newNote = NULL;
     long    err      = PIZ_GOOD;
-    long    k        = PIZ_NADA;
+    long    k        = PIZ_EVENT_NO_TAG;
     long    position = argv[0];
     long    pitch    = argv[1];
     long    velocity = argv[2];
@@ -116,7 +116,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
 
 PIZError pizSequenceGetTag (PIZSequence *x, long *ptr)
 {
-    long     i, k = PIZ_NADA;
+    long     i, k = PIZ_EVENT_NO_TAG;
     PIZError err = PIZ_ERROR;
     
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
@@ -127,7 +127,7 @@ PIZError pizSequenceGetTag (PIZSequence *x, long *ptr)
         }
     }
     
-    if (k != PIZ_NADA) {
+    if (k != PIZ_EVENT_NO_TAG) {
         (*ptr) = k;
         err = PIZ_GOOD;
     }
@@ -400,18 +400,18 @@ long pizSequenceToAmbitus (PIZSequence *x, long pitch)
 
 long pizSequenceToPattern (PIZSequence *x, long position)
 {
-    long s, j = (long)(position / (double)(ABS(x->cell)));
+    long s, j = (long)(position / (double)(x->cell));
     
     if (s = pizArrayCount (x->pattern)) {
         j += pizArrayAtIndex (x->pattern, j % s);
     }
 
-    return (j * ABS(x->cell));
+    return (j * x->cell);
 }
 
 long pizSequenceToCell (PIZSequence *x, long position)
 {
-    return (((long)((position / (double)(ABS(x->cell))) + 0.5)) * ABS(x->cell));
+    return (((long)((position / (double)(x->cell)) + 0.5)) * x->cell);
 }
 
 // -------------------------------------------------------------------------------------------------------------

@@ -105,9 +105,9 @@ PIZEvent *pizEventNew (PIZEventCode code)
     PIZEvent *x = NULL;
     
     if (x = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
-        x->code       = code;
-        x->type       = pizEventTypes[code];
-        x->tag        = PIZ_NADA;
+        x->code = code;
+        x->type = pizEventTypes[code];
+        x->tag  = PIZ_EVENT_NO_TAG;
     }
     
     return x;

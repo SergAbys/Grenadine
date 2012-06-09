@@ -94,10 +94,10 @@ PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
     if (!(pizEventData (event, &argc, &argv))) {
         long  i;
         ulong flags = PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS;
-        long  values[ ] = { PIZ_NADA,
+        long  values[ ] = { -1,
                             PIZ_SEQUENCE_DEFAULT_PITCH, 
                             PIZ_SEQUENCE_DEFAULT_VELOCITY, 
-                            ABS(x->value), 
+                            x->value, 
                             0 };
         
         for (i = 0; i < MIN (argc, 5); i++) {
@@ -393,7 +393,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
     
     pizEventValue (event, &iterate); 
     
-    if (x->cell != PIZ_NADA) {
+    if (x->cell != PIZ_NOTE_NONE) {
     //
     long k       = 0;
     long loop    = 0;

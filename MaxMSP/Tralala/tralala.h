@@ -45,17 +45,17 @@ typedef struct _tralala {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define SEND(code)          PIZEvent *event = NULL;                                 \
-                            if (event = pizEventNew (code)) {                       \
-                                DEBUGEVENT                                          \
-                                pizAgentAddEvent (x->agent, event);                 \
-                            }
-#define PARSE(s, ac, av)    PIZEvent *event = NULL;                                 \
-                            tralala_parseMessageToEvent (&event, (s), (ac), (av));  \
-                            if (event) {                                            \
-                                DEBUGEVENT                                          \
-                                pizAgentAddEvent (x->agent, event);                 \
-                            }
+#define SEND(code)                  PIZEvent *event = NULL;                                 \
+                                    if (event = pizEventNew (code)) {                       \
+                                    DEBUGEVENT                                              \
+                                    pizAgentAddEvent (x->agent, event);                     \
+                                    }
+#define PARSE_MESSAGE(s, ac, av)    PIZEvent *event = NULL;                                 \
+                                    tralala_parseMessageToEvent (&event, (s), (ac), (av));  \
+                                    if (event) {                                            \
+                                    DEBUGEVENT                                              \
+                                    pizAgentAddEvent (x->agent, event);                     \
+                                    }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

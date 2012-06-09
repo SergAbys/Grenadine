@@ -179,10 +179,10 @@ PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
     //
     pizEventOption (event, &option);
     
-    x->type = CLAMP (value, PIZ_NADA, PIZ_SEVENTH_FLAT_FIVE);
+    x->type = CLAMP (value, PIZ_MODE_NONE, PIZ_SEVENTH_FLAT_FIVE);
     x->key  = CLAMP (option, PIZ_KEY_C, PIZ_KEY_B);
     
-    if (x->type != PIZ_NADA) {
+    if (x->type != PIZ_MODE_NONE) {
         long       i;
         const long *ptr = NULL;
         
@@ -195,7 +195,7 @@ PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
     //
     } else {
         x->key  = PIZ_KEY_C;
-        x->type = PIZ_NADA;
+        x->type = PIZ_MODE_NONE;
     }
     
     x->flags |= PIZ_SEQUENCE_FLAG_SCALE;
@@ -248,7 +248,7 @@ bool pizSequenceIsValidNoteValue (long value)
         value == PIZ_SIXTEENTH_NOTE_TRIPLET     ||
         value == PIZ_THIRTY_SECOND_NOTE         ||
         value == PIZ_THIRTY_SECOND_NOTE_TRIPLET ||
-        value == PIZ_NADA) {
+        value == PIZ_NOTE_NONE) {
         return true;
     }
         

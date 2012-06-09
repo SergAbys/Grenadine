@@ -82,6 +82,12 @@ struct _PIZAgent;
 // -------------------------------------------------------------------------------------------------------------
 
 enum {
+    PIZ_UP      = 0,
+    PIZ_DOWN    = 1
+    };
+
+enum {
+    PIZ_NOTE_NONE                   = 1,
     PIZ_THIRTY_SECOND_NOTE_TRIPLET  = 2,
     PIZ_THIRTY_SECOND_NOTE          = 3,
     PIZ_SIXTEENTH_NOTE_TRIPLET      = 4,
@@ -102,9 +108,10 @@ enum {
     };
 
 enum {
-    PIZ_IONIAN                      = 0,
-    PIZ_DORIAN                      = 1,
-    PIZ_PHRYGIAN,
+    PIZ_MODE_NONE                   = -1,
+    PIZ_IONIAN                      =  0,
+    PIZ_DORIAN                      =  1,
+    PIZ_PHRYGIAN                    =  2,
     PIZ_LYDIAN,
     PIZ_MIXOLYDIAN,
     PIZ_AEOLIAN,
@@ -128,11 +135,14 @@ enum {
     PIZ_SEVENTH_SHARP_FIVE,
     PIZ_SEVENTH_FLAT_FIVE
     };
-    
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 enum {
     PIZ_KEY_C                       = 0,
     PIZ_KEY_C_SHARP                 = 1,
-    PIZ_KEY_D,
+    PIZ_KEY_D                       = 2,
     PIZ_KEY_D_SHARP,
     PIZ_KEY_E,
     PIZ_KEY_F,

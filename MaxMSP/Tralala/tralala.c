@@ -214,12 +214,12 @@ void tralala_unloop (t_tralala *x)
 
 void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    PARSE (s, argc, argv)
+    PARSE_MESSAGE (s, argc, argv)
 }
 
 void tralala_anything (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    PARSE (s, argc, argv)
+    PARSE_MESSAGE (s, argc, argv)
 }
 
 // -------------------------------------------------------------------------------------------------------------
