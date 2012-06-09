@@ -22,12 +22,12 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-typedef struct _tralalaSymbols {
+typedef struct _tralalaTable {
     t_symbol *sym_note;
     t_symbol *sym_clear;
     t_symbol *sym_tralala;
     t_symbol *sym_current;
-    } t_tralalaSymbols;
+    } t_tralalaTable;
 
 typedef struct _tralala {
     t_object        ob;

@@ -15,18 +15,7 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-extern t_tralalaSymbols tll_symbolsTable;
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-static t_quickmap *tll_code;
-static t_quickmap *tll_key;
-static t_quickmap *tll_type;
-static t_quickmap *tll_length;
-static t_quickmap *tll_value;
-static t_quickmap *tll_select;
-static t_quickmap *tll_notification;
+extern t_tralalaTable tll_table;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -37,7 +26,7 @@ static t_quickmap *tll_notification;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark-
 
-PIZ_INLINE t_symbol *tagToKey (long tag);
+PIZ_INLINE t_symbol *keyWithTag (long tag);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -45,7 +34,15 @@ PIZ_INLINE t_symbol *tagToKey (long tag);
 #pragma mark ---
 #pragma mark -
 
-void tralala_parseInit (t_tralalaSymbols *table)
+static t_quickmap *tll_code;
+static t_quickmap *tll_key;
+static t_quickmap *tll_type;
+static t_quickmap *tll_length;
+static t_quickmap *tll_value;
+static t_quickmap *tll_select;
+static t_quickmap *tll_notification;
+
+void tralala_parseInit (t_tralalaTable *table)
 {
 //
 tll_code           = quickmap_new ( );
@@ -202,7 +199,7 @@ void tralala_parseEventToDictionary (t_dictionary *d, PIZEvent *event)
     //
     } else {
     //
-    s = tagToKey (event->tag);
+    s = keyWithTag (event->tag);
         
     if (code == PIZ_EVENT_NOTE_REMOVED) {
         dictionary_deleteentry (d, s);
@@ -280,7 +277,7 @@ void tralala_parseMessageToEvent (PIZEvent **event, t_symbol *s, long argc, t_at
 #pragma mark ---
 #pragma mark -
 
-PIZ_INLINE t_symbol *tagToKey (long tag)
+PIZ_INLINE t_symbol *keyWithTag (long tag)
 {
     char string[10];
     snprintf (string, 10, "note_%ld", tag);

@@ -18,18 +18,20 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
-#define TLL_NOTE    (tll_symbolsTable.sym_note)
-#define TLL_CLEAR   (tll_symbolsTable.sym_clear)
-#define TLL_TRALALA (tll_symbolsTable.sym_tralala)
-#define TLL_CURRENT (tll_symbolsTable.sym_current)
+#define TLL_NOTE    (tll_table.sym_note)
+#define TLL_CLEAR   (tll_table.sym_clear)
+#define TLL_TRALALA (tll_table.sym_tralala)
+#define TLL_CURRENT (tll_table.sym_current)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
-void tralala_parseInit              (t_tralalaSymbols *table);
-void tralala_parseEventToDictionary (t_dictionary *d, PIZEvent *event);
-void tralala_parseMessageToEvent    (PIZEvent **event, t_symbol *s, long argc, t_atom *argv);
+void tralala_parseInit                  (t_tralalaTable *table);
+void tralala_parseEventToDictionary     (t_dictionary *d, PIZEvent *event);
+void tralala_parseMessageToEvent        (PIZEvent **event, t_symbol *s, long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

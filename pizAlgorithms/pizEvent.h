@@ -124,9 +124,9 @@ typedef struct _PIZEvent {
     PIZEventType    type;
     long            identifier;
     long            tag;
-    long            option;
     long            size;
     long            data[PIZ_EVENT_DATA_SIZE];
+    long            option;
     } PIZEvent;
 
 // -------------------------------------------------------------------------------------------------------------
