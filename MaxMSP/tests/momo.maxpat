@@ -7,9 +7,9 @@
 			"revision" : 9
 		}
 ,
-		"rect" : [ 39.0, 96.0, 457.0, 349.0 ],
+		"rect" : [ 104.0, 126.0, 383.0, 287.0 ],
 		"bglocked" : 0,
-		"defrect" : [ 39.0, 96.0, 457.0, 349.0 ],
+		"defrect" : [ 104.0, 126.0, 383.0, 287.0 ],
 		"openrect" : [ 0.0, 0.0, 0.0, 0.0 ],
 		"openinpresentation" : 0,
 		"default_fontsize" : 14.0,
@@ -28,7 +28,7 @@
 				"box" : 				{
 					"maxclass" : "newobj",
 					"text" : "tralala",
-					"patching_rect" : [ 100.0, 200.0, 49.5, 23.0 ],
+					"patching_rect" : [ 60.0, 140.0, 59.5, 23.0 ],
 					"numinlets" : 1,
 					"fontname" : "Arial",
 					"numoutlets" : 4,
@@ -41,7 +41,16 @@
 						}
 ,
 						"restore" : 						{
-							"scale" : [ "scale", "dorian", "B" ]
+							"bpm" : [ "bpm", 120 ],
+							"chance" : [ "chance", 100 ],
+							"velocity" : [ "velocity", 0 ],
+							"channel" : [ "channel", 1 ],
+							"chord" : [ "chord", 0 ],
+							"cell" : [ "cell", 12 ],
+							"value" : [ "value", 12 ],
+							"scale" : [ "scale", "none", "C" ],
+							"pattern" : [ "pattern" ],
+							"zone" : [ "zone", 0, 96, 60, 71 ]
 						}
 
 					}
@@ -134,61 +143,7 @@
 
 			}
  ],
-		"lines" : [ 			{
-				"patchline" : 				{
-					"source" : [ "obj-7", 0 ],
-					"destination" : [ "obj-1", 0 ],
-					"hidden" : 0,
-					"midpoints" : [  ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"source" : [ "obj-3", 0 ],
-					"destination" : [ "obj-1", 0 ],
-					"hidden" : 0,
-					"midpoints" : [  ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"source" : [ "obj-5", 0 ],
-					"destination" : [ "obj-1", 0 ],
-					"hidden" : 0,
-					"midpoints" : [  ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"source" : [ "obj-8", 0 ],
-					"destination" : [ "obj-1", 0 ],
-					"hidden" : 0,
-					"midpoints" : [  ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"source" : [ "obj-6", 0 ],
-					"destination" : [ "obj-1", 0 ],
-					"hidden" : 0,
-					"midpoints" : [  ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"source" : [ "obj-4", 0 ],
-					"destination" : [ "obj-1", 0 ],
-					"hidden" : 0,
-					"midpoints" : [  ]
-				}
-
-			}
- ]
+		"lines" : [  ]
 	}
 
 }

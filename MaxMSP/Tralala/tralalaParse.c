@@ -164,6 +164,7 @@ quickmap_add (tll_notification, gensym ("cell"),            (void *)(TINY + PIZ_
 quickmap_add (tll_notification, gensym ("value"),           (void *)(TINY + PIZ_EVENT_CHANGED_VALUE));
 quickmap_add (tll_notification, gensym ("scale"),           (void *)(TINY + PIZ_EVENT_CHANGED_SCALE));
 quickmap_add (tll_notification, gensym ("pattern"),         (void *)(TINY + PIZ_EVENT_CHANGED_PATTERN)); 
+quickmap_add (tll_notification, gensym ("zone"),            (void *)(TINY + PIZ_EVENT_CHANGED_ZONE));
 //
 }
 

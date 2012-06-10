@@ -84,10 +84,6 @@ PIZError pizSequenceRefresh (PIZSequence *x)
     
     if (x->flags) {
     //
-    if (x->flags & PIZ_SEQUENCE_FLAG_ZONE) {
-        long a[ ] = { x->start, x->end, x->down, x->up };
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_ZONE, PIZ_EVENT_NO_TAG, 4, a);
-    }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANCE) {
         err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHANCE, PIZ_EVENT_NO_TAG, 1, &x->chance);
@@ -122,6 +118,11 @@ PIZError pizSequenceRefresh (PIZSequence *x)
         long argc  = pizArrayCount (x->pattern);
         long *argv = pizArrayPtr (x->pattern);
         err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_PATTERN, PIZ_EVENT_NO_TAG, argc, argv);
+    }
+    
+    if (x->flags & PIZ_SEQUENCE_FLAG_ZONE) {
+        long a[ ] = { x->start, x->end, x->down, x->up };
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_ZONE, PIZ_EVENT_NO_TAG, 4, a);
     }
     
     x->flags = PIZ_SEQUENCE_FLAG_NONE;

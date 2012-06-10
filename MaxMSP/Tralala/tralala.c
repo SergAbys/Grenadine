@@ -13,6 +13,48 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+#define SEND(code)          PIZEvent *event = NULL;                                 \
+                            if (event = pizEventNew (code)) {                       \
+                                DEBUGEVENT                                          \
+                                pizAgentAddEvent (x->agent, event);                 \
+                            }
+#define PARSE(s, ac, av)    PIZEvent *event = NULL;                                 \
+                            tralala_parseMessageToEvent (&event, (s), (ac), (av));  \
+                            if (event) {                                            \
+                                DEBUGEVENT                                          \
+                                pizAgentAddEvent (x->agent, event);                 \
+                            }
+                            
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define DEBUGEVENT  if (event) {        \
+                    PIZTime t;          \
+                    pizTimeSet (&t);    \
+                    t = t / 100000.;    \
+                    post ("%llu / %ld / %ld / %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld / %ld / %ld", \
+                        t, event->identifier, event->code,  \
+                        event->data[0], \
+                        event->data[1], \
+                        event->data[2], \
+                        event->data[3], \
+                        event->data[4], \
+                        event->data[5], \
+                        event->data[6], \
+                        event->data[7], \
+                        event->data[8], \
+                        event->data[9], \
+                        event->data[10],\
+                        event->data[11],\
+                        event->tag,     \
+                        event->option   \
+                        );              \
+                    }
+                    
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
 t_tralalaTable tll_table;
 
@@ -37,7 +79,7 @@ int main (void)
     class_addmethod (c, (method)tralala_loop,                   "loop",                 0);
     class_addmethod (c, (method)tralala_unloop,                 "unloop",               0);
     class_addmethod (c, (method)tralala_assist,                 "assist",               A_CANT, 0);
-    class_addmethod	(c, (method)tralala_appendtodictionary,     "appendtodictionary",   A_CANT, 0);
+    class_addmethod (c, (method)tralala_appendtodictionary,     "appendtodictionary",   A_CANT, 0);
     class_addmethod (c, (method)tralala_list,                   "list",                 A_GIMME, 0);
     class_addmethod (c, (method)tralala_anything,               "anything",             A_GIMME, 0);
 
@@ -246,12 +288,12 @@ void tralala_unloop (t_tralala *x)
 
 void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    PARSE_MESSAGE (s, argc, argv)
+    PARSE (s, argc, argv)
 }
 
 void tralala_anything (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    PARSE_MESSAGE (s, argc, argv)
+    PARSE (s, argc, argv)
 }
 
 // -------------------------------------------------------------------------------------------------------------
