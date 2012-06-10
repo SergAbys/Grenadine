@@ -341,7 +341,7 @@ long pizSequenceFillTempNotes (PIZSequence *x)
     return x->tempIndex;
 }
 
-void pizSequenceByTempNotes (PIZSequence *x, long selector, bool reverse)
+void pizSequenceSetByTempNotes (PIZSequence *x, long selector, bool reverse)
 {
     long i;
     

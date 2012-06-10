@@ -73,15 +73,16 @@ int main (void)
     
     c = class_new ("tralala", (method)tralala_new, (method)tralala_free, sizeof(t_tralala), 0L, A_GIMME, 0);
 
-    class_addmethod (c, (method)tralala_bang,                   "bang",                 0);
-    class_addmethod (c, (method)tralala_play,                   "play",                 0);
-    class_addmethod (c, (method)tralala_stop,                   "stop",                 0);
-    class_addmethod (c, (method)tralala_loop,                   "loop",                 0);
-    class_addmethod (c, (method)tralala_unloop,                 "unloop",               0);
-    class_addmethod (c, (method)tralala_assist,                 "assist",               A_CANT, 0);
-    class_addmethod (c, (method)tralala_appendtodictionary,     "appendtodictionary",   A_CANT, 0);
-    class_addmethod (c, (method)tralala_list,                   "list",                 A_GIMME, 0);
-    class_addmethod (c, (method)tralala_anything,               "anything",             A_GIMME, 0);
+    class_addmethod (c, (method)tralala_bang,       "bang",                 0);
+    class_addmethod (c, (method)tralala_play,       "play",                 0);
+    class_addmethod (c, (method)tralala_stop,       "stop",                 0);
+    class_addmethod (c, (method)tralala_loop,       "loop",                 0);
+    class_addmethod (c, (method)tralala_unloop,     "unloop",               0);
+    class_addmethod (c, (method)tralala_assist,     "assist",               A_CANT, 0);
+    class_addmethod (c, (method)tralala_dictionary, "appendtodictionary",   A_CANT, 0);
+    class_addmethod (c, (method)tralala_dblclick,   "dblclick",             A_CANT, 0);
+    class_addmethod (c, (method)tralala_list,       "list",                 A_GIMME, 0);
+    class_addmethod (c, (method)tralala_anything,   "anything",             A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
 
@@ -145,7 +146,7 @@ void tralala_init (t_tralala *x, t_symbol *s, short argc, t_atom *argv)
     
     if (dictionary_entryisdictionary (x->data, TLL_RESTORE)) {
         dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&sd);
-        tralala_parseDictionaryToAgent (x->agent, sd);
+        //tralala_parseDictionaryToAgent (x->agent, sd);
         
     } else {
         sd = dictionary_new ( );
@@ -179,7 +180,7 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
     }
 }
 
-void tralala_appendtodictionary (t_tralala *x, t_dictionary *d)
+void tralala_dictionary (t_tralala *x, t_dictionary *d)
 {
     if (d) {
         t_dictionary *temp = NULL;
@@ -202,6 +203,16 @@ void tralala_appendtodictionary (t_tralala *x, t_dictionary *d)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+
+void tralala_dblclick (t_tralala *x)
+{
+    t_dictionary *sd = NULL;
+    
+    post ("???");
+    
+	dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&sd);
+    tralala_parseDictionaryToAgent (x->agent, sd);
+}
 
 void tralala_notify (void *ptr, PIZEvent *event)
 {

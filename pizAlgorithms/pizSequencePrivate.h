@@ -85,7 +85,7 @@ PIZ_LOCAL void      pizSequenceEachTempHash     (PIZSequence *x, const PIZEvent 
 PIZ_LOCAL void      pizSequenceEachTempNotes    (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
 
 PIZ_LOCAL long      pizSequenceFillTempNotes    (PIZSequence *x);
-PIZ_LOCAL void      pizSequenceByTempNotes      (PIZSequence *x, long selector, bool reverse);
+PIZ_LOCAL void      pizSequenceSetByTempNotes   (PIZSequence *x, long selector, bool reverse);
 
 PIZ_LOCAL long      pizSequenceSnapByAmbitus    (PIZSequence *x, long pitch);
 PIZ_LOCAL long      pizSequenceSnapByPattern    (PIZSequence *x, long position);

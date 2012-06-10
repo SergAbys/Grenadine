@@ -198,7 +198,7 @@ PIZError pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
         x->tempValues[i] = x->tempNotes1[(i + shift) % k]->values[selector];
     }
                 
-    pizSequenceByTempNotes (x, selector, 0);
+    pizSequenceSetByTempNotes (x, selector, 0);
     
     return PIZ_GOOD;
 }
@@ -225,7 +225,7 @@ PIZError pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
         x->tempNotes1[i] = temp;
     }
             
-    pizSequenceByTempNotes (x, selector, 0);
+    pizSequenceSetByTempNotes (x, selector, 0);
     
     return PIZ_GOOD;
 }
@@ -262,9 +262,9 @@ PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
     }
      
     if (down) {
-        pizSequenceByTempNotes (x, selector, 1);
+        pizSequenceSetByTempNotes (x, selector, 1);
     } else {
-        pizSequenceByTempNotes (x, selector, 0);
+        pizSequenceSetByTempNotes (x, selector, 0);
     }
     
     return PIZ_GOOD;
@@ -379,7 +379,7 @@ PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
         } 
     }
     
-    pizSequenceByTempNotes (x, PIZ_VALUE_PITCH, 0);
+    pizSequenceSetByTempNotes (x, PIZ_VALUE_PITCH, 0);
     //
     }
     

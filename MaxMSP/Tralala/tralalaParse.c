@@ -275,7 +275,16 @@ void tralala_parseMessageToEvent (PIZEvent **event, t_symbol *s, long argc, t_at
 
 void tralala_parseDictionaryToAgent (PIZAgent *agent, t_dictionary *d)
 {
-    post ("TOTO");
+    long     i, n = 0;
+    t_symbol **keys = NULL;
+    
+    if (!(dictionary_getkeys (d, &n, &keys))) {
+    //
+    for (i = 0; i < n; i++) {
+        post ("%s", (*(keys + i))->s_name);
+    }
+    //
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
