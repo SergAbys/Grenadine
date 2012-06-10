@@ -89,7 +89,16 @@ PIZSequence *pizSequenceNew (struct _PIZAgent *agent)
         x->agent         &&
         (x->timeline = (PIZLinklist **)calloc (PIZ_SEQUENCE_SIZE_TIMELINE, sizeof(PIZLinklist **)))) {
 
-        x->flags = PIZ_SEQUENCE_FLAG_NONE;
+        x->flags =  PIZ_SEQUENCE_FLAG_NONE          |
+                    PIZ_SEQUENCE_FLAG_ZONE          |
+                    PIZ_SEQUENCE_FLAG_CHANCE        |
+                    PIZ_SEQUENCE_FLAG_VELOCITY      |
+                    PIZ_SEQUENCE_FLAG_CHANNEL       |
+                    PIZ_SEQUENCE_FLAG_CHORD         |
+                    PIZ_SEQUENCE_FLAG_CELL          |
+                    PIZ_SEQUENCE_FLAG_NOTE_VALUE    |
+                    PIZ_SEQUENCE_FLAG_SCALE         |
+                    PIZ_SEQUENCE_FLAG_PATTERN;
         
         pizItemsetClear (&x->usedNotes);
         pizItemsetClear (&x->addedNotes);

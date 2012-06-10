@@ -213,8 +213,6 @@ void tralala_parseEventToDictionary (t_dictionary *d, PIZEvent *event)
     }
     //
     }
-    
-    dictionary_dump (d, 1, 0);
 }
 
 void tralala_parseMessageToEvent (PIZEvent **event, t_symbol *s, long argc, t_atom *argv)
@@ -272,6 +270,11 @@ void tralala_parseMessageToEvent (PIZEvent **event, t_symbol *s, long argc, t_at
     }
     //
     }
+}
+
+void tralala_parseDictionaryToAgent (PIZAgent *agent, t_dictionary *d)
+{
+    post ("TOTO");
 }
 
 // -------------------------------------------------------------------------------------------------------------

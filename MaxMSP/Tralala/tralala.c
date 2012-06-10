@@ -8,8 +8,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "tralala.h"
 #include "tralalaParse.h"
+#include "jpatcher_api.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -61,34 +61,30 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
     if (x = (t_tralala *)object_alloc (tralala_class)) {
     //
     t_dictionary *d = NULL;
+    t_dictionary *sd = NULL;
         
     if (d = (t_dictionary *)gensym ("#D")->s_thing) {
-    //
-    if (dictionary_entryisdictionary (d, TLL_TRALALA)) {
-    
-        dictionary_getdictionary (d, TLL_TRALALA, (t_object **)&x->data);
-        dictionary_chuckentry    (d, TLL_TRALALA);
-        
-    } else {
-        t_dictionary *current = dictionary_new ( );
-        t_dictionary *restore = dictionary_new ( );
-        
-        x->data = dictionary_new ( );
-        dictionary_appenddictionary (x->data, TLL_CURRENT, (t_object *)current);
-        dictionary_appenddictionary (x->data, TLL_RESTORE, (t_object *)restore);
-    }
-    //
+        if (dictionary_entryisdictionary (d, TLL_TRALALA)) {
+            dictionary_getdictionary (d, TLL_TRALALA, (t_object **)&x->data);
+            dictionary_chuckentry (d, TLL_TRALALA);
+            
+        } else {
+            sd = dictionary_new ( );
+            x->data = dictionary_new ( );
+            dictionary_appenddictionary (x->data, TLL_CURRENT, (t_object *)sd);
+        }
     }
     
     if (x->data && (x->agent = pizAgentNew (identifier++))) {
-    
-        x->right       = bangout ((t_object *)x);
-        x->middleRight = bangout ((t_object *)x);
-        x->middleLeft  = outlet_new ((t_object *)x, NULL);
-        x->left        = listout ((t_object *)x);
+        x->patcher      = NULL;
+        x->right        = bangout ((t_object *)x);
+        x->middleRight  = bangout ((t_object *)x);
+        x->middleLeft   = outlet_new ((t_object *)x, NULL);
+        x->left         = listout ((t_object *)x);
         
         pizAgentAttach (x->agent, (void *)x, tralala_notify);
-        
+        defer_low (x, (method)tralala_init, NULL, 0, NULL);
+
     } else {
         object_free (x);
         x = NULL;
@@ -97,6 +93,23 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
     }	
 	
 	return x;
+}
+
+void tralala_init (t_tralala *x, t_symbol *s, short argc, t_atom *argv)
+{
+    t_dictionary *sd = NULL;
+    
+    object_obex_lookup (x, gensym ("#P"), &x->patcher);
+    
+    if (dictionary_entryisdictionary (x->data, TLL_RESTORE)) {
+        dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&sd);
+        tralala_parseDictionaryToAgent (x->agent, sd);
+        
+    } else {
+        sd = dictionary_new ( );
+        dictionary_appenddictionary (x->data, TLL_RESTORE, (t_object *)sd);
+        SEND (PIZ_EVENT_INIT)
+    }
 }
 
 void tralala_free (t_tralala *x)
@@ -129,13 +142,13 @@ void tralala_appendtodictionary (t_tralala *x, t_dictionary *d)
     if (d) {
         t_dictionary *temp = NULL;
         t_dictionary *current = NULL;
-        t_dictionary *restore = NULL;
+        t_dictionary *storage = NULL;
         
-        dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&restore);
+        dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&storage);
         dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&current);
         
-        dictionary_clear (restore);
-        dictionary_copyunique (restore, current);
+        dictionary_clear (storage);
+        dictionary_copyunique (storage, current);
         dictionary_clear (current);
         
         temp = dictionary_new ( );
@@ -190,6 +203,7 @@ void tralala_notify (void *ptr, PIZEvent *event)
     default :
         if (!(dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&d))) {
             tralala_parseEventToDictionary (d, event);
+            jpatcher_set_dirty (x->patcher, 1); 
         } break;
     //
     }

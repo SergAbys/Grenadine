@@ -34,6 +34,7 @@ typedef struct _tralala {
     t_object        ob;
     t_atom          played[4];
     t_atom          dumped[5];
+    t_object        *patcher;
     t_dictionary    *data;
     PIZAgent        *agent;
     void            *left;
@@ -90,6 +91,7 @@ typedef struct _tralala {
 
 void *tralala_new                   (t_symbol *s, long argc, t_atom *argv);
 
+void tralala_init                   (t_tralala *x, t_symbol *s, short argc, t_atom *argv);
 void tralala_free                   (t_tralala *x);
 void tralala_assist                 (t_tralala *x, void *b, long m, long a, char *s);
 void tralala_appendtodictionary     (t_tralala *x, t_dictionary *d);
