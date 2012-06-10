@@ -239,7 +239,7 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q)
     PIZ_AGENT_LOCK_EVENT
     
     if (!(pizLinklistPtrAtIndex (q, 0, (void **)&event))) {
-        pizLinklistChuckByPtr (q, event);
+        pizLinklistChuckWithPtr (q, event);
     }
     
     if (!(pizLinklistCount (q))) {
@@ -312,7 +312,7 @@ void pizAgentEventLoopDoStep (PIZAgent *x, bool blank)
             x->flags &= ~PIZ_AGENT_FLAG_RUNNING;
         }
         
-        pizSequenceGoToStart (x->sequence);
+        pizSequenceJumpStart (x->sequence);
         pizAgentAddNotification (x, PIZ_EVENT_END, 0, NULL);
   
     } else if (err == PIZ_MEMORY) { 
@@ -447,7 +447,7 @@ void pizAgentNotificationLoopNotify (PIZAgent *x)
     PIZ_AGENT_LOCK_NOTIFICATION
     
     if (!(pizLinklistPtrAtIndex (x->notification, 0, (void **)&event))) {
-        pizLinklistChuckByPtr (x->notification, event);
+        pizLinklistChuckWithPtr (x->notification, event);
     }
     
     PIZ_AGENT_UNLOCK_NOTIFICATION   

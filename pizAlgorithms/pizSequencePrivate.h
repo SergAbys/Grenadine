@@ -58,7 +58,6 @@
 #define PIZ_SEQUENCE_FLAG_FILL          2UL
 #define PIZ_SEQUENCE_FLAG_NEARBY        4UL
 
-#define PIZ_SEQUENCE_FLAG_ALL           (511UL)
 #define PIZ_SEQUENCE_FLAG_CHANCE        (1UL << 0)
 #define PIZ_SEQUENCE_FLAG_VELOCITY      (1UL << 1)
 #define PIZ_SEQUENCE_FLAG_CHANNEL       (1UL << 2)
@@ -73,7 +72,6 @@
 // -------------------------------------------------------------------------------------------------------------
 
 PIZ_LOCAL PIZNote   *pizSequenceNewNote         (PIZSequence *x, long *argv, ulong flags);
-PIZ_LOCAL PIZError  pizSequenceGetTag           (PIZSequence *x, long *ptr);
 PIZ_LOCAL void      pizSequenceMakeMap          (PIZSequence *x);
 
 PIZ_LOCAL PIZError  pizSequenceAddNotification  (PIZSequence *x, PIZEventCode n, long tag, long ac, long *av);
@@ -87,11 +85,11 @@ PIZ_LOCAL void      pizSequenceEachTempHash     (PIZSequence *x, const PIZEvent 
 PIZ_LOCAL void      pizSequenceEachTempNotes    (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
 
 PIZ_LOCAL long      pizSequenceFillTempNotes    (PIZSequence *x);
-PIZ_LOCAL void      pizSequenceWithTempNotes    (PIZSequence *x, long selector, bool reverse);
+PIZ_LOCAL void      pizSequenceByTempNotes      (PIZSequence *x, long selector, bool reverse);
 
-PIZ_LOCAL long      pizSequenceToAmbitus        (PIZSequence *x, long pitch);
-PIZ_LOCAL long      pizSequenceToPattern        (PIZSequence *x, long position);
-PIZ_LOCAL long      pizSequenceToCell           (PIZSequence *x, long position);
+PIZ_LOCAL long      pizSequenceSnapByAmbitus    (PIZSequence *x, long pitch);
+PIZ_LOCAL long      pizSequenceSnapByPattern    (PIZSequence *x, long position);
+PIZ_LOCAL long      pizSequenceSnapByCell       (PIZSequence *x, long position);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

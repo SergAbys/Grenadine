@@ -66,7 +66,7 @@ PIZError pizAgentPlay (PIZAgent *x, const PIZEvent *event)
     if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
         x->flags |= PIZ_AGENT_FLAG_REPLAY;
     } else {
-        pizSequenceGoToStart (x->sequence);
+        pizSequenceJumpStart (x->sequence);
         x->flags |= PIZ_AGENT_FLAG_RUNNING; 
     }
     

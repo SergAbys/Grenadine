@@ -58,7 +58,7 @@ bool pizSequenceIsAtEnd (PIZSequence *x)
     return (x->index >= x->end);
 }
 
-void pizSequenceGoToStart (PIZSequence *x)
+void pizSequenceJumpStart (PIZSequence *x)
 {
     x->index = x->start;
 }
@@ -145,7 +145,7 @@ PIZError pizSequenceRefresh (PIZSequence *x)
     //
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
         if (pizItemsetIsSetAtIndex (&x->addedNotes, i)) {
-            if (!(pizHashTablePtrByKey (x->lookup, i, (void **)&note))) {
+            if (!(pizHashTablePtrWithKey (x->lookup, i, (void **)&note))) {
             
                 long a[ ] = { note->position, 
                               note->values[PIZ_VALUE_PITCH],
@@ -167,7 +167,7 @@ PIZError pizSequenceRefresh (PIZSequence *x)
     //
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
         if (pizItemsetIsSetAtIndex (&x->changedNotes, i)) {
-            if (!(pizHashTablePtrByKey (x->lookup, i, (void **)&note))) {
+            if (!(pizHashTablePtrWithKey (x->lookup, i, (void **)&note))) {
             
                 long a[ ] = { note->position,
                               note->values[PIZ_VALUE_PITCH],
@@ -221,7 +221,7 @@ PIZError pizSequenceStep (PIZSequence *x)
         long duration = note->values[PIZ_VALUE_DURATION];
         long channel  = note->values[PIZ_VALUE_CHANNEL];
         
-        pizLinklistNextByPtr (x->timeline[x->index], (void *)note, (void **)&nextNote);
+        pizLinklistNextWithPtr (x->timeline[x->index], (void *)note, (void **)&nextNote);
         
         if (scale) {
             pitch += pizArrayAtIndex (x->scale, pitch % scale);

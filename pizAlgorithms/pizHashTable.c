@@ -217,7 +217,7 @@ long pizHashTableCount (const PIZHashTable *x)
     return x->count;
 }
 
-PIZError pizHashTablePtrByKey (const PIZHashTable *x, long key, void **ptr)
+PIZError pizHashTablePtrWithKey (const PIZHashTable *x, long key, void **ptr)
 {
     PIZError err = PIZ_ERROR;
     

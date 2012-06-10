@@ -49,7 +49,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 PIZ_LOCAL bool      pizSequenceIsAtEnd      (PIZSequence *x);
-PIZ_LOCAL void      pizSequenceGoToStart    (PIZSequence *x);
+PIZ_LOCAL void      pizSequenceJumpStart    (PIZSequence *x);
 
 PIZ_LOCAL PIZError  pizSequenceDump         (PIZSequence *x); //
 PIZ_LOCAL PIZError  pizSequenceRefresh      (PIZSequence *x); //
@@ -66,7 +66,7 @@ PIZ_EXTERN bool pizSequenceIsAtEnd (PIZSequence *x)
     return (x->index >= x->end);
 }
 
-PIZ_EXTERN void pizSequenceGoToStart (PIZSequence *x)
+PIZ_EXTERN void pizSequenceJumpStart (PIZSequence *x)
 {
     x->index = x->start;
 }

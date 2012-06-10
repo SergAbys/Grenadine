@@ -126,8 +126,8 @@ PIZError pizSequenceZone (PIZSequence *x, const PIZEvent *event)
         v[i] = argv[i];
     }
     
-    v[0] = pizSequenceToCell (x, v[0]);
-    v[1] = pizSequenceToCell (x, v[1]);
+    v[0] = pizSequenceSnapByCell (x, v[0]);
+    v[1] = pizSequenceSnapByCell (x, v[1]);
     
     v[0] = CLAMP (v[0], 0, PIZ_SEQUENCE_SIZE_TIMELINE);
     v[1] = CLAMP (v[1], 0, PIZ_SEQUENCE_SIZE_TIMELINE);
@@ -198,7 +198,7 @@ PIZError pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
         x->tempValues[i] = x->tempNotes1[(i + shift) % k]->values[selector];
     }
                 
-    pizSequenceWithTempNotes (x, selector, 0);
+    pizSequenceByTempNotes (x, selector, 0);
     
     return PIZ_GOOD;
 }
@@ -225,7 +225,7 @@ PIZError pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
         x->tempNotes1[i] = temp;
     }
             
-    pizSequenceWithTempNotes (x, selector, 0);
+    pizSequenceByTempNotes (x, selector, 0);
     
     return PIZ_GOOD;
 }
@@ -262,9 +262,9 @@ PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
     }
      
     if (down) {
-        pizSequenceWithTempNotes (x, selector, 1);
+        pizSequenceByTempNotes (x, selector, 1);
     } else {
-        pizSequenceWithTempNotes (x, selector, 0);
+        pizSequenceByTempNotes (x, selector, 0);
     }
     
     return PIZ_GOOD;
@@ -369,7 +369,7 @@ PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
     long i;  
     
     for (i = 0; i < k; i++) {
-        x->tempValues[i] = pizSequenceToAmbitus (x, x->tempValues[i]);
+        x->tempValues[i] = pizSequenceSnapByAmbitus (x, x->tempValues[i]);
     }
     
     for (i = 0; i < k; i++) {        
@@ -379,7 +379,7 @@ PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
         } 
     }
     
-    pizSequenceWithTempNotes (x, PIZ_VALUE_PITCH, 0);
+    pizSequenceByTempNotes (x, PIZ_VALUE_PITCH, 0);
     //
     }
     
@@ -498,7 +498,7 @@ PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
             
             for (t = 0; t < PIZ_SIZE_BIRTH; t++) {
             //
-            if (!(pizHashTablePtrByKey (x->tempHash, hPat[j] + pizSequenceNeighbors[t], (void **)&temp))) {
+            if (!(pizHashTablePtrWithKey (x->tempHash, hPat[j] + pizSequenceNeighbors[t], (void **)&temp))) {
                 toCopy = temp;
                 neighbors ++;
             }

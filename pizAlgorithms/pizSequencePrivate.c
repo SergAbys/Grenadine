@@ -42,6 +42,11 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+PIZ_INLINE PIZError pizSequenceGetTag (PIZSequence *x, long *ptr);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 #pragma mark ---
 #pragma mark -
@@ -58,11 +63,11 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
     long    channel  = argv[4]; 
     
     if (flags & PIZ_SEQUENCE_FLAG_SNAP) {
-        position = pizSequenceToPattern (x, position);
+        position = pizSequenceSnapByPattern (x, position);
     } 
     
     if (flags & PIZ_SEQUENCE_FLAG_AMBITUS) {
-        pitch = pizSequenceToAmbitus (x, pitch);
+        pitch = pizSequenceSnapByAmbitus (x, pitch);
     }
                 
     err |= (position < 0);
@@ -113,27 +118,6 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
         
     return newNote;
 }   
-
-PIZError pizSequenceGetTag (PIZSequence *x, long *ptr)
-{
-    long     i, k = PIZ_EVENT_NO_TAG;
-    PIZError err = PIZ_ERROR;
-    
-    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
-        if (!(pizItemsetIsSetAtIndex (&x->usedNotes, i))) {
-            pizItemsetSetAtIndex (&x->usedNotes, i);
-            k = i;
-            break;
-        }
-    }
-    
-    if (k != PIZ_EVENT_NO_TAG) {
-        (*ptr) = k;
-        err = PIZ_GOOD;
-    }
-    
-    return err;
-}
 
 void pizSequenceMakeMap (PIZSequence *x)
 {
@@ -191,7 +175,7 @@ void pizSequenceForEach (PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod m
         pizLinklistPtrAtIndex (x->timeline[p], 0, (void **)&note);
         
         while (note) {
-            pizLinklistNextByPtr (x->timeline[p], (void *)note, (void **)&nextNote);
+            pizLinklistNextWithPtr (x->timeline[p], (void *)note, (void **)&nextNote);
             
             (*method)(x, e, f, note);
             
@@ -217,7 +201,7 @@ void pizSequenceEachRemove (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote 
     //
     pizHashTableRemove (x->lookup, tag, n);
     pizItemsetUnsetAtIndex (&x->usedNotes, tag);
-    pizLinklistRemoveByPtr (x->timeline[p], (void *)n);
+    pizLinklistRemoveWithPtr (x->timeline[p], (void *)n);
     x->count --; 
     
     pizItemsetSetAtIndex   (&x->removedNotes, tag);
@@ -357,7 +341,7 @@ long pizSequenceFillTempNotes (PIZSequence *x)
     return x->tempIndex;
 }
 
-void pizSequenceWithTempNotes (PIZSequence *x, long selector, bool reverse)
+void pizSequenceByTempNotes (PIZSequence *x, long selector, bool reverse)
 {
     long i;
     
@@ -383,7 +367,7 @@ void pizSequenceWithTempNotes (PIZSequence *x, long selector, bool reverse)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-long pizSequenceToAmbitus (PIZSequence *x, long pitch)
+long pizSequenceSnapByAmbitus (PIZSequence *x, long pitch)
 {
     if (pitch < x->down) {
         while ((pitch < x->down) && (pitch < PIZ_MAGIC_PITCH)) {
@@ -398,7 +382,7 @@ long pizSequenceToAmbitus (PIZSequence *x, long pitch)
     return (CLAMP (pitch, 0, PIZ_MAGIC_PITCH));
 }
 
-long pizSequenceToPattern (PIZSequence *x, long position)
+long pizSequenceSnapByPattern (PIZSequence *x, long position)
 {
     long s, j = (long)(position / (double)(x->cell));
     
@@ -409,9 +393,36 @@ long pizSequenceToPattern (PIZSequence *x, long position)
     return (j * x->cell);
 }
 
-long pizSequenceToCell (PIZSequence *x, long position)
+long pizSequenceSnapByCell (PIZSequence *x, long position)
 {
     return (((long)((position / (double)(x->cell)) + 0.5)) * x->cell);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark ---
+#pragma mark -
+
+PIZ_INLINE PIZError pizSequenceGetTag (PIZSequence *x, long *ptr)
+{
+    long     i, k = PIZ_EVENT_NO_TAG;
+    PIZError err = PIZ_ERROR;
+    
+    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+        if (!(pizItemsetIsSetAtIndex (&x->usedNotes, i))) {
+            pizItemsetSetAtIndex (&x->usedNotes, i);
+            k = i;
+            break;
+        }
+    }
+    
+    if (k != PIZ_EVENT_NO_TAG) {
+        (*ptr) = k;
+        err = PIZ_GOOD;
+    }
+    
+    return err;
 }
 
 // -------------------------------------------------------------------------------------------------------------

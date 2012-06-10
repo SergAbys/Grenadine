@@ -77,9 +77,9 @@ PIZError        pizLinklistAppend           (PIZLinklist *x, void *ptr); //
 void            pizLinklistClear            (PIZLinklist *x);
 
 PIZError        pizLinklistPtrAtIndex       (PIZLinklist *x, long index, void **ptr);
-PIZError        pizLinklistNextByPtr        (PIZLinklist *x, void *ptr, void **nextPtr);
-PIZError        pizLinklistRemoveByPtr      (PIZLinklist *x, void *ptr);
-PIZError        pizLinklistChuckByPtr       (PIZLinklist *x, void *ptr);
+PIZError        pizLinklistNextWithPtr      (PIZLinklist *x, void *ptr, void **nextPtr);
+PIZError        pizLinklistRemoveWithPtr    (PIZLinklist *x, void *ptr);
+PIZError        pizLinklistChuckWithPtr     (PIZLinklist *x, void *ptr);
 long            pizLinklistCount            (const PIZLinklist *x);
 
 // -------------------------------------------------------------------------------------------------------------

@@ -213,7 +213,7 @@ PIZError pizLinklistPtrAtIndex (PIZLinklist *x, long index, void **ptr)
     return err; 
 }
 
-PIZError pizLinklistNextByPtr (PIZLinklist *x, void *ptr, void **nextPtr)
+PIZError pizLinklistNextWithPtr (PIZLinklist *x, void *ptr, void **nextPtr)
 {
     PIZError           err = PIZ_ERROR;
     PIZLinklistElement *matchedElement = NULL;
@@ -250,7 +250,7 @@ PIZError pizLinklistNextByPtr (PIZLinklist *x, void *ptr, void **nextPtr)
     return err;
 }
 
-PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr)
+PIZError pizLinklistRemoveWithPtr (PIZLinklist *x, void *ptr)
 {
     PIZError           err = PIZ_ERROR;
     PIZLinklistElement *toBeRemoved = NULL;
@@ -313,7 +313,7 @@ PIZError pizLinklistRemoveByPtr (PIZLinklist *x, void *ptr)
     return err;
 }
 
-PIZError pizLinklistChuckByPtr (PIZLinklist *x, void *ptr)
+PIZError pizLinklistChuckWithPtr (PIZLinklist *x, void *ptr)
 {
     PIZError           err = PIZ_ERROR;
     PIZLinklistElement *toBeChucked = NULL;

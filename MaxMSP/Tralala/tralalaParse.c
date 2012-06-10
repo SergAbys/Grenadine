@@ -288,6 +288,7 @@ PIZ_INLINE void symbolWithTag (t_symbol **s, long tag)
 {
     char string[4];
     snprintf (string, 4, "%ld", tag);
+    string[3] = 0;
     (*s) = gensym (string);
 }
 
