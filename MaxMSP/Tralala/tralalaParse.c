@@ -168,8 +168,35 @@ quickmap_add (tll_notification, gensym ("zone"),            (void *)(TINY + PIZ_
 //
 }
 
-void tralala_parseEventToDictionary (t_dictionary *d, PIZEvent *event)
+void tralala_parseDictionary (t_tralala *x, t_dictionary *d)
 {
+    long     i, n = 0;
+    t_symbol **keys = NULL;
+    
+    if (!(dictionary_getkeys (d, &n, &keys))) {
+    //
+    for (i = 0; i < n; i++) {
+    //
+    long   k;
+    t_atom *data = NULL;
+    
+    if (!dictionary_getatoms (d, (*(keys + i)), &k, &data)) {
+        PARSE (atom_getsym (data), k - 1, data + 1)
+    }
+    //
+    }
+    
+    dictionary_freekeys (d, n, keys);
+    //
+    }
+}
+
+void tralala_parseNotification (t_tralala *x, PIZEvent *event)
+{
+    t_dictionary *d = NULL;
+
+    if (!(dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&d))) {
+    //
     long         i, k = 0;
     long         *ptr;
     t_atom       data[PIZ_EVENT_DATA_SIZE + 1];
@@ -214,6 +241,10 @@ void tralala_parseEventToDictionary (t_dictionary *d, PIZEvent *event)
     }
     //
     }
+    
+    dictionary_dump (d, 1, 0);
+    //
+    }
 }
 
 void tralala_parseMessageToEvent (PIZEvent **event, t_symbol *s, long argc, t_atom *argv)
@@ -237,51 +268,37 @@ void tralala_parseMessageToEvent (PIZEvent **event, t_symbol *s, long argc, t_at
     } else if (atom_gettype (argv + i) == A_SYM) {
     //
     long       temp;
-    t_quickmap *d = NULL;
-        
+    t_quickmap *q = NULL;
+            
     if (!(quickmap_lookup_key1 (tll_select, (void *)atom_getsym (argv + i), (void **)&temp))) {
         option = temp;
-    }
-    
-    if (!(quickmap_lookup_key1 (tll_key, (void *)atom_getsym (argv + i), (void **)&temp))) {
+        
+    } else if (!(quickmap_lookup_key1 (tll_key, (void *)atom_getsym (argv + i), (void **)&temp))) {
         option = temp;
-    }
+        
+    } else {
+        switch (code) {
+            case PIZ_EVENT_SORT  : q = tll_value;   break;
+            case PIZ_EVENT_SCALE : q = tll_type;    break;
+            case PIZ_EVENT_CELL  : q = tll_length;  break;
+            case PIZ_EVENT_VALUE : q = tll_length;  break;
+        }
     
-    switch (code) {
-        case PIZ_EVENT_SORT  : d = tll_value;   break;
-        case PIZ_EVENT_SCALE : d = tll_type;    break;
-        case PIZ_EVENT_CELL  : d = tll_length;  break;
-        case PIZ_EVENT_VALUE : d = tll_length;  break;
+        if (q && !(quickmap_lookup_key1 (q, (void *)atom_getsym (argv + i), (void **)&temp))) {
+            data[0] = temp - TINY;
+            k = MAX (1, k);
+        } 
     }
-    
-    if (d && !(quickmap_lookup_key1 (d, (void *)atom_getsym (argv + i), (void **)data))) {
-        data[0] -= TINY;
-        k = MAX (1, k);
-    } 
     //
     }
     //
     }
     
     option -= TINY;
-    
+        
     if ((*event) = pizEventNew (code)) {
         pizEventSetOption (*event, option);
         pizEventSetData   (*event, k, data);
-    }
-    //
-    }
-}
-
-void tralala_parseDictionaryToAgent (PIZAgent *agent, t_dictionary *d)
-{
-    long     i, n = 0;
-    t_symbol **keys = NULL;
-    
-    if (!(dictionary_getkeys (d, &n, &keys))) {
-    //
-    for (i = 0; i < n; i++) {
-        post ("%s", (*(keys + i))->s_name);
     }
     //
     }

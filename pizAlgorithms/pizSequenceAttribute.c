@@ -86,7 +86,7 @@ PIZError pizSequenceSetChance (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
-        if ((value >= 0) && (value <= 100)) {
+        if ((value >= 0) && (value <= 100) && (value != x->chance)) {
             x->chance = value;
             x->flags |= PIZ_SEQUENCE_FLAG_CHANCE;
         }
@@ -100,7 +100,7 @@ PIZError pizSequenceSetVelocity (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
-        if ((value >= -PIZ_MAGIC_VELOCITY) && (value <= PIZ_MAGIC_VELOCITY)) {
+        if ((value >= -PIZ_MAGIC_VELOCITY) && (value <= PIZ_MAGIC_VELOCITY) && (value != x->velocity)) {
             x->velocity = value;
             x->flags |= PIZ_SEQUENCE_FLAG_VELOCITY;
         }
@@ -114,7 +114,7 @@ PIZError pizSequenceSetChannel (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
-        if ((value >= 0) && (value <= PIZ_MAGIC_CHANNEL)) {
+        if ((value >= 0) && (value <= PIZ_MAGIC_CHANNEL) && (value != x->channel)) {
             x->channel = value;
             x->flags |= PIZ_SEQUENCE_FLAG_CHANNEL;
         }
@@ -128,7 +128,7 @@ PIZError pizSequenceSetChord (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
-        if ((value >= 0) && (value < PIZ_MAGIC_ULONG)) {
+        if ((value >= 0) && (value < PIZ_MAGIC_ULONG) && (value != x->chord)) {
             x->chord = value;
             x->flags |= PIZ_SEQUENCE_FLAG_CHORD;
         }
@@ -142,7 +142,7 @@ PIZError pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
-        if (pizSequenceIsValidNoteValue (value)) {
+        if ((pizSequenceIsValidNoteValue (value)) && (value != x->cell)) {
             x->cell = value;
             x->flags |= PIZ_SEQUENCE_FLAG_CELL;
         }
@@ -156,7 +156,7 @@ PIZError pizSequenceSetValue (PIZSequence *x, const PIZEvent *event)
     long value;
     
     if (!(pizEventValue (event, &value))) {
-        if (pizSequenceIsValidNoteValue (value)) {
+        if ((pizSequenceIsValidNoteValue (value)) && (value != x->value)) {
             x->value = value;
             x->flags |= PIZ_SEQUENCE_FLAG_NOTE_VALUE;
         }

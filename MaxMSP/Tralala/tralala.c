@@ -10,48 +10,6 @@
 
 #include "tralalaParse.h"
 #include "jpatcher_api.h"
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-#define SEND(code)          PIZEvent *event = NULL;                                 \
-                            if (event = pizEventNew (code)) {                       \
-                                DEBUGEVENT                                          \
-                                pizAgentAddEvent (x->agent, event);                 \
-                            }
-#define PARSE(s, ac, av)    PIZEvent *event = NULL;                                 \
-                            tralala_parseMessageToEvent (&event, (s), (ac), (av));  \
-                            if (event) {                                            \
-                                DEBUGEVENT                                          \
-                                pizAgentAddEvent (x->agent, event);                 \
-                            }
-                            
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define DEBUGEVENT  if (event) {        \
-                    PIZTime t;          \
-                    pizTimeSet (&t);    \
-                    t = t / 100000.;    \
-                    post ("%llu / %ld / %ld / %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld / %ld / %ld", \
-                        t, event->identifier, event->code,  \
-                        event->data[0], \
-                        event->data[1], \
-                        event->data[2], \
-                        event->data[3], \
-                        event->data[4], \
-                        event->data[5], \
-                        event->data[6], \
-                        event->data[7], \
-                        event->data[8], \
-                        event->data[9], \
-                        event->data[10],\
-                        event->data[11],\
-                        event->tag,     \
-                        event->option   \
-                        );              \
-                    }
                     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -146,7 +104,7 @@ void tralala_init (t_tralala *x, t_symbol *s, short argc, t_atom *argv)
     
     if (dictionary_entryisdictionary (x->data, TLL_RESTORE)) {
         dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&sd);
-        //tralala_parseDictionaryToAgent (x->agent, sd);
+        //tralala_parseDictionary (x, sd);
         
     } else {
         sd = dictionary_new ( );
@@ -208,10 +166,10 @@ void tralala_dblclick (t_tralala *x)
 {
     t_dictionary *sd = NULL;
     
-    post ("???");
+    post ("click");
     
 	dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&sd);
-    tralala_parseDictionaryToAgent (x->agent, sd);
+    tralala_parseDictionary (x, sd);
 }
 
 void tralala_notify (void *ptr, PIZEvent *event)
@@ -219,7 +177,6 @@ void tralala_notify (void *ptr, PIZEvent *event)
     long         argc = 0;
     long         *argv = NULL;
     t_tralala    *x = NULL;
-    t_dictionary *d = NULL;
     PIZEventCode code;
     
     x = (t_tralala *)ptr;
@@ -254,10 +211,9 @@ void tralala_notify (void *ptr, PIZEvent *event)
         break;
     
     default :
-        if (!(dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&d))) {
-            tralala_parseEventToDictionary (d, event);
-            jpatcher_set_dirty (x->patcher, 1); 
-        } break;
+        tralala_parseNotification (x, event);
+        jpatcher_set_dirty (x->patcher, 1); 
+        break;
     //
     }
     
