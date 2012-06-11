@@ -168,25 +168,67 @@ quickmap_add (tll_notification, gensym ("zone"),            (void *)(TINY + PIZ_
 //
 }
 
-void tralala_parseDictionary (t_tralala *x, t_dictionary *d)
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void tralala_parseMessage (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    long     i, n = 0;
-    t_symbol **keys = NULL;
+    long code = 0;
     
-    if (!(dictionary_getkeys (d, &n, &keys))) {
+    if (!(quickmap_lookup_key1 (tll_code, (void *)s, (void **)&code))) {
     //
-    for (i = 0; i < n; i++) {
-    //
-    long   k;
-    t_atom *data = NULL;
+    long     i, k = 0;
+    long     option = TINY;
+    long     data[PIZ_EVENT_DATA_SIZE];
+    PIZEvent *event = NULL;
+     
+    code -= TINY;
     
-    if (!dictionary_getatoms (d, (*(keys + i)), &k, &data)) {
-        PARSE (atom_getsym (data), k - 1, data + 1)
+    for (i = 0; i < argc; i++) {
+    //
+    if ((atom_gettype (argv + i) == A_LONG) && (k < PIZ_EVENT_DATA_SIZE)) {
+        data[k] = atom_getlong (argv + i);
+        k ++;
+        
+    } else if (atom_gettype (argv + i) == A_SYM) {
+    //
+    long       temp;
+    t_quickmap *q = NULL;
+            
+    if (!(quickmap_lookup_key1 (tll_select, (void *)atom_getsym (argv + i), (void **)&temp))) {
+        option = temp;
+        
+    } else if (!(quickmap_lookup_key1 (tll_key, (void *)atom_getsym (argv + i), (void **)&temp))) {
+        option = temp;
+        
+    } else {
+        switch (code) {
+            case PIZ_EVENT_SORT  : q = tll_value;   break;
+            case PIZ_EVENT_SCALE : q = tll_type;    break;
+            case PIZ_EVENT_CELL  : q = tll_length;  break;
+            case PIZ_EVENT_VALUE : q = tll_length;  break;
+        }
+    
+        if (q && !(quickmap_lookup_key1 (q, (void *)atom_getsym (argv + i), (void **)&temp))) {
+            data[0] = temp - TINY;
+            k = MAX (1, k);
+        } 
     }
     //
     }
+    //
+    }
     
-    dictionary_freekeys (d, n, keys);
+    option -= TINY;
+        
+    if (event = pizEventNew (code)) {
+        pizEventSetOption (event, option);
+        pizEventSetData   (event, k, data);
+        
+        DEBUGEVENT
+        pizAgentAddEvent (x->agent, event);
+    }
     //
     }
 }
@@ -241,65 +283,29 @@ void tralala_parseNotification (t_tralala *x, PIZEvent *event)
     }
     //
     }
-    
-    dictionary_dump (d, 1, 0);
     //
     }
 }
 
-void tralala_parseMessageToEvent (PIZEvent **event, t_symbol *s, long argc, t_atom *argv)
+void tralala_parseDictionary (t_tralala *x, t_dictionary *d)
 {
-    long code = 0;
+    long     i, n = 0;
+    t_symbol **keys = NULL;
     
-    if (!(quickmap_lookup_key1 (tll_code, (void *)s, (void **)&code))) {
+    if (!(dictionary_getkeys (d, &n, &keys))) {
     //
-    long i, k = 0;
-    long option = TINY;
-    long data[PIZ_EVENT_DATA_SIZE];
-     
-    code -= TINY;
+    for (i = 0; i < n; i++) {
+    //
+    long   k;
+    t_atom *data = NULL;
     
-    for (i = 0; i < argc; i++) {
-    //
-    if ((atom_gettype (argv + i) == A_LONG) && (k < PIZ_EVENT_DATA_SIZE)) {
-        data[k] = atom_getlong (argv + i);
-        k ++;
-        
-    } else if (atom_gettype (argv + i) == A_SYM) {
-    //
-    long       temp;
-    t_quickmap *q = NULL;
-            
-    if (!(quickmap_lookup_key1 (tll_select, (void *)atom_getsym (argv + i), (void **)&temp))) {
-        option = temp;
-        
-    } else if (!(quickmap_lookup_key1 (tll_key, (void *)atom_getsym (argv + i), (void **)&temp))) {
-        option = temp;
-        
-    } else {
-        switch (code) {
-            case PIZ_EVENT_SORT  : q = tll_value;   break;
-            case PIZ_EVENT_SCALE : q = tll_type;    break;
-            case PIZ_EVENT_CELL  : q = tll_length;  break;
-            case PIZ_EVENT_VALUE : q = tll_length;  break;
-        }
-    
-        if (q && !(quickmap_lookup_key1 (q, (void *)atom_getsym (argv + i), (void **)&temp))) {
-            data[0] = temp - TINY;
-            k = MAX (1, k);
-        } 
-    }
-    //
+    if (!dictionary_getatoms (d, (*(keys + i)), &k, &data)) {
+        PARSE (atom_getsym (data), k - 1, data + 1)
     }
     //
     }
     
-    option -= TINY;
-        
-    if ((*event) = pizEventNew (code)) {
-        pizEventSetOption (*event, option);
-        pizEventSetData   (*event, k, data);
-    }
+    dictionary_freekeys (d, n, keys);
     //
     }
 }

@@ -70,17 +70,12 @@ void tralala_anything       (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define SEND(code)          PIZEvent *event = NULL;                                 \
-                            if (event = pizEventNew (code)) {                       \
-                                DEBUGEVENT                                          \
-                                pizAgentAddEvent (x->agent, event);                 \
+#define SEND(code)          PIZEvent *event = NULL;                     \
+                            if (event = pizEventNew (code)) {           \
+                                DEBUGEVENT                              \
+                                pizAgentAddEvent (x->agent, event);     \
                             }
-#define PARSE(s, ac, av)    PIZEvent *event = NULL;                                 \
-                            tralala_parseMessageToEvent (&event, (s), (ac), (av));  \
-                            if (event) {                                            \
-                                DEBUGEVENT                                          \
-                                pizAgentAddEvent (x->agent, event);                 \
-                            }
+#define PARSE(s, ac, av)    tralala_parseMessage (x, (s), (ac), (av));  \
                             
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
