@@ -240,7 +240,7 @@ PIZError pizSequenceStep (PIZSequence *x)
         long a[ ] = { note->position, 
                       CLAMP (pitch, 0, PIZ_MAGIC_PITCH),
                       CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY),
-                      (long)(duration * (PIZ_AGENT_CONSTANT_BPM_MS / x->agent->bpm)), 
+                      (long)(duration * (PIZ_AGENT_CONSTANT_BPM_MS / x->owner->bpm)), 
                       channel };
         
         err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_PLAYED, note->tag, 5, a);

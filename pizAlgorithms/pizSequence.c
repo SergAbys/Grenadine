@@ -68,7 +68,7 @@ PIZSequence *pizSequenceNew (struct _PIZAgent *agent)
     long argv1[ ] = { 0, PIZ_SEQUENCE_MAXIMUM_NOTES };
     long argv2[ ] = { PIZ_SEQUENCE_SIZE_LOOKUP, PIZ_SEQUENCE_MAXIMUM_NOTES };
     
-    x->agent         = agent;
+    x->owner         = agent;
     x->map           = pizArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
     x->scale         = pizArrayNew (PIZ_MAGIC_SCALE);
     x->pattern       = pizArrayNew (PIZ_EVENT_DATA_SIZE);
@@ -86,7 +86,7 @@ PIZSequence *pizSequenceNew (struct _PIZAgent *agent)
         x->tempNotes2    &&
         x->tempHash      &&
         x->lookup        &&
-        x->agent         &&
+        x->owner         &&
         (x->timeline = (PIZLinklist **)calloc (PIZ_SEQUENCE_SIZE_TIMELINE, sizeof(PIZLinklist **)))) {
 
         x->flags = PIZ_SEQUENCE_FLAG_NONE;
