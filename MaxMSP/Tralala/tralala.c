@@ -10,8 +10,7 @@
 
 #include "tralalaParse.h"
 #include "jpatcher_api.h"
-#include "jpatcher_utils.h"
-                    
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
@@ -83,6 +82,8 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
         x->middleRight  = bangout ((t_object *)x);
         x->middleLeft   = outlet_new ((t_object *)x, NULL);
         x->left         = listout ((t_object *)x);
+        
+        x->flags        = TLL_FLAG_NONE;
         
         pizAgentAttach (x->agent, (void *)x, tralala_notify);
         defer_low (x, (method)tralala_init, NULL, 0, NULL);
@@ -210,7 +211,9 @@ void tralala_notify (void *ptr, PIZEvent *event)
     
     default :
         tralala_parseNotification (x, event);
-        jpatcher_set_dirty (x->patcher, 1); 
+        if (x->flags & TLL_FLAG_DIRTY) {
+            jpatcher_set_dirty (x->patcher, 1); 
+        }
         break;
     //
     }
@@ -258,6 +261,10 @@ void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_anything (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
+    if (!(x->flags & TLL_FLAG_DIRTY)) { 
+        x->flags |= TLL_FLAG_DIRTY; 
+    }
+    
     PARSE (s, argc, argv)
 }
 

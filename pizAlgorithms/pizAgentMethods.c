@@ -100,7 +100,7 @@ PIZError pizAgentBPM (PIZAgent *x, const PIZEvent *event)
     
     if (!(pizEventValue (event, &value))) {
     //
-    if ((value >= PIZ_MINIMUM_BPM) && (value <= PIZ_MAXIMUM_BPM) && (value != x->bpm)) {
+    if ((value >= PIZ_MINIMUM_BPM) && (value <= PIZ_MAXIMUM_BPM)) {
         x->bpm = value;
         pizAgentAddNotification (x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
             
