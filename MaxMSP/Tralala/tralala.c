@@ -70,6 +70,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
             dictionary_chuckentry (d, TLL_TRALALA);
             
         } else {
+            
             sd = dictionary_new ( );
             x->data = dictionary_new ( );
             dictionary_appenddictionary (x->data, TLL_CURRENT, (t_object *)sd);
@@ -211,9 +212,7 @@ void tralala_notify (void *ptr, PIZEvent *event)
     
     default :
         tralala_parseNotification (x, event);
-        if (x->flags & TLL_FLAG_DIRTY) {
-            jpatcher_set_dirty (x->patcher, 1); 
-        }
+        if (x->flags & TLL_FLAG_DIRTY) { jpatcher_set_dirty (x->patcher, 1); }
         break;
     //
     }
@@ -261,11 +260,7 @@ void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_anything (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    if (!(x->flags & TLL_FLAG_DIRTY)) { 
-        x->flags |= TLL_FLAG_DIRTY; 
-    }
-    
-    PARSE (s, argc, argv)
+    x->flags |= TLL_FLAG_DIRTY; PARSE (s, argc, argv)
 }
 
 // -------------------------------------------------------------------------------------------------------------
