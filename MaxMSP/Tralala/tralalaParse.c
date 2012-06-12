@@ -46,13 +46,13 @@ static t_quickmap *tll_notification;
 void tralala_parseInit (t_tralalaTable *table)
 {
 //
-tll_code           = quickmap_new ( );
-tll_type           = quickmap_new ( );
-tll_length         = quickmap_new ( );
-tll_value          = quickmap_new ( );
-tll_key            = quickmap_new ( );
-tll_select         = quickmap_new ( );
-tll_notification   = quickmap_new ( );
+tll_code           = (t_quickmap *)quickmap_new ( );
+tll_type           = (t_quickmap *)quickmap_new ( );
+tll_length         = (t_quickmap *)quickmap_new ( );
+tll_value          = (t_quickmap *)quickmap_new ( );
+tll_key            = (t_quickmap *)quickmap_new ( );
+tll_select         = (t_quickmap *)quickmap_new ( );
+tll_notification   = (t_quickmap *)quickmap_new ( );
 
 table->sym_note    = gensym ("note");
 table->sym_clear   = gensym ("clear");
@@ -222,7 +222,7 @@ void tralala_parseMessage (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     
     option -= TINY;
         
-    if (event = pizEventNew (code)) {
+    if (event = pizEventNew ((PIZEventCode)code)) {
         pizEventSetOption (event, option);
         pizEventSetData   (event, k, data);
         
@@ -298,7 +298,7 @@ void tralala_parseDictionary (t_tralala *x, t_dictionary *d)
     //
     long   k;
     t_atom *data = NULL;
-    
+        
     if (!dictionary_getatoms (d, (*(keys + i)), &k, &data)) {
         PARSE (atom_getsym (data), k - 1, data + 1)
     }

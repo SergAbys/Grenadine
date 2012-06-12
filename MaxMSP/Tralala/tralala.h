@@ -42,7 +42,7 @@
 #define DEBUGEVENT  if (event) {        \
                     PIZTime t;          \
                     pizTimeSet (&t);    \
-                    t = t / 100000.;    \
+                    t = t / 1000000.;   \
                     post ("%llu / %ld / %ld / %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld %ld / %ld / %ld", \
                         t, event->identifier, event->code,  \
                         event->data[0], \

@@ -86,7 +86,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
         
         x->flags        = TLL_FLAG_NONE;
         
-        pizAgentAttach (x->agent, (void *)x, tralala_notify);
+        pizAgentAttach (x->agent, (void *)x, (PIZMethod)tralala_notify);
         defer_low (x, (method)tralala_init, NULL, 0, NULL);
 
     } else {

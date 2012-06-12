@@ -256,7 +256,7 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>4</integer>
+											<integer>6</integer>
 											<integer>2</integer>
 											<integer>0</integer>
 										</array>
@@ -285,7 +285,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>253 309 420 385 0 0 1280 778 </string>
+								<string>295 234 420 385 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -425,8 +425,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D6F96315870A6B00B61E38</string>
-				<string>96D6F96415870A6B00B61E38</string>
+				<string>96E5868415879A43005A3F4F</string>
+				<string>96E5868515879A43005A3F4F</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -459,10 +459,11 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/MaxMSP/Tralala/tralala.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>253 309 420 385 0 0 1280 778 </string>
+	<string>295 234 420 385 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -629,7 +630,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {1205, 216}}</string>
 								<key>RubberWindowFrame</key>
-								<string>34 60 1205 635 0 0 1280 778 </string>
+								<string>29 90 1205 635 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -655,7 +656,7 @@
 								<key>Frame</key>
 								<string>{{0, 221}, {1205, 373}}</string>
 								<key>RubberWindowFrame</key>
-								<string>34 60 1205 635 0 0 1280 778 </string>
+								<string>29 90 1205 635 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXBuildResultsModule</string>
@@ -678,14 +679,14 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96DC0A95158648E200970269</string>
+				<string>96E5868615879A43005A3F4F</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.build</string>
 			<key>WindowString</key>
-			<string>34 60 1205 635 0 0 1280 778 </string>
+			<string>29 90 1205 635 0 0 1280 778 </string>
 			<key>WindowToolGUID</key>
 			<string>1C530D52069F1CE1000CFCEE</string>
 			<key>WindowToolIsVisible</key>
