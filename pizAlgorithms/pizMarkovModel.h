@@ -68,6 +68,7 @@ typedef struct _PIZMarkovModel {
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+PIZ_START_C_LINKAGE
 
 PIZMarkovModel      *pizMarkovModelNew          (long argc, long *argv);
 
@@ -77,6 +78,7 @@ PIZError            pizMarkovModelClear         (PIZMarkovModel *x);
 PIZError            pizMarkovModelProceed       (PIZMarkovModel *x, long argc, long *argv);
 long                pizMarkovModelCount         (const PIZMarkovModel *x);
 
+PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif  // PIZ_MARKOV_MODEL_H

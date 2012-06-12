@@ -48,6 +48,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+PIZ_START_C_LINKAGE
 
 PIZ_LOCAL PIZError  pizSequenceNote         (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceZone         (PIZSequence *x, const PIZEvent *event);
@@ -63,6 +64,7 @@ PIZ_LOCAL PIZError  pizSequenceCycle        (PIZSequence *x, const PIZEvent *eve
 PIZ_LOCAL PIZError  pizSequenceAlgorithm    (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceJuliet       (PIZSequence *x, const PIZEvent *event); //
 
+PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // PIZ_SEQUENCE_METHODS_H

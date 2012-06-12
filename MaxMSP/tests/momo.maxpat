@@ -41,16 +41,16 @@
 						}
 ,
 						"restore" : 						{
+							"chance" : [ "chance", 100 ],
 							"channel" : [ "channel", 1 ],
 							"cell" : [ "cell", 12 ],
-							"scale" : [ "scale", "none", "C" ],
-							"chance" : [ "chance", 100 ],
-							"bpm" : [ "bpm", 120 ],
+							"scale" : [ "scale", "dorian", "B" ],
+							"bpm" : [ "bpm", 240 ],
 							"velocity" : [ "velocity", 0 ],
 							"chord" : [ "chord", 0 ],
 							"value" : [ "value", 12 ],
-							"pattern" : [ "pattern" ],
-							"zone" : [ "zone", 0, 96, 60, 71 ]
+							"zone" : [ "zone", 0, 96, 60, 71 ],
+							"pattern" : [ "pattern", 1, 0, -2 ]
 						}
 
 					}

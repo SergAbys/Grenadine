@@ -69,6 +69,7 @@ typedef struct _PIZLinklist {
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+PIZ_START_C_LINKAGE
 
 PIZLinklist     *pizLinklistNew             (void);
 
@@ -82,6 +83,7 @@ PIZError        pizLinklistRemoveWithPtr    (PIZLinklist *x, void *ptr);
 PIZError        pizLinklistChuckWithPtr     (PIZLinklist *x, void *ptr);
 long            pizLinklistCount            (const PIZLinklist *x);
 
+PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 

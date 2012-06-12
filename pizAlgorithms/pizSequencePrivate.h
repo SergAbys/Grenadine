@@ -70,6 +70,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+PIZ_START_C_LINKAGE
 
 PIZ_LOCAL PIZNote   *pizSequenceNewNote         (PIZSequence *x, long *argv, ulong flags);
 PIZ_LOCAL void      pizSequenceMakeMap          (PIZSequence *x);
@@ -91,6 +92,7 @@ PIZ_LOCAL long      pizSequenceSnapByAmbitus    (PIZSequence *x, long pitch);
 PIZ_LOCAL long      pizSequenceSnapByPattern    (PIZSequence *x, long position);
 PIZ_LOCAL long      pizSequenceSnapByCell       (PIZSequence *x, long position);
 
+PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // PIZ_SEQUENCE_PRIVATE_H

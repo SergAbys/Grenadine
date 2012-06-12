@@ -48,6 +48,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+PIZ_START_C_LINKAGE
 
 PIZ_LOCAL PIZError  pizSequenceSetChance        (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceSetVelocity      (PIZSequence *x, const PIZEvent *event);
@@ -58,6 +59,7 @@ PIZ_LOCAL PIZError  pizSequenceSetValue         (PIZSequence *x, const PIZEvent 
 PIZ_LOCAL PIZError  pizSequenceSetScale         (PIZSequence *x, const PIZEvent *event); //
 PIZ_LOCAL PIZError  pizSequenceSetPattern       (PIZSequence *x, const PIZEvent *event); //
 
+PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // PIZ_SEQUENCE_ATTRIBUTE_H

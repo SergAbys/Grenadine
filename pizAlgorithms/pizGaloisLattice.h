@@ -78,6 +78,7 @@ typedef struct _PIZGaloisLattice {
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+PIZ_START_C_LINKAGE
 
 PIZGaloisLattice    *pizGaloisLatticeNew        (long argc, long *argv);
 
@@ -87,6 +88,7 @@ PIZError            pizGaloisLatticeClear       (PIZGaloisLattice *x);
 PIZError            pizGaloisLatticeProceed     (PIZGaloisLattice *x, long argc, long *argv);
 long                pizGaloisLatticeCount       (const PIZGaloisLattice *x);
 
+PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // PIZ_GALOIS_LATTICE_H
