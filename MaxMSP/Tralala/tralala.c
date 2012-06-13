@@ -36,9 +36,8 @@ int main (void)
     class_addmethod (c, (method)tralala_stop,           "stop",                 0);
     class_addmethod (c, (method)tralala_loop,           "loop",                 0);
     class_addmethod (c, (method)tralala_unloop,         "unloop",               0);
-    class_addmethod (c, (method)tralala_assist,         "assist",               A_CANT, 0);
     class_addmethod (c, (method)tralala_dictionary,     "appendtodictionary",   A_CANT, 0);
-    class_addmethod (c, (method)tralala_dblclick,       "dblclick",             A_CANT, 0);
+    class_addmethod (c, (method)tralala_assist,         "assist",               A_CANT, 0);
     class_addmethod (c, (method)tralala_list,           "list",                 A_GIMME, 0);
     class_addmethod (c, (method)tralala_anything,       "anything",             A_GIMME, 0);
 
@@ -70,7 +69,6 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
             dictionary_chuckentry (d, TLL_TRALALA);
             
         } else {
-            
             sd = dictionary_new ( );
             x->data = dictionary_new ( );
             dictionary_appenddictionary (x->data, TLL_CURRENT, (t_object *)sd);
@@ -86,7 +84,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
         
         x->flags        = TLL_FLAG_NONE;
         
-        pizAgentAttach (x->agent, (void *)x, (PIZMethod)tralala_notify);
+        pizAgentAttach (x->agent, (void *)x, (PIZMethod)tralala_callback);
         defer_low (x, (method)tralala_init, NULL, 0, NULL);
 
     } else {
@@ -165,14 +163,7 @@ void tralala_dictionary (t_tralala *x, t_dictionary *d)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_dblclick (t_tralala *x)
-{
-    post ("dblclick");
-    
-	dictionary_dump (x->data, 1, 0);
-}
-
-void tralala_notify (void *ptr, PIZEvent *event)
+void tralala_callback (void *ptr, PIZEvent *event)
 {
     long         argc = 0;
     long         *argv = NULL;
@@ -212,7 +203,7 @@ void tralala_notify (void *ptr, PIZEvent *event)
     
     default :
         tralala_parseNotification (x, event);
-        if (x->flags & TLL_FLAG_DIRTY) { jpatcher_set_dirty (x->patcher, 1); }
+        if (x->flags & TLL_FLAG_SAVE) { jpatcher_set_dirty (x->patcher, 1); }
         break;
     //
     }
@@ -260,7 +251,7 @@ void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_anything (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    x->flags |= TLL_FLAG_DIRTY; PARSE (s, argc, argv)
+    x->flags |= TLL_FLAG_SAVE; PARSE (s, argc, argv)
 }
 
 // -------------------------------------------------------------------------------------------------------------

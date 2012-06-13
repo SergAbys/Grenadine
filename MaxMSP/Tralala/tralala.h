@@ -23,7 +23,7 @@
 #pragma mark -
 
 #define TLL_FLAG_NONE       0UL
-#define TLL_FLAG_DIRTY      1UL
+#define TLL_FLAG_SAVE       1UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ typedef struct _tralalaTable {
     } t_tralalaTable;
 
 typedef struct _tralala {
-    t_object        ob;
+    t_object        ob;						
     t_atom          played[4];
     t_atom          dumped[5];
     t_object        *patcher;
@@ -99,8 +99,7 @@ void tralala_free           (t_tralala *x);
 void tralala_assist         (t_tralala *x, void *b, long m, long a, char *s);
 void tralala_dictionary     (t_tralala *x, t_dictionary *d);
 
-void tralala_dblclick       (t_tralala *x);
-void tralala_notify         (void *ptr, PIZEvent *event);
+void tralala_callback       (void *ptr, PIZEvent *event);
 
 void tralala_bang           (t_tralala *x);
 void tralala_play           (t_tralala *x);
@@ -110,7 +109,7 @@ void tralala_unloop         (t_tralala *x);
 
 void tralala_list           (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_anything       (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-                    
+     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // TLL_TRALALA_H
