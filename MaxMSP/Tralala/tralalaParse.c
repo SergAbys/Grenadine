@@ -26,8 +26,9 @@ extern t_tralalaTable tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark-
 
-PIZ_INLINE void symbolWithTag (t_symbol **s, long tag);
-PIZ_INLINE void tagWithSymbol (long *tag, t_symbol *s);
+PIZ_INLINE void symbolWithTag               (t_symbol **s, long tag);
+PIZ_INLINE void tagWithSymbol               (long *tag, t_symbol *s);
+PIZ_LOCAL  void tralala_parseDictionaryFun  (t_dictionary_entry *entry, void *ptr);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -289,25 +290,7 @@ void tralala_parseNotification (t_tralala *x, PIZEvent *event)
 
 void tralala_parseDictionary (t_tralala *x, t_dictionary *d)
 {
-    long     i, n = 0;
-    t_symbol **keys = NULL;
-    
-    if (!(dictionary_getkeys (d, &n, &keys))) {
-    //
-    for (i = 0; i < n; i++) {
-    //
-    long   k;
-    t_atom *data = NULL;
-        
-    if (!dictionary_getatoms (d, (*(keys + i)), &k, &data)) {
-        PARSE (atom_getsym (data), k - 1, data + 1)
-    }
-    //
-    }
-    
-    dictionary_freekeys (d, n, keys);
-    //
-    }
+    dictionary_funall (d, (method)tralala_parseDictionaryFun, (void *)x);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -327,6 +310,18 @@ PIZ_INLINE void symbolWithTag (t_symbol **s, long tag)
 PIZ_INLINE void tagWithSymbol (long *tag, t_symbol *s)
 {
     (*tag) = atoi (s->s_name);
+}
+
+void tralala_parseDictionaryFun (t_dictionary_entry *entry, void *ptr)
+{
+    long      ac = 0;
+    t_atom    *av = NULL;
+    t_atom    value;
+    t_tralala *x = ptr;
+    
+    dictionary_entry_getvalue (entry, &value);
+    atomarray_getatoms ((t_atomarray *)atom_getobj (&value), &ac, &av);
+    PARSE (gensym (string_getptr ((t_string *)atom_getobj (av))), ac - 1, av + 1)
 }
 
 // -------------------------------------------------------------------------------------------------------------

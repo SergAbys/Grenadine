@@ -36,6 +36,7 @@ int main (void)
     class_addmethod (c, (method)tralala_stop,           "stop",                 0);
     class_addmethod (c, (method)tralala_loop,           "loop",                 0);
     class_addmethod (c, (method)tralala_unloop,         "unloop",               0);
+    class_addmethod (c, (method)tralala_dblclick,       "dblclick",             A_CANT, 0);
     class_addmethod (c, (method)tralala_dictionary,     "appendtodictionary",   A_CANT, 0);
     class_addmethod (c, (method)tralala_assist,         "assist",               A_CANT, 0);
     class_addmethod (c, (method)tralala_list,           "list",                 A_GIMME, 0);
@@ -156,6 +157,20 @@ void tralala_dictionary (t_tralala *x, t_dictionary *d)
         temp = dictionary_new ( );
         dictionary_copyunique (temp, x->data);
         dictionary_appenddictionary (d, TLL_TRALALA, (t_object *)temp);
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void tralala_dblclick (t_tralala *x)
+{
+    t_dictionary *sd = NULL;
+    
+    if (dictionary_entryisdictionary (x->data, TLL_RESTORE)) {
+        dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&sd);
+        tralala_parseDictionary (x, sd);
     }
 }
 

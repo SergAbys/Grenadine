@@ -47,7 +47,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_RUN,              // PIZ_EVENT_STOP
                                         PIZ_EVENT_RUN,              // PIZ_EVENT_LOOP
                                         PIZ_EVENT_RUN,              // PIZ_EVENT_UNLOOP
-                                        PIZ_EVENT_RUN,              // PIZ_EVENT_BPM
+                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_BPM
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_LEARN
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_FORGET
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_DUMP
