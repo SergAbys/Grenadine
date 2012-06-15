@@ -211,7 +211,7 @@
 			<array>
 				<dict>
 					<key>Proportion</key>
-					<string>570pt</string>
+					<string>588pt</string>
 					<key>Tabs</key>
 					<array>
 						<dict>
@@ -231,7 +231,7 @@
 								<dict>
 									<key>PBXSmartGroupTreeModuleColumnWidthsKey</key>
 									<array>
-										<real>447</real>
+										<real>465</real>
 										<real>20</real>
 										<real>43</real>
 										<real>43</real>
@@ -250,6 +250,7 @@
 									<array>
 										<string>08FB7794FE84155DC02AAC07</string>
 										<string>08FB7795FE84155DC02AAC07</string>
+										<string>96AF1B7E148CFBF7001358AB</string>
 										<string>96D8682714FF5A4B00849A50</string>
 										<string>C6A0FF2B0290797F04C91782</string>
 										<string>1AB674ADFE9D54B511CA2CBB</string>
@@ -257,14 +258,14 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>14</integer>
-											<integer>8</integer>
+											<integer>19</integer>
+											<integer>18</integer>
 											<integer>2</integer>
 											<integer>0</integer>
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 0}, {553, 423}}</string>
+									<string>{{0, 0}, {571, 484}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -274,11 +275,11 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{10, 27}, {570, 441}}</string>
+								<string>{{10, 27}, {588, 502}}</string>
 								<key>GroupTreeTableConfiguration</key>
 								<array>
 									<string>MainColumn</string>
-									<real>447</real>
+									<real>465</real>
 									<string>FileBuiltColumn</string>
 									<real>20</real>
 									<string>ErrorsColumn</string>
@@ -287,7 +288,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>549 192 570 509 0 0 1280 778 </string>
+								<string>350 144 588 570 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -424,8 +425,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96F86C9F158A425100A4FED2</string>
-				<string>96F86CA0158A425100A4FED2</string>
+				<string>96F8F2D9158B820200B6FCFC</string>
+				<string>96F8F2DA158B820200B6FCFC</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -458,10 +459,12 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D52069F1CE1000CFCEE</string>
+		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/pizAlgorithms/PizAlgorithms.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>549 192 570 509 0 0 1280 778 </string>
+	<string>350 144 588 570 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -639,7 +642,7 @@
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 209}, {1280, 66}}</string>
+								<string>{{0, 185}, {1280, 90}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>
@@ -677,7 +680,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96F86C7E158A40C400A4FED2</string>
+				<string>96F8F2DB158B820200B6FCFC</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -817,12 +820,14 @@
 							<key>Dock</key>
 							<array>
 								<dict>
+									<key>BecomeActive</key>
+									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>&lt;No Editor&gt;</string>
+										<string>pizSequencePrivate.c</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -843,8 +848,6 @@
 							<string>324pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -880,8 +883,8 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>96F86BC3158A312300A4FED2</string>
-				<string>96F86BC4158A312300A4FED2</string>
+				<string>96F8F2D3158B81C700B6FCFC</string>
+				<string>96F8F2D4158B81C700B6FCFC</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>

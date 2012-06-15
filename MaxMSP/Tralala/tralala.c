@@ -22,7 +22,7 @@ t_tralalaTable tll_table;
 #pragma mark ---
 #pragma mark -
 
-static long    identifier = 1;
+static long identifier = 1;
 static t_class *tralala_class;
 
 int main (void)
@@ -180,22 +180,26 @@ void tralala_dblclick (t_tralala *x)
 
 void tralala_callback (void *ptr, PIZEvent *event)
 {
-    long         argc = 0;
+    long         bpm, argc = 0;
     long         *argv = NULL;
     t_tralala    *x = NULL;
     PIZEventCode code;
     
     x = (t_tralala *)ptr;
     pizEventCode (event, &code);
+    pizEventOption (event, &bpm);
     
     DEBUGEVENT
     
     switch (code) {
     //
     case PIZ_EVENT_NOTE_PLAYED :
+        if (bpm) {
         pizEventData (event, &argc, &argv);
+        argv[3] = (long)(argv[3] * (PIZ_AGENT_CONSTANT_BPM_MS / bpm));
         atom_setlong_array (4, x->played, argc - 1, argv + 1);
         outlet_list (x->left, NULL, 4, x->played); 
+        }
         break;
         
     case PIZ_EVENT_NOTE_DUMPED :
