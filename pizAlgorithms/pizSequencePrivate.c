@@ -55,7 +55,7 @@ PIZNote *pizSequenceNewNote (PIZSequence *x, long *argv, ulong flags)
 {
     PIZNote *newNote = NULL;
     long    err      = PIZ_GOOD;
-    long    k        = PIZ_EVENT_NO_TAG;
+    long    k        = -1;
     long    position = argv[0];
     long    pitch    = argv[1];
     long    velocity = argv[2];
@@ -136,7 +136,7 @@ void pizSequenceMakeMap (PIZSequence *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizSequenceAddNotification (PIZSequence *x, PIZEventCode n, long tag, long ac, long *av)
+PIZError pizSequenceAddNotification (PIZSequence *x, PIZEventCode n, long ac, long *av)
 {
     PIZEvent *notification = NULL;
     PIZError err = PIZ_GOOD;
@@ -144,9 +144,7 @@ PIZError pizSequenceAddNotification (PIZSequence *x, PIZEventCode n, long tag, l
     if (notification = pizEventNew (n)) {
     //
     pizEventSetIdentifier (notification, x->owner->identifier);
-    pizEventSetTag        (notification, tag);
     pizEventSetData       (notification, ac, av);
-    pizEventSetValue      (notification, x->owner->bpm);
     
     if (err |= pizLinklistAppend (x->owner->notification, notification)) {       
         pizEventFree (notification);  
@@ -282,9 +280,11 @@ void pizSequenceEachDump (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n
                   n->values[PIZ_VALUE_PITCH],
                   n->values[PIZ_VALUE_VELOCITY],
                   n->values[PIZ_VALUE_DURATION], 
-                  n->values[PIZ_VALUE_CHANNEL] };
+                  n->values[PIZ_VALUE_CHANNEL],
+                  n->tag,
+                  x->owner->bpm };
                 
-    x->tempError |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_DUMPED, n->tag, 5, a);
+    x->tempError |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_DUMPED, 7, a);
 }
 
 void pizSequenceEachTempHash (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n)
@@ -410,7 +410,7 @@ long pizSequenceSnapByCell (PIZSequence *x, long position)
 
 PIZ_INLINE PIZError pizSequenceGetTag (PIZSequence *x, long *ptr)
 {
-    long     i, k = PIZ_EVENT_NO_TAG;
+    long     i, k = -1;
     PIZError err = PIZ_ERROR;
     
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
@@ -421,7 +421,7 @@ PIZ_INLINE PIZError pizSequenceGetTag (PIZSequence *x, long *ptr)
         }
     }
     
-    if (k != PIZ_EVENT_NO_TAG) {
+    if (k != -1) {
         (*ptr) = k;
         err = PIZ_GOOD;
     }

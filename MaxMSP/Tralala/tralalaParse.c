@@ -273,15 +273,16 @@ void tralala_parseNotification (t_tralala *x, PIZEvent *event)
     //
     } else {
     //
-    symbolWithTag (&s, event->tag);
-            
+    symbolWithTag (&s, ptr[PIZ_EVENT_NOTE_TAG]);
+    
     if (code == PIZ_EVENT_NOTE_REMOVED) {
         dictionary_deleteentry (d, s);
         
     } else {
         atom_setsym (data, TLL_NOTE);
-        dictionary_appendatoms (d, s, k + 1, data);
+        dictionary_appendatoms (d, s, k - 1, data);
     }
+    
     //
     }
     //

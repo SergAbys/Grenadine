@@ -48,8 +48,20 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_EVENT_DATA_SIZE     12
-#define PIZ_EVENT_NO_TAG        -1
+#define PIZ_EVENT_DATA_SIZE 12
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+enum {
+    PIZ_EVENT_NOTE_POSITION     = 0,
+    PIZ_EVENT_NOTE_PITCH        = 1,
+    PIZ_EVENT_NOTE_VELOCITY     = 2,
+    PIZ_EVENT_NOTE_DURATION     = 3,
+    PIZ_EVENT_NOTE_CHANNEL      = 4,
+    PIZ_EVENT_NOTE_TAG          = 5,
+    PIZ_EVENT_NOTE_BPM          = 6
+    };
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -125,7 +137,6 @@ typedef struct _PIZEvent {
     PIZEventCode    code;
     PIZEventType    type;
     long            identifier;
-    long            tag;
     long            value;
     long            data[PIZ_EVENT_DATA_SIZE];
     long            size;
@@ -139,14 +150,12 @@ PIZEvent    *pizEventNew            (PIZEventCode code);
 
 void        pizEventFree            (PIZEvent *x);
 void        pizEventSetIdentifier   (PIZEvent *x, long identifier);
-void        pizEventSetTag          (PIZEvent *x, long tag);
 void        pizEventSetValue        (PIZEvent *x, long value);
 void        pizEventSetData         (PIZEvent *x, long argc, const long *argv);
 
 void        pizEventCode            (const PIZEvent *x, PIZEventCode *code);
 void        pizEventType            (const PIZEvent *x, PIZEventType *type);
 void        pizEventIdentifier      (const PIZEvent *x, long *identifier);
-void        pizEventTag             (const PIZEvent *x, long *tag);
 void        pizEventValue           (const PIZEvent *x, long *value);
 PIZError    pizEventData            (const PIZEvent *x, long *argc, long **argv);
 
@@ -164,11 +173,6 @@ PIZ_EXTERN void pizEventFree (PIZEvent *x)
 PIZ_EXTERN void pizEventSetIdentifier (PIZEvent *x, long identifier)
 {
     x->identifier = identifier;
-}
-
-PIZ_EXTERN void pizEventSetTag (PIZEvent *x, long tag)
-{
-    x->tag = tag;
 }
 
 PIZ_EXTERN void pizEventSetValue (PIZEvent *x, long value)
@@ -189,11 +193,6 @@ PIZ_EXTERN void pizEventType (const PIZEvent *x, PIZEventType *type)
 PIZ_EXTERN void pizEventIdentifier (const PIZEvent *x, long *identifier)
 {
     (*identifier) = x->identifier;
-}
-
-PIZ_EXTERN void pizEventTag (const PIZEvent *x, long *tag)
-{
-    (*tag) = x->tag;
 }
 
 PIZ_EXTERN void pizEventValue (const PIZEvent *x, long *value)

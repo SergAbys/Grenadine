@@ -69,7 +69,7 @@ void pizSequenceJumpStart (PIZSequence *x)
 
 PIZError pizSequenceDump (PIZSequence *x)
 {
-    x->tempError = pizSequenceAddNotification (x, PIZ_EVENT_WILL_DUMP, PIZ_EVENT_NO_TAG, 0, NULL);
+    x->tempError = pizSequenceAddNotification (x, PIZ_EVENT_WILL_DUMP, 0, NULL);
     
     pizSequenceForEach (x, NULL, PIZ_SEQUENCE_FLAG_NONE, pizSequenceEachDump);
     
@@ -86,43 +86,43 @@ PIZError pizSequenceRefresh (PIZSequence *x)
     //
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANCE) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHANCE, PIZ_EVENT_NO_TAG, 1, &x->chance);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHANCE, 1, &x->chance);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_VELOCITY) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_VELOCITY, PIZ_EVENT_NO_TAG, 1, &x->velocity);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_VELOCITY, 1, &x->velocity);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANNEL) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHANNEL, PIZ_EVENT_NO_TAG, 1, &x->channel);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHANNEL, 1, &x->channel);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CHORD) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHORD, PIZ_EVENT_NO_TAG, 1, &x->chord);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CHORD, 1, &x->chord);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CELL) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CELL, PIZ_EVENT_NO_TAG, 1, &x->cell);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_CELL, 1, &x->cell);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_NOTE_VALUE) {
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_VALUE, PIZ_EVENT_NO_TAG, 1, &x->value);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_VALUE, 1, &x->value);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_SCALE) {
         long a[ ] = { x->type, x->key };
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_SCALE, PIZ_EVENT_NO_TAG, 2, a);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_SCALE, 2, a);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_PATTERN) {
         long argc  = pizArrayCount (x->pattern);
         long *argv = pizArrayPtr (x->pattern);
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_PATTERN, PIZ_EVENT_NO_TAG, argc, argv);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_PATTERN, argc, argv);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_ZONE) {
         long a[ ] = { x->start, x->end, x->down, x->up };
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_ZONE, PIZ_EVENT_NO_TAG, 4, a);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_ZONE, 4, a);
     }
     
     x->flags = PIZ_SEQUENCE_FLAG_NONE;
@@ -133,7 +133,18 @@ PIZError pizSequenceRefresh (PIZSequence *x)
     //
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
         if (pizItemsetIsSetAtIndex (&x->removedNotes, i)) { 
-            err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_REMOVED, i, 0, NULL);
+            if (!(pizHashTablePtrWithKey (x->lookup, i, (void **)&note))) {
+            
+                long a[ ] = { note->position, 
+                              note->values[PIZ_VALUE_PITCH],
+                              note->values[PIZ_VALUE_VELOCITY],
+                              note->values[PIZ_VALUE_DURATION], 
+                              note->values[PIZ_VALUE_CHANNEL],
+                              note->tag,
+                              x->owner->bpm };
+                
+                err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_REMOVED, 7, a);
+            }
         } 
     }
     
@@ -151,9 +162,11 @@ PIZError pizSequenceRefresh (PIZSequence *x)
                               note->values[PIZ_VALUE_PITCH],
                               note->values[PIZ_VALUE_VELOCITY],
                               note->values[PIZ_VALUE_DURATION], 
-                              note->values[PIZ_VALUE_CHANNEL] };
+                              note->values[PIZ_VALUE_CHANNEL],
+                              note->tag,
+                              x->owner->bpm };
                 
-                err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_ADDED, i, 5, a);
+                err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_ADDED, 7, a);
             }
             pizItemsetUnsetAtIndex (&x->changedNotes, i);
         } 
@@ -173,9 +186,11 @@ PIZError pizSequenceRefresh (PIZSequence *x)
                               note->values[PIZ_VALUE_PITCH],
                               note->values[PIZ_VALUE_VELOCITY],
                               note->values[PIZ_VALUE_DURATION], 
-                              note->values[PIZ_VALUE_CHANNEL] };
+                              note->values[PIZ_VALUE_CHANNEL],
+                              note->tag,
+                              x->owner->bpm };
                 
-                err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_CHANGED, i, 5, a);
+                err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_CHANGED, 7, a);
             }
         } 
     }
@@ -218,7 +233,6 @@ PIZError pizSequenceStep (PIZSequence *x)
         //
         long pitch    = note->values[PIZ_VALUE_PITCH];
         long velocity = note->values[PIZ_VALUE_VELOCITY];
-        long duration = note->values[PIZ_VALUE_DURATION];
         long channel  = note->values[PIZ_VALUE_CHANNEL];
         
         pizLinklistNextWithPtr (x->timeline[x->index], (void *)note, (void **)&nextNote);
@@ -240,9 +254,12 @@ PIZError pizSequenceStep (PIZSequence *x)
         long a[ ] = { note->position, 
                       CLAMP (pitch, 0, PIZ_MAGIC_PITCH),
                       CLAMP (velocity, 0, PIZ_MAGIC_VELOCITY),
-                      duration, channel };
+                      note->values[PIZ_VALUE_DURATION], 
+                      channel,
+                      note->tag,
+                      x->owner->bpm };
         
-        err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_PLAYED, note->tag, 5, a);
+        err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_PLAYED, 7, a);
         //
         }
         

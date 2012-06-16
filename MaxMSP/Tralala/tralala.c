@@ -167,6 +167,8 @@ void tralala_dictionary (t_tralala *x, t_dictionary *d)
 void tralala_dblclick (t_tralala *x)
 {
     post ("DBLCLICK");
+    
+    dictionary_dump (x->data, 1, 0);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -175,31 +177,29 @@ void tralala_dblclick (t_tralala *x)
 
 void tralala_callback (void *ptr, PIZEvent *event)
 {
-    long         bpm, argc = 0;
+    long         k, argc = 0;
     long         *argv = NULL;
     t_tralala    *x = NULL;
     PIZEventCode code;
     
     x = (t_tralala *)ptr;
     pizEventCode (event, &code);
-    pizEventValue (event, &bpm);
     
     DEBUGEVENT
     
     switch (code) {
     //
     case PIZ_EVENT_NOTE_PLAYED :
-        if (bpm) {
         pizEventData (event, &argc, &argv);
-        argv[3] = (long)(argv[3] * (PIZ_AGENT_CONSTANT_BPM_MS / bpm));
-        atom_setlong_array (4, x->played, argc - 1, argv + 1);
+        k = argv[PIZ_EVENT_NOTE_DURATION]; 
+        argv[PIZ_EVENT_NOTE_DURATION] = (long)(k * (PIZ_AGENT_CONSTANT_BPM_MS / argv[PIZ_EVENT_NOTE_BPM]));
+        atom_setlong_array (4, x->played, 4, argv + 1);
         outlet_list (x->left, NULL, 4, x->played); 
-        }
         break;
         
     case PIZ_EVENT_NOTE_DUMPED :
         pizEventData (event, &argc, &argv);
-        atom_setlong_array (5, x->dumped, argc, argv);
+        atom_setlong_array (5, x->dumped, 5, argv);
         outlet_anything (x->middleLeft, TLL_NOTE, 5, x->dumped); 
         break;
 

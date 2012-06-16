@@ -75,7 +75,7 @@ PIZ_START_C_LINKAGE
 PIZ_LOCAL PIZNote   *pizSequenceNewNote         (PIZSequence *x, long *argv, ulong flags);
 PIZ_LOCAL void      pizSequenceMakeMap          (PIZSequence *x);
 
-PIZ_LOCAL PIZError  pizSequenceAddNotification  (PIZSequence *x, PIZEventCode n, long tag, long ac, long *av);
+PIZ_LOCAL PIZError  pizSequenceAddNotification  (PIZSequence *x, PIZEventCode n, long ac, long *av);
 
 PIZ_LOCAL void      pizSequenceForEach          (PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod method);
 PIZ_LOCAL void      pizSequenceEachRemove       (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
