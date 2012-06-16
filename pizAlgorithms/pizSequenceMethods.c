@@ -86,32 +86,6 @@ static const long   pizSequenceNeighbors[ ] = { -256,
 #pragma mark ---
 #pragma mark -
 
-PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
-{
-    long argc;
-    long *argv = NULL;
-    
-    if (!(pizEventData (event, &argc, &argv))) {
-        long  i;
-        ulong flags = PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS;
-        long  values[ ] = { -1,
-                            PIZ_SEQUENCE_DEFAULT_PITCH, 
-                            PIZ_SEQUENCE_DEFAULT_VELOCITY, 
-                            x->value, 
-                            0 };
-        
-        for (i = 0; i < MIN (argc, 5); i++) {
-            values[i] = argv[i];
-        }
-        
-        if (pizSequenceNewNote (x, values, flags)) {
-            pizSequenceMakeMap (x);
-        }
-    }
-    
-    return PIZ_GOOD;
-}
-
 PIZError pizSequenceZone (PIZSequence *x, const PIZEvent *event)
 {
     long argc;
@@ -143,6 +117,32 @@ PIZError pizSequenceZone (PIZSequence *x, const PIZEvent *event)
         
     x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
     //
+    }
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceNote (PIZSequence *x, const PIZEvent *event)
+{
+    long argc;
+    long *argv = NULL;
+    
+    if (!(pizEventData (event, &argc, &argv))) {
+        long  i;
+        ulong flags = PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS;
+        long  values[ ] = { -1,
+                            PIZ_SEQUENCE_DEFAULT_PITCH, 
+                            PIZ_SEQUENCE_DEFAULT_VELOCITY, 
+                            x->value, 
+                            0 };
+        
+        for (i = 0; i < MIN (argc, 5); i++) {
+            values[i] = argv[i];
+        }
+        
+        if (pizSequenceNewNote (x, values, flags)) {
+            pizSequenceMakeMap (x);
+        }
     }
     
     return PIZ_GOOD;
@@ -182,10 +182,14 @@ PIZError pizSequenceClean (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
 {
-    long i, k, selector, shift = 1;
+    long i, k, selector, argc, shift = 1;
+    long *argv = NULL;
         
-    pizEventValue  (event, &shift);
-    pizEventOption (event, &selector);
+    if (!(pizEventData (event, &argc, &argv))) {
+        shift = argv[0];
+    }
+    
+    pizEventValue (event, &selector);
     selector = CLAMP (selector, PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
     
     k = pizSequenceFillTempNotes (x);
@@ -207,7 +211,7 @@ PIZError pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
 {
     long i, k, selector;
     
-    pizEventOption (event, &selector);
+    pizEventValue (event, &selector);
     selector = CLAMP (selector, PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
         
     k = pizSequenceFillTempNotes (x);
@@ -232,10 +236,14 @@ PIZError pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
 {
-    long i, k, selector, down = 0;
+    long i, k, selector, argc, down = 0;
+    long *argv = NULL;
     
-    pizEventValue (event, &down);
-    pizEventOption (event, &selector);
+    if (!(pizEventData (event, &argc, &argv))) {
+        down = argv[0];
+    }
+    
+    pizEventValue (event, &selector);
     selector = CLAMP (selector, PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
         
     k = pizSequenceFillTempNotes (x);
@@ -311,7 +319,7 @@ PIZError pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
     long  a[ ] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     long  t[ ] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     
-    pizEventOption (event, &key);
+    pizEventValue (event, &key);
     key = CLAMP (key, PIZ_KEY_C, PIZ_KEY_B);
     
     for (i = 0; i < argc; i++) {
@@ -388,11 +396,14 @@ PIZError pizSequenceAlgorithm (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceJuliet (PIZSequence *x, const PIZEvent *event)
 {
-    long     iterate = 1;
+    long     argc, iterate = 1;
+    long     *argv = NULL;
     PIZError hashErr = PIZ_GOOD;
     
-    pizEventValue (event, &iterate); 
-    
+    if (!(pizEventData (event, &argc, &argv))) {
+        iterate = argv[0];
+    }
+        
     if (x->cell != PIZ_NOTE_NONE) {
     //
     long k       = 0;

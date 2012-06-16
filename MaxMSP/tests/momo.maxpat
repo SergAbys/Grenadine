@@ -26,40 +26,6 @@
 		"devicewidth" : 0.0,
 		"boxes" : [ 			{
 				"box" : 				{
-					"maxclass" : "newobj",
-					"text" : "tralala",
-					"patching_rect" : [ 120.0, 220.0, 59.5, 23.0 ],
-					"numinlets" : 1,
-					"fontname" : "Arial",
-					"numoutlets" : 4,
-					"outlettype" : [ "list", "", "bang", "bang" ],
-					"fontsize" : 14.0,
-					"id" : "obj-1",
-					"tralala" : 					{
-						"current" : 						{
-
-						}
-,
-						"restore" : 						{
-							"channel" : [ "channel", 1 ],
-							"cell" : [ "cell", 12 ],
-							"bpm" : [ "bpm", 240 ],
-							"velocity" : [ "velocity", 0 ],
-							"chord" : [ "chord", 0 ],
-							"pattern" : [ "pattern" ],
-							"chance" : [ "chance", 100 ],
-							"value" : [ "value", 12 ],
-							"zone" : [ "zone", 0, 96, 60, 71 ],
-							"scale" : [ "scale", "dorian", "B" ]
-						}
-
-					}
-
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"maxclass" : "message",
 					"text" : "change pitch 12",
 					"patching_rect" : [ 220.0, 160.0, 109.0, 21.0 ],
@@ -143,61 +109,7 @@
 
 			}
  ],
-		"lines" : [ 			{
-				"patchline" : 				{
-					"source" : [ "obj-4", 0 ],
-					"destination" : [ "obj-1", 0 ],
-					"hidden" : 0,
-					"midpoints" : [  ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"source" : [ "obj-6", 0 ],
-					"destination" : [ "obj-1", 0 ],
-					"hidden" : 0,
-					"midpoints" : [  ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"source" : [ "obj-8", 0 ],
-					"destination" : [ "obj-1", 0 ],
-					"hidden" : 0,
-					"midpoints" : [  ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"source" : [ "obj-5", 0 ],
-					"destination" : [ "obj-1", 0 ],
-					"hidden" : 0,
-					"midpoints" : [  ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"source" : [ "obj-3", 0 ],
-					"destination" : [ "obj-1", 0 ],
-					"hidden" : 0,
-					"midpoints" : [  ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"source" : [ "obj-7", 0 ],
-					"destination" : [ "obj-1", 0 ],
-					"hidden" : 0,
-					"midpoints" : [  ]
-				}
-
-			}
- ]
+		"lines" : [  ]
 	}
 
 }

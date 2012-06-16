@@ -146,7 +146,7 @@ PIZError pizSequenceAddNotification (PIZSequence *x, PIZEventCode n, long tag, l
     pizEventSetIdentifier (notification, x->owner->identifier);
     pizEventSetTag        (notification, tag);
     pizEventSetData       (notification, ac, av);
-    pizEventSetOption     (notification, x->owner->bpm);
+    pizEventSetValue      (notification, x->owner->bpm);
     
     if (err |= pizLinklistAppend (x->owner->notification, notification)) {       
         pizEventFree (notification);  
@@ -214,13 +214,15 @@ void pizSequenceEachRemove (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote 
 
 void pizSequenceEachChange (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n)
 {
-    long v, s;
+    long argc;
+    long *argv = NULL;
         
-    if (!(pizEventValue (e, &v))) {
+    if (!(pizEventData (e, &argc, &argv))) {
     //
-    long t, h = -1;
+    long t, s, h = -1;
+    long v = argv[0];
  
-    pizEventOption (e, &s);
+    pizEventValue (e, &s);
     s = CLAMP (s, PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
     
     if (f & PIZ_SEQUENCE_FLAG_RANDOM) {
@@ -295,15 +297,16 @@ void pizSequenceEachTempNotes (PIZSequence *x, const PIZEvent *e, ulong f, PIZNo
 {
     if (f & PIZ_SEQUENCE_FLAG_NEARBY) {
     //
-    long value;
+    long argc;
+    long *argv = NULL;
     
-    if (e && (!(pizEventValue (e, &value)))) {
+    if (e && (!(pizEventData (e, &argc, &argv)))) {
     //
     bool death = false;
-    long j, a, b;
+    long j, a, b, value;
     long pitch = n->values[PIZ_VALUE_PITCH];
     
-    value = MAX (0, value);
+    value = MAX (0, argv[0]);
     
     a = CLAMP ((pitch - value), 0, PIZ_MAGIC_PITCH);
     b = CLAMP ((pitch + value), 0, PIZ_MAGIC_PITCH);

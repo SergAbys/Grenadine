@@ -56,10 +56,11 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizAgentStop,                   // PIZ_EVENT_STOP
                                                     pizAgentLoop,                   // PIZ_EVENT_LOOP
                                                     pizAgentUnloop,                 // PIZ_EVENT_UNLOOP
-                                                    pizAgentBPM,                    // PIZ_EVENT_BPM
+                                                    //
                                                     pizAgentLearn,                  // PIZ_EVENT_LEARN
                                                     pizAgentForget,                 // PIZ_EVENT_FORGET
                                                     pizAgentDump,                   // PIZ_EVENT_DUMP
+                                                    pizAgentBpm,                    // PIZ_EVENT_BPM
                                                     //
                                                     pizSequenceSetChance,           // PIZ_EVENT_CHANCE
                                                     pizSequenceSetVelocity,         // PIZ_EVENT_VELOCITY
@@ -69,8 +70,8 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizSequenceSetValue,            // PIZ_EVENT_VALUE
                                                     pizSequenceSetScale,            // PIZ_EVENT_SCALE
                                                     pizSequenceSetPattern,          // PIZ_EVENT_PATTERN
-                                                    pizSequenceNote,                // PIZ_EVENT_NOTE
                                                     pizSequenceZone,                // PIZ_EVENT_ZONE
+                                                    pizSequenceNote,                // PIZ_EVENT_NOTE
                                                     pizSequenceClear,               // PIZ_EVENT_CLEAR
                                                     pizSequenceClean,               // PIZ_EVENT_CLEAN
                                                     pizSequenceRotate,              // PIZ_EVENT_ROTATE
@@ -84,7 +85,7 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizSequenceAlgorithm,           // PIZ_EVENT_ROMEO
                                                     pizSequenceJuliet,              // PIZ_EVENT_JULIET
                                                     };             
-                                                    
+                                                                                                    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -

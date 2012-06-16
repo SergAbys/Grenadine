@@ -94,14 +94,15 @@ PIZError pizAgentUnloop (PIZAgent *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizAgentBPM (PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentBpm (PIZAgent *x, const PIZEvent *event)
 {
-    long value;
+    long argc;
+    long *argv = NULL;
     
-    if (!(pizEventValue (event, &value))) {
+    if (!(pizEventData (event, &argc, &argv))) {
     //
-    if ((value >= PIZ_MINIMUM_BPM) && (value <= PIZ_MAXIMUM_BPM)) {
-        x->bpm = value;
+    if ((argv[0] >= PIZ_MINIMUM_BPM) && (argv[0] <= PIZ_MAXIMUM_BPM)) {
+        x->bpm = argv[0];
         pizAgentAddNotification (x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
             
         pizNanoSet     (&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);    
@@ -124,13 +125,14 @@ PIZError pizAgentForget (PIZAgent *x, const PIZEvent *event)
 
 PIZError pizAgentLearn (PIZAgent *x, const PIZEvent *event)
 {   
-    long value;
+    long argc;
+    long *argv = NULL;
     
-    if (!(pizEventValue (event, &value))) {
+    if (!(pizEventData (event, &argc, &argv))) {
     //
     long h = (100 * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
     
-    pizArrayAppend (x->toBeLearned, value);
+    pizArrayAppend (x->toBeLearned, argv[0]);
     
     if (h < (pizArrayCount (x->toBeLearned) * PIZ_CONSTANT_LEARN)) {
         pizFactorOracleAdd (x->factorOracle, pizArrayCount (x->toBeLearned), pizArrayPtr (x->toBeLearned));

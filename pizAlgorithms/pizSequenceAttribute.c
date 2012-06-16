@@ -83,11 +83,12 @@ PIZ_LOCAL bool pizSequenceIsValidNoteValue (long value);
 
 PIZError pizSequenceSetChance (PIZSequence *x, const PIZEvent *event)
 {
-    long value;
+    long argc;
+    long *argv = NULL;
     
-    if (!(pizEventValue (event, &value))) {
-        if ((value >= 0) && (value <= 100)) {
-            x->chance = value;
+    if (!(pizEventData (event, &argc, &argv))) {
+        if ((argv[0] >= 0) && (argv[0] <= 100)) {
+            x->chance = argv[0];
             x->flags |= PIZ_SEQUENCE_FLAG_CHANCE;
         }
     }
@@ -97,11 +98,12 @@ PIZError pizSequenceSetChance (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceSetVelocity (PIZSequence *x, const PIZEvent *event)
 {
-    long value;
+    long argc;
+    long *argv = NULL;
     
-    if (!(pizEventValue (event, &value))) {
-        if ((value >= -PIZ_MAGIC_VELOCITY) && (value <= PIZ_MAGIC_VELOCITY)) {
-            x->velocity = value;
+    if (!(pizEventData (event, &argc, &argv))) {
+        if ((argv[0] >= -PIZ_MAGIC_VELOCITY) && (argv[0] <= PIZ_MAGIC_VELOCITY)) {
+            x->velocity = argv[0];
             x->flags |= PIZ_SEQUENCE_FLAG_VELOCITY;
         }
     }
@@ -111,11 +113,12 @@ PIZError pizSequenceSetVelocity (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceSetChannel (PIZSequence *x, const PIZEvent *event)
 {
-    long value;
+    long argc;
+    long *argv = NULL;
     
-    if (!(pizEventValue (event, &value))) {
-        if ((value >= 0) && (value <= PIZ_MAGIC_CHANNEL)) {
-            x->channel = value;
+    if (!(pizEventData (event, &argc, &argv))) {
+        if ((argv[0] >= 0) && (argv[0] <= PIZ_MAGIC_CHANNEL)) {
+            x->channel = argv[0];
             x->flags |= PIZ_SEQUENCE_FLAG_CHANNEL;
         }
     }
@@ -125,11 +128,12 @@ PIZError pizSequenceSetChannel (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceSetChord (PIZSequence *x, const PIZEvent *event)
 {
-    long value;
+    long argc;
+    long *argv = NULL;
     
-    if (!(pizEventValue (event, &value))) {
-        if ((value >= 0) && (value < PIZ_MAGIC_ULONG)) {
-            x->chord = value;
+    if (!(pizEventData (event, &argc, &argv))) {
+        if ((argv[0] >= 0) && (argv[0] < PIZ_MAGIC_ULONG)) {
+            x->chord = argv[0];
             x->flags |= PIZ_SEQUENCE_FLAG_CHORD;
         }
     }
@@ -139,11 +143,12 @@ PIZError pizSequenceSetChord (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
 {
-    long value;
+    long argc;
+    long *argv = NULL;
     
-    if (!(pizEventValue (event, &value))) {
-        if ((pizSequenceIsValidNoteValue (value))) {
-            x->cell = value;
+    if (!(pizEventData (event, &argc, &argv))) {
+        if ((pizSequenceIsValidNoteValue (argv[0]))) {
+            x->cell = argv[0];
             x->flags |= PIZ_SEQUENCE_FLAG_CELL;
         }
     }
@@ -153,11 +158,12 @@ PIZError pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceSetValue (PIZSequence *x, const PIZEvent *event)
 {
-    long value;
+    long argc;
+    long *argv = NULL;
     
-    if (!(pizEventValue (event, &value))) {
-        if ((pizSequenceIsValidNoteValue (value))) {
-            x->value = value;
+    if (!(pizEventData (event, &argc, &argv))) {
+        if ((pizSequenceIsValidNoteValue (argv[0]))) {
+            x->value = argv[0];
             x->flags |= PIZ_SEQUENCE_FLAG_NOTE_VALUE;
         }
     }
@@ -170,14 +176,18 @@ PIZError pizSequenceSetValue (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
 {
-    long value, option;
+    long argc;
+    long *argv = NULL;
     PIZError err = PIZ_GOOD;
     
     pizArrayClear (x->scale);
     
-    if (!(pizEventValue (event, &value))) {
+    if (!(pizEventData (event, &argc, &argv))) {
     //
-    pizEventOption (event, &option);
+    long value, option;
+    
+    value = argv[0];
+    pizEventValue (event, &option);
     
     x->type = CLAMP (value, PIZ_MODE_NONE, PIZ_SEVENTH_FLAT_FIVE);
     x->key  = CLAMP (option, PIZ_KEY_C, PIZ_KEY_B);

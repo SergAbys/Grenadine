@@ -47,10 +47,10 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_RUN,              // PIZ_EVENT_STOP
                                         PIZ_EVENT_RUN,              // PIZ_EVENT_LOOP
                                         PIZ_EVENT_RUN,              // PIZ_EVENT_UNLOOP
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_BPM
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_LEARN
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_FORGET
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_DUMP
+                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_BPM
                                         //
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CHANCE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_VELOCITY
@@ -60,8 +60,8 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_VALUE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_SCALE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_PATTERN
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_NOTE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_ZONE
+                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_NOTE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CLEAR
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CLEAN
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_ROTATE
@@ -132,9 +132,9 @@ void pizEventSetTag (PIZEvent *x, long tag)
     x->tag = tag;
 }
 
-void pizEventSetOption (PIZEvent *x, long option)
+void pizEventSetValue (PIZEvent *x, long value)
 {
-    x->option = option;
+    x->value = value;
 }
 
 void pizEventSetData (PIZEvent *x, long argc, const long *argv)
@@ -172,9 +172,9 @@ void pizEventTag (const PIZEvent *x, long *tag)
     (*tag) = x->tag;
 }
 
-void pizEventOption (const PIZEvent *x, long *option)
+void pizEventValue (const PIZEvent *x, long *value)
 {
-    (*option) = x->option;
+    (*value) = x->value;
 }
 
 PIZError pizEventData (const PIZEvent *x, long *argc, long **argv)
@@ -185,18 +185,6 @@ PIZError pizEventData (const PIZEvent *x, long *argc, long **argv)
         (*argv) = (long *)x->data;
         err = PIZ_GOOD;
     }
-    
-    return err;
-}
-
-PIZError pizEventValue (const PIZEvent *x, long *value)
-{
-    PIZError err = PIZ_ERROR;
-    
-    if (x->size) {
-        (*value) = x->data[0];
-        err = PIZ_GOOD;
-    } 
     
     return err;
 }

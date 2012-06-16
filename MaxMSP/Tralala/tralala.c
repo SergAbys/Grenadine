@@ -166,12 +166,7 @@ void tralala_dictionary (t_tralala *x, t_dictionary *d)
 
 void tralala_dblclick (t_tralala *x)
 {
-    t_dictionary *sd = NULL;
-    
-    if (dictionary_entryisdictionary (x->data, TLL_RESTORE)) {
-        dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&sd);
-        tralala_parseDictionary (x, sd);
-    }
+    post ("DBLCLICK");
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -187,7 +182,7 @@ void tralala_callback (void *ptr, PIZEvent *event)
     
     x = (t_tralala *)ptr;
     pizEventCode (event, &code);
-    pizEventOption (event, &bpm);
+    pizEventValue (event, &bpm);
     
     DEBUGEVENT
     

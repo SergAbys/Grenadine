@@ -58,7 +58,7 @@
                         event->data[10],\
                         event->data[11],\
                         event->tag,     \
-                        event->option   \
+                        event->value    \
                         );              \
                     }
                     

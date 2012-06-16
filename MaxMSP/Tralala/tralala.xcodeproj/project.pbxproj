@@ -218,7 +218,7 @@
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../pizAlgorithms/build/Debug\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../pizAlgorithms/build/Release\"";
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-bind_at_load";
 				PREBINDING = NO;
 				PRODUCT_NAME = tralala;
 				UNEXPORTED_SYMBOLS_FILE = tralalaHide.txt;
