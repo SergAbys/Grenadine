@@ -26,9 +26,14 @@ extern t_tralalaTable tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark-
 
-PIZ_INLINE void symbolWithTag               (t_symbol **s, long tag);
-PIZ_INLINE void tagWithSymbol               (long *tag, t_symbol *s);
-PIZ_LOCAL  void tralala_parseDictionaryFun  (t_dictionary_entry *entry, void *ptr);
+PIZ_INLINE void symbolWithTag (t_symbol **s, long tag);
+PIZ_INLINE void tagWithSymbol (long *tag, t_symbol *s);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark-
+
+PIZ_LOCAL void tralala_parseDictionaryFun (t_dictionary_entry *entry, void *ptr);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -39,7 +44,7 @@ PIZ_LOCAL  void tralala_parseDictionaryFun  (t_dictionary_entry *entry, void *pt
 static t_quickmap *tll_code;
 static t_quickmap *tll_type;
 static t_quickmap *tll_length;
-static t_quickmap *tll_value;
+static t_quickmap *tll_direction;
 static t_quickmap *tll_select;
 static t_quickmap *tll_key;
 static t_quickmap *tll_notification;
@@ -50,7 +55,7 @@ void tralala_parseInit (t_tralalaTable *table)
 tll_code           = (t_quickmap *)quickmap_new ( );
 tll_type           = (t_quickmap *)quickmap_new ( );
 tll_length         = (t_quickmap *)quickmap_new ( );
-tll_value          = (t_quickmap *)quickmap_new ( );
+tll_direction      = (t_quickmap *)quickmap_new ( );
 tll_key            = (t_quickmap *)quickmap_new ( );
 tll_select         = (t_quickmap *)quickmap_new ( );
 tll_notification   = (t_quickmap *)quickmap_new ( );
@@ -135,8 +140,8 @@ quickmap_add (tll_length, gensym ("quarter_dotted"),        (void *)(TINY + PIZ_
 quickmap_add (tll_length, gensym ("eighth_dotted"),         (void *)(TINY + PIZ_EIGHTH_NOTE_DOTTED));
 quickmap_add (tll_length, gensym ("sixteenth_dotted"),      (void *)(TINY + PIZ_SIXTEENTH_NOTE_DOTTED));
 
-quickmap_add (tll_value,  gensym ("up"),                    (void *)(TINY + PIZ_UP)); 
-quickmap_add (tll_value,  gensym ("down"),                  (void *)(TINY + PIZ_DOWN));
+quickmap_add (tll_direction,  gensym ("up"),                (void *)(TINY + PIZ_UP)); 
+quickmap_add (tll_direction,  gensym ("down"),              (void *)(TINY + PIZ_DOWN));
 
 quickmap_add (tll_select, gensym ("pitch"),                 (void *)(TINY + PIZ_VALUE_PITCH));
 quickmap_add (tll_select, gensym ("velocity"),              (void *)(TINY + PIZ_VALUE_VELOCITY));
@@ -179,56 +184,67 @@ void tralala_parseMessage (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     
     if (!(quickmap_lookup_key1 (tll_code, (void *)s, (void **)&code))) {
     //
-    long     i, k = 0;
-    long     option = TINY;
-    long     data[PIZ_EVENT_DATA_SIZE];
+    long     i, k = 0, msg = 0;
+    long     data[PIZ_EVENT_DATA_SIZE] = { 0 };
     PIZEvent *event = NULL;
      
     code -= TINY;
     
+    if (msg = ((code == PIZ_EVENT_ROTATE)   ||
+               (code == PIZ_EVENT_SCRAMBLE) ||
+               (code == PIZ_EVENT_SORT)     ||
+               (code == PIZ_EVENT_CHANGE)   ||
+               (code == PIZ_EVENT_FILL)     ||
+               (code == PIZ_EVENT_CYCLE)))  { k = 1; }
+                     
     for (i = 0; i < argc; i++) {
     //
-    if ((atom_gettype (argv + i) == A_LONG) && (k < PIZ_EVENT_DATA_SIZE)) {
-        data[k] = atom_getlong (argv + i);
-        k ++;
-        
-    } else if (atom_gettype (argv + i) == A_SYM) {
+    if (atom_gettype (argv + i) == A_SYM) {
     //
-    long       temp;
-    t_quickmap *q = NULL;
-            
-    if (!(quickmap_lookup_key1 (tll_select, (void *)atom_getsym (argv + i), (void **)&temp))) {
-        option = temp;
-        
-    } else if (!(quickmap_lookup_key1 (tll_key, (void *)atom_getsym (argv + i), (void **)&temp))) {
-        option = temp;
-        
-    } else {
-        switch (code) {
-            case PIZ_EVENT_SORT  : q = tll_value;   break;
-            case PIZ_EVENT_SCALE : q = tll_type;    break;
-            case PIZ_EVENT_CELL  : q = tll_length;  break;
-            case PIZ_EVENT_VALUE : q = tll_length;  break;
+    long t, j = 0, p = 0;
+     
+    if ((code == PIZ_EVENT_SCALE) || (code == PIZ_EVENT_CYCLE)) {
+        if (!(quickmap_lookup_key1 (tll_type, (void *)atom_getsym (argv + i), (void **)&t))) {
+            j = t - TINY; p = 1; 
+        } else if (!(quickmap_lookup_key1 (tll_key, (void *)atom_getsym (argv + i), (void **)&t))) {
+            j = t - TINY;
         }
-    
-        if (q && !(quickmap_lookup_key1 (q, (void *)atom_getsym (argv + i), (void **)&temp))) {
-            data[0] = temp - TINY;
-            k = MAX (1, k);
-        } 
-    }
-    //
-    }
-    //
-    }
-    
-    option -= TINY;
         
+    } else if ((code == PIZ_EVENT_CELL) || (code == PIZ_EVENT_VALUE)) {
+        if (!(quickmap_lookup_key1 (tll_length, (void *)atom_getsym (argv + i), (void **)&t))) {
+            j = t - TINY; p = 0;
+        }
+        
+    } else if (msg) {
+        if (!(quickmap_lookup_key1 (tll_direction, (void *)atom_getsym (argv + i), (void **)&t))) {
+            j = t - TINY; p = 1;
+        } else if (!(quickmap_lookup_key1 (tll_select, (void *)atom_getsym (argv + i), (void **)&t))) {
+            j = t - TINY;
+        }
+    }
+
+    data[p] = j;
+    k = MAX (p + 1, k);
+    //
+    }
+    //
+    }
+    
+    for (i = 0; i < argc; i++) {
+    //
+    if ((k < PIZ_EVENT_DATA_SIZE) && (atom_gettype (argv + i) == A_LONG)) {
+        data[k] = atom_getlong (argv + i);
+        k++;
+    }
+    //
+    }
+    
     if (event = pizEventNew ((PIZEventCode)code)) {
-        pizEventSetValue (event, option);
-        pizEventSetData  (event, k, data);
+        pizEventSetData (event, k, data);
         
         DEBUGEVENT
-        pizAgentAddEvent (x->agent, event);
+        //pizAgentAddEvent (x->agent, event);
+        pizEventFree (event);
     }
     //
     }
@@ -260,8 +276,8 @@ void tralala_parseNotification (t_tralala *x, PIZEvent *event)
     t_symbol *sym1 = NULL;
     t_symbol *sym2 = NULL;
     
-    quickmap_lookup_key2 (tll_type, (void *)((*(ptr + 0)) + TINY), (void **)&sym1);
-    quickmap_lookup_key2 (tll_key,  (void *)((*(ptr + 1)) + TINY), (void **)&sym2);
+    quickmap_lookup_key2 (tll_key,  (void *)((*(ptr + 0)) + TINY), (void **)&sym1);
+    quickmap_lookup_key2 (tll_type, (void *)((*(ptr + 1)) + TINY), (void **)&sym2);
     
     atom_setsym (data + 1, sym1);
     atom_setsym (data + 2, sym2);
@@ -282,7 +298,6 @@ void tralala_parseNotification (t_tralala *x, PIZEvent *event)
         atom_setsym (data, TLL_NOTE);
         dictionary_appendatoms (d, s, k - 1, data);
     }
-    
     //
     }
     //
@@ -313,15 +328,27 @@ PIZ_INLINE void tagWithSymbol (long *tag, t_symbol *s)
     (*tag) = atoi (s->s_name);
 }
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 void tralala_parseDictionaryFun (t_dictionary_entry *entry, void *ptr)
 {
-    long      ac = 0;
+    long      i, ac = 0;
     t_atom    *av = NULL;
     t_atom    value;
     t_tralala *x = ptr;
     
     dictionary_entry_getvalue (entry, &value);
     atomarray_getatoms ((t_atomarray *)atom_getobj (&value), &ac, &av);
+    
+    for (i = 1; i < ac; i++) {
+        if (atom_gettype (av + i) == A_OBJ) {
+            t_symbol *t = gensym (string_getptr ((t_string *)atom_getobj (av + i)));
+            atom_setsym (av + i, t);
+        }
+    }
+    
     PARSE (gensym (string_getptr ((t_string *)atom_getobj (av))), ac - 1, av + 1)
 }
 

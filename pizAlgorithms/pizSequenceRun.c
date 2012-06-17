@@ -110,7 +110,7 @@ PIZError pizSequenceRefresh (PIZSequence *x)
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_SCALE) {
-        long a[ ] = { x->type, x->key };
+        long a[ ] = { x->key, x->type };
         err |= pizSequenceAddNotification (x, PIZ_EVENT_CHANGED_SCALE, 2, a);
     }
     
