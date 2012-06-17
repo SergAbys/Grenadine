@@ -49,13 +49,15 @@
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL bool      pizSequenceIsAtEnd      (PIZSequence *x);
-PIZ_LOCAL void      pizSequenceJumpStart    (PIZSequence *x);
+PIZ_LOCAL bool      pizSequenceIsAtEnd          (PIZSequence *x);
+PIZ_LOCAL void      pizSequenceJumpStart        (PIZSequence *x);
 
-PIZ_LOCAL PIZError  pizSequenceDump         (PIZSequence *x); //
-PIZ_LOCAL PIZError  pizSequenceRefresh      (PIZSequence *x); //
-PIZ_LOCAL PIZError  pizSequenceStep         (PIZSequence *x); //
-PIZ_LOCAL PIZError  pizSequenceStepBlank    (PIZSequence *x);
+PIZ_LOCAL PIZError  pizSequenceDump             (PIZSequence *x); //
+PIZ_LOCAL PIZError  pizSequenceRefresh          (PIZSequence *x); //
+PIZ_LOCAL PIZError  pizSequenceStep             (PIZSequence *x); //
+PIZ_LOCAL PIZError  pizSequenceStepBlank        (PIZSequence *x);
+
+PIZ_LOCAL PIZError  pizSequenceAddNotification  (PIZSequence *x, PIZEventCode n, long ac, long *av);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------

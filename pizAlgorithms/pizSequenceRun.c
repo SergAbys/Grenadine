@@ -39,7 +39,7 @@
 
 #include "pizAgent.h"
 #include "pizSequenceRun.h"
-#include "pizSequencePrivate.h"
+#include "pizSequenceLibrary.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -287,6 +287,31 @@ PIZError pizSequenceStepBlank (PIZSequence *x)
     if (x->index < x->end) {
         err = PIZ_GOOD;
         x->index ++;    
+    }
+    
+    return err;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZError pizSequenceAddNotification (PIZSequence *x, PIZEventCode n, long ac, long *av)
+{
+    PIZEvent *notification = NULL;
+    PIZError err = PIZ_GOOD;
+    
+    if (notification = pizEventNew (n)) {
+    //
+    pizEventSetIdentifier (notification, x->owner->identifier);
+    pizEventSetData       (notification, ac, av);
+    
+    if (err |= pizLinklistAppend (x->owner->notification, notification)) {       
+        pizEventFree (notification);  
+    }
+    //
+    } else {
+        err |= PIZ_MEMORY;
     }
     
     return err;

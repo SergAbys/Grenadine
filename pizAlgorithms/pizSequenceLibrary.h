@@ -1,5 +1,5 @@
 /**
- * \file    pizSequencePrivate.h
+ * \file    pizSequenceLibrary.h
  * \author  Jean Sapristi
  */
  
@@ -37,8 +37,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_SEQUENCE_PRIVATE_H
-#define PIZ_SEQUENCE_PRIVATE_H
+#ifndef PIZ_SEQUENCE_LIBRARY_H
+#define PIZ_SEQUENCE_LIBRARY_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -72,27 +72,16 @@
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL PIZNote   *pizSequenceNewNote         (PIZSequence *x, long *argv, ulong flags);
-PIZ_LOCAL void      pizSequenceMakeMap          (PIZSequence *x);
+PIZ_LOCAL void pizSequenceForEach       (PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod method);
 
-PIZ_LOCAL PIZError  pizSequenceAddNotification  (PIZSequence *x, PIZEventCode n, long ac, long *av);
-
-PIZ_LOCAL void      pizSequenceForEach          (PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod method);
-PIZ_LOCAL void      pizSequenceEachRemove       (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
-PIZ_LOCAL void      pizSequenceEachChange       (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
-PIZ_LOCAL void      pizSequenceEachCycle        (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
-PIZ_LOCAL void      pizSequenceEachDump         (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
-PIZ_LOCAL void      pizSequenceEachTempHash     (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
-PIZ_LOCAL void      pizSequenceEachTempNotes    (PIZSequence *x, const PIZEvent *e, ulong f, PIZNote *n);
-
-PIZ_LOCAL long      pizSequenceFillTempNotes    (PIZSequence *x);
-PIZ_LOCAL void      pizSequenceSetByTempNotes   (PIZSequence *x, long selector, bool reverse);
-
-PIZ_LOCAL long      pizSequenceSnapByAmbitus    (PIZSequence *x, long pitch);
-PIZ_LOCAL long      pizSequenceSnapByPattern    (PIZSequence *x, long position);
-PIZ_LOCAL long      pizSequenceSnapByCell       (PIZSequence *x, long position);
+PIZ_LOCAL void pizSequenceEachRemove    (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
+PIZ_LOCAL void pizSequenceEachChange    (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
+PIZ_LOCAL void pizSequenceEachCycle     (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
+PIZ_LOCAL void pizSequenceEachDump      (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
+PIZ_LOCAL void pizSequenceEachTempHash  (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
+PIZ_LOCAL void pizSequenceEachTempNotes (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_PRIVATE_H
+#endif // PIZ_SEQUENCE_LIBRARY_H
