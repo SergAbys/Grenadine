@@ -132,19 +132,11 @@ PIZError pizSequenceRefresh (PIZSequence *x)
     if (pizItemsetCount (&x->removedNotes)) {
     //
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
-        if (pizItemsetIsSetAtIndex (&x->removedNotes, i)) { 
-            if (!(pizHashTablePtrWithKey (x->lookup, i, (void **)&note))) {
+        if (pizItemsetIsSetAtIndex (&x->removedNotes, i)) {
+         
+            long a[ ] = { 0, 0, 0, 0, 0, i, x->owner->bpm };
             
-                long a[ ] = { note->position, 
-                              note->values[PIZ_VALUE_PITCH],
-                              note->values[PIZ_VALUE_VELOCITY],
-                              note->values[PIZ_VALUE_DURATION], 
-                              note->values[PIZ_VALUE_CHANNEL],
-                              note->tag,
-                              x->owner->bpm };
-                
-                err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_REMOVED, 7, a);
-            }
+            err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_REMOVED, 7, a);
         } 
     }
     
@@ -303,8 +295,7 @@ PIZError pizSequenceAddNotification (PIZSequence *x, PIZEventCode n, long ac, lo
     
     if (notification = pizEventNew (n)) {
     //
-    pizEventSetIdentifier (notification, x->owner->identifier);
-    pizEventSetData       (notification, ac, av);
+    pizEventSetData (notification, ac, av);
     
     if (err |= pizLinklistAppend (x->owner->notification, notification)) {       
         pizEventFree (notification);  

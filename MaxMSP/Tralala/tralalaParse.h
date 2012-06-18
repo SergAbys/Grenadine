@@ -30,11 +30,11 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_parseInit              (t_tralalaTable *table);
+void tralala_parseInit          (t_tralalaTable *table);
 
-void tralala_parseMessage           (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-void tralala_parseNotification      (t_tralala *x, PIZEvent *event);
-void tralala_parseDictionary        (t_tralala *x, t_dictionary *d);
+void tralala_parseMessage       (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_parseNotification  (t_tralala *x, PIZEvent *event);
+void tralala_parseDictionary    (t_tralala *x, t_dictionary *d);
       
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

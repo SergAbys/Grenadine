@@ -94,7 +94,6 @@
 #pragma mark -
 
 typedef struct _PIZAgent {
-    long                identifier;
     long                bpm;
     ulong               flags;
     PIZNano             grainSize;
@@ -129,7 +128,7 @@ typedef struct _PIZAgent {
 
 PIZ_START_C_LINKAGE
 
-PIZAgent    *pizAgentNew        (long identifier);
+PIZAgent    *pizAgentNew        (void);
 
 void        pizAgentFree        (PIZAgent *x);
 PIZError    pizAgentAttach      (PIZAgent *x, void *observer, PIZMethod f); 

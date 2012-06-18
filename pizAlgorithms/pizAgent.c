@@ -52,7 +52,7 @@
 #pragma mark ---
 #pragma mark -
 
-PIZAgent *pizAgentNew (long identifier)
+PIZAgent *pizAgentNew ( )
 {
     PIZAgent *x = NULL;
     
@@ -60,7 +60,6 @@ PIZAgent *pizAgentNew (long identifier)
     //
     long err = PIZ_GOOD;
     
-    x->identifier       = identifier;
     x->bpm              = PIZ_DEFAULT_BPM;  
     x->flags            = PIZ_AGENT_FLAG_INIT; 
     x->run              = pizLinklistNew ( );
@@ -209,7 +208,7 @@ PIZError pizAgentDetach (PIZAgent *x, void *observer)
 void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
 {
     PIZLinklist *q = NULL;
-    
+        
     switch (event->type) {
         case PIZ_EVENT_RUN  : q = x->run;   break;
         case PIZ_EVENT_LOW  : q = x->low;   break;

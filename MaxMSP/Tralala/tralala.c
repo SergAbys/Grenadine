@@ -22,7 +22,6 @@ t_tralalaTable tll_table;
 #pragma mark ---
 #pragma mark -
 
-static long identifier = 1;
 static t_class *tralala_class;
 
 int main (void)
@@ -76,7 +75,7 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
         }
     }
     
-    if (x->data && (x->agent = pizAgentNew (identifier++))) {
+    if (x->data && (x->agent = pizAgentNew ( ))) {
         x->patcher      = NULL;
         x->right        = bangout ((t_object *)x);
         x->middleRight  = bangout ((t_object *)x);

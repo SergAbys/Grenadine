@@ -178,12 +178,12 @@ PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
-    PIZError err = PIZ_GOOD;
-    
-    pizArrayClear (x->scale);
+    PIZError err = PIZ_ERROR;
     
     if ((!(pizEventData (event, &argc, &argv))) && (argc > 1)) {
     //
+    pizArrayClear (x->scale);
+        
     x->key  = CLAMP (argv[0], PIZ_KEY_C, PIZ_KEY_B);
     x->type = CLAMP (argv[1], PIZ_MODE_NONE, PIZ_SEVENTH_FLAT_FIVE);
     
@@ -197,13 +197,19 @@ PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
             err |= pizArrayAppend (x->scale, *(ptr + ((PIZ_MAGIC_SCALE - x->key + i) % PIZ_MAGIC_SCALE)));
         }
     }
-    //
-    } else {
-        x->key  = PIZ_KEY_C;
-        x->type = PIZ_MODE_NONE;
-    }
     
     x->flags |= PIZ_SEQUENCE_FLAG_SCALE;
+    //
+    } else if (argc == 0) {
+    //
+    pizArrayClear (x->scale);
+    
+    x->key  = PIZ_KEY_C;
+    x->type = PIZ_MODE_NONE;
+    
+    x->flags |= PIZ_SEQUENCE_FLAG_SCALE;
+    //
+    }
     
     return err;
 }   

@@ -210,8 +210,7 @@ void pizAgentAddNotification (PIZAgent *x, PIZEventCode n, long ac, long *av)
 
     if (notification = pizEventNew (n)) {
     //
-    pizEventSetIdentifier (notification, x->identifier);
-    pizEventSetData       (notification, ac, av);
+    pizEventSetData (notification, ac, av);
     
     PIZ_AGENT_LOCK_NOTIFICATION
     PIZ_AGENT_QUEUE (x->notification, notification)
@@ -252,7 +251,7 @@ PIZError pizAgentEventLoopDoEvent (PIZAgent *x, PIZLinklist *q)
     if (event) {
     //
     pizEventCode (event, &code);
-        
+    
     if (code < PIZ_EVENT_CHANCE) {
         o = x;
     } else {

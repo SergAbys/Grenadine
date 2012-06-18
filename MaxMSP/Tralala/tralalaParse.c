@@ -52,19 +52,19 @@ static t_quickmap *tll_notification;
 void tralala_parseInit (t_tralalaTable *table)
 {
 //
-tll_code           = (t_quickmap *)quickmap_new ( );
-tll_type           = (t_quickmap *)quickmap_new ( );
-tll_length         = (t_quickmap *)quickmap_new ( );
-tll_direction      = (t_quickmap *)quickmap_new ( );
-tll_key            = (t_quickmap *)quickmap_new ( );
-tll_select         = (t_quickmap *)quickmap_new ( );
-tll_notification   = (t_quickmap *)quickmap_new ( );
+tll_code            = (t_quickmap *)quickmap_new ( );
+tll_type            = (t_quickmap *)quickmap_new ( );
+tll_length          = (t_quickmap *)quickmap_new ( );
+tll_direction       = (t_quickmap *)quickmap_new ( );
+tll_key             = (t_quickmap *)quickmap_new ( );
+tll_select          = (t_quickmap *)quickmap_new ( );
+tll_notification    = (t_quickmap *)quickmap_new ( );
 
-table->sym_note    = gensym ("note");
-table->sym_clear   = gensym ("clear");
-table->sym_tralala = gensym ("tralala");
-table->sym_current = gensym ("current");
-table->sym_restore = gensym ("restore");
+table->sym_note     = gensym ("note");
+table->sym_clear    = gensym ("clear");
+table->sym_tralala  = gensym ("tralala");
+table->sym_current  = gensym ("current");
+table->sym_restore  = gensym ("restore");
 
 quickmap_add (tll_code, gensym ("bpm"),                     (void *)(TINY + PIZ_EVENT_BPM));
 quickmap_add (tll_code, gensym ("learn"),                   (void *)(TINY + PIZ_EVENT_LEARN));
@@ -213,6 +213,8 @@ void tralala_parseMessage (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     } else if ((code == PIZ_EVENT_CELL) || (code == PIZ_EVENT_VALUE)) {
         if (!(quickmap_lookup_key1 (tll_length, (void *)atom_getsym (argv + i), (void **)&t))) {
             j = t - TINY; p = 0;
+        } else {
+            continue;
         }
         
     } else if (msg) {
@@ -221,6 +223,9 @@ void tralala_parseMessage (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         } else if (!(quickmap_lookup_key1 (tll_select, (void *)atom_getsym (argv + i), (void **)&t))) {
             j = t - TINY;
         }
+        
+    } else {
+        continue;
     }
 
     data[p] = j;
