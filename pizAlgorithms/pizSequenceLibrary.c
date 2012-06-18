@@ -101,13 +101,11 @@ void pizSequenceEachChange (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNo
     long argc;
     long *argv = NULL;
         
-    if (!(pizEventData (e, &argc, &argv))) {
+    if ((!(pizEventData (e, &argc, &argv))) && (argc > 1)) {
     //
-    long t, s, h = -1;
-    long v = argv[0];
- 
-    pizEventValue (e, &s);
-    s = CLAMP (s, PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
+    long t, h = -1;
+    long v = argv[1];
+    long s = CLAMP (argv[0], PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
     
     if (flag & PIZ_SEQUENCE_FLAG_RANDOM) {
         h = 100 * (rand_r (&x->seed) / (RAND_MAX + 1.0));

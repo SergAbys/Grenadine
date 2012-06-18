@@ -65,6 +65,7 @@ PIZError pizAgentPlay (PIZAgent *x, const PIZEvent *event)
 {
     if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
         x->flags |= PIZ_AGENT_FLAG_REPLAY;
+        
     } else {
         pizSequenceJumpStart (x->sequence);
         x->flags |= PIZ_AGENT_FLAG_RUNNING; 
@@ -90,27 +91,6 @@ PIZError pizAgentLoop (PIZAgent *x, const PIZEvent *event)
 PIZError pizAgentUnloop (PIZAgent *x, const PIZEvent *event)
 {
     x->flags &= ~PIZ_AGENT_FLAG_LOOPED;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizAgentBpm (PIZAgent *x, const PIZEvent *event)
-{
-    long argc;
-    long *argv = NULL;
-    
-    if (!(pizEventData (event, &argc, &argv))) {
-    //
-    if ((argv[0] >= PIZ_MINIMUM_BPM) && (argv[0] <= PIZ_MAXIMUM_BPM)) {
-        x->bpm = argv[0];
-        pizAgentAddNotification (x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
-            
-        pizNanoSet     (&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);    
-        pizTimeCopy    (&x->grainEnd, &x->grainStart);
-        pizTimeAddNano (&x->grainEnd, &x->grainSize);
-    }
-    //
-    }
     
     return PIZ_GOOD;
 }
@@ -162,6 +142,27 @@ PIZError pizAgentDump (PIZAgent *x, const PIZEvent *event)
         
     if (err == PIZ_MEMORY) {
         PIZ_AGENT_MEMORY
+    }
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizAgentBpm (PIZAgent *x, const PIZEvent *event)
+{
+    long argc;
+    long *argv = NULL;
+    
+    if (!(pizEventData (event, &argc, &argv))) {
+    //
+    if ((argv[0] >= PIZ_MINIMUM_BPM) && (argv[0] <= PIZ_MAXIMUM_BPM)) {
+        x->bpm = argv[0];
+        pizAgentAddNotification (x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
+            
+        pizNanoSet     (&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);    
+        pizTimeCopy    (&x->grainEnd, &x->grainStart);
+        pizTimeAddNano (&x->grainEnd, &x->grainSize);
+    }
+    //
     }
     
     return PIZ_GOOD;

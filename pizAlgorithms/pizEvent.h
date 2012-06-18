@@ -137,9 +137,8 @@ typedef struct _PIZEvent {
     PIZEventCode    code;
     PIZEventType    type;
     long            identifier;
-    long            value;
-    long            data[PIZ_EVENT_DATA_SIZE];
     long            size;
+    long            data[PIZ_EVENT_DATA_SIZE];
     } PIZEvent;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -150,13 +149,11 @@ PIZEvent    *pizEventNew            (PIZEventCode code);
 
 void        pizEventFree            (PIZEvent *x);
 void        pizEventSetIdentifier   (PIZEvent *x, long identifier);
-void        pizEventSetValue        (PIZEvent *x, long value);
 void        pizEventSetData         (PIZEvent *x, long argc, const long *argv);
 
 void        pizEventCode            (const PIZEvent *x, PIZEventCode *code);
 void        pizEventType            (const PIZEvent *x, PIZEventType *type);
 void        pizEventIdentifier      (const PIZEvent *x, long *identifier);
-void        pizEventValue           (const PIZEvent *x, long *value);
 PIZError    pizEventData            (const PIZEvent *x, long *argc, long **argv);
 
 PIZ_END_C_LINKAGE
@@ -175,11 +172,6 @@ PIZ_EXTERN void pizEventSetIdentifier (PIZEvent *x, long identifier)
     x->identifier = identifier;
 }
 
-PIZ_EXTERN void pizEventSetValue (PIZEvent *x, long value)
-{
-    x->value = value;
-}
-
 PIZ_EXTERN void pizEventCode (const PIZEvent *x, PIZEventCode *code)
 {
     (*code) = x->code;
@@ -193,11 +185,6 @@ PIZ_EXTERN void pizEventType (const PIZEvent *x, PIZEventType *type)
 PIZ_EXTERN void pizEventIdentifier (const PIZEvent *x, long *identifier)
 {
     (*identifier) = x->identifier;
-}
-
-PIZ_EXTERN void pizEventValue (const PIZEvent *x, long *value)
-{
-    (*value) = x->value;
 }
 
 #endif // PIZ_EXTERN_INLINE

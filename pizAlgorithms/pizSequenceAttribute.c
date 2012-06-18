@@ -182,15 +182,10 @@ PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
     
     pizArrayClear (x->scale);
     
-    if (!(pizEventData (event, &argc, &argv))) {
+    if ((!(pizEventData (event, &argc, &argv))) && (argc > 1)) {
     //
-    long value, option;
-    
-    value = argv[0];
-    pizEventValue (event, &option);
-    
-    x->type = CLAMP (value, PIZ_MODE_NONE, PIZ_SEVENTH_FLAT_FIVE);
-    x->key  = CLAMP (option, PIZ_KEY_C, PIZ_KEY_B);
+    x->key  = CLAMP (argv[0], PIZ_KEY_C, PIZ_KEY_B);
+    x->type = CLAMP (argv[1], PIZ_MODE_NONE, PIZ_SEVENTH_FLAT_FIVE);
     
     if (x->type != PIZ_MODE_NONE) {
         long       i;

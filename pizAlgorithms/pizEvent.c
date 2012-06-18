@@ -126,11 +126,6 @@ void pizEventSetIdentifier (PIZEvent *x, long identifier)
     x->identifier = identifier;
 }
 
-void pizEventSetValue (PIZEvent *x, long value)
-{
-    x->value = value;
-}
-
 void pizEventSetData (PIZEvent *x, long argc, const long *argv)
 {
     if (argc && argv) {
@@ -159,11 +154,6 @@ void pizEventType (const PIZEvent *x, PIZEventType *type)
 void pizEventIdentifier (const PIZEvent *x, long *identifier)
 {
     (*identifier) = x->identifier;
-}
-
-void pizEventValue (const PIZEvent *x, long *value)
-{
-    (*value) = x->value;
 }
 
 PIZError pizEventData (const PIZEvent *x, long *argc, long **argv)

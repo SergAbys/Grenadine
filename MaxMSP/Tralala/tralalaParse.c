@@ -180,7 +180,7 @@ quickmap_add (tll_notification, gensym ("zone"),            (void *)(TINY + PIZ_
 
 void tralala_parseMessage (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    long code = 0;
+    PIZEventCode code = 0;
     
     if (!(quickmap_lookup_key1 (tll_code, (void *)s, (void **)&code))) {
     //
@@ -239,12 +239,11 @@ void tralala_parseMessage (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     //
     }
     
-    if (event = pizEventNew ((PIZEventCode)code)) {
+    if (event = pizEventNew (code)) {
         pizEventSetData (event, k, data);
         
         DEBUGEVENT
-        //pizAgentAddEvent (x->agent, event);
-        pizEventFree (event);
+        pizAgentAddEvent (x->agent, event);
     }
     //
     }

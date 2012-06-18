@@ -197,14 +197,14 @@ PIZError pizSequenceClean (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
 {
-    long i, k, selector, argc, shift = 1;
+    long i, k, argc, shift = 1, selector = 0;
     long *argv = NULL;
         
     if (!(pizEventData (event, &argc, &argv))) {
-        shift = argv[0];
+        selector = argv[0];
+        if (argc > 1) { shift = argv[1]; }
     }
     
-    pizEventValue (event, &selector);
     selector = CLAMP (selector, PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
     
     k = pizSequenceFillTempNotes (x);
@@ -224,9 +224,13 @@ PIZError pizSequenceRotate (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
 {
-    long i, k, selector;
+    long i, k, argc, selector = 0;
+    long *argv;
     
-    pizEventValue (event, &selector);
+    if (!(pizEventData (event, &argc, &argv))) {
+        selector = argv[0];
+    }
+    
     selector = CLAMP (selector, PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
         
     k = pizSequenceFillTempNotes (x);
@@ -251,14 +255,14 @@ PIZError pizSequenceScramble (PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceSort (PIZSequence *x, const PIZEvent *event)
 {
-    long i, k, selector, argc, down = 0;
+    long i, k, argc, down = 0, selector = 0;
     long *argv = NULL;
     
     if (!(pizEventData (event, &argc, &argv))) {
-        down = argv[0];
+        selector = argv[0];
+        if (argc > 1) { down = argv[1]; }
     }
     
-    pizEventValue (event, &selector);
     selector = CLAMP (selector, PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
         
     k = pizSequenceFillTempNotes (x);
@@ -327,17 +331,16 @@ PIZError pizSequenceCycle (PIZSequence *x, const PIZEvent *event)
     long argc;
     long *argv = NULL;
         
-    if (!(pizEventData (event, &argc, &argv))) {
+    if ((!(pizEventData (event, &argc, &argv))) && (argc > 2)) {
     //
     ulong mask = 0UL;
-    long  key, i, m, n, o, k = 0;
+    long  i, m, n, o, k = 0;
     long  a[ ] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     long  t[ ] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     
-    pizEventValue (event, &key);
-    key = CLAMP (key, PIZ_KEY_C, PIZ_KEY_B);
+    long  key = CLAMP (argv[0], PIZ_KEY_C, PIZ_KEY_B);
     
-    for (i = 0; i < argc; i++) {
+    for (i = 1; i < argc; i++) {
         long j = CLAMP (argv[i], 0, PIZ_MAGIC_SCALE - 1);
         if (!((1UL << j) & mask)) {
             mask |= (1UL << j);

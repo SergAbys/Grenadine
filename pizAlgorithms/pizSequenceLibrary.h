@@ -72,14 +72,13 @@
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL void pizSequenceForEach       (PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod method);
-
-PIZ_LOCAL void pizSequenceEachRemove    (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
-PIZ_LOCAL void pizSequenceEachChange    (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
-PIZ_LOCAL void pizSequenceEachCycle     (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
-PIZ_LOCAL void pizSequenceEachDump      (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
-PIZ_LOCAL void pizSequenceEachTempHash  (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
-PIZ_LOCAL void pizSequenceEachTempNotes (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
+PIZ_LOCAL void pizSequenceForEach           (PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod method);
+PIZ_LOCAL void pizSequenceEachRemove        (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
+PIZ_LOCAL void pizSequenceEachChange        (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
+PIZ_LOCAL void pizSequenceEachCycle         (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
+PIZ_LOCAL void pizSequenceEachDump          (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
+PIZ_LOCAL void pizSequenceEachTempHash      (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
+PIZ_LOCAL void pizSequenceEachTempNotes     (PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
