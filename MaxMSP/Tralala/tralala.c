@@ -259,12 +259,14 @@ void tralala_unloop (t_tralala *x)
 
 void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    PARSE (s, argc, argv)
+    tralala_parseMessage (x, s, argc, argv);
 }
 
 void tralala_anything (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    x->flags |= TLL_FLAG_SAVE; PARSE (s, argc, argv)
+    x->flags |= TLL_FLAG_SAVE; 
+    
+    tralala_parseMessage (x, s, argc, argv);
 }
 
 // -------------------------------------------------------------------------------------------------------------

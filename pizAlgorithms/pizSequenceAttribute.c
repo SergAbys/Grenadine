@@ -200,16 +200,7 @@ PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
     
     x->flags |= PIZ_SEQUENCE_FLAG_SCALE;
     //
-    } else if (argc == 0) {
-    //
-    pizArrayClear (x->scale);
-    
-    x->key  = PIZ_KEY_C;
-    x->type = PIZ_MODE_NONE;
-    
-    x->flags |= PIZ_SEQUENCE_FLAG_SCALE;
-    //
-    }
+    } 
     
     return err;
 }   

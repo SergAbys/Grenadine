@@ -112,12 +112,12 @@ PIZError pizAgentLearn (PIZAgent *x, const PIZEvent *event)
     //
     long h = (100 * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
     
-    pizArrayAppend (x->toBeLearned, argv[0]);
+    pizArrayAppend (x->buffer, argv[0]);
     
-    if (h < (pizArrayCount (x->toBeLearned) * PIZ_CONSTANT_LEARN)) {
-        pizFactorOracleAdd (x->factorOracle, pizArrayCount (x->toBeLearned), pizArrayPtr (x->toBeLearned));
-        pizGaloisLatticeAdd (x->galoisLattice, pizArrayCount (x->toBeLearned), pizArrayPtr (x->toBeLearned));
-        pizArrayClear (x->toBeLearned);
+    if (h < (pizArrayCount (x->buffer) * PIZ_CONSTANT_LEARN)) {
+        pizFactorOracleAdd (x->factorOracle, pizArrayCount (x->buffer), pizArrayPtr (x->buffer));
+        pizGaloisLatticeAdd (x->galoisLattice, pizArrayCount (x->buffer), pizArrayPtr (x->buffer));
+        pizArrayClear (x->buffer);
     }
     //
     }

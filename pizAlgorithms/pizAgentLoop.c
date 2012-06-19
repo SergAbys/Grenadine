@@ -455,7 +455,7 @@ void pizAgentNotificationLoopNotify (PIZAgent *x)
     if (event) {
     //
     PIZ_AGENT_LOCK_OBSERVER
-    
+        
     if (x->observer && x->notify) {
         (*x->notify)(x->observer, event);
     }

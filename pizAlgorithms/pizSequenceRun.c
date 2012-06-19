@@ -67,6 +67,20 @@ void pizSequenceJumpStart (PIZSequence *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+void pizSequenceInit (PIZSequence *x)
+{
+    x->flags =  PIZ_SEQUENCE_FLAG_NONE          |
+                PIZ_SEQUENCE_FLAG_CHANCE        |
+                PIZ_SEQUENCE_FLAG_VELOCITY      |
+                PIZ_SEQUENCE_FLAG_CHANNEL       |
+                PIZ_SEQUENCE_FLAG_CHORD         |
+                PIZ_SEQUENCE_FLAG_CELL          |
+                PIZ_SEQUENCE_FLAG_NOTE_VALUE    |
+                PIZ_SEQUENCE_FLAG_SCALE         |
+                PIZ_SEQUENCE_FLAG_PATTERN       |
+                PIZ_SEQUENCE_FLAG_ZONE;
+}
+
 PIZError pizSequenceDump (PIZSequence *x)
 {
     x->tempError = pizSequenceAddNotification (x, PIZ_EVENT_WILL_DUMP, 0, NULL);
@@ -133,9 +147,7 @@ PIZError pizSequenceRefresh (PIZSequence *x)
     //
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
         if (pizItemsetIsSetAtIndex (&x->removedNotes, i)) {
-         
             long a[ ] = { 0, 0, 0, 0, 0, i, x->owner->bpm };
-            
             err |= pizSequenceAddNotification (x, PIZ_EVENT_NOTE_REMOVED, 7, a);
         } 
     }

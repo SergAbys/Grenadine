@@ -59,7 +59,7 @@
 #pragma mark ---
 #pragma mark -
 
-PIZSequence *pizSequenceNew (struct _PIZAgent *agent)
+PIZSequence *pizSequenceNew (struct _PIZAgent *owner)
 {
     PIZSequence *x = NULL;
     
@@ -68,7 +68,7 @@ PIZSequence *pizSequenceNew (struct _PIZAgent *agent)
     long argv1[ ] = { 0, PIZ_SEQUENCE_MAXIMUM_NOTES };
     long argv2[ ] = { PIZ_SEQUENCE_SIZE_LOOKUP, PIZ_SEQUENCE_MAXIMUM_NOTES };
     
-    x->owner         = agent;
+    x->owner         = owner;
     x->map           = pizArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
     x->scale         = pizArrayNew (PIZ_MAGIC_SCALE);
     x->pattern       = pizArrayNew (PIZ_EVENT_DATA_SIZE);
@@ -121,20 +121,6 @@ PIZSequence *pizSequenceNew (struct _PIZAgent *agent)
     }
     
     return x;
-}
-
-void pizSequenceInit (PIZSequence *x)
-{
-    x->flags =  PIZ_SEQUENCE_FLAG_NONE          |
-                PIZ_SEQUENCE_FLAG_CHANCE        |
-                PIZ_SEQUENCE_FLAG_VELOCITY      |
-                PIZ_SEQUENCE_FLAG_CHANNEL       |
-                PIZ_SEQUENCE_FLAG_CHORD         |
-                PIZ_SEQUENCE_FLAG_CELL          |
-                PIZ_SEQUENCE_FLAG_NOTE_VALUE    |
-                PIZ_SEQUENCE_FLAG_SCALE         |
-                PIZ_SEQUENCE_FLAG_PATTERN       |
-                PIZ_SEQUENCE_FLAG_ZONE;
 }
 
 void pizSequenceFree (PIZSequence *x)

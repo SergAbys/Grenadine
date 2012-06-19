@@ -67,7 +67,7 @@ PIZAgent *pizAgentNew ( )
     x->high             = pizLinklistNew ( );
     x->notification     = pizLinklistNew ( );    
     x->sequence         = pizSequenceNew (x);
-    x->toBeLearned      = pizArrayNew (0);
+    x->buffer           = pizArrayNew (0);
     x->factorOracle     = pizFactorOracleNew  (0, NULL);
     x->galoisLattice    = pizGaloisLatticeNew (0, NULL);
     x->observer         = NULL;
@@ -81,7 +81,7 @@ PIZAgent *pizAgentNew ( )
         x->high          &&
         x->notification  && 
         x->sequence      &&
-        x->toBeLearned   &&
+        x->buffer        &&
         x->factorOracle  &&
         x->galoisLattice )) {
         
@@ -151,7 +151,7 @@ void pizAgentFree (PIZAgent *x)
     pthread_cond_destroy    (&x->eventCondition);
     pthread_cond_destroy    (&x->notificationCondition);
     
-    pizArrayFree            (x->toBeLearned);
+    pizArrayFree            (x->buffer);
     pizFactorOracleFree     (x->factorOracle);
     pizGaloisLatticeFree    (x->galoisLattice);
     

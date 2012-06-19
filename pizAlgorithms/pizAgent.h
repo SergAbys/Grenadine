@@ -104,7 +104,7 @@ typedef struct _PIZAgent {
     PIZLinklist         *high;
     PIZLinklist         *notification;
     PIZSequence         *sequence;
-    PIZArray            *toBeLearned;
+    PIZArray            *buffer;
     PIZFactorOracle     *factorOracle;
     PIZGaloisLattice    *galoisLattice;
     void                *observer;
@@ -133,6 +133,7 @@ PIZAgent    *pizAgentNew        (void);
 void        pizAgentFree        (PIZAgent *x);
 PIZError    pizAgentAttach      (PIZAgent *x, void *observer, PIZMethod f); 
 PIZError    pizAgentDetach      (PIZAgent *x, void *observer);
+
 void        pizAgentAddEvent    (PIZAgent *x, PIZEvent *event);
 
 PIZ_END_C_LINKAGE

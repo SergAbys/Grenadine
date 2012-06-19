@@ -26,14 +26,8 @@ extern t_tralalaTable tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark-
 
-PIZ_INLINE void symbolWithTag (t_symbol **s, long tag);
-PIZ_INLINE void tagWithSymbol (long *tag, t_symbol *s);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark-
-
-PIZ_LOCAL void tralala_parseDictionaryFun (t_dictionary_entry *entry, void *ptr);
+PIZ_INLINE  void symbolWithTag                  (t_symbol **s, long tag);
+PIZ_INLINE  void tagWithSymbol                  (long *tag, t_symbol *s);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -174,10 +168,6 @@ quickmap_add (tll_notification, gensym ("zone"),            (void *)(TINY + PIZ_
 //
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 void tralala_parseMessage (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
     PIZEventCode code = 0;
@@ -310,7 +300,27 @@ void tralala_parseNotification (t_tralala *x, PIZEvent *event)
 
 void tralala_parseDictionary (t_tralala *x, t_dictionary *d)
 {
-    dictionary_funall (d, (method)tralala_parseDictionaryFun, (void *)x);
+    long     i, n = 0;
+    t_symbol **keys = NULL;
+    
+    if (!(dictionary_getkeys (d, &n, &keys))) {
+    //
+    for (i = 0; i < n; i++) {
+    //
+    long   k;
+    t_atom *data = NULL;
+    
+    if (!dictionary_getatoms (d, (*(keys + i)), &k, &data)) {
+        if (atom_gettype (data) == A_SYM) {
+            tralala_parseMessage (x, atom_getsym (data), k - 1, data + 1);
+        }
+    }
+    //
+    }
+    
+    dictionary_freekeys (d, n, keys);
+    //
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -330,30 +340,6 @@ PIZ_INLINE void symbolWithTag (t_symbol **s, long tag)
 PIZ_INLINE void tagWithSymbol (long *tag, t_symbol *s)
 {
     (*tag) = atoi (s->s_name);
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void tralala_parseDictionaryFun (t_dictionary_entry *entry, void *ptr)
-{
-    long      i, ac = 0;
-    t_atom    *av = NULL;
-    t_atom    value;
-    t_tralala *x = ptr;
-    
-    dictionary_entry_getvalue (entry, &value);
-    atomarray_getatoms ((t_atomarray *)atom_getobj (&value), &ac, &av);
-    
-    for (i = 1; i < ac; i++) {
-        if (atom_gettype (av + i) == A_OBJ) {
-            t_symbol *t = gensym (string_getptr ((t_string *)atom_getobj (av + i)));
-            atom_setsym (av + i, t);
-        }
-    }
-    
-    PARSE (gensym (string_getptr ((t_string *)atom_getobj (av))), ac - 1, av + 1)
 }
 
 // -------------------------------------------------------------------------------------------------------------
