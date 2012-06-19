@@ -30,7 +30,6 @@
 
 #define SEND(code)          PIZEvent *event = NULL;                     \
                             if (event = pizEventNew (code)) {           \
-                                DEBUGEVENT                              \
                                 pizAgentAddEvent (x->agent, event);     \
                             }
                             

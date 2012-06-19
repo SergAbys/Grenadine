@@ -144,18 +144,23 @@ void tralala_dictionary (t_tralala *x, t_dictionary *d)
     if (d) {
         t_dictionary *temp = NULL;
         t_dictionary *current = NULL;
-        t_dictionary *storage = NULL;
-        
-        dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&storage);
+        t_dictionary *restore = NULL;
+                
+        dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&restore);
         dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&current);
         
-        dictionary_clear (storage);
-        dictionary_copyunique (storage, current);
-        dictionary_clear (current);
+        dictionary_clear (restore);
         
-        temp = dictionary_new ( );
-        dictionary_copyunique (temp, x->data);
-        dictionary_appenddictionary (d, TLL_TRALALA, (t_object *)temp);
+        dictionary_chuckentry (x->data, TLL_RESTORE);
+        dictionary_chuckentry (x->data, TLL_CURRENT);        
+        
+        dictionary_appenddictionary (x->data, TLL_RESTORE, (t_object *)current);
+        dictionary_appenddictionary (x->data, TLL_CURRENT, (t_object *)restore);
+        
+        if (temp = dictionary_new ( )) {
+            dictionary_copyunique (temp, x->data);
+            dictionary_appenddictionary (d, TLL_TRALALA, (t_object *)temp);
+        }
     }
 }
 
@@ -183,9 +188,7 @@ void tralala_callback (void *ptr, PIZEvent *event)
     
     x = (t_tralala *)ptr;
     pizEventCode (event, &code);
-    
-    DEBUGEVENT
-    
+        
     switch (code) {
     //
     case PIZ_EVENT_NOTE_PLAYED :
