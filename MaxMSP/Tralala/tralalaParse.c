@@ -134,8 +134,8 @@ quickmap_add (tll_length, gensym ("quarter_dotted"),        (void *)(TINY + PIZ_
 quickmap_add (tll_length, gensym ("eighth_dotted"),         (void *)(TINY + PIZ_EIGHTH_NOTE_DOTTED));
 quickmap_add (tll_length, gensym ("sixteenth_dotted"),      (void *)(TINY + PIZ_SIXTEENTH_NOTE_DOTTED));
 
-quickmap_add (tll_direction,  gensym ("up"),                (void *)(TINY + PIZ_UP)); 
-quickmap_add (tll_direction,  gensym ("down"),              (void *)(TINY + PIZ_DOWN));
+quickmap_add (tll_direction, gensym ("up"),                 (void *)(TINY + PIZ_UP)); 
+quickmap_add (tll_direction, gensym ("down"),               (void *)(TINY + PIZ_DOWN));
 
 quickmap_add (tll_select, gensym ("pitch"),                 (void *)(TINY + PIZ_VALUE_PITCH));
 quickmap_add (tll_select, gensym ("velocity"),              (void *)(TINY + PIZ_VALUE_VELOCITY));
@@ -171,7 +171,7 @@ quickmap_add (tll_notification, gensym ("zone"),            (void *)(TINY + PIZ_
 void tralala_parseMessage (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
     PIZEventCode code = 0;
-    
+        
     if (!(quickmap_lookup_key1 (tll_code, (void *)s, (void **)&code))) {
     //
     long     i, k = 0, msg = 0;
@@ -237,6 +237,7 @@ void tralala_parseMessage (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     if (event = pizEventNew (code)) {
         pizEventSetData (event, k, data);
         pizAgentAddEvent (x->agent, event);
+        DEBUGEVENT
     }
     //
     }

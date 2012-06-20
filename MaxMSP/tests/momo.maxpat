@@ -7,9 +7,9 @@
 			"revision" : 9
 		}
 ,
-		"rect" : [ 177.0, 191.0, 383.0, 287.0 ],
+		"rect" : [ 177.0, 142.0, 383.0, 287.0 ],
 		"bglocked" : 0,
-		"defrect" : [ 177.0, 191.0, 383.0, 287.0 ],
+		"defrect" : [ 177.0, 142.0, 383.0, 287.0 ],
 		"openrect" : [ 0.0, 0.0, 0.0, 0.0 ],
 		"openinpresentation" : 0,
 		"default_fontsize" : 14.0,
@@ -29,24 +29,25 @@
 					"maxclass" : "newobj",
 					"text" : "tralala",
 					"patching_rect" : [ 100.0, 200.0, 59.5, 23.0 ],
-					"fontname" : "Arial",
-					"fontsize" : 14.0,
 					"numinlets" : 1,
+					"fontname" : "Arial",
 					"numoutlets" : 4,
-					"id" : "obj-1",
 					"outlettype" : [ "list", "", "bang", "bang" ],
+					"fontsize" : 14.0,
+					"id" : "obj-1",
 					"tralala" : 					{
 						"restore" : 						{
-							"channel" : [ "channel", 1 ],
-							"velocity" : [ "velocity", 0 ],
-							"cell" : [ "cell", 12 ],
 							"chance" : [ "chance", 100 ],
-							"bpm" : [ "bpm", 120 ],
-							"pattern" : [ "pattern" ],
+							"velocity" : [ "velocity", 0 ],
+							"channel" : [ "channel", 1 ],
+							"cell" : [ "cell", 12 ],
+							"zone" : [ "zone", 0, 96, 60, 71 ],
 							"chord" : [ "chord", 0 ],
 							"value" : [ "value", 12 ],
-							"zone" : [ "zone", 0, 96, 60, 71 ],
-							"scale" : [ "scale", "B", "dorian" ]
+							"bpm" : [ "bpm", 240 ],
+							"pattern" : [ "pattern", 1, 0, -2 ],
+							"scale" : [ "scale", "B", "dorian" ],
+							"0" : [ "note", 12, 60, 80, 12, 0 ]
 						}
 ,
 						"current" : 						{
@@ -63,12 +64,12 @@
 					"maxclass" : "message",
 					"text" : "change pitch 12",
 					"patching_rect" : [ 220.0, 160.0, 109.0, 21.0 ],
-					"fontname" : "Arial",
-					"fontsize" : 14.0,
 					"numinlets" : 2,
+					"fontname" : "Arial",
 					"numoutlets" : 1,
-					"id" : "obj-6",
-					"outlettype" : [ "" ]
+					"outlettype" : [ "" ],
+					"fontsize" : 14.0,
+					"id" : "obj-6"
 				}
 
 			}
@@ -77,12 +78,12 @@
 					"maxclass" : "message",
 					"text" : "pattern 1 0 -2",
 					"patching_rect" : [ 220.0, 120.0, 94.0, 21.0 ],
-					"fontname" : "Arial",
-					"fontsize" : 14.0,
 					"numinlets" : 2,
+					"fontname" : "Arial",
 					"numoutlets" : 1,
-					"id" : "obj-8",
-					"outlettype" : [ "" ]
+					"outlettype" : [ "" ],
+					"fontsize" : 14.0,
+					"id" : "obj-8"
 				}
 
 			}
@@ -91,12 +92,12 @@
 					"maxclass" : "message",
 					"text" : "clear",
 					"patching_rect" : [ 220.0, 60.0, 41.0, 21.0 ],
-					"fontname" : "Arial",
-					"fontsize" : 14.0,
 					"numinlets" : 2,
+					"fontname" : "Arial",
 					"numoutlets" : 1,
-					"id" : "obj-5",
-					"outlettype" : [ "" ]
+					"outlettype" : [ "" ],
+					"fontsize" : 14.0,
+					"id" : "obj-5"
 				}
 
 			}
@@ -105,12 +106,12 @@
 					"maxclass" : "message",
 					"text" : "scale B dorian",
 					"patching_rect" : [ 240.0, 200.0, 99.0, 21.0 ],
-					"fontname" : "Arial",
-					"fontsize" : 14.0,
 					"numinlets" : 2,
+					"fontname" : "Arial",
 					"numoutlets" : 1,
-					"id" : "obj-4",
-					"outlettype" : [ "" ]
+					"outlettype" : [ "" ],
+					"fontsize" : 14.0,
+					"id" : "obj-4"
 				}
 
 			}
@@ -119,12 +120,12 @@
 					"maxclass" : "message",
 					"text" : "note 0 60",
 					"patching_rect" : [ 60.0, 60.0, 69.0, 21.0 ],
-					"fontname" : "Arial",
-					"fontsize" : 14.0,
 					"numinlets" : 2,
+					"fontname" : "Arial",
 					"numoutlets" : 1,
-					"id" : "obj-7",
-					"outlettype" : [ "" ]
+					"outlettype" : [ "" ],
+					"fontsize" : 14.0,
+					"id" : "obj-7"
 				}
 
 			}
@@ -133,12 +134,12 @@
 					"maxclass" : "message",
 					"text" : "bpm 240",
 					"patching_rect" : [ 140.0, 60.0, 65.0, 21.0 ],
-					"fontname" : "Arial",
-					"fontsize" : 14.0,
 					"numinlets" : 2,
+					"fontname" : "Arial",
 					"numoutlets" : 1,
-					"id" : "obj-3",
-					"outlettype" : [ "" ]
+					"outlettype" : [ "" ],
+					"fontsize" : 14.0,
+					"id" : "obj-3"
 				}
 
 			}

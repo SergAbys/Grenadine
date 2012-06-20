@@ -61,29 +61,46 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
     if (x = (t_tralala *)object_alloc (tralala_class)) {
     //
     t_dictionary *d = NULL;
-    t_dictionary *sd = NULL;
-        
-    if (d = (t_dictionary *)gensym ("#D")->s_thing) {
-        if (dictionary_entryisdictionary (d, TLL_TRALALA)) {
-            dictionary_getdictionary (d, TLL_TRALALA, (t_object **)&x->data);
-            dictionary_chuckentry (d, TLL_TRALALA);
+    t_dictionary *current = NULL;
+    t_dictionary *restore = NULL;
+    
+    PIZError err = PIZ_ERROR;
             
-        } else {
-            sd = dictionary_new ( );
-            x->data = dictionary_new ( );
-            dictionary_appenddictionary (x->data, TLL_CURRENT, (t_object *)sd);
-        }
+    if (d = (t_dictionary *)gensym ("#D")->s_thing) {
+    //    
+    if (dictionary_entryisdictionary (d, TLL_TRALALA)) {
+        dictionary_getdictionary (d, TLL_TRALALA, (t_object **)&x->data);
+        dictionary_chuckentry (d, TLL_TRALALA);
+        x->flags = TLL_FLAG_NONE;
+        
+    } else {
+        x->data = dictionary_new ( );
+        x->flags = TLL_FLAG_INIT;
+    }
+    //
     }
     
-    if (x->data && (x->agent = pizAgentNew ( ))) {
+    if (x->data) {
+    //
+    err = PIZ_GOOD;
+    
+    if (!(dictionary_entryisdictionary (x->data, TLL_RESTORE)) && (restore = dictionary_new ( ))) {
+        err |= ((dictionary_appenddictionary (x->data, TLL_RESTORE, (t_object *)restore)) != MAX_ERR_NONE);
+    }
+    
+    if (!(dictionary_entryisdictionary (x->data, TLL_CURRENT)) && (current = dictionary_new ( ))) {
+        err |= ((dictionary_appenddictionary (x->data, TLL_CURRENT, (t_object *)current)) != MAX_ERR_NONE);
+    }
+    //
+    }
+    
+    if (!err && (x->agent = pizAgentNew ( ))) {
         x->patcher      = NULL;
         x->right        = bangout ((t_object *)x);
         x->middleRight  = bangout ((t_object *)x);
         x->middleLeft   = outlet_new ((t_object *)x, NULL);
         x->left         = listout ((t_object *)x);
-        
-        x->flags        = TLL_FLAG_NONE;
-        
+                
         pizAgentAttach (x->agent, (void *)x, (PIZMethod)tralala_callback);
         defer_low (x, (method)tralala_init, NULL, 0, NULL);
 
@@ -99,19 +116,16 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 
 void tralala_init (t_tralala *x, t_symbol *s, short argc, t_atom *argv)
 {
-    t_dictionary *sd = NULL;
-    
+    t_dictionary *restore = NULL;
+
     object_obex_lookup (x, gensym ("#P"), &x->patcher);
     
-    if (dictionary_entryisdictionary (x->data, TLL_RESTORE)) {
-        dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&sd);
-        tralala_parseDictionary (x, sd);
-        
-    } else {
-        sd = dictionary_new ( );
-        dictionary_appenddictionary (x->data, TLL_RESTORE, (t_object *)sd);
+    if (x->flags & TLL_FLAG_INIT) {
         SEND (PIZ_EVENT_INIT)
-    }
+        
+    } else if (!(dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&restore))) {
+        tralala_parseDictionary (x, restore);
+    }    
 }
 
 void tralala_free (t_tralala *x)
@@ -188,7 +202,9 @@ void tralala_callback (void *ptr, PIZEvent *event)
     
     x = (t_tralala *)ptr;
     pizEventCode (event, &code);
-        
+    
+    DEBUGEVENT
+    
     switch (code) {
     //
     case PIZ_EVENT_NOTE_PLAYED :
