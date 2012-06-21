@@ -203,8 +203,6 @@ void tralala_callback (void *ptr, PIZEvent *event)
     x = (t_tralala *)ptr;
     pizEventCode (event, &code);
     
-    DEBUGEVENT
-    
     switch (code) {
     //
     case PIZ_EVENT_NOTE_PLAYED :
@@ -238,6 +236,14 @@ void tralala_callback (void *ptr, PIZEvent *event)
         if (x->flags & TLL_FLAG_SAVE) { jpatcher_set_dirty (x->patcher, 1); }
         break;
     //
+    }
+    
+    t_dictionary *current = NULL;
+    if (!(dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&current))) {
+        if (!(dictionary_hasentry (current, gensym ("chord")))) {
+            DEBUGEVENT
+            post ("###");
+        }
     }
     
     pizEventFree (event);

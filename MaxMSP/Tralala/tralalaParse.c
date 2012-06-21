@@ -26,8 +26,8 @@ extern t_tralalaTable tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark-
 
-PIZ_INLINE  void symbolWithTag                  (t_symbol **s, long tag);
-PIZ_INLINE  void tagWithSymbol                  (long *tag, t_symbol *s);
+PIZ_LOCAL void symbolWithTag    (t_symbol **s, long tag);
+PIZ_LOCAL void tagWithSymbol    (long *tag, t_symbol *s);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -168,6 +168,31 @@ quickmap_add (tll_notification, gensym ("zone"),            (void *)(TINY + PIZ_
 //
 }
 
+void tralala_parseDictionary (t_tralala *x, t_dictionary *d)
+{
+    long     i, n = 0;
+    t_symbol **keys = NULL;
+    
+    if (!(dictionary_getkeys (d, &n, &keys))) {
+    //
+    for (i = 0; i < n; i++) {
+    //
+    long   k;
+    t_atom *data = NULL;
+    
+    if (!dictionary_getatoms (d, (*(keys + i)), &k, &data)) {
+        if (atom_gettype (data) == A_SYM) {
+            tralala_parseMessage (x, atom_getsym (data), k - 1, data + 1);
+        }
+    }
+    //
+    }
+    
+    dictionary_freekeys (d, n, keys);
+    //
+    }
+}
+
 void tralala_parseMessage (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
     PIZEventCode code = 0;
@@ -237,7 +262,6 @@ void tralala_parseMessage (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     if (event = pizEventNew (code)) {
         pizEventSetData (event, k, data);
         pizAgentAddEvent (x->agent, event);
-        DEBUGEVENT
     }
     //
     }
@@ -245,9 +269,9 @@ void tralala_parseMessage (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_parseNotification (t_tralala *x, PIZEvent *event)
 {
-    t_dictionary *d = NULL;
-
-    if (!(dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&d))) {
+    t_dictionary *current = NULL;
+    
+    if (!(dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&current))) {
     //
     long         i, k = 0;
     long         *ptr;
@@ -278,46 +302,21 @@ void tralala_parseNotification (t_tralala *x, PIZEvent *event)
     }
     
     atom_setsym (data, s);
-    dictionary_appendatoms (d, s, k + 1, data);
+    dictionary_appendatoms (current, s, k + 1, data);
     //
     } else {
     //
     symbolWithTag (&s, ptr[PIZ_EVENT_NOTE_TAG]);
-    
+        
     if (code == PIZ_EVENT_NOTE_REMOVED) {
-        dictionary_deleteentry (d, s);
+        dictionary_deleteentry (current, s);
         
     } else {
         atom_setsym (data, TLL_NOTE);
-        dictionary_appendatoms (d, s, k - 1, data);
+        dictionary_appendatoms (current, s, k - 1, data);
     }
     //
     }
-    //
-    }
-}
-
-void tralala_parseDictionary (t_tralala *x, t_dictionary *d)
-{
-    long     i, n = 0;
-    t_symbol **keys = NULL;
-    
-    if (!(dictionary_getkeys (d, &n, &keys))) {
-    //
-    for (i = 0; i < n; i++) {
-    //
-    long   k;
-    t_atom *data = NULL;
-    
-    if (!dictionary_getatoms (d, (*(keys + i)), &k, &data)) {
-        if (atom_gettype (data) == A_SYM) {
-            tralala_parseMessage (x, atom_getsym (data), k - 1, data + 1);
-        }
-    }
-    //
-    }
-    
-    dictionary_freekeys (d, n, keys);
     //
     }
 }
@@ -328,7 +327,7 @@ void tralala_parseDictionary (t_tralala *x, t_dictionary *d)
 #pragma mark ---
 #pragma mark -
 
-PIZ_INLINE void symbolWithTag (t_symbol **s, long tag)
+void symbolWithTag (t_symbol **s, long tag)
 {
     char string[4];
     snprintf (string, 4, "%ld", tag);
@@ -336,7 +335,7 @@ PIZ_INLINE void symbolWithTag (t_symbol **s, long tag)
     (*s) = gensym (string);
 }
 
-PIZ_INLINE void tagWithSymbol (long *tag, t_symbol *s)
+void tagWithSymbol (long *tag, t_symbol *s)
 {
     (*tag) = atoi (s->s_name);
 }
