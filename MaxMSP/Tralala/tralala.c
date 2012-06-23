@@ -13,8 +13,9 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
-t_tralalaTable tll_table;
+t_tralalaSymbols tll_table;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -70,16 +71,16 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
     t_dictionary *restore = NULL;
     
     err = PIZ_GOOD;
+    x->flags = TLL_FLAG_NONE;
     
     if (d = (t_dictionary *)gensym ("#D")->s_thing) {
     //    
     if (dictionary_entryisdictionary (d, TLL_TRALALA)) {
         dictionary_getdictionary (d, TLL_TRALALA, (t_object **)&temp);
         dictionary_copyunique (x->data, temp);
-        x->flags = TLL_FLAG_NONE;
         
     } else {
-        x->flags = TLL_FLAG_INIT;
+        x->flags |= TLL_FLAG_INIT;
     }
     //
     }
@@ -101,7 +102,6 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
     }
     
     if (!err && (x->agent = pizAgentNew ( ))) {
-        x->patcher      = NULL;
         x->right        = bangout ((t_object *)x);
         x->middleRight  = bangout ((t_object *)x);
         x->middleLeft   = outlet_new ((t_object *)x, NULL);
@@ -122,15 +122,14 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 
 void tralala_init (t_tralala *x, t_symbol *s, short argc, t_atom *argv)
 {
-    t_dictionary *restore = NULL;
+    t_dictionary *d = NULL;
 
-    object_obex_lookup (x, gensym ("#P"), &x->patcher);
-    
-    if (x->flags & TLL_FLAG_INIT) { 
+    if (x->flags & TLL_FLAG_INIT) {
         SEND (PIZ_EVENT_INIT)
-        
-    } else if (!(dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&restore))) {
-        tralala_parseDictionary (x, restore);
+        x->flags &= ~TLL_FLAG_INIT;
+
+    } else if (!(dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&d))) {
+        tralala_parseDictionary (x, d);
     }    
 }
 
@@ -186,8 +185,6 @@ void tralala_dictionary (t_tralala *x, t_dictionary *d)
 
 void tralala_dblclick (t_tralala *x)
 {
-    post ("DBLCLICK");
-    
     dictionary_dump (x->data, 1, 0);
 }
 
@@ -235,7 +232,6 @@ void tralala_callback (void *ptr, PIZEvent *event)
     
     default :
         tralala_parseNotification (x, event);
-        if (x->flags & TLL_FLAG_SAVE) { jpatcher_set_dirty (x->patcher, 1); }
         break;
     //
     }
@@ -291,10 +287,8 @@ void tralala_list (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_anything (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
-    x->flags |= TLL_FLAG_SAVE; 
-    
     tralala_parseMessage (x, s, argc, argv);
 }
-
+        
 // -------------------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------:x

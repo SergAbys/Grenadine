@@ -250,6 +250,7 @@
 									<array>
 										<string>08FB7794FE84155DC02AAC07</string>
 										<string>08FB7795FE84155DC02AAC07</string>
+										<string>96AF1B80148CFC39001358AB</string>
 										<string>96D425811529D3170055F6A9</string>
 										<string>96D8682714FF5A4B00849A50</string>
 										<string>C6A0FF2B0290797F04C91782</string>
@@ -258,8 +259,8 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>7</integer>
-											<integer>6</integer>
+											<integer>5</integer>
+											<integer>4</integer>
 											<integer>2</integer>
 											<integer>0</integer>
 										</array>
@@ -425,8 +426,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96DF1B581594463C00585242</string>
-				<string>96DF1B591594463C00585242</string>
+				<string>969F8EF11596076C00BA59C8</string>
+				<string>969F8EF21596076C00BA59C8</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -459,6 +460,7 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/pizAlgorithms/PizAlgorithms.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -823,7 +825,7 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>&lt;No Editor&gt;</string>
+										<string></string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -881,8 +883,8 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>9698E2F31590C2300059917F</string>
-				<string>9698E2F41590C2300059917F</string>
+				<string>969F8EEF1596074B00BA59C8</string>
+				<string>969F8EF01596074B00BA59C8</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>

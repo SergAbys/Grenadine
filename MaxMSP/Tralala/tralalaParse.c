@@ -15,7 +15,7 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-extern t_tralalaTable tll_table;
+extern t_tralalaSymbols tll_table;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ static t_quickmap *tll_select;
 static t_quickmap *tll_key;
 static t_quickmap *tll_notification;
 
-void tralala_parseInit (t_tralalaTable *table)
+void tralala_parseInit (t_tralalaSymbols *table)
 {
 //
 tll_code            = (t_quickmap *)quickmap_new ( );

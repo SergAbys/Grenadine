@@ -22,17 +22,16 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_FLAG_NONE       0UL
-#define TLL_FLAG_INIT       1UL
-#define TLL_FLAG_SAVE       2UL
+#define TLL_FLAG_NONE   0UL
+#define TLL_FLAG_INIT   1UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define SEND(code)          PIZEvent *event = NULL;                     \
-                            if (event = pizEventNew (code)) {           \
-                                pizAgentAddEvent (x->agent, event);     \
-                            }
+#define SEND(code)  PIZEvent *event = NULL;                     \
+                    if (event = pizEventNew (code)) {           \
+                        pizAgentAddEvent (x->agent, event);     \
+                    }
                             
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -58,26 +57,17 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-typedef struct _tralalaTable {
-    t_symbol *sym_note;
-    t_symbol *sym_clear;
-    t_symbol *sym_tralala;
-    t_symbol *sym_current;
-    t_symbol *sym_restore;
-    } t_tralalaTable;
-
 typedef struct _tralala {
-    t_object        ob;						
+    t_object        ob;	
+    ulong           flags;					
     t_atom          played[4];
     t_atom          dumped[5];
-    t_object        *patcher;
     t_dictionary    *data;
     PIZAgent        *agent;
     void            *left;
     void            *middleLeft;
     void            *middleRight;
     void            *right;
-    ulong           flags;
     } t_tralala;
 
 // -------------------------------------------------------------------------------------------------------------
