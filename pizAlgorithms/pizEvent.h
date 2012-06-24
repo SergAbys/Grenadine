@@ -48,6 +48,27 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#define DEBUGEVENT  if (event) {            \
+                        PIZTime t;          \
+                        pizTimeSet (&t);    \
+                        t = t / 1000000.;   \
+                        post ("%llu / %s / %ld %ld %ld %ld %ld %ld %ld %ld / %s",   \
+                        t, pizEventName(event),                                     \
+                        event->data[0],     \
+                        event->data[1],     \
+                        event->data[2],     \
+                        event->data[3],     \
+                        event->data[4],     \
+                        event->data[5],     \
+                        event->data[6],     \
+                        event->data[8],     \
+                        __FUNCTION__        \
+                        );                  \
+                    }
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 #define PIZ_EVENT_DATA_SIZE     13
 
 // -------------------------------------------------------------------------------------------------------------
@@ -67,7 +88,7 @@ enum {
 // -------------------------------------------------------------------------------------------------------------
 
 typedef enum _PIZEventType {
-    PIZ_EVENT_RUN                   = 1,
+    PIZ_EVENT_RUN               = 1,
     PIZ_EVENT_LOW,
     PIZ_EVENT_HIGH,
     PIZ_EVENT_NOTIFICATION
@@ -75,58 +96,58 @@ typedef enum _PIZEventType {
 
 typedef enum _PIZEventCode {
     //
-    PIZ_EVENT_INIT                  = 0,
-    PIZ_EVENT_PLAY                  = 1,
-    PIZ_EVENT_STOP                  = 2,
-    PIZ_EVENT_LOOP                  = 3,
-    PIZ_EVENT_UNLOOP                = 4,
+    PIZ_EVENT_INIT              = 0,
+    PIZ_EVENT_PLAY              = 1,
+    PIZ_EVENT_STOP              = 2,
+    PIZ_EVENT_LOOP              = 3,
+    PIZ_EVENT_UNLOOP            = 4,
     //
-    PIZ_EVENT_LEARN                 = 5,
-    PIZ_EVENT_FORGET                = 6,
-    PIZ_EVENT_DUMP                  = 7,
-    PIZ_EVENT_BPM                   = 8,
+    PIZ_EVENT_LEARN             = 5,
+    PIZ_EVENT_FORGET            = 6,
+    PIZ_EVENT_DUMP              = 7,
+    PIZ_EVENT_BPM               = 8,
     //
-    PIZ_EVENT_CHANCE                = 9,
-    PIZ_EVENT_VELOCITY              = 10,
-    PIZ_EVENT_CHANNEL               = 11,
-    PIZ_EVENT_CHORD                 = 12,
-    PIZ_EVENT_CELL                  = 13,
-    PIZ_EVENT_VALUE                 = 14,
-    PIZ_EVENT_SCALE                 = 15,
-    PIZ_EVENT_PATTERN               = 16,
-    PIZ_EVENT_ZONE                  = 17,
-    PIZ_EVENT_NOTE                  = 18,
-    PIZ_EVENT_CLEAR                 = 19,
-    PIZ_EVENT_CLEAN                 = 20,
-    PIZ_EVENT_ROTATE                = 21,
-    PIZ_EVENT_SCRAMBLE              = 22,
-    PIZ_EVENT_SORT                  = 23,
-    PIZ_EVENT_CHANGE                = 24,
-    PIZ_EVENT_FILL                  = 25,
-    PIZ_EVENT_KILL                  = 26,
-    PIZ_EVENT_CYCLE                 = 27, 
-    PIZ_EVENT_ZOULOU                = 28,
-    PIZ_EVENT_ROMEO                 = 29,
-    PIZ_EVENT_JULIET                = 30,
+    PIZ_EVENT_CHANCE            = 9,
+    PIZ_EVENT_VELOCITY          = 10,
+    PIZ_EVENT_CHANNEL           = 11,
+    PIZ_EVENT_CHORD             = 12,
+    PIZ_EVENT_CELL              = 13,
+    PIZ_EVENT_VALUE             = 14,
+    PIZ_EVENT_SCALE             = 15,
+    PIZ_EVENT_PATTERN           = 16,
+    PIZ_EVENT_ZONE              = 17,
+    PIZ_EVENT_NOTE              = 18,
+    PIZ_EVENT_CLEAR             = 19,
+    PIZ_EVENT_CLEAN             = 20,
+    PIZ_EVENT_ROTATE            = 21,
+    PIZ_EVENT_SCRAMBLE          = 22,
+    PIZ_EVENT_SORT              = 23,
+    PIZ_EVENT_CHANGE            = 24,
+    PIZ_EVENT_FILL              = 25,
+    PIZ_EVENT_KILL              = 26,
+    PIZ_EVENT_CYCLE             = 27, 
+    PIZ_EVENT_ZOULOU            = 28,
+    PIZ_EVENT_ROMEO             = 29,
+    PIZ_EVENT_JULIET            = 30,
     //    
-    PIZ_EVENT_CHANGED_BPM           = 31,
-    PIZ_EVENT_CHANGED_CHANCE        = 32,
-    PIZ_EVENT_CHANGED_VELOCITY      = 33,
-    PIZ_EVENT_CHANGED_CHANNEL       = 34,
-    PIZ_EVENT_CHANGED_CHORD         = 35,
-    PIZ_EVENT_CHANGED_CELL          = 36,
-    PIZ_EVENT_CHANGED_VALUE         = 37,
-    PIZ_EVENT_CHANGED_SCALE         = 38,
-    PIZ_EVENT_CHANGED_PATTERN       = 39,
-    PIZ_EVENT_CHANGED_ZONE          = 40,
-    PIZ_EVENT_NOTE_ADDED            = 41,
-    PIZ_EVENT_NOTE_CHANGED          = 42,
-    PIZ_EVENT_NOTE_REMOVED          = 43,
-    PIZ_EVENT_NOTE_PLAYED           = 44,
-    PIZ_EVENT_NOTE_DUMPED           = 45,
-    PIZ_EVENT_END                   = 46,
-    PIZ_EVENT_WILL_DUMP             = 47,
-    PIZ_EVENT_WILL_END              = 48
+    PIZ_EVENT_CHANGED_BPM       = 31,
+    PIZ_EVENT_CHANGED_CHANCE    = 32,
+    PIZ_EVENT_CHANGED_VELOCITY  = 33,
+    PIZ_EVENT_CHANGED_CHANNEL   = 34,
+    PIZ_EVENT_CHANGED_CHORD     = 35,
+    PIZ_EVENT_CHANGED_CELL      = 36,
+    PIZ_EVENT_CHANGED_VALUE     = 37,
+    PIZ_EVENT_CHANGED_SCALE     = 38,
+    PIZ_EVENT_CHANGED_PATTERN   = 39,
+    PIZ_EVENT_CHANGED_ZONE      = 40,
+    PIZ_EVENT_NOTE_ADDED        = 41,
+    PIZ_EVENT_NOTE_CHANGED      = 42,
+    PIZ_EVENT_NOTE_REMOVED      = 43,
+    PIZ_EVENT_NOTE_PLAYED       = 44,
+    PIZ_EVENT_NOTE_DUMPED       = 45,
+    PIZ_EVENT_END               = 46,
+    PIZ_EVENT_WILL_DUMP         = 47,
+    PIZ_EVENT_WILL_END          = 48
     //
     } PIZEventCode;
 
@@ -145,6 +166,7 @@ typedef struct _PIZEvent {
 PIZ_START_C_LINKAGE
 
 PIZEvent    *pizEventNew        (PIZEventCode code);
+const char  *pizEventName       (const PIZEvent *x);
 
 void        pizEventFree        (PIZEvent *x);
 void        pizEventSetData     (PIZEvent *x, long argc, const long *argv);
