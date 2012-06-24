@@ -269,10 +269,6 @@ void tralala_parseMessage (t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_parseNotification (t_tralala *x, PIZEvent *event)
 {
-    t_dictionary *current = NULL;
-    
-    if (!(dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&current))) {
-    //
     long         i, k = 0;
     long         *ptr;
     t_atom       data[PIZ_EVENT_DATA_SIZE + 1];
@@ -302,20 +298,18 @@ void tralala_parseNotification (t_tralala *x, PIZEvent *event)
     }
     
     atom_setsym (data, s);
-    dictionary_appendatoms (current, s, k + 1, data);
+    dictionary_appendatoms (x->current, s, k + 1, data);
     //
     } else {
     //
     symbolWithTag (&s, ptr[PIZ_EVENT_NOTE_TAG]);
         
     if (code == PIZ_EVENT_NOTE_REMOVED) {
-        dictionary_deleteentry (current, s);
+        dictionary_deleteentry (x->current, s);
         
     } else {
         atom_setsym (data, TLL_NOTE);
-        dictionary_appendatoms (current, s, k - 1, data);
-    }
-    //
+        dictionary_appendatoms (x->current, s, k - 1, data);
     }
     //
     }

@@ -66,38 +66,29 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
     if (x->data = dictionary_new ( )) {
     //
     t_dictionary *d = NULL;
-    t_dictionary *temp = NULL;
-    t_dictionary *current = NULL;
-    t_dictionary *restore = NULL;
+    t_dictionary *t = NULL;
     
     err = PIZ_GOOD;
     x->flags = TLL_FLAG_NONE;
     
-    if (d = (t_dictionary *)gensym ("#D")->s_thing) {
-    //    
-    if (dictionary_entryisdictionary (d, TLL_TRALALA)) {
-        dictionary_getdictionary (d, TLL_TRALALA, (t_object **)&temp);
-        dictionary_copyunique (x->data, temp);
-        
+    if ((d = (t_dictionary *)gensym ("#D")->s_thing) && (dictionary_entryisdictionary (d, TLL_TRALALA))) {
+        dictionary_getdictionary (d, TLL_TRALALA, (t_object **)&t);
+        dictionary_copyunique (x->data, t);
+            
     } else {
         x->flags |= TLL_FLAG_INIT;
     }
-    //
+    
+    if (!(dictionary_entryisdictionary (x->data, TLL_RESTORE)) && (x->restore = dictionary_new ( ))) {
+        dictionary_appenddictionary (x->data, TLL_RESTORE, (t_object *)x->restore);
     }
     
-    if (!(dictionary_entryisdictionary (x->data, TLL_RESTORE)) && (restore = dictionary_new ( ))) {
-        err |= ((dictionary_appenddictionary (x->data, TLL_RESTORE, (t_object *)restore)) != MAX_ERR_NONE);
+    if (!(dictionary_entryisdictionary (x->data, TLL_CURRENT)) && (x->current = dictionary_new ( ))) {
+        dictionary_appenddictionary (x->data, TLL_CURRENT, (t_object *)x->current);
     }
-    
-    if (!(dictionary_entryisdictionary (x->data, TLL_CURRENT))) {
-        if (current = dictionary_new ( )) {
-            err |= ((dictionary_appenddictionary (x->data, TLL_CURRENT, (t_object *)current)) != MAX_ERR_NONE);
-        }
         
-    } else {
-        dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&current);
-        dictionary_clear (current);
-    }
+    err |= (dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&x->restore)) != MAX_ERR_NONE;
+    err |= (dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&x->current)) != MAX_ERR_NONE;
     //
     }
     
@@ -108,6 +99,8 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
         x->left         = listout ((t_object *)x);
                 
         pizAgentAttach (x->agent, (void *)x, (PIZMethod)tralala_callback);
+        
+        dictionary_clear (x->current);
         defer_low (x, (method)tralala_init, NULL, 0, NULL);
 
     } else {
@@ -122,14 +115,12 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
 
 void tralala_init (t_tralala *x, t_symbol *s, short argc, t_atom *argv)
 {
-    t_dictionary *d = NULL;
-
     if (x->flags & TLL_FLAG_INIT) {
+        x->flags &= ~TLL_FLAG_INIT; 
         SEND (PIZ_EVENT_INIT)
-        x->flags &= ~TLL_FLAG_INIT;
 
-    } else if (!(dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&d))) {
-        tralala_parseDictionary (x, d);
+    } else {
+        tralala_parseDictionary (x, x->restore);
     }    
 }
 
@@ -161,20 +152,14 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
 void tralala_dictionary (t_tralala *x, t_dictionary *d)
 {
     if (d) {
-        t_dictionary *temp = NULL;
-        t_dictionary *current = NULL;
-        t_dictionary *restore = NULL;
+        t_dictionary *t = NULL;
                 
-        if (!(dictionary_getdictionary (x->data, TLL_RESTORE, (t_object **)&restore)) &&
-            !(dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&current))) {
+        dictionary_clear (x->restore);
+        dictionary_copyunique (x->restore, x->current);
         
-            dictionary_clear (restore);
-            dictionary_copyunique (restore, current);
-        
-            if (temp = dictionary_new ( )) {
-                dictionary_copyunique (temp, x->data);
-                dictionary_appenddictionary (d, TLL_TRALALA, (t_object *)temp);
-            }
+        if (t = dictionary_new ( )) {
+            dictionary_copyunique (t, x->data);
+            dictionary_appenddictionary (d, TLL_TRALALA, (t_object *)t);
         }
     }
 }
@@ -236,12 +221,9 @@ void tralala_callback (void *ptr, PIZEvent *event)
     //
     }
     
-    t_dictionary *current = NULL;
-    if (!(dictionary_getdictionary (x->data, TLL_CURRENT, (t_object **)&current))) {
-        if (!(dictionary_hasentry (current, gensym ("chord")))) {
-            DEBUGEVENT
-            post ("###");
-        }
+    if (!(dictionary_hasentry (x->current, gensym ("chord")))) {
+        DEBUGEVENT
+        post ("###");
     }
     
     pizEventFree (event);

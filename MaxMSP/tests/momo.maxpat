@@ -29,12 +29,12 @@
 					"maxclass" : "newobj",
 					"text" : "tralala",
 					"patching_rect" : [ 100.0, 200.0, 59.5, 23.0 ],
-					"outlettype" : [ "list", "", "bang", "bang" ],
+					"fontname" : "Arial",
 					"fontsize" : 14.0,
 					"numinlets" : 1,
-					"fontname" : "Arial",
 					"numoutlets" : 4,
 					"id" : "obj-1",
+					"outlettype" : [ "list", "", "bang", "bang" ],
 					"tralala" : 					{
 						"restore" : 						{
 							"chance" : [ "chance", 100 ],
@@ -74,12 +74,12 @@
 					"maxclass" : "message",
 					"text" : "change pitch 12",
 					"patching_rect" : [ 220.0, 160.0, 109.0, 21.0 ],
-					"outlettype" : [ "" ],
+					"fontname" : "Arial",
 					"fontsize" : 14.0,
 					"numinlets" : 2,
-					"fontname" : "Arial",
 					"numoutlets" : 1,
-					"id" : "obj-6"
+					"id" : "obj-6",
+					"outlettype" : [ "" ]
 				}
 
 			}
@@ -88,12 +88,12 @@
 					"maxclass" : "message",
 					"text" : "pattern 1 0 -2",
 					"patching_rect" : [ 220.0, 120.0, 94.0, 21.0 ],
-					"outlettype" : [ "" ],
+					"fontname" : "Arial",
 					"fontsize" : 14.0,
 					"numinlets" : 2,
-					"fontname" : "Arial",
 					"numoutlets" : 1,
-					"id" : "obj-8"
+					"id" : "obj-8",
+					"outlettype" : [ "" ]
 				}
 
 			}
@@ -102,12 +102,12 @@
 					"maxclass" : "message",
 					"text" : "clear",
 					"patching_rect" : [ 220.0, 60.0, 41.0, 21.0 ],
-					"outlettype" : [ "" ],
+					"fontname" : "Arial",
 					"fontsize" : 14.0,
 					"numinlets" : 2,
-					"fontname" : "Arial",
 					"numoutlets" : 1,
-					"id" : "obj-5"
+					"id" : "obj-5",
+					"outlettype" : [ "" ]
 				}
 
 			}
@@ -116,12 +116,12 @@
 					"maxclass" : "message",
 					"text" : "scale B dorian",
 					"patching_rect" : [ 240.0, 200.0, 99.0, 21.0 ],
-					"outlettype" : [ "" ],
+					"fontname" : "Arial",
 					"fontsize" : 14.0,
 					"numinlets" : 2,
-					"fontname" : "Arial",
 					"numoutlets" : 1,
-					"id" : "obj-4"
+					"id" : "obj-4",
+					"outlettype" : [ "" ]
 				}
 
 			}
@@ -130,12 +130,12 @@
 					"maxclass" : "message",
 					"text" : "note 0 60",
 					"patching_rect" : [ 60.0, 60.0, 69.0, 21.0 ],
-					"outlettype" : [ "" ],
+					"fontname" : "Arial",
 					"fontsize" : 14.0,
 					"numinlets" : 2,
-					"fontname" : "Arial",
 					"numoutlets" : 1,
-					"id" : "obj-7"
+					"id" : "obj-7",
+					"outlettype" : [ "" ]
 				}
 
 			}
@@ -144,12 +144,12 @@
 					"maxclass" : "message",
 					"text" : "bpm 240",
 					"patching_rect" : [ 140.0, 60.0, 65.0, 21.0 ],
-					"outlettype" : [ "" ],
+					"fontname" : "Arial",
 					"fontsize" : 14.0,
 					"numinlets" : 2,
-					"fontname" : "Arial",
 					"numoutlets" : 1,
-					"id" : "obj-3"
+					"id" : "obj-3",
+					"outlettype" : [ "" ]
 				}
 
 			}

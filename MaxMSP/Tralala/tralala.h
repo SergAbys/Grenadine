@@ -63,6 +63,8 @@ typedef struct _tralala {
     t_atom          played[4];
     t_atom          dumped[5];
     t_dictionary    *data;
+    t_dictionary    *current;
+    t_dictionary    *restore;
     PIZAgent        *agent;
     void            *left;
     void            *middleLeft;
