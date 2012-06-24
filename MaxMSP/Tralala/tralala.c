@@ -31,16 +31,16 @@ int main (void)
     
     c = class_new ("tralala", (method)tralala_new, (method)tralala_free, sizeof(t_tralala), 0L, A_GIMME, 0);
 
-    class_addmethod (c, (method)tralala_bang,           "bang",                 0);
-    class_addmethod (c, (method)tralala_play,           "play",                 0);
-    class_addmethod (c, (method)tralala_stop,           "stop",                 0);
-    class_addmethod (c, (method)tralala_loop,           "loop",                 0);
-    class_addmethod (c, (method)tralala_unloop,         "unloop",               0);
-    class_addmethod (c, (method)tralala_dblclick,       "dblclick",             A_CANT, 0);
-    class_addmethod (c, (method)tralala_dictionary,     "appendtodictionary",   A_CANT, 0);
-    class_addmethod (c, (method)tralala_assist,         "assist",               A_CANT, 0);
-    class_addmethod (c, (method)tralala_list,           "list",                 A_GIMME, 0);
-    class_addmethod (c, (method)tralala_anything,       "anything",             A_GIMME, 0);
+    class_addmethod (c, (method)tralala_bang,       "bang",                 0);
+    class_addmethod (c, (method)tralala_play,       "play",                 0);
+    class_addmethod (c, (method)tralala_stop,       "stop",                 0);
+    class_addmethod (c, (method)tralala_loop,       "loop",                 0);
+    class_addmethod (c, (method)tralala_unloop,     "unloop",               0);
+    class_addmethod (c, (method)tralala_dblclick,   "dblclick",             A_CANT, 0);
+    class_addmethod (c, (method)tralala_jsave,      "appendtodictionary",   A_CANT, 0);
+    class_addmethod (c, (method)tralala_assist,     "assist",               A_CANT, 0);
+    class_addmethod (c, (method)tralala_list,       "list",                 A_GIMME, 0);
+    class_addmethod (c, (method)tralala_anything,   "anything",             A_GIMME, 0);
 
     class_register (CLASS_BOX, c);
 
@@ -71,7 +71,8 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
     err = PIZ_GOOD;
     x->flags = TLL_FLAG_NONE;
     
-    if ((d = (t_dictionary *)gensym ("#D")->s_thing) && (dictionary_entryisdictionary (d, TLL_TRALALA))) {
+    if ((d = (t_dictionary *)gensym ("#D")->s_thing) 
+        && (dictionary_entryisdictionary (d, TLL_TRALALA))) {
         dictionary_getdictionary (d, TLL_TRALALA, (t_object **)&t);
         dictionary_copyunique (x->data, t);
             
@@ -79,11 +80,13 @@ void *tralala_new (t_symbol *s, long argc, t_atom *argv)
         x->flags |= TLL_FLAG_INIT;
     }
     
-    if (!(dictionary_entryisdictionary (x->data, TLL_RESTORE)) && (x->restore = dictionary_new ( ))) {
+    if (!(dictionary_entryisdictionary (x->data, TLL_RESTORE)) 
+        && (x->restore = dictionary_new ( ))) {
         dictionary_appenddictionary (x->data, TLL_RESTORE, (t_object *)x->restore);
     }
     
-    if (!(dictionary_entryisdictionary (x->data, TLL_CURRENT)) && (x->current = dictionary_new ( ))) {
+    if (!(dictionary_entryisdictionary (x->data, TLL_CURRENT)) 
+        && (x->current = dictionary_new ( ))) {
         dictionary_appenddictionary (x->data, TLL_CURRENT, (t_object *)x->current);
     }
         
@@ -149,7 +152,7 @@ void tralala_assist (t_tralala *x, void *b, long m, long a, char *s)
     }
 }
 
-void tralala_dictionary (t_tralala *x, t_dictionary *d)
+void tralala_jsave (t_tralala *x, t_dictionary *d)
 {
     if (d) {
         t_dictionary *t = NULL;
