@@ -39,7 +39,7 @@
 
 /* 
  *  PIZ_SEQUENCE_MAXIMUM_NOTES   = PIZ_ITEMSET_SIZE 
- *  PIZ_SEQUENCE_SIZE_TEMP       = MAX (MAXIMUM_NOTES, MAXIMUM_DURATION, PIZ_MAGIC_PITCH + 1) 
+ *  PIZ_SEQUENCE_SIZE_TEMP       = MAX(MAXIMUM_NOTES, MAXIMUM_DURATION, PIZ_MAGIC_PITCH + 1) 
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -214,8 +214,8 @@ typedef struct _PIZSequence {
 
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL PIZSequence   *pizSequenceNew (struct _PIZAgent *owner);
-PIZ_LOCAL void          pizSequenceFree (PIZSequence *x);
+PIZ_LOCAL PIZSequence   *pizSequenceNew     (struct _PIZAgent *owner);
+PIZ_LOCAL void          pizSequenceFree     (PIZSequence *x);
 
 PIZ_END_C_LINKAGE
 

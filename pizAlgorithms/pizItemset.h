@@ -78,7 +78,7 @@ PIZ_END_C_LINKAGE
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN void pizItemsetSetAtIndex (PIZItemset *itemset, long index)
+PIZ_EXTERN void pizItemsetSetAtIndex(PIZItemset *itemset, long index)
 {
     long  i, p;
     ulong m;
@@ -91,7 +91,7 @@ PIZ_EXTERN void pizItemsetSetAtIndex (PIZItemset *itemset, long index)
     itemset->items[i] |= m;
 }
 
-PIZ_EXTERN void pizItemsetUnsetAtIndex (PIZItemset *itemset, long index) 
+PIZ_EXTERN void pizItemsetUnsetAtIndex(PIZItemset *itemset, long index) 
 {
     long  i, p;
     ulong m;
@@ -104,7 +104,7 @@ PIZ_EXTERN void pizItemsetUnsetAtIndex (PIZItemset *itemset, long index)
     itemset->items[i] &= ~m;
 }
 
-PIZ_EXTERN void pizItemsetClear (PIZItemset *itemset)  
+PIZ_EXTERN void pizItemsetClear(PIZItemset *itemset)  
 {
     long i;
     
@@ -113,7 +113,7 @@ PIZ_EXTERN void pizItemsetClear (PIZItemset *itemset)
     }
 }
 
-PIZ_EXTERN long pizItemsetCount (const PIZItemset *itemset)
+PIZ_EXTERN long pizItemsetCount(const PIZItemset *itemset)
 {
     long i, k = 0;
     
@@ -129,7 +129,7 @@ PIZ_EXTERN long pizItemsetCount (const PIZItemset *itemset)
     return k;
 }
 
-PIZ_EXTERN bool pizItemsetIsSetAtIndex (const PIZItemset *itemset, long index) 
+PIZ_EXTERN bool pizItemsetIsSetAtIndex(const PIZItemset *itemset, long index) 
 {
     long  i, p;
     ulong k = 0;
@@ -145,7 +145,7 @@ PIZ_EXTERN bool pizItemsetIsSetAtIndex (const PIZItemset *itemset, long index)
     return (k != 0UL);
 }
 
-PIZ_EXTERN void pizItemsetUnion (const PIZItemset *a, const PIZItemset *b, PIZItemset *r) 
+PIZ_EXTERN void pizItemsetUnion(const PIZItemset *a, const PIZItemset *b, PIZItemset *r) 
 {
     long i;
     
@@ -154,7 +154,7 @@ PIZ_EXTERN void pizItemsetUnion (const PIZItemset *a, const PIZItemset *b, PIZIt
     }
 }
 
-PIZ_EXTERN void pizItemsetIntersection (const PIZItemset *a, const PIZItemset *b, PIZItemset *r) 
+PIZ_EXTERN void pizItemsetIntersection(const PIZItemset *a, const PIZItemset *b, PIZItemset *r) 
 {
     long i;
     
@@ -163,7 +163,7 @@ PIZ_EXTERN void pizItemsetIntersection (const PIZItemset *a, const PIZItemset *b
     }
 }
 
-PIZ_EXTERN bool pizItemsetIsIncluded (const PIZItemset *a, const PIZItemset *b)
+PIZ_EXTERN bool pizItemsetIsIncluded(const PIZItemset *a, const PIZItemset *b)
 {
     long i;
     bool k = true;
@@ -178,7 +178,7 @@ PIZ_EXTERN bool pizItemsetIsIncluded (const PIZItemset *a, const PIZItemset *b)
     return k;
 }
 
-PIZ_EXTERN bool pizItemsetIsEqual (const PIZItemset *a, const PIZItemset *b)
+PIZ_EXTERN bool pizItemsetIsEqual(const PIZItemset *a, const PIZItemset *b)
 {
     long i;
     bool k = true;

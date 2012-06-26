@@ -50,7 +50,7 @@
 
 #define DEBUGEVENT  if (event) {            \
                         PIZTime t;          \
-                        pizTimeSet (&t);    \
+                        pizTimeSet(&t);     \
                         t = t / 1000000.;   \
                         post ("%llu / %s / %ld %ld %ld %ld %ld %ld %ld %ld / %s",   \
                         t, pizEventName(event),                                     \
@@ -181,17 +181,17 @@ PIZ_END_C_LINKAGE
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN void pizEventFree (PIZEvent *x)
+PIZ_EXTERN void pizEventFree(PIZEvent *x)
 {
-    free (x);
+    free(x);
 }
 
-PIZ_EXTERN void pizEventCode (const PIZEvent *x, PIZEventCode *code)
+PIZ_EXTERN void pizEventCode(const PIZEvent *x, PIZEventCode *code)
 {
     (*code) = x->code;
 }
 
-PIZ_EXTERN void pizEventType (const PIZEvent *x, PIZEventType *type)
+PIZ_EXTERN void pizEventType(const PIZEvent *x, PIZEventType *type)
 {
     (*type) = x->type;
 }

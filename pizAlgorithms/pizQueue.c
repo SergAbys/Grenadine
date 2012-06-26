@@ -43,19 +43,19 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZQueue *pizQueueNew (long size)
+PIZQueue *pizQueueNew(long size)
 {
     PIZQueue *x = NULL;
     
-    if ((size > 0) && (x = (PIZQueue *)malloc (sizeof(PIZQueue)))) {
-        if (x->values = (long *)malloc ((size + 1) * sizeof(long))) {
+    if ((size > 0) && (x = (PIZQueue *)malloc(sizeof(PIZQueue)))) {
+        if (x->values = (long *)malloc((size + 1) * sizeof(long))) {
             x->count       = 0;
             x->size        = size;
             x->head        = 0;
             x->tail        = 0;
             x->poppedValue = -1;
         } else {
-            free (x);
+            free(x);
             x = NULL;
         }
     }
@@ -63,13 +63,13 @@ PIZQueue *pizQueueNew (long size)
     return x;
 }
 
-void pizQueueFree (PIZQueue *x)
+void pizQueueFree(PIZQueue *x)
 {
     if (x) {
-        free (x->values);
+        free(x->values);
         x->values = NULL;
             
-        free (x);
+        free(x);
     }
 }
 
@@ -77,7 +77,7 @@ void pizQueueFree (PIZQueue *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizQueueClear (PIZQueue *x)
+void pizQueueClear(PIZQueue *x)
 {
     x->count       = 0;
     x->head        = 0;
@@ -85,7 +85,7 @@ void pizQueueClear (PIZQueue *x)
     x->poppedValue = -1;
 }
 
-PIZError pizQueueAppend (PIZQueue *x, long value) 
+PIZError pizQueueAppend(PIZQueue *x, long value) 
 {   
     PIZError err = PIZ_ERROR;
     
@@ -104,7 +104,7 @@ PIZError pizQueueAppend (PIZQueue *x, long value)
     return err;
 }
 
-PIZError pizQueuePop (PIZQueue *x)
+PIZError pizQueuePop(PIZQueue *x)
 {
     PIZError err = PIZ_ERROR;
     
@@ -123,7 +123,7 @@ PIZError pizQueuePop (PIZQueue *x)
     return err;
 }
 
-PIZError pizQueuePopLast (PIZQueue *x)
+PIZError pizQueuePopLast(PIZQueue *x)
 {
     PIZError err = PIZ_ERROR;
     
@@ -143,12 +143,12 @@ PIZError pizQueuePopLast (PIZQueue *x)
     return err;
 }
 
-long pizQueueCount (const PIZQueue *x)
+long pizQueueCount(const PIZQueue *x)
 {
     return x->count;
 }
 
-long pizQueuePoppedValue (const PIZQueue *x)
+long pizQueuePoppedValue(const PIZQueue *x)
 {
     return x->poppedValue;
 }

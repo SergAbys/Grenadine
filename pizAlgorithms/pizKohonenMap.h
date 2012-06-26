@@ -49,14 +49,14 @@
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZKohonenMap {
-    long            mapSize;
-    long            vectorSize;
-    long            count;
-    long            range;
-    long            training;
-    double          step;
-    double          *map;
-    uint            seed;
+    uint    seed;
+    long    mapSize;
+    long    vectorSize;
+    long    count;
+    long    range;
+    long    training;
+    double  step;
+    double  *map;
     } PIZKohonenMap;
 
 // -------------------------------------------------------------------------------------------------------------

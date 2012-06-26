@@ -59,6 +59,7 @@ typedef struct _PIZNeuralGasHead {
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _PIZNeuralGas {
+    uint                seed;
     PIZItemset          map;
     long                count;
     long                vectorSize;
@@ -71,7 +72,6 @@ typedef struct _PIZNeuralGas {
     double              beta;
     double              kappa;
     double              *vectorStock;
-    uint                seed;
     PIZNeuralGasHead    *headStock;
     PIZStack            *ticketMachine;
     } PIZNeuralGas;

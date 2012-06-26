@@ -79,32 +79,32 @@ PIZ_END_C_LINKAGE
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN long *pizArrayPtr (const PIZArray *x)
+PIZ_EXTERN long *pizArrayPtr(const PIZArray *x)
 {
     return x->values;
 }
 
-PIZ_EXTERN void pizArrayClear (PIZArray *x)
+PIZ_EXTERN void pizArrayClear(PIZArray *x)
 {
     x->index = 0;
 }
 
-PIZ_EXTERN void pizArraySetAtIndex (PIZArray *x, long index, long value)
+PIZ_EXTERN void pizArraySetAtIndex(PIZArray *x, long index, long value)
 {
     x->values[index] = value;
 }
 
-PIZ_EXTERN long pizArrayAtIndex (const PIZArray *x, long index)
+PIZ_EXTERN long pizArrayAtIndex(const PIZArray *x, long index)
 {   
     return x->values[index];
 }
 
-PIZ_EXTERN long pizArrayCount (const PIZArray *x)
+PIZ_EXTERN long pizArrayCount(const PIZArray *x)
 {
     return x->index;
 }
 
-PIZ_EXTERN void pizArrayRemoveLast (PIZArray *x)
+PIZ_EXTERN void pizArrayRemoveLast(PIZArray *x)
 {
     x->index --;
 }

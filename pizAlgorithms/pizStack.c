@@ -43,17 +43,17 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZStack *pizStackNew (long size)
+PIZStack *pizStackNew(long size)
 {
     PIZStack *x = NULL;
     
-    if (size > 0 && (x = (PIZStack *)malloc (sizeof(PIZStack)))) {
-        if (x->values = (long *)malloc (size * sizeof(long))) {
+    if (size > 0 && (x = (PIZStack *)malloc(sizeof(PIZStack)))) {
+        if (x->values = (long *)malloc(size * sizeof(long))) {
             x->size        = size;
             x->index       = 0;
             x->poppedValue = -1;
         } else {
-            free (x);
+            free(x);
             x = NULL;
         }
     }
@@ -61,13 +61,13 @@ PIZStack *pizStackNew (long size)
     return x;
 }
 
-void pizStackFree (PIZStack *x)
+void pizStackFree(PIZStack *x)
 {
     if (x) {
-        free (x->values);
+        free(x->values);
         x->values = NULL;
             
-        free (x);
+        free(x);
     }
 }
 
@@ -75,13 +75,13 @@ void pizStackFree (PIZStack *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizStackClear (PIZStack *x)
+void pizStackClear(PIZStack *x)
 {
     x->index       = 0;
     x->poppedValue = -1;
 }
 
-PIZError pizStackPush (PIZStack *x, long value) 
+PIZError pizStackPush(PIZStack *x, long value) 
 {   
     PIZError err = PIZ_ERROR;
     
@@ -94,7 +94,7 @@ PIZError pizStackPush (PIZStack *x, long value)
     return err;
 }
 
-PIZError pizStackPop (PIZStack *x)
+PIZError pizStackPop(PIZStack *x)
 {
     PIZError err = PIZ_ERROR;
     
@@ -107,12 +107,12 @@ PIZError pizStackPop (PIZStack *x)
     return err;
 }
 
-long pizStackCount (const PIZStack *x)
+long pizStackCount(const PIZStack *x)
 {
     return x->index;
 }
 
-long pizStackPoppedValue (const PIZStack *x)
+long pizStackPoppedValue(const PIZStack *x)
 {
     return x->poppedValue;
 }   

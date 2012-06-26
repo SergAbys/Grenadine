@@ -48,11 +48,11 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZArray *pizArrayNew (long size)
+PIZArray *pizArrayNew(long size)
 {
     PIZArray *x = NULL;
 
-    if (x = (PIZArray *)malloc (sizeof(PIZArray))) {  
+    if (x = (PIZArray *)malloc(sizeof(PIZArray))) {  
     //     
     x->size = PIZ_DEFAULT_SIZE_ARRAY;
     
@@ -60,10 +60,10 @@ PIZArray *pizArrayNew (long size)
         x->size = size;
     }
     
-    if (x->values = (long *)malloc (x->size * sizeof(long))) {
+    if (x->values = (long *)malloc(x->size * sizeof(long))) {
         x->index = 0;
     } else {
-        free (x);
+        free(x);
         x = NULL;
     }
     //
@@ -72,13 +72,13 @@ PIZArray *pizArrayNew (long size)
     return x;
 }
 
-void pizArrayFree (PIZArray *x)
+void pizArrayFree(PIZArray *x)
 {
     if (x) {
-        free (x->values);
+        free(x->values);
         x->values = NULL;
             
-        free (x);
+        free(x);
     }
 }
 
@@ -86,14 +86,14 @@ void pizArrayFree (PIZArray *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizArrayAppend (PIZArray *x, long value)
+PIZError pizArrayAppend(PIZArray *x, long value)
 {   
     PIZError err = PIZ_GOOD;
         
     if (x->index == x->size) {   
         long *newValues = NULL;
         
-        if (newValues = (long *)realloc (x->values, (x->size * 2) * sizeof(long))) {
+        if (newValues = (long *)realloc(x->values, (x->size * 2) * sizeof(long))) {
             x->size *= 2;
             x->values = newValues;
         } else {
@@ -109,22 +109,22 @@ PIZError pizArrayAppend (PIZArray *x, long value)
     return err;
 }
 
-void pizArrayClear (PIZArray *x)
+void pizArrayClear(PIZArray *x)
 {
     x->index = 0;
 }
 
-void pizArraySetAtIndex (PIZArray *x, long index, long value)
+void pizArraySetAtIndex(PIZArray *x, long index, long value)
 {
     x->values[index] = value;
 }
 
-long pizArrayAtIndex (const PIZArray *x, long index)
+long pizArrayAtIndex(const PIZArray *x, long index)
 {   
     return x->values[index];
 }
 
-long pizArrayCount (const PIZArray *x)
+long pizArrayCount(const PIZArray *x)
 {
     return x->index;
 }
@@ -133,7 +133,7 @@ long pizArrayCount (const PIZArray *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-long *pizArrayPtr (const PIZArray *array)
+long *pizArrayPtr(const PIZArray *array)
 {
     return array->values;
 }
@@ -142,7 +142,7 @@ long *pizArrayPtr (const PIZArray *array)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizArrayRemoveAtIndex (PIZArray *array, long index)
+void pizArrayRemoveAtIndex(PIZArray *array, long index)
 {
     long i;
             
@@ -153,12 +153,12 @@ void pizArrayRemoveAtIndex (PIZArray *array, long index)
     array->index --;
 }
 
-void pizArrayRemoveLast (PIZArray *x)
+void pizArrayRemoveLast(PIZArray *x)
 {
     x->index --;
 }
 
-bool pizArrayContainsValue (const PIZArray *x, long value)
+bool pizArrayContainsValue(const PIZArray *x, long value)
 {
     long i;
     bool k = false;
@@ -173,7 +173,7 @@ bool pizArrayContainsValue (const PIZArray *x, long value)
     return k;
 }
 
-PIZError pizArrayIndexOfValue (const PIZArray *x, long value, long *index)
+PIZError pizArrayIndexOfValue(const PIZArray *x, long value, long *index)
 {
     long i;
     PIZError err = PIZ_ERROR;

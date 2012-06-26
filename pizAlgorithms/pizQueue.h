@@ -77,7 +77,7 @@ PIZ_END_C_LINKAGE
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN void pizQueueClear (PIZQueue *x)
+PIZ_EXTERN void pizQueueClear(PIZQueue *x)
 {
     x->head        = 0;
     x->tail        = 0;
@@ -85,13 +85,13 @@ PIZ_EXTERN void pizQueueClear (PIZQueue *x)
     x->poppedValue = -1;
 }
 
-PIZ_EXTERN long pizQueueCount (const PIZQueue *x)
+PIZ_EXTERN long pizQueueCount(const PIZQueue *x)
 {
     return x->count;
 }
 
 
-PIZ_EXTERN long pizQueuePoppedValue (const PIZQueue *x)
+PIZ_EXTERN long pizQueuePoppedValue(const PIZQueue *x)
 {
     return x->poppedValue;
 }

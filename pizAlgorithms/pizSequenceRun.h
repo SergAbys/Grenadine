@@ -66,12 +66,12 @@ PIZ_END_C_LINKAGE
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN bool pizSequenceIsAtEnd (PIZSequence *x)
+PIZ_EXTERN bool pizSequenceIsAtEnd(PIZSequence *x)
 {
     return (x->index >= x->end);
 }
 
-PIZ_EXTERN void pizSequenceJumpStart (PIZSequence *x)
+PIZ_EXTERN void pizSequenceJumpStart(PIZSequence *x)
 {
     x->index = x->start;
 }

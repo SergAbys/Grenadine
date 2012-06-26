@@ -58,13 +58,13 @@ typedef struct _PIZFiniteStateNode {
     } PIZFiniteStateNode;
 
 typedef struct _PIZFiniteState {
+    uint                seed;
     long                count;
     long                shuttle;
     long                lotteryIndex;
     long                jumpChance;
     long                threshold; 
     long                *lottery; 
-    uint                seed;
     PIZQueue            **mapByValue;
     PIZStack            *ticketMachine; 
     PIZFiniteStateNode  *stock;

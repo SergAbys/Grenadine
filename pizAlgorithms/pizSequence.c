@@ -59,24 +59,24 @@
 #pragma mark ---
 #pragma mark -
 
-PIZSequence *pizSequenceNew (struct _PIZAgent *owner)
+PIZSequence *pizSequenceNew(struct _PIZAgent *owner)
 {
     PIZSequence *x = NULL;
     
-    if (x = (PIZSequence *)malloc (sizeof(PIZSequence))) {
+    if (x = (PIZSequence *)malloc(sizeof(PIZSequence))) {
     //
     long argv1[ ] = { 0, PIZ_SEQUENCE_MAXIMUM_NOTES };
     long argv2[ ] = { PIZ_SEQUENCE_SIZE_LOOKUP, PIZ_SEQUENCE_MAXIMUM_NOTES };
     
     x->owner         = owner;
-    x->map           = pizArrayNew (PIZ_SEQUENCE_MAXIMUM_NOTES);
-    x->scale         = pizArrayNew (PIZ_MAGIC_SCALE);
-    x->pattern       = pizArrayNew (PIZ_EVENT_DATA_SIZE);
-    x->tempValues    = (long *)malloc (sizeof(long) * PIZ_SEQUENCE_SIZE_TEMP);
-    x->tempNotes1    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMP);
-    x->tempNotes2    = (PIZNote **)malloc (sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMP);
-    x->tempHash      = pizHashTableNew (2, argv1);
-    x->lookup        = pizHashTableNew (2, argv2);
+    x->map           = pizArrayNew(PIZ_SEQUENCE_MAXIMUM_NOTES);
+    x->scale         = pizArrayNew(PIZ_MAGIC_SCALE);
+    x->pattern       = pizArrayNew(PIZ_EVENT_DATA_SIZE);
+    x->tempValues    = (long *)malloc(sizeof(long) * PIZ_SEQUENCE_SIZE_TEMP);
+    x->tempNotes1    = (PIZNote **)malloc(sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMP);
+    x->tempNotes2    = (PIZNote **)malloc(sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMP);
+    x->tempHash      = pizHashTableNew(2, argv1);
+    x->lookup        = pizHashTableNew(2, argv2);
     
     if (x->map           && 
         x->scale         &&
@@ -87,14 +87,14 @@ PIZSequence *pizSequenceNew (struct _PIZAgent *owner)
         x->tempHash      &&
         x->lookup        &&
         x->owner         &&
-        (x->timeline = (PIZLinklist **)calloc (PIZ_SEQUENCE_SIZE_TIMELINE, sizeof(PIZLinklist **)))) {
+        (x->timeline = (PIZLinklist **)calloc(PIZ_SEQUENCE_SIZE_TIMELINE, sizeof(PIZLinklist **)))) {
 
         x->flags = PIZ_SEQUENCE_FLAG_NONE;
         
-        pizItemsetClear (&x->usedNotes);
-        pizItemsetClear (&x->addedNotes);
-        pizItemsetClear (&x->removedNotes);
-        pizItemsetClear (&x->changedNotes);
+        pizItemsetClear(&x->usedNotes);
+        pizItemsetClear(&x->addedNotes);
+        pizItemsetClear(&x->removedNotes);
+        pizItemsetClear(&x->changedNotes);
                 
         x->start     = PIZ_DEFAULT_START;
         x->end       = PIZ_DEFAULT_END;
@@ -114,7 +114,7 @@ PIZSequence *pizSequenceNew (struct _PIZAgent *owner)
         x->seed = PIZ_SEED;
             
     } else {
-        pizSequenceFree (x);
+        pizSequenceFree(x);
         x = NULL;
     }
     //
@@ -123,7 +123,7 @@ PIZSequence *pizSequenceNew (struct _PIZAgent *owner)
     return x;
 }
 
-void pizSequenceFree (PIZSequence *x)
+void pizSequenceFree(PIZSequence *x)
 {
     if (x) {
     //
@@ -132,32 +132,32 @@ void pizSequenceFree (PIZSequence *x)
     long i;
     
     for (i = 0; i < PIZ_SEQUENCE_SIZE_TIMELINE; i++) {
-        pizLinklistFree (x->timeline[i]);
+        pizLinklistFree(x->timeline[i]);
     }
         
-    free (x->timeline);
+    free(x->timeline);
     x->timeline = NULL;
     //
     }
     
-    pizArrayFree (x->map);
-    pizArrayFree (x->scale);
-    pizArrayFree (x->pattern);
+    pizArrayFree(x->map);
+    pizArrayFree(x->scale);
+    pizArrayFree(x->pattern);
     
-    pizHashTableFree (x->tempHash);
-    pizHashTableFree (x->lookup);
+    pizHashTableFree(x->tempHash);
+    pizHashTableFree(x->lookup);
     
     if (x->tempValues) {
-        free (x->tempValues);
+        free(x->tempValues);
     }
     if (x->tempNotes1) {
-        free (x->tempNotes1);
+        free(x->tempNotes1);
     }
     if (x->tempNotes2) {
-        free (x->tempNotes2);
+        free(x->tempNotes2);
     }
     
-    free (x);
+    free(x);
     //
     }
 }

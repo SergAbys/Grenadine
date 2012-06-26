@@ -89,7 +89,7 @@ PIZ_END_C_LINKAGE
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN long pizHashTableCount (const PIZHashTable *x)
+PIZ_EXTERN long pizHashTableCount(const PIZHashTable *x)
 {
     return x->count;
 }

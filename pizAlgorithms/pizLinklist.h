@@ -89,7 +89,7 @@ PIZ_END_C_LINKAGE
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN long pizLinklistCount (const PIZLinklist *x)
+PIZ_EXTERN long pizLinklistCount(const PIZLinklist *x)
 {
     return x->count;
 }

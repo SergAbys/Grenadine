@@ -80,7 +80,7 @@ typedef unsigned long PIZError;
 
 #include <mach/mach_time.h>
 
-#define PIZ_SEED (uint)mach_absolute_time ( )
+#define PIZ_SEED (uint)mach_absolute_time( )
 
 #endif // __MACH__
 

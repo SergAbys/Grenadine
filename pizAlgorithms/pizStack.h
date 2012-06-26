@@ -74,18 +74,18 @@ PIZ_END_C_LINKAGE
 
 #ifdef PIZ_EXTERN_INLINE
 
-PIZ_EXTERN void pizStackClear (PIZStack *x)
+PIZ_EXTERN void pizStackClear(PIZStack *x)
 {
     x->index       = 0;
     x->poppedValue = -1;
 }
 
-PIZ_EXTERN long pizStackCount (const PIZStack *x)
+PIZ_EXTERN long pizStackCount(const PIZStack *x)
 {
     return x->index;
 }
 
-PIZ_EXTERN long pizStackPoppedValue (const PIZStack *x)
+PIZ_EXTERN long pizStackPoppedValue(const PIZStack *x)
 {
     return x->poppedValue;
 }

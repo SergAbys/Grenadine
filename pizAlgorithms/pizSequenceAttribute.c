@@ -73,7 +73,7 @@ static const long pizSequenceModes[ ]   = { 0,-1, 0, 1, 0, 0, 1, 0,-1, 0, 1, 0, 
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL bool pizSequenceIsValidNoteValue (long value);
+PIZ_LOCAL bool pizSequenceIsValidNoteValue(long value);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -81,12 +81,12 @@ PIZ_LOCAL bool pizSequenceIsValidNoteValue (long value);
 #pragma mark ---
 #pragma mark -
 
-PIZError pizSequenceSetChance (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetChance(PIZSequence *x, const PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
     
-    if (!(pizEventData (event, &argc, &argv))) {
+    if (!(pizEventData(event, &argc, &argv))) {
         if ((argv[0] >= 0) && (argv[0] <= 100)) {
             x->chance = argv[0];
             x->flags |= PIZ_SEQUENCE_FLAG_CHANCE;
@@ -96,12 +96,12 @@ PIZError pizSequenceSetChance (PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceSetVelocity (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetVelocity(PIZSequence *x, const PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
     
-    if (!(pizEventData (event, &argc, &argv))) {
+    if (!(pizEventData(event, &argc, &argv))) {
         if ((argv[0] >= -PIZ_MAGIC_VELOCITY) && (argv[0] <= PIZ_MAGIC_VELOCITY)) {
             x->velocity = argv[0];
             x->flags |= PIZ_SEQUENCE_FLAG_VELOCITY;
@@ -111,12 +111,12 @@ PIZError pizSequenceSetVelocity (PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceSetChannel (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetChannel(PIZSequence *x, const PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
     
-    if (!(pizEventData (event, &argc, &argv))) {
+    if (!(pizEventData(event, &argc, &argv))) {
         if ((argv[0] >= 0) && (argv[0] <= PIZ_MAGIC_CHANNEL)) {
             x->channel = argv[0];
             x->flags |= PIZ_SEQUENCE_FLAG_CHANNEL;
@@ -126,12 +126,12 @@ PIZError pizSequenceSetChannel (PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceSetChord (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetChord(PIZSequence *x, const PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
     
-    if (!(pizEventData (event, &argc, &argv))) {
+    if (!(pizEventData(event, &argc, &argv))) {
         if ((argv[0] >= 0) && (argv[0] < PIZ_MAGIC_ULONG)) {
             x->chord = argv[0];
             x->flags |= PIZ_SEQUENCE_FLAG_CHORD;
@@ -141,13 +141,13 @@ PIZError pizSequenceSetChord (PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetCell(PIZSequence *x, const PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
     
-    if (!(pizEventData (event, &argc, &argv))) {
-        if ((pizSequenceIsValidNoteValue (argv[0]))) {
+    if (!(pizEventData(event, &argc, &argv))) {
+        if ((pizSequenceIsValidNoteValue(argv[0]))) {
             x->cell = argv[0];
             x->flags |= PIZ_SEQUENCE_FLAG_CELL;
         }
@@ -156,13 +156,13 @@ PIZError pizSequenceSetCell (PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceSetValue (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetValue(PIZSequence *x, const PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
     
-    if (!(pizEventData (event, &argc, &argv))) {
-        if ((pizSequenceIsValidNoteValue (argv[0]))) {
+    if (!(pizEventData(event, &argc, &argv))) {
+        if ((pizSequenceIsValidNoteValue(argv[0]))) {
             x->value = argv[0];
             x->flags |= PIZ_SEQUENCE_FLAG_NOTE_VALUE;
         }
@@ -174,18 +174,18 @@ PIZError pizSequenceSetValue (PIZSequence *x, const PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetScale(PIZSequence *x, const PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
     PIZError err = PIZ_ERROR;
     
-    if ((!(pizEventData (event, &argc, &argv))) && (argc > 1)) {
+    if ((!(pizEventData(event, &argc, &argv))) && (argc > 1)) {
     //
-    pizArrayClear (x->scale);
+    pizArrayClear(x->scale);
         
-    x->key  = CLAMP (argv[0], PIZ_KEY_C, PIZ_KEY_B);
-    x->type = CLAMP (argv[1], PIZ_MODE_NONE, PIZ_SEVENTH_FLAT_FIVE);
+    x->key  = CLAMP(argv[0], PIZ_KEY_C, PIZ_KEY_B);
+    x->type = CLAMP(argv[1], PIZ_MODE_NONE, PIZ_SEVENTH_FLAT_FIVE);
     
     if (x->type != PIZ_MODE_NONE) {
         long       i;
@@ -194,7 +194,7 @@ PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
         ptr = pizSequenceModes + (x->type * PIZ_MAGIC_SCALE); 
         
         for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
-            err |= pizArrayAppend (x->scale, *(ptr + ((PIZ_MAGIC_SCALE - x->key + i) % PIZ_MAGIC_SCALE)));
+            err |= pizArrayAppend(x->scale, *(ptr + ((PIZ_MAGIC_SCALE - x->key + i) % PIZ_MAGIC_SCALE)));
         }
     }
     
@@ -205,18 +205,18 @@ PIZError pizSequenceSetScale (PIZSequence *x, const PIZEvent *event)
     return err;
 }   
 
-PIZError pizSequenceSetPattern (PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetPattern(PIZSequence *x, const PIZEvent *event)
 {
     long     argc;
     long     *argv = NULL;
     PIZError err = PIZ_GOOD;
 
-    pizArrayClear (x->pattern);
+    pizArrayClear(x->pattern);
     
-    if (!(pizEventData (event, &argc, &argv))) {
+    if (!(pizEventData(event, &argc, &argv))) {
         long i;
         for (i = 0; i < argc; i++) {
-            err |= pizArrayAppend (x->pattern, argv[i]);
+            err |= pizArrayAppend(x->pattern, argv[i]);
         }
     }
     
@@ -231,7 +231,7 @@ PIZError pizSequenceSetPattern (PIZSequence *x, const PIZEvent *event)
 #pragma mark ---
 #pragma mark -
 
-bool pizSequenceIsValidNoteValue (long value) 
+bool pizSequenceIsValidNoteValue(long value) 
 {
     if (value == PIZ_WHOLE_NOTE_DOTTED          ||
         value == PIZ_WHOLE_NOTE                 ||

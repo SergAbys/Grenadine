@@ -56,13 +56,13 @@ typedef struct _PIZFactorOracleNode {
     } PIZFactorOracleNode;
        
 typedef struct _PIZFactorOracle {
+    uint                seed;
     long                size;
     long                peak;
     long                index;
     long                shuttle;
     long                backwardThreshold;
     double              straightRatio;
-    uint                seed;
     PIZFactorOracleNode *nodes;            
     } PIZFactorOracle;
 

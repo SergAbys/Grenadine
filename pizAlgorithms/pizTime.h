@@ -87,22 +87,22 @@ PIZ_END_C_LINKAGE
 
 #ifdef __MACH__
 
-PIZ_EXTERN void pizTimeSet (PIZTime *t) 
+PIZ_EXTERN void pizTimeSet(PIZTime *t) 
 {
-    (*t) = mach_absolute_time ( );
+    (*t) = mach_absolute_time( );
 }
 
-PIZ_EXTERN void pizNanoSet (PIZNano *ns, double f)
+PIZ_EXTERN void pizNanoSet(PIZNano *ns, double f)
 {
     (*ns) = (PIZNano)f;
 }
 
-PIZ_EXTERN void pizTimeCopy (PIZTime *t, const PIZTime *toCopy)
+PIZ_EXTERN void pizTimeCopy(PIZTime *t, const PIZTime *toCopy)
 {
     (*t) = (*toCopy);
 }
 
-PIZ_EXTERN void pizTimespecWithNano (struct timespec *t, const PIZNano *ns)
+PIZ_EXTERN void pizTimespecWithNano(struct timespec *t, const PIZNano *ns)
 {
     t->tv_sec  = (time_t)(*ns / PIZ_TIME_NANO_PER_SECOND);
     t->tv_nsec = (long)(*ns % PIZ_TIME_NANO_PER_SECOND);

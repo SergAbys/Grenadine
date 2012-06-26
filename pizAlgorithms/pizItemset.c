@@ -43,7 +43,7 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizItemsetSetAtIndex (PIZItemset *itemset, long index)
+void pizItemsetSetAtIndex(PIZItemset *itemset, long index)
 {
     long  i, p;
     ulong m;
@@ -56,7 +56,7 @@ void pizItemsetSetAtIndex (PIZItemset *itemset, long index)
     itemset->items[i] |= m;
 }
 
-void pizItemsetUnsetAtIndex (PIZItemset *itemset, long index) 
+void pizItemsetUnsetAtIndex(PIZItemset *itemset, long index) 
 {
     long  i, p;
     ulong m;
@@ -69,7 +69,7 @@ void pizItemsetUnsetAtIndex (PIZItemset *itemset, long index)
     itemset->items[i] &= ~m;
 }
 
-void pizItemsetClear (PIZItemset *itemset)  
+void pizItemsetClear(PIZItemset *itemset)  
 {
     long i;
     
@@ -78,7 +78,7 @@ void pizItemsetClear (PIZItemset *itemset)
     }
 }
 
-long pizItemsetCount (const PIZItemset *itemset)
+long pizItemsetCount(const PIZItemset *itemset)
 {
     long i, k = 0;
     
@@ -94,7 +94,7 @@ long pizItemsetCount (const PIZItemset *itemset)
     return k;
 }
 
-bool pizItemsetIsSetAtIndex (const PIZItemset *itemset, long index) 
+bool pizItemsetIsSetAtIndex(const PIZItemset *itemset, long index) 
 {
     long  i, p;
     ulong k = 0;
@@ -110,7 +110,7 @@ bool pizItemsetIsSetAtIndex (const PIZItemset *itemset, long index)
     return (k != 0UL);
 }
 
-void pizItemsetUnion (const PIZItemset *a, const PIZItemset *b, PIZItemset *r) 
+void pizItemsetUnion(const PIZItemset *a, const PIZItemset *b, PIZItemset *r) 
 {
     long i;
     
@@ -119,7 +119,7 @@ void pizItemsetUnion (const PIZItemset *a, const PIZItemset *b, PIZItemset *r)
     }
 }
 
-void pizItemsetIntersection (const PIZItemset *a, const PIZItemset *b, PIZItemset *r) 
+void pizItemsetIntersection(const PIZItemset *a, const PIZItemset *b, PIZItemset *r) 
 {
     long i;
     
@@ -128,7 +128,7 @@ void pizItemsetIntersection (const PIZItemset *a, const PIZItemset *b, PIZItemse
     }
 }
 
-bool pizItemsetIsIncluded (const PIZItemset *a, const PIZItemset *b)
+bool pizItemsetIsIncluded(const PIZItemset *a, const PIZItemset *b)
 {
     long i;
     bool k = true;
@@ -143,7 +143,7 @@ bool pizItemsetIsIncluded (const PIZItemset *a, const PIZItemset *b)
     return k;
 }
 
-bool pizItemsetIsEqual (const PIZItemset *a, const PIZItemset *b)
+bool pizItemsetIsEqual(const PIZItemset *a, const PIZItemset *b)
 {
     long i;
     bool k = true;

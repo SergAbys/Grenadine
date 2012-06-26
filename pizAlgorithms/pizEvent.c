@@ -155,11 +155,11 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
 #pragma mark ---
 #pragma mark -
 
-PIZEvent *pizEventNew (PIZEventCode code)
+PIZEvent *pizEventNew(PIZEventCode code)
 {
     PIZEvent *x = NULL;
     
-    if (x = (PIZEvent *)calloc (1, sizeof(PIZEvent))) {
+    if (x = (PIZEvent *)calloc(1, sizeof(PIZEvent))) {
         x->code = code;
         x->type = pizEventTypes[code];
     }
@@ -167,7 +167,7 @@ PIZEvent *pizEventNew (PIZEventCode code)
     return x;
 }
 
-const char *pizEventName (const PIZEvent *x)
+const char *pizEventName(const PIZEvent *x)
 {
     return pizEventNames[x->code];
 }
@@ -177,16 +177,16 @@ const char *pizEventName (const PIZEvent *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizEventFree (PIZEvent *x)
+void pizEventFree(PIZEvent *x)
 {
-    free (x);
+    free(x);
 }
 
-void pizEventSetData (PIZEvent *x, long argc, const long *argv)
+void pizEventSetData(PIZEvent *x, long argc, const long *argv)
 {
     if (argc && argv) {
         long i;
-        x->size = MIN (argc, PIZ_EVENT_DATA_SIZE);
+        x->size = MIN(argc, PIZ_EVENT_DATA_SIZE);
         for (i = 0; i < x->size; i++) {
             x->data[i] = *(argv + i);
         }
@@ -197,17 +197,17 @@ void pizEventSetData (PIZEvent *x, long argc, const long *argv)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizEventCode (const PIZEvent *x, PIZEventCode *code)
+void pizEventCode(const PIZEvent *x, PIZEventCode *code)
 {
     (*code) = x->code;
 }
 
-void pizEventType (const PIZEvent *x, PIZEventType *type)
+void pizEventType(const PIZEvent *x, PIZEventType *type)
 {
     (*type) = x->type;
 }
 
-PIZError pizEventData (const PIZEvent *x, long *argc, long **argv)
+PIZError pizEventData(const PIZEvent *x, long *argc, long **argv)
 {
     PIZError err = PIZ_ERROR;
     

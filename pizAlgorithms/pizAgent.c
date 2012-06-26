@@ -52,24 +52,24 @@
 #pragma mark ---
 #pragma mark -
 
-PIZAgent *pizAgentNew ( )
+PIZAgent *pizAgentNew( )
 {
     PIZAgent *x = NULL;
     
-    if (x = (PIZAgent *)malloc (sizeof(PIZAgent))) {
+    if (x = (PIZAgent *)malloc(sizeof(PIZAgent))) {
     //
     long err = PIZ_GOOD;
     
     x->bpm              = PIZ_DEFAULT_BPM;  
     x->flags            = PIZ_AGENT_FLAG_INIT; 
-    x->run              = pizLinklistNew ( );
-    x->low              = pizLinklistNew ( );
-    x->high             = pizLinklistNew ( );
-    x->notification     = pizLinklistNew ( );    
-    x->sequence         = pizSequenceNew (x);
-    x->buffer           = pizArrayNew (0);
-    x->factorOracle     = pizFactorOracleNew  (0, NULL);
-    x->galoisLattice    = pizGaloisLatticeNew (0, NULL);
+    x->run              = pizLinklistNew( );
+    x->low              = pizLinklistNew( );
+    x->high             = pizLinklistNew( );
+    x->notification     = pizLinklistNew( );    
+    x->sequence         = pizSequenceNew(x);
+    x->buffer           = pizArrayNew(0);
+    x->factorOracle     = pizFactorOracleNew(0, NULL);
+    x->galoisLattice    = pizGaloisLatticeNew(0, NULL);
     x->observer         = NULL;
     x->notify           = NULL;
     x->err1             = PIZ_ERROR;
@@ -88,32 +88,32 @@ PIZAgent *pizAgentNew ( )
         err |= PIZ_MEMORY;
     }
     
-    err |= pthread_mutex_init (&x->eventLock, NULL);
-    err |= pthread_mutex_init (&x->notificationLock, NULL);
-    err |= pthread_mutex_init (&x->observerLock, NULL);
+    err |= pthread_mutex_init(&x->eventLock, NULL);
+    err |= pthread_mutex_init(&x->notificationLock, NULL);
+    err |= pthread_mutex_init(&x->observerLock, NULL);
     
-    err |= pthread_cond_init  (&x->eventCondition, NULL);
-    err |= pthread_cond_init  (&x->notificationCondition, NULL);
+    err |= pthread_cond_init(&x->eventCondition, NULL);
+    err |= pthread_cond_init(&x->notificationCondition, NULL);
     
-    err |= pthread_attr_init  (&x->attr);
+    err |= pthread_attr_init(&x->attr);
     
     if (!err) {
     //
 
-    pthread_attr_setscope        (&x->attr, PTHREAD_SCOPE_PROCESS);
-    pthread_attr_setdetachstate  (&x->attr, PTHREAD_CREATE_JOINABLE);
-    pthread_attr_setschedpolicy  (&x->attr, SCHED_OTHER);
+    pthread_attr_setscope(&x->attr, PTHREAD_SCOPE_PROCESS);
+    pthread_attr_setdetachstate(&x->attr, PTHREAD_CREATE_JOINABLE);
+    pthread_attr_setschedpolicy(&x->attr, SCHED_OTHER);
     
-    x->err1 = (pthread_create (&x->eventLoop, &x->attr, pizAgentEventLoop, (void *)x) != 0); 
+    x->err1 = (pthread_create(&x->eventLoop, &x->attr, pizAgentEventLoop, (void *)x) != 0); 
     err |= x->err1;
     
-    x->err2 = (pthread_create (&x->notificationLoop, &x->attr, pizAgentNotificationLoop, (void *)x) != 0); 
+    x->err2 = (pthread_create(&x->notificationLoop, &x->attr, pizAgentNotificationLoop, (void *)x) != 0); 
     err |= x->err2;
     //
     }
     
     if (err) {
-        pizAgentFree (x);
+        pizAgentFree(x);
         x = NULL;
     }
     //
@@ -122,7 +122,7 @@ PIZAgent *pizAgentNew ( )
     return x;
 }
 
-void pizAgentFree (PIZAgent *x)
+void pizAgentFree(PIZAgent *x)
 { 
     if (x) {
     //
@@ -130,37 +130,40 @@ void pizAgentFree (PIZAgent *x)
         PIZ_AGENT_LOCK_EVENT
         x->flags |= PIZ_AGENT_FLAG_EXIT;
         PIZ_AGENT_UNLOCK_EVENT
-        pthread_cond_signal (&x->eventCondition);
+        pthread_cond_signal(&x->eventCondition);
         
-        pthread_join (x->eventLoop, NULL); 
+        pthread_join(x->eventLoop, NULL); 
     }
     
     if (!x->err2) {
         PIZ_AGENT_LOCK_NOTIFICATION
         x->flags |= PIZ_AGENT_FLAG_EXIT;
         PIZ_AGENT_UNLOCK_NOTIFICATION
-        pthread_cond_signal (&x->notificationCondition);
+        pthread_cond_signal(&x->notificationCondition);
         
-        pthread_join (x->notificationLoop, NULL); 
+        pthread_join(x->notificationLoop, NULL); 
     }
     
-    pthread_attr_destroy    (&x->attr);
-    pthread_mutex_destroy   (&x->eventLock);
-    pthread_mutex_destroy   (&x->notificationLock);
-    pthread_mutex_destroy   (&x->observerLock);
-    pthread_cond_destroy    (&x->eventCondition);
-    pthread_cond_destroy    (&x->notificationCondition);
+    pthread_attr_destroy(&x->attr);
     
-    pizArrayFree            (x->buffer);
-    pizFactorOracleFree     (x->factorOracle);
-    pizGaloisLatticeFree    (x->galoisLattice);
+    pthread_mutex_destroy(&x->eventLock);
+    pthread_mutex_destroy(&x->notificationLock);
+    pthread_mutex_destroy(&x->observerLock);
     
-    pizLinklistFree (x->run);
-    pizLinklistFree (x->low);
-    pizLinklistFree (x->high);
-    pizLinklistFree (x->notification);
+    pthread_cond_destroy(&x->eventCondition);
+    pthread_cond_destroy(&x->notificationCondition);
+    
+    pizArrayFree(x->buffer);
+    
+    pizFactorOracleFree(x->factorOracle);
+    pizGaloisLatticeFree(x->galoisLattice);
+    
+    pizLinklistFree(x->run);
+    pizLinklistFree(x->low);
+    pizLinklistFree(x->high);
+    pizLinklistFree(x->notification);
 
-    pizSequenceFree (x->sequence);
+    pizSequenceFree(x->sequence);
     //
     }
 }
@@ -169,7 +172,7 @@ void pizAgentFree (PIZAgent *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizAgentAttach (PIZAgent *x, void *observer, PIZMethod f)
+PIZError pizAgentAttach(PIZAgent *x, void *observer, PIZMethod f)
 {
     PIZError err = PIZ_ERROR;
     
@@ -189,7 +192,7 @@ PIZError pizAgentAttach (PIZAgent *x, void *observer, PIZMethod f)
     return err;
 }
 
-PIZError pizAgentDetach (PIZAgent *x, void *observer)
+PIZError pizAgentDetach(PIZAgent *x, void *observer)
 {
     PIZ_AGENT_LOCK_OBSERVER
         
@@ -205,7 +208,7 @@ PIZError pizAgentDetach (PIZAgent *x, void *observer)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
+void pizAgentAddEvent(PIZAgent *x, PIZEvent *event)
 {
     PIZLinklist *q = NULL;
         
@@ -217,9 +220,9 @@ void pizAgentAddEvent (PIZAgent *x, PIZEvent *event)
     
     if (q) {
         PIZ_AGENT_LOCK_EVENT
-        PIZ_AGENT_QUEUE (q, event)
+        PIZ_AGENT_QUEUE(q, event)
         PIZ_AGENT_UNLOCK_EVENT
-        pthread_cond_signal (&x->eventCondition);
+        pthread_cond_signal(&x->eventCondition);
     }
 }
 

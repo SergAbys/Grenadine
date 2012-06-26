@@ -47,31 +47,31 @@
 
 static mach_timebase_info_data_t pizTimeBaseInfo;
 
-void pizTimeSet (PIZTime *t) 
+void pizTimeSet(PIZTime *t) 
 {
-    (*t) = mach_absolute_time ( );
+    (*t) = mach_absolute_time( );
 }
 
-void pizNanoSet (PIZNano *ns, double f)
+void pizNanoSet(PIZNano *ns, double f)
 {
     (*ns) = (PIZNano)f;
 }
 
-void pizTimeCopy (PIZTime *t, const PIZTime *toCopy)
+void pizTimeCopy(PIZTime *t, const PIZTime *toCopy)
 {
     (*t) = (*toCopy);
 }
 
-void pizTimeAddNano (PIZTime *t, const PIZNano *ns)
+void pizTimeAddNano(PIZTime *t, const PIZNano *ns)
 {
     if (pizTimeBaseInfo.denom == 0) {
-        mach_timebase_info (&pizTimeBaseInfo);
+        mach_timebase_info(&pizTimeBaseInfo);
     } 
         
     (*t) += (*ns) * pizTimeBaseInfo.denom / pizTimeBaseInfo.numer;
 }
 
-PIZError pizTimeElapsedNano (const PIZTime *t0, const PIZTime *t1, PIZNano *result)
+PIZError pizTimeElapsedNano(const PIZTime *t0, const PIZTime *t1, PIZNano *result)
 {
     PIZError err = PIZ_ERROR;
     uint64_t elapsed;
@@ -82,7 +82,7 @@ PIZError pizTimeElapsedNano (const PIZTime *t0, const PIZTime *t1, PIZNano *resu
         elapsed = (*t1) - (*t0);
 
         if (pizTimeBaseInfo.denom == 0) {
-            mach_timebase_info (&pizTimeBaseInfo);
+            mach_timebase_info(&pizTimeBaseInfo);
         } 
 
         (*result) = elapsed * pizTimeBaseInfo.numer / pizTimeBaseInfo.denom;
@@ -91,7 +91,7 @@ PIZError pizTimeElapsedNano (const PIZTime *t0, const PIZTime *t1, PIZNano *resu
     return err;
 }
 
-void pizTimespecWithNano (struct timespec *t, const PIZNano *ns)
+void pizTimespecWithNano(struct timespec *t, const PIZNano *ns)
 {
     t->tv_sec  = (time_t)(*ns / PIZ_TIME_NANO_PER_SECOND);
     t->tv_nsec = (long)(*ns % PIZ_TIME_NANO_PER_SECOND);

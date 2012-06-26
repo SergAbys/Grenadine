@@ -49,21 +49,21 @@
 // -------------------------------------------------------------------------------------------------------------
  
 typedef struct _PIZMarkovModel {
-    long            count;
-    long            vectorSize;
-    long            graphSize;
-    double          persistence;
-    double          *start;
-    double          *emission;
-    double          *transition;
-    double          *tempStart;
-    double          *tempEmission;
-    double          *tempTransition;
-    double          *alpha;
-    double          *tempAlpha;
-    double          *beta;
-    double          *coefficient;
-    uint            seed;
+    uint    seed;
+    long    count;
+    long    vectorSize;
+    long    graphSize;
+    double  persistence;
+    double  *start;
+    double  *emission;
+    double  *transition;
+    double  *tempStart;
+    double  *tempEmission;
+    double  *tempTransition;
+    double  *alpha;
+    double  *tempAlpha;
+    double  *beta;
+    double  *coefficient;
     } PIZMarkovModel;
 
 // -------------------------------------------------------------------------------------------------------------

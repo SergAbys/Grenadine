@@ -53,71 +53,71 @@
 #pragma mark ---
 #pragma mark -
 
-PIZError pizAgentInit (PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentInit(PIZAgent *x, const PIZEvent *event)
 {
-    pizAgentAddNotification (x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
-    pizSequenceInit (x->sequence);
+    pizAgentAddNotification(x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
+    pizSequenceInit(x->sequence);
     
     return PIZ_GOOD;
 }
 
-PIZError pizAgentPlay (PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentPlay(PIZAgent *x, const PIZEvent *event)
 {
     if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
         x->flags |= PIZ_AGENT_FLAG_REPLAY;
         
     } else {
-        pizSequenceJumpStart (x->sequence);
+        pizSequenceJumpStart(x->sequence);
         x->flags |= PIZ_AGENT_FLAG_RUNNING; 
     }
     
     return PIZ_GOOD;
 }
 
-PIZError pizAgentStop (PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentStop(PIZAgent *x, const PIZEvent *event)
 {
     x->flags &= ~(PIZ_AGENT_FLAG_LOOPED | PIZ_AGENT_FLAG_REPLAY | PIZ_AGENT_FLAG_RUNNING);
     
     return PIZ_GOOD;
 }
 
-PIZError pizAgentLoop (PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentLoop(PIZAgent *x, const PIZEvent *event)
 {
     x->flags |= PIZ_AGENT_FLAG_LOOPED;
     
-    return (pizAgentPlay (x, event));
+    return (pizAgentPlay(x, event));
 }
 
-PIZError pizAgentUnloop (PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentUnloop(PIZAgent *x, const PIZEvent *event)
 {
     x->flags &= ~PIZ_AGENT_FLAG_LOOPED;
     
     return PIZ_GOOD;
 }
 
-PIZError pizAgentForget (PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentForget(PIZAgent *x, const PIZEvent *event)
 {
-    pizFactorOracleClear  (x->factorOracle);
-    pizGaloisLatticeClear (x->galoisLattice);
+    pizFactorOracleClear(x->factorOracle);
+    pizGaloisLatticeClear(x->galoisLattice);
         
     return PIZ_GOOD;
 }
 
-PIZError pizAgentLearn (PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentLearn(PIZAgent *x, const PIZEvent *event)
 {   
     long argc;
     long *argv = NULL;
     
-    if (!(pizEventData (event, &argc, &argv))) {
+    if (!(pizEventData(event, &argc, &argv))) {
     //
-    long h = (100 * (rand_r (&x->seed) / (RAND_MAX + 1.0)));
+    long h = (100 * (rand_r(&x->seed) / (RAND_MAX + 1.0)));
     
-    pizArrayAppend (x->buffer, argv[0]);
+    pizArrayAppend(x->buffer, argv[0]);
     
-    if (h < (pizArrayCount (x->buffer) * PIZ_CONSTANT_LEARN)) {
-        pizFactorOracleAdd (x->factorOracle, pizArrayCount (x->buffer), pizArrayPtr (x->buffer));
-        pizGaloisLatticeAdd (x->galoisLattice, pizArrayCount (x->buffer), pizArrayPtr (x->buffer));
-        pizArrayClear (x->buffer);
+    if (h < (pizArrayCount(x->buffer) * PIZ_CONSTANT_LEARN)) {
+        pizFactorOracleAdd(x->factorOracle, pizArrayCount(x->buffer), pizArrayPtr(x->buffer));
+        pizGaloisLatticeAdd(x->galoisLattice, pizArrayCount(x->buffer), pizArrayPtr(x->buffer));
+        pizArrayClear(x->buffer);
     }
     //
     }
@@ -125,17 +125,17 @@ PIZError pizAgentLearn (PIZAgent *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizAgentDump (PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentDump(PIZAgent *x, const PIZEvent *event)
 {
     PIZError err = PIZ_ERROR;
     
     PIZ_AGENT_LOCK_NOTIFICATION
     
-    err = pizSequenceDump (x->sequence);
+    err = pizSequenceDump(x->sequence);
      
     if (!err) {
         PIZ_AGENT_UNLOCK_NOTIFICATION
-        pthread_cond_signal (&x->notificationCondition);
+        pthread_cond_signal(&x->notificationCondition);
     } else {
         PIZ_AGENT_UNLOCK_NOTIFICATION
     }
@@ -147,20 +147,20 @@ PIZError pizAgentDump (PIZAgent *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizAgentBpm (PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentBpm(PIZAgent *x, const PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
     
-    if (!(pizEventData (event, &argc, &argv))) {
+    if (!(pizEventData(event, &argc, &argv))) {
     //
     if ((argv[0] >= PIZ_MINIMUM_BPM) && (argv[0] <= PIZ_MAXIMUM_BPM)) {
         x->bpm = argv[0];
-        pizAgentAddNotification (x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
+        pizAgentAddNotification(x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
             
-        pizNanoSet     (&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);    
-        pizTimeCopy    (&x->grainEnd, &x->grainStart);
-        pizTimeAddNano (&x->grainEnd, &x->grainSize);
+        pizNanoSet(&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);    
+        pizTimeCopy(&x->grainEnd, &x->grainStart);
+        pizTimeAddNano(&x->grainEnd, &x->grainSize);
     }
     //
     }

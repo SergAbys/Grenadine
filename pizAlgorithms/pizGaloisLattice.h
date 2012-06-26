@@ -58,6 +58,7 @@ typedef struct _PIZGaloisLatticeConcept {
     } PIZGaloisLatticeConcept;
 
 typedef struct _PIZGaloisLattice {
+    uint                    seed;
     PIZItemset              toBeAdded;
     PIZItemset              intersection;
     long                    count;
@@ -69,7 +70,6 @@ typedef struct _PIZGaloisLattice {
     long                    mapPeak;
     long                    tempMapPeak;
     bool                    needToMakeMap;
-    uint                    seed;
     PIZArray                **map;
     PIZArray                **tempMap;
     PIZStack                *ticketMachine;

@@ -84,8 +84,8 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #define PIZ_AGENT_MEMORY                    ;
-#define PIZ_AGENT_QUEUE(queue, event)       if (pizLinklistAppend ((queue), (event))) {         \
-                                                pizEventFree ((event));                         \
+#define PIZ_AGENT_QUEUE(queue, event)       if (pizLinklistAppend((queue), (event))) {          \
+                                                pizEventFree((event));                          \
                                                 PIZ_AGENT_MEMORY                                \
                                             }
                                         
