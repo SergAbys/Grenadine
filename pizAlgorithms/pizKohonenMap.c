@@ -69,11 +69,11 @@ PIZKohonenMap *pizKohonenMapNew(long argc, long *argv)
     PIZKohonenMap *x = NULL;
 
     if (x = (PIZKohonenMap *)calloc(1, sizeof(PIZKohonenMap))) {
-        x->mapSize       = PIZ_DEFAULT_SIZE_MAP;
-        x->vectorSize    = PIZ_DEFAULT_SIZE_VECTOR;
-        x->range         = PIZ_DEFAULT_RANGE;
-        x->training      = PIZ_DEFAULT_TRAINING;
-        x->step          = PIZ_DEFAULT_STEP;
+        x->mapSize    = PIZ_DEFAULT_SIZE_MAP;
+        x->vectorSize = PIZ_DEFAULT_SIZE_VECTOR;
+        x->range      = PIZ_DEFAULT_RANGE;
+        x->training   = PIZ_DEFAULT_TRAINING;
+        x->step       = PIZ_DEFAULT_STEP;
         
         if (argc && ((argv[0] > 0) && (argv[0] <= PIZ_MAXIMUM_SIZE_MAP))) {
             x->mapSize  = argv[0];
@@ -133,10 +133,10 @@ PIZError pizKohonenMapAdd(PIZKohonenMap *x, long argc, long *argv)
                 
     for (t = 0; t < k; t++) {
     //
-    long    i, j, winner = 0;
-    double  sigma, eta ;
-    double  dist1 = 0.;
-    double  dist2 = 0.;
+    long i, j, winner = 0;
+    double sigma, eta ;
+    double dist1 = 0.;
+    double dist2 = 0.;
     
     for (i = 0; i < x->vectorSize; i++) {
         dist1 += pow(x->map[i] - argv[(t * x->vectorSize) + i], 2);
@@ -196,8 +196,8 @@ PIZError pizKohonenMapProceed(PIZKohonenMap *x, long argc, long *argv)
     PIZError err = PIZ_ERROR;
     
     if (argc && argv) {
-        long    i;
-        double  *temp = NULL;
+        long i;
+        double *temp = NULL;
         
         for (i = 0; i < argc; i++) {
             if ((i % x->vectorSize) == 0) {

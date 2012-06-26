@@ -92,8 +92,8 @@ PIZError pizSequenceDump(PIZSequence *x)
 
 PIZError pizSequenceRefresh(PIZSequence *x)
 {
-    long     i;
-    PIZNote  *note = NULL;
+    long i;
+    PIZNote *note = NULL;
     PIZError err = PIZ_GOOD; 
     
     if (x->flags) {
@@ -221,9 +221,9 @@ PIZError pizSequenceStep(PIZSequence *x)
     err = PIZ_GOOD;
     
     if (x->timeline[x->index] && (count = pizLinklistCount(x->timeline[x->index]))) {
-        long    i = 0;
-        ulong   mask = ~0UL;
-        long    scale = pizArrayCount(x->scale);
+        long i = 0;
+        ulong mask = ~0UL;
+        long scale = pizArrayCount(x->scale);
         PIZNote *note = NULL;
         PIZNote *nextNote = NULL;
         
@@ -328,7 +328,7 @@ PIZError pizSequenceAddNotification(PIZSequence *x, PIZEventCode n, long ac, lon
 
 ulong pizSequenceStepMask(PIZSequence *x, long n, long count)
 {
-    long  i;
+    long i;
     ulong mask = (1UL << n) - 1UL;
     
     for (i = (count - 1); i > 0; i--)  {

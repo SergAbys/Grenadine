@@ -68,7 +68,7 @@ PIZFiniteState *pizFiniteStateNew(long argc, long *argv)
     PIZFiniteState *x = NULL;
 
     if (x = (PIZFiniteState *)malloc(sizeof(PIZFiniteState))) {
-        long     i;
+        long i;
         PIZError err = PIZ_GOOD;
         
         if (x->stock = (PIZFiniteStateNode *)malloc(PIZ_ITEMSET_SIZE * sizeof(PIZFiniteStateNode))) {
@@ -366,9 +366,9 @@ PIZ_INLINE PIZError pizFiniteStateMergeNodes(PIZFiniteState *x)
             err = PIZ_GOOD;
             
         } else {
-            long        j, a, b;
-            PIZItemset  tempChilds;
-            PIZItemset  tempParents;
+            long j, a, b;
+            PIZItemset tempChilds;
+            PIZItemset tempParents;
             
             x->count --;
             

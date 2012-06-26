@@ -32,12 +32,6 @@ typedef struct _tralalaSymbols {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_parseInit  (t_tralalaSymbols *table);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 #define TLL_NOTE    (tll_table.sym_note)
 #define TLL_CLEAR   (tll_table.sym_clear)
 #define TLL_TRALALA (tll_table.sym_tralala)
@@ -47,6 +41,7 @@ void tralala_parseInit  (t_tralalaSymbols *table);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+void tralala_parseInit          (t_tralalaSymbols *table);
 
 void tralala_parseDictionary    (t_tralala *x, t_dictionary *d);
 void tralala_parseMessage       (t_tralala *x, t_symbol *s, long argc, t_atom *argv);

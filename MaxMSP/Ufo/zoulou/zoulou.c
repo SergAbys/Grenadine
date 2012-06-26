@@ -22,8 +22,14 @@
 
 #define MAXIMUM_SIZE_LIST           256
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 #define DEFAULT_BACKWARD            2
 #define DEFAULT_STRAIGHT            0.25
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
 #define PIZ_FACTOR_ORACLE_REFER     0
 #define PIZ_FACTOR_ORACLE_LRS       1
@@ -76,7 +82,7 @@ PIZ_INLINE PIZError pizFactorOracleEncodeToArray            (const PIZFactorOrac
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-static t_class  *zoulou_class;
+static t_class *zoulou_class;
 
 static t_symbol *zoulou_sym_dumpout = NULL;
 static t_symbol *zoulou_sym_node = NULL;
@@ -90,31 +96,29 @@ int main(void)
     
     c = class_new("zoulou", (method)zoulou_new, (method)zoulou_free, (long)sizeof(t_zoulou), 0L, A_GIMME, 0);
 
-    class_addmethod(c, (method)zoulou_assist,          "assist",   A_CANT, 0); 
-    class_addmethod(c, (method)zoulou_learn,           "learn",    A_GIMME, 0);
-    class_addmethod(c, (method)zoulou_int,             "int",      A_LONG, 0);
-    class_addmethod(c, (method)zoulou_dump,            "dump",     A_DEFLONG, 0);
-    class_addmethod(c, (method)zoulou_clear,           "clear",    0);
-    class_addmethod(c, (method)object_obex_dumpout,    "dumpout",  A_CANT, 0); 
+    class_addmethod(c, (method)zoulou_assist,       "assist",   A_CANT, 0); 
+    class_addmethod(c, (method)zoulou_learn,        "learn",    A_GIMME, 0);
+    class_addmethod(c, (method)zoulou_int,          "int",      A_LONG, 0);
+    class_addmethod(c, (method)zoulou_dump,         "dump",     A_DEFLONG, 0);
+    class_addmethod(c, (method)zoulou_clear,        "clear",    0);
+    class_addmethod(c, (method)object_obex_dumpout, "dumpout",  A_CANT, 0); 
 
-    CLASS_ATTR_DOUBLE       (c, "straightratio",        0, t_zoulou, straightRatio);
-    CLASS_ATTR_LABEL        (c, "straightratio",        0, "Straight Ratio");
-    CLASS_ATTR_ACCESSORS    (c, "straightratio",        NULL, zoulou_setStraightRatio);
-    CLASS_ATTR_FILTER_CLIP  (c, "straightratio",        0., 1.);
-    
-    CLASS_ATTR_LONG         (c, "backwardthreshold",    0, t_zoulou, backwardThreshold);
-    CLASS_ATTR_LABEL        (c, "backwardthreshold",    0, "Backward Threshold");
-    CLASS_ATTR_ACCESSORS    (c, "backwardthreshold",    NULL, zoulou_setBackwardThreshold);
-    CLASS_ATTR_FILTER_MIN   (c, "backwardthreshold",    0);
-    
-    CLASS_ATTR_ORDER        (c, "straightratio",        0, "1");
-    CLASS_ATTR_ORDER        (c, "backwardthreshold",    0, "2");
+    CLASS_ATTR_DOUBLE(c,        "straightratio",        0, t_zoulou, straightRatio);
+    CLASS_ATTR_LONG(c,          "backwardthreshold",    0, t_zoulou, backwardThreshold);
+    CLASS_ATTR_LABEL(c,         "straightratio",        0, "Straight Ratio");
+    CLASS_ATTR_LABEL(c,         "backwardthreshold",    0, "Backward Threshold");
+    CLASS_ATTR_ACCESSORS(c,     "straightratio",        NULL, zoulou_setStraightRatio);
+    CLASS_ATTR_ACCESSORS(c,     "backwardthreshold",    NULL, zoulou_setBackwardThreshold);
+    CLASS_ATTR_FILTER_CLIP(c,   "straightratio",        0., 1.);
+    CLASS_ATTR_FILTER_MIN(c,    "backwardthreshold",    0);
+    CLASS_ATTR_ORDER(c,         "straightratio",        0, "1");
+    CLASS_ATTR_ORDER(c,         "backwardthreshold",    0, "2");
 
-    zoulou_sym_dumpout      = gensym("dumpout");
-    zoulou_sym_node         = gensym("node");
-    zoulou_sym_ref          = gensym("ref");
-    zoulou_sym_lrs          = gensym("lrs");
-    zoulou_sym_arc          = gensym("arc");
+    zoulou_sym_dumpout = gensym("dumpout");
+    zoulou_sym_node    = gensym("node");
+    zoulou_sym_ref     = gensym("ref");
+    zoulou_sym_lrs     = gensym("lrs");
+    zoulou_sym_arc     = gensym("arc");
     
     class_register(CLASS_BOX, c); 
     
@@ -141,7 +145,7 @@ void *zoulou_new(t_symbol *s, long argc, t_atom *argv)
         x->straightRatio     = DEFAULT_STRAIGHT;
         x->backwardThreshold = DEFAULT_BACKWARD;
         
-        x->rightOutlet  = outlet_new(x, NULL);
+        x->rightOutlet = outlet_new(x, NULL);
         object_obex_store((void *)x, zoulou_sym_dumpout, (t_object *)x->rightOutlet);
         x->leftOutlet = listout((t_object *)x);
                 
@@ -228,9 +232,9 @@ void zoulou_learn(t_zoulou *x, t_symbol *s, long argc, t_atom *argv)
 
 void zoulou_int(t_zoulou *x, long n)
 {   
-    char    alloc;
-    t_atom  *argv = NULL;
-    long    argc = 0;
+    char alloc;
+    t_atom *argv = NULL;
+    long argc = 0;
 
     if ((n > 0) && (atom_alloc_array(MIN(n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
     //
@@ -277,8 +281,8 @@ void zoulou_dump(t_zoulou *x, long n)
     
     if (!err) {
     //
-    long    i, k, ref, lrs;
-    t_atom  result[4];
+    long i, k, ref, lrs;
+    t_atom result[4];
     
     ref = pizArrayAtIndex(values, PIZ_FACTOR_ORACLE_REFER);
     lrs = pizArrayAtIndex(values, PIZ_FACTOR_ORACLE_LRS);
@@ -329,7 +333,7 @@ PIZ_INLINE void pizFactorOracleSetStraightRatio(PIZFactorOracle *x, double f)
 
 PIZ_INLINE PIZError pizFactorOracleEncodeToArray(const PIZFactorOracle *x, long node, PIZArray *a)
 {
-    long     i, count;
+    long i, count;
     PIZError err = PIZ_ERROR;
     
     if ((node < x->index) && a) {

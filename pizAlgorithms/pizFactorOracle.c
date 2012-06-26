@@ -255,8 +255,8 @@ PIZError pizFactorOracleProceed(PIZFactorOracle *x, long argc, long *argv)
     err = PIZ_GOOD;
 
     while (argc) {
-        long                t = false;
-        double              h = rand_r(&x->seed) / (RAND_MAX + 1.0);
+        long t = false;
+        double h = rand_r(&x->seed) / (RAND_MAX + 1.0);
         PIZFactorOracleNode *p = NULL;
         
         if (x->shuttle == (x->index - 1)) {

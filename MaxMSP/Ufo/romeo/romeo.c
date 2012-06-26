@@ -22,6 +22,9 @@
 
 #define MAXIMUM_SIZE_LIST               256
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 #define PIZ_GALOIS_LATTICE_CONCEPTS     0
 #define PIZ_GALOIS_LATTICE_DATA         1
 
@@ -72,12 +75,12 @@ int main(void)
     
     c = class_new("romeo", (method)romeo_new, (method)romeo_free, (long)sizeof(t_romeo), 0L, A_GIMME, 0);
 
-    class_addmethod(c, (method)romeo_assist,           "assist",   A_CANT, 0); 
-    class_addmethod(c, (method)romeo_learn,            "learn",    A_GIMME, 0);
-    class_addmethod(c, (method)romeo_int,              "int",      A_LONG, 0);
-    class_addmethod(c, (method)romeo_dump,             "dump",     A_LONG, 0);
-    class_addmethod(c, (method)romeo_clear,            "clear",    0);
-    class_addmethod(c, (method)object_obex_dumpout,    "dumpout",  A_CANT, 0); 
+    class_addmethod(c, (method)romeo_assist,        "assist",   A_CANT, 0); 
+    class_addmethod(c, (method)romeo_learn,         "learn",    A_GIMME, 0);
+    class_addmethod(c, (method)romeo_int,           "int",      A_LONG, 0);
+    class_addmethod(c, (method)romeo_dump,          "dump",     A_LONG, 0);
+    class_addmethod(c, (method)romeo_clear,         "clear",    0);
+    class_addmethod(c, (method)object_obex_dumpout, "dumpout",  A_CANT, 0); 
 
     class_register(CLASS_BOX, c); 
     
@@ -168,9 +171,9 @@ void romeo_learn(t_romeo *x, t_symbol *s, long argc, t_atom *argv)
 
 void romeo_int(t_romeo *x, long n)
 {   
-    char    alloc;
-    t_atom  *argv = NULL;
-    long    argc = 0;
+    char alloc;
+    t_atom *argv = NULL;
+    long argc = 0;
 
     if ((n > 0) && (atom_alloc_array(MIN(n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
     //
@@ -206,9 +209,9 @@ void romeo_clear(t_romeo *x)
 
 void romeo_dump(t_romeo *x, long n)
 {
-    char    alloc;
-    t_atom  *argv = NULL;
-    long    argc = 0;
+    char alloc;
+    t_atom *argv = NULL;
+    long argc = 0;
 
     if (atom_alloc_array(n, &argc, &argv, &alloc) == MAX_ERR_NONE) {
     //

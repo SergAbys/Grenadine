@@ -71,14 +71,14 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_AGENT_LOCK_EVENT                pthread_mutex_lock      (&x->eventLock);
-#define PIZ_AGENT_UNLOCK_EVENT              pthread_mutex_unlock    (&x->eventLock);
+#define PIZ_AGENT_LOCK_EVENT                pthread_mutex_lock(&x->eventLock);
+#define PIZ_AGENT_UNLOCK_EVENT              pthread_mutex_unlock(&x->eventLock);
 
-#define PIZ_AGENT_LOCK_NOTIFICATION         pthread_mutex_lock      (&x->notificationLock);
-#define PIZ_AGENT_UNLOCK_NOTIFICATION       pthread_mutex_unlock    (&x->notificationLock);
+#define PIZ_AGENT_LOCK_NOTIFICATION         pthread_mutex_lock(&x->notificationLock);
+#define PIZ_AGENT_UNLOCK_NOTIFICATION       pthread_mutex_unlock(&x->notificationLock);
 
-#define PIZ_AGENT_LOCK_OBSERVER             pthread_mutex_lock      (&x->observerLock);
-#define PIZ_AGENT_UNLOCK_OBSERVER           pthread_mutex_unlock    (&x->observerLock);
+#define PIZ_AGENT_LOCK_OBSERVER             pthread_mutex_lock(&x->observerLock);
+#define PIZ_AGENT_UNLOCK_OBSERVER           pthread_mutex_unlock(&x->observerLock);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

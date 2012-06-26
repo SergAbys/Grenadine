@@ -16,12 +16,12 @@
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _quebec {
-    t_object        ob;
-    t_object        *patcher;
-    t_object        *firstview;
-    t_symbol        *title;
-    void            *leftOutlet;
-    void            *rightOutlet;
+    t_object    ob;
+    t_object    *patcher;
+    t_object    *firstview;
+    t_symbol    *title;
+    void        *leftOutlet;
+    void        *rightOutlet;
     } t_quebec;
     
 // -------------------------------------------------------------------------------------------------------------
@@ -71,12 +71,12 @@ void *quebec_new(t_symbol *s, long argc, t_atom *argv)
     
     if (x = (t_quebec *)object_alloc(quebec_class)) { 
     //      
-    x->patcher      = NULL;
-    x->firstview    = NULL;
-    x->title        = NULL;
+    x->patcher     = NULL;
+    x->firstview   = NULL;
+    x->title       = NULL;
     
-    x->rightOutlet  = outlet_new((t_object *)x, NULL);
-    x->leftOutlet   = bangout((t_object *)x);
+    x->rightOutlet = outlet_new((t_object *)x, NULL);
+    x->leftOutlet  = bangout((t_object *)x);
     
     object_obex_lookup(x, gensym("#P"), &x->patcher); 
     

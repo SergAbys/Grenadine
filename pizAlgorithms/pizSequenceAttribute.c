@@ -188,7 +188,7 @@ PIZError pizSequenceSetScale(PIZSequence *x, const PIZEvent *event)
     x->type = CLAMP(argv[1], PIZ_MODE_NONE, PIZ_SEVENTH_FLAT_FIVE);
     
     if (x->type != PIZ_MODE_NONE) {
-        long       i;
+        long i;
         const long *ptr = NULL;
         
         ptr = pizSequenceModes + (x->type * PIZ_MAGIC_SCALE); 
@@ -207,8 +207,8 @@ PIZError pizSequenceSetScale(PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceSetPattern(PIZSequence *x, const PIZEvent *event)
 {
-    long     argc;
-    long     *argv = NULL;
+    long argc;
+    long *argv = NULL;
     PIZError err = PIZ_GOOD;
 
     pizArrayClear(x->pattern);

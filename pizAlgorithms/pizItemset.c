@@ -45,7 +45,7 @@
 
 void pizItemsetSetAtIndex(PIZItemset *itemset, long index)
 {
-    long  i, p;
+    long i, p;
     ulong m;
     
     i = index / PIZ_MAGIC_ULONG;
@@ -58,7 +58,7 @@ void pizItemsetSetAtIndex(PIZItemset *itemset, long index)
 
 void pizItemsetUnsetAtIndex(PIZItemset *itemset, long index) 
 {
-    long  i, p;
+    long i, p;
     ulong m;
     
     i = index / PIZ_MAGIC_ULONG;
@@ -96,7 +96,7 @@ long pizItemsetCount(const PIZItemset *itemset)
 
 bool pizItemsetIsSetAtIndex(const PIZItemset *itemset, long index) 
 {
-    long  i, p;
+    long i, p;
     ulong k = 0;
 
     i = index / PIZ_MAGIC_ULONG;

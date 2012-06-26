@@ -23,7 +23,13 @@
 
 #define MAXIMUM_SIZE_LIST                   256
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 #define DEFAULT_PERSISTENCE                 0.5
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 
 #define PIZ_SIZE_ALPHABET                   128
 #define PIZ_MARKOV_MODEL_START              0
@@ -74,7 +80,7 @@ PIZ_INLINE PIZError pizMarkovModelEncodeToArray     (const PIZMarkovModel *x, lo
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-static t_class  *foxtrot_class;
+static t_class *foxtrot_class;
 
 static t_symbol *foxtrot_sym_dumpout     = NULL;
 static t_symbol *foxtrot_sym_start       = NULL;
@@ -88,17 +94,17 @@ t_class *c = NULL;
 
 c = class_new("foxtrot", (method)foxtrot_new, (method)foxtrot_free, (long)sizeof(t_foxtrot), 0L, A_GIMME, 0);
 
-class_addmethod(c, (method)foxtrot_assist,         "assist",   A_CANT, 0);
-class_addmethod(c, (method)foxtrot_learn,          "learn",    A_GIMME, 0);
-class_addmethod(c, (method)foxtrot_int,            "int",      A_LONG, 0);
-class_addmethod(c, (method)foxtrot_dump,           "dump",     A_DEFLONG, 0);
-class_addmethod(c, (method)foxtrot_clear,          "clear",    0);
-class_addmethod(c, (method)object_obex_dumpout,    "dumpout",  A_CANT, 0);
+class_addmethod(c, (method)foxtrot_assist,      "assist",   A_CANT, 0);
+class_addmethod(c, (method)foxtrot_learn,       "learn",    A_GIMME, 0);
+class_addmethod(c, (method)foxtrot_int,         "int",      A_LONG, 0);
+class_addmethod(c, (method)foxtrot_dump,        "dump",     A_DEFLONG, 0);
+class_addmethod(c, (method)foxtrot_clear,       "clear",    0);
+class_addmethod(c, (method)object_obex_dumpout, "dumpout",  A_CANT, 0);
 
-CLASS_ATTR_DOUBLE       (c, "persistence",      0, t_foxtrot, persistence);
-CLASS_ATTR_LABEL        (c, "persistence",      0, "Learning Persistence");
-CLASS_ATTR_ACCESSORS    (c, "persistence",      NULL, foxtrot_setPersistence);
-CLASS_ATTR_FILTER_MIN   (c, "persistence",      0.);
+CLASS_ATTR_DOUBLE(c,        "persistence",      0, t_foxtrot, persistence);
+CLASS_ATTR_LABEL(c,         "persistence",      0, "Learning Persistence");
+CLASS_ATTR_ACCESSORS(c,     "persistence",      NULL, foxtrot_setPersistence);
+CLASS_ATTR_FILTER_MIN(c,    "persistence",      0.);
 
 foxtrot_sym_dumpout     = gensym("dumpout");
 foxtrot_sym_start       = gensym("start");
@@ -123,7 +129,7 @@ void *foxtrot_new(t_symbol *s, long argc, t_atom *argv)
     
     if (x = (t_foxtrot *)object_alloc(foxtrot_class)) {
     //
-    long k[2] = {0, 0};
+    long k[2] = { 0, 0 };
     
     if (argc && atom_gettype(argv) == A_LONG) {
         k[0] = atom_getlong(argv);
@@ -217,9 +223,9 @@ void foxtrot_learn(t_foxtrot *x, t_symbol *s, long argc, t_atom *argv)
 
 void foxtrot_int(t_foxtrot *x, long n)
 {
-    char    alloc;
-    t_atom  *argv = NULL;
-    long    argc = 0;
+    char alloc;
+    t_atom *argv = NULL;
+    long argc = 0;
 
     if ((n > 0) && (atom_alloc_array(MIN(n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
     //
@@ -255,11 +261,10 @@ void foxtrot_clear(t_foxtrot *x)
 
 void foxtrot_dump(t_foxtrot *x, long n)
 {
-    char     alloc;
-    long     size;
-    long     argc = 0;
+    char alloc;
+    long size, argc = 0;
     PIZError err = PIZ_GOOD;
-    t_atom   *argv = NULL;
+    t_atom *argv = NULL;
     PIZArray *values = pizArrayNew(256);
     
     LOCK

@@ -21,11 +21,14 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define MAXIMUM_SIZE_LIST       256
+#define MAXIMUM_SIZE_LIST   256
 
-#define DEFAULT_RANGE           10
-#define DEFAULT_TRAINING        60
-#define DEFAULT_STEP            1.
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define DEFAULT_RANGE       10
+#define DEFAULT_TRAINING    60
+#define DEFAULT_STEP        1.
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -67,16 +70,16 @@ void        charlie_clear           (t_charlie *x);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_INLINE void     pizKohonenMapSetRange           (PIZKohonenMap *x, long n);
-PIZ_INLINE void     pizKohonenMapSetTraining        (PIZKohonenMap *x, long n);
-PIZ_INLINE void     pizKohonenMapSetStep            (PIZKohonenMap *x, double f);
-PIZ_INLINE PIZError pizKohonenMapEncodeToArray      (const PIZKohonenMap *x, long n, PIZArray *a);
+PIZ_INLINE void     pizKohonenMapSetRange       (PIZKohonenMap *x, long n);
+PIZ_INLINE void     pizKohonenMapSetTraining    (PIZKohonenMap *x, long n);
+PIZ_INLINE void     pizKohonenMapSetStep        (PIZKohonenMap *x, double f);
+PIZ_INLINE PIZError pizKohonenMapEncodeToArray  (const PIZKohonenMap *x, long n, PIZArray *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-static t_class  *charlie_class;
+static t_class *charlie_class;
 
 int main(void)
 {   
@@ -85,31 +88,28 @@ t_class *c = NULL;
 
 c = class_new("charlie", (method)charlie_new, (method)charlie_free, (long)sizeof(t_charlie), 0L, A_GIMME, 0);
 
-class_addmethod(c, (method)charlie_assist,         "assist",   A_CANT, 0);
-class_addmethod(c, (method)charlie_learn,          "learn",    A_GIMME, 0);
-class_addmethod(c, (method)charlie_int,            "int",      A_LONG, 0);
-class_addmethod(c, (method)charlie_dump,           "dump",     A_DEFLONG, 0);
-class_addmethod(c, (method)charlie_clear,          "clear",    0);
-class_addmethod(c, (method)object_obex_dumpout,    "dumpout",  A_CANT, 0);
+class_addmethod(c, (method)charlie_assist,      "assist",   A_CANT, 0);
+class_addmethod(c, (method)charlie_learn,       "learn",    A_GIMME, 0);
+class_addmethod(c, (method)charlie_int,         "int",      A_LONG, 0);
+class_addmethod(c, (method)charlie_dump,        "dump",     A_DEFLONG, 0);
+class_addmethod(c, (method)charlie_clear,       "clear",    0);
+class_addmethod(c, (method)object_obex_dumpout, "dumpout",  A_CANT, 0);
 
-CLASS_ATTR_LONG         (c, "range",        0, t_charlie, range);
-CLASS_ATTR_LABEL        (c, "range",        0, "Range of Neighborhood Influence");
-CLASS_ATTR_ACCESSORS    (c, "range",        NULL, charlie_setRange);
-CLASS_ATTR_FILTER_MIN   (c, "range",        1);
-
-CLASS_ATTR_LONG         (c, "training",     0, t_charlie, training);
-CLASS_ATTR_LABEL        (c, "training",     0, "Training Iterations");
-CLASS_ATTR_ACCESSORS    (c, "training",     NULL, charlie_setTraining);
-CLASS_ATTR_FILTER_MIN   (c, "training",     1);
-
-CLASS_ATTR_DOUBLE       (c, "step",         0, t_charlie, step);
-CLASS_ATTR_LABEL        (c, "step",         0, "Learning Step");
-CLASS_ATTR_ACCESSORS    (c, "step",         NULL, charlie_setStep);
-CLASS_ATTR_FILTER_MIN   (c, "step",         0.);
-
-CLASS_ATTR_ORDER        (c, "range",        0, "1");
-CLASS_ATTR_ORDER        (c, "training",     0, "2");
-CLASS_ATTR_ORDER        (c, "step",         0, "3");
+CLASS_ATTR_LONG(c,          "range",        0, t_charlie, range);
+CLASS_ATTR_LONG(c,          "training",     0, t_charlie, training);
+CLASS_ATTR_DOUBLE(c,        "step",         0, t_charlie, step);
+CLASS_ATTR_LABEL(c,         "range",        0, "Range of Neighborhood Influence");
+CLASS_ATTR_LABEL(c,         "training",     0, "Training Iterations");
+CLASS_ATTR_LABEL(c,         "step",         0, "Learning Step");
+CLASS_ATTR_ACCESSORS(c,     "range",        NULL, charlie_setRange);
+CLASS_ATTR_ACCESSORS(c,     "training",     NULL, charlie_setTraining);
+CLASS_ATTR_ACCESSORS(c,     "step",         NULL, charlie_setStep);
+CLASS_ATTR_FILTER_MIN(c,    "range",        1);
+CLASS_ATTR_FILTER_MIN(c,    "training",     1);
+CLASS_ATTR_FILTER_MIN(c,    "step",         0.);
+CLASS_ATTR_ORDER(c,         "range",        0, "1");
+CLASS_ATTR_ORDER(c,         "training",     0, "2");
+CLASS_ATTR_ORDER(c,         "step",         0, "3");
 
 class_register(CLASS_BOX, c); 
 
@@ -129,7 +129,7 @@ void *charlie_new(t_symbol *s, long argc, t_atom *argv)
     
     if (x = (t_charlie *)object_alloc(charlie_class)) {
     //
-    long k[2] = {0, 0};
+    long k[2] = { 0, 0 };
     
     if (argc && atom_gettype(argv) == A_LONG) {
         k[0] = atom_getlong(argv);
@@ -148,7 +148,7 @@ void *charlie_new(t_symbol *s, long argc, t_atom *argv)
         x->training = DEFAULT_TRAINING;
         x->step     = DEFAULT_STEP;
         
-        x->rightOutlet  = outlet_new(x, NULL);
+        x->rightOutlet = outlet_new(x, NULL);
         object_obex_store((void *)x, gensym("dumpout"), (t_object *)x->rightOutlet);
         x->leftOutlet = listout((t_object *)x);
                 
@@ -186,6 +186,7 @@ void charlie_assist(t_charlie *x, void *b, long m, long a, char *s)
 {
     if (m == ASSIST_INLET)  { 
         sprintf(s, "(int) learn clear dump");
+        
     } else {   
         switch (a) {
             case 0 : sprintf(s, "(list) Navigate"); break;
@@ -244,9 +245,9 @@ void charlie_learn(t_charlie *x, t_symbol *s, long argc, t_atom *argv)
 
 void charlie_int(t_charlie *x, long n)
 {
-    char     alloc;
-    t_atom   *argv = NULL;
-    long     argc = 0;
+    char alloc;
+    t_atom *argv = NULL;
+    long argc = 0;
     PIZError err = PIZ_ERROR;
     
     if ((n > 0) && (atom_alloc_array(MIN(n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
@@ -281,10 +282,10 @@ void charlie_clear(t_charlie *x)
 
 void charlie_dump(t_charlie *x, long n)
 {
-    char     alloc;
-    long     size, argc = 0;
+    char alloc;
+    long size, argc = 0;
     PIZError err = PIZ_GOOD;
-    t_atom   *argv = NULL;
+    t_atom *argv = NULL;
     PIZArray *values = pizArrayNew(4);
     
     LOCK

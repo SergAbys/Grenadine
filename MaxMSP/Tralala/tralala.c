@@ -182,9 +182,9 @@ void tralala_dblclick(t_tralala *x)
 
 void tralala_callback(void *ptr, PIZEvent *event)
 {
-    long         k, argc = 0;
-    long         *argv = NULL;
-    t_tralala    *x = NULL;
+    long k, argc = 0;
+    long *argv = NULL;
+    t_tralala *x = NULL;
     PIZEventCode code;
     
     x = (t_tralala *)ptr;

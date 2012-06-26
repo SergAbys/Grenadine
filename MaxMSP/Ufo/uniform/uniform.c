@@ -55,7 +55,7 @@ void uniform_clear      (t_uniform *x);
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-static t_class  *uniform_class;
+static t_class *uniform_class;
 
 int main(void)
 {   
@@ -64,11 +64,11 @@ t_class *c = NULL;
 
 c = class_new("uniform", (method)uniform_new, (method)uniform_free, (long)sizeof(t_uniform), 0L, A_GIMME, 0);
 
-class_addmethod(c, (method)uniform_assist,         "assist",   A_CANT, 0); 
-class_addmethod(c, (method)uniform_learn,          "learn",    A_GIMME, 0);
-class_addmethod(c, (method)uniform_int,            "int",      A_LONG, 0);
-class_addmethod(c, (method)uniform_clear,          "clear",    0);
-class_addmethod(c, (method)object_obex_dumpout,    "dumpout",  A_CANT, 0); 
+class_addmethod(c, (method)uniform_assist,      "assist",   A_CANT, 0); 
+class_addmethod(c, (method)uniform_learn,       "learn",    A_GIMME, 0);
+class_addmethod(c, (method)uniform_int,         "int",      A_LONG, 0);
+class_addmethod(c, (method)uniform_clear,       "clear",    0);
+class_addmethod(c, (method)object_obex_dumpout, "dumpout",  A_CANT, 0); 
 
 class_register(CLASS_BOX, c); 
 
@@ -160,9 +160,9 @@ void uniform_learn(t_uniform *x, t_symbol *s, long argc, t_atom *argv)
 
 void uniform_int(t_uniform *x, long n)
 {   
-    char    alloc;
-    t_atom  *argv = NULL;
-    long    argc = 0;
+    char alloc;
+    t_atom *argv = NULL;
+    long argc = 0;
 
     if ((n > 0) && (atom_alloc_array(MIN(n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
     //

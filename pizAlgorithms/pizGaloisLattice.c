@@ -449,8 +449,8 @@ PIZ_INLINE void pizGaloisLatticeReconnect(PIZGaloisLattice *x, long g, long n)
 
 PIZError pizGaloisLatticeMakeMap(PIZGaloisLattice *x)
 {
-    long     k = -1;
-    long     i, j = 0;
+    long k = -1;
+    long i, j = 0;
     PIZError err = PIZ_GOOD;
     
     x->targetedConcept = -1;

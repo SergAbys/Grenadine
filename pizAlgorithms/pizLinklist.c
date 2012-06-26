@@ -72,7 +72,7 @@ void pizLinklistFree(PIZLinklist *x)
 
 PIZError pizLinklistAppend(PIZLinklist *x, void *ptr)
 {
-    PIZError           err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     PIZLinklistElement *newElement = NULL;
     
     if (ptr) {
@@ -114,7 +114,7 @@ PIZError pizLinklistAppend(PIZLinklist *x, void *ptr)
 /*
 PIZError pizLinklistInsert(PIZLinklist *x, void *ptr)
 {
-    PIZError           err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     PIZLinklistElement *newElement = NULL;
     
     if (ptr) {
@@ -184,8 +184,8 @@ void pizLinklistClear(PIZLinklist *x)
 
 PIZError pizLinklistPtrAtIndex(PIZLinklist *x, long index, void **ptr)
 {
-    long               i = 0;
-    PIZError           err = PIZ_ERROR;
+    long i = 0;
+    PIZError err = PIZ_ERROR;
     PIZLinklistElement *theElement = NULL;
     
     if (*ptr) {
@@ -215,7 +215,7 @@ PIZError pizLinklistPtrAtIndex(PIZLinklist *x, long index, void **ptr)
 
 PIZError pizLinklistNextWithPtr(PIZLinklist *x, void *ptr, void **nextPtr)
 {
-    PIZError           err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     PIZLinklistElement *matchedElement = NULL;
     
     if (*nextPtr) {
@@ -252,7 +252,7 @@ PIZError pizLinklistNextWithPtr(PIZLinklist *x, void *ptr, void **nextPtr)
 
 PIZError pizLinklistRemoveWithPtr(PIZLinklist *x, void *ptr)
 {
-    PIZError           err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     PIZLinklistElement *toBeRemoved = NULL;
     
     if (x->cache && x->cache->previous && (x->cache->previous->ptr == ptr)) {
@@ -315,7 +315,7 @@ PIZError pizLinklistRemoveWithPtr(PIZLinklist *x, void *ptr)
 
 PIZError pizLinklistChuckWithPtr(PIZLinklist *x, void *ptr)
 {
-    PIZError           err = PIZ_ERROR;
+    PIZError err = PIZ_ERROR;
     PIZLinklistElement *toBeChucked = NULL;
     
     if (x->cache && x->cache->previous && (x->cache->previous->ptr == ptr)) {

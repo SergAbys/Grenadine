@@ -123,7 +123,7 @@ void *pizAgentEventLoop(void *agent)
     PIZ_AGENT_LOCK_EVENT
     
     while (!(pizAgentEventLoopIsCondition(x))) {
-        pthread_cond_wait (&x->eventCondition, &x->eventLock);
+        pthread_cond_wait(&x->eventCondition, &x->eventLock);
         x->flags |= PIZ_AGENT_FLAG_INIT;
         if (PIZ_EXIT) { 
             break; 
@@ -230,11 +230,11 @@ void pizAgentAddNotification(PIZAgent *x, PIZEventCode n, long ac, long *av)
 
 PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q) 
 {
-    PIZError        err = PIZ_GOOD;
-    PIZEventCode    code;
-    PIZMethodError  f = NULL;
-    PIZEvent        *event = NULL;
-    void            *o = NULL;
+    PIZError err = PIZ_GOOD;
+    PIZEventCode code;
+    PIZMethodError f = NULL;
+    PIZEvent *event = NULL;
+    void *o = NULL;
             
     PIZ_AGENT_LOCK_EVENT
     
@@ -271,8 +271,8 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
 
 void pizAgentEventLoopDoStep(PIZAgent *x, bool blank)
 {   
-    long     count;
-    bool     k = false;
+    long count;
+    bool k = false;
     PIZError err = PIZ_GOOD; 
     
     do {
@@ -325,7 +325,7 @@ void pizAgentEventLoopDoStep(PIZAgent *x, bool blank)
 
 void pizAgentEventLoopDoRefresh(PIZAgent *x)
 {
-    long     count;
+    long count;
     PIZError err = PIZ_ERROR;
     
     PIZ_AGENT_LOCK_NOTIFICATION
@@ -355,6 +355,7 @@ void pizAgentEventLoopInit(PIZAgent *x)
     if (x->flags & PIZ_AGENT_FLAG_INIT) {
         pizTimeSet(&x->grainStart);
         x->flags &= ~PIZ_AGENT_FLAG_INIT;
+        
     } else {
         pizTimeCopy(&x->grainStart, &x->grainEnd);
     }
@@ -371,11 +372,11 @@ void pizAgentEventLoopSleep(PIZAgent *x)
     
     if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
     //
-    PIZNano          ns;
-    struct timespec  t0, t1;
-    struct timespec* ptrA = &t0;
-    struct timespec* ptrB = &t1;
-    struct timespec* temp = NULL;
+    PIZNano ns;
+    struct timespec t0, t1;
+    struct timespec *ptrA = &t0;
+    struct timespec *ptrB = &t1;
+    struct timespec *temp = NULL;
     
     PIZError err = PIZ_GOOD;
     
@@ -403,7 +404,7 @@ void pizAgentEventLoopSleep(PIZAgent *x)
     }
 }
 
-bool pizAgentEventLoopIsCondition (PIZAgent *x)
+bool pizAgentEventLoopIsCondition(PIZAgent *x)
 {
     bool condition = false;
     
@@ -419,7 +420,7 @@ bool pizAgentEventLoopIsCondition (PIZAgent *x)
 
 bool pizAgentEventLoopIsWorkTime(PIZAgent *x)
 {
-    bool    isWorkTime = false;
+    bool isWorkTime = false;
     PIZTime now;
     PIZNano elapsed;
     PIZNano timeOut;

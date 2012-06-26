@@ -77,15 +77,15 @@ PIZNeuralGas *pizNeuralGasNew(long argc, long *argv)
     if (x->headStock = (PIZNeuralGasHead *)malloc(PIZ_ITEMSET_SIZE * sizeof(PIZNeuralGasHead))) {
         long k, i;
         
-        x->count         = 0;
-        x->vectorSize    = PIZ_DEFAULT_SIZE_VECTOR;
-        x->maximumSize   = PIZ_DEFAULT_MAXIMUM_SIZE;
-        x->lambda        = PIZ_DEFAULT_LAMBDA;
-        x->epsilon1      = PIZ_DEFAULT_EPSILON1;
-        x->epsilon2      = PIZ_DEFAULT_EPSILON2;
-        x->alpha         = PIZ_DEFAULT_ALPHA;
-        x->beta          = PIZ_DEFAULT_BETA;
-        x->kappa         = PIZ_DEFAULT_KAPPA;
+        x->count       = 0;
+        x->vectorSize  = PIZ_DEFAULT_SIZE_VECTOR;
+        x->maximumSize = PIZ_DEFAULT_MAXIMUM_SIZE;
+        x->lambda      = PIZ_DEFAULT_LAMBDA;
+        x->epsilon1    = PIZ_DEFAULT_EPSILON1;
+        x->epsilon2    = PIZ_DEFAULT_EPSILON2;
+        x->alpha       = PIZ_DEFAULT_ALPHA;
+        x->beta        = PIZ_DEFAULT_BETA;
+        x->kappa       = PIZ_DEFAULT_KAPPA;
         
         x->seed = PIZ_SEED;
         
@@ -186,9 +186,9 @@ PIZError pizNeuralGasAdd(PIZNeuralGas *x, long argc, long *argv)
                 
     for (t = 0; t < k; t++) {
     //   
-    long   i, j;
-    long   winner1 = -1;
-    long   winner2 = -1;
+    long i, j;
+    long winner1 = -1;
+    long winner2 = -1;
     double dist1 = 0.;
     double dist2 = 0.;
     
@@ -205,6 +205,7 @@ PIZError pizNeuralGasAdd(PIZNeuralGas *x, long argc, long *argv)
                 winner2 = winner1;
                 dist1   = e;
                 winner1 = i;
+                
             } else if ((e < dist2) || (winner2 == -1)) {
                 dist2   = e;
                 winner2 = i;
@@ -230,9 +231,9 @@ PIZError pizNeuralGasAdd(PIZNeuralGas *x, long argc, long *argv)
     }
     
     if (!(x->count % x->lambda)) {
-        long   maxError1 = -1;
-        long   maxError2 = -1;
-        long   minUtility = -1;
+        long maxError1 = -1;
+        long maxError2 = -1;
+        long minUtility = -1;
         double maxError1Value = 0.;
         double maxError2Value = 0.;
         double minUtilityValue = 0.;
@@ -376,8 +377,8 @@ PIZError pizNeuralGasProceed(PIZNeuralGas *x, long argc, long *argv)
     
     if (argc && argv) {
     //
-    long    i;
-    double  *temp = NULL;
+    long i;
+    double *temp = NULL;
     
     for (i = 0; i < argc; i++) {
         if ((i % x->vectorSize) == 0) {

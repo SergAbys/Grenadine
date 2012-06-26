@@ -286,7 +286,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>415 299 538 418 0 0 1280 778 </string>
+								<string>192 263 538 418 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -425,8 +425,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D63DC41577D460008D8705</string>
-				<string>96D63DC51577D460008D8705</string>
+				<string>96C5B892159A292A0002093C</string>
+				<string>96C5B893159A292A0002093C</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -463,7 +463,7 @@
 		<string>/Users/jeantoto/Dev/Grenadine/MaxMSP/Ufo/yankee/yankee.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>415 299 538 418 0 0 1280 778 </string>
+	<string>192 263 538 418 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -677,7 +677,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D63DC61577D460008D8705</string>
+				<string>96C5B894159A292A0002093C</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

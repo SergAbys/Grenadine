@@ -46,19 +46,19 @@ static t_quickmap *tll_notification;
 void tralala_parseInit(t_tralalaSymbols *table)
 {
 //
-tll_code            = (t_quickmap *)quickmap_new( );
-tll_type            = (t_quickmap *)quickmap_new( );
-tll_length          = (t_quickmap *)quickmap_new( );
-tll_direction       = (t_quickmap *)quickmap_new( );
-tll_key             = (t_quickmap *)quickmap_new( );
-tll_select          = (t_quickmap *)quickmap_new( );
-tll_notification    = (t_quickmap *)quickmap_new( );
+tll_code           = (t_quickmap *)quickmap_new( );
+tll_type           = (t_quickmap *)quickmap_new( );
+tll_length         = (t_quickmap *)quickmap_new( );
+tll_direction      = (t_quickmap *)quickmap_new( );
+tll_key            = (t_quickmap *)quickmap_new( );
+tll_select         = (t_quickmap *)quickmap_new( );
+tll_notification   = (t_quickmap *)quickmap_new( );
 
-table->sym_note     = gensym("note");
-table->sym_clear    = gensym("clear");
-table->sym_tralala  = gensym("tralala");
-table->sym_current  = gensym("current");
-table->sym_restore  = gensym("restore");
+table->sym_note    = gensym("note");
+table->sym_clear   = gensym("clear");
+table->sym_tralala = gensym("tralala");
+table->sym_current = gensym("current");
+table->sym_restore = gensym("restore");
 
 quickmap_add(tll_code, gensym("bpm"),                     (void *)(TINY + PIZ_EVENT_BPM));
 quickmap_add(tll_code, gensym("learn"),                   (void *)(TINY + PIZ_EVENT_LEARN));
@@ -174,14 +174,14 @@ quickmap_add(tll_notification, gensym("zone"),            (void *)(TINY + PIZ_EV
 
 void tralala_parseDictionary(t_tralala *x, t_dictionary *d)
 {
-    long     i, n = 0;
+    long i, n = 0;
     t_symbol **keys = NULL;
     
     if (!(dictionary_getkeys(d, &n, &keys))) {
     //
     for (i = 0; i < n; i++) {
     //
-    long   k;
+    long k;
     t_atom *data = NULL;
     
     if (!dictionary_getatoms(d, (*(keys + i)), &k, &data)) {
@@ -203,8 +203,8 @@ void tralala_parseMessage(t_tralala *x, t_symbol *s, long argc, t_atom *argv)
         
     if (!(quickmap_lookup_key1(tll_code, (void *)s, (void **)&code))) {
     //
-    long     i, k = 0, msg = 0;
-    long     data[PIZ_EVENT_DATA_SIZE] = { 0 };
+    long i, k = 0, msg = 0;
+    long data[PIZ_EVENT_DATA_SIZE] = { 0 };
     PIZEvent *event = NULL;
      
     code -= TINY;
@@ -273,10 +273,10 @@ void tralala_parseMessage(t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_parseNotification(t_tralala *x, PIZEvent *event)
 {
-    long         i, k = 0;
-    long         *ptr;
-    t_atom       data[PIZ_EVENT_DATA_SIZE + 1];
-    t_symbol     *s = NULL;
+    long i, k = 0;
+    long *ptr;
+    t_atom data[PIZ_EVENT_DATA_SIZE + 1];
+    t_symbol *s = NULL;
     PIZEventCode code;
     
     pizEventCode(event, &code);

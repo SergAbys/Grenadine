@@ -60,21 +60,21 @@ PIZAgent *pizAgentNew( )
     //
     long err = PIZ_GOOD;
     
-    x->bpm              = PIZ_DEFAULT_BPM;  
-    x->flags            = PIZ_AGENT_FLAG_INIT; 
-    x->run              = pizLinklistNew( );
-    x->low              = pizLinklistNew( );
-    x->high             = pizLinklistNew( );
-    x->notification     = pizLinklistNew( );    
-    x->sequence         = pizSequenceNew(x);
-    x->buffer           = pizArrayNew(0);
-    x->factorOracle     = pizFactorOracleNew(0, NULL);
-    x->galoisLattice    = pizGaloisLatticeNew(0, NULL);
-    x->observer         = NULL;
-    x->notify           = NULL;
-    x->err1             = PIZ_ERROR;
-    x->err2             = PIZ_ERROR;
-    x->seed             = PIZ_SEED;
+    x->bpm           = PIZ_DEFAULT_BPM;  
+    x->flags         = PIZ_AGENT_FLAG_INIT; 
+    x->run           = pizLinklistNew( );
+    x->low           = pizLinklistNew( );
+    x->high          = pizLinklistNew( );
+    x->notification  = pizLinklistNew( );    
+    x->sequence      = pizSequenceNew(x);
+    x->buffer        = pizArrayNew(0);
+    x->factorOracle  = pizFactorOracleNew(0, NULL);
+    x->galoisLattice = pizGaloisLatticeNew(0, NULL);
+    x->observer      = NULL;
+    x->notify        = NULL;
+    x->err1          = PIZ_ERROR;
+    x->err2          = PIZ_ERROR;
+    x->seed          = PIZ_SEED;
     
     if (!(x->run         &&  
         x->low           &&

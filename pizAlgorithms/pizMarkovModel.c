@@ -221,10 +221,10 @@ PIZError pizMarkovModelProceed(PIZMarkovModel *x, long argc, long *argv)
     PIZError err = PIZ_ERROR;
     
     if (argc && argv) {
-        long    i, j = 1;
-        long    p = 0;
-        long    v = 0;
-        double  h, k = 0.;
+        long i, j = 1;
+        long p = 0;
+        long v = 0;
+        double h, k = 0.;
 
         err = PIZ_GOOD;
         
@@ -301,9 +301,9 @@ long pizMarkovModelCount(const PIZMarkovModel *x)
 
 PIZ_INLINE void pizMarkovModelBaumWelch(PIZMarkovModel *x, long argc, long *argv)
 {
-    long    t, i, j, n;
-    double  f = 0.;
-    double  s = 0.;
+    long t, i, j, n;
+    double f = 0.;
+    double s = 0.;
                 
     for (t = 0; t < x->graphSize; t++) {
         x->tempAlpha[t * x->vectorSize] = x->start[t] * x->emission[(t * PIZ_SIZE_ALPHABET) + argv[0]];
@@ -446,8 +446,8 @@ PIZ_INLINE void pizMarkovModelBaumWelch(PIZMarkovModel *x, long argc, long *argv
 
 void pizMarkovModelFillStochastically(PIZMarkovModel *x, long argc, double *argv)
 {
-    long    i, f = (long)(6 * (rand_r(&x->seed) / (RAND_MAX + 1.0)) + 1.);
-    double  s = 0.;
+    long i, f = (long)(6 * (rand_r(&x->seed) / (RAND_MAX + 1.0)) + 1.);
+    double s = 0.;
     
     for (i = 0; i < argc; i++) {
         argv[i] = pow((rand_r(&x->seed) / (RAND_MAX + 1.0)), f);

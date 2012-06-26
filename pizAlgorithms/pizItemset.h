@@ -80,7 +80,7 @@ PIZ_END_C_LINKAGE
 
 PIZ_EXTERN void pizItemsetSetAtIndex(PIZItemset *itemset, long index)
 {
-    long  i, p;
+    long i, p;
     ulong m;
     
     i = index / PIZ_MAGIC_ULONG;
@@ -93,7 +93,7 @@ PIZ_EXTERN void pizItemsetSetAtIndex(PIZItemset *itemset, long index)
 
 PIZ_EXTERN void pizItemsetUnsetAtIndex(PIZItemset *itemset, long index) 
 {
-    long  i, p;
+    long i, p;
     ulong m;
     
     i = index / PIZ_MAGIC_ULONG;
@@ -131,7 +131,7 @@ PIZ_EXTERN long pizItemsetCount(const PIZItemset *itemset)
 
 PIZ_EXTERN bool pizItemsetIsSetAtIndex(const PIZItemset *itemset, long index) 
 {
-    long  i, p;
+    long i, p;
     ulong k = 0;
 
     i = index / PIZ_MAGIC_ULONG;

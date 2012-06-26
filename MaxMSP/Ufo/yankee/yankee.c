@@ -23,6 +23,9 @@
 
 #define MAXIMUM_SIZE_LIST       256
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 #define DEFAULT_LAMBDA          2
 #define DEFAULT_ALPHA           0.5
 #define DEFAULT_BETA            0.1
@@ -96,49 +99,43 @@ int main(void)
     
     c = class_new("yankee", (method)yankee_new, (method)yankee_free, (long)sizeof(t_yankee), 0L, A_GIMME, 0);
 
-    class_addmethod(c, (method)yankee_assist,          "assist",   A_CANT, 0); 
-    class_addmethod(c, (method)yankee_learn,           "learn",    A_GIMME, 0);
-    class_addmethod(c, (method)yankee_int,             "int",      A_LONG, 0);
-    class_addmethod(c, (method)yankee_dump,            "dump",     A_DEFLONG, 0);
-    class_addmethod(c, (method)yankee_clear,           "clear",    0);
-    class_addmethod(c, (method)object_obex_dumpout,    "dumpout",  A_CANT, 0);
+    class_addmethod(c, (method)yankee_assist,       "assist",   A_CANT, 0); 
+    class_addmethod(c, (method)yankee_learn,        "learn",    A_GIMME, 0);
+    class_addmethod(c, (method)yankee_int,          "int",      A_LONG, 0);
+    class_addmethod(c, (method)yankee_dump,         "dump",     A_DEFLONG, 0);
+    class_addmethod(c, (method)yankee_clear,        "clear",    0);
+    class_addmethod(c, (method)object_obex_dumpout, "dumpout",  A_CANT, 0);
     
-    CLASS_ATTR_LONG         (c, "kappa",        0, t_yankee, kappa);
-    CLASS_ATTR_LABEL        (c, "kappa",        0, "Utility Threshold");
-    CLASS_ATTR_ACCESSORS    (c, "kappa",        NULL, yankee_setKappa);
-    CLASS_ATTR_FILTER_MIN   (c, "kappa",        1);
-    
-    CLASS_ATTR_LONG         (c, "lambda",       0, t_yankee, lambda);
-    CLASS_ATTR_LABEL        (c, "lambda",       0, "New Node Rate");
-    CLASS_ATTR_ACCESSORS    (c, "lambda",       NULL, yankee_setLambda);
-    CLASS_ATTR_FILTER_MIN   (c, "lambda",       1);
-    
-    CLASS_ATTR_DOUBLE       (c, "epsilon1",     0, t_yankee, epsilon1);
-    CLASS_ATTR_LABEL        (c, "epsilon1",     0, "Move Winner Factor");
-    CLASS_ATTR_ACCESSORS    (c, "epsilon1",     NULL, yankee_setEpsilon1);
-    CLASS_ATTR_FILTER_CLIP  (c, "epsilon1",     0., 1.);
-    
-    CLASS_ATTR_DOUBLE       (c, "epsilon2",     0, t_yankee, epsilon2);
-    CLASS_ATTR_LABEL        (c, "epsilon2",     0, "Move Neighbours Factor");
-    CLASS_ATTR_ACCESSORS    (c, "epsilon2",     NULL, yankee_setEpsilon2);
-    CLASS_ATTR_FILTER_CLIP  (c, "epsilon2",     0., 1.);
-    
-    CLASS_ATTR_DOUBLE       (c, "alpha",        0, t_yankee, alpha);
-    CLASS_ATTR_LABEL        (c, "alpha",        0, "Decrease Generators Error Factor");
-    CLASS_ATTR_ACCESSORS    (c, "alpha",        NULL, yankee_setAlpha);
-    CLASS_ATTR_FILTER_CLIP  (c, "alpha",        0., 1.);
-    
-    CLASS_ATTR_DOUBLE       (c, "beta",         0, t_yankee, beta);
-    CLASS_ATTR_LABEL        (c, "beta",         0, "Decrease Global Error Factor");
-    CLASS_ATTR_ACCESSORS    (c, "beta",         NULL, yankee_setBeta);
-    CLASS_ATTR_FILTER_CLIP  (c, "beta",         0., 1.);
-    
-    CLASS_ATTR_ORDER        (c, "lambda",       0, "1");
-    CLASS_ATTR_ORDER        (c, "epsilon1",     0, "2");
-    CLASS_ATTR_ORDER        (c, "epsilon2",     0, "3");
-    CLASS_ATTR_ORDER        (c, "alpha",        0, "4");
-    CLASS_ATTR_ORDER        (c, "beta",         0, "5");
-    CLASS_ATTR_ORDER        (c, "kappa",        0, "6");
+    CLASS_ATTR_LONG(c,          "kappa",        0, t_yankee, kappa);
+    CLASS_ATTR_LONG(c,          "lambda",       0, t_yankee, lambda);
+    CLASS_ATTR_DOUBLE(c,        "epsilon1",     0, t_yankee, epsilon1);
+    CLASS_ATTR_DOUBLE(c,        "epsilon2",     0, t_yankee, epsilon2);
+    CLASS_ATTR_DOUBLE(c,        "alpha",        0, t_yankee, alpha);
+    CLASS_ATTR_DOUBLE(c,        "beta",         0, t_yankee, beta);
+    CLASS_ATTR_LABEL(c,         "kappa",        0, "Utility Threshold");
+    CLASS_ATTR_LABEL(c,         "lambda",       0, "New Node Rate");
+    CLASS_ATTR_LABEL(c,         "epsilon1",     0, "Move Winner Factor");
+    CLASS_ATTR_LABEL(c,         "epsilon2",     0, "Move Neighbours Factor");
+    CLASS_ATTR_LABEL(c,         "alpha",        0, "Decrease Generators Error Factor");
+    CLASS_ATTR_LABEL(c,         "beta",         0, "Decrease Global Error Factor");
+    CLASS_ATTR_ACCESSORS(c,     "kappa",        NULL, yankee_setKappa);
+    CLASS_ATTR_ACCESSORS(c,     "lambda",       NULL, yankee_setLambda);
+    CLASS_ATTR_ACCESSORS(c,     "epsilon1",     NULL, yankee_setEpsilon1);
+    CLASS_ATTR_ACCESSORS(c,     "epsilon2",     NULL, yankee_setEpsilon2);
+    CLASS_ATTR_ACCESSORS(c,     "alpha",        NULL, yankee_setAlpha);
+    CLASS_ATTR_ACCESSORS(c,     "beta",         NULL, yankee_setBeta);
+    CLASS_ATTR_FILTER_MIN(c,    "kappa",        1);
+    CLASS_ATTR_FILTER_MIN(c,    "lambda",       1);
+    CLASS_ATTR_FILTER_CLIP(c,   "epsilon1",     0., 1.);
+    CLASS_ATTR_FILTER_CLIP(c,   "epsilon2",     0., 1.);
+    CLASS_ATTR_FILTER_CLIP(c,   "alpha",        0., 1.);
+    CLASS_ATTR_FILTER_CLIP(c,   "beta",         0., 1.);
+    CLASS_ATTR_ORDER(c,         "lambda",       0, "1");
+    CLASS_ATTR_ORDER(c,         "epsilon1",     0, "2");
+    CLASS_ATTR_ORDER(c,         "epsilon2",     0, "3");
+    CLASS_ATTR_ORDER(c,         "alpha",        0, "4");
+    CLASS_ATTR_ORDER(c,         "beta",         0, "5");
+    CLASS_ATTR_ORDER(c,         "kappa",        0, "6");
     
     class_register(CLASS_BOX, c); 
     
@@ -157,7 +154,7 @@ void *yankee_new(t_symbol *s, long argc, t_atom *argv)
     
     if (x = (t_yankee *)object_alloc(yankee_class)) {
     //
-    long k[2] = {0, 0};
+    long k[2] = { 0, 0 };
     
     if (argc && atom_gettype(argv) == A_LONG) {
         k[0] = atom_getlong(argv);
@@ -172,14 +169,14 @@ void *yankee_new(t_symbol *s, long argc, t_atom *argv)
                             
     if (x->values && x->neuralGas) {
     
-        x->lambda       = DEFAULT_LAMBDA;
-        x->epsilon1     = DEFAULT_EPSILON1;
-        x->epsilon2     = DEFAULT_EPSILON2;
-        x->alpha        = DEFAULT_ALPHA;
-        x->beta         = DEFAULT_BETA;
-        x->kappa        = DEFAULT_KAPPA;
+        x->lambda   = DEFAULT_LAMBDA;
+        x->epsilon1 = DEFAULT_EPSILON1;
+        x->epsilon2 = DEFAULT_EPSILON2;
+        x->alpha    = DEFAULT_ALPHA;
+        x->beta     = DEFAULT_BETA;
+        x->kappa    = DEFAULT_KAPPA;
         
-        x->rightOutlet  = outlet_new(x, NULL);
+        x->rightOutlet = outlet_new(x, NULL);
         object_obex_store((void *)x, gensym("dumpout"), (t_object *)x->rightOutlet);
         x->leftOutlet = listout((t_object *)x);
                 
@@ -306,9 +303,9 @@ void yankee_learn(t_yankee *x, t_symbol *s, long argc, t_atom *argv)
 
 void yankee_int(t_yankee *x, long n)
 {
-    char    alloc;
-    t_atom  *argv = NULL;
-    long    argc = 0;
+    char alloc;
+    t_atom *argv = NULL;
+    long argc = 0;
 
     if ((n > 0) && (atom_alloc_array(MIN(n, MAXIMUM_SIZE_LIST), &argc, &argv, &alloc) == MAX_ERR_NONE)) {
     //
@@ -344,11 +341,11 @@ void yankee_clear(t_yankee *x)
 
 void yankee_dump(t_yankee *x, long n)
 {
-    char     alloc;
-    long     size;
-    long     argc = 0;
+    char alloc;
+    long size;
+    long argc = 0;
     PIZError err = PIZ_GOOD;
-    t_atom   *argv = NULL;
+    t_atom *argv = NULL;
     PIZArray *values = pizArrayNew(4);
     
     LOCK

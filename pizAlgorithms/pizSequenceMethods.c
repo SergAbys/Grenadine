@@ -240,7 +240,7 @@ PIZError pizSequenceScramble(PIZSequence *x, const PIZEvent *event)
     }
         
     for (i = (k - 1); i > 0; i--) {
-        long    h = (i + 1) * (rand_r(&x->seed) / (RAND_MAX + 1.0));
+        long h = (i + 1) * (rand_r(&x->seed) / (RAND_MAX + 1.0));
         PIZNote *temp = NULL;
             
         temp = x->tempNotes1[h];
@@ -334,9 +334,9 @@ PIZError pizSequenceCycle(PIZSequence *x, const PIZEvent *event)
     if ((!(pizEventData(event, &argc, &argv))) && (argc > 2)) {
     //
     ulong mask = 0UL;
-    long  i, m, n, o, k = 0;
-    long  a[ ] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    long  t[ ] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    long i, m, n, o, k = 0;
+    long a[ ] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    long t[ ] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     
     long  key = CLAMP(argv[0], PIZ_KEY_C, PIZ_KEY_B);
     
@@ -377,8 +377,8 @@ PIZError pizSequenceCycle(PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceAlgorithm(PIZSequence *x, const PIZEvent *event)
 {
-    long         k;
-    PIZError     err = PIZ_GOOD;
+    long k;
+    PIZError err = PIZ_GOOD;
     PIZEventCode code;
     
     pizEventCode(event, &code);
@@ -414,8 +414,8 @@ PIZError pizSequenceAlgorithm(PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
 {
-    long     argc, iterate = 1;
-    long     *argv = NULL;
+    long argc, iterate = 1;
+    long *argv = NULL;
     PIZError hashErr = PIZ_GOOD;
     
     if (!(pizEventData(event, &argc, &argv))) {
@@ -424,11 +424,11 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
         
     if (x->cell != PIZ_NOTE_NONE) {
     //
-    long k       = 0;
-    long loop    = 0;
-    long start   = PIZ_CEIL(x->start, x->cell);
-    long end     = PIZ_CEIL(x->end, x->cell);
-    long count   = pizArrayCount(x->map);
+    long k = 0;
+    long loop = 0;
+    long start = PIZ_CEIL(x->start, x->cell);
+    long end   = PIZ_CEIL(x->end, x->cell);
+    long count = pizArrayCount(x->map);
     
     bool haveChanged = false;
     
@@ -441,14 +441,14 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
     //
     if (x->count) {
     //
-    long    j, pitch, here, previous, next, center;
-    long    q = -1;
-    long    p = -1;
-    long    hPat[PIZ_SIZE_H] = { -1, -1, -1, -1, -1, -1 };
-    long    neighbors = 0;
-    long    err = PIZ_GOOD;
-    long    size = pizArrayCount(x->pattern);
-    bool    death = false;
+    long j, pitch, here, previous, next, center;
+    long q = -1;
+    long p = -1;
+    long hPat[PIZ_SIZE_H] = { -1, -1, -1, -1, -1, -1 };
+    long neighbors = 0;
+    long err = PIZ_GOOD;
+    long size = pizArrayCount(x->pattern);
+    bool death = false;
     PIZNote *note = NULL;
 
     while (q == -1) {
@@ -518,7 +518,7 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
             !(pizHashTableContainsKey(x->tempHash, hPat[j]))     &&
             !(pizHashTableContainsKey(x->tempHash, hPat[j] + 1)) &&
             !(pizHashTableContainsKey(x->tempHash, hPat[j] + 2))) {
-            long    t;
+            long t;
             PIZNote *temp = NULL;
             PIZNote *toCopy = NULL;
             PIZNote *newNote = NULL;
@@ -586,13 +586,13 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
 PIZNote *pizSequenceNewNote(PIZSequence *x, long *argv, ulong flags)
 {
     PIZNote *newNote = NULL;
-    long    err      = PIZ_GOOD;
-    long    k        = -1;
-    long    position = argv[0];
-    long    pitch    = argv[1];
-    long    velocity = argv[2];
-    long    duration = argv[3]; 
-    long    channel  = argv[4]; 
+    long err = PIZ_GOOD;
+    long k = -1;
+    long position = argv[0];
+    long pitch    = argv[1];
+    long velocity = argv[2];
+    long duration = argv[3]; 
+    long channel  = argv[4]; 
     
     if (flags & PIZ_SEQUENCE_FLAG_SNAP) {
         position = pizSequenceSnapByPattern(x, position);
@@ -653,7 +653,7 @@ PIZNote *pizSequenceNewNote(PIZSequence *x, long *argv, ulong flags)
 
 PIZError pizSequenceGetTag(PIZSequence *x, long *ptr)
 {
-    long     i, k = -1;
+    long i, k = -1;
     PIZError err = PIZ_ERROR;
     
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
