@@ -211,6 +211,7 @@ void pizAgentAddNotification(PIZAgent *x, PIZEventCode n, long ac, long *av)
     if (notification = pizEventNew(n)) {
     //
     pizEventSetData(notification, ac, av);
+    pizEventSetIdentifier(notification, x->identifier);
     
     PIZ_AGENT_LOCK_NOTIFICATION
     PIZ_AGENT_QUEUE(x->notification, notification)
@@ -261,6 +262,8 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
     if (o && (f = pizEventMethods[code]) && ((*f)(o, event) == PIZ_MEMORY)) {
         PIZ_AGENT_MEMORY
     }
+    
+    DEBUGEVENT
     
     pizEventFree(event);
     //

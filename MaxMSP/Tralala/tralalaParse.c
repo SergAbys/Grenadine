@@ -265,6 +265,7 @@ void tralala_parseMessage(t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     
     if (event = pizEventNew(code)) {
         pizEventSetData(event, k, data);
+        pizEventSetIdentifier(event, x->identifier);
         pizAgentAddEvent(x->agent, event);
     }
     //

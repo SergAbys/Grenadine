@@ -97,6 +97,11 @@ void pizTimespecWithNano(struct timespec *t, const PIZNano *ns)
     t->tv_nsec = (long)(*ns % PIZ_TIME_NANO_PER_SECOND);
 }
 
+bool pizTimeIsZero (const PIZTime *t)
+{
+    return ((*t) == PIZ_TIME_ZERO);
+}
+
 #endif // __MACH__
 
 // -------------------------------------------------------------------------------------------------------------

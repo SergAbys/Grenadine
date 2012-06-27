@@ -182,6 +182,11 @@ void pizEventFree(PIZEvent *x)
     free(x);
 }
 
+void pizEventSetIdentifier(PIZEvent *x, long identifier)
+{
+    x->identifier = identifier;
+}
+
 void pizEventSetData(PIZEvent *x, long argc, const long *argv)
 {
     if (argc && argv) {
@@ -205,6 +210,11 @@ void pizEventCode(const PIZEvent *x, PIZEventCode *code)
 void pizEventType(const PIZEvent *x, PIZEventType *type)
 {
     (*type) = x->type;
+}
+
+void pizEventIdentifier(const PIZEvent *x, long *identifier)
+{
+    (*identifier) = x->identifier;
 }
 
 PIZError pizEventData(const PIZEvent *x, long *argc, long **argv)

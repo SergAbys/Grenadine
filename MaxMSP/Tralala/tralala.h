@@ -28,9 +28,10 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define SEND(code)  PIZEvent *event = NULL;                 \
-                    if (event = pizEventNew(code)) {        \
-                        pizAgentAddEvent(x->agent, event);  \
+#define SEND(code)  PIZEvent *event = NULL;                             \
+                    if (event = pizEventNew(code)) {                    \
+                        pizEventSetIdentifier(event, x->identifier);    \
+                        pizAgentAddEvent(x->agent, event);              \
                     }
                     
 // -------------------------------------------------------------------------------------------------------------
@@ -39,6 +40,7 @@
 
 typedef struct _tralala {
     t_object        ob;	
+    long            identifier;
     ulong           flags;					
     t_atom          played[4];
     t_atom          dumped[5];

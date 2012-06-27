@@ -308,6 +308,7 @@ PIZError pizSequenceAddNotification(PIZSequence *x, PIZEventCode n, long ac, lon
     if (notification = pizEventNew(n)) {
     //
     pizEventSetData(notification, ac, av);
+    pizEventSetIdentifier(notification, x->owner->identifier);
     
     if (err |= pizLinklistAppend(x->owner->notification, notification)) {       
         pizEventFree(notification);  

@@ -24,6 +24,7 @@ t_tralalaSymbols tll_table;
 #pragma mark -
 
 static t_class *tralala_class;
+static long identifier = 1;
 
 int main(void)
 {	
@@ -95,7 +96,9 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     //
     }
     
-    if (!err && (x->agent = pizAgentNew( ))) {
+    x->identifier = identifier++;
+    
+    if (!err && (x->agent = pizAgentNew(x->identifier))) {
         x->right        = bangout((t_object *)x);
         x->middleRight  = bangout((t_object *)x);
         x->middleLeft   = outlet_new((t_object *)x, NULL);
@@ -224,8 +227,9 @@ void tralala_callback(void *ptr, PIZEvent *event)
     //
     }
     
+    DEBUGEVENT
+    
     if (!(dictionary_hasentry(x->current, gensym("chord")))) {
-        DEBUGEVENT
         post("###");
     }
     
