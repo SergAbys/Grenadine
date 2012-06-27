@@ -99,7 +99,6 @@ PIZAgent *pizAgentNew( )
     
     if (!err) {
     //
-
     pthread_attr_setscope(&x->attr, PTHREAD_SCOPE_PROCESS);
     pthread_attr_setdetachstate(&x->attr, PTHREAD_CREATE_JOINABLE);
     pthread_attr_setschedpolicy(&x->attr, SCHED_OTHER);

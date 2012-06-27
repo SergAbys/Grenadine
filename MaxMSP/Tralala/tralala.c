@@ -194,8 +194,8 @@ void tralala_callback(void *ptr, PIZEvent *event)
     //
     case PIZ_EVENT_NOTE_PLAYED :
         pizEventData(event, &argc, &argv);
-        k = argv[PIZ_EVENT_NOTE_DURATION]; 
-        argv[PIZ_EVENT_NOTE_DURATION] = (long)(k * (PIZ_AGENT_CONSTANT_BPM_MS / argv[PIZ_EVENT_NOTE_BPM]));
+        k = argv[PIZ_EVENT_DATA_DURATION]; 
+        argv[PIZ_EVENT_DATA_DURATION] = (long)(k * (PIZ_AGENT_CONSTANT_BPM_MS / argv[PIZ_EVENT_DATA_BPM]));
         atom_setlong_array(4, x->played, 4, argv + 1);
         outlet_list(x->left, NULL, 4, x->played); 
         break;

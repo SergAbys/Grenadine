@@ -45,13 +45,13 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define PIZ_DEFAULT_START           0
-#define PIZ_DEFAULT_END             96
-#define PIZ_DEFAULT_DOWN            60
-#define PIZ_DEFAULT_UP              71
-#define PIZ_DEFAULT_CHANCE          100
-#define PIZ_DEFAULT_CHANNEL         1
-#define PIZ_DEFAULT_VELOCITY        90
+#define PIZ_DEFAULT_START       0
+#define PIZ_DEFAULT_END         96
+#define PIZ_DEFAULT_DOWN        60
+#define PIZ_DEFAULT_UP          71
+#define PIZ_DEFAULT_CHANCE      100
+#define PIZ_DEFAULT_CHANNEL     1
+#define PIZ_DEFAULT_VELOCITY    90
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -68,15 +68,15 @@ PIZSequence *pizSequenceNew(struct _PIZAgent *owner)
     long argv1[ ] = { 0, PIZ_SEQUENCE_MAXIMUM_NOTES };
     long argv2[ ] = { PIZ_SEQUENCE_SIZE_LOOKUP, PIZ_SEQUENCE_MAXIMUM_NOTES };
     
-    x->owner         = owner;
-    x->map           = pizArrayNew(PIZ_SEQUENCE_MAXIMUM_NOTES);
-    x->scale         = pizArrayNew(PIZ_MAGIC_SCALE);
-    x->pattern       = pizArrayNew(PIZ_EVENT_DATA_SIZE);
-    x->tempValues    = (long *)malloc(sizeof(long) * PIZ_SEQUENCE_SIZE_TEMP);
-    x->tempNotes1    = (PIZNote **)malloc(sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMP);
-    x->tempNotes2    = (PIZNote **)malloc(sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMP);
-    x->tempHash      = pizHashTableNew(2, argv1);
-    x->lookup        = pizHashTableNew(2, argv2);
+    x->owner      = owner;
+    x->map        = pizArrayNew(PIZ_SEQUENCE_MAXIMUM_NOTES);
+    x->scale      = pizArrayNew(PIZ_MAGIC_SCALE);
+    x->pattern    = pizArrayNew(PIZ_EVENT_DATA_SIZE);
+    x->tempValues = (long *)malloc(sizeof(long) * PIZ_SEQUENCE_SIZE_TEMP);
+    x->tempNotes1 = (PIZNote **)malloc(sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMP);
+    x->tempNotes2 = (PIZNote **)malloc(sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMP);
+    x->tempHash   = pizHashTableNew(2, argv1);
+    x->lookup     = pizHashTableNew(2, argv2);
     
     if (x->map           && 
         x->scale         &&

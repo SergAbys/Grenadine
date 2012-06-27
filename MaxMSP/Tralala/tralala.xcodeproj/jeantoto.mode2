@@ -425,8 +425,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96C5B850159A28EE0002093C</string>
-				<string>96C5B851159A28EE0002093C</string>
+				<string>96D9F49C159B1EB700BEF459</string>
+				<string>96D9F49D159B1EB700BEF459</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -641,7 +641,7 @@
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 160}, {1205, 213}}</string>
+								<string>{{0, 5}, {1205, 368}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>
@@ -679,7 +679,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96C5B852159A28EE0002093C</string>
+				<string>96D9F49E159B1EB700BEF459</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -819,12 +819,14 @@
 							<key>Dock</key>
 							<array>
 								<dict>
+									<key>BecomeActive</key>
+									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>tralalaParse.h</string>
+										<string>tralalaParse.c</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -845,8 +847,6 @@
 							<string>443pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -882,8 +882,8 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>96C5B77F159A01040002093C</string>
-				<string>96C5B780159A01040002093C</string>
+				<string>96D9F422159B04F500BEF459</string>
+				<string>96D9F423159B04F500BEF459</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>

@@ -306,7 +306,7 @@ void tralala_parseNotification(t_tralala *x, PIZEvent *event)
     //
     } else {
     //
-    symbolWithTag(&s, ptr[PIZ_EVENT_NOTE_TAG]);
+    symbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
         
     if (code == PIZ_EVENT_NOTE_REMOVED) {
         dictionary_deleteentry(x->current, s);

@@ -75,13 +75,13 @@
 // -------------------------------------------------------------------------------------------------------------
 
 enum {
-    PIZ_EVENT_NOTE_POSITION     = 0,
-    PIZ_EVENT_NOTE_PITCH        = 1,
-    PIZ_EVENT_NOTE_VELOCITY     = 2,
-    PIZ_EVENT_NOTE_DURATION     = 3,
-    PIZ_EVENT_NOTE_CHANNEL      = 4,
-    PIZ_EVENT_NOTE_TAG          = 5,
-    PIZ_EVENT_NOTE_BPM          = 6,
+    PIZ_EVENT_DATA_POSITION     = 0,
+    PIZ_EVENT_DATA_PITCH        = 1,
+    PIZ_EVENT_DATA_VELOCITY     = 2,
+    PIZ_EVENT_DATA_DURATION     = 3,
+    PIZ_EVENT_DATA_CHANNEL      = 4,
+    PIZ_EVENT_DATA_TAG          = 5,
+    PIZ_EVENT_DATA_BPM          = 6
     };
 
 // -------------------------------------------------------------------------------------------------------------
