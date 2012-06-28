@@ -1,5 +1,5 @@
 /*
- *  tralalaParse.h
+ *  tralalaTime.h
  *
  *  nicolas.danet@free.fr
  *
@@ -8,46 +8,30 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef TLL_TRALALA_PARSE_H
-#define TLL_TRALALA_PARSE_H
+#ifndef TLL_TRALALA_TIME_H
+#define TLL_TRALALA_TIME_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "tralala.h"
+#include "ext.h"
+#include "ext_obex.h"
+#include "pizTime.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
-typedef struct _tllSymbols {
-    t_symbol *note;
-    t_symbol *clear;
-    t_symbol *tralala;
-    t_symbol *current;
-    t_symbol *restore;
-    } t_tllSymbols;
+typedef struct _time {
+    t_symbol    *symbol;
+    ulong       magic;
+    PIZTime     time;
+    } t_time;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
-#define TLL_NOTE        (tll_table.note)
-#define TLL_CLEAR       (tll_table.clear)
-#define TLL_TRALALA     (tll_table.tralala)
-#define TLL_CURRENT     (tll_table.current)
-#define TLL_RESTORE     (tll_table.restore)
+void tralala_timeInit (t_time *time);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void tralala_parseInit          (t_tllSymbols *table);
-
-void tralala_parseDictionary    (t_tll *x, t_dictionary *d);
-void tralala_parseMessage       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
-void tralala_parseNotification  (t_tll *x, PIZEvent *event);
-      
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#endif // TLL_TRALALA_PARSE_H
+#endif // TLL_TRALALA_TIME_H

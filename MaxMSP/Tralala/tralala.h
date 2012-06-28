@@ -17,6 +17,7 @@
 #include "ext.h"
 #include "ext_obex.h"
 #include "pizAgent.h"
+#include "tralalaTime.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -43,10 +44,11 @@
 
 typedef struct _tll {
     t_object        ob;	
-    long            identifier;
     ulong           flags;					
     t_atom          played[4];
     t_atom          dumped[5];
+    long            identifier;
+    t_time          time;
     t_dictionary    *data;
     t_dictionary    *current;
     t_dictionary    *restore;

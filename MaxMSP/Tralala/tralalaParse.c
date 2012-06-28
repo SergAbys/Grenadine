@@ -46,19 +46,19 @@ static t_quickmap *tll_notification;
 void tralala_parseInit(t_tllSymbols *table)
 {
 //
-tll_code           = (t_quickmap *)quickmap_new( );
-tll_type           = (t_quickmap *)quickmap_new( );
-tll_length         = (t_quickmap *)quickmap_new( );
-tll_direction      = (t_quickmap *)quickmap_new( );
-tll_key            = (t_quickmap *)quickmap_new( );
-tll_select         = (t_quickmap *)quickmap_new( );
-tll_notification   = (t_quickmap *)quickmap_new( );
+tll_code         = (t_quickmap *)quickmap_new( );
+tll_type         = (t_quickmap *)quickmap_new( );
+tll_length       = (t_quickmap *)quickmap_new( );
+tll_direction    = (t_quickmap *)quickmap_new( );
+tll_key          = (t_quickmap *)quickmap_new( );
+tll_select       = (t_quickmap *)quickmap_new( );
+tll_notification = (t_quickmap *)quickmap_new( );
 
-table->sym_note    = gensym("note");
-table->sym_clear   = gensym("clear");
-table->sym_tralala = gensym("tralala");
-table->sym_current = gensym("current");
-table->sym_restore = gensym("restore");
+table->note    = gensym("note");
+table->clear   = gensym("clear");
+table->tralala = gensym("tralala");
+table->current = gensym("current");
+table->restore = gensym("restore");
 
 quickmap_add(tll_code, gensym("bpm"),                     (void *)(TINY + PIZ_EVENT_BPM));
 quickmap_add(tll_code, gensym("learn"),                   (void *)(TINY + PIZ_EVENT_LEARN));

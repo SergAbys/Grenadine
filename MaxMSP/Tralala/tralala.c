@@ -10,6 +10,7 @@
 
 #include "tralalaParse.h"
 #include "jpatcher_api.h"
+#include "ext_atomic.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -23,7 +24,7 @@ t_tllSymbols tll_table;
 #pragma mark -
 
 static t_class *tll_class;
-static long identifier = 1;
+static t_int32_atomic identifier;
 
 int main(void)
 {	
@@ -95,7 +96,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     //
     }
     
-    x->identifier = identifier++;
+    x->identifier = ATOMIC_INCREMENT(&identifier);
     
     if (!err && (x->agent = pizAgentNew(x->identifier))) {
         x->right        = bangout((t_object *)x);
