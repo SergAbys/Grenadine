@@ -21,6 +21,7 @@
 #pragma mark -
 
 typedef struct _tllSymbols {
+    t_symbol *play;
     t_symbol *note;
     t_symbol *clear;
     t_symbol *tralala;
@@ -32,6 +33,7 @@ typedef struct _tllSymbols {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+#define TLL_PLAY        (tll_table.play)
 #define TLL_NOTE        (tll_table.note)
 #define TLL_CLEAR       (tll_table.clear)
 #define TLL_TRALALA     (tll_table.tralala)

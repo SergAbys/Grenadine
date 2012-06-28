@@ -21,11 +21,18 @@
 #pragma mark ---
 #pragma mark -
 
-void tralala_timeInit (t_time *time)
+void tralala_timeInit(t_time *x)
 {
-    time->symbol = symbol_unique( );
-    time->magic  = TLL_MAGIC;
-    pizTimeSet(&time->time);
+    t_symbol *s = symbol_unique( );
+    s->s_thing = (t_object *)x;
+    atom_setsym(&x->link, s);
+    x->magic = TLL_MAGIC;
+    x->time = PIZ_TIME_ZERO;
+}
+
+t_atom *tralala_timeAtom(t_time *x)
+{
+    return &x->link;
 }
     
 // -------------------------------------------------------------------------------------------------------------

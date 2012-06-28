@@ -24,7 +24,7 @@ t_tllSymbols tll_table;
 #pragma mark -
 
 static t_class *tll_class;
-static t_int32_atomic identifier;
+static long identifier;
 
 int main(void)
 {	
@@ -96,13 +96,14 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     //
     }
     
-    x->identifier = ATOMIC_INCREMENT(&identifier);
+    x->identifier = ++identifier;
+    tralala_timeInit(&x->time);
     
     if (!err && (x->agent = pizAgentNew(x->identifier))) {
-        x->right        = bangout((t_object *)x);
-        x->middleRight  = bangout((t_object *)x);
-        x->middleLeft   = outlet_new((t_object *)x, NULL);
-        x->left         = listout((t_object *)x);
+        x->right       = bangout((t_object *)x);
+        x->middleRight = outlet_new((t_object *)x, NULL);
+        x->middleLeft  = outlet_new((t_object *)x, NULL);
+        x->left        = listout((t_object *)x);
                 
         pizAgentAttach(x->agent, (void *)x, (PIZMethod)tralala_callback);
         
@@ -149,7 +150,7 @@ void tralala_assist(t_tll *x, void *b, long m, long a, char *s)
         switch (a) {
             case 0 : sprintf(s, "(List) Played");     break;
             case 1 : sprintf(s, "(Anything) Dumped"); break;
-            case 2 : sprintf(s, "(Bang) End");        break;
+            case 2 : sprintf(s, "(Anything) End");    break;
             case 3 : sprintf(s, "(Bang) Will End");   break;
         }
     }
@@ -218,7 +219,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
         break;
     
     case PIZ_EVENT_END :
-        outlet_bang(x->middleRight); 
+        outlet_anything(x->middleRight, TLL_PLAY, 1, tralala_timeAtom(&x->time)); 
         break;
     
     default :
@@ -240,24 +241,9 @@ void tralala_callback(void *ptr, PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_bang(t_tll *x) 
-{   
-    SEND(PIZ_EVENT_PLAY)
-}
-
-void tralala_play(t_tll *x) 
-{   
-    SEND(PIZ_EVENT_PLAY)
-}
-
 void tralala_stop(t_tll *x) 
 {   
     SEND(PIZ_EVENT_STOP)
-}
-
-void tralala_loop(t_tll *x) 
-{   
-    SEND(PIZ_EVENT_LOOP)
 }
 
 void tralala_unloop(t_tll *x) 
@@ -268,6 +254,21 @@ void tralala_unloop(t_tll *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+
+void tralala_bang(t_tll *x) 
+{   
+    SEND(PIZ_EVENT_PLAY)
+}
+
+void tralala_play(t_tll *x) 
+{   
+    SEND(PIZ_EVENT_PLAY)
+}
+
+void tralala_loop(t_tll *x) 
+{   
+    SEND(PIZ_EVENT_LOOP)
+}
 
 void tralala_list(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
