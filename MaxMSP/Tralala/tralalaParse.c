@@ -15,7 +15,7 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-extern t_tralalaSymbols tll_table;
+extern t_tllSymbols tll_table;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ static t_quickmap *tll_select;
 static t_quickmap *tll_key;
 static t_quickmap *tll_notification;
 
-void tralala_parseInit(t_tralalaSymbols *table)
+void tralala_parseInit(t_tllSymbols *table)
 {
 //
 tll_code           = (t_quickmap *)quickmap_new( );
@@ -172,7 +172,7 @@ quickmap_add(tll_notification, gensym("zone"),            (void *)(TINY + PIZ_EV
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_parseDictionary(t_tralala *x, t_dictionary *d)
+void tralala_parseDictionary(t_tll *x, t_dictionary *d)
 {
     long i, n = 0;
     t_symbol **keys = NULL;
@@ -197,7 +197,7 @@ void tralala_parseDictionary(t_tralala *x, t_dictionary *d)
     }
 }
 
-void tralala_parseMessage(t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
     PIZTime time;
     PIZEventCode code = 0;
@@ -275,7 +275,7 @@ void tralala_parseMessage(t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     }
 }
 
-void tralala_parseNotification(t_tralala *x, PIZEvent *event)
+void tralala_parseNotification(t_tll *x, PIZEvent *event)
 {
     long i, k = 0;
     long *ptr;

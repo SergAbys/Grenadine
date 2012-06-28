@@ -13,9 +13,8 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
-t_tralalaSymbols tll_table;
+t_tllSymbols tll_table;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -23,14 +22,14 @@ t_tralalaSymbols tll_table;
 #pragma mark ---
 #pragma mark -
 
-static t_class *tralala_class;
+static t_class *tll_class;
 static long identifier = 1;
 
 int main(void)
 {	
     t_class	*c = NULL;
     
-    c = class_new("tralala", (method)tralala_new, (method)tralala_free, sizeof(t_tralala), 0L, A_GIMME, 0);
+    c = class_new("tralala", (method)tralala_new, (method)tralala_free, sizeof(t_tll), 0L, A_GIMME, 0);
 
     class_addmethod(c, (method)tralala_bang,       "bang",                 0);
     class_addmethod(c, (method)tralala_play,       "play",                 0);
@@ -45,7 +44,7 @@ int main(void)
 
     class_register(CLASS_BOX, c);
 
-    tralala_class = c;
+    tll_class = c;
     
     tralala_parseInit(&tll_table);
 
@@ -58,9 +57,9 @@ int main(void)
 
 void *tralala_new(t_symbol *s, long argc, t_atom *argv)
 {
-    t_tralala *x = NULL;
+    t_tll *x = NULL;
 
-    if (x = (t_tralala *)object_alloc(tralala_class)) {
+    if (x = (t_tll *)object_alloc(tll_class)) {
     //
     PIZError err = PIZ_ERROR;
     
@@ -119,7 +118,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
 	return x;
 }
 
-void tralala_init(t_tralala *x, t_symbol *s, short argc, t_atom *argv)
+void tralala_init(t_tll *x, t_symbol *s, short argc, t_atom *argv)
 {
     if (x->flags & TLL_FLAG_INIT) {
         x->flags &= ~TLL_FLAG_INIT; 
@@ -130,7 +129,7 @@ void tralala_init(t_tralala *x, t_symbol *s, short argc, t_atom *argv)
     }    
 }
 
-void tralala_free(t_tralala *x)
+void tralala_free(t_tll *x)
 { 
     if (x->agent) {
         pizAgentDetach(x->agent, (void *)x);
@@ -140,7 +139,7 @@ void tralala_free(t_tralala *x)
     object_free(x->data);
 }
 
-void tralala_assist(t_tralala *x, void *b, long m, long a, char *s)
+void tralala_assist(t_tll *x, void *b, long m, long a, char *s)
 {
     if (m == ASSIST_INLET) { 
         sprintf(s, "Messages");
@@ -155,7 +154,7 @@ void tralala_assist(t_tralala *x, void *b, long m, long a, char *s)
     }
 }
 
-void tralala_jsave(t_tralala *x, t_dictionary *d)
+void tralala_jsave(t_tll *x, t_dictionary *d)
 {
     if (d) {
         t_dictionary *t = NULL;
@@ -174,7 +173,7 @@ void tralala_jsave(t_tralala *x, t_dictionary *d)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_dblclick(t_tralala *x)
+void tralala_dblclick(t_tll *x)
 {
     dictionary_dump(x->data, 1, 0);
 }
@@ -187,10 +186,10 @@ void tralala_callback(void *ptr, PIZEvent *event)
 {
     long k, argc = 0;
     long *argv = NULL;
-    t_tralala *x = NULL;
+    t_tll *x = NULL;
     PIZEventCode code;
     
-    x = (t_tralala *)ptr;
+    x = (t_tll *)ptr;
     pizEventCode(event, &code);
     
     switch (code) {
@@ -240,27 +239,27 @@ void tralala_callback(void *ptr, PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_bang(t_tralala *x) 
+void tralala_bang(t_tll *x) 
 {   
     SEND(PIZ_EVENT_PLAY)
 }
 
-void tralala_play(t_tralala *x) 
+void tralala_play(t_tll *x) 
 {   
     SEND(PIZ_EVENT_PLAY)
 }
 
-void tralala_stop(t_tralala *x) 
+void tralala_stop(t_tll *x) 
 {   
     SEND(PIZ_EVENT_STOP)
 }
 
-void tralala_loop(t_tralala *x) 
+void tralala_loop(t_tll *x) 
 {   
     SEND(PIZ_EVENT_LOOP)
 }
 
-void tralala_unloop(t_tralala *x) 
+void tralala_unloop(t_tll *x) 
 {   
     SEND(PIZ_EVENT_UNLOOP)
 }
@@ -269,12 +268,12 @@ void tralala_unloop(t_tralala *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_list(t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+void tralala_list(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
     tralala_parseMessage(x, s, argc, argv);
 }
 
-void tralala_anything(t_tralala *x, t_symbol *s, long argc, t_atom *argv)
+void tralala_anything(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
     tralala_parseMessage(x, s, argc, argv);
 }

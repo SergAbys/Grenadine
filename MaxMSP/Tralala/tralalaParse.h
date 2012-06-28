@@ -20,13 +20,13 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-typedef struct _tralalaSymbols {
+typedef struct _tllSymbols {
     t_symbol *sym_note;
     t_symbol *sym_clear;
     t_symbol *sym_tralala;
     t_symbol *sym_current;
     t_symbol *sym_restore;
-    } t_tralalaSymbols;
+    } t_tllSymbols;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -41,11 +41,11 @@ typedef struct _tralalaSymbols {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-void tralala_parseInit          (t_tralalaSymbols *table);
+void tralala_parseInit          (t_tllSymbols *table);
 
-void tralala_parseDictionary    (t_tralala *x, t_dictionary *d);
-void tralala_parseMessage       (t_tralala *x, t_symbol *s, long argc, t_atom *argv);
-void tralala_parseNotification  (t_tralala *x, PIZEvent *event);
+void tralala_parseDictionary    (t_tll *x, t_dictionary *d);
+void tralala_parseMessage       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_parseNotification  (t_tll *x, PIZEvent *event);
       
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
