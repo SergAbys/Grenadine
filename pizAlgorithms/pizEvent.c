@@ -187,6 +187,11 @@ void pizEventSetIdentifier(PIZEvent *x, long identifier)
     x->identifier = identifier;
 }
 
+void pizEventSetTime(PIZEvent *x, const PIZTime *time)
+{
+    pizTimeCopy(&x->time, time);
+}
+
 void pizEventSetData(PIZEvent *x, long argc, const long *argv)
 {
     if (argc && argv) {
@@ -215,6 +220,11 @@ void pizEventType(const PIZEvent *x, PIZEventType *type)
 void pizEventIdentifier(const PIZEvent *x, long *identifier)
 {
     (*identifier) = x->identifier;
+}
+
+void pizEventTime(const PIZEvent *x, PIZTime *time)
+{
+    pizTimeCopy(time, &x->time);
 }
 
 PIZError pizEventData(const PIZEvent *x, long *argc, long **argv)

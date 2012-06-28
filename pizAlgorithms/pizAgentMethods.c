@@ -63,10 +63,20 @@ PIZError pizAgentInit(PIZAgent *x, const PIZEvent *event)
 
 PIZError pizAgentPlay(PIZAgent *x, const PIZEvent *event)
 {
+    PIZTime time;
+    
     if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
         x->flags |= PIZ_AGENT_FLAG_REPLAY;
         
     } else {
+        pizEventTime(event, &time);
+        
+        if (!(pizTimeIsZero(&time))) {
+            pizTimeCopy(&x->grainStart, &time);
+            pizTimeCopy(&x->grainEnd, &x->grainStart);
+            pizTimeAddNano(&x->grainEnd, &x->grainSize);
+        }
+    
         pizSequenceJumpStart(x->sequence);
         x->flags |= PIZ_AGENT_FLAG_RUNNING; 
     }

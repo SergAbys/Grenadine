@@ -48,22 +48,23 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define DEBUGEVENT  if (event) {            \
-                        PIZTime t;          \
-                        pizTimeSet(&t);     \
-                        t = t / 1000000.;   \
-                        post("%llu / %ld / %s / %ld %ld %ld %ld %ld %ld %ld %ld / %s",      \
-                        t, event->identifier, pizEventName(event),                          \
-                        event->data[0],     \
-                        event->data[1],     \
-                        event->data[2],     \
-                        event->data[3],     \
-                        event->data[4],     \
-                        event->data[5],     \
-                        event->data[6],     \
-                        event->data[8],     \
-                        __FUNCTION__        \
-                        );                  \
+#define DEBUGEVENT  if (event) {                    \
+                        PIZTime ttt = event->time;  \
+                        ttt = ttt / 1000000;        \
+                        post("%llu / %ld / %s / %ld %ld %ld %ld %ld %ld %ld %ld / %s",  \
+                        ttt,                        \
+                        event->identifier,          \
+                        pizEventName(event),        \
+                        event->data[0],             \
+                        event->data[1],             \
+                        event->data[2],             \
+                        event->data[3],             \
+                        event->data[4],             \
+                        event->data[5],             \
+                        event->data[6],             \
+                        event->data[8],             \
+                        __FUNCTION__                \
+                        );                          \
                     }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -172,11 +173,13 @@ const char  *pizEventName           (const PIZEvent *x);
 
 void        pizEventFree            (PIZEvent *x);
 void        pizEventSetIdentifier   (PIZEvent *x, long identifier);
+void        pizEventSetTime         (PIZEvent *x, const PIZTime *time);
 void        pizEventSetData         (PIZEvent *x, long argc, const long *argv);
 
 void        pizEventCode            (const PIZEvent *x, PIZEventCode *code);
 void        pizEventType            (const PIZEvent *x, PIZEventType *type);
 void        pizEventIdentifier      (const PIZEvent *x, long *identifier);
+void        pizEventTime            (const PIZEvent *x, PIZTime *time);
 PIZError    pizEventData            (const PIZEvent *x, long *argc, long **argv);
 
 PIZ_END_C_LINKAGE

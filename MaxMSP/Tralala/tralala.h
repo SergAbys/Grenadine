@@ -30,6 +30,9 @@
 
 #define SEND(code)  PIZEvent *event = NULL;                             \
                     if (event = pizEventNew(code)) {                    \
+                        PIZTime time;                                   \
+                        pizTimeSet(&time);                              \
+                        pizEventSetTime(event, &time);                  \
                         pizEventSetIdentifier(event, x->identifier);    \
                         pizAgentAddEvent(x->agent, event);              \
                     }

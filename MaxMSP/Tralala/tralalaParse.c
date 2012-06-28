@@ -199,6 +199,7 @@ void tralala_parseDictionary(t_tralala *x, t_dictionary *d)
 
 void tralala_parseMessage(t_tralala *x, t_symbol *s, long argc, t_atom *argv)
 {
+    PIZTime time;
     PIZEventCode code = 0;
         
     if (!(quickmap_lookup_key1(tll_code, (void *)s, (void **)&code))) {
@@ -264,6 +265,8 @@ void tralala_parseMessage(t_tralala *x, t_symbol *s, long argc, t_atom *argv)
     }
     
     if (event = pizEventNew(code)) {
+        pizTimeSet(&time);
+        pizEventSetTime(event, &time);
         pizEventSetData(event, k, data);
         pizEventSetIdentifier(event, x->identifier);
         pizAgentAddEvent(x->agent, event);
