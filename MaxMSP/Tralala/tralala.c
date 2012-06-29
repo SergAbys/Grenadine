@@ -14,8 +14,14 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 t_tllSymbols tll_table;
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZ_LOCAL void tralala_send   (t_tll *x, PIZEventCode code, PIZTime *time);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -32,14 +38,14 @@ int main(void)
     
     c = class_new("tralala", (method)tralala_new, (method)tralala_free, sizeof(t_tll), 0L, A_GIMME, 0);
 
-    class_addmethod(c, (method)tralala_bang,       "bang",                 0);
-    class_addmethod(c, (method)tralala_play,       "play",                 0);
     class_addmethod(c, (method)tralala_stop,       "stop",                 0);
-    class_addmethod(c, (method)tralala_loop,       "loop",                 0);
     class_addmethod(c, (method)tralala_unloop,     "unloop",               0);
-    class_addmethod(c, (method)tralala_dblclick,   "dblclick",             A_CANT, 0);
-    class_addmethod(c, (method)tralala_jsave,      "appendtodictionary",   A_CANT, 0);
-    class_addmethod(c, (method)tralala_assist,     "assist",               A_CANT, 0);
+    class_addmethod(c, (method)tralala_dblclick,   "dblclick",             A_CANT,  0);
+    class_addmethod(c, (method)tralala_jsave,      "appendtodictionary",   A_CANT,  0);
+    class_addmethod(c, (method)tralala_assist,     "assist",               A_CANT,  0);
+    class_addmethod(c, (method)tralala_bang,       "bang",                 A_GIMME, 0);
+    class_addmethod(c, (method)tralala_play,       "play",                 A_GIMME, 0);
+    class_addmethod(c, (method)tralala_loop,       "loop",                 A_GIMME, 0);
     class_addmethod(c, (method)tralala_list,       "list",                 A_GIMME, 0);
     class_addmethod(c, (method)tralala_anything,   "anything",             A_GIMME, 0);
 
@@ -219,7 +225,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
         break;
     
     case PIZ_EVENT_END :
-        outlet_anything(x->middleRight, TLL_PLAY, 1, tralala_timeAtom(&x->time)); 
+        outlet_anything(x->middleRight, TLL_PLAY, 1, tralala_atomWithTime(&x->time));
         break;
     
     default :
@@ -255,17 +261,17 @@ void tralala_unloop(t_tll *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_bang(t_tll *x) 
+void tralala_bang(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
     SEND(PIZ_EVENT_PLAY)
 }
 
-void tralala_play(t_tll *x) 
+void tralala_play(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
     SEND(PIZ_EVENT_PLAY)
 }
 
-void tralala_loop(t_tll *x) 
+void tralala_loop(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
     SEND(PIZ_EVENT_LOOP)
 }
@@ -279,6 +285,23 @@ void tralala_anything(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
     tralala_parseMessage(x, s, argc, argv);
 }
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark ---
+#pragma mark -
         
+void tralala_send(t_tll *x, PIZEventCode code, PIZTime *time)
+{
+    PIZEvent *event = NULL;
+    
+    if (event = pizEventNew(code)) {
+        pizEventSetTime(event, time);
+        pizEventSetIdentifier(event, x->identifier);
+        pizAgentAddEvent(x->agent, event);
+    }
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------:x

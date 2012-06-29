@@ -30,9 +30,25 @@ void tralala_timeInit(t_time *x)
     x->time = PIZ_TIME_ZERO;
 }
 
-t_atom *tralala_timeAtom(t_time *x)
+t_atom *tralala_atomWithTime(t_time *x)
 {
     return &x->link;
+}
+
+t_time *tralala_timeWithAtom(t_atom *a)
+{
+    t_time *time = NULL;
+    t_symbol *s = NULL;
+    
+    if ((atom_gettype(a) == A_SYM) && (s = atom_getsym(a)) && (time = (t_time *)s->s_thing)) {
+    //
+    if ((*((long *)time)) != TLL_MAGIC) {
+        time = NULL;
+    } 
+    //    
+    }
+    
+    return time;
 }
     
 // -------------------------------------------------------------------------------------------------------------

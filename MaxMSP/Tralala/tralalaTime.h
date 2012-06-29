@@ -22,24 +22,22 @@
 // -------------------------------------------------------------------------------------------------------------
 
 typedef struct _time {
-    t_atom      link;
-    ulong       magic;
-    PIZTime     time;
+    ulong   magic;
+    t_atom  link;
+    PIZTime time;
     } t_time;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void     tralala_timeInit       (t_time *x);
-PIZError tralala_atomWithTime   (t_atom *a, t_time *time);
-PIZError tralala_timeWithAtom   (PIZTime *time, t_atom *a);
-
-t_atom *tralala_timeAtom(t_time *x);
+void    tralala_timeInit        (t_time *x);
+t_atom  *tralala_atomWithTime   (t_time *x);
+t_time  *tralala_timeWithAtom   (t_atom *a);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_EXTERN t_atom *tralala_timeAtom(t_time *x)
+PIZ_EXTERN t_atom *tralala_atomWithTime(t_time *x)
 {
     return &x->link;
 }

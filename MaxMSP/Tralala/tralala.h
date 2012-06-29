@@ -29,15 +29,10 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define SEND(code)  PIZEvent *event = NULL;                             \
-                    if (event = pizEventNew(code)) {                    \
-                        PIZTime time;                                   \
-                        pizTimeSet(&time);                              \
-                        pizEventSetTime(event, &time);                  \
-                        pizEventSetIdentifier(event, x->identifier);    \
-                        pizAgentAddEvent(x->agent, event);              \
-                    }
-                    
+#define SEND(code)  PIZTime time;                       \
+                    pizTimeSet(&time);                  \
+                    tralala_send(x, (code), &time);     \
+                                    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -77,9 +72,9 @@ void tralala_callback   (void *ptr, PIZEvent *event);
 void tralala_stop       (t_tll *x);
 void tralala_unloop     (t_tll *x);
 
-void tralala_bang       (t_tll *x);
-void tralala_play       (t_tll *x);
-void tralala_loop       (t_tll *x);
+void tralala_bang       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_play       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_loop       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_list       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_anything   (t_tll *x, t_symbol *s, long argc, t_atom *argv);
      
