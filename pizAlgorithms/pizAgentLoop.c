@@ -134,7 +134,6 @@ void *pizAgentEventLoop(void *agent)
         
     if (!PIZ_EXIT) {
     //
-    
     pizAgentEventLoopInit(x);
      
     while (pizAgentEventLoopIsWorkTime(x)) {
@@ -316,7 +315,7 @@ void pizAgentEventLoopDoStep(PIZAgent *x, bool blank)
             x->flags &= ~PIZ_AGENT_FLAG_RUNNING;
         }
         
-        pizSequenceJumpStart(x->sequence);
+        pizSequenceJumpToStart(x->sequence);
         pizAgentAddNotification(x, PIZ_EVENT_END, 0, NULL);
   
     } else if (err == PIZ_MEMORY) { 

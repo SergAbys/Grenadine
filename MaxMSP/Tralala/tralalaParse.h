@@ -33,12 +33,12 @@ typedef struct _tllSymbols {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_PLAY        (tll_table.play)
-#define TLL_NOTE        (tll_table.note)
-#define TLL_CLEAR       (tll_table.clear)
-#define TLL_TRALALA     (tll_table.tralala)
-#define TLL_CURRENT     (tll_table.current)
-#define TLL_RESTORE     (tll_table.restore)
+#define TLL_SYM_PLAY        (tll_table.play)
+#define TLL_SYM_NOTE        (tll_table.note)
+#define TLL_SYM_CLEAR       (tll_table.clear)
+#define TLL_SYM_TRALALA     (tll_table.tralala)
+#define TLL_SYM_CURRENT     (tll_table.current)
+#define TLL_SYM_RESTORE     (tll_table.restore)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

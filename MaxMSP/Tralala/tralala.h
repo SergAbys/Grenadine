@@ -17,7 +17,6 @@
 #include "ext.h"
 #include "ext_obex.h"
 #include "pizAgent.h"
-#include "tralalaTime.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -25,14 +24,7 @@
 
 #define TLL_FLAG_NONE   0UL
 #define TLL_FLAG_INIT   1UL
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define SEND(code)  PIZTime time;                       \
-                    pizTimeSet(&time);                  \
-                    tralala_send(x, (code), &time);     \
-                                    
+    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -42,8 +34,9 @@ typedef struct _tll {
     ulong           flags;					
     t_atom          played[4];
     t_atom          dumped[5];
+    t_atom          link;
+    PIZTime         time;
     long            identifier;
-    t_time          time;
     t_dictionary    *data;
     t_dictionary    *current;
     t_dictionary    *restore;
@@ -69,12 +62,12 @@ void tralala_dblclick   (t_tll *x);
 
 void tralala_callback   (void *ptr, PIZEvent *event);
 
-void tralala_stop       (t_tll *x);
-void tralala_unloop     (t_tll *x);
-
 void tralala_bang       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_play       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_loop       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_stop       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_unloop     (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+
 void tralala_list       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_anything   (t_tll *x, t_symbol *s, long argc, t_atom *argv);
      

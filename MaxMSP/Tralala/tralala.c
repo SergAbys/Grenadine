@@ -21,7 +21,7 @@ t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void tralala_send   (t_tll *x, PIZEventCode code, PIZTime *time);
+PIZ_LOCAL void tralala_send (t_tll *x, PIZEventCode code, long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -38,14 +38,14 @@ int main(void)
     
     c = class_new("tralala", (method)tralala_new, (method)tralala_free, sizeof(t_tll), 0L, A_GIMME, 0);
 
-    class_addmethod(c, (method)tralala_stop,       "stop",                 0);
-    class_addmethod(c, (method)tralala_unloop,     "unloop",               0);
     class_addmethod(c, (method)tralala_dblclick,   "dblclick",             A_CANT,  0);
     class_addmethod(c, (method)tralala_jsave,      "appendtodictionary",   A_CANT,  0);
     class_addmethod(c, (method)tralala_assist,     "assist",               A_CANT,  0);
     class_addmethod(c, (method)tralala_bang,       "bang",                 A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,       "play",                 A_GIMME, 0);
     class_addmethod(c, (method)tralala_loop,       "loop",                 A_GIMME, 0);
+    class_addmethod(c, (method)tralala_stop,       "stop",                 A_GIMME, 0);
+    class_addmethod(c, (method)tralala_unloop,     "unloop",               A_GIMME, 0);
     class_addmethod(c, (method)tralala_list,       "list",                 A_GIMME, 0);
     class_addmethod(c, (method)tralala_anything,   "anything",             A_GIMME, 0);
 
@@ -68,6 +68,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
 
     if (x = (t_tll *)object_alloc(tll_class)) {
     //
+    t_symbol *s = NULL;
     PIZError err = PIZ_ERROR;
     
     if (x->data = dictionary_new( )) {
@@ -79,32 +80,35 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     x->flags = TLL_FLAG_NONE;
     
     if ((d = (t_dictionary *)gensym("#D")->s_thing) 
-        && (dictionary_entryisdictionary(d, TLL_TRALALA))) {
-        dictionary_getdictionary(d, TLL_TRALALA, (t_object **)&t);
+        && (dictionary_entryisdictionary(d, TLL_SYM_TRALALA))) {
+        dictionary_getdictionary(d, TLL_SYM_TRALALA, (t_object **)&t);
         dictionary_copyunique(x->data, t);
             
     } else {
         x->flags |= TLL_FLAG_INIT;
     }
     
-    if (!(dictionary_entryisdictionary(x->data, TLL_RESTORE)) 
+    if (!(dictionary_entryisdictionary(x->data, TLL_SYM_RESTORE)) 
         && (x->restore = dictionary_new( ))) {
-        dictionary_appenddictionary(x->data, TLL_RESTORE,(t_object *)x->restore);
+        dictionary_appenddictionary(x->data, TLL_SYM_RESTORE,(t_object *)x->restore);
     }
     
-    if (!(dictionary_entryisdictionary(x->data, TLL_CURRENT)) 
+    if (!(dictionary_entryisdictionary(x->data, TLL_SYM_CURRENT)) 
         && (x->current = dictionary_new( ))) {
-        dictionary_appenddictionary(x->data, TLL_CURRENT, (t_object *)x->current);
+        dictionary_appenddictionary(x->data, TLL_SYM_CURRENT, (t_object *)x->current);
     }
         
-    err |= (dictionary_getdictionary(x->data, TLL_RESTORE, (t_object **)&x->restore)) != MAX_ERR_NONE;
-    err |= (dictionary_getdictionary(x->data, TLL_CURRENT, (t_object **)&x->current)) != MAX_ERR_NONE;
+    err |= (dictionary_getdictionary(x->data, TLL_SYM_RESTORE, (t_object **)&x->restore)) != MAX_ERR_NONE;
+    err |= (dictionary_getdictionary(x->data, TLL_SYM_CURRENT, (t_object **)&x->current)) != MAX_ERR_NONE;
     //
     }
     
-    x->identifier = ++identifier;
-    tralala_timeInit(&x->time);
+    s = symbol_unique( );
+    s->s_thing = (t_object *)x;
+    atom_setsym(&x->link, s);
     
+    x->identifier = ++identifier;
+        
     if (!err && (x->agent = pizAgentNew(x->identifier))) {
         x->right       = bangout((t_object *)x);
         x->middleRight = outlet_new((t_object *)x, NULL);
@@ -129,8 +133,8 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
 void tralala_init(t_tll *x, t_symbol *s, short argc, t_atom *argv)
 {
     if (x->flags & TLL_FLAG_INIT) {
+        tralala_send(x, PIZ_EVENT_INIT, 0, NULL);
         x->flags &= ~TLL_FLAG_INIT; 
-        SEND(PIZ_EVENT_INIT)
 
     } else {
         tralala_parseDictionary(x, x->restore);
@@ -172,7 +176,7 @@ void tralala_jsave(t_tll *x, t_dictionary *d)
         
         if (t = dictionary_new( )) {
             dictionary_copyunique(t, x->data);
-            dictionary_appenddictionary(d, TLL_TRALALA, (t_object *)t);
+            dictionary_appenddictionary(d, TLL_SYM_TRALALA, (t_object *)t);
         }
     }
 }
@@ -213,11 +217,11 @@ void tralala_callback(void *ptr, PIZEvent *event)
     case PIZ_EVENT_NOTE_DUMPED :
         pizEventData(event, &argc, &argv);
         atom_setlong_array(5, x->dumped, 5, argv);
-        outlet_anything(x->middleLeft, TLL_NOTE, 5, x->dumped); 
+        outlet_anything(x->middleLeft, TLL_SYM_NOTE, 5, x->dumped); 
         break;
 
     case PIZ_EVENT_WILL_DUMP :
-        outlet_anything(x->middleLeft, TLL_CLEAR, 0, NULL);
+        outlet_anything(x->middleLeft, TLL_SYM_CLEAR, 0, NULL);
         break;
 
     case PIZ_EVENT_WILL_END :
@@ -225,7 +229,8 @@ void tralala_callback(void *ptr, PIZEvent *event)
         break;
     
     case PIZ_EVENT_END :
-        outlet_anything(x->middleRight, TLL_PLAY, 1, tralala_atomWithTime(&x->time));
+        pizEventTime(event, &x->time);
+        outlet_anything(x->middleRight, TLL_SYM_PLAY, 1, &x->link);
         break;
     
     default :
@@ -247,34 +252,34 @@ void tralala_callback(void *ptr, PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_stop(t_tll *x) 
+void tralala_bang(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
-    SEND(PIZ_EVENT_STOP)
+    tralala_send(x, PIZ_EVENT_PLAY, argc, argv);
+}   
+
+void tralala_play(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
+{   
+    tralala_send(x, PIZ_EVENT_PLAY, argc, argv);
 }
 
-void tralala_unloop(t_tll *x) 
+void tralala_loop(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
-    SEND(PIZ_EVENT_UNLOOP)
+    tralala_send(x, PIZ_EVENT_LOOP, argc, argv);
+}
+
+void tralala_stop(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
+{   
+    tralala_send(x, PIZ_EVENT_STOP, 0, NULL);
+}
+
+void tralala_unloop(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
+{   
+    tralala_send(x, PIZ_EVENT_UNLOOP, 0, NULL);
 }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-
-void tralala_bang(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
-{   
-    SEND(PIZ_EVENT_PLAY)
-}
-
-void tralala_play(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
-{   
-    SEND(PIZ_EVENT_PLAY)
-}
-
-void tralala_loop(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
-{   
-    SEND(PIZ_EVENT_LOOP)
-}
 
 void tralala_list(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
@@ -292,14 +297,28 @@ void tralala_anything(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 #pragma mark ---
 #pragma mark -
         
-void tralala_send(t_tll *x, PIZEventCode code, PIZTime *time)
+void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv)
 {
     PIZEvent *event = NULL;
     
     if (event = pizEventNew(code)) {
-        pizEventSetTime(event, time);
-        pizEventSetIdentifier(event, x->identifier);
-        pizAgentAddEvent(x->agent, event);
+    //
+    PIZTime time;
+    pizTimeSet(&time);
+    
+    if ((argc && argv) && (atom_gettype(argv) == A_SYM)) {
+        t_symbol *s = atom_getsym(argv);
+        t_object *o = s->s_thing;
+        if (o && !NOGOOD(o) && object_classname_compare(o, TLL_SYM_TRALALA)) {
+            t_tll *ptr = (t_tll *)o;
+            pizTimeCopy(&time, &ptr->time);
+        }
+    }
+                        
+    pizEventSetTime(event, &time);
+    pizEventSetIdentifier(event, x->identifier);
+    pizAgentAddEvent(x->agent, event);
+    //
     }
 }
 

@@ -58,7 +58,7 @@ bool pizSequenceIsAtEnd(PIZSequence *x)
     return (x->index >= x->end);
 }
 
-void pizSequenceJumpStart(PIZSequence *x)
+void pizSequenceJumpToStart(PIZSequence *x)
 {
     x->index = x->start;
 }

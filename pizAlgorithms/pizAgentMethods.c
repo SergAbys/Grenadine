@@ -71,13 +71,13 @@ PIZError pizAgentPlay(PIZAgent *x, const PIZEvent *event)
     } else {
         pizEventTime(event, &time);
         
-        if (!(pizTimeIsZero(&time))) {
+        if (pizTimeIsValid(&time)) {
             pizTimeCopy(&x->grainStart, &time);
             pizTimeCopy(&x->grainEnd, &x->grainStart);
             pizTimeAddNano(&x->grainEnd, &x->grainSize);
         }
     
-        pizSequenceJumpStart(x->sequence);
+        pizSequenceJumpToStart(x->sequence);
         x->flags |= PIZ_AGENT_FLAG_RUNNING; 
     }
     

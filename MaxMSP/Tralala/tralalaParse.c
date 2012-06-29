@@ -317,7 +317,7 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
         dictionary_deleteentry(x->current, s);
         
     } else {
-        atom_setsym(data, TLL_NOTE);
+        atom_setsym(data, TLL_SYM_NOTE);
         dictionary_appendatoms(x->current, s, k - 1, data);
     }
     //

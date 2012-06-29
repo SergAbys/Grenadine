@@ -50,7 +50,7 @@
 PIZ_START_C_LINKAGE
 
 PIZ_LOCAL bool      pizSequenceIsAtEnd          (PIZSequence *x);
-PIZ_LOCAL void      pizSequenceJumpStart        (PIZSequence *x);
+PIZ_LOCAL void      pizSequenceJumpToStart      (PIZSequence *x);
 
 PIZ_LOCAL void      pizSequenceInit             (PIZSequence *x);
 PIZ_LOCAL PIZError  pizSequenceDump             (PIZSequence *x); //
@@ -71,7 +71,7 @@ PIZ_EXTERN bool pizSequenceIsAtEnd(PIZSequence *x)
     return (x->index >= x->end);
 }
 
-PIZ_EXTERN void pizSequenceJumpStart(PIZSequence *x)
+PIZ_EXTERN void pizSequenceJumpToStart(PIZSequence *x)
 {
     x->index = x->start;
 }
