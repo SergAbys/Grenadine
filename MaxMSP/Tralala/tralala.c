@@ -228,9 +228,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
         break;
     //
     }
-    
-    DEBUGEVENT
-    
+        
     pizEventFree(event);
 }
 

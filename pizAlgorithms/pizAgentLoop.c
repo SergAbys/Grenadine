@@ -231,11 +231,11 @@ void pizAgentAddNotification(PIZAgent *x, PIZEventCode n, long ac, long *av)
 
 PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q) 
 {
-    PIZError err = PIZ_GOOD;
-    PIZEventCode code;
-    PIZMethodError f = NULL;
-    PIZEvent *event = NULL;
     void *o = NULL;
+    PIZEventCode code;
+    PIZEvent *event = NULL;
+    PIZError err = PIZ_GOOD;
+    PIZMethodError f = NULL;
             
     PIZ_AGENT_LOCK_EVENT
     
@@ -262,9 +262,7 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
     if (o && (f = pizEventMethods[code]) && ((*f)(o, event) == PIZ_MEMORY)) {
         PIZ_AGENT_MEMORY
     }
-    
-    DEBUGEVENT
-    
+        
     pizEventFree(event);
     //
     }
