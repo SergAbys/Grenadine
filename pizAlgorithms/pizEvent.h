@@ -49,7 +49,8 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #define DEBUGEVENT  if (event) {                    \
-                        PIZTime ttt = event->time;  \
+                        PIZTime ttt;                \
+                        pizTimeSet(&ttt);           \
                         ttt = ttt / 1000000;        \
                         post("%llu / %ld / %s / %ld %ld %ld %ld %ld %ld %ld %ld / %s",  \
                         ttt,                        \

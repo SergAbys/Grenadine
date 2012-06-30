@@ -54,7 +54,7 @@ tll_key          = (t_quickmap *)quickmap_new( );
 tll_select       = (t_quickmap *)quickmap_new( );
 tll_notification = (t_quickmap *)quickmap_new( );
 
-table->play    = gensym("play");
+table->end     = gensym("end");
 table->note    = gensym("note");
 table->clear   = gensym("clear");
 table->tralala = gensym("tralala");

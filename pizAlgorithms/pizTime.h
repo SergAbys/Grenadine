@@ -79,7 +79,7 @@ void        pizTimeCopy             (PIZTime *t, const PIZTime *toCopy);
 void        pizTimeAddNano          (PIZTime *t, const PIZNano *ns); 
 PIZError    pizTimeElapsedNano      (const PIZTime *t0, const PIZTime *t1, PIZNano *result);
 void        pizTimespecWithNano     (struct timespec *t, const PIZNano *ns);
-bool        pizTimeIsValid          (const PIZTime *t);
+bool        pizTimeIsZero           (const PIZTime *t);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
@@ -108,6 +108,11 @@ PIZ_EXTERN void pizTimespecWithNano(struct timespec *t, const PIZNano *ns)
 {
     t->tv_sec  = (time_t)(*ns / PIZ_TIME_NANO_PER_SECOND);
     t->tv_nsec = (long)(*ns % PIZ_TIME_NANO_PER_SECOND);
+}
+
+PIZ_EXTERN bool pizTimeIsZero (const PIZTime *t)
+{
+    return ((*t) == PIZ_TIME_ZERO);
 }
 
 #endif // __MACH__

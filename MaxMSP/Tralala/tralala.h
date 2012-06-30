@@ -58,11 +58,8 @@ void tralala_free       (t_tll *x);
 void tralala_assist     (t_tll *x, void *b, long m, long a, char *s);
 void tralala_jsave      (t_tll *x, t_dictionary *d);
 
-void tralala_dblclick   (t_tll *x);
-
 void tralala_callback   (void *ptr, PIZEvent *event);
 
-void tralala_bang       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_play       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_loop       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_stop       (t_tll *x, t_symbol *s, long argc, t_atom *argv);

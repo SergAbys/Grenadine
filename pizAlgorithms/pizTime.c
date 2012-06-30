@@ -97,15 +97,9 @@ void pizTimespecWithNano(struct timespec *t, const PIZNano *ns)
     t->tv_nsec = (long)(*ns % PIZ_TIME_NANO_PER_SECOND);
 }
 
-bool pizTimeIsValid(const PIZTime *t)
+bool pizTimeIsZero (const PIZTime *t)
 {
-    if ((*t) != PIZ_TIME_ZERO) {
-        if ((*t) < mach_absolute_time( )) {
-            return true;
-        }
-    } 
-    
-    return false;
+    return ((*t) == PIZ_TIME_ZERO);
 }
 
 #endif // __MACH__

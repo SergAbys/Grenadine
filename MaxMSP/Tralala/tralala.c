@@ -10,7 +10,6 @@
 
 #include "tralalaParse.h"
 #include "jpatcher_api.h"
-#include "ext_atomic.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -38,11 +37,11 @@ int main(void)
     
     c = class_new("tralala", (method)tralala_new, (method)tralala_free, sizeof(t_tll), 0L, A_GIMME, 0);
 
-    class_addmethod(c, (method)tralala_dblclick,   "dblclick",             A_CANT,  0);
     class_addmethod(c, (method)tralala_jsave,      "appendtodictionary",   A_CANT,  0);
     class_addmethod(c, (method)tralala_assist,     "assist",               A_CANT,  0);
-    class_addmethod(c, (method)tralala_bang,       "bang",                 A_GIMME, 0);
+    class_addmethod(c, (method)tralala_play,       "bang",                 A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,       "play",                 A_GIMME, 0);
+    class_addmethod(c, (method)tralala_play,       "end",                  A_GIMME, 0);
     class_addmethod(c, (method)tralala_loop,       "loop",                 A_GIMME, 0);
     class_addmethod(c, (method)tralala_stop,       "stop",                 A_GIMME, 0);
     class_addmethod(c, (method)tralala_unloop,     "unloop",               A_GIMME, 0);
@@ -185,15 +184,6 @@ void tralala_jsave(t_tll *x, t_dictionary *d)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_dblclick(t_tll *x)
-{
-    dictionary_dump(x->data, 1, 0);
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 void tralala_callback(void *ptr, PIZEvent *event)
 {
     long k, argc = 0;
@@ -230,7 +220,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
     
     case PIZ_EVENT_END :
         pizEventTime(event, &x->time);
-        outlet_anything(x->middleRight, TLL_SYM_PLAY, 1, &x->link);
+        outlet_anything(x->middleRight, TLL_SYM_END, 1, &x->link);
         break;
     
     default :
@@ -241,21 +231,12 @@ void tralala_callback(void *ptr, PIZEvent *event)
     
     DEBUGEVENT
     
-    if (!(dictionary_hasentry(x->current, gensym("chord")))) {
-        post("###");
-    }
-    
     pizEventFree(event);
 }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void tralala_bang(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
-{   
-    tralala_send(x, PIZ_EVENT_PLAY, argc, argv);
-}   
+#pragma mark -  
 
 void tralala_play(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
@@ -303,19 +284,17 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv)
     
     if (event = pizEventNew(code)) {
     //
-    PIZTime time;
-    pizTimeSet(&time);
-    
     if ((argc && argv) && (atom_gettype(argv) == A_SYM)) {
         t_symbol *s = atom_getsym(argv);
         t_object *o = s->s_thing;
         if (o && !NOGOOD(o) && object_classname_compare(o, TLL_SYM_TRALALA)) {
+            PIZTime time;
             t_tll *ptr = (t_tll *)o;
             pizTimeCopy(&time, &ptr->time);
+            pizEventSetTime(event, &time);
         }
     }
                         
-    pizEventSetTime(event, &time);
     pizEventSetIdentifier(event, x->identifier);
     pizAgentAddEvent(x->agent, event);
     //

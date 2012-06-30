@@ -370,12 +370,10 @@ void pizAgentEventLoopInit(PIZAgent *x)
 
 void pizAgentEventLoopSleep(PIZAgent *x)
 {
-    PIZTime now;
-    pizTimeSet(&now);
-    
     if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
     //
     PIZNano ns;
+    PIZTime now;
     struct timespec t0, t1;
     struct timespec *ptrA = &t0;
     struct timespec *ptrB = &t1;
@@ -383,6 +381,7 @@ void pizAgentEventLoopSleep(PIZAgent *x)
     
     PIZError err = PIZ_GOOD;
     
+    pizTimeSet(&now);
     err = pizTimeElapsedNano(&now, &x->grainEnd, &ns);
     
     while (err) {
@@ -390,6 +389,11 @@ void pizAgentEventLoopSleep(PIZAgent *x)
         pizTimeAddNano(&x->grainEnd, &x->grainSize); 
         
         pizAgentEventLoopDoStep(x, 1);
+        
+        if (!(x->flags & PIZ_AGENT_FLAG_RUNNING)) {
+            x->flags |= PIZ_AGENT_FLAG_INIT;
+            return;
+        }
         
         err = pizTimeElapsedNano(&now, &x->grainEnd, &ns);
     }
