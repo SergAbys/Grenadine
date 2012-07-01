@@ -64,7 +64,6 @@ void tralala_init       (t_tll *x, t_symbol *s, short argc, t_atom *argv);
 void tralala_free       (t_tll *x);
 void tralala_assist     (t_tll *x, void *b, long m, long a, char *s);
 void tralala_jsave      (t_tll *x, t_dictionary *d);
-void tralala_paint      (t_tll *x, t_object *patcherview); 
 
 void tralala_callback   (void *ptr, PIZEvent *event);
 
@@ -72,9 +71,11 @@ void tralala_play       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_loop       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_stop       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_unloop     (t_tll *x, t_symbol *s, long argc, t_atom *argv);
-
 void tralala_list       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_anything   (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+
+void tralala_paint      (t_tll *x, t_object *patcherview); 
+void tralala_key        (t_tll *x, t_object *patcherview, long keycode, long m, long textcharacter);
      
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

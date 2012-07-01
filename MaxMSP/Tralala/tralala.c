@@ -43,6 +43,7 @@ int main(void)
     class_addmethod(c, (method)tralala_jsave,       "jsave",     A_CANT,  0);
     class_addmethod(c, (method)tralala_assist,      "assist",    A_CANT,  0);
     class_addmethod(c, (method)tralala_paint,       "paint",     A_CANT,  0);
+    class_addmethod(c, (method)tralala_key,         "key",       A_CANT,  0);
     class_addmethod(c, (method)tralala_play,        "bang",      A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "play",      A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "end",       A_GIMME, 0);
@@ -53,7 +54,7 @@ int main(void)
     class_addmethod(c, (method)tralala_anything,    "anything",  A_GIMME, 0);
 
 	CLASS_ATTR_RGBA                 (c, "color", 0, t_tll, background); 
-	CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "color", 0, "1. 0.75 0. 1."); 
+	CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "color", 0, "0. 0. 0. 1."); 
 	CLASS_ATTR_STYLE_LABEL          (c, "color", 0, "rgba", "Background Color");
 	CLASS_ATTR_CATEGORY             (c, "color", 0, "Color");
 	CLASS_ATTR_DEFAULT              (c, "patching_rect", 0, "0. 0. 50. 50.");
@@ -84,6 +85,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     PIZError err = PIZ_ERROR;
     
     long boxflags = 0L  | JBOX_DRAWFIRSTIN 
+                        | JBOX_NODRAWBOX 
                         | JBOX_DRAWINLAST
                         | JBOX_GROWBOTH
                         | JBOX_DRAWBACKGROUND
@@ -210,18 +212,9 @@ void tralala_jsave(t_tll *x, t_dictionary *d)
     }
 }
 
-void tralala_paint(t_tll *x, t_object *patcherview)
-{
-	t_rect rect;
-	t_jgraphics *g = NULL;
-	
-	g = (t_jgraphics*)patcherview_get_jgraphics(patcherview);		
-	jbox_get_rect_for_view((t_object *)x, patcherview, &rect);		
-	
-	jgraphics_set_source_jrgba(g, &x->background);
-	jgraphics_rectangle(g, 0., 0., rect.width, rect.height);
-	jgraphics_fill(g);
-}
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void tralala_callback(void *ptr, PIZEvent *event)
 {
@@ -305,6 +298,28 @@ void tralala_list(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 void tralala_anything(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
     tralala_parseMessage(x, s, argc, argv);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void tralala_paint(t_tll *x, t_object *patcherview)
+{
+	t_rect rect;
+	t_jgraphics *g = NULL;
+	
+	g = (t_jgraphics*)patcherview_get_jgraphics(patcherview);		
+	jbox_get_rect_for_view((t_object *)x, patcherview, &rect);		
+	
+	jgraphics_set_source_jrgba(g, &x->background);
+	jgraphics_rectangle(g, 0., 0., rect.width, rect.height);
+	jgraphics_fill(g);
+}
+
+void tralala_key(t_tll *x, t_object *patcherview, long keycode, long m, long textcharacter)
+{
+	//post("Key : %ld %ld %ld", keycode, m, textcharacter);
 }
 
 // -------------------------------------------------------------------------------------------------------------
