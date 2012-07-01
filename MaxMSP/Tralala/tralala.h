@@ -16,6 +16,12 @@
 
 #include "ext.h"
 #include "ext_obex.h"
+#include "jpatcher_api.h"
+#include "jgraphics.h"
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 #include "pizAgent.h"
 
 // -------------------------------------------------------------------------------------------------------------
@@ -30,12 +36,13 @@
 #pragma mark -
 
 typedef struct _tll {
-    t_object        ob;	
+    t_jbox          box;						
     ulong           flags;					
     t_atom          played[4];
     t_atom          dumped[5];
     t_atom          link;
     PIZTime         time;
+    t_jrgba         background;
     long            identifier;
     t_dictionary    *data;
     t_dictionary    *current;
@@ -57,6 +64,7 @@ void tralala_init       (t_tll *x, t_symbol *s, short argc, t_atom *argv);
 void tralala_free       (t_tll *x);
 void tralala_assist     (t_tll *x, void *b, long m, long a, char *s);
 void tralala_jsave      (t_tll *x, t_dictionary *d);
+void tralala_paint      (t_tll *x, t_object *patcherview); 
 
 void tralala_callback   (void *ptr, PIZEvent *event);
 

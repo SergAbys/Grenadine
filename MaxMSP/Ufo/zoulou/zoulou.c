@@ -103,16 +103,17 @@ int main(void)
     class_addmethod(c, (method)zoulou_clear,        "clear",    0);
     class_addmethod(c, (method)object_obex_dumpout, "dumpout",  A_CANT, 0); 
 
-    CLASS_ATTR_DOUBLE(c,        "straightratio",        0, t_zoulou, straightRatio);
-    CLASS_ATTR_LONG(c,          "backwardthreshold",    0, t_zoulou, backwardThreshold);
-    CLASS_ATTR_LABEL(c,         "straightratio",        0, "Straight Ratio");
-    CLASS_ATTR_LABEL(c,         "backwardthreshold",    0, "Backward Threshold");
-    CLASS_ATTR_ACCESSORS(c,     "straightratio",        NULL, zoulou_setStraightRatio);
-    CLASS_ATTR_ACCESSORS(c,     "backwardthreshold",    NULL, zoulou_setBackwardThreshold);
-    CLASS_ATTR_FILTER_CLIP(c,   "straightratio",        0., 1.);
-    CLASS_ATTR_FILTER_MIN(c,    "backwardthreshold",    0);
-    CLASS_ATTR_ORDER(c,         "straightratio",        0, "1");
-    CLASS_ATTR_ORDER(c,         "backwardthreshold",    0, "2");
+    CLASS_ATTR_DOUBLE       (c, "straightratio",        0, t_zoulou, straightRatio);
+    CLASS_ATTR_LABEL        (c, "straightratio",        0, "Straight Ratio");
+    CLASS_ATTR_ACCESSORS    (c, "straightratio",        NULL, zoulou_setStraightRatio);
+    CLASS_ATTR_FILTER_CLIP  (c, "straightratio",        0., 1.);
+    CLASS_ATTR_LONG         (c, "backwardthreshold",    0, t_zoulou, backwardThreshold);
+    CLASS_ATTR_LABEL        (c, "backwardthreshold",    0, "Backward Threshold");
+    CLASS_ATTR_ACCESSORS    (c, "backwardthreshold",    NULL, zoulou_setBackwardThreshold);
+    CLASS_ATTR_FILTER_MIN   (c, "backwardthreshold",    0);
+    
+    CLASS_ATTR_ORDER        (c, "straightratio",        0, "1");
+    CLASS_ATTR_ORDER        (c, "backwardthreshold",    0, "2");
 
     zoulou_sym_dumpout = gensym("dumpout");
     zoulou_sym_node    = gensym("node");

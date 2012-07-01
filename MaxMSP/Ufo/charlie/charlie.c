@@ -95,21 +95,22 @@ class_addmethod(c, (method)charlie_dump,        "dump",     A_DEFLONG, 0);
 class_addmethod(c, (method)charlie_clear,       "clear",    0);
 class_addmethod(c, (method)object_obex_dumpout, "dumpout",  A_CANT, 0);
 
-CLASS_ATTR_LONG(c,          "range",        0, t_charlie, range);
-CLASS_ATTR_LONG(c,          "training",     0, t_charlie, training);
-CLASS_ATTR_DOUBLE(c,        "step",         0, t_charlie, step);
-CLASS_ATTR_LABEL(c,         "range",        0, "Range of Neighborhood Influence");
-CLASS_ATTR_LABEL(c,         "training",     0, "Training Iterations");
-CLASS_ATTR_LABEL(c,         "step",         0, "Learning Step");
-CLASS_ATTR_ACCESSORS(c,     "range",        NULL, charlie_setRange);
-CLASS_ATTR_ACCESSORS(c,     "training",     NULL, charlie_setTraining);
-CLASS_ATTR_ACCESSORS(c,     "step",         NULL, charlie_setStep);
-CLASS_ATTR_FILTER_MIN(c,    "range",        1);
-CLASS_ATTR_FILTER_MIN(c,    "training",     1);
-CLASS_ATTR_FILTER_MIN(c,    "step",         0.);
-CLASS_ATTR_ORDER(c,         "range",        0, "1");
-CLASS_ATTR_ORDER(c,         "training",     0, "2");
-CLASS_ATTR_ORDER(c,         "step",         0, "3");
+CLASS_ATTR_LONG         (c, "range",        0, t_charlie, range);
+CLASS_ATTR_LABEL        (c, "range",        0, "Range of Neighborhood Influence");
+CLASS_ATTR_ACCESSORS    (c, "range",        NULL, charlie_setRange);
+CLASS_ATTR_FILTER_MIN   (c, "range",        1);
+CLASS_ATTR_LONG         (c, "training",     0, t_charlie, training);
+CLASS_ATTR_LABEL        (c, "training",     0, "Training Iterations");
+CLASS_ATTR_ACCESSORS    (c, "training",     NULL, charlie_setTraining);
+CLASS_ATTR_FILTER_MIN   (c, "training",     1);
+CLASS_ATTR_DOUBLE       (c, "step",         0, t_charlie, step);
+CLASS_ATTR_LABEL        (c, "step",         0, "Learning Step");
+CLASS_ATTR_ACCESSORS    (c, "step",         NULL, charlie_setStep);
+CLASS_ATTR_FILTER_MIN   (c, "step",         0.);
+
+CLASS_ATTR_ORDER        (c, "range",        0, "1");
+CLASS_ATTR_ORDER        (c, "training",     0, "2");
+CLASS_ATTR_ORDER        (c, "step",         0, "3");
 
 class_register(CLASS_BOX, c); 
 

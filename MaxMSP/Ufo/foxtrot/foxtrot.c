@@ -101,10 +101,10 @@ class_addmethod(c, (method)foxtrot_dump,        "dump",     A_DEFLONG, 0);
 class_addmethod(c, (method)foxtrot_clear,       "clear",    0);
 class_addmethod(c, (method)object_obex_dumpout, "dumpout",  A_CANT, 0);
 
-CLASS_ATTR_DOUBLE(c,        "persistence",      0, t_foxtrot, persistence);
-CLASS_ATTR_LABEL(c,         "persistence",      0, "Learning Persistence");
-CLASS_ATTR_ACCESSORS(c,     "persistence",      NULL, foxtrot_setPersistence);
-CLASS_ATTR_FILTER_MIN(c,    "persistence",      0.);
+CLASS_ATTR_DOUBLE       (c, "persistence",      0, t_foxtrot, persistence);
+CLASS_ATTR_LABEL        (c, "persistence",      0, "Learning Persistence");
+CLASS_ATTR_ACCESSORS    (c, "persistence",      NULL, foxtrot_setPersistence);
+CLASS_ATTR_FILTER_MIN   (c, "persistence",      0.);
 
 foxtrot_sym_dumpout     = gensym("dumpout");
 foxtrot_sym_start       = gensym("start");

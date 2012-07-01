@@ -134,7 +134,6 @@ PIZAgent    *pizAgentNew        (long identifier);
 void        pizAgentFree        (PIZAgent *x);
 PIZError    pizAgentAttach      (PIZAgent *x, void *observer, PIZMethod f); 
 PIZError    pizAgentDetach      (PIZAgent *x, void *observer);
-
 void        pizAgentAddEvent    (PIZAgent *x, PIZEvent *event);
 
 PIZ_END_C_LINKAGE

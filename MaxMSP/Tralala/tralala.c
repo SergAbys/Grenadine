@@ -9,7 +9,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "tralalaParse.h"
-#include "jpatcher_api.h"
+#include "tralalaPaint.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -37,17 +37,27 @@ int main(void)
     
     c = class_new("tralala", (method)tralala_new, (method)tralala_free, sizeof(t_tll), 0L, A_GIMME, 0);
 
-    class_addmethod(c, (method)tralala_jsave,      "appendtodictionary",   A_CANT,  0);
-    class_addmethod(c, (method)tralala_assist,     "assist",               A_CANT,  0);
-    class_addmethod(c, (method)tralala_play,       "bang",                 A_GIMME, 0);
-    class_addmethod(c, (method)tralala_play,       "play",                 A_GIMME, 0);
-    class_addmethod(c, (method)tralala_play,       "end",                  A_GIMME, 0);
-    class_addmethod(c, (method)tralala_loop,       "loop",                 A_GIMME, 0);
-    class_addmethod(c, (method)tralala_stop,       "stop",                 A_GIMME, 0);
-    class_addmethod(c, (method)tralala_unloop,     "unloop",               A_GIMME, 0);
-    class_addmethod(c, (method)tralala_list,       "list",                 A_GIMME, 0);
-    class_addmethod(c, (method)tralala_anything,   "anything",             A_GIMME, 0);
+    c->c_flags |= CLASS_FLAG_NEWDICTIONARY;
+	jbox_initclass(c, JBOX_FIXWIDTH | JBOX_COLOR);
+    
+    class_addmethod(c, (method)tralala_jsave,       "jsave",     A_CANT,  0);
+    class_addmethod(c, (method)tralala_assist,      "assist",    A_CANT,  0);
+    class_addmethod(c, (method)tralala_paint,       "paint",     A_CANT,  0);
+    class_addmethod(c, (method)tralala_play,        "bang",      A_GIMME, 0);
+    class_addmethod(c, (method)tralala_play,        "play",      A_GIMME, 0);
+    class_addmethod(c, (method)tralala_play,        "end",       A_GIMME, 0);
+    class_addmethod(c, (method)tralala_loop,        "loop",      A_GIMME, 0);
+    class_addmethod(c, (method)tralala_stop,        "stop",      A_GIMME, 0);
+    class_addmethod(c, (method)tralala_unloop,      "unloop",    A_GIMME, 0);
+    class_addmethod(c, (method)tralala_list,        "list",      A_GIMME, 0);
+    class_addmethod(c, (method)tralala_anything,    "anything",  A_GIMME, 0);
 
+	CLASS_ATTR_RGBA                 (c, "color", 0, t_tll, background); 
+	CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "color", 0, "1. 0.75 0. 1."); 
+	CLASS_ATTR_STYLE_LABEL          (c, "color", 0, "rgba", "Background Color");
+	CLASS_ATTR_CATEGORY             (c, "color", 0, "Color");
+	CLASS_ATTR_DEFAULT              (c, "patching_rect", 0, "0. 0. 50. 50.");
+    
     class_register(CLASS_BOX, c);
 
     tll_class = c;
@@ -64,22 +74,39 @@ int main(void)
 void *tralala_new(t_symbol *s, long argc, t_atom *argv)
 {
     t_tll *x = NULL;
-
-    if (x = (t_tll *)object_alloc(tll_class)) {
-    //
-    t_symbol *s = NULL;
-    PIZError err = PIZ_ERROR;
-    
-    if (x->data = dictionary_new( )) {
-    //
     t_dictionary *d = NULL;
     t_dictionary *t = NULL;
     
+    if (d = object_dictionaryarg (argc, argv)) {
+    //
+    if (x = (t_tll *)object_alloc(tll_class)) {
+    //
+    PIZError err = PIZ_ERROR;
+    
+    long boxflags = 0L  | JBOX_DRAWFIRSTIN 
+                        | JBOX_DRAWINLAST
+                        | JBOX_GROWBOTH
+                        | JBOX_DRAWBACKGROUND
+                        | JBOX_HILITE;
+    
+    jbox_new((t_jbox *)x, boxflags, argc, argv);
+    x->box.b_firstin = (void *)x;
+            
+    x->right        = bangout((t_object *)x);
+    x->middleRight  = outlet_new((t_object *)x, NULL);
+    x->middleLeft   = outlet_new((t_object *)x, NULL);
+    x->left         = listout((t_object *)x);
+    
+    jbox_ready((t_jbox *)x);
+    
+    attr_dictionary_process(x, d);
+    
+    if (x->data = dictionary_new( )) {
+    //
     err = PIZ_GOOD;
     x->flags = TLL_FLAG_NONE;
     
-    if ((d = (t_dictionary *)gensym("#D")->s_thing) 
-        && (dictionary_entryisdictionary(d, TLL_SYM_TRALALA))) {
+    if (dictionary_entryisdictionary(d, TLL_SYM_TRALALA)) {
         dictionary_getdictionary(d, TLL_SYM_TRALALA, (t_object **)&t);
         dictionary_copyunique(x->data, t);
             
@@ -102,20 +129,10 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     //
     }
     
-    s = symbol_unique( );
-    s->s_thing = (t_object *)x;
-    atom_setsym(&x->link, s);
-    
     x->identifier = ++identifier;
         
     if (!err && (x->agent = pizAgentNew(x->identifier))) {
-        x->right       = bangout((t_object *)x);
-        x->middleRight = outlet_new((t_object *)x, NULL);
-        x->middleLeft  = outlet_new((t_object *)x, NULL);
-        x->left        = listout((t_object *)x);
-                
         pizAgentAttach(x->agent, (void *)x, (PIZMethod)tralala_callback);
-        
         dictionary_clear(x->current);
         defer_low(x, (method)tralala_init, NULL, 0, NULL);
 
@@ -125,12 +142,20 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     }
     //
     }	
+    //
+    }
 	
 	return x;
 }
 
 void tralala_init(t_tll *x, t_symbol *s, short argc, t_atom *argv)
 {
+    t_symbol *link = NULL;
+    
+    link = symbol_unique( );
+    link->s_thing = (t_object *)x;
+    atom_setsym(&x->link, link);
+    
     if (x->flags & TLL_FLAG_INIT) {
         tralala_send(x, PIZ_EVENT_INIT, 0, NULL);
         x->flags &= ~TLL_FLAG_INIT; 
@@ -148,7 +173,12 @@ void tralala_free(t_tll *x)
     }
     
     object_free(x->data);
+    jbox_free((t_jbox *)x);
 }
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void tralala_assist(t_tll *x, void *b, long m, long a, char *s)
 {
@@ -180,9 +210,18 @@ void tralala_jsave(t_tll *x, t_dictionary *d)
     }
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
+void tralala_paint(t_tll *x, t_object *patcherview)
+{
+	t_rect rect;
+	t_jgraphics *g = NULL;
+	
+	g = (t_jgraphics*)patcherview_get_jgraphics(patcherview);		
+	jbox_get_rect_for_view((t_object *)x, patcherview, &rect);		
+	
+	jgraphics_set_source_jrgba(g, &x->background);
+	jgraphics_rectangle(g, 0., 0., rect.width, rect.height);
+	jgraphics_fill(g);
+}
 
 void tralala_callback(void *ptr, PIZEvent *event)
 {
@@ -228,13 +267,15 @@ void tralala_callback(void *ptr, PIZEvent *event)
         break;
     //
     }
+    
+    DEBUGEVENT
         
     pizEventFree(event);
 }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -  
+#pragma mark -
 
 void tralala_play(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
@@ -255,10 +296,6 @@ void tralala_unloop(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {   
     tralala_send(x, PIZ_EVENT_UNLOOP, 0, NULL);
 }
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
 
 void tralala_list(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
@@ -283,14 +320,18 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv)
     if (event = pizEventNew(code)) {
     //
     if ((argc && argv) && (atom_gettype(argv) == A_SYM)) {
-        t_symbol *s = atom_getsym(argv);
-        t_object *o = s->s_thing;
-        if (o && !NOGOOD(o) && object_classname_compare(o, TLL_SYM_TRALALA)) {
-            PIZTime time;
-            t_tll *ptr = (t_tll *)o;
-            pizTimeCopy(&time, &ptr->time);
-            pizEventSetTime(event, &time);
-        }
+    //
+    t_symbol *s = atom_getsym(argv);
+    t_object *o = s->s_thing;
+    
+    if (o && !NOGOOD(o) && object_classname_compare(o, TLL_SYM_TRALALA)) {
+        PIZTime time;
+        t_tll *ptr = (t_tll *)o;
+        
+        pizTimeCopy(&time, &ptr->time);
+        pizEventSetTime(event, &time);
+    }
+    //
     }
                         
     pizEventSetIdentifier(event, x->identifier);

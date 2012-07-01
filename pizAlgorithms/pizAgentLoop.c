@@ -263,6 +263,8 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
         PIZ_AGENT_MEMORY
     }
         
+    DEBUGEVENT
+        
     pizEventFree(event);
     //
     }
