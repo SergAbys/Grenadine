@@ -58,7 +58,6 @@ table->note    = gensym("note");
 table->clear   = gensym("clear");
 table->tralala = gensym("tralala");
 table->current = gensym("current");
-table->restore = gensym("restore");
 
 quickmap_add(tll_code, gensym("bpm"),                     (void *)(TINY + PIZ_EVENT_BPM));
 quickmap_add(tll_code, gensym("learn"),                   (void *)(TINY + PIZ_EVENT_LEARN));

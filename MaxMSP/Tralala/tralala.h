@@ -29,7 +29,6 @@
 #pragma mark -
 
 #define TLL_FLAG_NONE   0UL
-#define TLL_FLAG_INIT   1UL
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -46,7 +45,6 @@ typedef struct _tll {
     long            identifier;
     t_dictionary    *data;
     t_dictionary    *current;
-    t_dictionary    *restore;
     PIZAgent        *agent;
     void            *left;
     void            *middleLeft;

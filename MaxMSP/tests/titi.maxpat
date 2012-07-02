@@ -7,9 +7,9 @@
 			"revision" : 9
 		}
 ,
-		"rect" : [ 134.0, 149.0, 328.0, 319.0 ],
+		"rect" : [ 134.0, 149.0, 581.0, 333.0 ],
 		"bglocked" : 0,
-		"defrect" : [ 134.0, 149.0, 328.0, 319.0 ],
+		"defrect" : [ 134.0, 149.0, 581.0, 333.0 ],
 		"openrect" : [ 0.0, 0.0, 0.0, 0.0 ],
 		"openinpresentation" : 0,
 		"default_fontsize" : 14.0,
@@ -26,6 +26,34 @@
 		"devicewidth" : 0.0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"maxclass" : "message",
+					"text" : "0 60, 24 62, 48 64, 72 66",
+					"patching_rect" : [ 300.0, 20.0, 166.0, 21.0 ],
+					"fontname" : "Arial",
+					"fontsize" : 14.0,
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"id" : "obj-11",
+					"outlettype" : [ "" ]
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"maxclass" : "newobj",
+					"text" : "prepend note",
+					"patching_rect" : [ 300.0, 60.0, 93.0, 23.0 ],
+					"fontname" : "Arial",
+					"fontsize" : 14.0,
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"id" : "obj-12",
+					"outlettype" : [ "" ]
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"maxclass" : "tralala",
 					"patching_rect" : [ 100.0, 140.0, 50.0, 50.0 ],
 					"numinlets" : 1,
@@ -33,38 +61,8 @@
 					"id" : "obj-1",
 					"outlettype" : [ "list", "", "", "bang" ],
 					"tralala" : 					{
-						"restore" : 						{
-							"chance" : [ "chance", 100 ],
-							"velocity" : [ "velocity", 0 ],
-							"channel" : [ "channel", 1 ],
-							"chord" : [ "chord", 0 ],
-							"cell" : [ "cell", 12 ],
-							"value" : [ "value", 12 ],
-							"scale" : [ "scale", "C", "none" ],
-							"pattern" : [ "pattern" ],
-							"zone" : [ "zone", 0, 96, 60, 71 ],
-							"0" : [ "note", 72, 66, 80, 12, 0 ],
-							"1" : [ "note", 0, 60, 80, 12, 0 ],
-							"2" : [ "note", 24, 62, 80, 12, 0 ],
-							"3" : [ "note", 48, 64, 80, 12, 0 ],
-							"bpm" : [ "bpm", 240 ]
-						}
-,
 						"current" : 						{
-							"chance" : [ "chance", 100 ],
-							"velocity" : [ "velocity", 0 ],
-							"channel" : [ "channel", 1 ],
-							"chord" : [ "chord", 0 ],
-							"cell" : [ "cell", 12 ],
-							"value" : [ "value", 12 ],
-							"scale" : [ "scale", "C", "none" ],
-							"pattern" : [ "pattern" ],
-							"zone" : [ "zone", 0, 96, 60, 71 ],
-							"0" : [ "note", 72, 66, 80, 12, 0 ],
-							"1" : [ "note", 0, 60, 80, 12, 0 ],
-							"2" : [ "note", 24, 62, 80, 12, 0 ],
-							"3" : [ "note", 48, 64, 80, 12, 0 ],
-							"bpm" : [ "bpm", 240 ]
+
 						}
 
 					}
@@ -76,7 +74,7 @@
 				"box" : 				{
 					"maxclass" : "message",
 					"text" : "#####",
-					"patching_rect" : [ 220.0, 100.0, 49.0, 21.0 ],
+					"patching_rect" : [ 300.0, 140.0, 49.0, 21.0 ],
 					"fontname" : "Arial",
 					"fontsize" : 14.0,
 					"numinlets" : 2,
@@ -90,7 +88,7 @@
 				"box" : 				{
 					"maxclass" : "newobj",
 					"text" : "print",
-					"patching_rect" : [ 220.0, 160.0, 38.0, 23.0 ],
+					"patching_rect" : [ 300.0, 200.0, 38.0, 23.0 ],
 					"fontname" : "Arial",
 					"fontsize" : 14.0,
 					"numinlets" : 1,
@@ -102,7 +100,7 @@
 , 			{
 				"box" : 				{
 					"maxclass" : "message",
-					"text" : "end u458000169",
+					"text" : "end u039000153",
 					"patching_rect" : [ 140.0, 240.0, 119.0, 21.0 ],
 					"fontname" : "Arial",
 					"fontsize" : 14.0,
@@ -410,19 +408,19 @@
 									"maxclass" : "umenu",
 									"patching_rect" : [ 20.0, 40.0, 116.0, 25.0 ],
 									"fontname" : "Arial",
-									"align" : 1,
+									"bgcolor2" : [ 0.917647, 0.937255, 0.670588, 1.0 ],
+									"framecolor" : [ 0.827451, 0.827451, 0.827451, 0.0 ],
 									"hltcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-									"arrowframe" : 0,
-									"textcolor2" : [ 0.0, 0.0, 0.0, 1.0 ],
+									"arrow" : 0,
 									"types" : [  ],
 									"fontsize" : 16.0,
 									"numinlets" : 1,
 									"items" : [ "Grand", "Piano", ",", "Bright", "Piano", ",", "Electric", "Grand", ",", "Honkytonk", "Piano", ",", "Electric", "Piano", 1, ",", "Electric", "Piano", 2, ",", "Harpsichord", ",", "Clavinet", ",", "Celesta", ",", "Glockenspiel", ",", "Music", "Box", ",", "Vibraphone", ",", "Marimba", ",", "Xylophone", ",", "Tubular", "Bell", ",", "Dulcimer", ",", "Drawbar", "Organ", ",", "Percussive", "Organ", ",", "Rock", "Organ", ",", "Church", "Organ", ",", "Reed", "Organ", ",", "Accordion", ",", "Harmonica", ",", "Tango", "Accordion", ",", "Nylon", "String", "Guitar", ",", "Steel", "String", "Guitar", ",", "Jazz", "Guitar", ",", "Clean", "Guitar", ",", "Muted", "Guitar", ",", "Overdrive", "Guitar", ",", "Distortion", "Guitar", ",", "Guitar", "Harmonics", ",", "Acoustic", "Bass", ",", "Fingered", "Bass", ",", "Picked", "Bass", ",", "Fretless", "Bass", ",", "Slap", "Bass", 1, ",", "Slap", "Bass", 2, ",", "Synth", "Bass", 1, ",", "Synth", "Bass", 2, ",", "Violin", ",", "Viola", ",", "Cello", ",", "Contrabass", ",", "Tremolo", "Strings", ",", "Pizzicato", "Strings", ",", "Harp", ",", "Timpani", ",", "String", "Ensemble", ",", "Slow", "Strings", ",", "Synth", "Strings", 1, ",", "Synth", "Strings", 2, ",", "Choir", "Aahs", ",", "Voice", "Oohs", ",", "Synth", "Vox", ",", "Orchestra", "Hit", ",", "Trumpet", ",", "Trombone", ",", "Tuba", ",", "Muted", "Trumpet", ",", "French", "Horn", ",", "Brass", 1, ",", "Synth", "Brass", 1, ",", "Synth", "Brass", 2, ",", "Soprano", "Sax", ",", "Alto", "Sax", ",", "Tenor", "Sax", ",", "Baritone", "Sax", ",", "Oboe", ",", "English", "Horn", ",", "Bassoon", ",", "Clarinet", ",", "Piccolo", ",", "Flute", ",", "Recorder", ",", "Pan", "Flute", ",", "Blown", "Bottle", ",", "Shakuhachi", ",", "Whistle", ",", "Ocarina", ",", "Square", "Wave", ",", "Sawtooth", "Wave", ",", "Synth", "Calliope", ",", "Chiffer", "Lead", ",", "Charang", ",", "Solo", "Vox", ",", "5th", "Sawtooth", "Wave", ",", "Bass", "and", "Lead", ",", "Fantasia", ",", "Warm", "Pad", ",", "Polysynth", ",", "Space", "Voice", ",", "Bowed", "Glass", ",", "Metal", "Pad", ",", "Halo", "Pad", ",", "Sweep", "Pad", ",", "Ice", "Rain", ",", "Soundtrack", ",", "Crystal", ",", "Atmosphere", ",", "Brightness", ",", "Goblin", ",", "Echo", "Drops", ",", "Star", "Theme", ",", "Sitar", ",", "Banjo", ",", "Shamisen", ",", "Koto", ",", "Kalimba", ",", "Bag", "Pipe", ",", "Fiddle", ",", "Shanai", ",", "Tinkle", "Bell", ",", "Agogo", ",", "Steel", "Drums", ",", "Woodblock", ",", "Taiko", ",", "Melo", "Tom", ",", "Synth", "Drum", ",", "Reverse", "Cymbal", ",", "Guitar", "Fret", "Noise", ",", "Breath", "Noise", ",", "Seashore", ",", "Bird", ",", "Telephone", ",", "Helicopter", ",", "Applause", ",", "Gun", "Shot" ],
+									"arrowframe" : 0,
 									"bgcolor" : [ 0.827451, 0.737255, 0.835294, 0.0 ],
+									"textcolor2" : [ 0.0, 0.0, 0.0, 1.0 ],
 									"numoutlets" : 3,
-									"framecolor" : [ 0.827451, 0.827451, 0.827451, 0.0 ],
-									"bgcolor2" : [ 0.917647, 0.937255, 0.670588, 1.0 ],
-									"arrow" : 0,
+									"align" : 1,
 									"id" : "obj-11",
 									"outlettype" : [ "int", "", "" ]
 								}
@@ -732,26 +730,26 @@
  ],
 		"lines" : [ 			{
 				"patchline" : 				{
+					"source" : [ "obj-1", 0 ],
+					"destination" : [ "obj-14", 0 ],
+					"hidden" : 0,
+					"midpoints" : [  ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"source" : [ "obj-4", 0 ],
+					"destination" : [ "obj-1", 0 ],
+					"hidden" : 0,
+					"midpoints" : [  ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"source" : [ "obj-1", 2 ],
 					"destination" : [ "obj-4", 1 ],
-					"hidden" : 0,
-					"midpoints" : [  ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"source" : [ "obj-10", 0 ],
-					"destination" : [ "obj-6", 0 ],
-					"hidden" : 0,
-					"midpoints" : [  ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"source" : [ "obj-3", 0 ],
-					"destination" : [ "obj-1", 0 ],
 					"hidden" : 0,
 					"midpoints" : [  ]
 				}
@@ -768,8 +766,8 @@
 			}
 , 			{
 				"patchline" : 				{
-					"source" : [ "obj-1", 0 ],
-					"destination" : [ "obj-14", 0 ],
+					"source" : [ "obj-3", 0 ],
+					"destination" : [ "obj-1", 0 ],
 					"hidden" : 0,
 					"midpoints" : [  ]
 				}
@@ -777,7 +775,25 @@
 			}
 , 			{
 				"patchline" : 				{
-					"source" : [ "obj-4", 0 ],
+					"source" : [ "obj-10", 0 ],
+					"destination" : [ "obj-6", 0 ],
+					"hidden" : 0,
+					"midpoints" : [  ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"source" : [ "obj-11", 0 ],
+					"destination" : [ "obj-12", 0 ],
+					"hidden" : 0,
+					"midpoints" : [  ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"source" : [ "obj-12", 0 ],
 					"destination" : [ "obj-1", 0 ],
 					"hidden" : 0,
 					"midpoints" : [  ]

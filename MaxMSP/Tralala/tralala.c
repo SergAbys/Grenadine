@@ -78,7 +78,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     t_dictionary *d = NULL;
     t_dictionary *t = NULL;
     
-    if (d = object_dictionaryarg (argc, argv)) {
+    if (d = object_dictionaryarg(argc, argv)) {
     //
     if (x = (t_tll *)object_alloc(tll_class)) {
     //
@@ -100,42 +100,30 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     x->left         = listout((t_object *)x);
     
     jbox_ready((t_jbox *)x);
-    
     attr_dictionary_process(x, d);
     
     if (x->data = dictionary_new( )) {
     //
     err = PIZ_GOOD;
-    x->flags = TLL_FLAG_NONE;
     
     if (dictionary_entryisdictionary(d, TLL_SYM_TRALALA)) {
         dictionary_getdictionary(d, TLL_SYM_TRALALA, (t_object **)&t);
         dictionary_copyunique(x->data, t);
-            
-    } else {
-        x->flags |= TLL_FLAG_INIT;
-    }
+    } 
     
-    if (!(dictionary_entryisdictionary(x->data, TLL_SYM_RESTORE)) 
-        && (x->restore = dictionary_new( ))) {
-        dictionary_appenddictionary(x->data, TLL_SYM_RESTORE,(t_object *)x->restore);
-    }
-    
-    if (!(dictionary_entryisdictionary(x->data, TLL_SYM_CURRENT)) 
-        && (x->current = dictionary_new( ))) {
+    if (!(dictionary_entryisdictionary(x->data, TLL_SYM_CURRENT)) && (x->current = dictionary_new( ))) {
         dictionary_appenddictionary(x->data, TLL_SYM_CURRENT, (t_object *)x->current);
     }
         
-    err |= (dictionary_getdictionary(x->data, TLL_SYM_RESTORE, (t_object **)&x->restore)) != MAX_ERR_NONE;
     err |= (dictionary_getdictionary(x->data, TLL_SYM_CURRENT, (t_object **)&x->current)) != MAX_ERR_NONE;
     //
     }
     
     x->identifier = ++identifier;
+    x->flags = TLL_FLAG_NONE;
         
     if (!err && (x->agent = pizAgentNew(x->identifier))) {
         pizAgentAttach(x->agent, (void *)x, (PIZMethod)tralala_callback);
-        dictionary_clear(x->current);
         defer_low(x, (method)tralala_init, NULL, 0, NULL);
 
     } else {
@@ -158,13 +146,7 @@ void tralala_init(t_tll *x, t_symbol *s, short argc, t_atom *argv)
     link->s_thing = (t_object *)x;
     atom_setsym(&x->link, link);
     
-    if (x->flags & TLL_FLAG_INIT) {
-        tralala_send(x, PIZ_EVENT_INIT, 0, NULL);
-        x->flags &= ~TLL_FLAG_INIT; 
-
-    } else {
-        tralala_parseDictionary(x, x->restore);
-    }    
+    tralala_send(x, PIZ_EVENT_INIT, 0, NULL);
 }
 
 void tralala_free(t_tll *x)
@@ -201,12 +183,12 @@ void tralala_jsave(t_tll *x, t_dictionary *d)
 {
     if (d) {
         t_dictionary *t = NULL;
-                
-        dictionary_clear(x->restore);
-        dictionary_copyunique(x->restore, x->current);
+        t_dictionary *s = NULL;
         
         if (t = dictionary_new( )) {
             dictionary_copyunique(t, x->data);
+            dictionary_getdictionary(t, TLL_SYM_CURRENT, (t_object **)&s);
+            dictionary_clear(s);
             dictionary_appenddictionary(d, TLL_SYM_TRALALA, (t_object *)t);
         }
     }

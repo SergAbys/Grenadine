@@ -61,9 +61,7 @@ void pizSequenceForEach(PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod me
         
         while (note) {
             pizLinklistNextWithPtr(x->timeline[p], (void *)note, (void **)&nextNote);
-            
             (*method)(x, e, f, note);
-            
             note = nextNote;
         }
     }
