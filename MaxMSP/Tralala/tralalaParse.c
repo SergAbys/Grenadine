@@ -53,11 +53,11 @@ tll_key          = (t_quickmap *)quickmap_new( );
 tll_select       = (t_quickmap *)quickmap_new( );
 tll_notification = (t_quickmap *)quickmap_new( );
 
-table->end     = gensym("end");
-table->note    = gensym("note");
-table->clear   = gensym("clear");
-table->tralala = gensym("tralala");
-table->current = gensym("current");
+table->end       = gensym("end");
+table->note      = gensym("note");
+table->clear     = gensym("clear");
+table->tralala   = gensym("tralala");
+table->temporary = gensym("temporary");
 
 quickmap_add(tll_code, gensym("bpm"),                     (void *)(TINY + PIZ_EVENT_BPM));
 quickmap_add(tll_code, gensym("learn"),                   (void *)(TINY + PIZ_EVENT_LEARN));
@@ -305,18 +305,18 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
     }
     
     atom_setsym(data, s);
-    dictionary_appendatoms(x->current, s, k + 1, data);
+    dictionary_appendatoms(x->temporary, s, k + 1, data);
     //
     } else {
     //
     symbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
         
     if (code == PIZ_EVENT_NOTE_REMOVED) {
-        dictionary_deleteentry(x->current, s);
+        dictionary_deleteentry(x->temporary, s);
         
     } else {
         atom_setsym(data, TLL_SYM_NOTE);
-        dictionary_appendatoms(x->current, s, k - 1, data);
+        dictionary_appendatoms(x->temporary, s, k - 1, data);
     }
     //
     }

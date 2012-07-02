@@ -26,7 +26,7 @@ typedef struct _tllSymbols {
     t_symbol *note;
     t_symbol *clear;
     t_symbol *tralala;
-    t_symbol *current;
+    t_symbol *temporary;
     } t_tllSymbols;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ typedef struct _tllSymbols {
 #define TLL_SYM_NOTE        (tll_table.note)
 #define TLL_SYM_CLEAR       (tll_table.clear)
 #define TLL_SYM_TRALALA     (tll_table.tralala)
-#define TLL_SYM_CURRENT     (tll_table.current)
+#define TLL_SYM_TEMPORARY   (tll_table.temporary)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

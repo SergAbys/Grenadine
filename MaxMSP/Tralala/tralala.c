@@ -111,11 +111,11 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
         dictionary_copyunique(x->data, t);
     } 
     
-    if (!(dictionary_entryisdictionary(x->data, TLL_SYM_CURRENT)) && (x->current = dictionary_new( ))) {
-        dictionary_appenddictionary(x->data, TLL_SYM_CURRENT, (t_object *)x->current);
+    if (!(dictionary_entryisdictionary(x->data, TLL_SYM_TEMPORARY)) && (x->temporary = dictionary_new( ))) {
+        dictionary_appenddictionary(x->data, TLL_SYM_TEMPORARY, (t_object *)x->temporary);
     }
         
-    err |= (dictionary_getdictionary(x->data, TLL_SYM_CURRENT, (t_object **)&x->current)) != MAX_ERR_NONE;
+    err |= (dictionary_getdictionary(x->data, TLL_SYM_TEMPORARY, (t_object **)&x->temporary)) != MAX_ERR_NONE;
     //
     }
     
@@ -187,7 +187,7 @@ void tralala_jsave(t_tll *x, t_dictionary *d)
         
         if (t = dictionary_new( )) {
             dictionary_copyunique(t, x->data);
-            dictionary_getdictionary(t, TLL_SYM_CURRENT, (t_object **)&s);
+            dictionary_getdictionary(t, TLL_SYM_TEMPORARY, (t_object **)&s);
             dictionary_clear(s);
             dictionary_appenddictionary(d, TLL_SYM_TRALALA, (t_object *)t);
         }

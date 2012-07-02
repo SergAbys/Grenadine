@@ -33,7 +33,7 @@
 					"id" : "obj-1",
 					"outlettype" : [ "list", "", "", "bang" ],
 					"tralala" : 					{
-						"current" : 						{
+						"temporary" : 						{
 
 						}
 

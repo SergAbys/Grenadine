@@ -44,7 +44,7 @@ typedef struct _tll {
     t_jrgba         background;
     long            identifier;
     t_dictionary    *data;
-    t_dictionary    *current;
+    t_dictionary    *temporary;
     PIZAgent        *agent;
     void            *left;
     void            *middleLeft;
