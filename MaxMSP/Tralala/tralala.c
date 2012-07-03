@@ -210,7 +210,24 @@ void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
            
 void tralala_restore(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
-
+    t_dictionary *t = NULL;
+    t_symbol *name = TLL_SYM_UNTITLED;
+    
+    if (argc && argv) {
+        long k = 0;
+        char *p = NULL;
+        
+        atom_gettext(argc, argv, &k, &p, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
+        
+        if (p) {
+            name = gensym(p);            
+        }
+    }
+    
+    if ((dictionary_entryisdictionary(x->data, name)) 
+        && !(dictionary_getdictionary(x->data, name, (t_object **)&t))) {
+        tralala_parseDictionary(x, t);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
