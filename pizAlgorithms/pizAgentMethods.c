@@ -55,8 +55,8 @@
 
 PIZError pizAgentInit(PIZAgent *x, const PIZEvent *event)
 {
-    pizAgentNotify(x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
     pizSequenceInit(x->sequence);
+    pizAgentNotify(x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
     
     return PIZ_GOOD;
 }

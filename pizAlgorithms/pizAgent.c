@@ -123,9 +123,9 @@ void pizAgentFree(PIZAgent *x)
     }
     
     pthread_attr_destroy(&x->attr);
+    pthread_cond_destroy(&x->condition);
     pthread_mutex_destroy(&x->eventLock);
     pthread_mutex_destroy(&x->observerLock);
-    pthread_cond_destroy(&x->condition);
     
     pizArrayFree(x->buffer);
     
@@ -186,9 +186,9 @@ void pizAgentAddEvent(PIZAgent *x, PIZEvent *event)
     PIZLinklist *q = NULL;
         
     switch (event->type) {
-        case PIZ_EVENT_RUN  : q = x->run;   break;
-        case PIZ_EVENT_LOW  : q = x->low;   break;
-        case PIZ_EVENT_HIGH : q = x->high;  break;
+        case PIZ_EVENT_RUN  : q = x->run;  break;
+        case PIZ_EVENT_LOW  : q = x->low;  break;
+        case PIZ_EVENT_HIGH : q = x->high; break;
     }
     
     if (q) {

@@ -219,6 +219,8 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
         
     if (event) {
     //
+    DEBUGEVENT
+    
     pizEventCode(event, &code);
     
     if (code < PIZ_EVENT_CHANCE) {
@@ -230,8 +232,6 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
     if (o && (f = pizEventMethods[code]) && ((*f)(o, event) == PIZ_MEMORY)) {
         PIZ_AGENT_MEMORY
     }
-        
-    DEBUGEVENT
         
     pizEventFree(event);
     //
