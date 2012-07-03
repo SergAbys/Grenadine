@@ -44,6 +44,8 @@ int main(void)
     class_addmethod(c, (method)tralala_assist,      "assist",    A_CANT,  0);
     class_addmethod(c, (method)tralala_paint,       "paint",     A_CANT,  0);
     class_addmethod(c, (method)tralala_key,         "key",       A_CANT,  0);
+    class_addmethod(c, (method)tralala_store,       "store",     A_GIMME, 0);
+    class_addmethod(c, (method)tralala_restore,     "restore",   A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "bang",      A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "play",      A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "end",       A_GIMME, 0);
@@ -82,8 +84,6 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     //
     if (x = (t_tll *)object_alloc(tll_class)) {
     //
-    PIZError err = PIZ_ERROR;
-    
     long boxflags = 0L  | JBOX_DRAWFIRSTIN 
                         | JBOX_NODRAWBOX 
                         | JBOX_DRAWINLAST
@@ -102,33 +102,25 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     jbox_ready((t_jbox *)x);
     attr_dictionary_process(x, d);
     
-    if (x->data = dictionary_new( )) {
+    if ((x->data = dictionary_new( )) && (x->current = dictionary_new( ))) {
     //
-    err = PIZ_GOOD;
-    
     if (dictionary_entryisdictionary(d, TLL_SYM_TRALALA)) {
         dictionary_getdictionary(d, TLL_SYM_TRALALA, (t_object **)&t);
         dictionary_copyunique(x->data, t);
     } 
     
-    if (!(dictionary_entryisdictionary(x->data, TLL_SYM_TEMPORARY)) && (x->temporary = dictionary_new( ))) {
-        dictionary_appenddictionary(x->data, TLL_SYM_TEMPORARY, (t_object *)x->temporary);
-    }
-        
-    err |= (dictionary_getdictionary(x->data, TLL_SYM_TEMPORARY, (t_object **)&x->temporary)) != MAX_ERR_NONE;
-    //
-    }
-    
     x->identifier = ++identifier;
     x->flags = TLL_FLAG_NONE;
         
-    if (!err && (x->agent = pizAgentNew(x->identifier))) {
+    if (x->agent = pizAgentNew(x->identifier)) {
         pizAgentAttach(x->agent, (void *)x, (PIZMethod)tralala_callback);
         defer_low(x, (method)tralala_init, NULL, 0, NULL);
 
     } else {
         object_free(x);
         x = NULL;
+    }
+    //
     }
     //
     }	
@@ -157,6 +149,8 @@ void tralala_free(t_tll *x)
     }
     
     object_free(x->data);
+    object_free(x->current);
+    
     jbox_free((t_jbox *)x);
 }
 
@@ -183,15 +177,40 @@ void tralala_jsave(t_tll *x, t_dictionary *d)
 {
     if (d) {
         t_dictionary *t = NULL;
-        t_dictionary *s = NULL;
         
         if (t = dictionary_new( )) {
             dictionary_copyunique(t, x->data);
-            dictionary_getdictionary(t, TLL_SYM_TEMPORARY, (t_object **)&s);
-            dictionary_clear(s);
             dictionary_appenddictionary(d, TLL_SYM_TRALALA, (t_object *)t);
         }
     }
+}
+
+void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
+{
+    t_dictionary *t = NULL;
+    t_symbol *name = TLL_SYM_UNTITLED;
+
+    if (argc && argv) {
+        long k = 0;
+        char *p = NULL;
+        
+        atom_gettext(argc, argv, &k, &p, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
+        
+        if (p) {
+            name = gensym(p);            
+        }
+    }
+    
+    if (t = dictionary_new( )) {
+        dictionary_copyunique(t, x->current);
+        dictionary_appenddictionary(x->data, name, (t_object *)t);
+        jpatcher_set_dirty(jbox_get_patcher((t_object *)x), 1);
+    }
+}
+           
+void tralala_restore(t_tll *x, t_symbol *s, long argc, t_atom *argv)
+{
+
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -301,7 +320,7 @@ void tralala_paint(t_tll *x, t_object *patcherview)
 
 void tralala_key(t_tll *x, t_object *patcherview, long keycode, long m, long textcharacter)
 {
-	//post("Key : %ld %ld %ld", keycode, m, textcharacter);
+	post("Key : %ld %ld %ld", keycode, m, textcharacter);
 }
 
 // -------------------------------------------------------------------------------------------------------------

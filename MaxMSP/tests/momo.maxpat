@@ -7,9 +7,9 @@
 			"revision" : 9
 		}
 ,
-		"rect" : [ 168.0, 118.0, 383.0, 287.0 ],
+		"rect" : [ 75.0, 109.0, 426.0, 368.0 ],
 		"bglocked" : 0,
-		"defrect" : [ 168.0, 118.0, 383.0, 287.0 ],
+		"defrect" : [ 75.0, 109.0, 426.0, 368.0 ],
 		"openrect" : [ 0.0, 0.0, 0.0, 0.0 ],
 		"openinpresentation" : 0,
 		"default_fontsize" : 14.0,
@@ -26,15 +26,38 @@
 		"devicewidth" : 0.0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"maxclass" : "message",
+					"text" : "store",
+					"patching_rect" : [ 220.0, 220.0, 42.0, 21.0 ],
+					"fontname" : "Arial",
+					"fontsize" : 14.0,
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"id" : "obj-5",
+					"outlettype" : [ "" ]
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"maxclass" : "tralala",
-					"patching_rect" : [ 100.0, 160.0, 50.0, 50.0 ],
+					"patching_rect" : [ 100.0, 180.0, 50.0, 50.0 ],
 					"numinlets" : 1,
 					"numoutlets" : 4,
 					"id" : "obj-1",
 					"outlettype" : [ "list", "", "", "bang" ],
 					"tralala" : 					{
-						"temporary" : 						{
-
+						"untitled" : 						{
+							"bpm" : [ "bpm", 120 ],
+							"chance" : [ "chance", 100 ],
+							"velocity" : [ "velocity", 0 ],
+							"channel" : [ "channel", 1 ],
+							"chord" : [ "chord", 0 ],
+							"cell" : [ "cell", 12 ],
+							"value" : [ "value", 12 ],
+							"scale" : [ "scale", "C", "none" ],
+							"pattern" : [ "pattern" ],
+							"zone" : [ "zone", 0, 96, 60, 71 ]
 						}
 
 					}
@@ -46,7 +69,7 @@
 				"box" : 				{
 					"maxclass" : "message",
 					"text" : "pattern 1 0 -2",
-					"patching_rect" : [ 220.0, 120.0, 94.0, 21.0 ],
+					"patching_rect" : [ 220.0, 40.0, 94.0, 21.0 ],
 					"fontname" : "Arial",
 					"fontsize" : 14.0,
 					"numinlets" : 2,
@@ -60,7 +83,7 @@
 				"box" : 				{
 					"maxclass" : "message",
 					"text" : "scale B dorian",
-					"patching_rect" : [ 240.0, 200.0, 99.0, 21.0 ],
+					"patching_rect" : [ 240.0, 120.0, 99.0, 21.0 ],
 					"fontname" : "Arial",
 					"fontsize" : 14.0,
 					"numinlets" : 2,
@@ -101,7 +124,7 @@
  ],
 		"lines" : [ 			{
 				"patchline" : 				{
-					"source" : [ "obj-4", 0 ],
+					"source" : [ "obj-5", 0 ],
 					"destination" : [ "obj-1", 0 ],
 					"hidden" : 0,
 					"midpoints" : [  ]
@@ -110,7 +133,7 @@
 			}
 , 			{
 				"patchline" : 				{
-					"source" : [ "obj-8", 0 ],
+					"source" : [ "obj-7", 0 ],
 					"destination" : [ "obj-1", 0 ],
 					"hidden" : 0,
 					"midpoints" : [  ]
@@ -128,7 +151,16 @@
 			}
 , 			{
 				"patchline" : 				{
-					"source" : [ "obj-7", 0 ],
+					"source" : [ "obj-8", 0 ],
+					"destination" : [ "obj-1", 0 ],
+					"hidden" : 0,
+					"midpoints" : [  ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"source" : [ "obj-4", 0 ],
 					"destination" : [ "obj-1", 0 ],
 					"hidden" : 0,
 					"midpoints" : [  ]
