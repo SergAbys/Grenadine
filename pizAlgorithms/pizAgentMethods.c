@@ -55,7 +55,7 @@
 
 PIZError pizAgentInit(PIZAgent *x, const PIZEvent *event)
 {
-    pizAgentAddNotification(x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
+    pizAgentNotify(x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
     pizSequenceInit(x->sequence);
     
     return PIZ_GOOD;
@@ -137,19 +137,8 @@ PIZError pizAgentLearn(PIZAgent *x, const PIZEvent *event)
 PIZError pizAgentDump(PIZAgent *x, const PIZEvent *event)
 {
     PIZError err = PIZ_ERROR;
-    
-    PIZ_AGENT_LOCK_NOTIFICATION
-    
-    err = pizSequenceDump(x->sequence);
-     
-    if (!err) {
-        PIZ_AGENT_UNLOCK_NOTIFICATION
-        pthread_cond_signal(&x->notificationCondition);
-    } else {
-        PIZ_AGENT_UNLOCK_NOTIFICATION
-    }
         
-    if (err == PIZ_MEMORY) {
+    if ((err = pizSequenceDump(x->sequence)) == PIZ_MEMORY) {
         PIZ_AGENT_MEMORY
     }
     
@@ -165,7 +154,7 @@ PIZError pizAgentBpm(PIZAgent *x, const PIZEvent *event)
     //
     if ((argv[0] >= PIZ_MINIMUM_BPM) && (argv[0] <= PIZ_MAXIMUM_BPM)) {
         x->bpm = argv[0];
-        pizAgentAddNotification(x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
+        pizAgentNotify(x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
             
         pizNanoSet(&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);    
         pizTimeCopy(&x->grainEnd, &x->grainStart);

@@ -214,8 +214,10 @@ typedef struct _PIZSequence {
 
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL PIZSequence   *pizSequenceNew     (struct _PIZAgent *owner);
-PIZ_LOCAL void          pizSequenceFree     (PIZSequence *x);
+PIZ_LOCAL PIZSequence   *pizSequenceNew (struct _PIZAgent *owner);
+
+PIZ_LOCAL void          pizSequenceFree (PIZSequence *x);
+PIZ_LOCAL void          pizSequenceInit (PIZSequence *x);
 
 PIZ_END_C_LINKAGE
 

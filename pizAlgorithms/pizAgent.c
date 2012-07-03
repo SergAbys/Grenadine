@@ -66,37 +66,27 @@ PIZAgent *pizAgentNew(long identifier)
     x->run           = pizLinklistNew( );
     x->low           = pizLinklistNew( );
     x->high          = pizLinklistNew( );
-    x->notification  = pizLinklistNew( );    
     x->sequence      = pizSequenceNew(x);
     x->buffer        = pizArrayNew(0);
     x->factorOracle  = pizFactorOracleNew(0, NULL);
     x->galoisLattice = pizGaloisLatticeNew(0, NULL);
     x->observer      = NULL;
     x->notify        = NULL;
-    x->err1          = PIZ_ERROR;
-    x->err2          = PIZ_ERROR;
+    x->error         = PIZ_ERROR;
     x->seed          = PIZ_SEED;
     
     if (!(x->run         &&  
         x->low           &&
         x->high          &&
-        x->notification  && 
         x->sequence      &&
         x->buffer        &&
         x->factorOracle  &&
-        x->galoisLattice )) {
-        
-        err |= PIZ_MEMORY;
-    }
-    
-    err |= pthread_mutex_init(&x->eventLock, NULL);
-    err |= pthread_mutex_init(&x->notificationLock, NULL);
-    err |= pthread_mutex_init(&x->observerLock, NULL);
-    
-    err |= pthread_cond_init(&x->eventCondition, NULL);
-    err |= pthread_cond_init(&x->notificationCondition, NULL);
+        x->galoisLattice )) { err |= PIZ_MEMORY; }
     
     err |= pthread_attr_init(&x->attr);
+    err |= pthread_cond_init(&x->condition, NULL);
+    err |= pthread_mutex_init(&x->eventLock, NULL);
+    err |= pthread_mutex_init(&x->observerLock, NULL);
     
     if (!err) {
     //
@@ -104,11 +94,8 @@ PIZAgent *pizAgentNew(long identifier)
     pthread_attr_setdetachstate(&x->attr, PTHREAD_CREATE_JOINABLE);
     pthread_attr_setschedpolicy(&x->attr, SCHED_OTHER);
     
-    x->err1 = (pthread_create(&x->eventLoop, &x->attr, pizAgentEventLoop, (void *)x) != 0); 
-    err |= x->err1;
-    
-    x->err2 = (pthread_create(&x->notificationLoop, &x->attr, pizAgentNotificationLoop, (void *)x) != 0); 
-    err |= x->err2;
+    x->error = (pthread_create(&x->eventLoop, &x->attr, pizAgentEventLoop, (void *)x) != 0); 
+    err |= x->error;
     //
     }
     
@@ -126,32 +113,19 @@ void pizAgentFree(PIZAgent *x)
 { 
     if (x) {
     //
-    if (!x->err1) {
+    if (!x->error) {
         PIZ_AGENT_LOCK_EVENT
         x->flags |= PIZ_AGENT_FLAG_EXIT;
         PIZ_AGENT_UNLOCK_EVENT
-        pthread_cond_signal(&x->eventCondition);
         
+        pthread_cond_signal(&x->condition);
         pthread_join(x->eventLoop, NULL); 
     }
     
-    if (!x->err2) {
-        PIZ_AGENT_LOCK_NOTIFICATION
-        x->flags |= PIZ_AGENT_FLAG_EXIT;
-        PIZ_AGENT_UNLOCK_NOTIFICATION
-        pthread_cond_signal(&x->notificationCondition);
-        
-        pthread_join(x->notificationLoop, NULL); 
-    }
-    
     pthread_attr_destroy(&x->attr);
-    
     pthread_mutex_destroy(&x->eventLock);
-    pthread_mutex_destroy(&x->notificationLock);
     pthread_mutex_destroy(&x->observerLock);
-    
-    pthread_cond_destroy(&x->eventCondition);
-    pthread_cond_destroy(&x->notificationCondition);
+    pthread_cond_destroy(&x->condition);
     
     pizArrayFree(x->buffer);
     
@@ -161,7 +135,6 @@ void pizAgentFree(PIZAgent *x)
     pizLinklistFree(x->run);
     pizLinklistFree(x->low);
     pizLinklistFree(x->high);
-    pizLinklistFree(x->notification);
 
     pizSequenceFree(x->sequence);
     //
@@ -220,9 +193,15 @@ void pizAgentAddEvent(PIZAgent *x, PIZEvent *event)
     
     if (q) {
         PIZ_AGENT_LOCK_EVENT
-        PIZ_AGENT_QUEUE(q, event)
+        
+        if (pizLinklistAppend(q, event)) {
+            pizEventFree(event);
+            PIZ_AGENT_MEMORY
+        }
+                                            
         PIZ_AGENT_UNLOCK_EVENT
-        pthread_cond_signal(&x->eventCondition);
+        
+        pthread_cond_signal(&x->condition);
     }
 }
 
