@@ -11,8 +11,8 @@
 		breakpointsGroup = 9699A8E613D9A57300D9A0AD /* XCBreakpointsBucket */;
 		codeSenseManager = 96CFCDA713D7F01D004431BB /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 363009735;
-			PBXWorkspaceStateSaveDate = 363009735;
+			PBXPerProjectTemplateStateSaveDate = 363085338;
+			PBXWorkspaceStateSaveDate = 363085338;
 		};
 		sourceControlManager = 96CFCDA613D7F01D004431BB /* Source Control */;
 		userBuildSettings = {
@@ -278,9 +278,9 @@
 	};
 	96D8682914FF5A8B00849A50 /* pizAgent.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 5750}}";
-			sepNavSelRange = "{4512, 20}";
-			sepNavVisRect = "{{0, 4036}, {1233, 292}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 5750}}";
+			sepNavSelRange = "{4476, 0}";
+			sepNavVisRect = "{{0, 1928}, {1235, 645}}";
 			sepNavWindowFrame = "{{2, 4}, {1280, 774}}";
 		};
 	};
