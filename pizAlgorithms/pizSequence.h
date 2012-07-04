@@ -62,15 +62,15 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_MAXIMUM_NOTES          128
-#define PIZ_SEQUENCE_MAXIMUM_DURATION       96
+#define PIZ_SEQUENCE_MAXIMUM_NOTES      128
+#define PIZ_SEQUENCE_MAXIMUM_DURATION   96
                                         
-#define PIZ_SEQUENCE_SIZE_TEMP              128
-#define PIZ_SEQUENCE_SIZE_LOOKUP            19
-#define PIZ_SEQUENCE_SIZE_TIMELINE          288 
+#define PIZ_SEQUENCE_SIZE_TEMP          128
+#define PIZ_SEQUENCE_SIZE_LOOKUP        19
+#define PIZ_SEQUENCE_SIZE_TIMELINE      288 
 
-#define PIZ_SEQUENCE_DEFAULT_PITCH          60
-#define PIZ_SEQUENCE_DEFAULT_VELOCITY       80
+#define PIZ_SEQUENCE_DEFAULT_PITCH      60
+#define PIZ_SEQUENCE_DEFAULT_VELOCITY   80
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -82,36 +82,36 @@ struct _PIZAgent;
 // -------------------------------------------------------------------------------------------------------------
 
 enum {
-    PIZ_UP                          = 0,
-    PIZ_DOWN                        = 1
+    PIZ_UP                              = 0,
+    PIZ_DOWN                            = 1
     };
 
 enum {
-    PIZ_NOTE_NONE                   = 1,
-    PIZ_THIRTY_SECOND_NOTE_TRIPLET  = 2,
-    PIZ_THIRTY_SECOND_NOTE          = 3,
-    PIZ_SIXTEENTH_NOTE_TRIPLET      = 4,
-    PIZ_SIXTEENTH_NOTE              = 6,
-    PIZ_SIXTEENTH_NOTE_DOTTED       = 9,
-    PIZ_EIGHTH_NOTE_TRIPLET         = 8,
-    PIZ_EIGHTH_NOTE                 = 12,
-    PIZ_EIGHTH_NOTE_DOTTED          = 18,
-    PIZ_QUARTER_NOTE_TRIPLET        = 16,
-    PIZ_QUARTER_NOTE                = 24,
-    PIZ_QUARTER_NOTE_DOTTED         = 36,
-    PIZ_HALF_NOTE_TRIPLET           = 32,
-    PIZ_HALF_NOTE                   = 48,
-    PIZ_HALF_NOTE_DOTTED            = 72,
-    PIZ_WHOLE_NOTE_TRIPLET          = 64,
-    PIZ_WHOLE_NOTE                  = 96,
-    PIZ_WHOLE_NOTE_DOTTED           = 144
+    PIZ_NOTE_NONE                       = 1,
+    PIZ_THIRTY_SECOND_NOTE_TRIPLET      = 2,
+    PIZ_THIRTY_SECOND_NOTE              = 3,
+    PIZ_SIXTEENTH_NOTE_TRIPLET          = 4,
+    PIZ_SIXTEENTH_NOTE                  = 6,
+    PIZ_SIXTEENTH_NOTE_DOTTED           = 9,
+    PIZ_EIGHTH_NOTE_TRIPLET             = 8,
+    PIZ_EIGHTH_NOTE                     = 12,
+    PIZ_EIGHTH_NOTE_DOTTED              = 18,
+    PIZ_QUARTER_NOTE_TRIPLET            = 16,
+    PIZ_QUARTER_NOTE                    = 24,
+    PIZ_QUARTER_NOTE_DOTTED             = 36,
+    PIZ_HALF_NOTE_TRIPLET               = 32,
+    PIZ_HALF_NOTE                       = 48,
+    PIZ_HALF_NOTE_DOTTED                = 72,
+    PIZ_WHOLE_NOTE_TRIPLET              = 64,
+    PIZ_WHOLE_NOTE                      = 96,
+    PIZ_WHOLE_NOTE_DOTTED               = 144
     };
 
 enum {
-    PIZ_MODE_NONE                   = -1,
-    PIZ_IONIAN                      =  0,
-    PIZ_DORIAN                      =  1,
-    PIZ_PHRYGIAN                    =  2,
+    PIZ_MODE_NONE                       = -1,
+    PIZ_IONIAN                          =  0,
+    PIZ_DORIAN                          =  1,
+    PIZ_PHRYGIAN                        =  2,
     PIZ_LYDIAN,
     PIZ_MIXOLYDIAN,
     PIZ_AEOLIAN,
@@ -140,9 +140,9 @@ enum {
 // -------------------------------------------------------------------------------------------------------------
 
 enum {
-    PIZ_KEY_C                       = 0,
-    PIZ_KEY_C_SHARP                 = 1,
-    PIZ_KEY_D                       = 2,
+    PIZ_KEY_C                           = 0,
+    PIZ_KEY_C_SHARP                     = 1,
+    PIZ_KEY_D                           = 2,
     PIZ_KEY_D_SHARP,
     PIZ_KEY_E,
     PIZ_KEY_F,
@@ -155,10 +155,10 @@ enum {
     };
 
 enum {
-    PIZ_VALUE_PITCH                 = 0,
-    PIZ_VALUE_VELOCITY              = 1,
-    PIZ_VALUE_DURATION              = 2,
-    PIZ_VALUE_CHANNEL               = 3
+    PIZ_VALUE_PITCH                     = 0,
+    PIZ_VALUE_VELOCITY                  = 1,
+    PIZ_VALUE_DURATION                  = 2,
+    PIZ_VALUE_CHANNEL                   = 3
     };
 
 // -------------------------------------------------------------------------------------------------------------
@@ -214,8 +214,10 @@ typedef struct _PIZSequence {
 
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL PIZSequence   *pizSequenceNew     (struct _PIZAgent *owner);
-PIZ_LOCAL void          pizSequenceFree     (PIZSequence *x);
+PIZ_LOCAL PIZSequence   *pizSequenceNew (struct _PIZAgent *owner);
+
+PIZ_LOCAL void          pizSequenceFree (PIZSequence *x);
+PIZ_LOCAL void          pizSequenceInit (PIZSequence *x);
 
 PIZ_END_C_LINKAGE
 

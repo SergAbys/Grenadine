@@ -55,11 +55,11 @@ int main(void)
     class_addmethod(c, (method)tralala_list,        "list",      A_GIMME, 0);
     class_addmethod(c, (method)tralala_anything,    "anything",  A_GIMME, 0);
 
-	CLASS_ATTR_RGBA                 (c, "color", 0, t_tll, background); 
-	CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "color", 0, "0. 0. 0. 1."); 
-	CLASS_ATTR_STYLE_LABEL          (c, "color", 0, "rgba", "Background Color");
-	CLASS_ATTR_CATEGORY             (c, "color", 0, "Color");
-	CLASS_ATTR_DEFAULT              (c, "patching_rect", 0, "0. 0. 50. 50.");
+    CLASS_ATTR_RGBA                 (c, "color", 0, t_tll, background); 
+    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "color", 0, "0. 0. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL          (c, "color", 0, "rgba", "Background Color");
+    CLASS_ATTR_CATEGORY             (c, "color", 0, "Color");
+    CLASS_ATTR_DEFAULT              (c, "patching_rect", 0, "0. 0. 50. 50.");
     
     class_register(CLASS_BOX, c);
 

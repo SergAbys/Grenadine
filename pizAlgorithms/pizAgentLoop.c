@@ -105,8 +105,6 @@ PIZ_LOCAL void      pizAgentEventLoopSleep          (PIZAgent *x);
 PIZ_LOCAL bool      pizAgentEventLoopIsCondition    (PIZAgent *x);
 PIZ_LOCAL bool      pizAgentEventLoopIsWorkTime     (PIZAgent *x);
 
-PIZ_LOCAL void      pizAgentNotificationLoopNotify  (PIZAgent *x);
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -123,7 +121,7 @@ void *pizAgentEventLoop(void *agent)
     PIZ_AGENT_LOCK_EVENT
     
     while (!(pizAgentEventLoopIsCondition(x))) {
-        pthread_cond_wait(&x->eventCondition, &x->eventLock);
+        pthread_cond_wait(&x->condition, &x->eventLock);
         x->flags |= PIZ_AGENT_FLAG_INIT;
         if (PIZ_EXIT) { 
             break; 
@@ -172,38 +170,7 @@ void *pizAgentEventLoop(void *agent)
     pthread_exit(NULL);
 }
 
-void *pizAgentNotificationLoop(void *agent)
-{
-    PIZAgent *x = (PIZAgent *)agent;  
-    
-    while (!PIZ_EXIT) { 
-    //
-    
-    PIZ_AGENT_LOCK_NOTIFICATION
-    
-    while (!(pizLinklistCount(x->notification))) {
-        pthread_cond_wait(&x->notificationCondition, &x->notificationLock);
-        if (PIZ_EXIT) {
-            break;
-        } 
-    }
-    
-    PIZ_AGENT_UNLOCK_NOTIFICATION
-        
-    if (!PIZ_EXIT) {
-        pizAgentNotificationLoopNotify(x);
-    }
-    //    
-    }
-    
-    pthread_exit(NULL);
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void pizAgentAddNotification(PIZAgent *x, PIZEventCode n, long ac, long *av)
+void pizAgentNotify(PIZAgent *x, PIZEventCode n, long ac, long *av)
 {
     PIZEvent *notification = NULL;
 
@@ -212,16 +179,17 @@ void pizAgentAddNotification(PIZAgent *x, PIZEventCode n, long ac, long *av)
     pizEventSetData(notification, ac, av);
     pizEventSetIdentifier(notification, x->identifier);
     pizEventSetTime(notification, &x->grainStart);
-    
-    PIZ_AGENT_LOCK_NOTIFICATION
-    PIZ_AGENT_QUEUE(x->notification, notification)
-    PIZ_AGENT_UNLOCK_NOTIFICATION
-    pthread_cond_signal(&x->notificationCondition);
-    //
-    } else {
-        PIZ_AGENT_MEMORY
+ 
+    PIZ_AGENT_LOCK_OBSERVER
+        
+    if (x->observer && x->notify) {
+        (*x->notify)(x->observer, notification);
     }
-}
+    
+    PIZ_AGENT_UNLOCK_OBSERVER
+    //
+    }
+} 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -251,6 +219,8 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
         
     if (event) {
     //
+    DEBUGEVENT
+    
     pizEventCode(event, &code);
     
     if (code < PIZ_EVENT_CHANCE) {
@@ -263,8 +233,6 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
         PIZ_AGENT_MEMORY
     }
         
-    DEBUGEVENT
-        
     pizEventFree(event);
     //
     }
@@ -274,35 +242,20 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
 
 void pizAgentEventLoopDoStep(PIZAgent *x, bool blank)
 {   
-    long count;
     bool k = false;
     PIZError err = PIZ_GOOD; 
     
     do {
     //
-    
     if (!blank) {
-        
-        PIZ_AGENT_LOCK_NOTIFICATION
-        
-        count  = pizLinklistCount(x->notification);
-        err    = pizSequenceStep(x->sequence);
-        count -= pizLinklistCount(x->notification);
-        
-        if (count) { 
-            PIZ_AGENT_UNLOCK_NOTIFICATION
-            pthread_cond_signal(&x->notificationCondition);
-        } else {
-            PIZ_AGENT_UNLOCK_NOTIFICATION
-        }
-
+        err = pizSequenceStep(x->sequence);
     } else {
         err = pizSequenceStepBlank(x->sequence); 
     }
     
     if (err == PIZ_GOOD) {
         if (pizSequenceIsAtEnd(x->sequence)) {
-            pizAgentAddNotification(x, PIZ_EVENT_WILL_END, 0, NULL);
+            pizAgentNotify(x, PIZ_EVENT_WILL_END, 0, NULL);
         }
         k = false;  
         
@@ -316,35 +269,20 @@ void pizAgentEventLoopDoStep(PIZAgent *x, bool blank)
         }
         
         pizSequenceJumpToStart(x->sequence);
-        pizAgentAddNotification(x, PIZ_EVENT_END, 0, NULL);
+        pizAgentNotify(x, PIZ_EVENT_END, 0, NULL);
   
     } else if (err == PIZ_MEMORY) { 
         PIZ_AGENT_MEMORY 
     }
-
     //
     } while (k);
 }
 
 void pizAgentEventLoopDoRefresh(PIZAgent *x)
 {
-    long count;
     PIZError err = PIZ_ERROR;
-    
-    PIZ_AGENT_LOCK_NOTIFICATION
-    
-    count  = pizLinklistCount(x->notification);
-    err    = pizSequenceRefresh(x->sequence);
-    count -= pizLinklistCount(x->notification);
-     
-    if (!err && count) {
-        PIZ_AGENT_UNLOCK_NOTIFICATION
-        pthread_cond_signal(&x->notificationCondition);
-    } else {
-        PIZ_AGENT_UNLOCK_NOTIFICATION
-    }
-        
-    if (err == PIZ_MEMORY) {
+  
+    if ((err = pizSequenceRefresh(x->sequence)) == PIZ_MEMORY) {
         PIZ_AGENT_MEMORY
     }
 }
@@ -443,35 +381,6 @@ bool pizAgentEventLoopIsWorkTime(PIZAgent *x)
     
     return isWorkTime;
 }
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void pizAgentNotificationLoopNotify(PIZAgent *x)
-{
-    PIZEvent *event = NULL;
-            
-    PIZ_AGENT_LOCK_NOTIFICATION
-    
-    if (!(pizLinklistPtrAtIndex(x->notification, 0, (void **)&event))) {
-        pizLinklistChuckWithPtr(x->notification, event);
-    }
-    
-    PIZ_AGENT_UNLOCK_NOTIFICATION   
-    
-    if (event) {
-    //
-    PIZ_AGENT_LOCK_OBSERVER
-        
-    if (x->observer && x->notify) {
-        (*x->notify)(x->observer, event);
-    }
-    
-    PIZ_AGENT_UNLOCK_OBSERVER
-    //
-    }
-} 
 
 // -------------------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------:x

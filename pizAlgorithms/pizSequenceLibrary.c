@@ -166,7 +166,7 @@ void pizSequenceEachDump(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote 
                   note->tag,
                   x->owner->bpm };
                 
-    x->tempError |= pizSequenceAddNotification(x, PIZ_EVENT_NOTE_DUMPED, 7, a);
+    x->tempError |= pizAgentNotify(x->owner, PIZ_EVENT_NOTE_DUMPED, 7, a);
 }
 
 void pizSequenceEachTempHash(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note)

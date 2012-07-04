@@ -49,10 +49,8 @@
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL void  *pizAgentEventLoop          (void *agent);
-PIZ_LOCAL void  *pizAgentNotificationLoop   (void *agent);
-
-PIZ_LOCAL void  pizAgentAddNotification     (PIZAgent *x, PIZEventCode n, long ac, long *av);
+PIZ_LOCAL void  *pizAgentEventLoop  (void *agent);
+PIZ_LOCAL void  pizAgentNotify      (PIZAgent *x, PIZEventCode n, long ac, long *av);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
