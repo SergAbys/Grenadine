@@ -1,60 +1,28 @@
 // !$*UTF8*$!
 {
 	089C1669FE841209C02AAC07 /* Project object */ = {
-		activeBuildConfigurationName = Debug;
-		activeExecutable = 9964C5130FF7C8FF0006BC3B /* maxRT */;
-		activeTarget = 8D01CCC60486CAD60068D4B7 /* charlie */;
+		activeBuildConfigurationName = Release;
+		activeTarget = 8D01CCC60486CAD60068D4B7 /* max_external */;
 		addToTargets = (
-			8D01CCC60486CAD60068D4B7 /* charlie */,
+			8D01CCC60486CAD60068D4B7 /* max_external */,
 		);
 		breakpoints = (
 		);
-		breakpointsGroup = 998CC8E80FF639DD000A2E5E /* XCBreakpointsBucket */;
-		codeSenseManager = 99042ED70FEFB82900E07832 /* Code sense */;
-		executables = (
-			9964C5130FF7C8FF0006BC3B /* maxRT */,
-		);
+		breakpointsGroup = 96EDD4C813BDCC1A0058E023 /* XCBreakpointsBucket */;
+		codeSenseManager = 965F6CC212FF252E00F96EF1 /* Code sense */;
 		perUserDictionary = {
-			PBXConfiguration.PBXFileTableDataSource3.PBXBookmarksDataSource = {
-				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
-				PBXFileTableDataSourceColumnSortingKey = PBXBookmarksDataSource_NameID;
-				PBXFileTableDataSourceColumnWidthsKey = (
-					200,
-					200,
-					57.5835,
-				);
-				PBXFileTableDataSourceColumnsKey = (
-					PBXBookmarksDataSource_LocationID,
-					PBXBookmarksDataSource_NameID,
-					PBXBookmarksDataSource_CommentsID,
-				);
-			};
 			PBXConfiguration.PBXFileTableDataSource3.PBXErrorsWarningsDataSource = {
 				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
 				PBXFileTableDataSourceColumnSortingKey = PBXErrorsWarningsDataSource_LocationID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
 					300,
-					128,
+					200,
 				);
 				PBXFileTableDataSourceColumnsKey = (
 					PBXErrorsWarningsDataSource_TypeID,
 					PBXErrorsWarningsDataSource_MessageID,
 					PBXErrorsWarningsDataSource_LocationID,
-				);
-			};
-			PBXConfiguration.PBXFileTableDataSource3.PBXExecutablesDataSource = {
-				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
-				PBXFileTableDataSourceColumnSortingKey = PBXExecutablesDataSource_NameID;
-				PBXFileTableDataSourceColumnWidthsKey = (
-					22,
-					300,
-					126,
-				);
-				PBXFileTableDataSourceColumnsKey = (
-					PBXExecutablesDataSource_ActiveFlagID,
-					PBXExecutablesDataSource_NameID,
-					PBXExecutablesDataSource_CommentsID,
 				);
 			};
 			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
@@ -64,7 +32,7 @@
 					20,
 					238,
 					20,
-					48.1626,
+					48,
 					43,
 					43,
 					20,
@@ -92,13 +60,13 @@
 				);
 			};
 			PBXConfiguration.PBXFileTableDataSource3.PBXSymbolsDataSource = {
-				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingDirectionKey = 1;
 				PBXFileTableDataSourceColumnSortingKey = PBXSymbolsDataSource_SymbolNameID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					16,
 					200,
-					50,
-					178,
+					302,
+					45.2085,
 				);
 				PBXFileTableDataSourceColumnsKey = (
 					PBXSymbolsDataSource_SymbolTypeIconID,
@@ -113,9 +81,9 @@
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
 					20,
-					214,
+					532,
 					20,
-					48.1626,
+					48,
 					43,
 					43,
 					20,
@@ -137,7 +105,7 @@
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
 					200,
-					58,
+					436,
 					20,
 					48.1626,
 					43,
@@ -153,17 +121,17 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 279809941;
-			PBXWorkspaceStateSaveDate = 279809941;
+			PBXPerProjectTemplateStateSaveDate = 363099892;
+			PBXWorkspaceStateSaveDate = 363099892;
 		};
-		sourceControlManager = 99042ED60FEFB82900E07832 /* Source Control */;
+		sourceControlManager = 965F6CC112FF252E00F96EF1 /* Source Control */;
 		userBuildSettings = {
 		};
 	};
-	8D01CCC60486CAD60068D4B7 /* charlie */ = {
+	8D01CCC60486CAD60068D4B7 /* max_external */ = {
 		activeExec = 0;
 	};
-	99042ED60FEFB82900E07832 /* Source Control */ = {
+	965F6CC112FF252E00F96EF1 /* Source Control */ = {
 		isa = PBXSourceControlManager;
 		fallbackIsa = XCSourceControlManager;
 		isSCMEnabled = 0;
@@ -171,62 +139,78 @@
 		};
 		scmType = "";
 	};
-	99042ED70FEFB82900E07832 /* Code sense */ = {
+	965F6CC212FF252E00F96EF1 /* Code sense */ = {
 		isa = PBXCodeSenseManager;
 		indexTemplatePath = "";
 	};
-	99042EDA0FEFB8AA00E07832 /* charlie.c */ = {
+	9676982513B7784800FE77F4 /* tralala.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1232, 11382}}";
-			sepNavSelRange = "{3770, 0}";
-			sepNavVisRect = "{{0, 10738}, {1232, 644}}";
-			sepNavWindowFrame = "{{1, 5}, {1277, 773}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1233, 9425}}";
+			sepNavSelRange = "{7417, 0}";
+			sepNavVisRect = "{{0, 4719}, {1233, 643}}";
+			sepNavWindowFrame = "{{-1, 6}, {1278, 772}}";
 		};
 	};
-	9964C5130FF7C8FF0006BC3B /* maxRT */ = {
-		isa = PBXExecutable;
-		activeArgIndex = 2147483647;
-		activeArgIndices = (
-		);
-		argumentStrings = (
-		);
-		autoAttachOnCrash = 1;
-		configStateDict = {
+	96CF9325154C40F60027BB96 /* tralala.xcconfig */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 1050}}";
+			sepNavSelRange = "{484, 0}";
+			sepNavVisRect = "{{0, 208}, {1235, 645}}";
+			sepNavWindowFrame = "{{15, -1}, {1280, 774}}";
 		};
-		customDataFormattersEnabled = 1;
-		debuggerPlugin = GDBDebugging;
-		disassemblyDisplayState = 0;
-		dylibVariantSuffix = "";
-		enableDebugStr = 1;
-		environmentEntries = (
-		);
-		executableSystemSymbolLevel = 0;
-		executableUserSymbolLevel = 0;
-		launchableReference = 9964C5140FF7C8FF0006BC3B /* MaxMSP Runtime.app */;
-		libgmallocEnabled = 0;
-		name = maxRT;
-		sourceDirectories = (
-		);
 	};
-	9964C5140FF7C8FF0006BC3B /* MaxMSP Runtime.app */ = {
-		isa = PBXFileReference;
-		explicitFileType = wrapper.application;
-		name = "MaxMSP Runtime.app";
-		path = "/Applications/Max5/MaxMSP Runtime.app";
-		sourceTree = "<absolute>";
+	96D6A58B1588952600D2CBCC /* tralalaPaint.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1241, 642}}";
+			sepNavSelRange = "{57, 0}";
+			sepNavVisRect = "{{0, 0}, {1241, 642}}";
+			sepNavWindowFrame = "{{15, 2}, {1286, 771}}";
+		};
 	};
-	998CC8E80FF639DD000A2E5E /* XCBreakpointsBucket */ = {
+	96D6A58C1588952600D2CBCC /* tralalaPaint.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1241, 642}}";
+			sepNavSelRange = "{58, 0}";
+			sepNavVisRect = "{{0, 0}, {1241, 642}}";
+			sepNavWindowFrame = "{{-6, 5}, {1286, 771}}";
+		};
+	};
+	96D843C315824D41005B41A9 /* tralala.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1233, 2000}}";
+			sepNavSelRange = "{1727, 0}";
+			sepNavVisRect = "{{0, 957}, {1233, 411}}";
+			sepNavWindowFrame = "{{15, -1}, {1281, 774}}";
+		};
+	};
+	96D9672B1507C5EE006A848D /* tralalaHide.txt */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1147, 156}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 0}, {1147, 156}}";
+			sepNavWindowFrame = "{{15, -1}, {1280, 774}}";
+		};
+	};
+	96DC326315581A5500C26797 /* tralalaParse.c */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 8625}}";
+			sepNavSelRange = "{15824, 0}";
+			sepNavVisRect = "{{0, 7641}, {1235, 645}}";
+			sepNavWindowFrame = "{{-1, 2}, {1280, 774}}";
+		};
+	};
+	96DC326715581AC500C26797 /* tralalaParse.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1233, 1300}}";
+			sepNavSelRange = "{972, 0}";
+			sepNavVisRect = "{{0, 507}, {1233, 411}}";
+			sepNavWindowFrame = "{{1, 4}, {1280, 774}}";
+		};
+	};
+	96EDD4C813BDCC1A0058E023 /* XCBreakpointsBucket */ = {
 		isa = XCBreakpointsBucket;
 		name = "Project Breakpoints";
 		objects = (
 		);
-	};
-	999A650F1000C85800F6B661 /* charlie_Prefix.pch */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1232, 644}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRect = "{{0, 0}, {1232, 644}}";
-			sepNavWindowFrame = "{{15, 0}, {1277, 773}}";
-		};
 	};
 }
