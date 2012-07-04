@@ -1,7 +1,5 @@
 .DS_Store
 
-*/build
-Ufo/*/build
-maxMSP/Tralala/build
-maxMSP/Ufo/*/build
+build/
+
 
