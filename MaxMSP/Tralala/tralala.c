@@ -368,7 +368,7 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv)
     }
                         
     pizEventSetIdentifier(event, x->identifier);
-    pizAgentAddEvent(x->agent, event);
+    pizAgentDoEvent(x->agent, event);
     //
     }
 }

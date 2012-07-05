@@ -181,7 +181,7 @@ PIZError pizAgentDetach(PIZAgent *x, void *observer)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void pizAgentAddEvent(PIZAgent *x, PIZEvent *event)
+void pizAgentDoEvent(PIZAgent *x, PIZEvent *event)
 {
     PIZLinklist *q = NULL;
         

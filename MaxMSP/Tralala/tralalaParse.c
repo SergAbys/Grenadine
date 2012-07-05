@@ -268,7 +268,7 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv)
         pizEventSetTime(event, &time);
         pizEventSetData(event, k, data);
         pizEventSetIdentifier(event, x->identifier);
-        pizAgentAddEvent(x->agent, event);
+        pizAgentDoEvent(x->agent, event);
     }
     //
     }
