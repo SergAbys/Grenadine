@@ -29,7 +29,7 @@ PIZ_LOCAL void tralala_send (t_tll *x, PIZEventCode code, long argc, t_atom *arg
 #pragma mark -
 
 static t_class *tll_class;
-static long identifier;
+static t_int32_atomic identifier;
 
 int main(void)
 {	
@@ -109,7 +109,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
         dictionary_copyunique(x->data, t);
     } 
     
-    x->identifier = ++identifier;
+    x->identifier = ATOMIC_INCREMENT(&identifier);
     x->flags = TLL_FLAG_NONE;
         
     if (x->agent = pizAgentNew(x->identifier)) {
