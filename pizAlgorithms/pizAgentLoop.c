@@ -211,12 +211,8 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
         pizLinklistChuckWithPtr(q, event);
     }
     
-    if (!(pizLinklistCount(q))) {
-        err = PIZ_ERROR;
-    }
-    
     PIZ_AGENT_UNLOCK_EVENT
-        
+    
     if (event) {
     //
     DEBUGEVENT
@@ -236,6 +232,14 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
     pizEventFree(event);
     //
     }
+    
+    PIZ_AGENT_LOCK_EVENT
+    
+    if (!(pizLinklistCount(q))) {
+        err = PIZ_ERROR;
+    }
+    
+    PIZ_AGENT_UNLOCK_EVENT
     
     return err;
 }

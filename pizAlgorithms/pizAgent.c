@@ -152,10 +152,10 @@ PIZError pizAgentAttach(PIZAgent *x, void *observer, PIZMethod f)
     if (observer && f) {
     //
     PIZ_AGENT_LOCK_OBSERVER
-
+    
     x->observer = observer;
     x->notify   = f;
-
+    
     PIZ_AGENT_UNLOCK_OBSERVER
 
     err = PIZ_GOOD;
@@ -192,16 +192,18 @@ void pizAgentAddEvent(PIZAgent *x, PIZEvent *event)
     }
     
     if (q) {
+        PIZError err = PIZ_GOOD;
+
         PIZ_AGENT_LOCK_EVENT
-        
-        if (pizLinklistAppend(q, event)) {
-            pizEventFree(event);
-            PIZ_AGENT_MEMORY
-        }
-                                            
+        err = pizLinklistAppend(q, event);
         PIZ_AGENT_UNLOCK_EVENT
         
         pthread_cond_signal(&x->condition);
+        
+        if (err) {
+            pizEventFree(event);
+            PIZ_AGENT_MEMORY
+        }
     }
 }
 
