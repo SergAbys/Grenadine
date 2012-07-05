@@ -82,7 +82,7 @@ void pizSequenceEachRemove(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNot
     
     if ((h == -1) || (h < x->chance)) {
     //
-    pizHashTableRemove(x->lookup, tag, note);
+    x->lookup[tag] = NULL;
     pizItemsetUnsetAtIndex(&x->usedNotes, tag);
     pizLinklistRemoveWithPtr(x->timeline[p], (void *)note);
     x->count --; 

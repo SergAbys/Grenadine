@@ -267,7 +267,7 @@ PIZError pizSequenceSort(PIZSequence *x, const PIZEvent *event)
         
     k = pizSequenceFillTempNotes(x);
     
-    for (i = 0; i < PIZ_SEQUENCE_SIZE_TEMP; i++) {
+    for (i = 0; i < PIZ_SEQUENCE_SIZE_TEMPORARY; i++) {
         x->tempValues[i] = 0;
     }
     
@@ -275,7 +275,7 @@ PIZError pizSequenceSort(PIZSequence *x, const PIZEvent *event)
         x->tempValues[x->tempNotes1[i]->values[selector]] ++; 
     }   
         
-    for (i = 1; i < PIZ_SEQUENCE_SIZE_TEMP; i++) {
+    for (i = 1; i < PIZ_SEQUENCE_SIZE_TEMPORARY; i++) {
         x->tempValues[i] += x->tempValues[i - 1];
     }
                 
@@ -615,7 +615,6 @@ PIZNote *pizSequenceNewNote(PIZSequence *x, long *argv, ulong flags)
     
     if (!err) {
     //
-    
     err |= pizSequenceGetTag(x, &k);
     
     if (!err && (newNote = (PIZNote *)malloc(sizeof(PIZNote)))) {
@@ -632,14 +631,14 @@ PIZNote *pizSequenceNewNote(PIZSequence *x, long *argv, ulong flags)
             }
         }
         
-        err |= pizHashTableAdd(x->lookup, newNote->tag, newNote);
+        x->lookup[newNote->tag] = newNote;
                                 
         if (!err && !(pizLinklistAppend(x->timeline[newNote->position], (void *)newNote))) {
             x->count ++; 
             pizItemsetSetAtIndex(&x->addedNotes, newNote->tag);
             
         } else {
-            pizHashTableRemove(x->lookup, newNote->tag, newNote);
+            x->lookup[newNote->tag] = NULL;
             pizItemsetUnsetAtIndex(&x->usedNotes, newNote->tag);
             free(newNote);
             newNote = NULL;

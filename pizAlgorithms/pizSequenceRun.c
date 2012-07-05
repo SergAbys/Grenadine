@@ -145,19 +145,18 @@ PIZError pizSequenceRefresh(PIZSequence *x)
     if (pizItemsetCount(&x->addedNotes)) {
     //
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
-        if (pizItemsetIsSetAtIndex(&x->addedNotes, i)) {
-            if (!(pizHashTablePtrWithKey(x->lookup, i, (void **)&note))) {
-            
-                long a[ ] = { note->position, 
-                              note->values[PIZ_VALUE_PITCH],
-                              note->values[PIZ_VALUE_VELOCITY],
-                              note->values[PIZ_VALUE_DURATION], 
-                              note->values[PIZ_VALUE_CHANNEL],
-                              note->tag,
-                              x->owner->bpm };
+        if (pizItemsetIsSetAtIndex(&x->addedNotes, i) && (note = x->lookup[i])) {
+
+            long a[ ] = { note->position, 
+                          note->values[PIZ_VALUE_PITCH],
+                          note->values[PIZ_VALUE_VELOCITY],
+                          note->values[PIZ_VALUE_DURATION], 
+                          note->values[PIZ_VALUE_CHANNEL],
+                          note->tag,
+                          x->owner->bpm };
                 
-                err |= pizAgentNotify(x->owner, PIZ_EVENT_NOTE_ADDED, 7, a);
-            }
+            err |= pizAgentNotify(x->owner, PIZ_EVENT_NOTE_ADDED, 7, a);
+            
             pizItemsetUnsetAtIndex(&x->changedNotes, i);
         } 
     }
@@ -169,19 +168,17 @@ PIZError pizSequenceRefresh(PIZSequence *x)
     if (pizItemsetCount(&x->changedNotes)) {
     //
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
-        if (pizItemsetIsSetAtIndex(&x->changedNotes, i)) {
-            if (!(pizHashTablePtrWithKey(x->lookup, i, (void **)&note))) {
+        if (pizItemsetIsSetAtIndex(&x->changedNotes, i) && (note = x->lookup[i])) {
+
+            long a[ ] = { note->position,
+                          note->values[PIZ_VALUE_PITCH],
+                          note->values[PIZ_VALUE_VELOCITY],
+                          note->values[PIZ_VALUE_DURATION], 
+                          note->values[PIZ_VALUE_CHANNEL],
+                          note->tag,
+                          x->owner->bpm };
             
-                long a[ ] = { note->position,
-                              note->values[PIZ_VALUE_PITCH],
-                              note->values[PIZ_VALUE_VELOCITY],
-                              note->values[PIZ_VALUE_DURATION], 
-                              note->values[PIZ_VALUE_CHANNEL],
-                              note->tag,
-                              x->owner->bpm };
-                
-                err |= pizAgentNotify(x->owner, PIZ_EVENT_NOTE_CHANGED, 7, a);
-            }
+            err |= pizAgentNotify(x->owner, PIZ_EVENT_NOTE_CHANGED, 7, a);
         } 
     }
     

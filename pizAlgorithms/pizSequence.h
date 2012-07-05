@@ -39,7 +39,7 @@
 
 /* 
  *  PIZ_SEQUENCE_MAXIMUM_NOTES   = PIZ_ITEMSET_SIZE 
- *  PIZ_SEQUENCE_SIZE_TEMP       = MAX(MAXIMUM_NOTES, MAXIMUM_DURATION, PIZ_MAGIC_PITCH + 1) 
+ *  PIZ_SEQUENCE_SIZE_TEMPORARY  = MAX(MAXIMUM_NOTES, MAXIMUM_DURATION, PIZ_MAGIC_PITCH + 1) 
  */
 
 // -------------------------------------------------------------------------------------------------------------
@@ -65,8 +65,7 @@
 #define PIZ_SEQUENCE_MAXIMUM_NOTES      128
 #define PIZ_SEQUENCE_MAXIMUM_DURATION   96
                                         
-#define PIZ_SEQUENCE_SIZE_TEMP          128
-#define PIZ_SEQUENCE_SIZE_LOOKUP        19
+#define PIZ_SEQUENCE_SIZE_TEMPORARY     128
 #define PIZ_SEQUENCE_SIZE_TIMELINE      288 
 
 #define PIZ_SEQUENCE_DEFAULT_PITCH      60
@@ -174,22 +173,8 @@ typedef struct _PIZNote {
 // -------------------------------------------------------------------------------------------------------------
     
 typedef struct _PIZSequence {
-    long                tempIndex;
-    PIZError            tempError;
-    long                *tempValues;
-    PIZHashTable        *tempHash;
-    PIZNote             **tempNotes1;
-    PIZNote             **tempNotes2;
-    PIZArray            *map;
-    PIZLinklist         **timeline;
-    PIZHashTable        *lookup;
-    PIZArray            *scale;
-    PIZArray            *pattern;
-    PIZItemset          usedNotes;
-    PIZItemset          addedNotes;
-    PIZItemset          changedNotes;
-    PIZItemset          removedNotes;
     ulong               flags;
+    uint                seed;
     long                start;
     long                end;
     long                down;
@@ -204,7 +189,21 @@ typedef struct _PIZSequence {
     long                type;
     long                cell;
     long                value;
-    uint                seed;
+    PIZItemset          usedNotes;
+    PIZItemset          addedNotes;
+    PIZItemset          changedNotes;
+    PIZItemset          removedNotes;
+    PIZArray            *scale;
+    PIZArray            *pattern;
+    PIZArray            *map;
+    PIZLinklist         **timeline;
+    PIZNote             **lookup;
+    PIZNote             **tempNotes1;
+    PIZNote             **tempNotes2;
+    PIZHashTable        *tempHash;
+    long                *tempValues;
+    long                tempIndex;
+    PIZError            tempError;
     struct _PIZAgent    *owner;
     } PIZSequence;
     

@@ -59,6 +59,7 @@
 #define PIZ_SEQUENCE_FLAG_NEARBY        4UL
 
 #define PIZ_SEQUENCE_FLAG_INIT          (511UL)
+
 #define PIZ_SEQUENCE_FLAG_CHANCE        (1UL << 0)
 #define PIZ_SEQUENCE_FLAG_VELOCITY      (1UL << 1)
 #define PIZ_SEQUENCE_FLAG_CHANNEL       (1UL << 2)

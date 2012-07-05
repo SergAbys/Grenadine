@@ -65,18 +65,17 @@ PIZSequence *pizSequenceNew(struct _PIZAgent *owner)
     
     if (x = (PIZSequence *)malloc(sizeof(PIZSequence))) {
     //
-    long argv1[ ] = { 0, PIZ_SEQUENCE_MAXIMUM_NOTES };
-    long argv2[ ] = { PIZ_SEQUENCE_SIZE_LOOKUP, PIZ_SEQUENCE_MAXIMUM_NOTES };
+    long argv[ ] = { 0, PIZ_SEQUENCE_MAXIMUM_NOTES };
     
     x->owner      = owner;
     x->map        = pizArrayNew(PIZ_SEQUENCE_MAXIMUM_NOTES);
     x->scale      = pizArrayNew(PIZ_MAGIC_SCALE);
     x->pattern    = pizArrayNew(PIZ_EVENT_DATA_SIZE);
-    x->tempValues = (long *)malloc(sizeof(long) * PIZ_SEQUENCE_SIZE_TEMP);
-    x->tempNotes1 = (PIZNote **)malloc(sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMP);
-    x->tempNotes2 = (PIZNote **)malloc(sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMP);
-    x->tempHash   = pizHashTableNew(2, argv1);
-    x->lookup     = pizHashTableNew(2, argv2);
+    x->tempValues = (long *)malloc(sizeof(long) * PIZ_SEQUENCE_SIZE_TEMPORARY);
+    x->tempNotes1 = (PIZNote **)malloc(sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMPORARY);
+    x->tempNotes2 = (PIZNote **)malloc(sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMPORARY);
+    x->lookup     = (PIZNote **)calloc(PIZ_SEQUENCE_MAXIMUM_NOTES, sizeof(PIZNote *));
+    x->tempHash   = pizHashTableNew(2, argv);
     
     if (x->map           && 
         x->scale         &&
@@ -84,8 +83,8 @@ PIZSequence *pizSequenceNew(struct _PIZAgent *owner)
         x->tempValues    &&
         x->tempNotes1    &&
         x->tempNotes2    &&
-        x->tempHash      &&
         x->lookup        &&
+        x->tempHash      &&
         x->owner         &&
         (x->timeline = (PIZLinklist **)calloc(PIZ_SEQUENCE_SIZE_TIMELINE, sizeof(PIZLinklist **)))) {
 
@@ -145,8 +144,10 @@ void pizSequenceFree(PIZSequence *x)
     pizArrayFree(x->pattern);
     
     pizHashTableFree(x->tempHash);
-    pizHashTableFree(x->lookup);
     
+    if (x->lookup) {
+        free(x->lookup);
+    }
     if (x->tempValues) {
         free(x->tempValues);
     }
