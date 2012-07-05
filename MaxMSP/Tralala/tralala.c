@@ -226,6 +226,7 @@ void tralala_restore(t_tll *x, t_symbol *s, long argc, t_atom *argv)
     
     if ((dictionary_entryisdictionary(x->data, name)) 
         && !(dictionary_getdictionary(x->data, name, (t_object **)&t))) {
+        tralala_send(x, PIZ_EVENT_CLEAR, 0, NULL);
         tralala_parseDictionary(x, t);
     }
 }
