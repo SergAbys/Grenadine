@@ -183,7 +183,7 @@ PIZError pizSequenceClean(PIZSequence *x, const PIZEvent *event)
     
     x->tempIndex = 0;
     
-    pizSequenceForEach(x, event, PIZ_SEQUENCE_FLAG_NEARBY, pizSequenceEachTempNotes);
+    pizSequenceForEach(x, event, PIZ_SEQUENCE_FLAG_NEARBY, pizSequenceEachFillTempNotes);
     
     if (x->tempIndex) {
         for (i = 0; i < x->tempIndex; i++) {
@@ -434,7 +434,7 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
     
     x->tempError = PIZ_GOOD;
     pizHashTableClear(x->tempHash);
-    pizSequenceForEach(x, NULL, PIZ_SEQUENCE_FLAG_NONE, pizSequenceEachTempHash);
+    pizSequenceForEach(x, NULL, PIZ_SEQUENCE_FLAG_NONE, pizSequenceEachFillTempHash);
     hashErr = x->tempError;
     
     while (!hashErr && (k < iterate) && (loop < PIZ_MAXIMUM_LOOP)) {
@@ -691,7 +691,7 @@ void pizSequenceMakeMap(PIZSequence *x)
 long pizSequenceFillTempNotes(PIZSequence *x)
 {
     x->tempIndex = 0;
-    pizSequenceForEach(x, NULL, PIZ_SEQUENCE_FLAG_NONE, pizSequenceEachTempNotes);
+    pizSequenceForEach(x, NULL, PIZ_SEQUENCE_FLAG_NONE, pizSequenceEachFillTempNotes);
     
     return x->tempIndex;
 }

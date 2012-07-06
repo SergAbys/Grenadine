@@ -21,6 +21,16 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+#define TLL_SYM_END         (tll_table.end)
+#define TLL_SYM_NOTE        (tll_table.note)
+#define TLL_SYM_CLEAR       (tll_table.clear)
+#define TLL_SYM_TRALALA     (tll_table.tralala)
+#define TLL_SYM_UNTITLED    (tll_table.untitled)
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 typedef struct _tllSymbols {
     t_symbol *end;
     t_symbol *note;
@@ -28,16 +38,6 @@ typedef struct _tllSymbols {
     t_symbol *tralala;
     t_symbol *untitled;
     } t_tllSymbols;
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-#define TLL_SYM_END         (tll_table.end)
-#define TLL_SYM_NOTE        (tll_table.note)
-#define TLL_SYM_CLEAR       (tll_table.clear)
-#define TLL_SYM_TRALALA     (tll_table.tralala)
-#define TLL_SYM_UNTITLED    (tll_table.untitled)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

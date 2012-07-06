@@ -40,25 +40,32 @@ int main(void)
     c->c_flags |= CLASS_FLAG_NEWDICTIONARY;
 	jbox_initclass(c, JBOX_FIXWIDTH | JBOX_COLOR);
     
-    class_addmethod(c, (method)tralala_jsave,       "jsave",     A_CANT,  0);
-    class_addmethod(c, (method)tralala_assist,      "assist",    A_CANT,  0);
-    class_addmethod(c, (method)tralala_paint,       "paint",     A_CANT,  0);
-    class_addmethod(c, (method)tralala_key,         "key",       A_CANT,  0);
-    class_addmethod(c, (method)tralala_store,       "store",     A_GIMME, 0);
-    class_addmethod(c, (method)tralala_restore,     "restore",   A_GIMME, 0);
-    class_addmethod(c, (method)tralala_play,        "bang",      A_GIMME, 0);
-    class_addmethod(c, (method)tralala_play,        "play",      A_GIMME, 0);
-    class_addmethod(c, (method)tralala_play,        "end",       A_GIMME, 0);
-    class_addmethod(c, (method)tralala_loop,        "loop",      A_GIMME, 0);
-    class_addmethod(c, (method)tralala_stop,        "stop",      A_GIMME, 0);
-    class_addmethod(c, (method)tralala_unloop,      "unloop",    A_GIMME, 0);
-    class_addmethod(c, (method)tralala_list,        "list",      A_GIMME, 0);
-    class_addmethod(c, (method)tralala_anything,    "anything",  A_GIMME, 0);
+    class_addmethod(c, (method)tralala_jsave,           "jsave",         A_CANT,  0);
+    class_addmethod(c, (method)tralala_assist,          "assist",        A_CANT,  0);
+    class_addmethod(c, (method)tralala_paint,           "paint",         A_CANT,  0);
+    class_addmethod(c, (method)tralala_getdrawparams,   "getdrawparams", A_CANT,  0);
+    class_addmethod(c, (method)tralala_key,             "key",           A_CANT,  0);
+    class_addmethod(c, (method)tralala_store,           "store",         A_GIMME, 0);
+    class_addmethod(c, (method)tralala_restore,         "restore",       A_GIMME, 0);
+    class_addmethod(c, (method)tralala_play,            "bang",          A_GIMME, 0);
+    class_addmethod(c, (method)tralala_play,            "play",          A_GIMME, 0);
+    class_addmethod(c, (method)tralala_play,            "end",           A_GIMME, 0);
+    class_addmethod(c, (method)tralala_loop,            "loop",          A_GIMME, 0);
+    class_addmethod(c, (method)tralala_stop,            "stop",          A_GIMME, 0);
+    class_addmethod(c, (method)tralala_unloop,          "unloop",        A_GIMME, 0);
+    class_addmethod(c, (method)tralala_list,            "list",          A_GIMME, 0);
+    class_addmethod(c, (method)tralala_anything,        "anything",      A_GIMME, 0);
 
     CLASS_ATTR_RGBA                 (c, "color", 0, t_tll, background); 
     CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "color", 0, "0. 0. 0. 1."); 
     CLASS_ATTR_STYLE_LABEL          (c, "color", 0, "rgba", "Background Color");
     CLASS_ATTR_CATEGORY             (c, "color", 0, "Color");
+    
+    CLASS_ATTR_RGBA                 (c, "border", 0, t_tll, border); 
+    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "border", 0, "0. 0. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL          (c, "border", 0, "rgba", "Border Color");
+    CLASS_ATTR_CATEGORY             (c, "border", 0, "Color");
+    
     CLASS_ATTR_DEFAULT              (c, "patching_rect", 0, "0. 0. 50. 50.");
     
     class_register(CLASS_BOX, c);
@@ -85,7 +92,6 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     if (x = (t_tll *)object_alloc(tll_class)) {
     //
     long boxflags = 0L  | JBOX_DRAWFIRSTIN 
-                        | JBOX_NODRAWBOX 
                         | JBOX_DRAWINLAST
                         | JBOX_GROWBOTH
                         | JBOX_DRAWBACKGROUND
@@ -93,11 +99,13 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     
     jbox_new((t_jbox *)x, boxflags, argc, argv);
     x->box.b_firstin = (void *)x;
-            
-    x->right        = bangout((t_object *)x);
-    x->middleRight  = outlet_new((t_object *)x, NULL);
-    x->middleLeft   = outlet_new((t_object *)x, NULL);
-    x->left         = listout((t_object *)x);
+    
+    systhread_mutex_new(&x->mutex, SYSTHREAD_MUTEX_NORMAL);
+                    
+    x->right = bangout((t_object *)x);
+    x->middleRight = outlet_new((t_object *)x, NULL);
+    x->middleLeft = outlet_new((t_object *)x, NULL);
+    x->left = listout((t_object *)x);
     
     jbox_ready((t_jbox *)x);
     attr_dictionary_process(x, d);
@@ -146,6 +154,10 @@ void tralala_free(t_tll *x)
     if (x->agent) {
         pizAgentDetach(x->agent, (void *)x);
         pizAgentFree(x->agent);
+    }
+    
+    if (x->mutex) {
+        systhread_mutex_free(x->mutex);
     }
     
     object_free(x->data);
@@ -317,28 +329,6 @@ void tralala_list(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 void tralala_anything(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
     tralala_parseMessage(x, s, argc, argv);
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void tralala_paint(t_tll *x, t_object *patcherview)
-{
-	t_rect rect;
-	t_jgraphics *g = NULL;
-	
-	g = (t_jgraphics*)patcherview_get_jgraphics(patcherview);		
-	jbox_get_rect_for_view((t_object *)x, patcherview, &rect);		
-	
-	jgraphics_set_source_jrgba(g, &x->background);
-	jgraphics_rectangle(g, 0., 0., rect.width, rect.height);
-	jgraphics_fill(g);
-}
-
-void tralala_key(t_tll *x, t_object *patcherview, long keycode, long m, long textcharacter)
-{
-	post("Key : %ld %ld %ld", keycode, m, textcharacter);
 }
 
 // -------------------------------------------------------------------------------------------------------------

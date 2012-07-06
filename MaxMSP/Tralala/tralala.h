@@ -17,6 +17,7 @@
 #include "ext.h"
 #include "ext_obex.h"
 #include "ext_atomic.h"
+#include "ext_systhread.h"
 #include "jpatcher_api.h"
 #include "jgraphics.h"
 
@@ -29,28 +30,31 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_FLAG_NONE   0UL
-    
+#define TLL_FLAG_NONE           0UL
+#define TLL_FLAG_BACKGROUND     1UL
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 typedef struct _tll {
-    t_jbox          box;						
-    ulong           flags;					
-    t_atom          played[4];
-    t_atom          dumped[5];
-    t_atom          link;
-    PIZTime         time;
-    t_jrgba         background;
-    long            identifier;
-    t_dictionary    *data;
-    t_dictionary    *current;
-    PIZAgent        *agent;
-    void            *left;
-    void            *middleLeft;
-    void            *middleRight;
-    void            *right;
+    t_jbox              box;						
+    ulong               flags;					
+    t_atom              played[4];
+    t_atom              dumped[5];
+    t_atom              link;
+    PIZTime             time;
+    long                identifier;
+    t_jrgba             border;
+    t_jrgba             background;
+    t_systhread_mutex   mutex;
+    t_dictionary        *data;
+    t_dictionary        *current;
+    PIZAgent            *agent;
+    void                *left;
+    void                *middleLeft;
+    void                *middleRight;
+    void                *right;
     } t_tll;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -75,9 +79,6 @@ void tralala_stop       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_unloop     (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_list       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_anything   (t_tll *x, t_symbol *s, long argc, t_atom *argv);
-
-void tralala_paint      (t_tll *x, t_object *patcherview); 
-void tralala_key        (t_tll *x, t_object *patcherview, long keycode, long m, long textcharacter);
      
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -169,13 +169,13 @@ void pizSequenceEachDump(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote 
     x->tempError |= pizAgentNotify(x->owner, PIZ_EVENT_NOTE_DUMPED, 7, a);
 }
 
-void pizSequenceEachTempHash(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note)
+void pizSequenceEachFillTempHash(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note)
 {   
     long k = ((long)(note->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1)) + note->values[PIZ_VALUE_PITCH];
     x->tempError |= pizHashTableAdd(x->tempHash, k, (void *)note);
 }
 
-void pizSequenceEachTempNotes(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note)
+void pizSequenceEachFillTempNotes(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note)
 {
     if (flag & PIZ_SEQUENCE_FLAG_NEARBY) {
     //

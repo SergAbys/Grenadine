@@ -121,8 +121,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 363195836;
-			PBXWorkspaceStateSaveDate = 363195836;
+			PBXPerProjectTemplateStateSaveDate = 363264173;
+			PBXWorkspaceStateSaveDate = 363264173;
 		};
 		sourceControlManager = 965F6CC112FF252E00F96EF1 /* Source Control */;
 		userBuildSettings = {
@@ -145,9 +145,9 @@
 	};
 	9676982513B7784800FE77F4 /* tralala.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 9450}}";
-			sepNavSelRange = "{1213, 0}";
-			sepNavVisRect = "{{0, 2414}, {1233, 643}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1233, 9200}}";
+			sepNavSelRange = "{10356, 0}";
+			sepNavVisRect = "{{0, 8789}, {1233, 411}}";
 			sepNavWindowFrame = "{{-1, 6}, {1278, 772}}";
 		};
 	};
@@ -161,25 +161,25 @@
 	};
 	96D6A58B1588952600D2CBCC /* tralalaPaint.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1241, 642}}";
-			sepNavSelRange = "{57, 0}";
+			sepNavIntBoundsRect = "{{0, 0}, {1241, 700}}";
+			sepNavSelRange = "{971, 0}";
 			sepNavVisRect = "{{0, 0}, {1241, 642}}";
 			sepNavWindowFrame = "{{15, 2}, {1286, 771}}";
 		};
 	};
 	96D6A58C1588952600D2CBCC /* tralalaPaint.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1241, 642}}";
-			sepNavSelRange = "{58, 0}";
-			sepNavVisRect = "{{0, 0}, {1241, 642}}";
-			sepNavWindowFrame = "{{-6, 5}, {1286, 771}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1241, 900}}";
+			sepNavSelRange = "{676, 0}";
+			sepNavVisRect = "{{0, 258}, {1241, 642}}";
+			sepNavWindowFrame = "{{-4, 5}, {1286, 771}}";
 		};
 	};
 	96D843C315824D41005B41A9 /* tralala.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1236, 2100}}";
-			sepNavSelRange = "{615, 0}";
-			sepNavVisRect = "{{0, 0}, {1236, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1236, 2125}}";
+			sepNavSelRange = "{1257, 0}";
+			sepNavVisRect = "{{0, 582}, {1236, 645}}";
 			sepNavWindowFrame = "{{-1, 4}, {1281, 774}}";
 		};
 	};
@@ -201,9 +201,9 @@
 	};
 	96DC326715581AC500C26797 /* tralalaParse.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 1300}}";
-			sepNavSelRange = "{972, 0}";
-			sepNavVisRect = "{{0, 507}, {1233, 411}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 1350}}";
+			sepNavSelRange = "{1071, 0}";
+			sepNavVisRect = "{{0, 407}, {1235, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1280, 774}}";
 		};
 	};
