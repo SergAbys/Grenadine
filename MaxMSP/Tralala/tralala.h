@@ -45,6 +45,8 @@ typedef struct _tll {
     t_atom              link;
     PIZTime             time;
     long                identifier;
+    t_jrgba             text;
+    t_jrgba             color;
     t_jrgba             border;
     t_jrgba             background;
     t_systhread_mutex   mutex;

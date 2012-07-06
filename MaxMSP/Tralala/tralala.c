@@ -56,16 +56,31 @@ int main(void)
     class_addmethod(c, (method)tralala_list,            "list",          A_GIMME, 0);
     class_addmethod(c, (method)tralala_anything,        "anything",      A_GIMME, 0);
 
-    CLASS_ATTR_RGBA                 (c, "color", 0, t_tll, background); 
-    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "color", 0, "0. 0. 0. 1."); 
-    CLASS_ATTR_STYLE_LABEL          (c, "color", 0, "rgba", "Background Color");
+    CLASS_ATTR_RGBA                 (c, "bgcolor", 0, t_tll, background); 
+    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "bgcolor", 0, "0. 0. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL          (c, "bgcolor", 0, "rgba", "Background Color");
+    CLASS_ATTR_CATEGORY             (c, "bgcolor", 0, "Color");
+    
+    CLASS_ATTR_RGBA                 (c, "bordercolor", 0, t_tll, border); 
+    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "bordercolor", 0, "0. 0. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL          (c, "bordercolor", 0, "rgba", "Border Color");
+    CLASS_ATTR_CATEGORY             (c, "bordercolor", 0, "Color");
+    
+    CLASS_ATTR_RGBA                 (c, "color", 0, t_tll, color); 
+    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "color", 0, "0. 1. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL          (c, "color", 0, "rgba", "Color");
     CLASS_ATTR_CATEGORY             (c, "color", 0, "Color");
     
-    CLASS_ATTR_RGBA                 (c, "border", 0, t_tll, border); 
-    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "border", 0, "0. 0. 0. 1."); 
-    CLASS_ATTR_STYLE_LABEL          (c, "border", 0, "rgba", "Border Color");
-    CLASS_ATTR_CATEGORY             (c, "border", 0, "Color");
-    
+    CLASS_ATTR_RGBA                 (c, "textcolor", 0, t_tll, text); 
+    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "textcolor", 0, "1. 1. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL          (c, "textcolor", 0, "rgba", "Text Color");
+    CLASS_ATTR_CATEGORY             (c, "textcolor", 0, "Color");
+  
+    CLASS_ATTR_ORDER                (c, "color",        0, "1");
+    CLASS_ATTR_ORDER                (c, "textcolor",    0, "2");
+    CLASS_ATTR_ORDER                (c, "bordercolor",  0, "3");
+    CLASS_ATTR_ORDER                (c, "bgcolor",      0, "4");
+
     CLASS_ATTR_DEFAULT              (c, "patching_rect", 0, "0. 0. 50. 50.");
     
     class_register(CLASS_BOX, c);
@@ -344,18 +359,16 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv)
     if (event = pizEventNew(code)) {
     //
     if ((argc && argv) && (atom_gettype(argv) == A_SYM)) {
-    //
-    t_symbol *s = atom_getsym(argv);
-    t_object *o = s->s_thing;
-    
-    if (o && !NOGOOD(o) && object_classname_compare(o, TLL_SYM_TRALALA)) {
-        PIZTime time;
-        t_tll *ptr = (t_tll *)o;
+        t_symbol *s = atom_getsym(argv);
+        t_object *o = s->s_thing;
         
-        pizTimeCopy(&time, &ptr->time);
-        pizEventSetTime(event, &time);
-    }
-    //
+        if (o && !NOGOOD(o) && object_classname_compare(o, TLL_SYM_TRALALA)) {
+            PIZTime time;
+            t_tll *ptr = (t_tll *)o;
+            
+            pizTimeCopy(&time, &ptr->time);
+            pizEventSetTime(event, &time);
+        }
     }
                         
     pizEventSetIdentifier(event, x->identifier);
