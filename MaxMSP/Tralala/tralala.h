@@ -17,7 +17,6 @@
 #include "ext.h"
 #include "ext_obex.h"
 #include "ext_atomic.h"
-#include "ext_systhread.h"
 #include "jpatcher_api.h"
 #include "jgraphics.h"
 
@@ -30,33 +29,26 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_FLAG_NONE           0UL
-#define TLL_FLAG_BACKGROUND     1UL
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 typedef struct _tll {
-    t_jbox              box;						
-    ulong               flags;					
-    t_atom              played[4];
-    t_atom              dumped[5];
-    t_atom              link;
-    PIZTime             time;
-    long                identifier;
-    t_jrgba             text;
-    t_jrgba             color;
-    t_jrgba             border;
-    t_jrgba             background;
-    t_systhread_mutex   mutex;
-    t_dictionary        *data;
-    t_dictionary        *current;
-    PIZAgent            *agent;
-    void                *left;
-    void                *middleLeft;
-    void                *middleRight;
-    void                *right;
+    t_jbox          box;						
+    t_atom          played[4];
+    t_atom          dumped[5];
+    t_atom          link;
+    t_jrgba         text;
+    t_jrgba         color;
+    t_jrgba         border;
+    t_jrgba         background;
+    PIZTime         time;
+    long            identifier;
+    long            offsetX;
+    long            offsetY;
+    t_dictionary    *data;
+    t_dictionary    *current;
+    PIZAgent        *agent;
+    void            *left;
+    void            *middleLeft;
+    void            *middleRight;
+    void            *right;
     } t_tll;
 
 // -------------------------------------------------------------------------------------------------------------

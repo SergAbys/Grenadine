@@ -53,11 +53,15 @@ tll_key          = (t_quickmap *)quickmap_new( );
 tll_select       = (t_quickmap *)quickmap_new( );
 tll_notification = (t_quickmap *)quickmap_new( );
 
-table->end       = gensym("end");
-table->note      = gensym("note");
-table->clear     = gensym("clear");
-table->tralala   = gensym("tralala");
-table->untitled  = gensym("untitled");
+table->end      = gensym("end");
+table->run      = gensym("run");
+table->note     = gensym("note");
+table->text     = gensym("text");
+table->clear    = gensym("clear");
+table->tralala  = gensym("tralala");
+table->untitled = gensym("untitled");
+table->xoffset  = gensym("xoffset");
+table->yoffset  = gensym("yoffset");
 
 quickmap_add(tll_code, gensym("bpm"),                     (void *)(TINY + PIZ_EVENT_BPM));
 quickmap_add(tll_code, gensym("learn"),                   (void *)(TINY + PIZ_EVENT_LEARN));

@@ -44,6 +44,7 @@ int main(void)
     class_addmethod(c, (method)tralala_assist,          "assist",        A_CANT,  0);
     class_addmethod(c, (method)tralala_paint,           "paint",         A_CANT,  0);
     class_addmethod(c, (method)tralala_getdrawparams,   "getdrawparams", A_CANT,  0);
+    class_addmethod(c, (method)tralala_mousewheel,      "mousewheel",    A_CANT, 0);
     class_addmethod(c, (method)tralala_key,             "key",           A_CANT,  0);
     class_addmethod(c, (method)tralala_store,           "store",         A_GIMME, 0);
     class_addmethod(c, (method)tralala_restore,         "restore",       A_GIMME, 0);
@@ -76,12 +77,22 @@ int main(void)
     CLASS_ATTR_STYLE_LABEL          (c, "textcolor", 0, "rgba", "Text Color");
     CLASS_ATTR_CATEGORY             (c, "textcolor", 0, "Color");
   
-    CLASS_ATTR_ORDER                (c, "color",        0, "1");
-    CLASS_ATTR_ORDER                (c, "textcolor",    0, "2");
-    CLASS_ATTR_ORDER                (c, "bordercolor",  0, "3");
-    CLASS_ATTR_ORDER                (c, "bgcolor",      0, "4");
+    CLASS_ATTR_LONG                 (c, "xoffset", 0, t_tll, offsetX);
+    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "xoffset", 0, "-37");
+    CLASS_ATTR_LABEL                (c, "xoffset", 0, "Offset X");
+    CLASS_ATTR_CATEGORY             (c, "xoffset", 0, "Value");
+
+    CLASS_ATTR_LONG                 (c, "yoffset", 0, t_tll, offsetY);
+    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "yoffset", 0, "658");
+    CLASS_ATTR_LABEL                (c, "yoffset", 0, "Offset Y");
+    CLASS_ATTR_CATEGORY             (c, "yoffset", 0, "Value");
 
     CLASS_ATTR_DEFAULT              (c, "patching_rect", 0, "0. 0. 50. 50.");
+    
+    CLASS_ATTR_ORDER                (c, "color",       0, "1");
+    CLASS_ATTR_ORDER                (c, "textcolor",   0, "2");
+    CLASS_ATTR_ORDER                (c, "bordercolor", 0, "3");
+    CLASS_ATTR_ORDER                (c, "bgcolor",     0, "4");
     
     class_register(CLASS_BOX, c);
 
@@ -114,9 +125,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     
     jbox_new((t_jbox *)x, boxflags, argc, argv);
     x->box.b_firstin = (void *)x;
-    
-    systhread_mutex_new(&x->mutex, SYSTHREAD_MUTEX_NORMAL);
-                    
+                        
     x->right = bangout((t_object *)x);
     x->middleRight = outlet_new((t_object *)x, NULL);
     x->middleLeft = outlet_new((t_object *)x, NULL);
@@ -133,7 +142,6 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     } 
     
     x->identifier = ATOMIC_INCREMENT(&identifier);
-    x->flags = TLL_FLAG_NONE;
         
     if (x->agent = pizAgentNew(x->identifier)) {
         pizAgentAttach(x->agent, (void *)x, (PIZMethod)tralala_callback);
@@ -169,10 +177,6 @@ void tralala_free(t_tll *x)
     if (x->agent) {
         pizAgentDetach(x->agent, (void *)x);
         pizAgentFree(x->agent);
-    }
-    
-    if (x->mutex) {
-        systhread_mutex_free(x->mutex);
     }
     
     object_free(x->data);
