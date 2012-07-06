@@ -44,8 +44,9 @@ int main(void)
     class_addmethod(c, (method)tralala_assist,          "assist",        A_CANT,  0);
     class_addmethod(c, (method)tralala_paint,           "paint",         A_CANT,  0);
     class_addmethod(c, (method)tralala_getdrawparams,   "getdrawparams", A_CANT,  0);
-    class_addmethod(c, (method)tralala_mousewheel,      "mousewheel",    A_CANT, 0);
+    class_addmethod(c, (method)tralala_mousewheel,      "mousewheel",    A_CANT,  0);
     class_addmethod(c, (method)tralala_key,             "key",           A_CANT,  0);
+    class_addmethod(c, (method)jbox_notify,             "notify",        A_CANT,  0);
     class_addmethod(c, (method)tralala_store,           "store",         A_GIMME, 0);
     class_addmethod(c, (method)tralala_restore,         "restore",       A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,            "bang",          A_GIMME, 0);

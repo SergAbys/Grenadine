@@ -25,6 +25,8 @@ void tralala_getdrawparams  (t_tll *x, t_object *patcherview, t_jboxdrawparams *
 void tralala_key            (t_tll *x, t_object *patcherview, long keycode, long m, long textcharacter);
 void tralala_mousewheel     (t_tll *x, t_object *view, t_pt pt, long modifiers, double x_inc, double y_inc);
 
+t_max_err jbox_notify       (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, void *data);
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // TLL_TRALALA_PAINT_H

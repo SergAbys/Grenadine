@@ -7,9 +7,9 @@
 			"revision" : 9
 		}
 ,
-		"rect" : [ 25.0, 69.0, 261.0, 207.0 ],
+		"rect" : [ 201.0, 182.0, 261.0, 207.0 ],
 		"bglocked" : 0,
-		"defrect" : [ 25.0, 69.0, 261.0, 207.0 ],
+		"defrect" : [ 201.0, 182.0, 261.0, 207.0 ],
 		"openrect" : [ 0.0, 0.0, 0.0, 0.0 ],
 		"openinpresentation" : 0,
 		"default_fontsize" : 14.0,
@@ -27,11 +27,16 @@
 		"boxes" : [ 			{
 				"box" : 				{
 					"maxclass" : "tralala",
-					"patching_rect" : [ 40.0, 40.0, 113.0, 107.0 ],
-					"outlettype" : [ "list", "", "", "bang" ],
-					"id" : "obj-1",
+					"patching_rect" : [ 40.0, 40.0, 135.0, 121.0 ],
 					"numinlets" : 1,
+					"bordercolor" : [ 0.827451, 0.737255, 0.835294, 1.0 ],
 					"numoutlets" : 4,
+					"outlettype" : [ "list", "", "", "bang" ],
+					"xoffset" : -23,
+					"color" : [ 0.827451, 0.737255, 0.835294, 1.0 ],
+					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
+					"yoffset" : -41,
+					"id" : "obj-1",
 					"tralala" : 					{
 
 					}
