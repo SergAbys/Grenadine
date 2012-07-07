@@ -8,8 +8,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "tralalaParse.h"
-#include "tralalaPaint.h"
+#include "tralalaLibrary.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -40,23 +39,23 @@ int main(void)
     c->c_flags |= CLASS_FLAG_NEWDICTIONARY;
 	jbox_initclass(c, JBOX_FIXWIDTH | JBOX_COLOR);
     
-    class_addmethod(c, (method)tralala_jsave,           "jsave",         A_CANT,  0);
-    class_addmethod(c, (method)tralala_assist,          "assist",        A_CANT,  0);
-    class_addmethod(c, (method)tralala_paint,           "paint",         A_CANT,  0);
-    class_addmethod(c, (method)tralala_getdrawparams,   "getdrawparams", A_CANT,  0);
-    class_addmethod(c, (method)tralala_mousewheel,      "mousewheel",    A_CANT,  0);
-    class_addmethod(c, (method)tralala_key,             "key",           A_CANT,  0);
-    class_addmethod(c, (method)jbox_notify,             "notify",        A_CANT,  0);
-    class_addmethod(c, (method)tralala_store,           "store",         A_GIMME, 0);
-    class_addmethod(c, (method)tralala_restore,         "restore",       A_GIMME, 0);
-    class_addmethod(c, (method)tralala_play,            "bang",          A_GIMME, 0);
-    class_addmethod(c, (method)tralala_play,            "play",          A_GIMME, 0);
-    class_addmethod(c, (method)tralala_play,            "end",           A_GIMME, 0);
-    class_addmethod(c, (method)tralala_loop,            "loop",          A_GIMME, 0);
-    class_addmethod(c, (method)tralala_stop,            "stop",          A_GIMME, 0);
-    class_addmethod(c, (method)tralala_unloop,          "unloop",        A_GIMME, 0);
-    class_addmethod(c, (method)tralala_list,            "list",          A_GIMME, 0);
-    class_addmethod(c, (method)tralala_anything,        "anything",      A_GIMME, 0);
+    class_addmethod(c, (method)tralala_assist,      "assist",        A_CANT,  0);
+    class_addmethod(c, (method)tralala_jsave,       "jsave",         A_CANT,  0);
+    class_addmethod(c, (method)tralala_paint,       "paint",         A_CANT,  0);
+    class_addmethod(c, (method)tralala_params,      "getdrawparams", A_CANT,  0);
+    class_addmethod(c, (method)tralala_key,         "key",           A_CANT,  0);
+    class_addmethod(c, (method)tralala_mousewheel,  "mousewheel",    A_CANT,  0);
+    class_addmethod(c, (method)tralala_notify,      "notify",        A_CANT,  0);
+    class_addmethod(c, (method)tralala_store,       "store",         A_GIMME, 0);
+    class_addmethod(c, (method)tralala_restore,     "restore",       A_GIMME, 0);
+    class_addmethod(c, (method)tralala_play,        "bang",          A_GIMME, 0);
+    class_addmethod(c, (method)tralala_play,        "play",          A_GIMME, 0);
+    class_addmethod(c, (method)tralala_play,        "end",           A_GIMME, 0);
+    class_addmethod(c, (method)tralala_loop,        "loop",          A_GIMME, 0);
+    class_addmethod(c, (method)tralala_stop,        "stop",          A_GIMME, 0);
+    class_addmethod(c, (method)tralala_unloop,      "unloop",        A_GIMME, 0);
+    class_addmethod(c, (method)tralala_list,        "list",          A_GIMME, 0);
+    class_addmethod(c, (method)tralala_anything,    "anything",      A_GIMME, 0);
 
     CLASS_ATTR_RGBA                 (c, "bgcolor", 0, t_tll, background); 
     CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "bgcolor", 0, "0. 0. 0. 1."); 
@@ -135,24 +134,26 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     jbox_ready((t_jbox *)x);
     attr_dictionary_process(x, d);
     
-    if ((x->data = dictionary_new( )) && (x->current = dictionary_new( ))) {
-    //
-    if (dictionary_entryisdictionary(d, TLL_SYM_TRALALA)) {
-        dictionary_getdictionary(d, TLL_SYM_TRALALA, (t_object **)&t);
-        dictionary_copyunique(x->data, t);
-    } 
+    x->data     = dictionary_new( );
+    x->current  = dictionary_new( );
+    x->selected = dictionary_new( );
     
-    x->identifier = ATOMIC_INCREMENT(&identifier);
+    if (x->data && x->current && x->selected) {
+        if (dictionary_entryisdictionary(d, TLL_SYM_TRALALA)) {
+            dictionary_getdictionary(d, TLL_SYM_TRALALA, (t_object **)&t);
+            dictionary_copyunique(x->data, t);
+        } 
         
-    if (x->agent = pizAgentNew(x->identifier)) {
-        pizAgentAttach(x->agent, (void *)x, (PIZMethod)tralala_callback);
-        defer_low(x, (method)tralala_init, NULL, 0, NULL);
+        x->identifier = ATOMIC_INCREMENT(&identifier);
+            
+        if (x->agent = pizAgentNew(x->identifier)) {
+            pizAgentAttach(x->agent, (void *)x, (PIZMethod)tralala_callback);
+            defer_low(x, (method)tralala_init, NULL, 0, NULL);
 
-    } else {
-        object_free(x);
-        x = NULL;
-    }
-    //
+        } else {
+            object_free(x);
+            x = NULL;
+        }
     }
     //
     }	
@@ -182,6 +183,7 @@ void tralala_free(t_tll *x)
     
     object_free(x->data);
     object_free(x->current);
+    object_free(x->selected);
     
     jbox_free((t_jbox *)x);
 }
@@ -216,6 +218,60 @@ void tralala_jsave(t_tll *x, t_dictionary *d)
         }
     }
 }
+
+void tralala_paint(t_tll *x, t_object *pv)
+{
+    post("!");
+    
+    tralala_paintBackground(x, pv);
+    tralala_paintCurrent(x, pv);
+}
+
+void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
+{
+    jrgba_copy(&params->d_boxfillcolor, &x->background);
+    jrgba_copy(&params->d_bordercolor, &x->border);
+}
+
+void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacter)
+{
+	post("Key : %ld %ld %ld", keycode, m, textcharacter);
+}
+
+void tralala_mousewheel(t_tll *x, t_object *view, t_pt pt, long modifiers, double x_inc, double y_inc)
+{
+    long h = object_attr_getlong(x, TLL_SYM_XOFFSET) - (x_inc * 100);
+    long v = object_attr_getlong(x, TLL_SYM_YOFFSET) - (y_inc * 100);
+        
+    object_attr_setlong(x, TLL_SYM_XOFFSET, h);
+    object_attr_setlong(x, TLL_SYM_YOFFSET, v);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+t_max_err tralala_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, void *data)
+{
+    t_symbol *name = NULL;
+    
+    if (msg == TLL_SYM_ATTR_MODIFIED && (name = (t_symbol *)object_method(data, TLL_SYM_GETNAME))) {
+        if ((name != TLL_SYM_PATCHING_RECT) && object_attr_usercanset((t_object *)x, name)) {
+        
+            if (name == TLL_SYM_COLOR) {
+                jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_BACKGROUND);
+            }
+            
+            jbox_redraw(x);
+        }
+    }
+    
+    return MAX_ERR_NONE;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {

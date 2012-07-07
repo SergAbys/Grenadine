@@ -1,5 +1,5 @@
 /*
- *  tralalaParse.h
+ *  tralalaLibrary.h
  *
  *  nicolas.danet@free.fr
  *
@@ -8,8 +8,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef TLL_TRALALA_PARSE_H
-#define TLL_TRALALA_PARSE_H
+#ifndef TLL_TRALALA_LIBRARY_H
+#define TLL_TRALALA_LIBRARY_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -68,7 +68,10 @@ void tralala_parseInit          (t_tllSymbols *table);
 void tralala_parseDictionary    (t_tll *x, t_dictionary *d);
 void tralala_parseMessage       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_parseNotification  (t_tll *x, PIZEvent *event);
-      
+
+void tralala_paintBackground    (t_tll *x, t_object *pv);
+void tralala_paintCurrent       (t_tll *x, t_object *pv);
+          
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // TLL_TRALALA_PARSE_H
+#endif // TLL_TRALALA_LIBRARY_H

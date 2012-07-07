@@ -11,9 +11,8 @@
 		96A788A6156D3E3800B8CAB7 /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96A788A5156D3E3800B8CAB7 /* libPizAlgorithms.a */; };
 		96CF9326154C40F60027BB96 /* tralala.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 96CF9325154C40F60027BB96 /* tralala.xcconfig */; };
 		96CF932A154C41210027BB96 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96CF9329154C41210027BB96 /* MaxAPI.framework */; };
-		96D6A58D1588952600D2CBCC /* tralalaPaint.c in Sources */ = {isa = PBXBuildFile; fileRef = 96D6A58C1588952600D2CBCC /* tralalaPaint.c */; };
 		96D9672C1507C5EE006A848D /* tralalaHide.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96D9672B1507C5EE006A848D /* tralalaHide.txt */; };
-		96DC326415581A5500C26797 /* tralalaParse.c in Sources */ = {isa = PBXBuildFile; fileRef = 96DC326315581A5500C26797 /* tralalaParse.c */; };
+		96DC326415581A5500C26797 /* tralalaLibrary.c in Sources */ = {isa = PBXBuildFile; fileRef = 96DC326315581A5500C26797 /* tralalaLibrary.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,12 +21,10 @@
 		96A788A5156D3E3800B8CAB7 /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../../pizAlgorithms/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
 		96CF9325154C40F60027BB96 /* tralala.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; path = tralala.xcconfig; sourceTree = "<group>"; };
 		96CF9329154C41210027BB96 /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "../../../c74support/max-includes/MaxAPI.framework"; sourceTree = SOURCE_ROOT; };
-		96D6A58B1588952600D2CBCC /* tralalaPaint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tralalaPaint.h; sourceTree = "<group>"; };
-		96D6A58C1588952600D2CBCC /* tralalaPaint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tralalaPaint.c; sourceTree = "<group>"; };
 		96D843C315824D41005B41A9 /* tralala.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = tralala.h; sourceTree = "<group>"; };
 		96D9672B1507C5EE006A848D /* tralalaHide.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = tralalaHide.txt; sourceTree = "<group>"; };
-		96DC326315581A5500C26797 /* tralalaParse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tralalaParse.c; sourceTree = "<group>"; };
-		96DC326715581AC500C26797 /* tralalaParse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tralalaParse.h; sourceTree = "<group>"; };
+		96DC326315581A5500C26797 /* tralalaLibrary.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tralalaLibrary.c; sourceTree = "<group>"; };
+		96DC326715581AC500C26797 /* tralalaLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tralalaLibrary.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,11 +73,9 @@
 			isa = PBXGroup;
 			children = (
 				96D843C315824D41005B41A9 /* tralala.h */,
-				96D6A58B1588952600D2CBCC /* tralalaPaint.h */,
-				96DC326715581AC500C26797 /* tralalaParse.h */,
+				96DC326715581AC500C26797 /* tralalaLibrary.h */,
 				9676982513B7784800FE77F4 /* tralala.c */,
-				96D6A58C1588952600D2CBCC /* tralalaPaint.c */,
-				96DC326315581A5500C26797 /* tralalaParse.c */,
+				96DC326315581A5500C26797 /* tralalaLibrary.c */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -147,8 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9676982713B7784800FE77F4 /* tralala.c in Sources */,
-				96DC326415581A5500C26797 /* tralalaParse.c in Sources */,
-				96D6A58D1588952600D2CBCC /* tralalaPaint.c in Sources */,
+				96DC326415581A5500C26797 /* tralalaLibrary.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

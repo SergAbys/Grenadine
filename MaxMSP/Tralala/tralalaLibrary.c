@@ -1,5 +1,5 @@
 /*
- *  tralalaParse.c
+ *  tralalaLibrary.c
  *
  *  nicolas.danet@free.fr
  *
@@ -8,7 +8,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "tralalaParse.h"
+#include "tralalaLibrary.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -20,6 +20,9 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 
 #define TINY 2
+
+#define TLL_PIXELS_PER_STEP     2.
+#define TLL_PIXELS_PER_SEMITONE 24.
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -324,6 +327,7 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
             
         if (code == PIZ_EVENT_NOTE_REMOVED) {
             dictionary_deleteentry(x->current, s);
+            dictionary_deleteentry(x->selected, s);
         } else {
             atom_setsym(data, TLL_SYM_NOTE);
             dictionary_appendatoms(x->current, s, k - 1, data);
@@ -333,6 +337,30 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
     }
     
     jbox_redraw((t_jbox *)x);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void tralala_paintBackground(t_tll *x, t_object *pv)
+{
+    double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
+    double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
+    t_jgraphics *g = NULL;
+
+    if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_BACKGROUND, w, h)) {
+        jgraphics_set_source_jrgba(g, &x->color);
+        jgraphics_rectangle_draw_fast(g, 0., 0., w, h, 1.);
+        jbox_end_layer((t_object*)x, pv, TLL_SYM_BACKGROUND);
+    }
+        
+    jbox_paint_layer((t_object *)x, pv, TLL_SYM_BACKGROUND, -x->offsetX, -x->offsetY);
+}
+
+void tralala_paintCurrent(t_tll *x, t_object *pv)
+{
+
 }
 
 // -------------------------------------------------------------------------------------------------------------
