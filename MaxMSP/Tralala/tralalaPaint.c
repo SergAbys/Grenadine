@@ -15,8 +15,8 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_PIXELS_PER_STEP         2.
-#define TLL_PIXELS_PER_SEMITONE     24.
+#define TLL_PIXELS_PER_STEP     2.
+#define TLL_PIXELS_PER_SEMITONE 24.
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -27,7 +27,11 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void tralala_paintBackground    (t_tll *x, t_object *patcherview);
+void tralala_paintBackground        (t_tll *x, t_object *pv);
+void tralala_paintDictionary        (t_tll *x, t_object *pv);
+
+void tralala_paintDictionaryZone    (t_tll *x, t_object *pv, t_symbol *key, long argc, t_atom *argv);
+void tralala_paintDictionaryNote    (t_tll *x, t_object *pv, t_symbol *key, long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -35,18 +39,20 @@ void tralala_paintBackground    (t_tll *x, t_object *patcherview);
 #pragma mark ---
 #pragma mark -
     
-void tralala_paint(t_tll *x, t_object *patcherview)
+void tralala_paint(t_tll *x, t_object *pv)
 {
-    tralala_paintBackground(x, patcherview);
+    post("!");
+    tralala_paintBackground(x, pv);
+    tralala_paintDictionary(x, pv);
 }
 
-void tralala_getdrawparams(t_tll *x, t_object *patcherview, t_jboxdrawparams *params)
+void tralala_getdrawparams(t_tll *x, t_object *pv, t_jboxdrawparams *params)
 {
     jrgba_copy(&params->d_boxfillcolor, &x->background);
     jrgba_copy(&params->d_bordercolor, &x->border);
 }
 
-void tralala_key(t_tll *x, t_object *patcherview, long keycode, long m, long textcharacter)
+void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacter)
 {
 	post("Key : %ld %ld %ld", keycode, m, textcharacter);
 }
@@ -85,19 +91,59 @@ t_max_err jbox_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, void
 #pragma mark ---
 #pragma mark -
 
-void tralala_paintBackground(t_tll *x, t_object *patcherview)
+void tralala_paintBackground(t_tll *x, t_object *pv)
 {
     double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
     double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
     t_jgraphics *g = NULL;
 
-    if (g = jbox_start_layer((t_object *)x, patcherview, TLL_SYM_BACKGROUND, w, h)) {
+    if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_BACKGROUND, w, h)) {
         jgraphics_set_source_jrgba(g, &x->color);
         jgraphics_rectangle_draw_fast(g, 0., 0., w, h, 1.);
-        jbox_end_layer((t_object*)x, patcherview, TLL_SYM_BACKGROUND);
+        jbox_end_layer((t_object*)x, pv, TLL_SYM_BACKGROUND);
     }
         
-    jbox_paint_layer((t_object *)x, patcherview, TLL_SYM_BACKGROUND, -x->offsetX, -x->offsetY);
+    jbox_paint_layer((t_object *)x, pv, TLL_SYM_BACKGROUND, -x->offsetX, -x->offsetY);
+}
+
+void tralala_paintDictionary(t_tll *x, t_object *pv)
+{
+    long i, n = 0;
+    t_symbol **keys = NULL;
+    t_dictionary *d = x->current;
+    
+    if (!(dictionary_getkeys(d, &n, &keys))) {
+    //
+    for (i = 0; i < n; i++) {
+    //
+    long k;
+    t_atom *data = NULL;
+    
+    if (!dictionary_getatoms(d, (*(keys + i)), &k, &data)) {
+        if (atom_gettype(data) == A_SYM) {
+            if (atom_getsym(data) == TLL_SYM_NOTE) {
+                tralala_paintDictionaryNote(x, pv, *(keys + i), k - 1, data + 1);
+            } else if (atom_getsym(data) == TLL_SYM_ZONE) {
+                tralala_paintDictionaryZone(x, pv, *(keys + i), k - 1, data + 1);
+            }
+        }
+    }
+    //
+    }
+    
+    dictionary_freekeys(d, n, keys);
+    //
+    }
+}
+
+void tralala_paintDictionaryZone(t_tll *x, t_object *pv, t_symbol *key, long argc, t_atom *argv)
+{
+    post("%s", key->s_name);
+}
+
+void tralala_paintDictionaryNote(t_tll *x, t_object *pv, t_symbol *key, long argc, t_atom *argv)
+{
+    post("%s", key->s_name);
 }
 
 // -------------------------------------------------------------------------------------------------------------

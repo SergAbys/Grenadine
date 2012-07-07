@@ -53,20 +53,21 @@ tll_key          = (t_quickmap *)quickmap_new( );
 tll_select       = (t_quickmap *)quickmap_new( );
 tll_notification = (t_quickmap *)quickmap_new( );
 
-table->end              = gensym("end");
-table->clear            = gensym("clear");
-table->tralala          = gensym("tralala");
-table->untitled         = gensym("untitled");
-table->run              = gensym("run");
-table->note             = gensym("note");
-table->text             = gensym("text");
-table->background       = gensym("background");
-table->xoffset          = gensym("xoffset");
-table->yoffset          = gensym("yoffset");
-table->color            = gensym("color");
-table->attr_modified    = gensym("attr_modified");
-table->getname          = gensym("getname");
-table->patching_rect    = gensym("patching_rect");
+table->end           = gensym("end");
+table->clear         = gensym("clear");
+table->tralala       = gensym("tralala");
+table->untitled      = gensym("untitled");
+table->run           = gensym("run");
+table->note          = gensym("note");
+table->text          = gensym("text");
+table->zone          = gensym("zone");
+table->background    = gensym("background");
+table->xoffset       = gensym("xoffset");
+table->yoffset       = gensym("yoffset");
+table->color         = gensym("color");
+table->attr_modified = gensym("attr_modified");
+table->getname       = gensym("getname");
+table->patching_rect = gensym("patching_rect");
 
 quickmap_add(tll_code, gensym("bpm"),                     (void *)(TINY + PIZ_EVENT_BPM));
 quickmap_add(tll_code, gensym("learn"),                   (void *)(TINY + PIZ_EVENT_LEARN));
@@ -299,36 +300,39 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
     }
     
     if (!(quickmap_lookup_key2(tll_notification, (void *)(code + TINY), (void **)&s))) {
-    //
-    if (code == PIZ_EVENT_CHANGED_SCALE) {
-    //
-    t_symbol *sym1 = NULL;
-    t_symbol *sym2 = NULL;
     
-    quickmap_lookup_key2(tll_key,  (void *)((*(ptr + 0)) + TINY), (void **)&sym1);
-    quickmap_lookup_key2(tll_type, (void *)((*(ptr + 1)) + TINY), (void **)&sym2);
+        if (code == PIZ_EVENT_CHANGED_SCALE) {
+            t_symbol *sym1 = NULL;
+            t_symbol *sym2 = NULL;
+
+            quickmap_lookup_key2(tll_key,  (void *)((*(ptr + 0)) + TINY), (void **)&sym1);
+            quickmap_lookup_key2(tll_type, (void *)((*(ptr + 1)) + TINY), (void **)&sym2);
+
+            atom_setsym(data + 1, sym1);
+            atom_setsym(data + 2, sym2);
+        }
+
+        atom_setsym(data, s);
+        dictionary_appendatoms(x->current, s, k + 1, data);
+
+        if (code == PIZ_EVENT_CHANGED_ZONE) {
+            jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_ZONE);
+        } 
     
-    atom_setsym(data + 1, sym1);
-    atom_setsym(data + 2, sym2);
-    //
-    }
-    
-    atom_setsym(data, s);
-    dictionary_appendatoms(x->current, s, k + 1, data);
-    //
     } else {
-    //
-    symbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
+        symbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
+            
+        if (code == PIZ_EVENT_NOTE_REMOVED) {
+            dictionary_deleteentry(x->current, s);
+        } else {
+            atom_setsym(data, TLL_SYM_NOTE);
+            dictionary_appendatoms(x->current, s, k - 1, data);
+        }
         
-    if (code == PIZ_EVENT_NOTE_REMOVED) {
-        dictionary_deleteentry(x->current, s);
-        
-    } else {
-        atom_setsym(data, TLL_SYM_NOTE);
-        dictionary_appendatoms(x->current, s, k - 1, data);
+        jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_NOTE);
     }
-    //
-    }
+    
+    jbox_redraw((t_jbox *)x);
 }
 
 // -------------------------------------------------------------------------------------------------------------

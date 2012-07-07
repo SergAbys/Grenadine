@@ -27,15 +27,14 @@
 		"boxes" : [ 			{
 				"box" : 				{
 					"maxclass" : "tralala",
-					"patching_rect" : [ 40.0, 40.0, 135.0, 121.0 ],
-					"numinlets" : 1,
+					"patching_rect" : [ 40.0, 40.0, 110.0, 108.0 ],
 					"bordercolor" : [ 0.827451, 0.737255, 0.835294, 1.0 ],
-					"numoutlets" : 4,
-					"outlettype" : [ "list", "", "", "bang" ],
-					"xoffset" : -23,
+					"yoffset" : -39,
+					"numinlets" : 1,
 					"color" : [ 0.827451, 0.737255, 0.835294, 1.0 ],
+					"numoutlets" : 4,
 					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"yoffset" : -41,
+					"outlettype" : [ "list", "", "", "bang" ],
 					"id" : "obj-1",
 					"tralala" : 					{
 
