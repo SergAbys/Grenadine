@@ -265,7 +265,7 @@
 										</array>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-									<string>{{0, 62}, {570, 414}}</string>
+									<string>{{0, 43}, {570, 414}}</string>
 								</dict>
 								<key>PBXTopSmartGroupGIDs</key>
 								<array/>
@@ -425,8 +425,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D29E4015A84BC1009D99B6</string>
-				<string>96D29E4115A84BC1009D99B6</string>
+				<string>96D29F7315A897C4009D99B6</string>
+				<string>96D29F7415A897C4009D99B6</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
