@@ -27,14 +27,14 @@
 		"boxes" : [ 			{
 				"box" : 				{
 					"maxclass" : "tralala",
-					"yoffset" : -33,
-					"patching_rect" : [ 100.0, 100.0, 163.0, 136.0 ],
+					"yoffset" : -36,
+					"patching_rect" : [ 80.0, 60.0, 238.0, 206.0 ],
 					"numinlets" : 1,
 					"fontname" : "Arial",
+					"xoffset" : -56,
 					"numoutlets" : 4,
 					"outlettype" : [ "list", "", "", "bang" ],
 					"fontsize" : 14.0,
-					"xoffset" : -47,
 					"id" : "obj-1",
 					"tralala" : 					{
 

@@ -73,7 +73,7 @@ int main(void)
     CLASS_ATTR_CATEGORY     (c, "color", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "textcolor", 0, t_tll, text); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "0. 1. 0. 1."); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "1. 1. 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "textcolor", 0, "rgba", "Text Color");
     CLASS_ATTR_CATEGORY     (c, "textcolor", 0, "Color");
   
@@ -93,8 +93,12 @@ int main(void)
     CLASS_ATTR_STYLE        (c, "viewtext", 0, "onoff");
     CLASS_ATTR_FILTER_CLIP  (c, "viewtext", 0, 1);
     CLASS_ATTR_CATEGORY     (c, "viewtext", 0, "Appearance");
+ 
+    CLASS_ATTR_DEFAULT      (c, "fontname", 0, "Arial");
+    CLASS_ATTR_DEFAULT      (c, "fontsize", 0, "14.");
+    CLASS_ATTR_DEFAULT      (c, "fontface", 0, "1");
 
-    CLASS_ATTR_DEFAULT      (c, "patching_rect", 0, "0. 0. 50. 50.");
+    CLASS_ATTR_DEFAULT      (c, "patching_rect", 0, "0. 0. 200. 200.");
     
     CLASS_ATTR_ORDER        (c, "color",       0, "1");
     CLASS_ATTR_ORDER        (c, "textcolor",   0, "2");

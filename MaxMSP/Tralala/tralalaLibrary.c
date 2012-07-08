@@ -22,19 +22,21 @@ extern t_tllSymbols tll_table;
 
 #define TINY 2
 
-#define TLL_PIXELS_PER_STEP     2.
-#define TLL_PIXELS_PER_SEMITONE 24.
+#define TLL_MAXIMUM_STRING_SIZE     256
+#define TLL_PIXELS_PER_STEP         2.
+#define TLL_PIXELS_PER_SEMITONE     24.
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark-
 
-PIZ_LOCAL  void tralala_paintText       (t_tll *x, t_object *pv);
+PIZ_LOCAL  void tralala_paintText       (t_tll *x, t_object *pv, char *string);
 PIZ_LOCAL  void tralala_paintZone       (t_tll *x, t_object *pv);
 PIZ_LOCAL  void tralala_paintNotes      (t_tll *x, t_object *pv);
 
 PIZ_INLINE void tralala_symbolWithTag   (t_symbol **s, long tag);
 PIZ_INLINE void tralala_tagWithSymbol   (long *tag, t_symbol *s);
+PIZ_INLINE void tralala_stringWithAtoms (char *dst, long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -372,11 +374,13 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
     t_atom *argv = NULL;
     t_symbol *key = NULL;
     t_symbol **keys = NULL;
+    
+    char string[TLL_MAXIMUM_STRING_SIZE] = "";
 
-    for (i = PIZ_EVENT_CHANGED_BPM; i < PIZ_EVENT_CHANGED_ZONE; i++) {
+    for (i = PIZ_EVENT_CHANGED_BPM; i <= PIZ_EVENT_CHANGED_ZONE; i++) {
         if (!(quickmap_lookup_key2(tll_notification, (void *)(i + TINY), (void **)&key))) {
             if (!(dictionary_getatoms(x->current, key, &argc, &argv))) {
-                // TEXT;
+                tralala_stringWithAtoms(string, argc - 1, argv + 1);
             }
         }
     }
@@ -389,7 +393,7 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
         dictionary_freekeys(x->current, n, keys);
     }
     
-    tralala_paintText(x, pv);
+    tralala_paintText(x, pv, string);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -398,25 +402,23 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
 #pragma mark ---
 #pragma mark -
 
-void tralala_paintText(t_tll *x, t_object *pv)
+void tralala_paintText(t_tll *x, t_object *pv, char *string)
 {
     t_rect rect;
     t_jgraphics *g = NULL; 
     t_jfont *font = NULL;
-    t_jgraphics_text_justification justification = JGRAPHICS_TEXT_JUSTIFICATION_LEFT;
-    
-    char *string = "Toto est \n un idiot";
+    t_jgraphics_text_justification justification = JGRAPHICS_TEXT_JUSTIFICATION_RIGHT;
     
     jbox_get_rect_for_view((t_object *)x, pv, &rect);
     
-    g    = (t_jgraphics *)patcherview_get_jgraphics(pv);
+    g = (t_jgraphics *)patcherview_get_jgraphics(pv);
     font = jfont_create((jbox_get_fontname(((t_object *)x)))->s_name, 
                 (jbox_get_font_slant((t_object *)x)), 
                 (jbox_get_font_weight((t_object *)x)), 
                 (jbox_get_fontsize((t_object *)x))); 
-        
-    jtextlayout_set(x->layer, string, font, 0., 0., rect.width, rect.height, justification, 0L);
-    jtextlayout_settextcolor(x->layer, &x->text);
+    
+    jtextlayout_set(x->layer, string, font, 5., 5., rect.width - 10., rect.height - 5., justification, 0L);
+    jtextlayout_settextcolor(x->layer, &x->text);    
     jtextlayout_draw(x->layer, g);
     
     jfont_destroy(font);
@@ -446,6 +448,17 @@ PIZ_INLINE void tralala_symbolWithTag(t_symbol **s, long tag)
 PIZ_INLINE void tralala_tagWithSymbol(long *tag, t_symbol *s)
 {
     (*tag) = atoi(s->s_name);
+}
+
+PIZ_INLINE void tralala_stringWithAtoms(char *dst, long argc, t_atom *argv)
+{
+    long k = 0;
+    char *p = NULL;
+    
+    if (argc && !(atom_gettext(argc, argv, &k, &p, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE))) {
+        strncat_zero(dst, p, TLL_MAXIMUM_STRING_SIZE);
+        strncat_zero(dst, "\n", TLL_MAXIMUM_STRING_SIZE);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
