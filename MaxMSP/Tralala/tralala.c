@@ -37,7 +37,7 @@ int main(void)
     c = class_new("tralala", (method)tralala_new, (method)tralala_free, sizeof(t_tll), 0L, A_GIMME, 0);
 
     c->c_flags |= CLASS_FLAG_NEWDICTIONARY;
-	jbox_initclass(c, JBOX_FIXWIDTH | JBOX_COLOR | JBOX_FONTATTR);
+	jbox_initclass(c, JBOX_FONTATTR);
     
     class_addmethod(c, (method)tralala_assist,      "assist",        A_CANT,  0);
     class_addmethod(c, (method)tralala_jsave,       "jsave",         A_CANT,  0);
@@ -73,7 +73,7 @@ int main(void)
     CLASS_ATTR_CATEGORY     (c, "color", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "textcolor", 0, t_tll, text); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "1. 1. 0. 1."); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "0. 1. 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "textcolor", 0, "rgba", "Text Color");
     CLASS_ATTR_CATEGORY     (c, "textcolor", 0, "Color");
   
@@ -128,7 +128,8 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
                         | JBOX_DRAWINLAST
                         | JBOX_GROWBOTH
                         | JBOX_DRAWBACKGROUND
-                        | JBOX_HILITE;
+                        | JBOX_HILITE
+                        | JBOX_TRANSPARENT;
     
     jbox_new((t_jbox *)x, boxflags, argc, argv);
     x->box.b_firstin = (void *)x;
@@ -141,17 +142,19 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     jbox_ready((t_jbox *)x);
     attr_dictionary_process(x, d);
     
-    x->data     = dictionary_new( );
-    x->current  = dictionary_new( );
-    x->selected = dictionary_new( );
+    x->data    = dictionary_new( );
+    x->current = dictionary_new( );
+    x->status  = dictionary_new( );
+    x->layer   = jtextlayout_create( );
     
-    if (x->data && x->current && x->selected) {
+    if (x->data && x->current && x->status && x->layer) {
         if (dictionary_entryisdictionary(d, TLL_SYM_TRALALA)) {
             dictionary_getdictionary(d, TLL_SYM_TRALALA, (t_object **)&t);
             dictionary_copyunique(x->data, t);
         } 
         
         x->identifier = ATOMIC_INCREMENT(&identifier);
+        x->flags = TLL_FLAG_NONE;
             
         if (x->agent = pizAgentNew(x->identifier)) {
             pizAgentAttach(x->agent, (void *)x, (PIZMethod)tralala_callback);
@@ -188,9 +191,13 @@ void tralala_free(t_tll *x)
         pizAgentFree(x->agent);
     }
     
+    if (x->layer) {
+        jtextlayout_destroy(x->layer);
+    }
+    
     object_free(x->data);
     object_free(x->current);
-    object_free(x->selected);
+    object_free(x->status);
     
     jbox_free((t_jbox *)x);
 }
@@ -228,8 +235,6 @@ void tralala_jsave(t_tll *x, t_dictionary *d)
 
 void tralala_paint(t_tll *x, t_object *pv)
 {
-    post("!");
-    
     tralala_paintBackground(x, pv);
     tralala_paintCurrent(x, pv);
 }
@@ -266,7 +271,7 @@ t_max_err tralala_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, v
         if ((name != TLL_SYM_PATCHING_RECT) && object_attr_usercanset((t_object *)x, name)) {
         
             if (name == TLL_SYM_COLOR) {
-                jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_BACKGROUND);
+                TLL_DIRTY_BACKGROUND
             }
             
             jbox_redraw(x);

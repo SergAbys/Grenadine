@@ -21,6 +21,23 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+#define TLL_DIRTY_TEXT          x->flags |= TLL_FLAG_TEXT;
+#define TLL_DIRTY_ZONE          jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_ZONE);
+#define TLL_DIRTY_NOTE          jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_NOTE);
+#define TLL_DIRTY_BACKGROUND    jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_BACKGROUND);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+#define TLL_FLAG_NONE           0UL
+#define TLL_FLAG_TEXT           1UL
+#define TLL_FLAG_FOREGROUND     2UL
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 #define TLL_SYM_END             (tll_table.end)
 #define TLL_SYM_CLEAR           (tll_table.clear)
 #define TLL_SYM_TRALALA         (tll_table.tralala)

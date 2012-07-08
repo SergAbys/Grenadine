@@ -9,6 +9,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "tralalaLibrary.h"
+#include "ext_strings.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -307,37 +308,40 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
     }
     
     if (!(quickmap_lookup_key2(tll_notification, (void *)(code + TINY), (void **)&s))) {
+    //
+    if (code == PIZ_EVENT_CHANGED_SCALE) {
+        t_symbol *sym1 = NULL;
+        t_symbol *sym2 = NULL;
+
+        quickmap_lookup_key2(tll_key,  (void *)((*(ptr + 0)) + TINY), (void **)&sym1);
+        quickmap_lookup_key2(tll_type, (void *)((*(ptr + 1)) + TINY), (void **)&sym2);
+
+        atom_setsym(data + 1, sym1);
+        atom_setsym(data + 2, sym2);
+    }
+
+    atom_setsym(data, s);
+    dictionary_appendatoms(x->current, s, k + 1, data);
+
+    if (code == PIZ_EVENT_CHANGED_ZONE) {
+        TLL_DIRTY_ZONE
+    } 
     
-        if (code == PIZ_EVENT_CHANGED_SCALE) {
-            t_symbol *sym1 = NULL;
-            t_symbol *sym2 = NULL;
-
-            quickmap_lookup_key2(tll_key,  (void *)((*(ptr + 0)) + TINY), (void **)&sym1);
-            quickmap_lookup_key2(tll_type, (void *)((*(ptr + 1)) + TINY), (void **)&sym2);
-
-            atom_setsym(data + 1, sym1);
-            atom_setsym(data + 2, sym2);
-        }
-
-        atom_setsym(data, s);
-        dictionary_appendatoms(x->current, s, k + 1, data);
-
-        if (code == PIZ_EVENT_CHANGED_ZONE) {
-            jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_ZONE);
-        } 
-    
+    TLL_DIRTY_TEXT
+    //
     } else {
-        tralala_symbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
-            
-        if (code == PIZ_EVENT_NOTE_REMOVED) {
-            dictionary_deleteentry(x->current, s);
-            dictionary_deleteentry(x->selected, s);
-        } else {
-            atom_setsym(data, TLL_SYM_NOTE);
-            dictionary_appendatoms(x->current, s, k - 1, data);
-        }
+    //
+    tralala_symbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
         
-        jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_NOTE);
+    if (code == PIZ_EVENT_NOTE_REMOVED) {
+        dictionary_deleteentry(x->current, s);
+    } else {
+        atom_setsym(data, TLL_SYM_NOTE);
+        dictionary_appendatoms(x->current, s, k - 1, data);
+    }
+    
+    TLL_DIRTY_NOTE
+    //
     }
     
     jbox_redraw((t_jbox *)x);
@@ -398,26 +402,24 @@ void tralala_paintText(t_tll *x, t_object *pv)
 {
     t_rect rect;
     t_jgraphics *g = NULL; 
-    t_jtextlayout *layer = NULL; 
     t_jfont *font = NULL;
-    t_jgraphics_textlayout_flags flags = JGRAPHICS_TEXTLAYOUT_NOWRAP | JGRAPHICS_TEXTLAYOUT_USEELLIPSIS;
     t_jgraphics_text_justification justification = JGRAPHICS_TEXT_JUSTIFICATION_LEFT;
+    
+    char *string = "Toto est \n un idiot";
     
     jbox_get_rect_for_view((t_object *)x, pv, &rect);
     
-    g     = (t_jgraphics *)patcherview_get_jgraphics(pv);
-    layer = jtextlayout_withbgcolor(g, &x->background);
-    font  = jfont_create((jbox_get_fontname(((t_object *)x)))->s_name, 
+    g    = (t_jgraphics *)patcherview_get_jgraphics(pv);
+    font = jfont_create((jbox_get_fontname(((t_object *)x)))->s_name, 
                 (jbox_get_font_slant((t_object *)x)), 
                 (jbox_get_font_weight((t_object *)x)), 
                 (jbox_get_fontsize((t_object *)x))); 
         
-    jtextlayout_set(layer, "Toto", font, 0., 0., rect.width, rect.height, justification, flags);
-    jtextlayout_settextcolor(layer, &x->text);
-    jtextlayout_draw(layer, g);
+    jtextlayout_set(x->layer, string, font, 0., 0., rect.width, rect.height, justification, 0L);
+    jtextlayout_settextcolor(x->layer, &x->text);
+    jtextlayout_draw(x->layer, g);
     
     jfont_destroy(font);
-    jtextlayout_destroy(layer);
 }
 
 void tralala_paintZone(t_tll *x, t_object *pv)
@@ -437,8 +439,7 @@ void tralala_paintNotes(t_tll *x, t_object *pv)
 PIZ_INLINE void tralala_symbolWithTag(t_symbol **s, long tag)
 {
     char string[4];
-    snprintf(string, 4, "%ld", tag);
-    string[3] = 0;
+    snprintf_zero(string, 4, "%ld", tag);
     (*s) = gensym(string);
 }
 

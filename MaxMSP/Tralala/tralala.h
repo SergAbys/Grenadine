@@ -31,6 +31,7 @@
 
 typedef struct _tll {
     t_jbox          box;
+    ulong           flags;
     t_atom          played[4];
     t_atom          dumped[5];
     t_atom          link;
@@ -43,9 +44,10 @@ typedef struct _tll {
     long            offsetX;
     long            offsetY;
     long            viewText;
+    t_jtextlayout   *layer; 
     t_dictionary    *data;
     t_dictionary    *current;
-    t_dictionary    *selected;
+    t_dictionary    *status;
     PIZAgent        *agent;
     void            *left;
     void            *middleLeft;
