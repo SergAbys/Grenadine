@@ -28,9 +28,12 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark-
 
-PIZ_LOCAL void          tralala_symbolWithTag   (t_symbol **s, long tag);
-PIZ_LOCAL void          tralala_tagWithSymbol   (long *tag, t_symbol *s);
-PIZ_LOCAL t_dictionary  *tralala_dictionaryCopy (t_dictionary *d);
+PIZ_LOCAL  void tralala_paintText       (t_tll *x, t_object *pv);
+PIZ_LOCAL  void tralala_paintZone       (t_tll *x, t_object *pv);
+PIZ_LOCAL  void tralala_paintNotes      (t_tll *x, t_object *pv);
+
+PIZ_INLINE void tralala_symbolWithTag   (t_symbol **s, long tag);
+PIZ_INLINE void tralala_tagWithSymbol   (long *tag, t_symbol *s);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -361,16 +364,28 @@ void tralala_paintBackground(t_tll *x, t_object *pv)
 
 void tralala_paintCurrent(t_tll *x, t_object *pv)
 {
-    t_dictionary *t = NULL;
-    
-    if (t = tralala_dictionaryCopy(x->current)) {
-    //
-    //long zone[5];
-    //PIZArray *notes = NULL;
-        
-    object_free(t);
-    //
+    long i, argc, n = 0;
+    t_atom *argv = NULL;
+    t_symbol *key = NULL;
+    t_symbol **keys = NULL;
+
+    for (i = PIZ_EVENT_CHANGED_BPM; i < PIZ_EVENT_CHANGED_ZONE; i++) {
+        if (!(quickmap_lookup_key2(tll_notification, (void *)(i + TINY), (void **)&key))) {
+            if (!(dictionary_getatoms(x->current, key, &argc, &argv))) {
+                // TEXT;
+            }
+        }
     }
+    
+    if (!(dictionary_getkeys(x->current, &n, &keys))) {
+        for (i = 0; i < n; i++) {
+            ;
+        }
+        
+        dictionary_freekeys(x->current, n, keys);
+    }
+    
+    tralala_paintText(x, pv);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -379,7 +394,47 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
 #pragma mark ---
 #pragma mark -
 
-void tralala_symbolWithTag(t_symbol **s, long tag)
+void tralala_paintText(t_tll *x, t_object *pv)
+{
+    t_rect rect;
+    t_jgraphics *g = NULL; 
+    t_jtextlayout *layer = NULL; 
+    t_jfont *font = NULL;
+    t_jgraphics_textlayout_flags flags = JGRAPHICS_TEXTLAYOUT_NOWRAP | JGRAPHICS_TEXTLAYOUT_USEELLIPSIS;
+    t_jgraphics_text_justification justification = JGRAPHICS_TEXT_JUSTIFICATION_LEFT;
+    
+    jbox_get_rect_for_view((t_object *)x, pv, &rect);
+    
+    g     = (t_jgraphics *)patcherview_get_jgraphics(pv);
+    layer = jtextlayout_withbgcolor(g, &x->background);
+    font  = jfont_create((jbox_get_fontname(((t_object *)x)))->s_name, 
+                (jbox_get_font_slant((t_object *)x)), 
+                (jbox_get_font_weight((t_object *)x)), 
+                (jbox_get_fontsize((t_object *)x))); 
+        
+    jtextlayout_set(layer, "Toto", font, 0., 0., rect.width, rect.height, justification, flags);
+    jtextlayout_settextcolor(layer, &x->text);
+    jtextlayout_draw(layer, g);
+    
+    jfont_destroy(font);
+    jtextlayout_destroy(layer);
+}
+
+void tralala_paintZone(t_tll *x, t_object *pv)
+{
+
+}
+
+void tralala_paintNotes(t_tll *x, t_object *pv)
+{
+
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZ_INLINE void tralala_symbolWithTag(t_symbol **s, long tag)
 {
     char string[4];
     snprintf(string, 4, "%ld", tag);
@@ -387,43 +442,9 @@ void tralala_symbolWithTag(t_symbol **s, long tag)
     (*s) = gensym(string);
 }
 
-void tralala_tagWithSymbol(long *tag, t_symbol *s)
+PIZ_INLINE void tralala_tagWithSymbol(long *tag, t_symbol *s)
 {
     (*tag) = atoi(s->s_name);
-}
-
-t_dictionary *tralala_dictionaryCopy(t_dictionary *d)
-{
-    t_dictionary *t = NULL;
-    
-    if (t = dictionary_new( )) {
-    //
-    long i, argc, n = 0;
-    t_atom *argv = NULL;
-    t_symbol *key = NULL;
-    t_symbol **keys = NULL;
-
-    for (i = PIZ_EVENT_CHANGED_BPM; i <= PIZ_EVENT_CHANGED_ZONE; i++) {
-        if (!(quickmap_lookup_key2(tll_notification, (void *)(i + TINY), (void **)&key))) {
-            if (!(dictionary_getatoms(d, key, &argc, &argv))) {
-                dictionary_appendatoms(t, key, argc, argv);
-            }
-        }
-    }
-    
-    if (!(dictionary_getkeys(d, &n, &keys))) {
-        for (i = 0; i < n; i++) {
-            if (!(dictionary_hasentry(t, (*(keys + i))))) {
-                post("%s", (*(keys + i))->s_name);
-            }
-        }
-        
-        dictionary_freekeys(d, n, keys);
-    }
-    //
-    }
-    
-    return t;
 }
 
 // -------------------------------------------------------------------------------------------------------------

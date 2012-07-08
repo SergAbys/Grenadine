@@ -30,7 +30,7 @@
 #pragma mark -
 
 typedef struct _tll {
-    t_jbox          box;						
+    t_jbox          box;
     t_atom          played[4];
     t_atom          dumped[5];
     t_atom          link;
@@ -42,6 +42,7 @@ typedef struct _tll {
     long            identifier;
     long            offsetX;
     long            offsetY;
+    long            viewText;
     t_dictionary    *data;
     t_dictionary    *current;
     t_dictionary    *selected;

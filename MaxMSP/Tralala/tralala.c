@@ -37,7 +37,7 @@ int main(void)
     c = class_new("tralala", (method)tralala_new, (method)tralala_free, sizeof(t_tll), 0L, A_GIMME, 0);
 
     c->c_flags |= CLASS_FLAG_NEWDICTIONARY;
-	jbox_initclass(c, JBOX_FIXWIDTH | JBOX_COLOR);
+	jbox_initclass(c, JBOX_FIXWIDTH | JBOX_COLOR | JBOX_FONTATTR);
     
     class_addmethod(c, (method)tralala_assist,      "assist",        A_CANT,  0);
     class_addmethod(c, (method)tralala_jsave,       "jsave",         A_CANT,  0);
@@ -57,42 +57,49 @@ int main(void)
     class_addmethod(c, (method)tralala_list,        "list",          A_GIMME, 0);
     class_addmethod(c, (method)tralala_anything,    "anything",      A_GIMME, 0);
 
-    CLASS_ATTR_RGBA                 (c, "bgcolor", 0, t_tll, background); 
-    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "bgcolor", 0, "0. 0. 0. 1."); 
-    CLASS_ATTR_STYLE_LABEL          (c, "bgcolor", 0, "rgba", "Background Color");
-    CLASS_ATTR_CATEGORY             (c, "bgcolor", 0, "Color");
+    CLASS_ATTR_RGBA         (c, "bgcolor", 0, t_tll, background); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "bgcolor", 0, "0. 0. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "bgcolor", 0, "rgba", "Background Color");
+    CLASS_ATTR_CATEGORY     (c, "bgcolor", 0, "Color");
     
-    CLASS_ATTR_RGBA                 (c, "bordercolor", 0, t_tll, border); 
-    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "bordercolor", 0, "0. 0. 0. 1."); 
-    CLASS_ATTR_STYLE_LABEL          (c, "bordercolor", 0, "rgba", "Border Color");
-    CLASS_ATTR_CATEGORY             (c, "bordercolor", 0, "Color");
+    CLASS_ATTR_RGBA         (c, "bordercolor", 0, t_tll, border); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "bordercolor", 0, "0. 0. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "bordercolor", 0, "rgba", "Border Color");
+    CLASS_ATTR_CATEGORY     (c, "bordercolor", 0, "Color");
     
-    CLASS_ATTR_RGBA                 (c, "color", 0, t_tll, color); 
-    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "color", 0, "0. 1. 0. 1."); 
-    CLASS_ATTR_STYLE_LABEL          (c, "color", 0, "rgba", "Color");
-    CLASS_ATTR_CATEGORY             (c, "color", 0, "Color");
+    CLASS_ATTR_RGBA         (c, "color", 0, t_tll, color); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "color", 0, "0. 1. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "color", 0, "rgba", "Color");
+    CLASS_ATTR_CATEGORY     (c, "color", 0, "Color");
     
-    CLASS_ATTR_RGBA                 (c, "textcolor", 0, t_tll, text); 
-    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "textcolor", 0, "1. 1. 0. 1."); 
-    CLASS_ATTR_STYLE_LABEL          (c, "textcolor", 0, "rgba", "Text Color");
-    CLASS_ATTR_CATEGORY             (c, "textcolor", 0, "Color");
+    CLASS_ATTR_RGBA         (c, "textcolor", 0, t_tll, text); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "1. 1. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "textcolor", 0, "rgba", "Text Color");
+    CLASS_ATTR_CATEGORY     (c, "textcolor", 0, "Color");
   
-    CLASS_ATTR_LONG                 (c, "xoffset", 0, t_tll, offsetX);
-    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "xoffset", 0, "-37");
-    CLASS_ATTR_LABEL                (c, "xoffset", 0, "Offset X");
-    CLASS_ATTR_CATEGORY             (c, "xoffset", 0, "Value");
+    CLASS_ATTR_LONG         (c, "xoffset", 0, t_tll, offsetX);
+    CLASS_ATTR_DEFAULT_SAVE (c, "xoffset", 0, "-37");
+    CLASS_ATTR_LABEL        (c, "xoffset", 0, "Offset X");
+    CLASS_ATTR_CATEGORY     (c, "xoffset", 0, "Value");
 
-    CLASS_ATTR_LONG                 (c, "yoffset", 0, t_tll, offsetY);
-    CLASS_ATTR_DEFAULT_SAVE_PAINT   (c, "yoffset", 0, "658");
-    CLASS_ATTR_LABEL                (c, "yoffset", 0, "Offset Y");
-    CLASS_ATTR_CATEGORY             (c, "yoffset", 0, "Value");
+    CLASS_ATTR_LONG         (c, "yoffset", 0, t_tll, offsetY);
+    CLASS_ATTR_DEFAULT_SAVE (c, "yoffset", 0, "658");
+    CLASS_ATTR_LABEL        (c, "yoffset", 0, "Offset Y");
+    CLASS_ATTR_CATEGORY     (c, "yoffset", 0, "Value");
 
-    CLASS_ATTR_DEFAULT              (c, "patching_rect", 0, "0. 0. 50. 50.");
+    CLASS_ATTR_LONG         (c, "viewtext", 0, t_tll, viewText);
+    CLASS_ATTR_DEFAULT_SAVE (c, "viewtext", 0, "1");
+    CLASS_ATTR_LABEL        (c, "viewtext", 0, "View Text");
+    CLASS_ATTR_STYLE        (c, "viewtext", 0, "onoff");
+    CLASS_ATTR_FILTER_CLIP  (c, "viewtext", 0, 1);
+    CLASS_ATTR_CATEGORY     (c, "viewtext", 0, "Appearance");
+
+    CLASS_ATTR_DEFAULT      (c, "patching_rect", 0, "0. 0. 50. 50.");
     
-    CLASS_ATTR_ORDER                (c, "color",       0, "1");
-    CLASS_ATTR_ORDER                (c, "textcolor",   0, "2");
-    CLASS_ATTR_ORDER                (c, "bordercolor", 0, "3");
-    CLASS_ATTR_ORDER                (c, "bgcolor",     0, "4");
+    CLASS_ATTR_ORDER        (c, "color",       0, "1");
+    CLASS_ATTR_ORDER        (c, "textcolor",   0, "2");
+    CLASS_ATTR_ORDER        (c, "bordercolor", 0, "3");
+    CLASS_ATTR_ORDER        (c, "bgcolor",     0, "4");
     
     class_register(CLASS_BOX, c);
 
