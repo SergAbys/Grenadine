@@ -72,6 +72,11 @@ int main(void)
     CLASS_ATTR_STYLE_LABEL  (c, "color", 0, "rgba", "Color");
     CLASS_ATTR_CATEGORY     (c, "color", 0, "Color");
     
+    CLASS_ATTR_RGBA         (c, "hcolor", 0, t_tll, hcolor); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor", 0, "1. 0.75 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "hcolor", 0, "rgba", "Highlighted Color");
+    CLASS_ATTR_CATEGORY     (c, "hcolor", 0, "Color");
+    
     CLASS_ATTR_RGBA         (c, "textcolor", 0, t_tll, text); 
     CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "1. 1. 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "textcolor", 0, "rgba", "Text Color");
@@ -101,9 +106,10 @@ int main(void)
     CLASS_ATTR_DEFAULT      (c, "patching_rect", 0, "0. 0. 200. 200.");
     
     CLASS_ATTR_ORDER        (c, "color",       0, "1");
-    CLASS_ATTR_ORDER        (c, "textcolor",   0, "2");
-    CLASS_ATTR_ORDER        (c, "bordercolor", 0, "3");
-    CLASS_ATTR_ORDER        (c, "bgcolor",     0, "4");
+    CLASS_ATTR_ORDER        (c, "hcolor",      0, "2");
+    CLASS_ATTR_ORDER        (c, "textcolor",   0, "3");
+    CLASS_ATTR_ORDER        (c, "bordercolor", 0, "4");
+    CLASS_ATTR_ORDER        (c, "bgcolor",     0, "5");
     
     class_register(CLASS_BOX, c);
 
@@ -158,7 +164,6 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
         } 
         
         x->identifier = ATOMIC_INCREMENT(&identifier);
-        x->flags = TLL_FLAG_NONE;
             
         if (x->agent = pizAgentNew(x->identifier)) {
             pizAgentAttach(x->agent, (void *)x, (PIZMethod)tralala_callback);
@@ -240,7 +245,7 @@ void tralala_jsave(t_tll *x, t_dictionary *d)
 void tralala_paint(t_tll *x, t_object *pv)
 {
     tralala_paintBackground(x, pv);
-    tralala_paintCurrent(x, pv);
+    tralala_paintDictionary(x, pv);
 }
 
 void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
@@ -272,14 +277,19 @@ t_max_err tralala_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, v
     t_symbol *name = NULL;
     
     if (msg == TLL_SYM_ATTR_MODIFIED && (name = (t_symbol *)object_method(data, TLL_SYM_GETNAME))) {
-        if ((name != TLL_SYM_PATCHING_RECT) && object_attr_usercanset((t_object *)x, name)) {
+    //
+    if (name == TLL_SYM_COLOR) {
+        TLL_DIRTY_BACKGROUND
+        TLL_DIRTY_ZONE
+        TLL_DIRTY_NOTE
         
-            if (name == TLL_SYM_COLOR) {
-                TLL_DIRTY_BACKGROUND
-            }
-            
-            jbox_redraw(x);
-        }
+    } else if (name == TLL_SYM_HCOLOR) {
+        TLL_DIRTY_ZONE
+        TLL_DIRTY_NOTE
+    }
+    
+    jbox_redraw(x);
+    //
     }
     
     return MAX_ERR_NONE;
@@ -301,7 +311,8 @@ void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
         atom_gettext(argc, argv, &k, &p, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
         
         if (p) {
-            name = gensym(p);            
+            name = gensym(p);   
+            sysmem_freeptr(p);         
         }
     }
     
@@ -324,7 +335,8 @@ void tralala_restore(t_tll *x, t_symbol *s, long argc, t_atom *argv)
         atom_gettext(argc, argv, &k, &p, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
         
         if (p) {
-            name = gensym(p);            
+            name = gensym(p); 
+            sysmem_freeptr(p);           
         }
     }
     

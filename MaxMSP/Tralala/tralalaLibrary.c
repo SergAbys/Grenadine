@@ -20,23 +20,32 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+PIZ_LOCAL void tralala_paintText            (t_tll *x, t_object *pv, char *string);
+PIZ_LOCAL void tralala_paintZone            (t_tll *x, t_object *pv, long argc, t_atom *argv);
+PIZ_LOCAL void tralala_paintNotes           (t_tll *x, t_object *pv);
+
+PIZ_LOCAL void tralala_symbolWithTag        (t_symbol **s, long tag);
+PIZ_LOCAL void tralala_tagWithSymbol        (long *tag, t_symbol *s);
+
+PIZ_LOCAL void tralala_strncatZone          (char *dst, long argc, t_atom *argv);
+PIZ_LOCAL void tralala_strncatNote          (char *dst, long argc, t_atom *argv);
+PIZ_LOCAL void tralala_strncatAttribute     (char *dst, long argc, t_atom *argv);
+
+PIZ_LOCAL void tralala_pitchAsString        (char *s, long k, long size);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 #define TINY 2
 
-#define TLL_MAXIMUM_STRING_SIZE     256
+#define TLL_POSITION_TO_X(a)        ((a) * TLL_PIXELS_PER_STEP)
+#define TLL_PITCH_TO_Y_UP(a)        ((PIZ_MAGIC_PITCH - (a)) * TLL_PIXELS_PER_SEMITONE)
+#define TLL_PITCH_TO_Y_DOWN(a)      ((PIZ_MAGIC_PITCH - (a) + 1) * TLL_PIXELS_PER_SEMITONE)
+
+#define TLL_MAXIMUM_STRING_SIZE     128
 #define TLL_PIXELS_PER_STEP         2.
 #define TLL_PIXELS_PER_SEMITONE     24.
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark-
-
-PIZ_LOCAL  void tralala_paintText       (t_tll *x, t_object *pv, char *string);
-PIZ_LOCAL  void tralala_paintZone       (t_tll *x, t_object *pv);
-PIZ_LOCAL  void tralala_paintNotes      (t_tll *x, t_object *pv);
-
-PIZ_INLINE void tralala_symbolWithTag   (t_symbol **s, long tag);
-PIZ_INLINE void tralala_tagWithSymbol   (long *tag, t_symbol *s);
-PIZ_INLINE void tralala_stringWithAtoms (char *dst, long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -75,6 +84,7 @@ table->background    = gensym("background");
 table->xoffset       = gensym("xoffset");
 table->yoffset       = gensym("yoffset");
 table->color         = gensym("color");
+table->hcolor        = gensym("hcolor");
 table->attr_modified = gensym("attr_modified");
 table->getname       = gensym("getname");
 table->patching_rect = gensym("patching_rect");
@@ -329,14 +339,18 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
         TLL_DIRTY_ZONE
     } 
     
-    TLL_DIRTY_TEXT
     //
     } else {
     //
     tralala_symbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
         
     if (code == PIZ_EVENT_NOTE_REMOVED) {
+        if (dictionary_hasentry(x->status, s)) {
+            dictionary_deleteentry(x->status, s);
+        }
+        
         dictionary_deleteentry(x->current, s);
+        
     } else {
         atom_setsym(data, TLL_SYM_NOTE);
         dictionary_appendatoms(x->current, s, k - 1, data);
@@ -368,32 +382,49 @@ void tralala_paintBackground(t_tll *x, t_object *pv)
     jbox_paint_layer((t_object *)x, pv, TLL_SYM_BACKGROUND, -x->offsetX, -x->offsetY);
 }
 
-void tralala_paintCurrent(t_tll *x, t_object *pv)
+void tralala_paintDictionary(t_tll *x, t_object *pv)
 {
     long i, argc, n = 0;
     t_atom *argv = NULL;
-    t_symbol *key = NULL;
+    t_symbol *s = NULL;
     t_symbol **keys = NULL;
     
     char string[TLL_MAXIMUM_STRING_SIZE] = "";
 
-    for (i = PIZ_EVENT_CHANGED_BPM; i <= PIZ_EVENT_CHANGED_ZONE; i++) {
-        if (!(quickmap_lookup_key2(tll_notification, (void *)(i + TINY), (void **)&key))) {
-            if (!(dictionary_getatoms(x->current, key, &argc, &argv))) {
-                tralala_stringWithAtoms(string, argc - 1, argv + 1);
+    for (i = PIZ_EVENT_CHANGED_BPM; i < PIZ_EVENT_CHANGED_ZONE; i++) {
+        if (!(quickmap_lookup_key2(tll_notification, (void *)(i + TINY), (void **)&s))) {
+            if (!(dictionary_getatoms(x->current, s, &argc, &argv))) {
+                tralala_strncatAttribute(string, argc - 1, argv + 1);
             }
         }
     }
     
+    if (!(dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv))) {
+        if (dictionary_hasentry(x->status, TLL_SYM_ZONE)) {
+            tralala_strncatZone(string, argc - 1, argv + 1);
+        } 
+        
+        tralala_paintZone(x, pv, argc - 1, argv + 1);
+    }
+    
     if (!(dictionary_getkeys(x->current, &n, &keys))) {
+        long max = 4;
         for (i = 0; i < n; i++) {
-            ;
+            if (!(dictionary_getatoms(x->current, (*(keys + i)), &argc, &argv)) 
+                && ((atom_getsym(argv) == TLL_SYM_NOTE))) {
+                if (max && dictionary_hasentry(x->status, (*(keys + i)))) {
+                    tralala_strncatNote(string, argc - 1, argv + 1);
+                    max --;
+                } 
+            }
         }
         
         dictionary_freekeys(x->current, n, keys);
     }
     
-    tralala_paintText(x, pv, string);
+    if (x->viewText) {
+        tralala_paintText(x, pv, string);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -424,10 +455,53 @@ void tralala_paintText(t_tll *x, t_object *pv, char *string)
     jfont_destroy(font);
 }
 
-void tralala_paintZone(t_tll *x, t_object *pv)
+void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv)
 {
-
+    t_rect rect;
+    long zone[4] = { 0 };
+    double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
+    double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
+    t_jgraphics *g = NULL;
+    
+    atom_getlong_array(argc, argv, 4, zone);
+    
+    if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_ZONE, w, h)) {
+        rect.x = TLL_POSITION_TO_X(zone[0]);
+        rect.y = TLL_PITCH_TO_Y_UP(zone[3]); 
+        rect.width  = TLL_POSITION_TO_X(zone[1]) - rect.x; 
+        rect.height = TLL_PITCH_TO_Y_DOWN(zone[2]) - rect.y;
+        
+        if (!(dictionary_hasentry(x->status, TLL_SYM_ZONE))) {
+            jgraphics_set_source_jrgba(g, &x->color);
+        } else {
+            jgraphics_set_source_jrgba(g, &x->hcolor);
+        }
+        
+        jgraphics_rectangle_draw_fast(g, rect.x, rect.y, rect.width, rect.height, 1.);
+        jbox_end_layer((t_object*)x, pv, TLL_SYM_ZONE);
+    }
+        
+    jbox_paint_layer((t_object *)x, pv, TLL_SYM_ZONE, -x->offsetX, -x->offsetY);
 }
+
+/*
+void tralala_setCoordinates (t_tralala *x, PIZCoordinates *coordinates, t_pt pt)
+{
+    long    m, n;
+    double  f = 1.;
+    
+    switch (x->zoomMode) {
+        case MODE_ZOOM_A : f = 0.5; break;
+        case MODE_ZOOM_B : f = 1.;  break;
+        case MODE_ZOOM_C : f = 2.;  break;
+    }
+    
+    m = (long)((x->offsetX + pt.x) / (GUI_PIXELS_PER_STEP * f));
+    n = PIZ_MAGIC_PITCH - MAX (((long)((x->offsetY + pt.y) / (GUI_PIXELS_PER_SEMITONE * f))), 0);
+    
+    coordinates->position = m;
+    coordinates->pitch    = n;
+}*/
 
 void tralala_paintNotes(t_tll *x, t_object *pv)
 {
@@ -438,26 +512,83 @@ void tralala_paintNotes(t_tll *x, t_object *pv)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_INLINE void tralala_symbolWithTag(t_symbol **s, long tag)
+void tralala_symbolWithTag(t_symbol **s, long tag)
 {
     char string[4];
     snprintf_zero(string, 4, "%ld", tag);
     (*s) = gensym(string);
 }
 
-PIZ_INLINE void tralala_tagWithSymbol(long *tag, t_symbol *s)
+void tralala_tagWithSymbol(long *tag, t_symbol *s)
 {
     (*tag) = atoi(s->s_name);
 }
 
-PIZ_INLINE void tralala_stringWithAtoms(char *dst, long argc, t_atom *argv)
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+
+void tralala_strncatZone(char *dst, long argc, t_atom *argv)
+{
+    char a[4];
+    char b[4];
+    char temp[16];
+    
+    tralala_pitchAsString(a, atom_getlong(argv + 2), 4);
+    tralala_pitchAsString(b, atom_getlong(argv + 3), 4);
+    snprintf_zero(temp, 16, "%ld %ld %s %s \n", atom_getlong(argv), atom_getlong(argv + 1), a, b);
+    strncat_zero(dst, temp, TLL_MAXIMUM_STRING_SIZE);
+}
+
+void tralala_strncatNote(char *dst, long argc, t_atom *argv)
+{
+    char a[4];
+    char temp[16];
+    long p = atom_getlong(argv);
+    long v = atom_getlong(argv + 2);
+    long d = atom_getlong(argv + 3);
+    long c = atom_getlong(argv + 4);
+    
+    tralala_pitchAsString(a, atom_getlong(argv + 1), 4);
+    snprintf_zero(temp, 16, "%ld %s %ld %ld %ld \n", p, a, v, d, c);
+    strncat_zero(dst, temp, TLL_MAXIMUM_STRING_SIZE);
+}
+
+void tralala_strncatAttribute(char *dst, long argc, t_atom *argv)
 {
     long k = 0;
     char *p = NULL;
     
-    if (argc && !(atom_gettext(argc, argv, &k, &p, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE))) {
+    if (!(atom_gettext(argc, argv, &k, &p, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE))) {
         strncat_zero(dst, p, TLL_MAXIMUM_STRING_SIZE);
         strncat_zero(dst, "\n", TLL_MAXIMUM_STRING_SIZE);
+        sysmem_freeptr(p);
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void tralala_pitchAsString(char *s, long k, long size)
+{
+    long m = k % 12;
+    long n = ((long)(k / 12.)) - 2;
+    
+    switch (m) {
+        case 0  : snprintf_zero(s, size, "%s%ld", "C",  n); break;
+        case 1  : snprintf_zero(s, size, "%s%ld", "C#", n); break;
+        case 2  : snprintf_zero(s, size, "%s%ld", "D",  n); break;
+        case 3  : snprintf_zero(s, size, "%s%ld", "D#", n); break;
+        case 4  : snprintf_zero(s, size, "%s%ld", "E",  n); break;
+        case 5  : snprintf_zero(s, size, "%s%ld", "F",  n); break;
+        case 6  : snprintf_zero(s, size, "%s%ld", "F#", n); break;
+        case 7  : snprintf_zero(s, size, "%s%ld", "G",  n); break;
+        case 8  : snprintf_zero(s, size, "%s%ld", "G#", n); break;
+        case 9  : snprintf_zero(s, size, "%s%ld", "A",  n); break;
+        case 10 : snprintf_zero(s, size, "%s%ld", "A#", n); break;
+        case 11 : snprintf_zero(s, size, "%s%ld", "B",  n); break;
     }
 }
 

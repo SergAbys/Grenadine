@@ -31,12 +31,12 @@
 
 typedef struct _tll {
     t_jbox          box;
-    ulong           flags;
     t_atom          played[4];
     t_atom          dumped[5];
     t_atom          link;
     t_jrgba         text;
     t_jrgba         color;
+    t_jrgba         hcolor;
     t_jrgba         border;
     t_jrgba         background;
     PIZTime         time;

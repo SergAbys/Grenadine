@@ -8,8 +8,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef TLL_TRALALA_LIBRARY_H
-#define TLL_TRALALA_LIBRARY_H
+#ifndef TLL_LIBRARY_H
+#define TLL_LIBRARY_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -21,18 +21,9 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_DIRTY_TEXT          x->flags |= TLL_FLAG_TEXT;
 #define TLL_DIRTY_ZONE          jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_ZONE);
 #define TLL_DIRTY_NOTE          jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_NOTE);
 #define TLL_DIRTY_BACKGROUND    jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_BACKGROUND);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-#define TLL_FLAG_NONE           0UL
-#define TLL_FLAG_TEXT           1UL
-#define TLL_FLAG_FOREGROUND     2UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -50,6 +41,7 @@
 #define TLL_SYM_XOFFSET         (tll_table.xoffset)
 #define TLL_SYM_YOFFSET         (tll_table.yoffset)
 #define TLL_SYM_COLOR           (tll_table.color)
+#define TLL_SYM_HCOLOR          (tll_table.hcolor)
 #define TLL_SYM_ATTR_MODIFIED   (tll_table.attr_modified)
 #define TLL_SYM_GETNAME         (tll_table.getname)
 #define TLL_SYM_PATCHING_RECT   (tll_table.patching_rect)
@@ -71,6 +63,7 @@ typedef struct _tllSymbols {
     t_symbol *xoffset;
     t_symbol *yoffset;
     t_symbol *color;
+    t_symbol *hcolor;
     t_symbol *attr_modified;
     t_symbol *getname;
     t_symbol *patching_rect;
@@ -87,8 +80,8 @@ void tralala_parseMessage       (t_tll *x, t_symbol *s, long argc, t_atom *argv)
 void tralala_parseNotification  (t_tll *x, PIZEvent *event);
 
 void tralala_paintBackground    (t_tll *x, t_object *pv);
-void tralala_paintCurrent       (t_tll *x, t_object *pv);
+void tralala_paintDictionary    (t_tll *x, t_object *pv);
           
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // TLL_TRALALA_LIBRARY_H
+#endif // TLL_LIBRARY_H
