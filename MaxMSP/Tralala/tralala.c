@@ -244,6 +244,7 @@ void tralala_jsave(t_tll *x, t_dictionary *d)
 
 void tralala_paint(t_tll *x, t_object *pv)
 {
+    post("!");
     tralala_paintBackground(x, pv);
     tralala_paintDictionary(x, pv);
 }

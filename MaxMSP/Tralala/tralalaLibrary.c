@@ -50,8 +50,8 @@ PIZ_LOCAL void tralala_pitchAsString        (char *s, long k, long size);
 #define TINY 2
 
 #define TLL_MAXIMUM_STRING_SIZE     128
-#define TLL_PIXELS_PER_STEP         2.
-#define TLL_PIXELS_PER_SEMITONE     24.
+#define TLL_PIXELS_PER_STEP         1.
+#define TLL_PIXELS_PER_SEMITONE     12.
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -506,7 +506,60 @@ void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv)
 
 void tralala_paintNotes(t_tll *x, t_object *pv, t_atomarray *a, t_atomarray *b)
 {
-    ;
+    double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
+    double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
+    t_jgraphics *g = NULL;
+    
+    if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_NOTE, w, h)) {
+    //
+    long argc;
+    t_atom *argv = NULL;
+    
+    if (!atomarray_getatoms(b, &argc, &argv)) {
+    //
+    long i;
+    for (i = 0; i < atomarray_getsize(b); i += 5) {
+        long note[5];
+        t_rect rect;
+        
+        atom_getlong_array(5, argv + i, 5, note);
+        
+        rect.x = POSITION_TO_X(note[0]);
+        rect.y = PITCH_TO_Y_UP(note[1]); 
+        rect.width  = POSITION_TO_X(note[0] + note[3]) - rect.x; 
+        rect.height = PITCH_TO_Y_DOWN(note[1]) - rect.y;
+    
+        jgraphics_set_source_jrgba(g, &x->color);
+        jgraphics_rectangle_fill_fast(g, rect.x, rect.y, rect.width, rect.height);
+    }
+    //
+    }
+    
+    if (!atomarray_getatoms(a, &argc, &argv)) {
+    //
+    long i;
+    for (i = 0; i < atomarray_getsize(a); i += 5) {
+        long note[5];
+        t_rect rect;
+        
+        atom_getlong_array(5, argv + i, 5, note);
+        
+        rect.x = POSITION_TO_X(note[0]);
+        rect.y = PITCH_TO_Y_UP(note[1]); 
+        rect.width  = POSITION_TO_X(note[0] + note[3]) - rect.x; 
+        rect.height = PITCH_TO_Y_DOWN(note[1]) - rect.y;
+    
+        jgraphics_set_source_jrgba(g, &x->hcolor);
+        jgraphics_rectangle_fill_fast(g, rect.x, rect.y, rect.width, rect.height);
+    }
+    //
+    }
+    
+    jbox_end_layer((t_object*)x, pv, TLL_SYM_NOTE);
+    //
+    }
+        
+    jbox_paint_layer((t_object *)x, pv, TLL_SYM_NOTE, -x->offsetX, -x->offsetY);
 }
 
 // -------------------------------------------------------------------------------------------------------------
