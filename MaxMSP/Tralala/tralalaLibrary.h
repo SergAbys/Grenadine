@@ -29,6 +29,16 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+#define TLL_SELECTED            1
+#define TLL_SELECTED_START      2
+#define TLL_SELECTED_END        3
+#define TLL_SELECTED_DOWN       4
+#define TLL_SELECTED_UP         5
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 #define TLL_SYM_END             (tll_table.end)
 #define TLL_SYM_CLEAR           (tll_table.clear)
 #define TLL_SYM_TRALALA         (tll_table.tralala)
