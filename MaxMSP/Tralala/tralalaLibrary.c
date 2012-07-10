@@ -22,7 +22,7 @@ extern t_tllSymbols tll_table;
 
 PIZ_LOCAL void tralala_paintText            (t_tll *x, t_object *pv, char *string);
 PIZ_LOCAL void tralala_paintZone            (t_tll *x, t_object *pv, long argc, t_atom *argv);
-PIZ_LOCAL void tralala_paintNotes           (t_tll *x, t_object *pv, t_atomarray *a, t_atomarray *b);
+PIZ_LOCAL void tralala_paintNotes           (t_tll *x, t_object *pv, t_atomarray **notes);
 
 PIZ_LOCAL void tralala_symbolWithTag        (t_symbol **s, long tag);
 PIZ_LOCAL void tralala_tagWithSymbol        (long *tag, t_symbol *s);
@@ -394,8 +394,10 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     t_atom *argv = NULL;
     t_symbol *s = NULL;
     t_symbol **keys = NULL;
-    t_atomarray *a = atomarray_new(0, NULL);
-    t_atomarray *b = atomarray_new(0, NULL);
+    t_atomarray *notes[2];
+    
+    notes[0] = atomarray_new(0, NULL);
+    notes[1] = atomarray_new(0, NULL);
     
     char string[TLL_MAXIMUM_STRING_SIZE] = "";
 
@@ -415,7 +417,7 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
         tralala_paintZone(x, pv, argc - 1, argv + 1);
     }
     
-    if (a && b && !(dictionary_getkeys(x->current, &n, &keys))) {
+    if (notes[0] && notes[1] && !(dictionary_getkeys(x->current, &n, &keys))) {
         long max = 4;
         for (i = 0; i < n; i++) {
             if (!(dictionary_getatoms(x->current, (*(keys + i)), &argc, &argv)) 
@@ -425,9 +427,9 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
                         tralala_strncatNote(string, argc - 1, argv + 1);
                         max --;
                     }
-                    atomarray_appendatoms(a, argc - 1, argv + 1);
+                    atomarray_appendatoms(notes[0], argc - 1, argv + 1);
                 } else {
-                    atomarray_appendatoms(b, argc - 1, argv + 1);
+                    atomarray_appendatoms(notes[1], argc - 1, argv + 1);
                 }
             }
         }
@@ -435,14 +437,14 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
         dictionary_freekeys(x->current, n, keys);
     }
     
-    tralala_paintNotes(x, pv, a, b);
+    tralala_paintNotes(x, pv, notes);
     
     if (x->viewText) {
         tralala_paintText(x, pv, string);
     }
     
-    object_free(a);
-    object_free(b);
+    object_free(notes[0]);
+    object_free(notes[1]);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -504,7 +506,7 @@ void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv)
     jbox_paint_layer((t_object *)x, pv, TLL_SYM_ZONE, -x->offsetX, -x->offsetY);
 }
 
-void tralala_paintNotes(t_tll *x, t_object *pv, t_atomarray *a, t_atomarray *b)
+void tralala_paintNotes(t_tll *x, t_object *pv, t_atomarray **notes)
 {
     double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
     double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
@@ -512,45 +514,35 @@ void tralala_paintNotes(t_tll *x, t_object *pv, t_atomarray *a, t_atomarray *b)
     
     if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_NOTE, w, h)) {
     //
-    long argc;
+    long i, argc;
     t_atom *argv = NULL;
     
-    if (!atomarray_getatoms(b, &argc, &argv)) {
+    for (i = 0; i < 2; i++) {
     //
-    long i;
-    for (i = 0; i < atomarray_getsize(b); i += 5) {
+    if (!atomarray_getatoms(notes[i], &argc, &argv)) {
+    //
+    long j;
+    
+    for (j = 0; j < atomarray_getsize(notes[i]); j += 5) {
         long note[5];
         t_rect rect;
         
-        atom_getlong_array(5, argv + i, 5, note);
+        atom_getlong_array(5, argv + j, 5, note);
         
         rect.x = POSITION_TO_X(note[0]);
         rect.y = PITCH_TO_Y_UP(note[1]); 
         rect.width  = POSITION_TO_X(note[0] + note[3]) - rect.x; 
         rect.height = PITCH_TO_Y_DOWN(note[1]) - rect.y;
     
-        jgraphics_set_source_jrgba(g, &x->color);
+        if (i) {
+            jgraphics_set_source_jrgba(g, &x->color);
+        } else {
+            jgraphics_set_source_jrgba(g, &x->hcolor);
+        }
+        
         jgraphics_rectangle_fill_fast(g, rect.x, rect.y, rect.width, rect.height);
     }
     //
-    }
-    
-    if (!atomarray_getatoms(a, &argc, &argv)) {
-    //
-    long i;
-    for (i = 0; i < atomarray_getsize(a); i += 5) {
-        long note[5];
-        t_rect rect;
-        
-        atom_getlong_array(5, argv + i, 5, note);
-        
-        rect.x = POSITION_TO_X(note[0]);
-        rect.y = PITCH_TO_Y_UP(note[1]); 
-        rect.width  = POSITION_TO_X(note[0] + note[3]) - rect.x; 
-        rect.height = PITCH_TO_Y_DOWN(note[1]) - rect.y;
-    
-        jgraphics_set_source_jrgba(g, &x->hcolor);
-        jgraphics_rectangle_fill_fast(g, rect.x, rect.y, rect.width, rect.height);
     }
     //
     }
