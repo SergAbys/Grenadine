@@ -44,8 +44,8 @@ int main(void)
     class_addmethod(c, (method)tralala_paint,       "paint",         A_CANT,  0);
     class_addmethod(c, (method)tralala_params,      "getdrawparams", A_CANT,  0);
     class_addmethod(c, (method)tralala_key,         "key",           A_CANT,  0);
-    class_addmethod(c, (method)tralala_mousewheel,  "mousewheel",    A_CANT,  0);
-    class_addmethod(c, (method)tralala_mousedown,   "mousedown",     A_CANT,  0);
+    class_addmethod(c, (method)tralala_wheel,       "mousewheel",    A_CANT,  0);
+    class_addmethod(c, (method)tralala_down,        "mousedown",     A_CANT,  0);
     class_addmethod(c, (method)tralala_notify,      "notify",        A_CANT,  0);
     class_addmethod(c, (method)tralala_store,       "store",         A_GIMME, 0);
     class_addmethod(c, (method)tralala_restore,     "restore",       A_GIMME, 0);
@@ -69,22 +69,22 @@ int main(void)
     CLASS_ATTR_CATEGORY     (c, "bordercolor", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "color", 0, t_tll, color); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "color", 0, "0. 1. 0. 1."); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "color", 0, "0.30 0.24 0.28 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "color", 0, "rgba", "Color");
     CLASS_ATTR_CATEGORY     (c, "color", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "hcolor1", 0, t_tll, hcolor1); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor1", 0, "1. 0.75 0. 1."); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor1", 0, "0.83 0.74 0.84 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "hcolor1", 0, "rgba", "Highlighted Color");
     CLASS_ATTR_CATEGORY     (c, "hcolor1", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "hcolor2", 0, t_tll, hcolor2); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor2", 0, "1. 1. 0. 1."); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor2", 0, "1. 0.75 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "hcolor2", 0, "rgba", "Highlighted Color");
     CLASS_ATTR_CATEGORY     (c, "hcolor2", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "textcolor", 0, t_tll, text); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "1. 1. 0. 1."); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "0.51 0.44 0.49 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "textcolor", 0, "rgba", "Text Color");
     CLASS_ATTR_CATEGORY     (c, "textcolor", 0, "Color");
   
@@ -271,7 +271,7 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
 	;
 }
 
-void tralala_mousewheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc)
+void tralala_wheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc)
 {
     long h = object_attr_getlong(x, TLL_SYM_XOFFSET) - (x_inc * 100);
     long v = object_attr_getlong(x, TLL_SYM_YOFFSET) - (y_inc * 100);
@@ -280,31 +280,37 @@ void tralala_mousewheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc,
     object_attr_setlong(x, TLL_SYM_YOFFSET, v);
 }
 
-void tralala_mousedown(t_tll *x, t_object *pv, t_pt pt, long m)
+void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
 {	
-    t_symbol *s = NULL;
-    
     if ((m & eControlKey) || !(m & eShiftKey)) {
         dictionary_clear(x->status);
     }
     
-    if (s = tralala_hitNote(x, pt)) {
-    //
-    if (dictionary_hasentry(x->status, s)) {
-        t_symbol *last = NULL;
-        dictionary_getsym(x->status, TLL_SYM_LAST, &last);
-        if (s == last) {
-            dictionary_deleteentry(x->status, TLL_SYM_LAST);
+    if (m & eControlKey) {
+        long k;
+        if (k = tralala_hitZone(x, pt)) {
+            dictionary_appendlong(x->status, TLL_SYM_ZONE, k);
         }
-        dictionary_deleteentry(x->status, s);
-        
+    
     } else {
-        dictionary_appendsym(x->status, TLL_SYM_LAST, s);
-        dictionary_appendlong(x->status, s, TLL_SELECTED);
-    }
-    //
+        t_symbol *s = NULL;
+        if (s = tralala_hitNote(x, pt)) {
+            if (dictionary_hasentry(x->status, s)) {
+                t_symbol *last = NULL;
+                dictionary_getsym(x->status, TLL_SYM_LAST, &last);
+                if (s == last) {
+                    dictionary_deleteentry(x->status, TLL_SYM_LAST);
+                }
+                dictionary_deleteentry(x->status, s);
+                
+            } else {
+                dictionary_appendsym(x->status, TLL_SYM_LAST, s);
+                dictionary_appendlong(x->status, s, TLL_SELECTED);
+            }
+        }
     }
     
+    TLL_DIRTY_ZONE
     TLL_DIRTY_NOTE
     jbox_redraw((t_jbox *)x);
 }
@@ -436,9 +442,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
         break;
     //
     }
-    
-    DEBUGEVENT
-        
+            
     pizEventFree(event);
 }
 

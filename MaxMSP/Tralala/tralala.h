@@ -70,8 +70,8 @@ void tralala_jsave          (t_tll *x, t_dictionary *d);
 void tralala_paint          (t_tll *x, t_object *pv);
 void tralala_params         (t_tll *x, t_object *pv, t_jboxdrawparams *params);
 void tralala_key            (t_tll *x, t_object *pv, long keycode, long m, long textcharacter);
-void tralala_mousewheel     (t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc);
-void tralala_mousedown      (t_tll *x, t_object *pv, t_pt pt, long m);
+void tralala_wheel          (t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc);
+void tralala_down           (t_tll *x, t_object *pv, t_pt pt, long m);
 
 t_max_err tralala_notify    (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, void *data);
 
