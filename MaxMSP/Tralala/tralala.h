@@ -36,7 +36,8 @@ typedef struct _tll {
     t_atom          link;
     t_jrgba         text;
     t_jrgba         color;
-    t_jrgba         hcolor;
+    t_jrgba         hcolor1;
+    t_jrgba         hcolor2;
     t_jrgba         border;
     t_jrgba         background;
     PIZTime         time;
@@ -69,7 +70,8 @@ void tralala_jsave          (t_tll *x, t_dictionary *d);
 void tralala_paint          (t_tll *x, t_object *pv);
 void tralala_params         (t_tll *x, t_object *pv, t_jboxdrawparams *params);
 void tralala_key            (t_tll *x, t_object *pv, long keycode, long m, long textcharacter);
-void tralala_mousewheel     (t_tll *x, t_object *view, t_pt pt, long modifiers, double x_inc, double y_inc);
+void tralala_mousewheel     (t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc);
+void tralala_mousedown      (t_tll *x, t_object *pv, t_pt pt, long m);
 
 t_max_err tralala_notify    (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, void *data);
 

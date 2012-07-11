@@ -45,6 +45,7 @@ int main(void)
     class_addmethod(c, (method)tralala_params,      "getdrawparams", A_CANT,  0);
     class_addmethod(c, (method)tralala_key,         "key",           A_CANT,  0);
     class_addmethod(c, (method)tralala_mousewheel,  "mousewheel",    A_CANT,  0);
+    class_addmethod(c, (method)tralala_mousedown,   "mousedown",     A_CANT,  0);
     class_addmethod(c, (method)tralala_notify,      "notify",        A_CANT,  0);
     class_addmethod(c, (method)tralala_store,       "store",         A_GIMME, 0);
     class_addmethod(c, (method)tralala_restore,     "restore",       A_GIMME, 0);
@@ -72,10 +73,15 @@ int main(void)
     CLASS_ATTR_STYLE_LABEL  (c, "color", 0, "rgba", "Color");
     CLASS_ATTR_CATEGORY     (c, "color", 0, "Color");
     
-    CLASS_ATTR_RGBA         (c, "hcolor", 0, t_tll, hcolor); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor", 0, "1. 0.75 0. 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "hcolor", 0, "rgba", "Highlighted Color");
-    CLASS_ATTR_CATEGORY     (c, "hcolor", 0, "Color");
+    CLASS_ATTR_RGBA         (c, "hcolor1", 0, t_tll, hcolor1); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor1", 0, "1. 0.75 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "hcolor1", 0, "rgba", "Highlighted Color");
+    CLASS_ATTR_CATEGORY     (c, "hcolor1", 0, "Color");
+    
+    CLASS_ATTR_RGBA         (c, "hcolor2", 0, t_tll, hcolor2); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor2", 0, "1. 1. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "hcolor2", 0, "rgba", "Highlighted Color");
+    CLASS_ATTR_CATEGORY     (c, "hcolor2", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "textcolor", 0, t_tll, text); 
     CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "1. 1. 0. 1."); 
@@ -99,17 +105,18 @@ int main(void)
     CLASS_ATTR_FILTER_CLIP  (c, "viewtext", 0, 1);
     CLASS_ATTR_CATEGORY     (c, "viewtext", 0, "Appearance");
  
+    CLASS_ATTR_ORDER        (c, "color",       0, "1");
+    CLASS_ATTR_ORDER        (c, "hcolor1",     0, "2");
+    CLASS_ATTR_ORDER        (c, "hcolor2",     0, "3");
+    CLASS_ATTR_ORDER        (c, "textcolor",   0, "4");
+    CLASS_ATTR_ORDER        (c, "bordercolor", 0, "5");
+    CLASS_ATTR_ORDER        (c, "bgcolor",     0, "6");
+    
     CLASS_ATTR_DEFAULT      (c, "fontname", 0, "Arial");
     CLASS_ATTR_DEFAULT      (c, "fontsize", 0, "14.");
     CLASS_ATTR_DEFAULT      (c, "fontface", 0, "1");
 
     CLASS_ATTR_DEFAULT      (c, "patching_rect", 0, "0. 0. 200. 200.");
-    
-    CLASS_ATTR_ORDER        (c, "color",       0, "1");
-    CLASS_ATTR_ORDER        (c, "hcolor",      0, "2");
-    CLASS_ATTR_ORDER        (c, "textcolor",   0, "3");
-    CLASS_ATTR_ORDER        (c, "bordercolor", 0, "4");
-    CLASS_ATTR_ORDER        (c, "bgcolor",     0, "5");
     
     class_register(CLASS_BOX, c);
 
@@ -255,18 +262,39 @@ void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
     jrgba_copy(&params->d_bordercolor, &x->border);
 }
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacter)
 {
-	post("Key : %ld %ld %ld", keycode, m, textcharacter);
+	;
 }
 
-void tralala_mousewheel(t_tll *x, t_object *view, t_pt pt, long modifiers, double x_inc, double y_inc)
+void tralala_mousewheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc)
 {
     long h = object_attr_getlong(x, TLL_SYM_XOFFSET) - (x_inc * 100);
     long v = object_attr_getlong(x, TLL_SYM_YOFFSET) - (y_inc * 100);
         
     object_attr_setlong(x, TLL_SYM_XOFFSET, h);
     object_attr_setlong(x, TLL_SYM_YOFFSET, v);
+}
+
+void tralala_mousedown(t_tll *x, t_object *pv, t_pt pt, long m)
+{	
+    t_symbol *key;
+    
+    tralala_hitNote(x, pt, &key);
+    
+    if (key) {
+        if (dictionary_hasentry(x->status, key)) {
+            dictionary_deleteentry(x->status, key);
+        } else {
+            dictionary_appendlong(x->status, key, TLL_SELECTED_ALL);
+        }
+        TLL_DIRTY_NOTE
+        jbox_redraw((t_jbox *)x);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -284,7 +312,7 @@ t_max_err tralala_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, v
         TLL_DIRTY_ZONE
         TLL_DIRTY_NOTE
         
-    } else if (name == TLL_SYM_HCOLOR) {
+    } else if ((name == TLL_SYM_HCOLOR1) && (name == TLL_SYM_HCOLOR2)) {
         TLL_DIRTY_ZONE
         TLL_DIRTY_NOTE
     }

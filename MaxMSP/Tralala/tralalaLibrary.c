@@ -20,9 +20,9 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void tralala_paintText            (t_tll *x, t_object *pv, char *string);
-PIZ_LOCAL void tralala_paintZone            (t_tll *x, t_object *pv, long argc, t_atom *argv);
-PIZ_LOCAL void tralala_paintNotes           (t_tll *x, t_object *pv, t_atomarray **notes);
+PIZ_LOCAL void tralala_paintDictionaryText  (t_tll *x, t_object *pv, char *string);
+PIZ_LOCAL void tralala_paintDictionaryZone  (t_tll *x, t_object *pv, long argc, t_atom *argv);
+PIZ_LOCAL void tralala_paintDictionaryNote  (t_tll *x, t_object *pv, t_atomarray **notes);
 
 PIZ_LOCAL void tralala_symbolWithTag        (t_symbol **s, long tag);
 PIZ_LOCAL void tralala_tagWithSymbol        (long *tag, t_symbol *s);
@@ -52,7 +52,7 @@ PIZ_LOCAL void tralala_pitchAsString        (char *s, long k, long size);
 #define TLL_MAXIMUM_STRING_SIZE     128
 #define TLL_PIXELS_PER_STEP         1.
 #define TLL_PIXELS_PER_SEMITONE     12.
-
+    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -90,7 +90,8 @@ table->background    = gensym("background");
 table->xoffset       = gensym("xoffset");
 table->yoffset       = gensym("yoffset");
 table->color         = gensym("color");
-table->hcolor        = gensym("hcolor");
+table->hcolor1       = gensym("hcolor1");
+table->hcolor2       = gensym("hcolor2");
 table->attr_modified = gensym("attr_modified");
 table->getname       = gensym("getname");
 table->patching_rect = gensym("patching_rect");
@@ -373,6 +374,53 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+void tralala_hitZone(t_tll *x, t_pt pt, long *status)
+{
+    long k = TLL_SELECTED_NONE;
+    
+    (*status) = k;
+}
+
+void tralala_hitNote(t_tll *x, t_pt pt, t_symbol **key)
+{
+    long i, n;
+    t_symbol *note = NULL;
+    t_symbol **keys = NULL;
+    long position = X_TO_POSITION(pt.x);
+    long pitch = Y_TO_PITCH(pt.y);
+    
+    if (!(dictionary_getkeys(x->current, &n, &keys))) {
+    //
+    long argc;
+    t_atom *argv = NULL;
+    
+    for (i = 0; i < n; i++) {
+        if (!(dictionary_getatoms(x->current, (*(keys + i)), &argc, &argv))) { 
+        //
+        if ((atom_getsym(argv) == TLL_SYM_NOTE)) {
+            long p = atom_getlong(argv + 2);
+            long a = atom_getlong(argv + 1);
+            long b = a + atom_getlong(argv + 4);
+            if ((pitch == p) && (position >= a) && (position <= b)) {
+                note = (*(keys + i));
+                break;
+            }
+        }
+        //
+        }
+    }
+    
+    dictionary_freekeys(x->current, n, keys);
+    //
+    }
+    
+    (*key) = note;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 void tralala_paintBackground(t_tll *x, t_object *pv)
 {
     double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
@@ -394,45 +442,39 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     t_atom *argv = NULL;
     t_symbol *s = NULL;
     t_symbol **keys = NULL;
-    t_atomarray *notes[2];
+    t_atomarray *notes[3];
+    PIZError err = PIZ_GOOD;
     
     char string[TLL_MAXIMUM_STRING_SIZE] = "";
     
-    notes[0] = atomarray_new(0, NULL);
-    notes[1] = atomarray_new(0, NULL);
+    err |= !(notes[0] = atomarray_new(0, NULL));
+    err |= !(notes[1] = atomarray_new(0, NULL));
+    err |= !(notes[2] = atomarray_new(0, NULL));
     
     for (i = PIZ_EVENT_CHANGED_BPM; i < PIZ_EVENT_CHANGED_ZONE; i++) {
         if (!(quickmap_lookup_key2(tll_notification, (void *)(i + TINY), (void **)&s))) {
             if (!(dictionary_getatoms(x->current, s, &argc, &argv))) {
-                tralala_strncatAttribute(string, argc - 1, argv + 1);
+                tralala_strncatAttribute(string, argc, argv);
             }
         }
     }
     
-    
     if (dictionary_hasentry(x->status, TLL_SYM_ZONE)) {
         if (!(dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv))) {
-            tralala_strncatZone(string, argc - 1, argv + 1);
+            tralala_strncatZone(string, argc, argv);
         } 
     }
     
-    if (notes[0] && notes[1] && !(dictionary_getkeys(x->current, &n, &keys))) {
+    if (!err && !(dictionary_getkeys(x->current, &n, &keys))) {
     //
-    long max = 4;
-    
     for (i = 0; i < n; i++) {
         if (!(dictionary_getatoms(x->current, (*(keys + i)), &argc, &argv))) { 
         //
         if ((atom_getsym(argv) == TLL_SYM_NOTE)) {
-        
-            if (dictionary_hasentry(x->status, (*(keys + i)))) {
-                if (max) {
-                    tralala_strncatNote(string, argc - 1, argv + 1);
-                    max --;
-                }
-                atomarray_appendatoms(notes[0], argc - 1, argv + 1);
+            if (!(dictionary_hasentry(x->status, (*(keys + i))))) {
+                atomarray_appendatoms(notes[0], argc, argv);
             } else {
-                atomarray_appendatoms(notes[1], argc - 1, argv + 1);
+                atomarray_appendatoms(notes[1], argc, argv);
             }
         }
         //
@@ -443,18 +485,19 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     //
     }
     
-    tralala_paintNotes(x, pv, notes);
+    tralala_paintDictionaryNote(x, pv, notes);
     
     if (!(dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv))) {
-        tralala_paintZone(x, pv, argc - 1, argv + 1);
+        tralala_paintDictionaryZone(x, pv, argc, argv);
     }
     
     if (x->viewText) {
-        tralala_paintText(x, pv, string);
+        tralala_paintDictionaryText(x, pv, string);
     }
     
     object_free(notes[0]);
     object_free(notes[1]);
+    object_free(notes[2]);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -463,7 +506,7 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
 #pragma mark ---
 #pragma mark -
 
-void tralala_paintText(t_tll *x, t_object *pv, char *string)
+void tralala_paintDictionaryText(t_tll *x, t_object *pv, char *string)
 {
     t_rect rect;
     t_jgraphics *g = NULL; 
@@ -485,7 +528,7 @@ void tralala_paintText(t_tll *x, t_object *pv, char *string)
     jfont_destroy(font);
 }
 
-void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv)
+void tralala_paintDictionaryZone(t_tll *x, t_object *pv, long argc, t_atom *argv)
 {
     double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
     double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
@@ -495,12 +538,12 @@ void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv)
     //
     t_rect rect; 
     long zone[4];
-    long status = 0;
+    long status = TLL_SELECTED_NONE;
     
-    atom_getlong_array(argc, argv, 4, zone);
+    atom_getlong_array(argc - 1, argv + 1, 4, zone);
     
-    if (!(dictionary_getlong(x->status, TLL_SYM_ZONE, &status)) && (status == TLL_SELECTED)) {
-        jgraphics_set_source_jrgba(g, &x->hcolor);
+    if (!(dictionary_getlong(x->status, TLL_SYM_ZONE, &status)) && (status == TLL_SELECTED_ALL)) {
+        jgraphics_set_source_jrgba(g, &x->hcolor1);
     } else {
         jgraphics_set_source_jrgba(g, &x->color);
     }
@@ -512,7 +555,7 @@ void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv)
         
     jgraphics_rectangle_draw_fast(g, rect.x, rect.y, rect.width, rect.height, 1.);
     
-    if (status > TLL_SELECTED) {
+    if (status > TLL_SELECTED_ALL) {
         switch (status) {
             case TLL_SELECTED_START : rect.x = POSITION_TO_X(zone[0]); rect.width = 3.; break ;
             case TLL_SELECTED_END   : rect.x = POSITION_TO_X(zone[1]) - 3.; rect.width = 3.; break ;
@@ -520,7 +563,7 @@ void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv)
             case TLL_SELECTED_UP    : rect.height = 3.; break;
         }
         
-        jgraphics_set_source_jrgba(g, &x->hcolor);
+        jgraphics_set_source_jrgba(g, &x->hcolor1);
         jgraphics_rectangle_draw_fast(g, rect.x, rect.y, rect.width, rect.height, 1.);
     }
     
@@ -531,7 +574,7 @@ void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv)
     jbox_paint_layer((t_object *)x, pv, TLL_SYM_ZONE, -x->offsetX, -x->offsetY);
 }
 
-void tralala_paintNotes(t_tll *x, t_object *pv, t_atomarray **notes)
+void tralala_paintDictionaryNote(t_tll *x, t_object *pv, t_atomarray **notes)
 {
     double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
     double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
@@ -542,26 +585,28 @@ void tralala_paintNotes(t_tll *x, t_object *pv, t_atomarray **notes)
     long i, argc;
     t_atom *argv = NULL;
     
-    for (i = 0; i < 2; i++) {
+    for (i = 0; i < 3; i++) {
     //
     if (!atomarray_getatoms(notes[i], &argc, &argv)) {
     //
     long j;
-    for (j = 0; j < atomarray_getsize(notes[i]); j += 5) {
+    for (j = 0; j < atomarray_getsize(notes[i]); j += 6) {
         t_rect rect;
         long note[5];
         
-        atom_getlong_array(5, argv + j, 5, note);
+        atom_getlong_array(5, argv + 1 + j, 5, note);
         
         rect.x = POSITION_TO_X(note[0]);
         rect.y = PITCH_TO_Y_UP(note[1]); 
         rect.width  = POSITION_TO_X(note[0] + note[3]) - rect.x; 
         rect.height = PITCH_TO_Y_DOWN(note[1]) - rect.y;
     
-        if (i) {
+        if (i == 0) {
             jgraphics_set_source_jrgba(g, &x->color);
+        } else if (i == 1) {
+            jgraphics_set_source_jrgba(g, &x->hcolor1);
         } else {
-            jgraphics_set_source_jrgba(g, &x->hcolor);
+            jgraphics_set_source_jrgba(g, &x->hcolor2);
         }
         
         jgraphics_rectangle_fill_fast(g, rect.x, rect.y, rect.width, rect.height);
@@ -603,25 +648,25 @@ void tralala_strncatZone(char *dst, long argc, t_atom *argv)
 {
     char a[4];
     char b[4];
-    char temp[16];
+    char temp[32];
     
-    tralala_pitchAsString(a, atom_getlong(argv + 2), 4);
-    tralala_pitchAsString(b, atom_getlong(argv + 3), 4);
-    snprintf_zero(temp, 16, "%ld %ld %s %s \n", atom_getlong(argv), atom_getlong(argv + 1), a, b);
+    tralala_pitchAsString(a, atom_getlong(argv + 3), 4);
+    tralala_pitchAsString(b, atom_getlong(argv + 4), 4);
+    snprintf_zero(temp, 32, "%ld %ld %s %s\n", atom_getlong(argv + 1), atom_getlong(argv + 2), a, b);
     strncat_zero(dst, temp, TLL_MAXIMUM_STRING_SIZE);
 }
 
 void tralala_strncatNote(char *dst, long argc, t_atom *argv)
 {
     char a[4];
-    char temp[16];
-    long p = atom_getlong(argv);
-    long v = atom_getlong(argv + 2);
-    long d = atom_getlong(argv + 3);
-    long c = atom_getlong(argv + 4);
+    char temp[32];
+    long p = atom_getlong(argv + 1);
+    long v = atom_getlong(argv + 3);
+    long d = atom_getlong(argv + 4);
+    long c = atom_getlong(argv + 5);
     
-    tralala_pitchAsString(a, atom_getlong(argv + 1), 4);
-    snprintf_zero(temp, 16, "%ld %s %ld %ld %ld \n", p, a, v, d, c);
+    tralala_pitchAsString(a, atom_getlong(argv + 2), 4);
+    snprintf_zero(temp, 32, "%ld %s %ld %ld %ld\n", p, a, v, d, c);
     strncat_zero(dst, temp, TLL_MAXIMUM_STRING_SIZE);
 }
 
@@ -630,7 +675,7 @@ void tralala_strncatAttribute(char *dst, long argc, t_atom *argv)
     long k = 0;
     char *p = NULL;
     
-    if (!(atom_gettext(argc, argv, &k, &p, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE))) {
+    if (!(atom_gettext(argc - 1, argv + 1, &k, &p, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE))) {
         strncat_zero(dst, p, TLL_MAXIMUM_STRING_SIZE);
         strncat_zero(dst, "\n", TLL_MAXIMUM_STRING_SIZE);
         sysmem_freeptr(p);
