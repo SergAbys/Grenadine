@@ -33,6 +33,7 @@
 #define TLL_SYM_CLEAR           (tll_table.clear)
 #define TLL_SYM_TRALALA         (tll_table.tralala)
 #define TLL_SYM_UNTITLED        (tll_table.untitled)
+#define TLL_SYM_LAST            (tll_table.last)
 #define TLL_SYM_RUN             (tll_table.run)
 #define TLL_SYM_NOTE            (tll_table.note)
 #define TLL_SYM_TEXT            (tll_table.text)
@@ -52,8 +53,7 @@
 #pragma mark -
 
 enum {
-    TLL_SELECTED_NONE   = 0,
-    TLL_SELECTED_ALL    = 1,
+    TLL_SELECTED        = 1,
     TLL_SELECTED_START  = 2,
     TLL_SELECTED_END    = 3,
     TLL_SELECTED_DOWN   = 4,
@@ -68,6 +68,7 @@ typedef struct _tllSymbols {
     t_symbol *clear;
     t_symbol *tralala;
     t_symbol *untitled;
+    t_symbol *last;
     t_symbol *run;
     t_symbol *note;
     t_symbol *text;
@@ -87,17 +88,16 @@ typedef struct _tllSymbols {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_parseInit          (t_tllSymbols *table);
+void     tralala_parseInit          (t_tllSymbols *table);
+void     tralala_parseDictionary    (t_tll *x, t_dictionary *d);
+void     tralala_parseMessage       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void     tralala_parseNotification  (t_tll *x, PIZEvent *event);
 
-void tralala_parseDictionary    (t_tll *x, t_dictionary *d);
-void tralala_parseMessage       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
-void tralala_parseNotification  (t_tll *x, PIZEvent *event);
+void     tralala_paintBackground    (t_tll *x, t_object *pv);
+void     tralala_paintDictionary    (t_tll *x, t_object *pv);
 
-void tralala_hitZone            (t_tll *x, t_pt pt, long *status);
-void tralala_hitNote            (t_tll *x, t_pt pt, t_symbol **key);
-
-void tralala_paintBackground    (t_tll *x, t_object *pv);
-void tralala_paintDictionary    (t_tll *x, t_object *pv);
+long     tralala_hitZone            (t_tll *x, t_pt pt);
+t_symbol *tralala_hitNote           (t_tll *x, t_pt pt);
           
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

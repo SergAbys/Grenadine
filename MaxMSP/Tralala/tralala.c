@@ -282,19 +282,31 @@ void tralala_mousewheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc,
 
 void tralala_mousedown(t_tll *x, t_object *pv, t_pt pt, long m)
 {	
-    t_symbol *key;
+    t_symbol *s = NULL;
     
-    tralala_hitNote(x, pt, &key);
-    
-    if (key) {
-        if (dictionary_hasentry(x->status, key)) {
-            dictionary_deleteentry(x->status, key);
-        } else {
-            dictionary_appendlong(x->status, key, TLL_SELECTED_ALL);
-        }
-        TLL_DIRTY_NOTE
-        jbox_redraw((t_jbox *)x);
+    if ((m & eControlKey) || !(m & eShiftKey)) {
+        dictionary_clear(x->status);
     }
+    
+    if (s = tralala_hitNote(x, pt)) {
+    //
+    if (dictionary_hasentry(x->status, s)) {
+        t_symbol *last = NULL;
+        dictionary_getsym(x->status, TLL_SYM_LAST, &last);
+        if (s == last) {
+            dictionary_deleteentry(x->status, TLL_SYM_LAST);
+        }
+        dictionary_deleteentry(x->status, s);
+        
+    } else {
+        dictionary_appendsym(x->status, TLL_SYM_LAST, s);
+        dictionary_appendlong(x->status, s, TLL_SELECTED);
+    }
+    //
+    }
+    
+    TLL_DIRTY_NOTE
+    jbox_redraw((t_jbox *)x);
 }
 
 // -------------------------------------------------------------------------------------------------------------
