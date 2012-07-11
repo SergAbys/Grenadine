@@ -8,7 +8,9 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "tralalaLibrary.h"
+#include "tralalaUser.h"
+#include "tralalaParse.h"
+#include "tralalaPaint.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -286,7 +288,9 @@ void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
         dictionary_clear(x->status);
     }
     
-    if (m & eControlKey) {
+    if (m & eCommandKey) {
+        ;
+    } else if (m & eControlKey) {
         long k;
         if (k = tralala_hitZone(x, pt)) {
             dictionary_appendlong(x->status, TLL_SYM_ZONE, k);

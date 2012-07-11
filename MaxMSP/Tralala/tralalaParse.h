@@ -1,5 +1,5 @@
 /*
- *  tralalaLibrary.h
+ *  tralalaParse.h
  *
  *  nicolas.danet@free.fr
  *
@@ -8,8 +8,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef TLL_LIBRARY_H
-#define TLL_LIBRARY_H
+#ifndef TLL_PARSE_H
+#define TLL_PARSE_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -21,9 +21,7 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_DIRTY_ZONE          jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_ZONE);
-#define TLL_DIRTY_NOTE          jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_NOTE);
-#define TLL_DIRTY_BACKGROUND    jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_BACKGROUND);
+#define TINY 2
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -47,18 +45,6 @@
 #define TLL_SYM_ATTR_MODIFIED   (tll_table.attr_modified)
 #define TLL_SYM_GETNAME         (tll_table.getname)
 #define TLL_SYM_PATCHING_RECT   (tll_table.patching_rect)
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-enum {
-    TLL_SELECTED        = 1,
-    TLL_SELECTED_START  = 2,
-    TLL_SELECTED_END    = 3,
-    TLL_SELECTED_DOWN   = 4,
-    TLL_SELECTED_UP     = 5
-    };
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -88,17 +74,11 @@ typedef struct _tllSymbols {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void     tralala_parseInit          (t_tllSymbols *table);
-void     tralala_parseDictionary    (t_tll *x, t_dictionary *d);
-void     tralala_parseMessage       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
-void     tralala_parseNotification  (t_tll *x, PIZEvent *event);
-
-void     tralala_paintBackground    (t_tll *x, t_object *pv);
-void     tralala_paintDictionary    (t_tll *x, t_object *pv);
-
-long     tralala_hitZone            (t_tll *x, t_pt pt);
-t_symbol *tralala_hitNote           (t_tll *x, t_pt pt);
+void tralala_parseInit          (t_tllSymbols *table);
+void tralala_parseDictionary    (t_tll *x, t_dictionary *d);
+void tralala_parseMessage       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_parseNotification  (t_tll *x, PIZEvent *event);
           
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // TLL_LIBRARY_H
+#endif // TLL_PARSE_H

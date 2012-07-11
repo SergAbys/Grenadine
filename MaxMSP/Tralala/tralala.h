@@ -17,6 +17,7 @@
 #include "ext.h"
 #include "ext_obex.h"
 #include "ext_atomic.h"
+#include "ext_strings.h"
 #include "jpatcher_api.h"
 #include "jgraphics.h"
 
