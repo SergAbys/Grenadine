@@ -42,8 +42,11 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_paintBackground (t_tll *x, t_object *pv);
-void tralala_paintDictionary (t_tll *x, t_object *pv);
+void tralala_paint              (t_tll *x, t_object *pv);
+void tralala_params             (t_tll *x, t_object *pv, t_jboxdrawparams *params);
+
+void tralala_paintBackground    (t_tll *x, t_object *pv);
+void tralala_paintDictionary    (t_tll *x, t_object *pv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

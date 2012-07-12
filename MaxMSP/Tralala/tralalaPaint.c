@@ -16,7 +16,6 @@
 #pragma mark -
 
 extern t_tllSymbols tll_table;
-extern t_quickmap *tll_notification;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -43,6 +42,19 @@ PIZ_LOCAL void tralala_pitchAsString        (char *s, long k, long size);
 #pragma mark ---
 #pragma mark -
 
+void tralala_paint(t_tll *x, t_object *pv)
+{
+    post("!");
+    tralala_paintBackground(x, pv);
+    tralala_paintDictionary(x, pv);
+}
+
+void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
+{
+    jrgba_copy(&params->d_boxfillcolor, &x->background);
+    jrgba_copy(&params->d_bordercolor, &x->border);
+}
+
 void tralala_paintBackground(t_tll *x, t_object *pv)
 {
     double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
@@ -62,23 +74,31 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
 {
     long i, argc, n = 0;
     t_atom *argv = NULL;
-    t_symbol *s = NULL;
     t_symbol *last = NULL;
     t_symbol **keys = NULL;
     t_atomarray *notes[3];
     PIZError err = PIZ_GOOD;
-    
     char string[TLL_STRING_SIZE] = "";
     
+    t_symbol *s[ ] = { 
+        TLL_SYM_BPM, 
+        TLL_SYM_CHANCE, 
+        TLL_SYM_VELOCITY, 
+        TLL_SYM_CHANNEL, 
+        TLL_SYM_CHORD,
+        TLL_SYM_CELL, 
+        TLL_SYM_VALUE, 
+        TLL_SYM_SCALE, 
+        TLL_SYM_PATTERN 
+        };
+
     err |= !(notes[0] = atomarray_new(0, NULL));
     err |= !(notes[1] = atomarray_new(0, NULL));
     err |= !(notes[2] = atomarray_new(0, NULL));
     
-    for (i = PIZ_EVENT_CHANGED_BPM; i < PIZ_EVENT_CHANGED_ZONE; i++) {
-        if (!(quickmap_lookup_key2(tll_notification, (void *)(i + TINY), (void **)&s))) {
-            if (!(dictionary_getatoms(x->current, s, &argc, &argv))) {
-                tralala_strncatAttribute(string, argc, argv);
-            }
+    for (i = 0; i < 9; i++) {
+        if (!(dictionary_getatoms(x->current, s[i], &argc, &argv))) {
+            tralala_strncatAttribute(string, argc, argv);
         }
     }
     

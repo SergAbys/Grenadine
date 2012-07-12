@@ -10,12 +10,18 @@
 
 #include "tralalaParse.h"
 #include "tralalaPaint.h"
+#include "ext_quickmap.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-t_quickmap *tll_notification;
+#define TINY 2
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 extern t_tllSymbols tll_table;
 
 // -------------------------------------------------------------------------------------------------------------
@@ -36,6 +42,7 @@ static t_quickmap *tll_length;
 static t_quickmap *tll_direction;
 static t_quickmap *tll_select;
 static t_quickmap *tll_key;
+static t_quickmap *tll_notification;
 
 void tralala_parseInit(t_tllSymbols *table)
 {
@@ -48,6 +55,15 @@ tll_key          = (t_quickmap *)quickmap_new( );
 tll_select       = (t_quickmap *)quickmap_new( );
 tll_notification = (t_quickmap *)quickmap_new( );
 
+table->bpm           = gensym("bpm");
+table->chance        = gensym("chance");
+table->velocity      = gensym("velocity");
+table->channel       = gensym("channel");
+table->chord         = gensym("chord");
+table->cell          = gensym("cell");
+table->value         = gensym("value");
+table->scale         = gensym("scale");
+table->pattern       = gensym("pattern");
 table->end           = gensym("end");
 table->clear         = gensym("clear");
 table->tralala       = gensym("tralala");
@@ -316,7 +332,7 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
     if (code == PIZ_EVENT_CHANGED_ZONE) {
         TLL_DIRTY_ZONE
     } 
-    //    
+    // 
     } else {
     //
     tralala_symbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
@@ -325,10 +341,12 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
     //
     if (dictionary_hasentry(x->status, s)) {
         t_symbol *last = NULL;
+        
         dictionary_getsym(x->status, TLL_SYM_LAST, &last);
         if (s == last) {
             dictionary_deleteentry(x->status, TLL_SYM_LAST);
         }
+        
         dictionary_deleteentry(x->status, s);
     }
     

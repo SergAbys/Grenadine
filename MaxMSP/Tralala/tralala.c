@@ -251,19 +251,6 @@ void tralala_jsave(t_tll *x, t_dictionary *d)
     }
 }
 
-void tralala_paint(t_tll *x, t_object *pv)
-{
-    post("!");
-    tralala_paintBackground(x, pv);
-    tralala_paintDictionary(x, pv);
-}
-
-void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
-{
-    jrgba_copy(&params->d_boxfillcolor, &x->background);
-    jrgba_copy(&params->d_bordercolor, &x->border);
-}
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -

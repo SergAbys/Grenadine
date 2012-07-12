@@ -15,18 +15,20 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "tralala.h"
-#include "ext_quickmap.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TINY 2
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
+#define TLL_SYM_BPM             (tll_table.bpm)
+#define TLL_SYM_CHANCE          (tll_table.chance)
+#define TLL_SYM_VELOCITY        (tll_table.velocity)
+#define TLL_SYM_CHANNEL         (tll_table.channel)
+#define TLL_SYM_CHORD           (tll_table.chord)
+#define TLL_SYM_CELL            (tll_table.cell)
+#define TLL_SYM_VALUE           (tll_table.value)
+#define TLL_SYM_SCALE           (tll_table.scale)
+#define TLL_SYM_PATTERN         (tll_table.pattern)
 #define TLL_SYM_END             (tll_table.end)
 #define TLL_SYM_CLEAR           (tll_table.clear)
 #define TLL_SYM_TRALALA         (tll_table.tralala)
@@ -50,6 +52,15 @@
 // -------------------------------------------------------------------------------------------------------------
     
 typedef struct _tllSymbols {
+    t_symbol *bpm;
+    t_symbol *chance;
+    t_symbol *velocity;
+    t_symbol *channel;
+    t_symbol *chord;
+    t_symbol *cell;
+    t_symbol *value;
+    t_symbol *scale;
+    t_symbol *pattern;
     t_symbol *end;
     t_symbol *clear;
     t_symbol *tralala;
