@@ -148,7 +148,7 @@
 		comments = "warning: initialization from incompatible pointer type";
 		fRef = 96E4A85615ADD2DA003BF81E /* tralalaPaint.c */;
 		rLen = 1;
-		rLoc = 82;
+		rLoc = 76;
 		rType = 1;
 	};
 	962AFD9615AE974E00630356 /* PBXTextBookmark */ = {
@@ -156,7 +156,7 @@
 		fRef = 96E4A85615ADD2DA003BF81E /* tralalaPaint.c */;
 		name = "tralalaPaint.c: 70";
 		rLen = 0;
-		rLoc = 3147;
+		rLoc = 2963;
 		rType = 0;
 		vrLen = 508;
 		vrLoc = 2602;
@@ -166,7 +166,7 @@
 		comments = "warning: unused variable 'lookup'";
 		fRef = 96E4A85615ADD2DA003BF81E /* tralalaPaint.c */;
 		rLen = 1;
-		rLoc = 82;
+		rLoc = 76;
 		rType = 1;
 	};
 	962AFD9A15AE975600630356 /* PBXTextBookmark */ = {
@@ -174,7 +174,7 @@
 		fRef = 96E4A85615ADD2DA003BF81E /* tralalaPaint.c */;
 		name = "t_symbol *lookup[ ] = { TLL_SYM_BPM };";
 		rLen = 233;
-		rLoc = 3147;
+		rLoc = 2963;
 		rType = 0;
 		vrLen = 508;
 		vrLoc = 2602;
@@ -184,7 +184,7 @@
 		fRef = 96E4A85615ADD2DA003BF81E /* tralalaPaint.c */;
 		name = "tralalaPaint.c: 90";
 		rLen = 0;
-		rLoc = 3706;
+		rLoc = 3522;
 		rType = 0;
 		vrLen = 776;
 		vrLoc = 2836;
@@ -203,9 +203,9 @@
 	};
 	9676982513B7784800FE77F4 /* tralala.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 12650}}";
-			sepNavSelRange = "{9876, 0}";
-			sepNavVisRect = "{{0, 6114}, {1233, 643}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1233, 10500}}";
+			sepNavSelRange = "{9306, 0}";
+			sepNavVisRect = "{{0, 6082}, {1233, 643}}";
 			sepNavWindowFrame = "{{-1, 6}, {1278, 772}}";
 		};
 	};
@@ -219,9 +219,9 @@
 	};
 	96D843C315824D41005B41A9 /* tralala.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1236, 2300}}";
-			sepNavSelRange = "{2476, 0}";
-			sepNavVisRect = "{{0, 1655}, {1236, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1236, 2125}}";
+			sepNavSelRange = "{2180, 0}";
+			sepNavVisRect = "{{0, 1480}, {1236, 645}}";
 			sepNavWindowFrame = "{{-1, 4}, {1281, 774}}";
 		};
 	};
@@ -237,7 +237,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1235, 9650}}";
 			sepNavSelRange = "{2515, 0}";
-			sepNavVisRect = "{{0, 1888}, {1235, 645}}";
+			sepNavVisRect = "{{0, 9005}, {1235, 645}}";
 			sepNavWindowFrame = "{{-1, 2}, {1280, 774}}";
 		};
 	};
@@ -245,15 +245,15 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1235, 2375}}";
 			sepNavSelRange = "{1272, 0}";
-			sepNavVisRect = "{{0, 1730}, {1235, 645}}";
+			sepNavVisRect = "{{0, 0}, {1235, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1280, 774}}";
 		};
 	};
 	96E4A85515ADD2DA003BF81E /* tralalaPaint.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1236, 1325}}";
-			sepNavSelRange = "{2169, 0}";
-			sepNavVisRect = "{{0, 680}, {1236, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1236, 1350}}";
+			sepNavSelRange = "{2311, 0}";
+			sepNavVisRect = "{{0, 705}, {1236, 645}}";
 			sepNavWindowFrame = "{{-2, 4}, {1281, 774}}";
 		};
 	};
@@ -267,17 +267,17 @@
 	};
 	96E4A85F15ADD3A1003BF81E /* tralalaUser.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1236, 2175}}";
-			sepNavSelRange = "{1776, 0}";
-			sepNavVisRect = "{{0, 208}, {1236, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1236, 3550}}";
+			sepNavSelRange = "{2872, 0}";
+			sepNavVisRect = "{{0, 0}, {1236, 645}}";
 			sepNavWindowFrame = "{{-2, 4}, {1281, 774}}";
 		};
 	};
 	96E4A86015ADD3A1003BF81E /* tralalaUser.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1236, 1000}}";
-			sepNavSelRange = "{1219, 0}";
-			sepNavVisRect = "{{0, 355}, {1236, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1236, 1100}}";
+			sepNavSelRange = "{1248, 0}";
+			sepNavVisRect = "{{0, 455}, {1236, 645}}";
 			sepNavWindowFrame = "{{15, -1}, {1281, 774}}";
 		};
 	};

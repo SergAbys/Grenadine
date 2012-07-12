@@ -61,31 +61,24 @@ typedef struct _tll {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void *tralala_new           (t_symbol *s, long argc, t_atom *argv);
+void *tralala_new       (t_symbol *s, long argc, t_atom *argv);
 
-void tralala_init           (t_tll *x, t_symbol *s, short argc, t_atom *argv);
-void tralala_free           (t_tll *x);
+void tralala_init       (t_tll *x, t_symbol *s, short argc, t_atom *argv);
+void tralala_free       (t_tll *x);
+void tralala_assist     (t_tll *x, void *b, long m, long a, char *s);
+void tralala_jsave      (t_tll *x, t_dictionary *d);
 
-void tralala_assist         (t_tll *x, void *b, long m, long a, char *s);
-void tralala_jsave          (t_tll *x, t_dictionary *d);
+void tralala_store      (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_restore    (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 
-void tralala_key            (t_tll *x, t_object *pv, long keycode, long m, long textcharacter);
-void tralala_wheel          (t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc);
-void tralala_down           (t_tll *x, t_object *pv, t_pt pt, long m);
+void tralala_callback   (void *ptr, PIZEvent *event);
 
-t_max_err tralala_notify    (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, void *data);
-
-void tralala_store          (t_tll *x, t_symbol *s, long argc, t_atom *argv);
-void tralala_restore        (t_tll *x, t_symbol *s, long argc, t_atom *argv);
-
-void tralala_callback       (void *ptr, PIZEvent *event);
-
-void tralala_play           (t_tll *x, t_symbol *s, long argc, t_atom *argv);
-void tralala_loop           (t_tll *x, t_symbol *s, long argc, t_atom *argv);
-void tralala_stop           (t_tll *x, t_symbol *s, long argc, t_atom *argv);
-void tralala_unloop         (t_tll *x, t_symbol *s, long argc, t_atom *argv);
-void tralala_list           (t_tll *x, t_symbol *s, long argc, t_atom *argv);
-void tralala_anything       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_play       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_loop       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_stop       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_unloop     (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_list       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_anything   (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

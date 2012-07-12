@@ -23,6 +23,61 @@ extern t_tllSymbols tll_table;
 #pragma mark ---
 #pragma mark -
 
+void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacter)
+{
+	;
+}
+
+void tralala_wheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc)
+{
+    long h = object_attr_getlong(x, TLL_SYM_XOFFSET) - (x_inc * 100);
+    long v = object_attr_getlong(x, TLL_SYM_YOFFSET) - (y_inc * 100);
+        
+    object_attr_setlong(x, TLL_SYM_XOFFSET, h);
+    object_attr_setlong(x, TLL_SYM_YOFFSET, v);
+}
+
+void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
+{	
+    if ((m & eControlKey) || !(m & eShiftKey)) {
+        dictionary_clear(x->status);
+    }
+    
+    if (m & eCommandKey) {
+        ;
+    } else if (m & eControlKey) {
+        long k;
+        if (k = tralala_hitZone(x, pt)) {
+            dictionary_appendlong(x->status, TLL_SYM_ZONE, k);
+        }
+    
+    } else {
+        t_symbol *s = NULL;
+        if (s = tralala_hitNote(x, pt)) {
+            if (dictionary_hasentry(x->status, s)) {
+                t_symbol *last = NULL;
+                dictionary_getsym(x->status, TLL_SYM_LAST, &last);
+                if (s == last) {
+                    dictionary_deleteentry(x->status, TLL_SYM_LAST);
+                }
+                dictionary_deleteentry(x->status, s);
+                
+            } else {
+                dictionary_appendsym(x->status, TLL_SYM_LAST, s);
+                dictionary_appendlong(x->status, s, TLL_SELECTED);
+            }
+        }
+    }
+    
+    TLL_DIRTY_ZONE
+    TLL_DIRTY_NOTE
+    jbox_redraw((t_jbox *)x);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 long tralala_hitZone(t_tll *x, t_pt pt)
 {
     long argc, k = 0;

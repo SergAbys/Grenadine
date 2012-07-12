@@ -32,8 +32,12 @@ enum {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-long        tralala_hitZone    (t_tll *x, t_pt pt);
-t_symbol    *tralala_hitNote   (t_tll *x, t_pt pt);
+void     tralala_key        (t_tll *x, t_object *pv, long keycode, long m, long textcharacter);
+void     tralala_wheel      (t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc);
+void     tralala_down       (t_tll *x, t_object *pv, t_pt pt, long m);
+
+long     tralala_hitZone    (t_tll *x, t_pt pt);
+t_symbol *tralala_hitNote   (t_tll *x, t_pt pt);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

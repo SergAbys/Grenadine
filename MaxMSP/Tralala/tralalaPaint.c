@@ -49,12 +49,6 @@ void tralala_paint(t_tll *x, t_object *pv)
     tralala_paintDictionary(x, pv);
 }
 
-void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
-{
-    jrgba_copy(&params->d_boxfillcolor, &x->background);
-    jrgba_copy(&params->d_bordercolor, &x->border);
-}
-
 void tralala_paintBackground(t_tll *x, t_object *pv)
 {
     double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
@@ -148,6 +142,39 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     object_free(notes[0]);
     object_free(notes[1]);
     object_free(notes[2]);
+}
+
+void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
+{
+    jrgba_copy(&params->d_boxfillcolor, &x->background);
+    jrgba_copy(&params->d_bordercolor, &x->border);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+t_max_err tralala_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, void *data)
+{
+    t_symbol *name = NULL;
+    
+    if (msg == TLL_SYM_ATTR_MODIFIED && (name = (t_symbol *)object_method(data, TLL_SYM_GETNAME))) {
+    //
+    if (name == TLL_SYM_COLOR) {
+        TLL_DIRTY_BACKGROUND
+        TLL_DIRTY_ZONE
+        TLL_DIRTY_NOTE
+        
+    } else if ((name == TLL_SYM_HCOLOR1) && (name == TLL_SYM_HCOLOR2)) {
+        TLL_DIRTY_ZONE
+        TLL_DIRTY_NOTE
+    }
+    
+    jbox_redraw(x);
+    //
+    }
+    
+    return MAX_ERR_NONE;
 }
 
 // -------------------------------------------------------------------------------------------------------------
