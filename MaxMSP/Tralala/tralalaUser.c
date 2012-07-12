@@ -21,8 +21,9 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL long     tralala_hitZone    (t_tll *x, t_pt pt);
-PIZ_LOCAL t_symbol *tralala_hitNote   (t_tll *x, t_pt pt);
+PIZ_LOCAL void     tralala_addNote  (t_tll *x, t_pt pt);
+PIZ_LOCAL long     tralala_hitZone  (t_tll *x, t_pt pt);
+PIZ_LOCAL t_symbol *tralala_hitNote (t_tll *x, t_pt pt);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -48,12 +49,12 @@ void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
 {	
     TLL_LOCK
     
-    if ((m & eControlKey) || !(m & eShiftKey)) {
+    if (!(m & eShiftKey)) {
         dictionary_clear(x->status);
     }
     
     if (m & eCommandKey) {
-        ;
+        tralala_addNote(x, pt);
         
     } else if (m & eControlKey) {
         long k;
@@ -85,11 +86,26 @@ void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
     jbox_redraw((t_jbox *)x);
 }
 
+void tralala_move(t_tll *x, t_object *pv, t_pt pt, long m)
+{
+    jbox_redraw((t_jbox *)x);
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 #pragma mark ---
 #pragma mark -
+
+void tralala_addNote(t_tll *x, t_pt pt)
+{
+    t_atom a[2];
+    
+    atom_setlong(a, X_TO_POSITION(pt.x));
+    atom_setlong(a + 1, Y_TO_PITCH(pt.y));
+    
+    tralala_parseMessage(x, TLL_SYM_NOTE, 2, a);
+}
 
 long tralala_hitZone(t_tll *x, t_pt pt)
 {

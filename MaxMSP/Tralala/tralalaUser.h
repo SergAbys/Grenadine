@@ -35,6 +35,7 @@ enum {
 void tralala_key    (t_tll *x, t_object *pv, long keycode, long m, long textcharacter);
 void tralala_wheel  (t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc);
 void tralala_down   (t_tll *x, t_object *pv, t_pt pt, long m);
+void tralala_move   (t_tll *x, t_object *pv, t_pt pt, long m);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

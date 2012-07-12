@@ -285,7 +285,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>208 294 421 389 0 0 1280 778 </string>
+								<string>209 311 421 389 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -425,8 +425,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D663BB15AF1CBB00CCB053</string>
-				<string>96D663BC15AF1CBB00CCB053</string>
+				<string>96D6641815AF31AC00CCB053</string>
+				<string>96D6641915AF31AC00CCB053</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -463,7 +463,7 @@
 		<string>/Users/jeantoto/Dev/Grenadine/MaxMSP/Tralala/tralala.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>208 294 421 389 0 0 1280 778 </string>
+	<string>209 311 421 389 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -628,20 +628,20 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {1205, 435}}</string>
+								<string>{{0, 0}, {1205, 378}}</string>
 								<key>RubberWindowFrame</key>
 								<string>28 91 1205 635 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>435pt</string>
+							<string>378pt</string>
 						</dict>
 						<dict>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 5}, {1205, 149}}</string>
+								<string>{{0, 192}, {1205, 19}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>
@@ -654,14 +654,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 440}, {1205, 154}}</string>
+								<string>{{0, 383}, {1205, 211}}</string>
 								<key>RubberWindowFrame</key>
 								<string>28 91 1205 635 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXBuildResultsModule</string>
 							<key>Proportion</key>
-							<string>154pt</string>
+							<string>211pt</string>
 						</dict>
 					</array>
 					<key>Proportion</key>
@@ -679,7 +679,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D663BD15AF1CBB00CCB053</string>
+				<string>96D6641A15AF31AC00CCB053</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -819,12 +819,14 @@
 							<key>Dock</key>
 							<array>
 								<dict>
+									<key>BecomeActive</key>
+									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>tralalaPaint.c</string>
+										<string>tralalaUser.c</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -845,8 +847,6 @@
 							<string>443pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -882,8 +882,8 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>96D6639C15AF182C00CCB053</string>
-				<string>96D6639D15AF182C00CCB053</string>
+				<string>96D663EA15AF27E500CCB053</string>
+				<string>96D663EB15AF27E500CCB053</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>
