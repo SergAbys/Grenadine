@@ -43,9 +43,7 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define PIZ_MINIMUM_BPM         40
-#define PIZ_MAXIMUM_BPM         300
-#define PIZ_CONSTANT_LEARN      5
+#define PIZ_CONSTANT_LEARN 5
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -56,7 +54,6 @@
 PIZError pizAgentInit(PIZAgent *x, const PIZEvent *event)
 {
     pizSequenceInit(x->sequence);
-    pizAgentNotify(x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
     
     return PIZ_GOOD;
 }
@@ -152,9 +149,9 @@ PIZError pizAgentBpm(PIZAgent *x, const PIZEvent *event)
     
     if (!(pizEventData(event, &argc, &argv))) {
     //
-    if ((argv[0] >= PIZ_MINIMUM_BPM) && (argv[0] <= PIZ_MAXIMUM_BPM)) {
+    if ((argv[0] >= PIZ_SEQUENCE_MINIMUM_BPM) && (argv[0] <= PIZ_SEQUENCE_MAXIMUM_BPM)) {
         x->bpm = argv[0];
-        pizAgentNotify(x, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
+        pizSequenceSetBpm(x->sequence, event);
             
         pizNanoSet(&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);    
         pizTimeCopy(&x->grainEnd, &x->grainStart);

@@ -101,6 +101,7 @@ PIZSequence *pizSequenceNew(struct _PIZAgent *owner)
         x->up        = PIZ_DEFAULT_UP;
         x->count     = 0;
         x->index     = 0;
+        x->bpm       = PIZ_SEQUENCE_DEFAULT_BPM;
         x->chance    = PIZ_DEFAULT_CHANCE;
         x->velocity  = 0;
         x->channel   = PIZ_DEFAULT_CHANNEL;

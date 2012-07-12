@@ -164,7 +164,7 @@ void pizSequenceEachDump(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote 
                   note->values[PIZ_VALUE_DURATION], 
                   note->values[PIZ_VALUE_CHANNEL],
                   note->tag,
-                  x->owner->bpm };
+                  x->bpm };
                 
     x->tempError |= pizAgentNotify(x->owner, PIZ_EVENT_NOTE_DUMPED, 7, a);
 }

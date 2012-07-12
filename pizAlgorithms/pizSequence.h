@@ -64,12 +64,15 @@
 
 #define PIZ_SEQUENCE_MAXIMUM_NOTES      128
 #define PIZ_SEQUENCE_MAXIMUM_DURATION   96
+#define PIZ_SEQUENCE_MINIMUM_BPM        40
+#define PIZ_SEQUENCE_MAXIMUM_BPM        300
                                         
 #define PIZ_SEQUENCE_SIZE_TEMPORARY     128
 #define PIZ_SEQUENCE_SIZE_TIMELINE      288 
 
 #define PIZ_SEQUENCE_DEFAULT_PITCH      60
 #define PIZ_SEQUENCE_DEFAULT_VELOCITY   80
+#define PIZ_SEQUENCE_DEFAULT_BPM        120
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -181,6 +184,7 @@ typedef struct _PIZSequence {
     long                up;
     long                count;
     long                index;
+    long                bpm;
     long                chance;
     long                velocity;
     long                channel;

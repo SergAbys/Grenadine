@@ -81,6 +81,19 @@ PIZ_LOCAL bool pizSequenceIsValidNoteValue(long value);
 #pragma mark ---
 #pragma mark -
 
+PIZError pizSequenceSetBpm(PIZSequence *x, const PIZEvent *event)
+{
+    long argc;
+    long *argv = NULL;
+    
+    if (!(pizEventData(event, &argc, &argv))) {
+        x->bpm = argv[0];
+        x->flags |= PIZ_SEQUENCE_FLAG_BPM;
+    }
+    
+    return PIZ_GOOD;
+}
+
 PIZError pizSequenceSetChance(PIZSequence *x, const PIZEvent *event)
 {
     long argc;
