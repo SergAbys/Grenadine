@@ -50,7 +50,7 @@ int main(void)
     class_addmethod(c, (method)tralala_down,        "mousedown",     A_CANT,  0);
     class_addmethod(c, (method)tralala_notify,      "notify",        A_CANT,  0);
     class_addmethod(c, (method)tralala_store,       "store",         A_GIMME, 0);
-    class_addmethod(c, (method)tralala_restore,     "restore",       A_GIMME, 0);
+    class_addmethod(c, (method)tralala_recall,      "recall",        A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "bang",          A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "play",          A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "end",           A_GIMME, 0);
@@ -275,8 +275,9 @@ void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
     }
 }
            
-void tralala_restore(t_tll *x, t_symbol *s, long argc, t_atom *argv)
+void tralala_recall(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
+    t_dictionary *d = NULL;
     t_dictionary *t = NULL;
     t_symbol *name = TLL_SYM_UNTITLED;
     
@@ -292,10 +293,13 @@ void tralala_restore(t_tll *x, t_symbol *s, long argc, t_atom *argv)
         }
     }
     
-    if ((dictionary_entryisdictionary(x->data, name)) 
-        && !(dictionary_getdictionary(x->data, name, (t_object **)&t))) {
-        tralala_send(x, PIZ_EVENT_CLEAR, 0, NULL);
-        tralala_parseDictionary(x, t);
+    if (!(dictionary_getdictionary(x->data, name, (t_object **)&d))) {
+        if (t = dictionary_new ( )) {
+            dictionary_copyunique(t, d);
+            tralala_send(x, PIZ_EVENT_CLEAR, 0, NULL);
+            tralala_parseDictionary(x, t);
+            object_free(t);
+        }
     }
 }
 
