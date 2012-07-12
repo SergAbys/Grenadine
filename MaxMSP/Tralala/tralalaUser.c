@@ -46,12 +46,15 @@ void tralala_wheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc, doub
 
 void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
 {	
+    TLL_LOCK
+    
     if ((m & eControlKey) || !(m & eShiftKey)) {
         dictionary_clear(x->status);
     }
     
     if (m & eCommandKey) {
         ;
+        
     } else if (m & eControlKey) {
         long k;
         if (k = tralala_hitZone(x, pt)) {
@@ -61,20 +64,21 @@ void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
     } else {
         t_symbol *s = NULL;
         if (s = tralala_hitNote(x, pt)) {
-            if (dictionary_hasentry(x->status, s)) {
-                t_symbol *last = NULL;
-                dictionary_getsym(x->status, TLL_SYM_LAST, &last);
-                if (s == last) {
-                    dictionary_deleteentry(x->status, TLL_SYM_LAST);
-                }
-                dictionary_deleteentry(x->status, s);
-                
-            } else {
-                dictionary_appendsym(x->status, TLL_SYM_LAST, s);
-                dictionary_appendlong(x->status, s, TLL_SELECTED);
-            }
+        //
+        if (dictionary_hasentry(x->status, s)) {
+            t_symbol *last = NULL;
+            dictionary_getsym(x->status, TLL_SYM_LAST, &last);
+            if (s == last) { dictionary_deleteentry(x->status, TLL_SYM_LAST); }
+            dictionary_deleteentry(x->status, s);
+        } else {
+            dictionary_appendsym(x->status, TLL_SYM_LAST, s);
+            dictionary_appendlong(x->status, s, TLL_SELECTED);
+        }
+        //
         }
     }
+    
+    TLL_UNLOCK
     
     TLL_DIRTY_ZONE
     TLL_DIRTY_NOTE

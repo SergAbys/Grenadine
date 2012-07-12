@@ -138,6 +138,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     t_tll *x = NULL;
     t_dictionary *d = NULL;
     t_dictionary *t = NULL;
+    PIZError err = PIZ_GOOD;
     
     if (d = object_dictionaryarg(argc, argv)) {
     //
@@ -161,12 +162,14 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     jbox_ready((t_jbox *)x);
     attr_dictionary_process(x, d);
     
-    x->data    = dictionary_new( );
-    x->current = dictionary_new( );
-    x->status  = dictionary_new( );
-    x->layer   = jtextlayout_create( );
+    err |= !(x->data = dictionary_new( ));
+    err |= !(x->current = dictionary_new( ));
+    err |= !(x->status = dictionary_new( ));
+    err |= !(x->layer = jtextlayout_create( ));
     
-    if (x->data && x->current && x->status && x->layer) {
+    err |= (systhread_mutex_new(&x->mutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
+    
+    if (!err) {
         if (dictionary_entryisdictionary(d, TLL_SYM_TRALALA)) {
             dictionary_getdictionary(d, TLL_SYM_TRALALA, (t_object **)&t);
             dictionary_copyunique(x->data, t);
@@ -174,14 +177,15 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
         
         x->identifier = ATOMIC_INCREMENT(&identifier);
             
-        if (x->agent = pizAgentNew(x->identifier)) {
+        if (!(err |= !(x->agent = pizAgentNew(x->identifier)))) {
             pizAgentAttach(x->agent, (void *)x, (PIZMethod)tralala_callback);
             defer_low(x, (method)tralala_init, NULL, 0, NULL);
-
-        } else {
-            object_free(x);
-            x = NULL;
-        }
+        } 
+    } 
+    
+    if (err) {
+        object_free(x);
+        x = NULL;
     }
     //
     }	
@@ -209,13 +213,17 @@ void tralala_free(t_tll *x)
         pizAgentFree(x->agent);
     }
     
+    if (x->mutex) {
+        systhread_mutex_free(x->mutex);
+    }
+    
     if (x->layer) {
         jtextlayout_destroy(x->layer);
     }
     
-    object_free(x->data);
-    object_free(x->current);
     object_free(x->status);
+    object_free(x->current);
+    object_free(x->data);
     
     jbox_free((t_jbox *)x);
 }

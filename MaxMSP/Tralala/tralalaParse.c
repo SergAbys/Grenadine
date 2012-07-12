@@ -313,53 +313,50 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
         atom_setlong(data + i + 1, *(ptr + i));
     }
     
+    TLL_LOCK
+    
     if (!(quickmap_lookup_key2(tll_notification, (void *)(code + TINY), (void **)&s))) {
-    //
-    if (code == PIZ_EVENT_CHANGED_SCALE) {
-        t_symbol *sym1 = NULL;
-        t_symbol *sym2 = NULL;
+        
+        if (code == PIZ_EVENT_CHANGED_ZONE) {
+            TLL_DIRTY_ZONE
+            
+        } else if (code == PIZ_EVENT_CHANGED_SCALE) {
+            t_symbol *sym1 = NULL;
+            t_symbol *sym2 = NULL;
 
-        quickmap_lookup_key2(tll_key,  (void *)((*(ptr + 0)) + TINY), (void **)&sym1);
-        quickmap_lookup_key2(tll_type, (void *)((*(ptr + 1)) + TINY), (void **)&sym2);
+            quickmap_lookup_key2(tll_key,  (void *)((*(ptr + 0)) + TINY), (void **)&sym1);
+            quickmap_lookup_key2(tll_type, (void *)((*(ptr + 1)) + TINY), (void **)&sym2);
 
-        atom_setsym(data + 1, sym1);
-        atom_setsym(data + 2, sym2);
-    }
+            atom_setsym(data + 1, sym1);
+            atom_setsym(data + 2, sym2);
+        }
 
-    atom_setsym(data, s);
-    dictionary_appendatoms(x->current, s, k + 1, data);
+        atom_setsym(data, s);
+        dictionary_appendatoms(x->current, s, k + 1, data); 
 
-    if (code == PIZ_EVENT_CHANGED_ZONE) {
-        TLL_DIRTY_ZONE
-    } 
-    // 
     } else {
-    //
-    tralala_symbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
+        tralala_symbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
+            
+        if (code == PIZ_EVENT_NOTE_REMOVED) {
         
-    if (code == PIZ_EVENT_NOTE_REMOVED) {
-    //
-    if (dictionary_hasentry(x->status, s)) {
-        t_symbol *last = NULL;
-        
-        dictionary_getsym(x->status, TLL_SYM_LAST, &last);
-        if (s == last) {
-            dictionary_deleteentry(x->status, TLL_SYM_LAST);
+            if (dictionary_hasentry(x->status, s)) {
+                t_symbol *last = NULL;
+                dictionary_getsym(x->status, TLL_SYM_LAST, &last);
+                if (s == last) { dictionary_deleteentry(x->status, TLL_SYM_LAST); }
+                dictionary_deleteentry(x->status, s);
+            }
+            
+            dictionary_deleteentry(x->current, s);
+
+        } else {
+            atom_setsym(data, TLL_SYM_NOTE);
+            dictionary_appendatoms(x->current, s, k - 1, data);
         }
         
-        dictionary_deleteentry(x->status, s);
+        TLL_DIRTY_NOTE
     }
     
-    dictionary_deleteentry(x->current, s);
-    //
-    } else {
-        atom_setsym(data, TLL_SYM_NOTE);
-        dictionary_appendatoms(x->current, s, k - 1, data);
-    }
-    
-    TLL_DIRTY_NOTE
-    //
-    }
+    TLL_UNLOCK
     
     jbox_redraw((t_jbox *)x);
 }

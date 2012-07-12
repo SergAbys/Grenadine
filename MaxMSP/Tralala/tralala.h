@@ -18,6 +18,7 @@
 #include "ext_obex.h"
 #include "ext_atomic.h"
 #include "ext_strings.h"
+#include "ext_systhread.h"
 #include "jpatcher_api.h"
 #include "jgraphics.h"
 
@@ -30,31 +31,39 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+#define TLL_LOCK    systhread_mutex_lock (&x->mutex); 
+#define TLL_UNLOCK  systhread_mutex_unlock (&x->mutex); 
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 typedef struct _tll {
-    t_jbox          box;
-    t_atom          played[4];
-    t_atom          dumped[5];
-    t_atom          link;
-    t_jrgba         text;
-    t_jrgba         color;
-    t_jrgba         hcolor1;
-    t_jrgba         hcolor2;
-    t_jrgba         border;
-    t_jrgba         background;
-    PIZTime         time;
-    long            identifier;
-    long            offsetX;
-    long            offsetY;
-    long            viewText;
-    t_jtextlayout   *layer; 
-    t_dictionary    *data;
-    t_dictionary    *current;
-    t_dictionary    *status;
-    PIZAgent        *agent;
-    void            *left;
-    void            *middleLeft;
-    void            *middleRight;
-    void            *right;
+    t_jbox              box;
+    t_systhread_mutex   mutex;
+    t_atom              played[4];
+    t_atom              dumped[5];
+    t_atom              link;
+    t_jrgba             text;
+    t_jrgba             color;
+    t_jrgba             hcolor1;
+    t_jrgba             hcolor2;
+    t_jrgba             border;
+    t_jrgba             background;
+    PIZTime             time;
+    long                identifier;
+    long                offsetX;
+    long                offsetY;
+    long                viewText;
+    t_jtextlayout       *layer; 
+    t_dictionary        *data;
+    t_dictionary        *current;
+    t_dictionary        *status;
+    PIZAgent            *agent;
+    void                *left;
+    void                *middleLeft;
+    void                *middleRight;
+    void                *right;
     } t_tll;
 
 // -------------------------------------------------------------------------------------------------------------

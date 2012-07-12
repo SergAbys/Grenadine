@@ -24,7 +24,7 @@ PIZ_LOCAL void tralala_paintBackground      (t_tll *x, t_object *pv);
 PIZ_LOCAL void tralala_paintDictionary      (t_tll *x, t_object *pv);
 
 PIZ_LOCAL void tralala_paintText            (t_tll *x, t_object *pv, char *string);
-PIZ_LOCAL void tralala_paintZone            (t_tll *x, t_object *pv, long argc, t_atom *argv);
+PIZ_LOCAL void tralala_paintZone            (t_tll *x, t_object *pv, long argc, t_atom *argv, long status);
 PIZ_LOCAL void tralala_paintNote            (t_tll *x, t_object *pv, t_atomarray **notes);
 
 PIZ_LOCAL void tralala_strncatZone          (char *dst, long argc, t_atom *argv);
@@ -108,6 +108,7 @@ void tralala_paintBackground(t_tll *x, t_object *pv)
 
 void tralala_paintDictionary(t_tll *x, t_object *pv)
 {
+    long status = 0;
     long i, argc, n = 0;
     t_atom *argv = NULL;
     t_symbol *last = NULL;
@@ -132,6 +133,8 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     err |= !(notes[1] = atomarray_new(0, NULL));
     err |= !(notes[2] = atomarray_new(0, NULL));
     
+    TLL_LOCK
+            
     for (i = 0; i < 9; i++) {
         if (!(dictionary_getatoms(x->current, s[i], &argc, &argv))) {
             tralala_strncatAttribute(string, argc, argv);
@@ -171,14 +174,18 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     //
     }
     
-    tralala_paintNote(x, pv, notes);
+    dictionary_getlong(x->status, TLL_SYM_ZONE, &status);
+    err |= (dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv)) != MAX_ERR_NONE;
     
-    if (!(dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv))) {
-        tralala_paintZone(x, pv, argc, argv);
-    }
+    TLL_UNLOCK 
     
-    if (x->viewText) {
-        tralala_paintText(x, pv, string);
+    if (!err) {
+        tralala_paintNote(x, pv, notes);
+        tralala_paintZone(x, pv, argc, argv, status);
+        
+        if (x->viewText) {
+            tralala_paintText(x, pv, string);
+        }
     }
     
     object_free(notes[0]);
@@ -192,12 +199,12 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
 
 void tralala_paintText(t_tll *x, t_object *pv, char *string)
 {
-    t_rect rect;
+    t_rect r;
     t_jgraphics *g = NULL; 
     t_jfont *font = NULL;
     t_jgraphics_text_justification justification = JGRAPHICS_TEXT_JUSTIFICATION_RIGHT;
     
-    jbox_get_rect_for_view((t_object *)x, pv, &rect);
+    jbox_get_rect_for_view((t_object *)x, pv, &r);
     
     g = (t_jgraphics *)patcherview_get_jgraphics(pv);
     font = jfont_create((jbox_get_fontname(((t_object *)x)))->s_name, 
@@ -205,14 +212,14 @@ void tralala_paintText(t_tll *x, t_object *pv, char *string)
                 (jbox_get_font_weight((t_object *)x)), 
                 (jbox_get_fontsize((t_object *)x))); 
     
-    jtextlayout_set(x->layer, string, font, 5., 5., rect.width - 10., rect.height - 5., justification, 0L);
+    jtextlayout_set(x->layer, string, font, 5., 5., r.width - 10., r.height - 5., justification, 0L);
     jtextlayout_settextcolor(x->layer, &x->text);    
     jtextlayout_draw(x->layer, g);
     
     jfont_destroy(font);
 }
 
-void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv)
+void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv, long status)
 {
     double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
     double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
@@ -220,35 +227,34 @@ void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv)
     
     if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_ZONE, w, h)) {
     //
-    t_rect rect; 
+    t_rect r; 
     long zone[4];
-    long status = 0;
     
     atom_getlong_array(argc - 1, argv + 1, 4, zone);
     
-    if (!(dictionary_getlong(x->status, TLL_SYM_ZONE, &status)) && (status == TLL_SELECTED)) {
+    if (status == TLL_SELECTED) {
         jgraphics_set_source_jrgba(g, &x->hcolor2);
     } else {
         jgraphics_set_source_jrgba(g, &x->color);
     }
     
-    rect.x = POSITION_TO_X(zone[0]);
-    rect.y = PITCH_TO_Y_UP(zone[3]); 
-    rect.width  = POSITION_TO_X(zone[1]) - rect.x; 
-    rect.height = PITCH_TO_Y_DOWN(zone[2]) - rect.y;
+    r.x = POSITION_TO_X(zone[0]);
+    r.y = PITCH_TO_Y_UP(zone[3]); 
+    r.width  = POSITION_TO_X(zone[1]) - r.x; 
+    r.height = PITCH_TO_Y_DOWN(zone[2]) - r.y;
         
-    jgraphics_rectangle_draw_fast(g, rect.x, rect.y, rect.width, rect.height, 1.);
+    jgraphics_rectangle_draw_fast(g, r.x, r.y, r.width, r.height, 1.);
     
     if (status > TLL_SELECTED) {
         switch (status) {
-            case TLL_SELECTED_START : rect.x = POSITION_TO_X(zone[0]); rect.width = 1.; break ;
-            case TLL_SELECTED_END   : rect.x = POSITION_TO_X(zone[1]) - 1.; rect.width = 1.; break ;
-            case TLL_SELECTED_DOWN  : rect.y = PITCH_TO_Y_DOWN(zone[2]) - 1.; rect.height = 1.; break;
-            case TLL_SELECTED_UP    : rect.height = 1.; break;
+            case TLL_SELECTED_START : r.x = POSITION_TO_X(zone[0]); r.width = 3.; break ;
+            case TLL_SELECTED_END   : r.x = POSITION_TO_X(zone[1]) - 3.; r.width = 3.; break ;
+            case TLL_SELECTED_DOWN  : r.y = PITCH_TO_Y_DOWN(zone[2]) - 3.; r.height = 3.; break;
+            case TLL_SELECTED_UP    : r.height = 3.; break;
         }
         
         jgraphics_set_source_jrgba(g, &x->hcolor2);
-        jgraphics_rectangle_draw_fast(g, rect.x, rect.y, rect.width, rect.height, 1.);
+        jgraphics_rectangle_draw_fast(g, r.x, r.y, r.width, r.height, 1.);
     }
     
     jbox_end_layer((t_object*)x, pv, TLL_SYM_ZONE);
@@ -275,15 +281,15 @@ void tralala_paintNote(t_tll *x, t_object *pv, t_atomarray **notes)
     //
     long j;
     for (j = 0; j < atomarray_getsize(notes[i]); j += 6) {
-        t_rect rect;
+        t_rect r;
         long note[5];
         
         atom_getlong_array(5, argv + 1 + j, 5, note);
         
-        rect.x = POSITION_TO_X(note[0]);
-        rect.y = PITCH_TO_Y_UP(note[1]); 
-        rect.width  = POSITION_TO_X(note[0] + note[3]) - rect.x; 
-        rect.height = PITCH_TO_Y_DOWN(note[1]) - rect.y;
+        r.x = POSITION_TO_X(note[0]);
+        r.y = PITCH_TO_Y_UP(note[1]); 
+        r.width  = POSITION_TO_X(note[0] + note[3]) - r.x; 
+        r.height = PITCH_TO_Y_DOWN(note[1]) - r.y;
     
         if (i == 0) {
             jgraphics_set_source_jrgba(g, &x->color);
@@ -293,7 +299,7 @@ void tralala_paintNote(t_tll *x, t_object *pv, t_atomarray **notes)
             jgraphics_set_source_jrgba(g, &x->hcolor2);
         }
         
-        jgraphics_rectangle_fill_fast(g, rect.x, rect.y, rect.width, rect.height);
+        jgraphics_rectangle_fill_fast(g, r.x, r.y, r.width, r.height);
     }
     //
     }
