@@ -30,6 +30,7 @@ PIZ_LOCAL void tralala_paintNote            (t_tll *x, t_object *pv, t_atomarray
 PIZ_LOCAL void tralala_strncatZone          (char *dst, long argc, t_atom *argv);
 PIZ_LOCAL void tralala_strncatNote          (char *dst, long argc, t_atom *argv);
 PIZ_LOCAL void tralala_strncatAttribute     (char *dst, long argc, t_atom *argv);
+PIZ_LOCAL void tralala_strncatCursor        (char *dst, long pitch, long position);
 
 PIZ_LOCAL void tralala_pitchAsString        (char *s, long k, long size);
 
@@ -134,7 +135,16 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     err |= !(notes[2] = atomarray_new(0, NULL));
     
     TLL_LOCK
-            
+    
+    if (!(dictionary_getatoms(x->current, TLL_SYM_CELL, &argc, &argv))) {
+        long cell;
+        if (cell = atom_getlong(argv + 1)) {
+            long pitch = Y_TO_PITCH(x->cursor.y);
+            long position = ((long)((X_TO_POSITION(x->cursor.x)) / cell)) * cell;
+            tralala_strncatCursor(string, pitch, position);
+        }
+    }
+    
     for (i = 0; i < 9; i++) {
         if (!(dictionary_getatoms(x->current, s[i], &argc, &argv))) {
             tralala_strncatAttribute(string, argc, argv);
@@ -353,6 +363,17 @@ void tralala_strncatAttribute(char *dst, long argc, t_atom *argv)
         strncat_zero(dst, "\n", TLL_STRING_SIZE);
         sysmem_freeptr(p);
     }
+}
+
+void tralala_strncatCursor(char *dst, long pitch, long position)
+{   
+    char a[8];
+    char b[8];
+    
+    tralala_pitchAsString(a, CLAMP(pitch, 0, PIZ_MAGIC_PITCH), 8);
+    snprintf_zero(b, 8, "\n%ld\n", CLAMP(position, 0, PIZ_SEQUENCE_SIZE_TIMELINE));
+    strncat_zero(dst, a, TLL_STRING_SIZE);
+    strncat_zero(dst, b, TLL_STRING_SIZE);
 }
 
 // -------------------------------------------------------------------------------------------------------------

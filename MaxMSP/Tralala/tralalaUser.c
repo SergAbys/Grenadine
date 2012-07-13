@@ -88,6 +88,7 @@ void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
 
 void tralala_move(t_tll *x, t_object *pv, t_pt pt, long m)
 {
+    x->cursor = pt;
     jbox_redraw((t_jbox *)x);
 }
 

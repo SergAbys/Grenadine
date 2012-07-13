@@ -278,7 +278,9 @@ void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
     }
     
     if (t = dictionary_new( )) {
+        TLL_LOCK
         dictionary_copyunique(t, x->current);
+        TLL_UNLOCK
         dictionary_appenddictionary(x->data, name, (t_object *)t);
         jpatcher_set_dirty(jbox_get_patcher((t_object *)x), 1);
     }

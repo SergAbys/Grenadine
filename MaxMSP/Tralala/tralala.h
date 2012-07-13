@@ -55,6 +55,7 @@ typedef struct _tll {
     long                offsetX;
     long                offsetY;
     long                viewText;
+    t_pt                cursor;        
     t_jtextlayout       *layer; 
     t_dictionary        *data;
     t_dictionary        *current;
