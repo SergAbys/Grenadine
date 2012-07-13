@@ -31,9 +31,9 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_LOCK    systhread_mutex_lock (&x->mutex); 
-#define TLL_UNLOCK  systhread_mutex_unlock (&x->mutex); 
-
+#define TLL_LOCK    systhread_mutex_lock(&x->mutex);
+#define TLL_UNLOCK  systhread_mutex_unlock(&x->mutex); 
+   
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -

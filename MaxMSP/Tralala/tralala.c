@@ -48,7 +48,11 @@ int main(void)
     class_addmethod(c, (method)tralala_key,         "key",           A_CANT,  0);
     class_addmethod(c, (method)tralala_wheel,       "mousewheel",    A_CANT,  0);
     class_addmethod(c, (method)tralala_down,        "mousedown",     A_CANT,  0);
-    class_addmethod(c, (method)tralala_move,        "mousemove",     A_CANT, 0);
+    class_addmethod(c, (method)tralala_move,        "mousemove",     A_CANT,  0);
+    class_addmethod(c, (method)tralala_drag,        "mousedrag",     A_CANT,  0);
+	class_addmethod(c, (method)tralala_up,          "mouseup",       A_CANT,  0);
+	class_addmethod(c, (method)tralala_enter,       "mouseenter",    A_CANT,  0);
+	class_addmethod(c, (method)tralala_leave,       "mouseleave",    A_CANT,  0);
     class_addmethod(c, (method)tralala_notify,      "notify",        A_CANT,  0);
     class_addmethod(c, (method)tralala_store,       "store",         A_GIMME, 0);
     class_addmethod(c, (method)tralala_recall,      "recall",        A_GIMME, 0);
@@ -327,7 +331,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
     
     x = (t_tll *)ptr;
     pizEventCode(event, &code);
-    
+        
     switch (code) {
     //
     case PIZ_EVENT_NOTE_PLAYED :

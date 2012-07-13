@@ -48,7 +48,6 @@ PIZ_LOCAL void tralala_pitchAsString        (char *s, long k, long size);
 
 void tralala_paint(t_tll *x, t_object *pv)
 {
-    post("!");
     tralala_paintBackground(x, pv);
     tralala_paintDictionary(x, pv);
 }
@@ -74,7 +73,7 @@ t_max_err tralala_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, v
         TLL_DIRTY_ZONE
         TLL_DIRTY_NOTE
         
-    } else if ((name == TLL_SYM_HCOLOR1) && (name == TLL_SYM_HCOLOR2)) {
+    } else if ((name == TLL_SYM_HCOLOR1) || (name == TLL_SYM_HCOLOR2)) {
         TLL_DIRTY_ZONE
         TLL_DIRTY_NOTE
     }
@@ -190,8 +189,13 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     TLL_UNLOCK 
     
     if (!err) {
-        tralala_paintNote(x, pv, notes);
-        tralala_paintZone(x, pv, argc, argv, status);
+        if (!status) {
+            tralala_paintZone(x, pv, argc, argv, status);
+            tralala_paintNote(x, pv, notes);
+        } else {
+            tralala_paintNote(x, pv, notes);
+            tralala_paintZone(x, pv, argc, argv, status);
+        }
         
         if (x->viewText) {
             tralala_paintText(x, pv, string);
@@ -255,7 +259,7 @@ void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv, long sta
         
     jgraphics_rectangle_draw_fast(g, r.x, r.y, r.width, r.height, 1.);
     
-    if (status > TLL_SELECTED) {
+    if (status >= TLL_SELECTED_START) {
         switch (status) {
             case TLL_SELECTED_START : r.x = POSITION_TO_X(zone[0]); r.width = 3.; break ;
             case TLL_SELECTED_END   : r.x = POSITION_TO_X(zone[1]) - 3.; r.width = 3.; break ;
