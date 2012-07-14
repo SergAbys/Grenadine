@@ -78,6 +78,7 @@ t_max_err tralala_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, v
     } else if ((name == TLL_SYM_HCOLOR1) || (name == TLL_SYM_HCOLOR2)) {
         TLL_DIRTY_ZONE
         TLL_DIRTY_NOTES
+        
     } else if (name == TLL_SYM_LASSOCOLOR) {
         TLL_DIRTY_LASSO
     }
@@ -193,18 +194,19 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     if (!err && !(dictionary_getkeys(x->current, &n, &keys))) {
     //
     for (i = 0; i < n; i++) {
-        if (!(dictionary_getatoms(x->current, (*(keys + i)), &argc, &argv))) { 
+        t_symbol *key = (*(keys + i));
+        if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
         //
         if ((atom_getsym(argv) == TLL_SYM_NOTE)) {
             long k, t = 0; 
             
-            if (k = dictionary_hasentry(x->status, (*(keys + i)))) {
-               dictionary_getlong(x->status, (*(keys + i)), &t);
+            if (k = dictionary_hasentry(x->status, key)) {
+               dictionary_getlong(x->status, key, &t);
             }
             
-            if (!k || (t == TLL_SELECTED_SWAP)) {
+            if (!k || (t == TLL_UNSELECTED)) {
                 atomarray_appendatoms(notes[0], argc, argv);
-            } else if ((*(keys + i)) != last) {
+            } else if (key != last) {
                 atomarray_appendatoms(notes[1], argc, argv);
             } else {
                 atomarray_appendatoms(notes[2], argc, argv);

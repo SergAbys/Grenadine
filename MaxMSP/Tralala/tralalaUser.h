@@ -22,8 +22,8 @@
 
 enum {
     TLL_SELECTED        = 1,
-    TLL_SELECTED_GRAB   = 2,
-    TLL_SELECTED_SWAP   = 3,
+    TLL_UNSELECTED      = 2,
+    TLL_SELECTED_GRAB   = 3,
     TLL_SELECTED_START  = 4,
     TLL_SELECTED_END    = 5,
     TLL_SELECTED_DOWN   = 6,
