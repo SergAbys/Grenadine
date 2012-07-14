@@ -144,7 +144,26 @@ void tralala_swapNote(t_tll *x, t_symbol *s)
 
 bool tralala_insideLasso(t_tll *x, t_symbol *s)
 {
-    return false;
+    bool k = false;
+    long argc;
+    t_atom *argv = NULL;
+        
+    if (!(dictionary_getatoms(x->current, s, &argc, &argv))) {
+        double a = POSITION_TO_X(atom_getlong(argv + 1));
+        double b = PITCH_TO_Y_UP(atom_getlong(argv + 2));
+        double c = POSITION_TO_X(atom_getlong(argv + 1) + atom_getlong(argv + 4));
+        double d = PITCH_TO_Y_DOWN(atom_getlong(argv + 2));
+                
+        double m = X_OFFSET(MIN(x->origin.x, x->cursor.x));
+        double n = Y_OFFSET(MIN(x->origin.y, x->cursor.y));
+        double u = X_OFFSET(MAX(x->origin.x, x->cursor.x));
+        double v = Y_OFFSET(MAX(x->origin.y, x->cursor.y));
+        
+        k  = ((a > m) && (a < u)) || ((c > m) && (c < u));
+        k &= ((b > n) && (b < v)) || ((d > n) && (d < v));
+    }
+    
+    return k;
 }
 
 bool tralala_grabNotes(t_tll *x)
@@ -163,7 +182,7 @@ bool tralala_grabNotes(t_tll *x)
         //
         if ((atom_getsym(argv) == TLL_SYM_NOTE)) {
             if (tralala_insideLasso(x, (*(keys + i)))) {
-                ;
+                post("%s", (*(keys + i))->s_name);
             }
         }
         //

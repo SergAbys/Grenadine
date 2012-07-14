@@ -159,6 +159,11 @@
 			96E865F215B1B6A800C3913E /* PBXTextBookmark */ = 96E865F215B1B6A800C3913E /* PBXTextBookmark */;
 			96E865F315B1B6A800C3913E /* PBXTextBookmark */ = 96E865F315B1B6A800C3913E /* PBXTextBookmark */;
 			96E865F415B1B6A800C3913E /* PBXTextBookmark */ = 96E865F415B1B6A800C3913E /* PBXTextBookmark */;
+			96E8660B15B1C00500C3913E /* PBXTextBookmark */ = 96E8660B15B1C00500C3913E /* PBXTextBookmark */;
+			96E8660C15B1C00500C3913E /* PBXTextBookmark */ = 96E8660C15B1C00500C3913E /* PBXTextBookmark */;
+			96E8660E15B1C00F00C3913E /* PBXTextBookmark */ = 96E8660E15B1C00F00C3913E /* PBXTextBookmark */;
+			96E8660F15B1C00F00C3913E /* PBXTextBookmark */ = 96E8660F15B1C00F00C3913E /* PBXTextBookmark */;
+			96E8661015B1C00F00C3913E /* PBXTextBookmark */ = 96E8661015B1C00F00C3913E /* PBXTextBookmark */;
 		};
 		sourceControlManager = 965F6CC112FF252E00F96EF1 /* Source Control */;
 		userBuildSettings = {
@@ -245,8 +250,8 @@
 	};
 	96E4A85F15ADD3A1003BF81E /* tralalaUser.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 6450}}";
-			sepNavSelRange = "{4105, 27}";
+			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 6825}}";
+			sepNavSelRange = "{4579, 50}";
 			sepNavVisRect = "{{0, 3896}, {1158, 346}}";
 			sepNavWindowFrame = "{{-2, 4}, {1281, 774}}";
 		};
@@ -486,7 +491,7 @@
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		name = "tralalaUser.c: 231";
 		rLen = 0;
-		rLoc = 5736;
+		rLoc = 6551;
 		rType = 0;
 		vrLen = 812;
 		vrLoc = 6077;
@@ -543,7 +548,7 @@
 		comments = "warning: unused variable 'note'";
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		rLen = 1;
-		rLoc = 153;
+		rLoc = 172;
 		rType = 1;
 	};
 	96E865F315B1B6A800C3913E /* PBXTextBookmark */ = {
@@ -551,12 +556,60 @@
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		name = "t_symbol *note = NULL;";
 		rLen = 0;
-		rLoc = 4105;
+		rLoc = 4887;
 		rType = 0;
 		vrLen = 395;
 		vrLoc = 4160;
 	};
 	96E865F415B1B6A800C3913E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
+		name = "tralalaUser.c: 23";
+		rLen = 0;
+		rLoc = 863;
+		rType = 0;
+		vrLen = 855;
+		vrLoc = 589;
+	};
+	96E8660B15B1C00500C3913E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
+		name = "tralalaUser.c: 157";
+		rLen = 0;
+		rLoc = 4439;
+		rType = 0;
+		vrLen = 356;
+		vrLoc = 4402;
+	};
+	96E8660C15B1C00500C3913E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
+		name = "tralalaUser.c: 23";
+		rLen = 0;
+		rLoc = 863;
+		rType = 0;
+		vrLen = 855;
+		vrLoc = 589;
+	};
+	96E8660E15B1C00F00C3913E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "warning: unused variable 'v'";
+		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
+		rLen = 1;
+		rLoc = 159;
+		rType = 1;
+	};
+	96E8660F15B1C00F00C3913E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
+		name = "double v = MAX(x->origin.y, x->cursor.y);";
+		rLen = 187;
+		rLoc = 4599;
+		rType = 0;
+		vrLen = 356;
+		vrLoc = 4402;
+	};
+	96E8661015B1C00F00C3913E /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		name = "tralalaUser.c: 23";
