@@ -189,8 +189,8 @@
 	9676982513B7784800FE77F4 /* tralala.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1233, 11075}}";
-			sepNavSelRange = "{2325, 0}";
-			sepNavVisRect = "{{0, 974}, {1233, 643}}";
+			sepNavSelRange = "{4955, 0}";
+			sepNavVisRect = "{{0, 2223}, {1233, 643}}";
 			sepNavWindowFrame = "{{-1, 6}, {1278, 772}}";
 		};
 	};
@@ -228,9 +228,9 @@
 	};
 	96DC326715581AC500C26797 /* tralalaParse.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 2425}}";
-			sepNavSelRange = "{2942, 0}";
-			sepNavVisRect = "{{0, 1780}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 2475}}";
+			sepNavSelRange = "{3136, 0}";
+			sepNavVisRect = "{{0, 1674}, {1235, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1280, 774}}";
 		};
 	};
@@ -283,8 +283,8 @@
 	96E865B415B1AC7200C3913E /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
-		rLen = 16;
-		rLoc = 3525;
+		rLen = 0;
+		rLoc = 3518;
 		rType = 0;
 	};
 	96E865B515B1AC7200C3913E /* PBXTextBookmark */ = {
@@ -292,7 +292,7 @@
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		name = "tralalaUser.c: tralala_swapNote";
 		rLen = 0;
-		rLoc = 3537;
+		rLoc = 3518;
 		rType = 0;
 		vrLen = 428;
 		vrLoc = 3415;
@@ -300,8 +300,8 @@
 	96E865C515B1AEC600C3913E /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
-		rLen = 16;
-		rLoc = 3525;
+		rLen = 0;
+		rLoc = 3518;
 		rType = 0;
 	};
 	96E865C615B1AEC600C3913E /* PBXTextBookmark */ = {
@@ -309,7 +309,7 @@
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		name = "tralalaUser.c: 124";
 		rLen = 0;
-		rLoc = 3537;
+		rLoc = 3518;
 		rType = 0;
 		vrLen = 426;
 		vrLoc = 3390;
@@ -319,7 +319,7 @@
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		name = "tralalaUser.c: 126";
 		rLen = 0;
-		rLoc = 3537;
+		rLoc = 3518;
 		rType = 0;
 		vrLen = 532;
 		vrLoc = 3306;
@@ -366,7 +366,7 @@
 		fRef = 96DC326315581A5500C26797 /* tralalaParse.c */;
 		name = "tralalaParse.c: jbox_invalidate_layer";
 		rLen = 0;
-		rLoc = 17424;
+		rLoc = 17469;
 		rType = 0;
 		vrLen = 428;
 		vrLoc = 17318;
@@ -413,7 +413,7 @@
 		fRef = 96DC326315581A5500C26797 /* tralalaParse.c */;
 		name = "tralalaParse.c: jbox_invalidate_layer";
 		rLen = 0;
-		rLoc = 17424;
+		rLoc = 17469;
 		rType = 0;
 		vrLen = 428;
 		vrLoc = 17318;
@@ -433,7 +433,7 @@
 		comments = "warning: no return statement in function returning non-void";
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		rLen = 0;
-		rLoc = 142;
+		rLoc = 128;
 		rType = 1;
 	};
 	96E865DE15B1B2DB00C3913E /* PBXTextBookmark */ = {
@@ -441,7 +441,7 @@
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		name = "tralalaUser.c: 150";
 		rLen = 0;
-		rLoc = 3970;
+		rLoc = 3518;
 		rType = 0;
 		vrLen = 237;
 		vrLoc = 4032;
@@ -522,7 +522,7 @@
 		isa = PBXTextBookmark;
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		rLen = 19;
-		rLoc = 949;
+		rLoc = 936;
 		rType = 0;
 	};
 	96E865EE15B1B62E00C3913E /* PBXTextBookmark */ = {
@@ -549,8 +549,8 @@
 		isa = PBXTextBookmark;
 		comments = "warning: unused variable 'note'";
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
-		rLen = 1;
-		rLoc = 167;
+		rLen = 0;
+		rLoc = 183;
 		rType = 1;
 	};
 	96E865F315B1B6A800C3913E /* PBXTextBookmark */ = {
@@ -558,7 +558,7 @@
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		name = "t_symbol *note = NULL;";
 		rLen = 0;
-		rLoc = 4676;
+		rLoc = 5486;
 		rType = 0;
 		vrLen = 395;
 		vrLoc = 4160;
@@ -578,7 +578,7 @@
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		name = "tralalaUser.c: 157";
 		rLen = 0;
-		rLoc = 4424;
+		rLoc = 4857;
 		rType = 0;
 		vrLen = 356;
 		vrLoc = 4402;
@@ -598,7 +598,7 @@
 		comments = "warning: unused variable 'v'";
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		rLen = 0;
-		rLoc = 155;
+		rLoc = 175;
 		rType = 1;
 	};
 	96E8660F15B1C00F00C3913E /* PBXTextBookmark */ = {
@@ -606,7 +606,7 @@
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		name = "double v = MAX(x->origin.y, x->cursor.y);";
 		rLen = 151;
-		rLoc = 4424;
+		rLoc = 4857;
 		rType = 0;
 		vrLen = 356;
 		vrLoc = 4402;
@@ -630,7 +630,7 @@
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		name = "tralalaUser.c: 183";
 		rLen = 0;
-		rLoc = 5292;
+		rLoc = 5486;
 		rType = 0;
 		vrLen = 778;
 		vrLoc = 4709;

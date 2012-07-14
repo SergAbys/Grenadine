@@ -78,6 +78,8 @@ t_max_err tralala_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, v
     } else if ((name == TLL_SYM_HCOLOR1) || (name == TLL_SYM_HCOLOR2)) {
         TLL_DIRTY_ZONE
         TLL_DIRTY_NOTES
+    } else if (name == TLL_SYM_LASSOCOLOR) {
+        TLL_DIRTY_LASSO
     }
     
     TLL_DRAW

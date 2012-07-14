@@ -94,7 +94,7 @@ int main(void)
     CLASS_ATTR_CATEGORY     (c, "textcolor", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "lassocolor", 0, t_tll, lasso); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "lassocolor", 0, "0.51 0.44 0.49 0.30"); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "lassocolor", 0, "0.51 0.44 0.49 0.40"); 
     CLASS_ATTR_STYLE_LABEL  (c, "lassocolor", 0, "rgba", "Lasso Color");
     CLASS_ATTR_CATEGORY     (c, "lassocolor", 0, "Color");
   

@@ -45,6 +45,7 @@
 #define TLL_SYM_COLOR           (tll_table.color)
 #define TLL_SYM_HCOLOR1         (tll_table.hcolor1)
 #define TLL_SYM_HCOLOR2         (tll_table.hcolor2)
+#define TLL_SYM_LASSOCOLOR      (tll_table.lassocolor)
 #define TLL_SYM_ATTR_MODIFIED   (tll_table.attr_modified)
 #define TLL_SYM_GETNAME         (tll_table.getname)
 #define TLL_SYM_PATCHING_RECT   (tll_table.patching_rect)
@@ -78,6 +79,7 @@ typedef struct _tllSymbols {
     t_symbol *color;
     t_symbol *hcolor1;
     t_symbol *hcolor2;
+    t_symbol *lassocolor;
     t_symbol *attr_modified;
     t_symbol *getname;
     t_symbol *patching_rect;

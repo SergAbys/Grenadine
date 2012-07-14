@@ -21,9 +21,9 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL void      tralala_swapNote    (t_tll *x, t_symbol *s);
-PIZ_LOCAL bool      tralala_insideLasso (t_tll *x, t_symbol *s, double *f);
 PIZ_LOCAL bool      tralala_grabNotes   (t_tll *x);
+PIZ_LOCAL bool      tralala_insideLasso (t_tll *x, t_symbol *s, double *f);
+PIZ_LOCAL void      tralala_swapNote    (t_tll *x, t_symbol *s);
 PIZ_LOCAL void      tralala_addNote     (t_tll *x);
 PIZ_LOCAL long      tralala_hitZone     (t_tll *x);
 PIZ_LOCAL t_symbol  *tralala_hitNote    (t_tll *x);
@@ -128,39 +128,6 @@ void tralala_up(t_tll *x, t_object *pv, t_pt pt, long m)
 #pragma mark ---
 #pragma mark -
 
-void tralala_swapNote(t_tll *x, t_symbol *s)
-{
-    if (dictionary_hasentry(x->status, s)) {
-        t_symbol *last = NULL;
-        dictionary_getsym(x->status, TLL_SYM_LAST, &last);
-        if (s == last) { dictionary_deleteentry(x->status, TLL_SYM_LAST); }
-        dictionary_deleteentry(x->status, s);
-        
-    } else {
-        dictionary_appendsym(x->status, TLL_SYM_LAST, s);
-        dictionary_appendlong(x->status, s, TLL_SELECTED);
-    }
-}
-
-bool tralala_insideLasso(t_tll *x, t_symbol *s, double *f)
-{
-    bool k = false;
-    long argc;
-    t_atom *argv = NULL;
-        
-    if (!(dictionary_getatoms(x->current, s, &argc, &argv))) {
-        double a = POSITION_TO_X(atom_getlong(argv + 1));
-        double b = PITCH_TO_Y_UP(atom_getlong(argv + 2));
-        double c = POSITION_TO_X(atom_getlong(argv + 1) + atom_getlong(argv + 4));
-        double d = PITCH_TO_Y_DOWN(atom_getlong(argv + 2));
-        
-        k  = ((a > f[0]) && (a < f[2])) || ((c > f[0]) && (c < f[2]));
-        k &= ((b > f[1]) && (b < f[3])) || ((d > f[1]) && (d < f[3]));
-    }
-    
-    return k;
-}
-
 bool tralala_grabNotes(t_tll *x)
 {
     long i, n;
@@ -193,6 +160,39 @@ bool tralala_grabNotes(t_tll *x)
     }
     
     return draw;
+}
+
+bool tralala_insideLasso(t_tll *x, t_symbol *s, double *f)
+{
+    bool k = false;
+    long argc;
+    t_atom *argv = NULL;
+        
+    if (!(dictionary_getatoms(x->current, s, &argc, &argv))) {
+        double a = POSITION_TO_X(atom_getlong(argv + 1));
+        double b = PITCH_TO_Y_UP(atom_getlong(argv + 2));
+        double c = POSITION_TO_X(atom_getlong(argv + 1) + atom_getlong(argv + 4));
+        double d = PITCH_TO_Y_DOWN(atom_getlong(argv + 2));
+        
+        k  = ((a > f[0]) && (a < f[2])) || ((c > f[0]) && (c < f[2]));
+        k &= ((b > f[1]) && (b < f[3])) || ((d > f[1]) && (d < f[3]));
+    }
+    
+    return k;
+}
+
+void tralala_swapNote(t_tll *x, t_symbol *s)
+{
+    if (dictionary_hasentry(x->status, s)) {
+        t_symbol *last = NULL;
+        dictionary_getsym(x->status, TLL_SYM_LAST, &last);
+        if (s == last) { dictionary_deleteentry(x->status, TLL_SYM_LAST); }
+        dictionary_deleteentry(x->status, s);
+        
+    } else {
+        dictionary_appendsym(x->status, TLL_SYM_LAST, s);
+        dictionary_appendlong(x->status, s, TLL_SELECTED);
+    }
 }
 
 void tralala_addNote(t_tll *x)

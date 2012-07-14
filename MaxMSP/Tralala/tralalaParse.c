@@ -80,6 +80,7 @@ table->yoffset       = gensym("yoffset");
 table->color         = gensym("color");
 table->hcolor1       = gensym("hcolor1");
 table->hcolor2       = gensym("hcolor2");
+table->lassocolor    = gensym("lassocolor");
 table->attr_modified = gensym("attr_modified");
 table->getname       = gensym("getname");
 table->patching_rect = gensym("patching_rect");
