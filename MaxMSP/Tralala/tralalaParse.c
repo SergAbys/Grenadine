@@ -354,12 +354,12 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
             dictionary_appendatoms(x->current, s, k - 1, data);
         }
         
-        TLL_DIRTY_NOTE
+        TLL_DIRTY_NOTES
     }
     
     TLL_UNLOCK
     
-    jbox_redraw((t_jbox *)x);
+    TLL_DRAW
 }
 
 // -------------------------------------------------------------------------------------------------------------

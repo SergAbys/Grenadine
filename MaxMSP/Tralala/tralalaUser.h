@@ -22,10 +22,12 @@
 
 enum {
     TLL_SELECTED        = 1,
-    TLL_SELECTED_START  = 2,
-    TLL_SELECTED_END    = 3,
-    TLL_SELECTED_DOWN   = 4,
-    TLL_SELECTED_UP     = 5
+    TLL_SELECTED_GRAB   = 2,
+    TLL_SELECTED_SWAP   = 3,
+    TLL_SELECTED_START  = 4,
+    TLL_SELECTED_END    = 5,
+    TLL_SELECTED_DOWN   = 6,
+    TLL_SELECTED_UP     = 7
     };
     
 // -------------------------------------------------------------------------------------------------------------
@@ -38,8 +40,6 @@ void tralala_down   (t_tll *x, t_object *pv, t_pt pt, long m);
 void tralala_move   (t_tll *x, t_object *pv, t_pt pt, long m);
 void tralala_drag   (t_tll *x, t_object *pv, t_pt pt, long m);
 void tralala_up     (t_tll *x, t_object *pv, t_pt pt, long m);
-void tralala_enter  (t_tll *x, t_object *pv, t_pt pt, long m);
-void tralala_leave  (t_tll *x, t_object *pv, t_pt pt, long m);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -33,6 +33,7 @@
 
 #define TLL_FLAG_NONE   0UL
 #define TLL_FLAG_LASSO  1UL
+#define TLL_FLAG_SHIFT  2UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -58,13 +59,13 @@ typedef struct _tll {
     t_jrgba             lasso;
     t_jrgba             background;
     PIZTime             time;
+    ulong               flags;
     long                identifier;
     long                offsetX;
     long                offsetY;
     long                viewText;
     t_pt                cursor;  
     t_pt                origin;
-    ulong               flags;
     t_jtextlayout       *layer; 
     t_dictionary        *data;
     t_dictionary        *current;

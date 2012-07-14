@@ -25,9 +25,13 @@
 #define TLL_PIXELS_PER_SEMITONE     12.
 
 #define TLL_DIRTY_ZONE              jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
-#define TLL_DIRTY_NOTE              jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
+#define TLL_DIRTY_NOTES             jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
 #define TLL_DIRTY_LASSO             jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
-#define TLL_DIRTY_BACKGROUND        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);
+#define TLL_DIRTY_BACKGROUND        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);   
+#define TLL_DRAW                    jbox_redraw((t_jbox *)x);
+
+#define TLL_DIRTY_NOTES_DRAW        TLL_DIRTY_NOTES TLL_DRAW
+#define TLL_DIRTY_LASSO_DRAW        TLL_DIRTY_LASSO TLL_DRAW
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

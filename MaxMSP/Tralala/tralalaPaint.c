@@ -20,9 +20,9 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+PIZ_LOCAL void tralala_paintLasso           (t_tll *x, t_object *pv);
 PIZ_LOCAL void tralala_paintBackground      (t_tll *x, t_object *pv);
 PIZ_LOCAL void tralala_paintDictionary      (t_tll *x, t_object *pv);
-PIZ_LOCAL void tralala_paintLasso           (t_tll *x, t_object *pv);
 
 PIZ_LOCAL void tralala_paintText            (t_tll *x, t_object *pv, char *string);
 PIZ_LOCAL void tralala_paintZone            (t_tll *x, t_object *pv, long argc, t_atom *argv, long status);
@@ -73,14 +73,14 @@ t_max_err tralala_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, v
     if (name == TLL_SYM_COLOR) {
         TLL_DIRTY_BACKGROUND
         TLL_DIRTY_ZONE
-        TLL_DIRTY_NOTE
+        TLL_DIRTY_NOTES
         
     } else if ((name == TLL_SYM_HCOLOR1) || (name == TLL_SYM_HCOLOR2)) {
         TLL_DIRTY_ZONE
-        TLL_DIRTY_NOTE
+        TLL_DIRTY_NOTES
     }
     
-    jbox_redraw(x);
+    TLL_DRAW
     //
     }
     
@@ -92,6 +92,31 @@ t_max_err tralala_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, v
 #pragma mark -
 #pragma mark ---
 #pragma mark -
+
+void tralala_paintLasso(t_tll *x, t_object *pv)
+{
+    double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
+    double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
+    t_jgraphics *g = NULL;
+
+    if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_LASSO, w, h)) {
+        t_rect r;
+        
+        r.x = MIN(x->origin.x, x->cursor.x);
+        r.y = MIN(x->origin.y, x->cursor.y);
+        r.width = MAX(x->origin.x, x->cursor.x) - r.x;
+        r.height = MAX(x->origin.y, x->cursor.y) - r.y;
+        
+        if (x->flags & TLL_FLAG_LASSO) {
+            jgraphics_set_source_jrgba(g, &x->lasso);
+            jgraphics_rectangle_fill_fast(g, X_OFFSET(r.x), Y_OFFSET(r.y), r.width, r.height);
+        }
+        
+        jbox_end_layer((t_object*)x, pv, TLL_SYM_LASSO);
+    }
+        
+    jbox_paint_layer((t_object *)x, pv, TLL_SYM_LASSO, -x->offsetX, -x->offsetY);
+}
 
 void tralala_paintBackground(t_tll *x, t_object *pv)
 {
@@ -169,7 +194,13 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
         if (!(dictionary_getatoms(x->current, (*(keys + i)), &argc, &argv))) { 
         //
         if ((atom_getsym(argv) == TLL_SYM_NOTE)) {
-            if (!(dictionary_hasentry(x->status, (*(keys + i))))) {
+            long k, t = 0; 
+            
+            if (k = dictionary_hasentry(x->status, (*(keys + i)))) {
+               dictionary_getlong(x->status, (*(keys + i)), &t);
+            }
+            
+            if (!k || (t == TLL_SELECTED_SWAP)) {
                 atomarray_appendatoms(notes[0], argc, argv);
             } else if ((*(keys + i)) != last) {
                 atomarray_appendatoms(notes[1], argc, argv);
@@ -207,31 +238,6 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     object_free(notes[0]);
     object_free(notes[1]);
     object_free(notes[2]);
-}
-
-void tralala_paintLasso(t_tll *x, t_object *pv)
-{
-    double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
-    double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
-    t_jgraphics *g = NULL;
-
-    if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_LASSO, w, h)) {
-        t_rect r;
-        
-        r.x = MIN(x->origin.x, x->cursor.x);
-        r.y = MIN(x->origin.y, x->cursor.y);
-        r.width = MAX(x->origin.x, x->cursor.x) - r.x;
-        r.height = MAX(x->origin.y, x->cursor.y) - r.y;
-        
-        if (x->flags & TLL_FLAG_LASSO) {
-            jgraphics_set_source_jrgba(g, &x->lasso);
-            jgraphics_rectangle_fill_fast(g, X_OFFSET(r.x), Y_OFFSET(r.y), r.width, r.height);
-        }
-        
-        jbox_end_layer((t_object*)x, pv, TLL_SYM_LASSO);
-    }
-        
-    jbox_paint_layer((t_object *)x, pv, TLL_SYM_LASSO, -x->offsetX, -x->offsetY);
 }
 
 // -------------------------------------------------------------------------------------------------------------
