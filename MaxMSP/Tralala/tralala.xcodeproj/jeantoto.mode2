@@ -185,7 +185,48 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array/>
+	<array>
+		<dict>
+			<key>Content</key>
+			<dict>
+				<key>PBXProjectModuleGUID</key>
+				<string>96E8661615B1C4E400C3913E</string>
+				<key>PBXProjectModuleLabel</key>
+				<string>tralalaUser.c</string>
+				<key>PBXSplitModuleInNavigatorKey</key>
+				<dict>
+					<key>Split0</key>
+					<dict>
+						<key>PBXProjectModuleGUID</key>
+						<string>96E8661715B1C4E400C3913E</string>
+						<key>PBXProjectModuleLabel</key>
+						<string>tralalaUser.c</string>
+						<key>_historyCapacity</key>
+						<integer>40</integer>
+						<key>bookmark</key>
+						<string>96E8661815B1C4E400C3913E</string>
+						<key>history</key>
+						<array>
+							<string>96E8661315B1C34E00C3913E</string>
+						</array>
+					</dict>
+					<key>SplitCount</key>
+					<string>1</string>
+				</dict>
+				<key>StatusBarVisibility</key>
+				<true/>
+			</dict>
+			<key>Geometry</key>
+			<dict>
+				<key>Frame</key>
+				<string>{{0, 20}, {1281, 677}}</string>
+				<key>PBXModuleWindowStatusBarHidden2</key>
+				<false/>
+				<key>RubberWindowFrame</key>
+				<string>-2 60 1281 718 0 0 1280 778 </string>
+			</dict>
+		</dict>
+	</array>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -285,7 +326,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>384 262 421 389 0 0 1280 778 </string>
+								<string>311 285 421 389 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -462,9 +503,10 @@
 		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/MaxMSP/Tralala/tralala.xcodeproj</string>
+		<string>96E8661615B1C4E400C3913E</string>
 	</array>
 	<key>WindowString</key>
-	<string>384 262 421 389 0 0 1280 778 </string>
+	<string>311 285 421 389 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -644,7 +686,7 @@
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 5}, {1205, 206}}</string>
+								<string>{{0, 211}, {1205, 0}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>

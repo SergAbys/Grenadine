@@ -22,7 +22,7 @@ extern t_tllSymbols tll_table;
 #pragma mark -
 
 PIZ_LOCAL void      tralala_swapNote    (t_tll *x, t_symbol *s);
-PIZ_LOCAL bool      tralala_insideLasso (t_tll *x, t_symbol *s);
+PIZ_LOCAL bool      tralala_insideLasso (t_tll *x, t_symbol *s, double *f);
 PIZ_LOCAL bool      tralala_grabNotes   (t_tll *x);
 PIZ_LOCAL void      tralala_addNote     (t_tll *x);
 PIZ_LOCAL long      tralala_hitZone     (t_tll *x);
@@ -142,7 +142,7 @@ void tralala_swapNote(t_tll *x, t_symbol *s)
     }
 }
 
-bool tralala_insideLasso(t_tll *x, t_symbol *s)
+bool tralala_insideLasso(t_tll *x, t_symbol *s, double *f)
 {
     bool k = false;
     long argc;
@@ -153,14 +153,9 @@ bool tralala_insideLasso(t_tll *x, t_symbol *s)
         double b = PITCH_TO_Y_UP(atom_getlong(argv + 2));
         double c = POSITION_TO_X(atom_getlong(argv + 1) + atom_getlong(argv + 4));
         double d = PITCH_TO_Y_DOWN(atom_getlong(argv + 2));
-                
-        double m = X_OFFSET(MIN(x->origin.x, x->cursor.x));
-        double n = Y_OFFSET(MIN(x->origin.y, x->cursor.y));
-        double u = X_OFFSET(MAX(x->origin.x, x->cursor.x));
-        double v = Y_OFFSET(MAX(x->origin.y, x->cursor.y));
         
-        k  = ((a > m) && (a < u)) || ((c > m) && (c < u));
-        k &= ((b > n) && (b < v)) || ((d > n) && (d < v));
+        k  = ((a > f[0]) && (a < f[2])) || ((c > f[0]) && (c < f[2]));
+        k &= ((b > f[1]) && (b < f[3])) || ((d > f[1]) && (d < f[3]));
     }
     
     return k;
@@ -176,12 +171,16 @@ bool tralala_grabNotes(t_tll *x)
     //
     long argc;
     t_atom *argv = NULL;
+    double c[ ] = { X_OFFSET(MIN(x->origin.x, x->cursor.x)),
+                    Y_OFFSET(MIN(x->origin.y, x->cursor.y)),
+                    X_OFFSET(MAX(x->origin.x, x->cursor.x)),
+                    Y_OFFSET(MAX(x->origin.y, x->cursor.y)) };  
     
     for (i = 0; i < n; i++) {
         if (!(dictionary_getatoms(x->current, (*(keys + i)), &argc, &argv))) { 
         //
         if ((atom_getsym(argv) == TLL_SYM_NOTE)) {
-            if (tralala_insideLasso(x, (*(keys + i)))) {
+            if (tralala_insideLasso(x, (*(keys + i)), c)) {
                 post("%s", (*(keys + i))->s_name);
             }
         }
