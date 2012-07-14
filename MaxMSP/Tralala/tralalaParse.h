@@ -38,6 +38,7 @@
 #define TLL_SYM_NOTE            (tll_table.note)
 #define TLL_SYM_TEXT            (tll_table.text)
 #define TLL_SYM_ZONE            (tll_table.zone)
+#define TLL_SYM_LASSO           (tll_table.lasso)
 #define TLL_SYM_BACKGROUND      (tll_table.background)
 #define TLL_SYM_XOFFSET         (tll_table.xoffset)
 #define TLL_SYM_YOFFSET         (tll_table.yoffset)
@@ -71,6 +72,7 @@ typedef struct _tllSymbols {
     t_symbol *text;
     t_symbol *zone;
     t_symbol *background;
+    t_symbol *lasso;
     t_symbol *xoffset;
     t_symbol *yoffset;
     t_symbol *color;

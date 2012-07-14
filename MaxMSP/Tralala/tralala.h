@@ -31,9 +31,15 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+#define TLL_FLAG_NONE   0UL
+#define TLL_FLAG_LASSO  1UL
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 #define TLL_LOCK    systhread_mutex_lock(&x->mutex);
 #define TLL_UNLOCK  systhread_mutex_unlock(&x->mutex); 
-   
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -49,13 +55,16 @@ typedef struct _tll {
     t_jrgba             hcolor1;
     t_jrgba             hcolor2;
     t_jrgba             border;
+    t_jrgba             lasso;
     t_jrgba             background;
     PIZTime             time;
     long                identifier;
     long                offsetX;
     long                offsetY;
     long                viewText;
-    t_pt                cursor;        
+    t_pt                cursor;  
+    t_pt                origin;
+    ulong               flags;
     t_jtextlayout       *layer; 
     t_dictionary        *data;
     t_dictionary        *current;

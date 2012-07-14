@@ -22,6 +22,7 @@ extern t_tllSymbols tll_table;
 
 PIZ_LOCAL void tralala_paintBackground      (t_tll *x, t_object *pv);
 PIZ_LOCAL void tralala_paintDictionary      (t_tll *x, t_object *pv);
+PIZ_LOCAL void tralala_paintLasso           (t_tll *x, t_object *pv);
 
 PIZ_LOCAL void tralala_paintText            (t_tll *x, t_object *pv, char *string);
 PIZ_LOCAL void tralala_paintZone            (t_tll *x, t_object *pv, long argc, t_atom *argv, long status);
@@ -50,6 +51,7 @@ void tralala_paint(t_tll *x, t_object *pv)
 {
     tralala_paintBackground(x, pv);
     tralala_paintDictionary(x, pv);
+    tralala_paintLasso(x, pv);
 }
 
 void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
@@ -205,6 +207,31 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     object_free(notes[0]);
     object_free(notes[1]);
     object_free(notes[2]);
+}
+
+void tralala_paintLasso(t_tll *x, t_object *pv)
+{
+    double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
+    double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
+    t_jgraphics *g = NULL;
+
+    if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_LASSO, w, h)) {
+        t_rect r;
+        
+        r.x = MIN(x->origin.x, x->cursor.x);
+        r.y = MIN(x->origin.y, x->cursor.y);
+        r.width = MAX(x->origin.x, x->cursor.x) - r.x;
+        r.height = MAX(x->origin.y, x->cursor.y) - r.y;
+        
+        if (x->flags & TLL_FLAG_LASSO) {
+            jgraphics_set_source_jrgba(g, &x->lasso);
+            jgraphics_rectangle_fill_fast(g, X_OFFSET(r.x), Y_OFFSET(r.y), r.width, r.height);
+        }
+        
+        jbox_end_layer((t_object*)x, pv, TLL_SYM_LASSO);
+    }
+        
+    jbox_paint_layer((t_object *)x, pv, TLL_SYM_LASSO, -x->offsetX, -x->offsetY);
 }
 
 // -------------------------------------------------------------------------------------------------------------

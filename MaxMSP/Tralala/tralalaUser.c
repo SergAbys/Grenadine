@@ -67,11 +67,15 @@ void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
         t_symbol *s = NULL;
         if (s = tralala_hitNote(x, pt)) {
             tralala_swapNote(x, s);
+        } else {
+            x->flags |= TLL_FLAG_LASSO;
         }
     }
     
     TLL_UNLOCK
     
+    x->origin = pt;
+        
     TLL_DIRTY_ZONE
     TLL_DIRTY_NOTE
     jbox_redraw((t_jbox *)x);
@@ -85,12 +89,21 @@ void tralala_move(t_tll *x, t_object *pv, t_pt pt, long m)
 
 void tralala_drag(t_tll *x, t_object *pv, t_pt pt, long m)
 {
-
+    x->cursor = pt;
+        
+    if (x->flags & TLL_FLAG_LASSO) {
+        TLL_DIRTY_LASSO
+        jbox_redraw((t_jbox *)x);
+    }
 }
 
 void tralala_up(t_tll *x, t_object *pv, t_pt pt, long m)
 {
-
+    if (x->flags & TLL_FLAG_LASSO) {
+        x->flags &= ~TLL_FLAG_LASSO;
+        TLL_DIRTY_LASSO
+        jbox_redraw((t_jbox *)x);
+    }
 }
 
 void tralala_enter(t_tll *x, t_object *pv, t_pt pt, long m)
@@ -116,6 +129,7 @@ void tralala_swapNote(t_tll *x, t_symbol *s)
         dictionary_getsym(x->status, TLL_SYM_LAST, &last);
         if (s == last) { dictionary_deleteentry(x->status, TLL_SYM_LAST); }
         dictionary_deleteentry(x->status, s);
+        
     } else {
         dictionary_appendsym(x->status, TLL_SYM_LAST, s);
         dictionary_appendlong(x->status, s, TLL_SELECTED);

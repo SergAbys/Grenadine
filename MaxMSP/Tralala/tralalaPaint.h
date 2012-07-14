@@ -24,9 +24,10 @@
 #define TLL_PIXELS_PER_STEP         1.
 #define TLL_PIXELS_PER_SEMITONE     12.
 
-#define TLL_DIRTY_ZONE              jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_ZONE);
-#define TLL_DIRTY_NOTE              jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_NOTE);
-#define TLL_DIRTY_BACKGROUND        jbox_invalidate_layer((t_object*)x, NULL, TLL_SYM_BACKGROUND);
+#define TLL_DIRTY_ZONE              jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
+#define TLL_DIRTY_NOTE              jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
+#define TLL_DIRTY_LASSO             jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
+#define TLL_DIRTY_BACKGROUND        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -37,6 +38,8 @@
 #define PITCH_TO_Y_DOWN(a)          ((PIZ_MAGIC_PITCH - (a) + 1) * TLL_PIXELS_PER_SEMITONE)
 #define Y_TO_PITCH(a)               (PIZ_MAGIC_PITCH - ((long)((x->offsetY + (a)) / TLL_PIXELS_PER_SEMITONE)))
 #define X_TO_POSITION(a)            ((long)((x->offsetX + (a)) / TLL_PIXELS_PER_STEP))
+#define Y_OFFSET(a)                 ((a) + x->offsetY)
+#define X_OFFSET(a)                 ((a) + x->offsetX)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

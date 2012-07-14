@@ -74,6 +74,7 @@ table->note          = gensym("note");
 table->text          = gensym("text");
 table->zone          = gensym("zone");
 table->background    = gensym("background");
+table->lasso         = gensym("lasso");
 table->xoffset       = gensym("xoffset");
 table->yoffset       = gensym("yoffset");
 table->color         = gensym("color");

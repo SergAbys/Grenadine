@@ -94,6 +94,11 @@ int main(void)
     CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "0.51 0.44 0.49 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "textcolor", 0, "rgba", "Text Color");
     CLASS_ATTR_CATEGORY     (c, "textcolor", 0, "Color");
+    
+    CLASS_ATTR_RGBA         (c, "lassocolor", 0, t_tll, lasso); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "lassocolor", 0, "0.51 0.44 0.49 0.30"); 
+    CLASS_ATTR_STYLE_LABEL  (c, "lassocolor", 0, "rgba", "Lasso Color");
+    CLASS_ATTR_CATEGORY     (c, "lassocolor", 0, "Color");
   
     CLASS_ATTR_LONG         (c, "xoffset", 0, t_tll, offsetX);
     CLASS_ATTR_DEFAULT_SAVE (c, "xoffset", 0, "-37");
@@ -116,8 +121,9 @@ int main(void)
     CLASS_ATTR_ORDER        (c, "hcolor1",     0, "2");
     CLASS_ATTR_ORDER        (c, "hcolor2",     0, "3");
     CLASS_ATTR_ORDER        (c, "textcolor",   0, "4");
-    CLASS_ATTR_ORDER        (c, "bordercolor", 0, "5");
-    CLASS_ATTR_ORDER        (c, "bgcolor",     0, "6");
+    CLASS_ATTR_ORDER        (c, "lassocolor",  0, "5");
+    CLASS_ATTR_ORDER        (c, "bordercolor", 0, "6");
+    CLASS_ATTR_ORDER        (c, "bgcolor",     0, "7");
     
     CLASS_ATTR_DEFAULT      (c, "fontname", 0, "Arial");
     CLASS_ATTR_DEFAULT      (c, "fontsize", 0, "14.");
