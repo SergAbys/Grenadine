@@ -30,12 +30,6 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_PT(a)   (a).x = pt.x - 1.; (a).y = pt.y - 1.;
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 PIZ_LOCAL void tralala_userAddNote              (t_tll *x);
 PIZ_LOCAL void tralala_userSelectAllNotes       (t_tll *x);
 PIZ_LOCAL void tralala_userSelectNoteByClick    (t_tll *x, t_symbol *s);
@@ -83,8 +77,10 @@ void tralala_wheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc, doub
 
 void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
 {	
-    TLL_PT(x->cursor)
-    TLL_PT(x->origin)
+    x->cursor.x = pt.x - 1.;
+    x->cursor.y = pt.y - 1.;
+    x->origin.x = pt.x - 1.;
+    x->origin.y = pt.y - 1.;
     
     TLL_LOCK
     
@@ -119,13 +115,16 @@ void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
 
 void tralala_move(t_tll *x, t_object *pv, t_pt pt, long m)
 {
-    TLL_PT(x->cursor) 
+    x->cursor.x = pt.x - 1.;
+    x->cursor.y = pt.y - 1.;
+    
     jbox_redraw((t_jbox *)x);
 }
 
 void tralala_drag(t_tll *x, t_object *pv, t_pt pt, long m)
 {
-    TLL_PT(x->cursor)
+    x->cursor.x = pt.x - 1.;
+    x->cursor.y = pt.y - 1.;
      
     if (m & eShiftKey) {
         x->flags |= TLL_FLAG_SHIFT;
