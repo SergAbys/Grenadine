@@ -17,7 +17,7 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TINY 2
+#define TLL_TINY 2
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -86,111 +86,111 @@ table->attr_modified = gensym("attr_modified");
 table->getname       = gensym("getname");
 table->patching_rect = gensym("patching_rect");
 
-quickmap_add(tll_code, gensym("bpm"),                     (void *)(TINY + PIZ_EVENT_BPM));
-quickmap_add(tll_code, gensym("learn"),                   (void *)(TINY + PIZ_EVENT_LEARN));
-quickmap_add(tll_code, gensym("list"),                    (void *)(TINY + PIZ_EVENT_LEARN));
-quickmap_add(tll_code, gensym("forget"),                  (void *)(TINY + PIZ_EVENT_FORGET));
-quickmap_add(tll_code, gensym("dump"),                    (void *)(TINY + PIZ_EVENT_DUMP));
-quickmap_add(tll_code, gensym("chance"),                  (void *)(TINY + PIZ_EVENT_CHANCE));
-quickmap_add(tll_code, gensym("velocity"),                (void *)(TINY + PIZ_EVENT_VELOCITY));
-quickmap_add(tll_code, gensym("channel"),                 (void *)(TINY + PIZ_EVENT_CHANNEL));
-quickmap_add(tll_code, gensym("chord"),                   (void *)(TINY + PIZ_EVENT_CHORD));
-quickmap_add(tll_code, gensym("cell"),                    (void *)(TINY + PIZ_EVENT_CELL));
-quickmap_add(tll_code, gensym("value"),                   (void *)(TINY + PIZ_EVENT_VALUE));
-quickmap_add(tll_code, gensym("scale"),                   (void *)(TINY + PIZ_EVENT_SCALE));
-quickmap_add(tll_code, gensym("pattern"),                 (void *)(TINY + PIZ_EVENT_PATTERN));
-quickmap_add(tll_code, gensym("note"),                    (void *)(TINY + PIZ_EVENT_NOTE));
-quickmap_add(tll_code, gensym("zone"),                    (void *)(TINY + PIZ_EVENT_ZONE));
-quickmap_add(tll_code, gensym("clear"),                   (void *)(TINY + PIZ_EVENT_CLEAR));
-quickmap_add(tll_code, gensym("clean"),                   (void *)(TINY + PIZ_EVENT_CLEAN));
-quickmap_add(tll_code, gensym("rotate"),                  (void *)(TINY + PIZ_EVENT_ROTATE));
-quickmap_add(tll_code, gensym("scramble"),                (void *)(TINY + PIZ_EVENT_SCRAMBLE));
-quickmap_add(tll_code, gensym("sort"),                    (void *)(TINY + PIZ_EVENT_SORT));
-quickmap_add(tll_code, gensym("change"),                  (void *)(TINY + PIZ_EVENT_CHANGE));
-quickmap_add(tll_code, gensym("fill"),                    (void *)(TINY + PIZ_EVENT_FILL));
-quickmap_add(tll_code, gensym("kill"),                    (void *)(TINY + PIZ_EVENT_KILL));
-quickmap_add(tll_code, gensym("cycle"),                   (void *)(TINY + PIZ_EVENT_CYCLE));
-quickmap_add(tll_code, gensym("zoulou"),                  (void *)(TINY + PIZ_EVENT_ZOULOU));
-quickmap_add(tll_code, gensym("romeo"),                   (void *)(TINY + PIZ_EVENT_ROMEO));
-quickmap_add(tll_code, gensym("juliet"),                  (void *)(TINY + PIZ_EVENT_JULIET));
+quickmap_add(tll_code, gensym("bpm"),                     (void *)(TLL_TINY + PIZ_EVENT_BPM));
+quickmap_add(tll_code, gensym("learn"),                   (void *)(TLL_TINY + PIZ_EVENT_LEARN));
+quickmap_add(tll_code, gensym("list"),                    (void *)(TLL_TINY + PIZ_EVENT_LEARN));
+quickmap_add(tll_code, gensym("forget"),                  (void *)(TLL_TINY + PIZ_EVENT_FORGET));
+quickmap_add(tll_code, gensym("dump"),                    (void *)(TLL_TINY + PIZ_EVENT_DUMP));
+quickmap_add(tll_code, gensym("chance"),                  (void *)(TLL_TINY + PIZ_EVENT_CHANCE));
+quickmap_add(tll_code, gensym("velocity"),                (void *)(TLL_TINY + PIZ_EVENT_VELOCITY));
+quickmap_add(tll_code, gensym("channel"),                 (void *)(TLL_TINY + PIZ_EVENT_CHANNEL));
+quickmap_add(tll_code, gensym("chord"),                   (void *)(TLL_TINY + PIZ_EVENT_CHORD));
+quickmap_add(tll_code, gensym("cell"),                    (void *)(TLL_TINY + PIZ_EVENT_CELL));
+quickmap_add(tll_code, gensym("value"),                   (void *)(TLL_TINY + PIZ_EVENT_VALUE));
+quickmap_add(tll_code, gensym("scale"),                   (void *)(TLL_TINY + PIZ_EVENT_SCALE));
+quickmap_add(tll_code, gensym("pattern"),                 (void *)(TLL_TINY + PIZ_EVENT_PATTERN));
+quickmap_add(tll_code, gensym("note"),                    (void *)(TLL_TINY + PIZ_EVENT_NOTE));
+quickmap_add(tll_code, gensym("zone"),                    (void *)(TLL_TINY + PIZ_EVENT_ZONE));
+quickmap_add(tll_code, gensym("clear"),                   (void *)(TLL_TINY + PIZ_EVENT_CLEAR));
+quickmap_add(tll_code, gensym("clean"),                   (void *)(TLL_TINY + PIZ_EVENT_CLEAN));
+quickmap_add(tll_code, gensym("rotate"),                  (void *)(TLL_TINY + PIZ_EVENT_ROTATE));
+quickmap_add(tll_code, gensym("scramble"),                (void *)(TLL_TINY + PIZ_EVENT_SCRAMBLE));
+quickmap_add(tll_code, gensym("sort"),                    (void *)(TLL_TINY + PIZ_EVENT_SORT));
+quickmap_add(tll_code, gensym("change"),                  (void *)(TLL_TINY + PIZ_EVENT_CHANGE));
+quickmap_add(tll_code, gensym("fill"),                    (void *)(TLL_TINY + PIZ_EVENT_FILL));
+quickmap_add(tll_code, gensym("kill"),                    (void *)(TLL_TINY + PIZ_EVENT_KILL));
+quickmap_add(tll_code, gensym("cycle"),                   (void *)(TLL_TINY + PIZ_EVENT_CYCLE));
+quickmap_add(tll_code, gensym("zoulou"),                  (void *)(TLL_TINY + PIZ_EVENT_ZOULOU));
+quickmap_add(tll_code, gensym("romeo"),                   (void *)(TLL_TINY + PIZ_EVENT_ROMEO));
+quickmap_add(tll_code, gensym("juliet"),                  (void *)(TLL_TINY + PIZ_EVENT_JULIET));
 
-quickmap_add(tll_type, gensym("none"),                    (void *)(TINY + PIZ_MODE_NONE));
-quickmap_add(tll_type, gensym("ionian"),                  (void *)(TINY + PIZ_IONIAN));
-quickmap_add(tll_type, gensym("dorian"),                  (void *)(TINY + PIZ_DORIAN));
-quickmap_add(tll_type, gensym("phrygian"),                (void *)(TINY + PIZ_PHRYGIAN));
-quickmap_add(tll_type, gensym("lydian"),                  (void *)(TINY + PIZ_LYDIAN));
-quickmap_add(tll_type, gensym("mixolydian"),              (void *)(TINY + PIZ_MIXOLYDIAN));
-quickmap_add(tll_type, gensym("aeolian"),                 (void *)(TINY + PIZ_AEOLIAN));
-quickmap_add(tll_type, gensym("locrian"),                 (void *)(TINY + PIZ_LOCRIAN));
-quickmap_add(tll_type, gensym("natural"),                 (void *)(TINY + PIZ_NATURAL));
-quickmap_add(tll_type, gensym("harmonic"),                (void *)(TINY + PIZ_HARMONIC));
-quickmap_add(tll_type, gensym("melodic"),                 (void *)(TINY + PIZ_MELODIC));
-quickmap_add(tll_type, gensym("whole_tone"),              (void *)(TINY + PIZ_WHOLE_TONE));
-quickmap_add(tll_type, gensym("pentatonic_major"),        (void *)(TINY + PIZ_PENTATONIC_MAJOR));
-quickmap_add(tll_type, gensym("pentatonic_minor"),        (void *)(TINY + PIZ_PENTATONIC_MINOR));
-quickmap_add(tll_type, gensym("octatonic_half_whole"),    (void *)(TINY + PIZ_OCTATONIC_HALF_WHOLE));
-quickmap_add(tll_type, gensym("octatonic_whole_half"),    (void *)(TINY + PIZ_OCTATONIC_WHOLE_HALF));
-quickmap_add(tll_type, gensym("7th_major"),               (void *)(TINY + PIZ_SEVENTH_MAJOR));
-quickmap_add(tll_type, gensym("7th_minor"),               (void *)(TINY + PIZ_SEVENTH_MINOR));
-quickmap_add(tll_type, gensym("7th_dominant"),            (void *)(TINY + PIZ_SEVENTH_DOMINANT));
-quickmap_add(tll_type, gensym("7th_major_sixth"),         (void *)(TINY + PIZ_SEVENTH_MAJOR_SIXTH));
-quickmap_add(tll_type, gensym("7th_minor_sixth"),         (void *)(TINY + PIZ_SEVENTH_MINOR_SIXTH));
-quickmap_add(tll_type, gensym("7th_half_diminished"),     (void *)(TINY + PIZ_SEVENTH_HALF_DIMINISHED));
-quickmap_add(tll_type, gensym("7th_diminished"),          (void *)(TINY + PIZ_SEVENTH_DIMINISHED));
-quickmap_add(tll_type, gensym("7th_dominant_suspended"),  (void *)(TINY + PIZ_SEVENTH_SUSPENDED));
-quickmap_add(tll_type, gensym("7th_dominant_sharp_five"), (void *)(TINY + PIZ_SEVENTH_SHARP_FIVE));
-quickmap_add(tll_type, gensym("7th_dominant_flat_five"),  (void *)(TINY + PIZ_SEVENTH_FLAT_FIVE));
+quickmap_add(tll_type, gensym("none"),                    (void *)(TLL_TINY + PIZ_MODE_NONE));
+quickmap_add(tll_type, gensym("ionian"),                  (void *)(TLL_TINY + PIZ_IONIAN));
+quickmap_add(tll_type, gensym("dorian"),                  (void *)(TLL_TINY + PIZ_DORIAN));
+quickmap_add(tll_type, gensym("phrygian"),                (void *)(TLL_TINY + PIZ_PHRYGIAN));
+quickmap_add(tll_type, gensym("lydian"),                  (void *)(TLL_TINY + PIZ_LYDIAN));
+quickmap_add(tll_type, gensym("mixolydian"),              (void *)(TLL_TINY + PIZ_MIXOLYDIAN));
+quickmap_add(tll_type, gensym("aeolian"),                 (void *)(TLL_TINY + PIZ_AEOLIAN));
+quickmap_add(tll_type, gensym("locrian"),                 (void *)(TLL_TINY + PIZ_LOCRIAN));
+quickmap_add(tll_type, gensym("natural"),                 (void *)(TLL_TINY + PIZ_NATURAL));
+quickmap_add(tll_type, gensym("harmonic"),                (void *)(TLL_TINY + PIZ_HARMONIC));
+quickmap_add(tll_type, gensym("melodic"),                 (void *)(TLL_TINY + PIZ_MELODIC));
+quickmap_add(tll_type, gensym("whole_tone"),              (void *)(TLL_TINY + PIZ_WHOLE_TONE));
+quickmap_add(tll_type, gensym("pentatonic_major"),        (void *)(TLL_TINY + PIZ_PENTATONIC_MAJOR));
+quickmap_add(tll_type, gensym("pentatonic_minor"),        (void *)(TLL_TINY + PIZ_PENTATONIC_MINOR));
+quickmap_add(tll_type, gensym("octatonic_half_whole"),    (void *)(TLL_TINY + PIZ_OCTATONIC_HALF_WHOLE));
+quickmap_add(tll_type, gensym("octatonic_whole_half"),    (void *)(TLL_TINY + PIZ_OCTATONIC_WHOLE_HALF));
+quickmap_add(tll_type, gensym("7th_major"),               (void *)(TLL_TINY + PIZ_SEVENTH_MAJOR));
+quickmap_add(tll_type, gensym("7th_minor"),               (void *)(TLL_TINY + PIZ_SEVENTH_MINOR));
+quickmap_add(tll_type, gensym("7th_dominant"),            (void *)(TLL_TINY + PIZ_SEVENTH_DOMINANT));
+quickmap_add(tll_type, gensym("7th_major_sixth"),         (void *)(TLL_TINY + PIZ_SEVENTH_MAJOR_SIXTH));
+quickmap_add(tll_type, gensym("7th_minor_sixth"),         (void *)(TLL_TINY + PIZ_SEVENTH_MINOR_SIXTH));
+quickmap_add(tll_type, gensym("7th_half_diminished"),     (void *)(TLL_TINY + PIZ_SEVENTH_HALF_DIMINISHED));
+quickmap_add(tll_type, gensym("7th_diminished"),          (void *)(TLL_TINY + PIZ_SEVENTH_DIMINISHED));
+quickmap_add(tll_type, gensym("7th_dominant_suspended"),  (void *)(TLL_TINY + PIZ_SEVENTH_SUSPENDED));
+quickmap_add(tll_type, gensym("7th_dominant_sharp_five"), (void *)(TLL_TINY + PIZ_SEVENTH_SHARP_FIVE));
+quickmap_add(tll_type, gensym("7th_dominant_flat_five"),  (void *)(TLL_TINY + PIZ_SEVENTH_FLAT_FIVE));
 
-quickmap_add(tll_length, gensym("none"),                  (void *)(TINY + PIZ_NOTE_NONE));
-quickmap_add(tll_length, gensym("whole"),                 (void *)(TINY + PIZ_WHOLE_NOTE));
-quickmap_add(tll_length, gensym("half"),                  (void *)(TINY + PIZ_HALF_NOTE));
-quickmap_add(tll_length, gensym("quarter"),               (void *)(TINY + PIZ_QUARTER_NOTE));
-quickmap_add(tll_length, gensym("eighth"),                (void *)(TINY + PIZ_EIGHTH_NOTE));
-quickmap_add(tll_length, gensym("sixteenth"),             (void *)(TINY + PIZ_SIXTEENTH_NOTE));
-quickmap_add(tll_length, gensym("thirty_second"),         (void *)(TINY + PIZ_THIRTY_SECOND_NOTE));
-quickmap_add(tll_length, gensym("whole_triplet"),         (void *)(TINY + PIZ_WHOLE_NOTE_TRIPLET));
-quickmap_add(tll_length, gensym("half_triplet"),          (void *)(TINY + PIZ_HALF_NOTE_TRIPLET));
-quickmap_add(tll_length, gensym("quarter_triplet"),       (void *)(TINY + PIZ_QUARTER_NOTE_TRIPLET));
-quickmap_add(tll_length, gensym("eighth_triplet"),        (void *)(TINY + PIZ_EIGHTH_NOTE_TRIPLET));
-quickmap_add(tll_length, gensym("sixteenth_triplet"),     (void *)(TINY + PIZ_SIXTEENTH_NOTE_TRIPLET));
-quickmap_add(tll_length, gensym("thirty_second_triplet"), (void *)(TINY + PIZ_THIRTY_SECOND_NOTE_TRIPLET));
-quickmap_add(tll_length, gensym("whole_dotted"),          (void *)(TINY + PIZ_WHOLE_NOTE_DOTTED));
-quickmap_add(tll_length, gensym("half_dotted"),           (void *)(TINY + PIZ_HALF_NOTE_DOTTED));
-quickmap_add(tll_length, gensym("quarter_dotted"),        (void *)(TINY + PIZ_QUARTER_NOTE_DOTTED));
-quickmap_add(tll_length, gensym("eighth_dotted"),         (void *)(TINY + PIZ_EIGHTH_NOTE_DOTTED));
-quickmap_add(tll_length, gensym("sixteenth_dotted"),      (void *)(TINY + PIZ_SIXTEENTH_NOTE_DOTTED));
+quickmap_add(tll_length, gensym("none"),                  (void *)(TLL_TINY + PIZ_NOTE_NONE));
+quickmap_add(tll_length, gensym("whole"),                 (void *)(TLL_TINY + PIZ_WHOLE_NOTE));
+quickmap_add(tll_length, gensym("half"),                  (void *)(TLL_TINY + PIZ_HALF_NOTE));
+quickmap_add(tll_length, gensym("quarter"),               (void *)(TLL_TINY + PIZ_QUARTER_NOTE));
+quickmap_add(tll_length, gensym("eighth"),                (void *)(TLL_TINY + PIZ_EIGHTH_NOTE));
+quickmap_add(tll_length, gensym("sixteenth"),             (void *)(TLL_TINY + PIZ_SIXTEENTH_NOTE));
+quickmap_add(tll_length, gensym("thirty_second"),         (void *)(TLL_TINY + PIZ_THIRTY_SECOND_NOTE));
+quickmap_add(tll_length, gensym("whole_triplet"),         (void *)(TLL_TINY + PIZ_WHOLE_NOTE_TRIPLET));
+quickmap_add(tll_length, gensym("half_triplet"),          (void *)(TLL_TINY + PIZ_HALF_NOTE_TRIPLET));
+quickmap_add(tll_length, gensym("quarter_triplet"),       (void *)(TLL_TINY + PIZ_QUARTER_NOTE_TRIPLET));
+quickmap_add(tll_length, gensym("eighth_triplet"),        (void *)(TLL_TINY + PIZ_EIGHTH_NOTE_TRIPLET));
+quickmap_add(tll_length, gensym("sixteenth_triplet"),     (void *)(TLL_TINY + PIZ_SIXTEENTH_NOTE_TRIPLET));
+quickmap_add(tll_length, gensym("thirty_second_triplet"), (void *)(TLL_TINY + PIZ_THIRTY_SECOND_NOTE_TRIPLET));
+quickmap_add(tll_length, gensym("whole_dotted"),          (void *)(TLL_TINY + PIZ_WHOLE_NOTE_DOTTED));
+quickmap_add(tll_length, gensym("half_dotted"),           (void *)(TLL_TINY + PIZ_HALF_NOTE_DOTTED));
+quickmap_add(tll_length, gensym("quarter_dotted"),        (void *)(TLL_TINY + PIZ_QUARTER_NOTE_DOTTED));
+quickmap_add(tll_length, gensym("eighth_dotted"),         (void *)(TLL_TINY + PIZ_EIGHTH_NOTE_DOTTED));
+quickmap_add(tll_length, gensym("sixteenth_dotted"),      (void *)(TLL_TINY + PIZ_SIXTEENTH_NOTE_DOTTED));
 
-quickmap_add(tll_direction, gensym("up"),                 (void *)(TINY + PIZ_UP)); 
-quickmap_add(tll_direction, gensym("down"),               (void *)(TINY + PIZ_DOWN));
+quickmap_add(tll_direction, gensym("up"),                 (void *)(TLL_TINY + PIZ_UP)); 
+quickmap_add(tll_direction, gensym("down"),               (void *)(TLL_TINY + PIZ_DOWN));
 
-quickmap_add(tll_select, gensym("pitch"),                 (void *)(TINY + PIZ_VALUE_PITCH));
-quickmap_add(tll_select, gensym("velocity"),              (void *)(TINY + PIZ_VALUE_VELOCITY));
-quickmap_add(tll_select, gensym("duration"),              (void *)(TINY + PIZ_VALUE_DURATION));
-quickmap_add(tll_select, gensym("channel"),               (void *)(TINY + PIZ_VALUE_CHANNEL));
+quickmap_add(tll_select, gensym("pitch"),                 (void *)(TLL_TINY + PIZ_VALUE_PITCH));
+quickmap_add(tll_select, gensym("velocity"),              (void *)(TLL_TINY + PIZ_VALUE_VELOCITY));
+quickmap_add(tll_select, gensym("duration"),              (void *)(TLL_TINY + PIZ_VALUE_DURATION));
+quickmap_add(tll_select, gensym("channel"),               (void *)(TLL_TINY + PIZ_VALUE_CHANNEL));
 
-quickmap_add(tll_key, gensym("C"),                        (void *)(TINY + PIZ_KEY_C));
-quickmap_add(tll_key, gensym("C#"),                       (void *)(TINY + PIZ_KEY_C_SHARP));
-quickmap_add(tll_key, gensym("D"),                        (void *)(TINY + PIZ_KEY_D));
-quickmap_add(tll_key, gensym("D#"),                       (void *)(TINY + PIZ_KEY_D_SHARP));
-quickmap_add(tll_key, gensym("E"),                        (void *)(TINY + PIZ_KEY_E));
-quickmap_add(tll_key, gensym("F"),                        (void *)(TINY + PIZ_KEY_F));
-quickmap_add(tll_key, gensym("F#"),                       (void *)(TINY + PIZ_KEY_F_SHARP));
-quickmap_add(tll_key, gensym("G"),                        (void *)(TINY + PIZ_KEY_G));
-quickmap_add(tll_key, gensym("G#"),                       (void *)(TINY + PIZ_KEY_G_SHARP));
-quickmap_add(tll_key, gensym("A"),                        (void *)(TINY + PIZ_KEY_A));
-quickmap_add(tll_key, gensym("A#"),                       (void *)(TINY + PIZ_KEY_A_SHARP));
-quickmap_add(tll_key, gensym("B"),                        (void *)(TINY + PIZ_KEY_B));
+quickmap_add(tll_key, gensym("C"),                        (void *)(TLL_TINY + PIZ_KEY_C));
+quickmap_add(tll_key, gensym("C#"),                       (void *)(TLL_TINY + PIZ_KEY_C_SHARP));
+quickmap_add(tll_key, gensym("D"),                        (void *)(TLL_TINY + PIZ_KEY_D));
+quickmap_add(tll_key, gensym("D#"),                       (void *)(TLL_TINY + PIZ_KEY_D_SHARP));
+quickmap_add(tll_key, gensym("E"),                        (void *)(TLL_TINY + PIZ_KEY_E));
+quickmap_add(tll_key, gensym("F"),                        (void *)(TLL_TINY + PIZ_KEY_F));
+quickmap_add(tll_key, gensym("F#"),                       (void *)(TLL_TINY + PIZ_KEY_F_SHARP));
+quickmap_add(tll_key, gensym("G"),                        (void *)(TLL_TINY + PIZ_KEY_G));
+quickmap_add(tll_key, gensym("G#"),                       (void *)(TLL_TINY + PIZ_KEY_G_SHARP));
+quickmap_add(tll_key, gensym("A"),                        (void *)(TLL_TINY + PIZ_KEY_A));
+quickmap_add(tll_key, gensym("A#"),                       (void *)(TLL_TINY + PIZ_KEY_A_SHARP));
+quickmap_add(tll_key, gensym("B"),                        (void *)(TLL_TINY + PIZ_KEY_B));
 
-quickmap_add(tll_notification, gensym("bpm"),             (void *)(TINY + PIZ_EVENT_CHANGED_BPM));
-quickmap_add(tll_notification, gensym("chance"),          (void *)(TINY + PIZ_EVENT_CHANGED_CHANCE));
-quickmap_add(tll_notification, gensym("velocity"),        (void *)(TINY + PIZ_EVENT_CHANGED_VELOCITY));
-quickmap_add(tll_notification, gensym("channel"),         (void *)(TINY + PIZ_EVENT_CHANGED_CHANNEL));
-quickmap_add(tll_notification, gensym("chord"),           (void *)(TINY + PIZ_EVENT_CHANGED_CHORD));
-quickmap_add(tll_notification, gensym("cell"),            (void *)(TINY + PIZ_EVENT_CHANGED_CELL));
-quickmap_add(tll_notification, gensym("value"),           (void *)(TINY + PIZ_EVENT_CHANGED_VALUE));
-quickmap_add(tll_notification, gensym("scale"),           (void *)(TINY + PIZ_EVENT_CHANGED_SCALE));
-quickmap_add(tll_notification, gensym("pattern"),         (void *)(TINY + PIZ_EVENT_CHANGED_PATTERN)); 
-quickmap_add(tll_notification, gensym("zone"),            (void *)(TINY + PIZ_EVENT_CHANGED_ZONE));
+quickmap_add(tll_notification, gensym("bpm"),             (void *)(TLL_TINY + PIZ_EVENT_CHANGED_BPM));
+quickmap_add(tll_notification, gensym("chance"),          (void *)(TLL_TINY + PIZ_EVENT_CHANGED_CHANCE));
+quickmap_add(tll_notification, gensym("velocity"),        (void *)(TLL_TINY + PIZ_EVENT_CHANGED_VELOCITY));
+quickmap_add(tll_notification, gensym("channel"),         (void *)(TLL_TINY + PIZ_EVENT_CHANGED_CHANNEL));
+quickmap_add(tll_notification, gensym("chord"),           (void *)(TLL_TINY + PIZ_EVENT_CHANGED_CHORD));
+quickmap_add(tll_notification, gensym("cell"),            (void *)(TLL_TINY + PIZ_EVENT_CHANGED_CELL));
+quickmap_add(tll_notification, gensym("value"),           (void *)(TLL_TINY + PIZ_EVENT_CHANGED_VALUE));
+quickmap_add(tll_notification, gensym("scale"),           (void *)(TLL_TINY + PIZ_EVENT_CHANGED_SCALE));
+quickmap_add(tll_notification, gensym("pattern"),         (void *)(TLL_TINY + PIZ_EVENT_CHANGED_PATTERN)); 
+quickmap_add(tll_notification, gensym("zone"),            (void *)(TLL_TINY + PIZ_EVENT_CHANGED_ZONE));
 //
 }
 
@@ -234,7 +234,7 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv)
     long data[PIZ_EVENT_DATA_SIZE] = { 0 };
     PIZEvent *event = NULL;
      
-    code -= TINY;
+    code -= TLL_TINY;
     
     if (msg = ((code == PIZ_EVENT_ROTATE)   ||
                (code == PIZ_EVENT_SCRAMBLE) ||
@@ -251,23 +251,23 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv)
      
     if ((code == PIZ_EVENT_SCALE) || (code == PIZ_EVENT_CYCLE)) {
         if (!(quickmap_lookup_key1(tll_type, (void *)atom_getsym(argv + i), (void **)&t))) {
-            j = t - TINY; p = 1; 
+            j = t - TLL_TINY; p = 1; 
         } else if (!(quickmap_lookup_key1(tll_key, (void *)atom_getsym(argv + i), (void **)&t))) {
-            j = t - TINY;
+            j = t - TLL_TINY;
         }
         
     } else if ((code == PIZ_EVENT_CELL) || (code == PIZ_EVENT_VALUE)) {
         if (!(quickmap_lookup_key1(tll_length, (void *)atom_getsym(argv + i), (void **)&t))) {
-            j = t - TINY; p = 0;
+            j = t - TLL_TINY; p = 0;
         } else {
             continue;
         }
         
     } else if (msg) {
         if (!(quickmap_lookup_key1(tll_direction, (void *)atom_getsym(argv + i), (void **)&t))) {
-            j = t - TINY; p = 1;
+            j = t - TLL_TINY; p = 1;
         } else if (!(quickmap_lookup_key1(tll_select, (void *)atom_getsym(argv + i), (void **)&t))) {
-            j = t - TINY;
+            j = t - TLL_TINY;
         }
         
     } else {
@@ -304,11 +304,11 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 void tralala_parseNotification(t_tll *x, PIZEvent *event)
 {
     long i, k = 0;
-    long dirty = 0;
     long *ptr = NULL;
     t_symbol *s = NULL;
     t_atom data[PIZ_EVENT_DATA_SIZE + 1];
     PIZEventCode code;
+    ulong dirty = TLL_DIRTY_NONE;
     
     pizEventCode(event, &code);
     pizEventData(event, &k, &ptr);
@@ -319,17 +319,17 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
     
     TLL_LOCK
     
-    if (!(quickmap_lookup_key2(tll_notification, (void *)(code + TINY), (void **)&s))) {
+    if (!(quickmap_lookup_key2(tll_notification, (void *)(code + TLL_TINY), (void **)&s))) {
         
         if (code == PIZ_EVENT_CHANGED_ZONE) {
-            dirty = 1;
+            dirty |= TLL_DIRTY_ZONE;
             
         } else if (code == PIZ_EVENT_CHANGED_SCALE) {
             t_symbol *sym1 = NULL;
             t_symbol *sym2 = NULL;
 
-            quickmap_lookup_key2(tll_key,  (void *)((*(ptr + 0)) + TINY), (void **)&sym1);
-            quickmap_lookup_key2(tll_type, (void *)((*(ptr + 1)) + TINY), (void **)&sym2);
+            quickmap_lookup_key2(tll_key,  (void *)((*(ptr + 0)) + TLL_TINY), (void **)&sym1);
+            quickmap_lookup_key2(tll_type, (void *)((*(ptr + 1)) + TLL_TINY), (void **)&sym2);
 
             atom_setsym(data + 1, sym1);
             atom_setsym(data + 2, sym2);
@@ -339,7 +339,7 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
         dictionary_appendatoms(x->current, s, k + 1, data); 
 
     } else {
-        tralala_reset(x);
+        dirty |= tralala_reset(x);
         tralala_symbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
             
         if (code == PIZ_EVENT_NOTE_REMOVED) {
@@ -358,17 +358,22 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
             dictionary_appendatoms(x->current, s, k - 1, data);
         }
         
-        dirty = 2;
+        dirty |= TLL_DIRTY_NOTES;
     }
     
     TLL_UNLOCK
     
-    switch (dirty) {
-        case 1 : TLL_DIRTY_ZONE break;
-        case 2 : TLL_DIRTY_NOTES break;
+    if (dirty & TLL_DIRTY_ZONE) { 
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
+    } else if (dirty & TLL_DIRTY_NOTES) { 
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE); 
     }
     
-    TLL_DRAW
+    if (dirty & TLL_DIRTY_LASSO) { 
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO); 
+    }
+
+    jbox_redraw((t_jbox *)x);
 }
 
 // -------------------------------------------------------------------------------------------------------------

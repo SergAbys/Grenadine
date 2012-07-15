@@ -38,8 +38,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define TLL_LOCK    systhread_mutex_lock(&x->mutex);
-#define TLL_UNLOCK  systhread_mutex_unlock(&x->mutex); 
+#define TLL_LOCK        systhread_mutex_lock(&x->mutex);
+#define TLL_UNLOCK      systhread_mutex_unlock(&x->mutex); 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -51,13 +51,6 @@ typedef struct _tll {
     t_atom              played[4];
     t_atom              dumped[5];
     t_atom              link;
-    t_jrgba             text;
-    t_jrgba             color;
-    t_jrgba             hcolor1;
-    t_jrgba             hcolor2;
-    t_jrgba             border;
-    t_jrgba             lasso;
-    t_jrgba             background;
     PIZTime             time;
     ulong               flags;
     long                identifier;
@@ -66,6 +59,13 @@ typedef struct _tll {
     long                viewText;
     t_pt                cursor;  
     t_pt                origin;
+    t_jrgba             color;
+    t_jrgba             textColor;
+    t_jrgba             highlightedColor1;
+    t_jrgba             highlightedColor2;
+    t_jrgba             lassoColor;
+    t_jrgba             borderColor;
+    t_jrgba             backgroundColor;
     t_jtextlayout       *layer; 
     t_dictionary        *data;
     t_dictionary        *current;

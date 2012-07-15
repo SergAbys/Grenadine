@@ -17,6 +17,7 @@
 #pragma mark -
 
 t_tllSymbols tll_table;
+t_dictionary *tll_clipboard;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -30,7 +31,7 @@ PIZ_LOCAL void tralala_send (t_tll *x, PIZEventCode code, long argc, t_atom *arg
 #pragma mark -
 
 static t_class *tll_class;
-static t_int32_atomic identifier;
+static t_int32_atomic tll_identifier;
 
 int main(void)
 {	
@@ -63,12 +64,12 @@ int main(void)
     class_addmethod(c, (method)tralala_list,        "list",          A_GIMME, 0);
     class_addmethod(c, (method)tralala_anything,    "anything",      A_GIMME, 0);
 
-    CLASS_ATTR_RGBA         (c, "bgcolor", 0, t_tll, background); 
+    CLASS_ATTR_RGBA         (c, "bgcolor", 0, t_tll, backgroundColor); 
     CLASS_ATTR_DEFAULT_SAVE (c, "bgcolor", 0, "0. 0. 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "bgcolor", 0, "rgba", "Background Color");
     CLASS_ATTR_CATEGORY     (c, "bgcolor", 0, "Color");
     
-    CLASS_ATTR_RGBA         (c, "bordercolor", 0, t_tll, border); 
+    CLASS_ATTR_RGBA         (c, "bordercolor", 0, t_tll, borderColor); 
     CLASS_ATTR_DEFAULT_SAVE (c, "bordercolor", 0, "0. 0. 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "bordercolor", 0, "rgba", "Border Color");
     CLASS_ATTR_CATEGORY     (c, "bordercolor", 0, "Color");
@@ -78,22 +79,22 @@ int main(void)
     CLASS_ATTR_STYLE_LABEL  (c, "color", 0, "rgba", "Color");
     CLASS_ATTR_CATEGORY     (c, "color", 0, "Color");
     
-    CLASS_ATTR_RGBA         (c, "hcolor1", 0, t_tll, hcolor1); 
+    CLASS_ATTR_RGBA         (c, "hcolor1", 0, t_tll, highlightedColor1); 
     CLASS_ATTR_DEFAULT_SAVE (c, "hcolor1", 0, "0.83 0.74 0.84 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "hcolor1", 0, "rgba", "Highlighted Color");
     CLASS_ATTR_CATEGORY     (c, "hcolor1", 0, "Color");
     
-    CLASS_ATTR_RGBA         (c, "hcolor2", 0, t_tll, hcolor2); 
+    CLASS_ATTR_RGBA         (c, "hcolor2", 0, t_tll, highlightedColor2); 
     CLASS_ATTR_DEFAULT_SAVE (c, "hcolor2", 0, "1. 0.75 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "hcolor2", 0, "rgba", "Highlighted Color");
     CLASS_ATTR_CATEGORY     (c, "hcolor2", 0, "Color");
     
-    CLASS_ATTR_RGBA         (c, "textcolor", 0, t_tll, text); 
+    CLASS_ATTR_RGBA         (c, "textcolor", 0, t_tll, textColor); 
     CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "0.51 0.44 0.49 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "textcolor", 0, "rgba", "Text Color");
     CLASS_ATTR_CATEGORY     (c, "textcolor", 0, "Color");
     
-    CLASS_ATTR_RGBA         (c, "lassocolor", 0, t_tll, lasso); 
+    CLASS_ATTR_RGBA         (c, "lassocolor", 0, t_tll, lassoColor); 
     CLASS_ATTR_DEFAULT_SAVE (c, "lassocolor", 0, "0.51 0.44 0.49 0.40"); 
     CLASS_ATTR_STYLE_LABEL  (c, "lassocolor", 0, "rgba", "Lasso Color");
     CLASS_ATTR_CATEGORY     (c, "lassocolor", 0, "Color");
@@ -134,6 +135,7 @@ int main(void)
     tll_class = c;
     
     tralala_parseInit(&tll_table);
+    tll_clipboard = dictionary_new( );
 
     return 0;
 }
@@ -149,7 +151,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     t_dictionary *t = NULL;
     PIZError err = PIZ_GOOD;
     
-    if (d = object_dictionaryarg(argc, argv)) {
+    if (tll_clipboard && (d = object_dictionaryarg(argc, argv))) {
     //
     if (x = (t_tll *)object_alloc(tll_class)) {
     //
@@ -184,7 +186,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
             dictionary_copyunique(x->data, t);
         } 
         
-        x->identifier = ATOMIC_INCREMENT(&identifier);
+        x->identifier = ATOMIC_INCREMENT(&tll_identifier);
             
         if (!(err |= !(x->agent = pizAgentNew(x->identifier)))) {
             pizAgentAttach(x->agent, (void *)x, (PIZMethod)tralala_callback);

@@ -14,27 +14,58 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 extern t_tllSymbols tll_table;
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#define TLL_KEY_A   (keycode == 97)
+#define TLL_KEY_X   (keycode == 120)
+#define TLL_KEY_C   (keycode == 99)
+#define TLL_KEY_V   (keycode == 118)
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+#define TLL_PT(a)   (a).x = pt.x - 1.; (a).y = pt.y - 1.;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 PIZ_LOCAL void tralala_userAddNote              (t_tll *x);
+PIZ_LOCAL void tralala_userSelectAllNotes       (t_tll *x);
 PIZ_LOCAL void tralala_userSelectNoteByClick    (t_tll *x, t_symbol *s);
 PIZ_LOCAL bool tralala_userSelectNoteByLasso    (t_tll *x);
 PIZ_LOCAL bool tralala_userIsNoteInsideLasso    (t_tll *x, t_symbol *s, double *coordinates);
 PIZ_LOCAL void tralala_userReleaseLasso         (t_tll *x);
 
-PIZ_LOCAL t_tllStatus   tralala_userHitZone     (t_tll *x);
-PIZ_LOCAL t_symbol      *tralala_userHitNote    (t_tll *x);
+PIZ_LOCAL tllStatus tralala_userHitZone         (t_tll *x);
+PIZ_LOCAL t_symbol  *tralala_userHitNote        (t_tll *x);
+
+PIZ_LOCAL void tralala_userCommandA             (t_tll *x);
+PIZ_LOCAL void tralala_userCommandX             (t_tll *x);
+PIZ_LOCAL void tralala_userCommandC             (t_tll *x);
+PIZ_LOCAL void tralala_userCommandV             (t_tll *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 #pragma mark ---
 #pragma mark -
+
+tllDirty tralala_reset(t_tll *x)
+{
+    if (x->flags & TLL_FLAG_LASSO) {
+        tralala_userReleaseLasso(x);
+        return TLL_DIRTY_LASSO;
+    } 
+    
+    return TLL_DIRTY_NONE;
+}
 
 void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacter)
 {
@@ -52,8 +83,8 @@ void tralala_wheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc, doub
 
 void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
 {	
-    x->cursor = pt;
-    x->origin = pt;
+    TLL_PT(x->cursor)
+    TLL_PT(x->origin)
     
     TLL_LOCK
     
@@ -81,19 +112,20 @@ void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
     
     TLL_UNLOCK
         
-    TLL_DIRTY_ZONE 
-    TLL_DIRTY_NOTES_DRAW  
+    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE); 
+    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
+    jbox_redraw((t_jbox *)x);  
 }
 
 void tralala_move(t_tll *x, t_object *pv, t_pt pt, long m)
 {
-    x->cursor = pt; 
-    TLL_DRAW
+    TLL_PT(x->cursor) 
+    jbox_redraw((t_jbox *)x);
 }
 
 void tralala_drag(t_tll *x, t_object *pv, t_pt pt, long m)
 {
-    x->cursor = pt;
+    TLL_PT(x->cursor)
      
     if (m & eShiftKey) {
         x->flags |= TLL_FLAG_SHIFT;
@@ -103,10 +135,11 @@ void tralala_drag(t_tll *x, t_object *pv, t_pt pt, long m)
     
     if (x->flags & TLL_FLAG_LASSO) {
         if (tralala_userSelectNoteByLasso(x)) {
-            TLL_DIRTY_NOTES
+            jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
         }
     
-        TLL_DIRTY_LASSO_DRAW
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
+        jbox_redraw((t_jbox *)x);
     }
 }
 
@@ -117,15 +150,8 @@ void tralala_up(t_tll *x, t_object *pv, t_pt pt, long m)
         tralala_userReleaseLasso(x);
         TLL_UNLOCK
         
-        TLL_DIRTY_LASSO_DRAW
-    }
-}
-
-void tralala_reset(t_tll *x)
-{
-    if (x->flags & TLL_FLAG_LASSO) {
-        tralala_userReleaseLasso(x);
-        TLL_DIRTY_LASSO
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
+        jbox_redraw((t_jbox *)x);
     }
 }
 
@@ -139,10 +165,15 @@ void tralala_userAddNote(t_tll *x)
 {
     t_atom a[2];
     
-    atom_setlong(a, X_TO_POSITION(x->cursor.x));
-    atom_setlong(a + 1, Y_TO_PITCH(x->cursor.y));
+    atom_setlong(a, TLL_X_TO_POSITION(x->cursor.x));
+    atom_setlong(a + 1, TLL_Y_TO_PITCH(x->cursor.y));
     
     tralala_parseMessage(x, TLL_SYM_NOTE, 2, a);
+}
+
+void tralala_userSelectAllNotes(t_tll *x)
+{
+
 }
 
 void tralala_userSelectNoteByClick(t_tll *x, t_symbol *s)
@@ -172,8 +203,8 @@ bool tralala_userSelectNoteByLasso(t_tll *x)
     long argc;
     t_atom *argv = NULL;
     
-    double c[ ] = { X_OFFSET(MIN(x->origin.x, x->cursor.x)), Y_OFFSET(MIN(x->origin.y, x->cursor.y)),
-                    X_OFFSET(MAX(x->origin.x, x->cursor.x)), Y_OFFSET(MAX(x->origin.y, x->cursor.y)) };  
+    double c[ ] = { TLL_X_OFFSET(MIN(x->origin.x, x->cursor.x)), TLL_Y_OFFSET(MIN(x->origin.y, x->cursor.y)),
+                    TLL_X_OFFSET(MAX(x->origin.x, x->cursor.x)), TLL_Y_OFFSET(MAX(x->origin.y, x->cursor.y)) };
     
     for (i = 0; i < n; i++) {
     //
@@ -238,10 +269,10 @@ bool tralala_userIsNoteInsideLasso(t_tll *x, t_symbol *s, double *c)
     t_atom *argv = NULL;
         
     if (!(dictionary_getatoms(x->current, s, &argc, &argv))) {
-        double a = POSITION_TO_X(atom_getlong(argv + 1));
-        double b = PITCH_TO_Y_UP(atom_getlong(argv + 2));
-        double u = POSITION_TO_X(atom_getlong(argv + 1) + atom_getlong(argv + 4));
-        double v = PITCH_TO_Y_DOWN(atom_getlong(argv + 2));
+        double a = TLL_POSITION_TO_X(atom_getlong(argv + 1));
+        double b = TLL_PITCH_TO_Y_UP(atom_getlong(argv + 2));
+        double u = TLL_POSITION_TO_X(atom_getlong(argv + 1) + atom_getlong(argv + 4));
+        double v = TLL_PITCH_TO_Y_DOWN(atom_getlong(argv + 2));
         
         k  = ((a > c[0]) && (a < c[2])) || ((u > c[0]) && (u < c[2]));
         k &= ((b > c[1]) && (b < c[3])) || ((v > c[1]) && (v < c[3]));
@@ -288,12 +319,12 @@ void tralala_userReleaseLasso(t_tll *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-t_tllStatus tralala_userHitZone(t_tll *x)
+tllStatus tralala_userHitZone(t_tll *x)
 {
     long argc, k = 0;
     t_atom *argv = NULL;
-    long position = X_TO_POSITION(x->cursor.x);
-    long pitch = Y_TO_PITCH(x->cursor.y);
+    long position = TLL_X_TO_POSITION(x->cursor.x);
+    long pitch = TLL_Y_TO_PITCH(x->cursor.y);
     
     if (!(dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv))) {
     //
@@ -323,8 +354,8 @@ t_symbol *tralala_userHitNote(t_tll *x)
     long i, n;
     t_symbol *note = NULL;
     t_symbol **keys = NULL;
-    long position = X_TO_POSITION(x->cursor.x - 1.);
-    long pitch = Y_TO_PITCH(x->cursor.y - 1.);
+    long position = TLL_X_TO_POSITION(x->cursor.x - 1.);
+    long pitch = TLL_Y_TO_PITCH(x->cursor.y - 1.);
     
     if (!(dictionary_getkeys(x->current, &n, &keys))) {
     //
@@ -353,6 +384,30 @@ t_symbol *tralala_userHitNote(t_tll *x)
     }
     
     return note;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZ_LOCAL void tralala_userCommandA(t_tll *x)
+{
+    ;
+}
+
+PIZ_LOCAL void tralala_userCommandX(t_tll *x)
+{
+    ;
+}
+
+PIZ_LOCAL void tralala_userCommandC(t_tll *x)
+{
+    ;
+}
+
+PIZ_LOCAL void tralala_userCommandV(t_tll *x)
+{
+    ;
 }
 
 // -------------------------------------------------------------------------------------------------------------
