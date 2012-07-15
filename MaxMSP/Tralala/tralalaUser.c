@@ -53,7 +53,29 @@ PIZ_LOCAL void      tralala_userCommandV            (t_tll *x);
 
 void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacter)
 {
-	;
+    ulong dirty = TLL_DIRTY_NONE;
+        
+    TLL_LOCK
+    dirty |= tralala_userAbort(x);
+    TLL_UNLOCK
+    
+    if (dirty & TLL_DIRTY_LASSO) {
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
+    }
+    
+    if (m & eCommandKey) {
+    //
+    if (TLL_KEY_A) {
+        TLL_LOCK
+        tralala_userSelectAllNotes(x);
+        TLL_UNLOCK
+        
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
+    }
+    //
+    }
+    
+    jbox_redraw((t_jbox *)x);
 }
 
 void tralala_wheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc)
@@ -124,13 +146,13 @@ void tralala_drag(t_tll *x, t_object *pv, t_pt pt, long m)
     
     if (x->flags & TLL_FLAG_LASSO) {
     //
-    ulong k;
+    ulong dirty;
     
     TLL_LOCK
-    k = tralala_userSelectNoteByLasso(x);
+    dirty = tralala_userSelectNoteByLasso(x);
     TLL_UNLOCK
     
-    if (k) {
+    if (dirty) {
         jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
     }
 
@@ -154,6 +176,8 @@ void tralala_up(t_tll *x, t_object *pv, t_pt pt, long m)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark ---
 #pragma mark -
 
 ulong tralala_userAbort(t_tll *x)
@@ -184,7 +208,24 @@ void tralala_userAddNote(t_tll *x)
 
 void tralala_userSelectAllNotes(t_tll *x)
 {
-
+    long i, n;
+    t_symbol **keys = NULL;
+    
+    if (!(dictionary_getkeys(x->current, &n, &keys))) {
+        for (i = 0; i < n; i++) {
+        //
+        long argc;
+        t_atom *argv = NULL;
+        t_symbol *key = (*(keys + i));
+        
+        if (!(dictionary_getatoms(x->current, key, &argc, &argv)) && ((atom_getsym(argv) == TLL_SYM_NOTE))) { 
+            dictionary_appendlong(x->status, key, TLL_SELECTED); 
+        }
+        //
+        }
+        
+        dictionary_freekeys(x->current, n, keys);
+    }
 }
 
 void tralala_userSelectNoteByClick(t_tll *x, t_symbol *s)
