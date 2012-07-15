@@ -20,15 +20,15 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-enum {
+typedef enum _tllStatus {
     TLL_SELECTED        = 1,
     TLL_UNSELECTED      = 2,
-    TLL_SELECTED_GRAB   = 3,
+    TLL_SELECTED_LASSO  = 3,
     TLL_SELECTED_START  = 4,
     TLL_SELECTED_END    = 5,
     TLL_SELECTED_DOWN   = 6,
     TLL_SELECTED_UP     = 7
-    };
+    } t_tllStatus;
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -40,6 +40,7 @@ void tralala_down   (t_tll *x, t_object *pv, t_pt pt, long m);
 void tralala_move   (t_tll *x, t_object *pv, t_pt pt, long m);
 void tralala_drag   (t_tll *x, t_object *pv, t_pt pt, long m);
 void tralala_up     (t_tll *x, t_object *pv, t_pt pt, long m);
+void tralala_reset  (t_tll *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

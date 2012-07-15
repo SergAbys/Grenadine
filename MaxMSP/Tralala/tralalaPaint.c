@@ -20,20 +20,20 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void tralala_paintLasso           (t_tll *x, t_object *pv);
-PIZ_LOCAL void tralala_paintBackground      (t_tll *x, t_object *pv);
-PIZ_LOCAL void tralala_paintDictionary      (t_tll *x, t_object *pv);
+PIZ_LOCAL void tralala_paintLasso               (t_tll *x, t_object *pv);
+PIZ_LOCAL void tralala_paintBackground          (t_tll *x, t_object *pv);
+PIZ_LOCAL void tralala_paintDictionary          (t_tll *x, t_object *pv);
 
-PIZ_LOCAL void tralala_paintText            (t_tll *x, t_object *pv, char *string);
-PIZ_LOCAL void tralala_paintZone            (t_tll *x, t_object *pv, long argc, t_atom *argv, long status);
-PIZ_LOCAL void tralala_paintNote            (t_tll *x, t_object *pv, t_atomarray **notes);
+PIZ_LOCAL void tralala_paintText                (t_tll *x, t_object *pv, char *string);
+PIZ_LOCAL void tralala_paintZone                (t_tll *x, t_object *pv, long argc, t_atom *argv, long status);
+PIZ_LOCAL void tralala_paintNote                (t_tll *x, t_object *pv, t_atomarray **notes);
 
-PIZ_LOCAL void tralala_strncatZone          (char *dst, long argc, t_atom *argv);
-PIZ_LOCAL void tralala_strncatNote          (char *dst, long argc, t_atom *argv);
-PIZ_LOCAL void tralala_strncatAttribute     (char *dst, long argc, t_atom *argv);
-PIZ_LOCAL void tralala_strncatCursor        (char *dst, long pitch, long position);
+PIZ_LOCAL void tralala_paintStrncatZone         (char *dst, long argc, t_atom *argv);
+PIZ_LOCAL void tralala_paintStrncatNote         (char *dst, long argc, t_atom *argv);
+PIZ_LOCAL void tralala_paintStrncatAttribute    (char *dst, long argc, t_atom *argv);
+PIZ_LOCAL void tralala_paintStrncatCursor       (char *dst, long pitch, long position);
 
-PIZ_LOCAL void tralala_pitchAsString        (char *s, long k, long size);
+PIZ_LOCAL void tralala_paintPitchAsString       (char *s, long k, long size);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -170,25 +170,25 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
         if (cell = atom_getlong(argv + 1)) {
             long pitch = Y_TO_PITCH(x->cursor.y);
             long position = ((long)((X_TO_POSITION(x->cursor.x)) / cell)) * cell;
-            tralala_strncatCursor(string, pitch, position);
+            tralala_paintStrncatCursor(string, pitch, position);
         }
     }
     
     for (i = 0; i < 9; i++) {
         if (!(dictionary_getatoms(x->current, s[i], &argc, &argv))) {
-            tralala_strncatAttribute(string, argc, argv);
+            tralala_paintStrncatAttribute(string, argc, argv);
         }
     }
     
     if (dictionary_hasentry(x->status, TLL_SYM_ZONE)) {
         if (!(dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv))) {
-            tralala_strncatZone(string, argc, argv);
+            tralala_paintStrncatZone(string, argc, argv);
         } 
     }
     
     if (!(dictionary_getsym(x->status, TLL_SYM_LAST, &last)) 
         && (!(dictionary_getatoms(x->current, last, &argc, &argv)))) {
-        tralala_strncatNote(string, argc, argv);
+        tralala_paintStrncatNote(string, argc, argv);
     }
     
     if (!err && !(dictionary_getkeys(x->current, &n, &keys))) {
@@ -368,19 +368,19 @@ void tralala_paintNote(t_tll *x, t_object *pv, t_atomarray **notes)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_strncatZone(char *dst, long argc, t_atom *argv)
+void tralala_paintStrncatZone(char *dst, long argc, t_atom *argv)
 {
     char a[4];
     char b[4];
     char temp[32];
     
-    tralala_pitchAsString(a, atom_getlong(argv + 3), 4);
-    tralala_pitchAsString(b, atom_getlong(argv + 4), 4);
+    tralala_paintPitchAsString(a, atom_getlong(argv + 3), 4);
+    tralala_paintPitchAsString(b, atom_getlong(argv + 4), 4);
     snprintf_zero(temp, 32, "%ld %ld %s %s\n", atom_getlong(argv + 1), atom_getlong(argv + 2), a, b);
     strncat_zero(dst, temp, TLL_STRING_SIZE);
 }
 
-void tralala_strncatNote(char *dst, long argc, t_atom *argv)
+void tralala_paintStrncatNote(char *dst, long argc, t_atom *argv)
 {
     char a[4];
     char temp[32];
@@ -389,12 +389,12 @@ void tralala_strncatNote(char *dst, long argc, t_atom *argv)
     long d = atom_getlong(argv + 4);
     long c = atom_getlong(argv + 5);
     
-    tralala_pitchAsString(a, atom_getlong(argv + 2), 4);
+    tralala_paintPitchAsString(a, atom_getlong(argv + 2), 4);
     snprintf_zero(temp, 32, "%ld %s %ld %ld %ld\n", p, a, v, d, c);
     strncat_zero(dst, temp, TLL_STRING_SIZE);
 }
 
-void tralala_strncatAttribute(char *dst, long argc, t_atom *argv)
+void tralala_paintStrncatAttribute(char *dst, long argc, t_atom *argv)
 {
     long k = 0;
     char *p = NULL;
@@ -406,12 +406,12 @@ void tralala_strncatAttribute(char *dst, long argc, t_atom *argv)
     }
 }
 
-void tralala_strncatCursor(char *dst, long pitch, long position)
+void tralala_paintStrncatCursor(char *dst, long pitch, long position)
 {   
     char a[8];
     char b[8];
     
-    tralala_pitchAsString(a, CLAMP(pitch, 0, PIZ_MAGIC_PITCH), 8);
+    tralala_paintPitchAsString(a, CLAMP(pitch, 0, PIZ_MAGIC_PITCH), 8);
     snprintf_zero(b, 8, "\n%ld\n", CLAMP(position, 0, PIZ_SEQUENCE_SIZE_TIMELINE));
     strncat_zero(dst, a, TLL_STRING_SIZE);
     strncat_zero(dst, b, TLL_STRING_SIZE);
@@ -421,7 +421,7 @@ void tralala_strncatCursor(char *dst, long pitch, long position)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_pitchAsString(char *s, long k, long size)
+void tralala_paintPitchAsString(char *s, long k, long size)
 {
     long m = k % 12;
     long n = ((long)(k / 12.)) - 2;

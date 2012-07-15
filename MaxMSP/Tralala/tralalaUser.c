@@ -21,13 +21,14 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL bool      tralala_grabNotes   (t_tll *x);
-PIZ_LOCAL void      tralala_grabUpdate  (t_tll *x);
-PIZ_LOCAL bool      tralala_isInLasso   (t_tll *x, t_symbol *s, double *f);
-PIZ_LOCAL void      tralala_selectNote  (t_tll *x, t_symbol *s);
-PIZ_LOCAL void      tralala_addNote     (t_tll *x);
-PIZ_LOCAL long      tralala_hitZone     (t_tll *x);
-PIZ_LOCAL t_symbol  *tralala_hitNote    (t_tll *x);
+PIZ_LOCAL void tralala_userAddNote              (t_tll *x);
+PIZ_LOCAL void tralala_userSelectNoteByClick    (t_tll *x, t_symbol *s);
+PIZ_LOCAL bool tralala_userSelectNoteByLasso    (t_tll *x);
+PIZ_LOCAL bool tralala_userIsNoteInsideLasso    (t_tll *x, t_symbol *s, double *coordinates);
+PIZ_LOCAL void tralala_userReleaseLasso         (t_tll *x);
+
+PIZ_LOCAL t_tllStatus   tralala_userHitZone     (t_tll *x);
+PIZ_LOCAL t_symbol      *tralala_userHitNote    (t_tll *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -61,18 +62,18 @@ void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
     }
     
     if (m & eCommandKey) {
-        tralala_addNote(x);
+        tralala_userAddNote(x);
         
     } else if (m & eControlKey) {
         long k;
-        if (k = tralala_hitZone(x)) {
+        if (k = tralala_userHitZone(x)) {
             dictionary_appendlong(x->status, TLL_SYM_ZONE, k);
         }
     
     } else {
         t_symbol *s = NULL;
-        if (s = tralala_hitNote(x)) {
-            tralala_selectNote(x, s);
+        if (s = tralala_userHitNote(x)) {
+            tralala_userSelectNoteByClick(x, s);
         } else {
             x->flags |= TLL_FLAG_LASSO;
         }
@@ -101,28 +102,30 @@ void tralala_drag(t_tll *x, t_object *pv, t_pt pt, long m)
     }
     
     if (x->flags & TLL_FLAG_LASSO) {
-    //
-    bool k;
-        
-    TLL_LOCK
-    k = tralala_grabNotes(x);
-    TLL_UNLOCK
-     
-    if (k) {
-        TLL_DIRTY_NOTES
-    }
+        if (tralala_userSelectNoteByLasso(x)) {
+            TLL_DIRTY_NOTES
+        }
     
-    TLL_DIRTY_LASSO_DRAW
-    //
+        TLL_DIRTY_LASSO_DRAW
     }
 }
 
 void tralala_up(t_tll *x, t_object *pv, t_pt pt, long m)
 {
     if (x->flags & TLL_FLAG_LASSO) {
-        tralala_grabUpdate(x);
-        x->flags &= ~TLL_FLAG_LASSO;
+        TLL_LOCK
+        tralala_userReleaseLasso(x);
+        TLL_UNLOCK
+        
         TLL_DIRTY_LASSO_DRAW
+    }
+}
+
+void tralala_reset(t_tll *x)
+{
+    if (x->flags & TLL_FLAG_LASSO) {
+        tralala_userReleaseLasso(x);
+        TLL_DIRTY_LASSO
     }
 }
 
@@ -132,114 +135,17 @@ void tralala_up(t_tll *x, t_object *pv, t_pt pt, long m)
 #pragma mark ---
 #pragma mark -
 
-bool tralala_grabNotes(t_tll *x)
+void tralala_userAddNote(t_tll *x)
 {
-    long i, n;
-    bool draw = false;
-    t_symbol **keys = NULL;
+    t_atom a[2];
     
-    if (!(dictionary_getkeys(x->current, &n, &keys))) {
-    //
-    long argc;
-    t_atom *argv = NULL;
-    double c[ ] = { X_OFFSET(MIN(x->origin.x, x->cursor.x)),
-                    Y_OFFSET(MIN(x->origin.y, x->cursor.y)),
-                    X_OFFSET(MAX(x->origin.x, x->cursor.x)),
-                    Y_OFFSET(MAX(x->origin.y, x->cursor.y)) };  
+    atom_setlong(a, X_TO_POSITION(x->cursor.x));
+    atom_setlong(a + 1, Y_TO_PITCH(x->cursor.y));
     
-    for (i = 0; i < n; i++) {
-        t_symbol *key = (*(keys + i));
-        if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
-        //
-        if ((atom_getsym(argv) == TLL_SYM_NOTE)) {
-            if (tralala_isInLasso(x, key, c)) {
-            //
-            if (!(dictionary_hasentry(x->status, key))) {
-                dictionary_appendlong(x->status, key, TLL_SELECTED_GRAB);
-                draw = true;
-            } else if (x->flags & TLL_FLAG_SHIFT) {
-                long status = 0;
-                if (!(dictionary_getlong(x->status, key, &status)) && (status == TLL_SELECTED)) {
-                    dictionary_appendlong(x->status, key, TLL_UNSELECTED);
-                    draw = true;
-                }
-            }
-            //
-            } else {
-            //
-            long status = 0;
-            if (!(dictionary_getlong(x->status, key, &status))) {
-                if (status == TLL_SELECTED_GRAB) {
-                    dictionary_deleteentry(x->status, key);
-                    draw = true;
-                } else if ((x->flags & TLL_FLAG_SHIFT) && (status == TLL_UNSELECTED)) {
-                    dictionary_appendlong(x->status, key, TLL_SELECTED);
-                    draw = true;
-                }
-            }
-            //
-            }
-        }
-        //
-        }
-    }
-    
-    dictionary_freekeys(x->current, n, keys);
-    //
-    }
-    
-    return draw;
+    tralala_parseMessage(x, TLL_SYM_NOTE, 2, a);
 }
 
-void tralala_grabUpdate(t_tll *x)
-{
-    long i, n;
-    t_symbol **keys = NULL;
-    
-    if (!(dictionary_getkeys(x->current, &n, &keys))) {
-    //
-    long argc;
-    t_atom *argv = NULL;
-    
-    for (i = 0; i < n; i++) {
-        long status = 0;
-        t_symbol *key = (*(keys + i));
-        if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
-            if ((atom_getsym(argv) == TLL_SYM_NOTE) && (!dictionary_getlong(x->status, key, &status))) {
-                if (status == TLL_UNSELECTED) {
-                    dictionary_deleteentry(x->status, key);
-                } else {
-                    dictionary_appendlong(x->status, key, TLL_SELECTED);
-                }
-            }
-        }
-    }
-    
-    dictionary_freekeys(x->current, n, keys);
-    //
-    }
-}
-
-bool tralala_isInLasso(t_tll *x, t_symbol *s, double *f)
-{
-    bool k = false;
-    long argc;
-    t_atom *argv = NULL;
-        
-    if (!(dictionary_getatoms(x->current, s, &argc, &argv))) {
-        double a = POSITION_TO_X(atom_getlong(argv + 1));
-        double b = PITCH_TO_Y_UP(atom_getlong(argv + 2));
-        double c = POSITION_TO_X(atom_getlong(argv + 1) + atom_getlong(argv + 4));
-        double d = PITCH_TO_Y_DOWN(atom_getlong(argv + 2));
-        
-        k  = ((a > f[0]) && (a < f[2])) || ((c > f[0]) && (c < f[2]));
-        k &= ((b > f[1]) && (b < f[3])) || ((d > f[1]) && (d < f[3]));
-    }
-    
-    return k;
-}
-
-void tralala_selectNote(t_tll *x, t_symbol *s)
+void tralala_userSelectNoteByClick(t_tll *x, t_symbol *s)
 {
     if (dictionary_hasentry(x->status, s)) {
         t_symbol *last = NULL;
@@ -253,17 +159,136 @@ void tralala_selectNote(t_tll *x, t_symbol *s)
     }
 }
 
-void tralala_addNote(t_tll *x)
+bool tralala_userSelectNoteByLasso(t_tll *x)
 {
-    t_atom a[2];
+    long i, n;
+    bool draw = false;
+    t_symbol **keys = NULL;
     
-    atom_setlong(a, X_TO_POSITION(x->cursor.x));
-    atom_setlong(a + 1, Y_TO_PITCH(x->cursor.y));
+    TLL_LOCK
     
-    tralala_parseMessage(x, TLL_SYM_NOTE, 2, a);
+    if (!(dictionary_getkeys(x->current, &n, &keys))) {
+    //
+    long argc;
+    t_atom *argv = NULL;
+    
+    double c[ ] = { X_OFFSET(MIN(x->origin.x, x->cursor.x)), Y_OFFSET(MIN(x->origin.y, x->cursor.y)),
+                    X_OFFSET(MAX(x->origin.x, x->cursor.x)), Y_OFFSET(MAX(x->origin.y, x->cursor.y)) };  
+    
+    for (i = 0; i < n; i++) {
+    //
+    t_symbol *key = (*(keys + i));
+    
+    if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
+    //
+    if ((atom_getsym(argv) == TLL_SYM_NOTE)) {
+        if (tralala_userIsNoteInsideLasso(x, key, c)) {
+        //
+        if (!(dictionary_hasentry(x->status, key))) {
+            dictionary_appendlong(x->status, key, TLL_SELECTED_LASSO);
+            draw = true;
+            
+        } else if (x->flags & TLL_FLAG_SHIFT) {
+            long status = 0;
+            if (!(dictionary_getlong(x->status, key, &status)) && (status == TLL_SELECTED)) {
+                dictionary_appendlong(x->status, key, TLL_UNSELECTED);
+                draw = true;
+            }
+        }
+        //
+        
+        } else {
+        //
+        long status = 0;
+        if (!(dictionary_getlong(x->status, key, &status))) {
+            if (status == TLL_SELECTED_LASSO) {
+                dictionary_deleteentry(x->status, key);
+                draw = true;
+                
+            } else if ((x->flags & TLL_FLAG_SHIFT) && (status == TLL_UNSELECTED)) {
+                dictionary_appendlong(x->status, key, TLL_SELECTED);
+                draw = true;
+            }
+        }
+        //
+        }
+    }
+    //
+    }
+    //
+    }
+    
+    dictionary_freekeys(x->current, n, keys);
+    //
+    }
+    
+    TLL_UNLOCK
+    
+    return draw;
 }
 
-long tralala_hitZone(t_tll *x)
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+bool tralala_userIsNoteInsideLasso(t_tll *x, t_symbol *s, double *c)
+{
+    bool k = false;
+    long argc;
+    t_atom *argv = NULL;
+        
+    if (!(dictionary_getatoms(x->current, s, &argc, &argv))) {
+        double a = POSITION_TO_X(atom_getlong(argv + 1));
+        double b = PITCH_TO_Y_UP(atom_getlong(argv + 2));
+        double u = POSITION_TO_X(atom_getlong(argv + 1) + atom_getlong(argv + 4));
+        double v = PITCH_TO_Y_DOWN(atom_getlong(argv + 2));
+        
+        k  = ((a > c[0]) && (a < c[2])) || ((u > c[0]) && (u < c[2]));
+        k &= ((b > c[1]) && (b < c[3])) || ((v > c[1]) && (v < c[3]));
+    }
+    
+    return k;
+}
+
+void tralala_userReleaseLasso(t_tll *x)
+{
+    long i, n;
+    t_symbol **keys = NULL;
+    
+    if (!(dictionary_getkeys(x->current, &n, &keys))) {
+    //
+    long argc;
+    t_atom *argv = NULL;
+    
+    for (i = 0; i < n; i++) {
+    //
+    long status = 0;
+    t_symbol *key = (*(keys + i));
+    
+    if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
+        if ((atom_getsym(argv) == TLL_SYM_NOTE) && (!dictionary_getlong(x->status, key, &status))) {
+            if (status == TLL_UNSELECTED) {
+                dictionary_deleteentry(x->status, key);
+            } else {
+                dictionary_appendlong(x->status, key, TLL_SELECTED);
+            }
+        }
+    }
+    //
+    }
+    
+    dictionary_freekeys(x->current, n, keys);
+    //
+    }
+    
+    x->flags &= ~TLL_FLAG_LASSO;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+t_tllStatus tralala_userHitZone(t_tll *x)
 {
     long argc, k = 0;
     t_atom *argv = NULL;
@@ -293,7 +318,7 @@ long tralala_hitZone(t_tll *x)
     return k;
 }
 
-t_symbol *tralala_hitNote(t_tll *x)
+t_symbol *tralala_userHitNote(t_tll *x)
 {
     long i, n;
     t_symbol *note = NULL;

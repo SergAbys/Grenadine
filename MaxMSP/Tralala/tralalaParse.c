@@ -10,6 +10,7 @@
 
 #include "tralalaParse.h"
 #include "tralalaPaint.h"
+#include "tralalaUser.h"
 #include "ext_quickmap.h"
 
 // -------------------------------------------------------------------------------------------------------------
@@ -27,8 +28,8 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void tralala_symbolWithTag    (t_symbol **s, long tag);
-PIZ_LOCAL void tralala_tagWithSymbol    (long *tag, t_symbol *s);
+PIZ_INLINE void tralala_symbolWithTag    (t_symbol **s, long tag);
+PIZ_INLINE void tralala_tagWithSymbol    (long *tag, t_symbol *s);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -303,9 +304,10 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 void tralala_parseNotification(t_tll *x, PIZEvent *event)
 {
     long i, k = 0;
-    long *ptr;
-    t_atom data[PIZ_EVENT_DATA_SIZE + 1];
+    long dirty = 0;
+    long *ptr = NULL;
     t_symbol *s = NULL;
+    t_atom data[PIZ_EVENT_DATA_SIZE + 1];
     PIZEventCode code;
     
     pizEventCode(event, &code);
@@ -320,7 +322,7 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
     if (!(quickmap_lookup_key2(tll_notification, (void *)(code + TINY), (void **)&s))) {
         
         if (code == PIZ_EVENT_CHANGED_ZONE) {
-            TLL_DIRTY_ZONE
+            dirty = 1;
             
         } else if (code == PIZ_EVENT_CHANGED_SCALE) {
             t_symbol *sym1 = NULL;
@@ -337,6 +339,7 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
         dictionary_appendatoms(x->current, s, k + 1, data); 
 
     } else {
+        tralala_reset(x);
         tralala_symbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
             
         if (code == PIZ_EVENT_NOTE_REMOVED) {
@@ -355,10 +358,15 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
             dictionary_appendatoms(x->current, s, k - 1, data);
         }
         
-        TLL_DIRTY_NOTES
+        dirty = 2;
     }
     
     TLL_UNLOCK
+    
+    switch (dirty) {
+        case 1 : TLL_DIRTY_ZONE break;
+        case 2 : TLL_DIRTY_NOTES break;
+    }
     
     TLL_DRAW
 }
@@ -369,14 +377,14 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
 #pragma mark ---
 #pragma mark -
 
-void tralala_symbolWithTag(t_symbol **s, long tag)
+PIZ_INLINE void tralala_symbolWithTag(t_symbol **s, long tag)
 {
     char string[4];
     snprintf_zero(string, 4, "%ld", tag);
     (*s) = gensym(string);
 }
 
-void tralala_tagWithSymbol(long *tag, t_symbol *s)
+PIZ_INLINE void tralala_tagWithSymbol(long *tag, t_symbol *s)
 {
     (*tag) = atoi(s->s_name);
 }
