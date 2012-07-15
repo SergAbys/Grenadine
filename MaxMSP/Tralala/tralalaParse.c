@@ -358,14 +358,14 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
             dictionary_appendatoms(x->current, s, k - 1, data);
         }
         
-        dirty |= TLL_DIRTY_NOTES;
+        dirty |= TLL_DIRTY_NOTE;
     }
     
     TLL_UNLOCK
     
     if (dirty & TLL_DIRTY_ZONE) { 
         jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
-    } else if (dirty & TLL_DIRTY_NOTES) { 
+    } else if (dirty & TLL_DIRTY_NOTE) { 
         jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE); 
     }
     

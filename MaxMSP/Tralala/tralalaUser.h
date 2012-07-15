@@ -35,7 +35,7 @@ enum {
 
 #define TLL_DIRTY_NONE          0UL
 #define TLL_DIRTY_ZONE          1UL
-#define TLL_DIRTY_NOTES         2UL
+#define TLL_DIRTY_NOTE          2UL
 #define TLL_DIRTY_LASSO         4UL
 #define TLL_DIRTY_BACKGROUND    8UL
 

@@ -40,11 +40,6 @@ PIZ_LOCAL void      tralala_userReleaseLasso        (t_tll *x);
 PIZ_LOCAL long      tralala_userHitZone             (t_tll *x);
 PIZ_LOCAL t_symbol  *tralala_userHitNote            (t_tll *x);
 
-PIZ_LOCAL void      tralala_userCommandA            (t_tll *x);
-PIZ_LOCAL void      tralala_userCommandX            (t_tll *x);
-PIZ_LOCAL void      tralala_userCommandC            (t_tll *x);
-PIZ_LOCAL void      tralala_userCommandV            (t_tll *x);
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -56,23 +51,28 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
     ulong dirty = TLL_DIRTY_NONE;
         
     TLL_LOCK
-    dirty |= tralala_userAbort(x);
-    TLL_UNLOCK
     
-    if (dirty & TLL_DIRTY_LASSO) {
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
-    }
+    dirty |= tralala_userAbort(x);
     
     if (m & eCommandKey) {
     //
     if (TLL_KEY_A) {
-        TLL_LOCK
         tralala_userSelectAllNotes(x);
-        TLL_UNLOCK
-        
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
+        dirty |= TLL_DIRTY_NOTE;
+                
+    } else if (TLL_KEY_C) {
+    
     }
     //
+    }
+    
+    TLL_UNLOCK
+    
+    if (dirty & TLL_DIRTY_NOTE) {
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
+    }
+    if (dirty & TLL_DIRTY_LASSO) {
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
     }
     
     jbox_redraw((t_jbox *)x);
@@ -267,28 +267,27 @@ ulong tralala_userSelectNoteByLasso(t_tll *x)
         //
         if (!(dictionary_hasentry(x->status, key))) {
             dictionary_appendlong(x->status, key, TLL_SELECTED_LASSO);
-            dirty |= TLL_DIRTY_NOTES;
+            dirty |= TLL_DIRTY_NOTE;
             
         } else if (x->flags & TLL_FLAG_SHIFT) {
             long status = 0;
             if (!(dictionary_getlong(x->status, key, &status)) && (status == TLL_SELECTED)) {
                 dictionary_appendlong(x->status, key, TLL_UNSELECTED);
-                dirty |= TLL_DIRTY_NOTES;
+                dirty |= TLL_DIRTY_NOTE;
             }
         }
         //
-        
         } else {
         //
         long status = 0;
         if (!(dictionary_getlong(x->status, key, &status))) {
             if (status == TLL_SELECTED_LASSO) {
                 dictionary_deleteentry(x->status, key);
-                dirty |= TLL_DIRTY_NOTES;
+                dirty |= TLL_DIRTY_NOTE;
                 
             } else if ((x->flags & TLL_FLAG_SHIFT) && (status == TLL_UNSELECTED)) {
                 dictionary_appendlong(x->status, key, TLL_SELECTED);
-                dirty |= TLL_DIRTY_NOTES;
+                dirty |= TLL_DIRTY_NOTE;
             }
         }
         //
@@ -432,30 +431,6 @@ t_symbol *tralala_userHitNote(t_tll *x)
     }
     
     return note;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-PIZ_LOCAL void tralala_userCommandA(t_tll *x)
-{
-    ;
-}
-
-PIZ_LOCAL void tralala_userCommandX(t_tll *x)
-{
-    ;
-}
-
-PIZ_LOCAL void tralala_userCommandC(t_tll *x)
-{
-    ;
-}
-
-PIZ_LOCAL void tralala_userCommandV(t_tll *x)
-{
-    ;
 }
 
 // -------------------------------------------------------------------------------------------------------------

@@ -127,6 +127,12 @@
 		perUserProjectItems = {
 			96D6394015B31E5E004832A8 /* PBXTextBookmark */ = 96D6394015B31E5E004832A8 /* PBXTextBookmark */;
 			96D6394115B31E5E004832A8 /* PBXTextBookmark */ = 96D6394115B31E5E004832A8 /* PBXTextBookmark */;
+			96D6395015B3239C004832A8 /* PBXTextBookmark */ = 96D6395015B3239C004832A8 /* PBXTextBookmark */;
+			96D6395115B3239C004832A8 /* PBXTextBookmark */ = 96D6395115B3239C004832A8 /* PBXTextBookmark */;
+			96D6395215B3239C004832A8 /* PBXTextBookmark */ = 96D6395215B3239C004832A8 /* PBXTextBookmark */;
+			96D6395315B3239C004832A8 /* PBXTextBookmark */ = 96D6395315B3239C004832A8 /* PBXTextBookmark */;
+			96D6395415B3239C004832A8 /* PBXTextBookmark */ = 96D6395415B3239C004832A8 /* PBXTextBookmark */;
+			96D6395515B3239C004832A8 /* PBXTextBookmark */ = 96D6395515B3239C004832A8 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 965F6CC112FF252E00F96EF1 /* Source Control */;
 		userBuildSettings = {
@@ -167,8 +173,8 @@
 		isa = PBXTextBookmark;
 		comments = "error: 'key' undeclared (first use in this function)";
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
-		rLen = 1;
-		rLoc = 220;
+		rLen = 0;
+		rLoc = 214;
 		rType = 1;
 	};
 	96D6394115B31E5E004832A8 /* PBXTextBookmark */ = {
@@ -176,10 +182,67 @@
 		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
 		name = "tralalaUser.c: 223";
 		rLen = 0;
-		rLoc = 6604;
+		rLoc = 6139;
 		rType = 0;
 		vrLen = 413;
 		vrLoc = 6393;
+	};
+	96D6395015B3239C004832A8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96E4A86015ADD3A1003BF81E /* tralalaUser.h */;
+		name = "tralalaUser.h: TLL_DIRTY_NOTES";
+		rLen = 0;
+		rLoc = 1354;
+		rType = 0;
+		vrLen = 722;
+		vrLoc = 996;
+	};
+	96D6395115B3239C004832A8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
+		name = "tralalaUser.c: 292";
+		rLen = 0;
+		rLoc = 8708;
+		rType = 0;
+		vrLen = 537;
+		vrLoc = 8226;
+	};
+	96D6395215B3239C004832A8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96DC326315581A5500C26797 /* tralalaParse.c */;
+		rLen = 14;
+		rLoc = 18187;
+		rType = 0;
+	};
+	96D6395315B3239C004832A8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96E4A86015ADD3A1003BF81E /* tralalaUser.h */;
+		name = "tralalaUser.h: TLL_DIRTY_NOTES";
+		rLen = 0;
+		rLoc = 1354;
+		rType = 0;
+		vrLen = 722;
+		vrLoc = 996;
+	};
+	96D6395415B3239C004832A8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */;
+		name = "tralalaUser.c: 292";
+		rLen = 0;
+		rLoc = 8708;
+		rType = 0;
+		vrLen = 537;
+		vrLoc = 8226;
+	};
+	96D6395515B3239C004832A8 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 96DC326315581A5500C26797 /* tralalaParse.c */;
+		name = "tralalaParse.c: dirty";
+		rLen = 0;
+		rLoc = 18201;
+		rType = 0;
+		vrLen = 484;
+		vrLoc = 17789;
 	};
 	96D843C315824D41005B41A9 /* tralala.h */ = {
 		uiCtxt = {
@@ -200,8 +263,8 @@
 	96DC326315581A5500C26797 /* tralalaParse.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1233, 9950}}";
-			sepNavSelRange = "{17345, 0}";
-			sepNavVisRect = "{{0, 8332}, {1233, 411}}";
+			sepNavSelRange = "{18201, 0}";
+			sepNavVisRect = "{{0, 8807}, {1233, 411}}";
 			sepNavWindowFrame = "{{-1, 2}, {1280, 774}}";
 		};
 	};
@@ -231,17 +294,17 @@
 	};
 	96E4A85F15ADD3A1003BF81E /* tralalaUser.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1236, 11550}}";
-			sepNavSelRange = "{6243, 0}";
-			sepNavVisRect = "{{0, 5182}, {1236, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1236, 10925}}";
+			sepNavSelRange = "{2233, 0}";
+			sepNavVisRect = "{{0, 3542}, {1236, 645}}";
 			sepNavWindowFrame = "{{-2, 4}, {1281, 774}}";
 		};
 	};
 	96E4A86015ADD3A1003BF81E /* tralalaUser.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1236, 1525}}";
-			sepNavSelRange = "{1688, 17}";
-			sepNavVisRect = "{{0, 857}, {1236, 645}}";
+			sepNavSelRange = "{1402, 0}";
+			sepNavVisRect = "{{0, 880}, {1236, 645}}";
 			sepNavWindowFrame = "{{2, 4}, {1281, 774}}";
 		};
 	};
