@@ -339,7 +339,7 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
         dictionary_appendatoms(x->current, s, k + 1, data); 
 
     } else {
-        dirty |= tralala_reset(x);
+        dirty |= tralala_userAbort(x);
         tralala_symbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
             
         if (code == PIZ_EVENT_NOTE_REMOVED) {

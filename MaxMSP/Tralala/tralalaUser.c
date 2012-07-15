@@ -30,36 +30,26 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL void tralala_userAddNote              (t_tll *x);
-PIZ_LOCAL void tralala_userSelectAllNotes       (t_tll *x);
-PIZ_LOCAL void tralala_userSelectNoteByClick    (t_tll *x, t_symbol *s);
-PIZ_LOCAL bool tralala_userSelectNoteByLasso    (t_tll *x);
-PIZ_LOCAL bool tralala_userIsNoteInsideLasso    (t_tll *x, t_symbol *s, double *coordinates);
-PIZ_LOCAL void tralala_userReleaseLasso         (t_tll *x);
+PIZ_LOCAL void      tralala_userAddNote             (t_tll *x);
+PIZ_LOCAL void      tralala_userSelectAllNotes      (t_tll *x);
+PIZ_LOCAL void      tralala_userSelectNoteByClick   (t_tll *x, t_symbol *s);
+PIZ_LOCAL ulong     tralala_userSelectNoteByLasso   (t_tll *x);
+PIZ_LOCAL bool      tralala_userIsNoteInsideLasso   (t_tll *x, t_symbol *s, double *coordinates);
+PIZ_LOCAL void      tralala_userReleaseLasso        (t_tll *x);
 
-PIZ_LOCAL tllStatus tralala_userHitZone         (t_tll *x);
-PIZ_LOCAL t_symbol  *tralala_userHitNote        (t_tll *x);
+PIZ_LOCAL long      tralala_userHitZone             (t_tll *x);
+PIZ_LOCAL t_symbol  *tralala_userHitNote            (t_tll *x);
 
-PIZ_LOCAL void tralala_userCommandA             (t_tll *x);
-PIZ_LOCAL void tralala_userCommandX             (t_tll *x);
-PIZ_LOCAL void tralala_userCommandC             (t_tll *x);
-PIZ_LOCAL void tralala_userCommandV             (t_tll *x);
+PIZ_LOCAL void      tralala_userCommandA            (t_tll *x);
+PIZ_LOCAL void      tralala_userCommandX            (t_tll *x);
+PIZ_LOCAL void      tralala_userCommandC            (t_tll *x);
+PIZ_LOCAL void      tralala_userCommandV            (t_tll *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 #pragma mark ---
 #pragma mark -
-
-tllDirty tralala_reset(t_tll *x)
-{
-    if (x->flags & TLL_FLAG_LASSO) {
-        tralala_userReleaseLasso(x);
-        return TLL_DIRTY_LASSO;
-    } 
-    
-    return TLL_DIRTY_NONE;
-}
 
 void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacter)
 {
@@ -133,12 +123,20 @@ void tralala_drag(t_tll *x, t_object *pv, t_pt pt, long m)
     }
     
     if (x->flags & TLL_FLAG_LASSO) {
-        if (tralala_userSelectNoteByLasso(x)) {
-            jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
-        }
+    //
+    ulong k;
     
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
-        jbox_redraw((t_jbox *)x);
+    TLL_LOCK
+    k = tralala_userSelectNoteByLasso(x);
+    TLL_UNLOCK
+    
+    if (k) {
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
+    }
+
+    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
+    jbox_redraw((t_jbox *)x);
+    //
     }
 }
 
@@ -152,6 +150,20 @@ void tralala_up(t_tll *x, t_object *pv, t_pt pt, long m)
         jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
         jbox_redraw((t_jbox *)x);
     }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+ulong tralala_userAbort(t_tll *x)
+{
+    if (x->flags & TLL_FLAG_LASSO) {
+        tralala_userReleaseLasso(x);
+        return TLL_DIRTY_LASSO;
+    } 
+    
+    return TLL_DIRTY_NONE;
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -189,13 +201,11 @@ void tralala_userSelectNoteByClick(t_tll *x, t_symbol *s)
     }
 }
 
-bool tralala_userSelectNoteByLasso(t_tll *x)
+ulong tralala_userSelectNoteByLasso(t_tll *x)
 {
     long i, n;
-    bool draw = false;
+    ulong dirty = TLL_DIRTY_NONE;
     t_symbol **keys = NULL;
-    
-    TLL_LOCK
     
     if (!(dictionary_getkeys(x->current, &n, &keys))) {
     //
@@ -216,13 +226,13 @@ bool tralala_userSelectNoteByLasso(t_tll *x)
         //
         if (!(dictionary_hasentry(x->status, key))) {
             dictionary_appendlong(x->status, key, TLL_SELECTED_LASSO);
-            draw = true;
+            dirty |= TLL_DIRTY_NOTES;
             
         } else if (x->flags & TLL_FLAG_SHIFT) {
             long status = 0;
             if (!(dictionary_getlong(x->status, key, &status)) && (status == TLL_SELECTED)) {
                 dictionary_appendlong(x->status, key, TLL_UNSELECTED);
-                draw = true;
+                dirty |= TLL_DIRTY_NOTES;
             }
         }
         //
@@ -233,11 +243,11 @@ bool tralala_userSelectNoteByLasso(t_tll *x)
         if (!(dictionary_getlong(x->status, key, &status))) {
             if (status == TLL_SELECTED_LASSO) {
                 dictionary_deleteentry(x->status, key);
-                draw = true;
+                dirty |= TLL_DIRTY_NOTES;
                 
             } else if ((x->flags & TLL_FLAG_SHIFT) && (status == TLL_UNSELECTED)) {
                 dictionary_appendlong(x->status, key, TLL_SELECTED);
-                draw = true;
+                dirty |= TLL_DIRTY_NOTES;
             }
         }
         //
@@ -251,10 +261,8 @@ bool tralala_userSelectNoteByLasso(t_tll *x)
     dictionary_freekeys(x->current, n, keys);
     //
     }
-    
-    TLL_UNLOCK
-    
-    return draw;
+        
+    return dirty;
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -318,7 +326,7 @@ void tralala_userReleaseLasso(t_tll *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-tllStatus tralala_userHitZone(t_tll *x)
+long tralala_userHitZone(t_tll *x)
 {
     long argc, k = 0;
     t_atom *argv = NULL;
