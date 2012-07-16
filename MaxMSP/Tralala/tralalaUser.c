@@ -37,21 +37,22 @@ typedef ulong (*tllMethod)( );
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL ulong tralala_userKeyA                (t_tll *x, long m);
-PIZ_LOCAL ulong tralala_userKeyC                (t_tll *x, long m);
-PIZ_LOCAL ulong tralala_userKeyV                (t_tll *x, long m);
-PIZ_LOCAL ulong tralala_userKeyX                (t_tll *x, long m);
+PIZ_LOCAL ulong tralala_userKeyA    (t_tll *x, long m);
+PIZ_LOCAL ulong tralala_userKeyC    (t_tll *x, long m);
+PIZ_LOCAL ulong tralala_userKeyV    (t_tll *x, long m);
+PIZ_LOCAL ulong tralala_userKeyX    (t_tll *x, long m);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 PIZ_LOCAL void  tralala_userAddNote             (t_tll *x);
+PIZ_LOCAL void  tralala_userSelectZone          (t_tll *x);
 PIZ_LOCAL void  tralala_userSelectAll           (t_tll *x);
 PIZ_LOCAL void  tralala_userUnselectAll         (t_tll *x);
 PIZ_LOCAL void  tralala_userReleaseLasso        (t_tll *x);
-PIZ_LOCAL void  tralala_userSelectZone          (t_tll *x);
-PIZ_LOCAL bool  tralala_userSelectNote          (t_tll *x);
+PIZ_LOCAL void  tralala_userHitZone             (t_tll *x);
+PIZ_LOCAL bool  tralala_userHitNote             (t_tll *x);
 PIZ_LOCAL bool  tralala_userIsNoteInsideLasso   (t_tll *x, t_symbol *s, double *coordinates);
 PIZ_LOCAL ulong tralala_userSelectNoteByLasso   (t_tll *x);
 
@@ -67,8 +68,8 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
     ulong dirty = TLL_DIRTY_NONE;
         
     switch (keycode) {
-        case TLL_KEY_A  : f = tralala_userKeyA; break;
-        case TLL_KEY_C  : f = tralala_userKeyC; break;
+        case TLL_KEY_A : f = tralala_userKeyA; break;
+        case TLL_KEY_C : f = tralala_userKeyC; break;
     }
         
     dirty |= tralala_userAbort(x);
@@ -111,9 +112,9 @@ void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
         tralala_userAddNote(x);
         
     } else if (m & eControlKey) {
-        tralala_userSelectZone(x);
+        tralala_userHitZone(x);
 
-    } else if (!(tralala_userSelectNote(x))) {
+    } else if (!(tralala_userHitNote(x))) {
         x->flags |= TLL_FLAG_LASSO;
     }
             
@@ -155,6 +156,7 @@ void tralala_up(t_tll *x, t_object *pv, t_pt pt, long m)
 {
     if (x->flags & TLL_FLAG_LASSO) {
         tralala_userReleaseLasso(x);
+        
         jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
         jbox_redraw((t_jbox *)x);
     }
@@ -189,7 +191,7 @@ ulong tralala_userKeyA(t_tll *x, long m)
         dirty |= TLL_DIRTY_NOTE;
         
         if (m & eShiftKey) {
-            dictionary_appendlong(x->status, TLL_SYM_ZONE, TLL_SELECTED);
+            tralala_userSelectZone(x);
             dirty |= TLL_DIRTY_ZONE;
         }
     }
@@ -220,10 +222,19 @@ void tralala_userAddNote(t_tll *x)
     tralala_parseMessage(x, TLL_SYM_NOTE, 2, a);
 }
 
+void tralala_userSelectZone(t_tll *x)
+{
+    TLL_LOCK
+    dictionary_appendlong(x->status, TLL_SYM_ZONE, TLL_SELECTED);
+    TLL_UNLOCK
+}
+
 void tralala_userSelectAll(t_tll *x)
 {
     long i, n;
     t_symbol **keys = NULL;
+    
+    TLL_LOCK
     
     if (!(dictionary_getkeys(x->current, &n, &keys))) {
     //
@@ -233,24 +244,30 @@ void tralala_userSelectAll(t_tll *x)
         t_symbol *key = (*(keys + i));
         
         if (!(dictionary_getatoms(x->current, key, &argc, &argv)) && ((atom_getsym(argv) == TLL_SYM_NOTE))) { 
-                dictionary_appendlong(x->status, key, TLL_SELECTED); 
+            dictionary_appendlong(x->status, key, TLL_SELECTED); 
         }
     }
     
     dictionary_freekeys(x->current, n, keys);
     //
     }
+    
+    TLL_UNLOCK
 }
 
 void tralala_userUnselectAll(t_tll *x)
 {
+    TLL_LOCK
     dictionary_clear(x->status);
+    TLL_UNLOCK
 }
 
 void tralala_userReleaseLasso(t_tll *x)
 {
     long i, n;
     t_symbol **keys = NULL;
+    
+    TLL_LOCK
     
     if (!(dictionary_getkeys(x->current, &n, &keys))) {
     //
@@ -278,15 +295,19 @@ void tralala_userReleaseLasso(t_tll *x)
     //
     }
     
+    TLL_UNLOCK
+    
     x->flags &= ~TLL_FLAG_LASSO;
 }
 
-void tralala_userSelectZone(t_tll *x)
+void tralala_userHitZone(t_tll *x)
 {
     long argc, k = TLL_SELECTED;
     t_atom *argv = NULL;
     long position = TLL_X_TO_POSITION(x->cursor.x);
     long pitch = TLL_Y_TO_PITCH(x->cursor.y);
+    
+    TLL_LOCK
     
     if (!(dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv))) {
         if (position < atom_getlong(argv + 1)) { 
@@ -301,15 +322,20 @@ void tralala_userSelectZone(t_tll *x)
     }
     
     dictionary_appendlong(x->status, TLL_SYM_ZONE, k);
+    
+    TLL_UNLOCK
 }
 
-bool tralala_userSelectNote(t_tll *x)
+bool tralala_userHitNote(t_tll *x)
 {
     long i, n;
     t_symbol *s = NULL;
     t_symbol **keys = NULL;
     long position = TLL_X_TO_POSITION(x->cursor.x - 1.);
     long pitch = TLL_Y_TO_PITCH(x->cursor.y - 1.);
+    bool k = true;
+    
+    TLL_LOCK
     
     if (!(dictionary_getkeys(x->current, &n, &keys))) {
     //
@@ -347,12 +373,14 @@ bool tralala_userSelectNote(t_tll *x)
         dictionary_appendsym(x->status, TLL_SYM_LAST, s);
         dictionary_appendlong(x->status, s, TLL_SELECTED);
     }
-    
-    return true;
     //
     } else {
-        return false;
+        k = false;
     }
+    
+    TLL_UNLOCK
+    
+    return k;
 }
 
 bool tralala_userIsNoteInsideLasso(t_tll *x, t_symbol *s, double *c)
@@ -379,6 +407,8 @@ ulong tralala_userSelectNoteByLasso(t_tll *x)
     long i, n;
     t_symbol **keys = NULL;
     ulong dirty = TLL_DIRTY_NONE;
+    
+    TLL_LOCK
     
     if (!(dictionary_getkeys(x->current, &n, &keys))) {
     //
@@ -428,6 +458,8 @@ ulong tralala_userSelectNoteByLasso(t_tll *x)
     dictionary_freekeys(x->current, n, keys);
     //
     }
+    
+    TLL_UNLOCK
         
     return dirty;
 }

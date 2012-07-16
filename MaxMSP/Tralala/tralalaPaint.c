@@ -138,7 +138,7 @@ void tralala_paintBackground(t_tll *x, t_object *pv)
 
 void tralala_paintDictionary(t_tll *x, t_object *pv)
 {
-    long status = 0;
+    long zoneStatus = 0;
     long i, argc, n = 0;
     t_atom *argv = NULL;
     t_symbol *last = NULL;
@@ -192,46 +192,41 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     }
     
     if (!err && !(dictionary_getkeys(x->current, &n, &keys))) {
-    //
-    for (i = 0; i < n; i++) {
-        t_symbol *key = (*(keys + i));
-        if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
-        //
-        if ((atom_getsym(argv) == TLL_SYM_NOTE)) {
-            long k, t = 0; 
+        for (i = 0; i < n; i++) {
+            long k, status = 0; 
+            t_symbol *key = (*(keys + i));
             
-            if (k = dictionary_hasentry(x->status, key)) {
-               dictionary_getlong(x->status, key, &t);
-            }
-            
-            if (!k || (t == TLL_UNSELECTED)) {
-                atomarray_appendatoms(notes[0], argc, argv);
-            } else if (key != last) {
-                atomarray_appendatoms(notes[1], argc, argv);
-            } else {
-                atomarray_appendatoms(notes[2], argc, argv);
+            if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
+                if ((atom_getsym(argv) == TLL_SYM_NOTE)) {
+                    if (k = dictionary_hasentry(x->status, key)) {
+                       dictionary_getlong(x->status, key, &status);
+                    }
+                    if (!k || (status == TLL_UNSELECTED)) {
+                        atomarray_appendatoms(notes[0], argc, argv);
+                    } else if (key != last) {
+                        atomarray_appendatoms(notes[1], argc, argv);
+                    } else {
+                        atomarray_appendatoms(notes[2], argc, argv);
+                    }
+                }
             }
         }
-        //
-        }
+    
+        dictionary_freekeys(x->current, n, keys);
     }
     
-    dictionary_freekeys(x->current, n, keys);
-    //
-    }
-    
-    dictionary_getlong(x->status, TLL_SYM_ZONE, &status);
+    dictionary_getlong(x->status, TLL_SYM_ZONE, &zoneStatus);
     err |= (dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv)) != MAX_ERR_NONE;
     
     TLL_UNLOCK 
     
     if (!err) {
-        if (!status) {
-            tralala_paintZone(x, pv, argc, argv, status);
+        if (!zoneStatus) {
+            tralala_paintZone(x, pv, argc, argv, zoneStatus);
             tralala_paintNote(x, pv, notes);
         } else {
             tralala_paintNote(x, pv, notes);
-            tralala_paintZone(x, pv, argc, argv, status);
+            tralala_paintZone(x, pv, argc, argv, zoneStatus);
         }
         
         if (x->viewText) {
