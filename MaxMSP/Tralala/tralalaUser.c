@@ -55,6 +55,7 @@ PIZ_LOCAL void  tralala_userHitZone             (t_tll *x);
 PIZ_LOCAL bool  tralala_userHitNote             (t_tll *x);
 PIZ_LOCAL bool  tralala_userIsNoteInsideLasso   (t_tll *x, t_symbol *s, double *coordinates);
 PIZ_LOCAL ulong tralala_userSelectNoteByLasso   (t_tll *x);
+PIZ_LOCAL void  tralala_userCopySelected        (t_tll *x, t_dictionary *d);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -202,7 +203,14 @@ ulong tralala_userKeyA(t_tll *x, long m)
 ulong tralala_userKeyC(t_tll *x, long m)
 {
     if (m & eCommandKey) {
-        ; 
+        t_dictionary *t = NULL;
+        
+        if (t = dictionary_new( )) {
+            tralala_userCopySelected(x, t);
+            dictionary_clear(tll_clipboard);
+            dictionary_copyunique(tll_clipboard, t);
+            object_free(t);
+        }
     }
     
     return TLL_DIRTY_NONE;
@@ -462,6 +470,37 @@ ulong tralala_userSelectNoteByLasso(t_tll *x)
     TLL_UNLOCK
         
     return dirty;
+}
+
+void tralala_userCopySelected(t_tll *x, t_dictionary *d)
+{
+    long i, n;
+    t_symbol **keys = NULL;
+    
+    TLL_LOCK
+    
+    if (!(dictionary_getkeys(x->status, &n, &keys))) {
+    //
+    for (i = 0; i < n; i++) {
+    //
+    long status = 0;
+    t_symbol *key = (*(keys + i));
+    
+    if ((key != TLL_SYM_LAST) && !(dictionary_getlong(x->status, key, &status)) && (status == TLL_SELECTED)) {
+        long argc;
+        t_atom *argv = NULL;
+        if (!(dictionary_getatoms(x->current, key, &argc, &argv))) {
+            dictionary_appendatoms(d, key, argc, argv);
+        }
+    }
+    //
+    }
+    
+    dictionary_freekeys(x->status, n, keys);
+    //
+    }
+    
+    TLL_UNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------

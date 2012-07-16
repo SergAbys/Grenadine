@@ -26,12 +26,17 @@ PIZ_LOCAL void tralala_send (t_tll *x, PIZEventCode code, long argc, t_atom *arg
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-#pragma mark ---
-#pragma mark -
 
 static t_class *tll_class;
 static t_int32_atomic tll_identifier;
+
+static void destructor(void) __attribute__ ((destructor));
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark ---
+#pragma mark -
 
 int main(void)
 {	
@@ -138,6 +143,11 @@ int main(void)
     tll_clipboard = dictionary_new( );
 
     return 0;
+}
+
+void destructor(void) 
+{
+    cpost("Max: Et voilˆ, tralala, Zut ˆ celui qui le lira !\n");
 }
 
 // -------------------------------------------------------------------------------------------------------------
