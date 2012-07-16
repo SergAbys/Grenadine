@@ -317,8 +317,6 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
         atom_setlong(data + i + 1, *(ptr + i));
     }
     
-    TLL_LOCK
-    
     if (!(quickmap_lookup_key2(tll_notification, (void *)(code + TLL_TINY), (void **)&s))) {
         
         if (code == PIZ_EVENT_CHANGED_ZONE) {
@@ -360,9 +358,7 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
         
         dirty |= TLL_DIRTY_NOTE;
     }
-    
-    TLL_UNLOCK
-    
+        
     if (dirty & TLL_DIRTY_ZONE) { 
         jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
     } else if (dirty & TLL_DIRTY_NOTE) { 
