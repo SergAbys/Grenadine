@@ -53,8 +53,8 @@ PIZ_LOCAL void  tralala_userUnselectAll         (t_tll *x);
 PIZ_LOCAL void  tralala_userReleaseLasso        (t_tll *x);
 PIZ_LOCAL void  tralala_userHitZone             (t_tll *x);
 PIZ_LOCAL bool  tralala_userHitNote             (t_tll *x);
-PIZ_LOCAL bool  tralala_userIsNoteInsideLasso   (t_tll *x, t_symbol *s, double *coordinates);
 PIZ_LOCAL ulong tralala_userSelectNoteByLasso   (t_tll *x);
+PIZ_LOCAL bool  tralala_userIsNoteInsideLasso   (t_tll *x, t_symbol *s, double *coordinates);
 PIZ_LOCAL void  tralala_userCopySelected        (t_tll *x, t_dictionary *d);
 
 // -------------------------------------------------------------------------------------------------------------
@@ -71,10 +71,13 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
     switch (keycode) {
         case TLL_KEY_A : f = tralala_userKeyA; break;
         case TLL_KEY_C : f = tralala_userKeyC; break;
+        case TLL_KEY_V : f = tralala_userKeyV; break;
     }
-        
-    dirty |= tralala_userAbort(x);
-    dirty |= (*f)(x, m);
+    
+    if (f) {
+        dirty |= tralala_userAbort(x);
+        dirty |= (*f)(x, m);
+    }
     
     if (dirty & TLL_DIRTY_NOTE) {
         jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
@@ -207,8 +210,27 @@ ulong tralala_userKeyC(t_tll *x, long m)
         
         if (t = dictionary_new( )) {
             tralala_userCopySelected(x, t);
+            dictionary_appendlong(t, TLL_SYM_IDENTIFIER, x->identifier);
             dictionary_clear(tll_clipboard);
             dictionary_copyunique(tll_clipboard, t);
+            object_free(t);
+        }
+    }
+    
+    return TLL_DIRTY_NONE;
+}
+
+ulong tralala_userKeyV(t_tll *x, long m)
+{
+    if (m & eCommandKey) {
+        long k = 0;
+        t_dictionary *t = NULL;
+        
+        if (t = dictionary_new( )) {
+            dictionary_copyunique(t, tll_clipboard);
+            if (!(dictionary_getlong(t, TLL_SYM_IDENTIFIER, &k)) && (k != x->identifier)) {
+                tralala_parseDictionary(x, t);  
+            }
             object_free(t);
         }
     }
@@ -391,25 +413,6 @@ bool tralala_userHitNote(t_tll *x)
     return k;
 }
 
-bool tralala_userIsNoteInsideLasso(t_tll *x, t_symbol *s, double *c)
-{
-    bool k = false;
-    long argc;
-    t_atom *argv = NULL;
-        
-    if (!(dictionary_getatoms(x->current, s, &argc, &argv))) {
-        double a = TLL_POSITION_TO_X(atom_getlong(argv + 1));
-        double b = TLL_PITCH_TO_Y_UP(atom_getlong(argv + 2));
-        double u = TLL_POSITION_TO_X(atom_getlong(argv + 1) + atom_getlong(argv + 4));
-        double v = TLL_PITCH_TO_Y_DOWN(atom_getlong(argv + 2));
-        
-        k  = ((a > c[0]) && (a < c[2])) || ((u > c[0]) && (u < c[2]));
-        k &= ((b > c[1]) && (b < c[3])) || ((v > c[1]) && (v < c[3]));
-    }
-    
-    return k;
-}
-
 ulong tralala_userSelectNoteByLasso(t_tll *x)
 {
     long i, n;
@@ -470,6 +473,25 @@ ulong tralala_userSelectNoteByLasso(t_tll *x)
     TLL_UNLOCK
         
     return dirty;
+}
+
+bool tralala_userIsNoteInsideLasso(t_tll *x, t_symbol *s, double *c)
+{
+    bool k = false;
+    long argc;
+    t_atom *argv = NULL;
+        
+    if (!(dictionary_getatoms(x->current, s, &argc, &argv))) {
+        double a = TLL_POSITION_TO_X(atom_getlong(argv + 1));
+        double b = TLL_PITCH_TO_Y_UP(atom_getlong(argv + 2));
+        double u = TLL_POSITION_TO_X(atom_getlong(argv + 1) + atom_getlong(argv + 4));
+        double v = TLL_PITCH_TO_Y_DOWN(atom_getlong(argv + 2));
+        
+        k  = ((a > c[0]) && (a < c[2])) || ((u > c[0]) && (u < c[2]));
+        k &= ((b > c[1]) && (b < c[3])) || ((v > c[1]) && (v < c[3]));
+    }
+    
+    return k;
 }
 
 void tralala_userCopySelected(t_tll *x, t_dictionary *d)
