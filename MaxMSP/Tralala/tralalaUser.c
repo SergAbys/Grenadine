@@ -63,8 +63,8 @@ PIZ_LOCAL ulong tralala_userSelectNoteByLasso   (t_tll *x);
 
 void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacter)
 {
-    ulong dirty = TLL_DIRTY_NONE;
     tllMethod f = NULL;
+    ulong dirty = TLL_DIRTY_NONE;
         
     switch (keycode) {
         case TLL_KEY_A  : f = tralala_userKeyA; break;
@@ -377,8 +377,8 @@ bool tralala_userIsNoteInsideLasso(t_tll *x, t_symbol *s, double *c)
 ulong tralala_userSelectNoteByLasso(t_tll *x)
 {
     long i, n;
-    ulong dirty = TLL_DIRTY_NONE;
     t_symbol **keys = NULL;
+    ulong dirty = TLL_DIRTY_NONE;
     
     if (!(dictionary_getkeys(x->current, &n, &keys))) {
     //
