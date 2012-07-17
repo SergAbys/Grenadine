@@ -62,6 +62,7 @@ table->end           = gensym("end");
 table->clear         = gensym("clear");
 table->tralala       = gensym("tralala");
 table->untitled      = gensym("untitled");
+table->identifier    = gensym("identifier");
 table->mark          = gensym("mark");
 table->run           = gensym("run");
 table->note          = gensym("note");
@@ -353,16 +354,25 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
         TLL_LOCK
         
         if (code == PIZ_EVENT_NOTE_REMOVED) {
+        
             if (dictionary_hasentry(x->status, s)) {
                 t_symbol *mark = NULL;
                 if (!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) && (s == mark)) {
                     dictionary_deleteentry(x->status, TLL_SYM_MARK); 
                 }
+                
                 dictionary_deleteentry(x->status, s);
             }
-            dictionary_deleteentry(x->current, s);
             
+            dictionary_deleteentry(x->current, s);
+        
         } else {
+        
+            if ((code == PIZ_EVENT_NOTE_ADDED) && (*(ptr + PIZ_EVENT_DATA_LOW))) {
+                dictionary_appendsym(x->status, TLL_SYM_MARK, s);
+                dictionary_appendlong(x->status, s, TLL_SELECTED);
+            }
+            
             atom_setsym(data, TLL_SYM_NOTE);
             dictionary_appendatoms(x->current, s, 6, data);
         }

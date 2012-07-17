@@ -84,7 +84,7 @@ enum {
     PIZ_EVENT_DATA_CHANNEL      = 4,
     PIZ_EVENT_DATA_TAG          = 5,
     PIZ_EVENT_DATA_BPM          = 6,
-    PIZ_EVENT_DATA_ADDED_LOW    = 7
+    PIZ_EVENT_DATA_LOW          = 7
     };
 
 // -------------------------------------------------------------------------------------------------------------

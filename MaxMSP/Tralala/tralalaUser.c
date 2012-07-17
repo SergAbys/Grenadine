@@ -55,7 +55,7 @@ PIZ_LOCAL void  tralala_userHitZone             (t_tll *x);
 PIZ_LOCAL bool  tralala_userHitNote             (t_tll *x);
 PIZ_LOCAL ulong tralala_userSelectNoteByLasso   (t_tll *x);
 PIZ_LOCAL bool  tralala_userIsNoteInsideLasso   (t_tll *x, t_symbol *s, double *coordinates);
-PIZ_LOCAL void  tralala_userCopySelected        (t_tll *x, t_dictionary *d);
+PIZ_LOCAL void  tralala_userCopyToClipboard     (t_tll *x, t_dictionary *d);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -69,9 +69,9 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
     ulong dirty = TLL_DIRTY_NONE;
         
     switch (keycode) {
-        case TLL_KEY_A : f = tralala_userKeyAll; break;
-        case TLL_KEY_C : f = tralala_userKeyCopy; break;
-        case TLL_KEY_V : f = tralala_userKeyPaste; break;
+        case TLL_KEY_A : f = tralala_userKeyAll;    break;
+        case TLL_KEY_C : f = tralala_userKeyCopy;   break;
+        case TLL_KEY_V : f = tralala_userKeyPaste;  break;
     }
     
     if (f) {
@@ -211,7 +211,8 @@ ulong tralala_userKeyCopy(t_tll *x, long m)
         t_dictionary *t = NULL;
         
         if (t = dictionary_new( )) {
-            tralala_userCopySelected(x, t);
+            tralala_userCopyToClipboard(x, t);
+            dictionary_appendlong(t, TLL_SYM_IDENTIFIER, x->identifier);
             dictionary_clear(tll_clipboard);
             dictionary_copyunique(tll_clipboard, t);
             object_free(t);
@@ -224,11 +225,14 @@ ulong tralala_userKeyCopy(t_tll *x, long m)
 ulong tralala_userKeyPaste(t_tll *x, long m)
 {
     if (m & eCommandKey) {
+        long k;
         t_dictionary *t = NULL;
         
         if (t = dictionary_new( )) {
             dictionary_copyunique(t, tll_clipboard);
-            tralala_parseDictionary(x, t, TLL_DEFER);  
+            if (!(dictionary_getlong(t, TLL_SYM_IDENTIFIER, &k)) && (k != x->identifier)) {
+                tralala_parseDictionary(x, t, TLL_DEFER);  
+            }
             object_free(t);
         }
     }
@@ -492,11 +496,7 @@ bool tralala_userIsNoteInsideLasso(t_tll *x, t_symbol *s, double *c)
     return k;
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void tralala_userCopySelected(t_tll *x, t_dictionary *d)
+void tralala_userCopyToClipboard(t_tll *x, t_dictionary *d)
 {
     long i, n;
     t_symbol **keys = NULL;
