@@ -395,12 +395,12 @@ bool tralala_userHitNote(t_tll *x)
     //
     if (dictionary_hasentry(x->status, s)) {
         t_symbol *last = NULL;
-        dictionary_getsym(x->status, TLL_SYM_LAST, &last);
-        if (s == last) { dictionary_deleteentry(x->status, TLL_SYM_LAST); }
+        dictionary_getsym(x->status, TLL_SYM_MARK, &last);
+        if (s == last) { dictionary_deleteentry(x->status, TLL_SYM_MARK); }
         dictionary_deleteentry(x->status, s);
         
     } else {
-        dictionary_appendsym(x->status, TLL_SYM_LAST, s);
+        dictionary_appendsym(x->status, TLL_SYM_MARK, s);
         dictionary_appendlong(x->status, s, TLL_SELECTED);
     }
     //
@@ -508,7 +508,7 @@ void tralala_userCopySelected(t_tll *x, t_dictionary *d)
     long status = 0;
     t_symbol *key = (*(keys + i));
     
-    if ((key != TLL_SYM_LAST) && !(dictionary_getlong(x->status, key, &status)) && (status == TLL_SELECTED)) {
+    if ((key != TLL_SYM_MARK) && !(dictionary_getlong(x->status, key, &status)) && (status == TLL_SELECTED)) {
         long argc;
         t_atom *argv = NULL;
         if (!(dictionary_getatoms(x->current, key, &argc, &argv))) {

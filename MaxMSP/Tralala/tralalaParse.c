@@ -70,7 +70,7 @@ table->clear         = gensym("clear");
 table->tralala       = gensym("tralala");
 table->untitled      = gensym("untitled");
 table->identifier    = gensym("identifier");
-table->last          = gensym("last");
+table->mark          = gensym("mark");
 table->run           = gensym("run");
 table->note          = gensym("note");
 table->text          = gensym("text");
@@ -350,8 +350,8 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
         
             if (dictionary_hasentry(x->status, s)) {
                 t_symbol *last = NULL;
-                dictionary_getsym(x->status, TLL_SYM_LAST, &last);
-                if (s == last) { dictionary_deleteentry(x->status, TLL_SYM_LAST); }
+                dictionary_getsym(x->status, TLL_SYM_MARK, &last);
+                if (s == last) { dictionary_deleteentry(x->status, TLL_SYM_MARK); }
                 dictionary_deleteentry(x->status, s);
             }
             

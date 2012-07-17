@@ -186,7 +186,7 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
         } 
     }
     
-    if (!(dictionary_getsym(x->status, TLL_SYM_LAST, &last)) 
+    if (!(dictionary_getsym(x->status, TLL_SYM_MARK, &last)) 
         && (!(dictionary_getatoms(x->current, last, &argc, &argv)))) {
         tralala_paintStrncatNote(string, argc, argv);
     }
