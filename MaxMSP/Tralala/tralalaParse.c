@@ -347,16 +347,10 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
         TLL_LOCK
         
         if (code == PIZ_EVENT_NOTE_REMOVED) {
-        
             if (dictionary_hasentry(x->status, s)) {
-                t_symbol *last = NULL;
-                dictionary_getsym(x->status, TLL_SYM_MARK, &last);
-                if (s == last) { dictionary_deleteentry(x->status, TLL_SYM_MARK); }
-                dictionary_deleteentry(x->status, s);
+                tralala_userDeleteStatus(x, s);
             }
-            
             dictionary_deleteentry(x->current, s);
-
         } else {
             atom_setsym(data, TLL_SYM_NOTE);
             dictionary_appendatoms(x->current, s, k - 1, data);

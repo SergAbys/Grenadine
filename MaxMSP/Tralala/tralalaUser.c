@@ -63,6 +63,31 @@ PIZ_LOCAL void  tralala_userCopySelected        (t_tll *x, t_dictionary *d);
 #pragma mark ---
 #pragma mark -
 
+ulong tralala_userAbort(t_tll *x)
+{
+    if (x->flags & TLL_FLAG_LASSO) {
+        tralala_userReleaseLasso(x);
+        return TLL_DIRTY_LASSO;
+    } 
+    
+    return TLL_DIRTY_NONE;
+}
+
+void tralala_userDeleteStatus(t_tll *x, t_symbol *s)
+{
+    t_symbol *last = NULL;
+    
+    if(!(dictionary_getsym(x->status, TLL_SYM_MARK, &last)) && (s == last)) {
+        dictionary_deleteentry(x->status, TLL_SYM_MARK); 
+    }
+    
+    dictionary_deleteentry(x->status, s);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacter)
 {
     tllMethod f = NULL;
@@ -164,20 +189,6 @@ void tralala_up(t_tll *x, t_object *pv, t_pt pt, long m)
         jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
         jbox_redraw((t_jbox *)x);
     }
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-ulong tralala_userAbort(t_tll *x)
-{
-    if (x->flags & TLL_FLAG_LASSO) {
-        tralala_userReleaseLasso(x);
-        return TLL_DIRTY_LASSO;
-    } 
-    
-    return TLL_DIRTY_NONE;
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -392,18 +403,13 @@ bool tralala_userHitNote(t_tll *x)
     }
     
     if (s) {
-    //
-    if (dictionary_hasentry(x->status, s)) {
-        t_symbol *last = NULL;
-        dictionary_getsym(x->status, TLL_SYM_MARK, &last);
-        if (s == last) { dictionary_deleteentry(x->status, TLL_SYM_MARK); }
-        dictionary_deleteentry(x->status, s);
+        if (dictionary_hasentry(x->status, s)) {
+            tralala_userDeleteStatus(x, s);
+        } else {
+            dictionary_appendsym(x->status, TLL_SYM_MARK, s);
+            dictionary_appendlong(x->status, s, TLL_SELECTED);
+        }
         
-    } else {
-        dictionary_appendsym(x->status, TLL_SYM_MARK, s);
-        dictionary_appendlong(x->status, s, TLL_SELECTED);
-    }
-    //
     } else {
         k = false;
     }
