@@ -31,7 +31,6 @@ PIZ_LOCAL void tralala_paintNote                (t_tll *x, t_object *pv, t_atoma
 PIZ_LOCAL void tralala_paintStrncatZone         (char *dst, long argc, t_atom *argv);
 PIZ_LOCAL void tralala_paintStrncatNote         (char *dst, long argc, t_atom *argv);
 PIZ_LOCAL void tralala_paintStrncatAttribute    (char *dst, long argc, t_atom *argv);
-PIZ_LOCAL void tralala_paintStrncatCursor       (char *dst, long pitch, long position);
 
 PIZ_LOCAL void tralala_paintPitchAsString       (char *s, long k, long size);
 
@@ -165,15 +164,6 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     
     TLL_LOCK
     
-    if (!(dictionary_getatoms(x->current, TLL_SYM_CELL, &argc, &argv))) {
-        long cell;
-        if (cell = atom_getlong(argv + 1)) {
-            long pitch = TLL_Y_TO_PITCH(x->cursor.y);
-            long position = ((long)((TLL_X_TO_POSITION(x->cursor.x)) / cell)) * cell;
-            tralala_paintStrncatCursor(string, pitch, position);
-        }
-    }
-    
     for (i = 0; i < 9; i++) {
         if (!(dictionary_getatoms(x->current, s[i], &argc, &argv))) {
             tralala_paintStrncatAttribute(string, argc, argv);
@@ -192,27 +182,29 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     }
     
     if (!err && !(dictionary_getkeys(x->current, &n, &keys))) {
-        for (i = 0; i < n; i++) {
-            long k, status = 0; 
-            t_symbol *key = (*(keys + i));
-            
-            if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
-                if ((atom_getsym(argv) == TLL_SYM_NOTE)) {
-                    if (k = dictionary_hasentry(x->status, key)) {
-                       dictionary_getlong(x->status, key, &status);
-                    }
-                    if (!k || (status == TLL_UNSELECTED)) {
-                        atomarray_appendatoms(notes[0], argc, argv);
-                    } else if (key != mark) {
-                        atomarray_appendatoms(notes[1], argc, argv);
-                    } else {
-                        atomarray_appendatoms(notes[2], argc, argv);
-                    }
+    //
+    for (i = 0; i < n; i++) {
+        long k, status = 0; 
+        t_symbol *key = (*(keys + i));
+        
+        if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
+            if ((atom_getsym(argv) == TLL_SYM_NOTE)) {
+                if (k = dictionary_hasentry(x->status, key)) {
+                   dictionary_getlong(x->status, key, &status);
+                }
+                if (!k || (status == TLL_UNSELECTED)) {
+                    atomarray_appendatoms(notes[0], argc, argv);
+                } else if (key != mark) {
+                    atomarray_appendatoms(notes[1], argc, argv);
+                } else {
+                    atomarray_appendatoms(notes[2], argc, argv);
                 }
             }
         }
-    
-        dictionary_freekeys(x->current, n, keys);
+    }
+
+    dictionary_freekeys(x->current, n, keys);
+    //
     }
     
     dictionary_getlong(x->status, TLL_SYM_ZONE, &zoneStatus);
@@ -399,17 +391,6 @@ void tralala_paintStrncatAttribute(char *dst, long argc, t_atom *argv)
         strncat_zero(dst, "\n", TLL_STRING_SIZE);
         sysmem_freeptr(p);
     }
-}
-
-void tralala_paintStrncatCursor(char *dst, long pitch, long position)
-{   
-    char a[8];
-    char b[8];
-    
-    tralala_paintPitchAsString(a, CLAMP(pitch, 0, PIZ_MAGIC_PITCH), 8);
-    snprintf_zero(b, 8, "\n%ld\n", CLAMP(position, 0, PIZ_SEQUENCE_SIZE_TIMELINE));
-    strncat_zero(dst, a, TLL_STRING_SIZE);
-    strncat_zero(dst, b, TLL_STRING_SIZE);
 }
 
 // -------------------------------------------------------------------------------------------------------------

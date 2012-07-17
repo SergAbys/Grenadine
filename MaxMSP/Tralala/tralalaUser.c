@@ -129,10 +129,7 @@ void tralala_mousedown(t_tll *x, t_object *pv, t_pt pt, long m)
 
 void tralala_mousemove(t_tll *x, t_object *pv, t_pt pt, long m)
 {
-    x->cursor.x = pt.x - 1.;
-    x->cursor.y = pt.y - 1.;
-    
-    jbox_redraw((t_jbox *)x);
+    ;
 }
 
 void tralala_mousedrag(t_tll *x, t_object *pv, t_pt pt, long m)

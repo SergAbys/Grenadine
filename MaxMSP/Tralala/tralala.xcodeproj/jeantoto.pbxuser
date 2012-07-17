@@ -121,8 +121,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 364228474;
-			PBXWorkspaceStateSaveDate = 364228474;
+			PBXPerProjectTemplateStateSaveDate = 364230809;
+			PBXWorkspaceStateSaveDate = 364230809;
 		};
 		sourceControlManager = 965F6CC112FF252E00F96EF1 /* Source Control */;
 		userBuildSettings = {
@@ -146,8 +146,8 @@
 	9676982513B7784800FE77F4 /* tralala.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1233, 11150}}";
-			sepNavSelRange = "{2639, 0}";
-			sepNavVisRect = "{{0, 1207}, {1233, 411}}";
+			sepNavSelRange = "{7069, 0}";
+			sepNavVisRect = "{{0, 3263}, {1233, 643}}";
 			sepNavWindowFrame = "{{-1, 6}, {1278, 772}}";
 		};
 	};
@@ -177,17 +177,17 @@
 	};
 	96DC326315581A5500C26797 /* tralalaParse.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1229.8, 10400}}";
-			sepNavSelRange = "{17811, 0}";
-			sepNavVisRect = "{{0, 9179}, {1158, 346}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 10425}}";
+			sepNavSelRange = "{1842, 0}";
+			sepNavVisRect = "{{0, 1475}, {1235, 645}}";
 			sepNavWindowFrame = "{{-1, 2}, {1280, 774}}";
 		};
 	};
 	96DC326715581AC500C26797 /* tralalaParse.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 2650}}";
-			sepNavSelRange = "{4048, 0}";
-			sepNavVisRect = "{{0, 1644}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 2700}}";
+			sepNavSelRange = "{3605, 0}";
+			sepNavVisRect = "{{0, 1114}, {1235, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1280, 774}}";
 		};
 	};
@@ -201,18 +201,18 @@
 	};
 	96E4A85615ADD2DA003BF81E /* tralalaPaint.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1236, 11025}}";
-			sepNavSelRange = "{7869, 0}";
-			sepNavVisRect = "{{0, 4816}, {1236, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1236, 10550}}";
+			sepNavSelRange = "{1616, 0}";
+			sepNavVisRect = "{{0, 18}, {1236, 645}}";
 			sepNavWindowFrame = "{{3, 4}, {1281, 774}}";
 		};
 	};
 	96E4A85F15ADD3A1003BF81E /* tralalaUser.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 13175}}";
-			sepNavSelRange = "{14283, 0}";
-			sepNavVisRect = "{{0, 12257}, {1233, 411}}";
-			sepNavWindowFrame = "{{-2, 4}, {1281, 774}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1236, 13200}}";
+			sepNavSelRange = "{4807, 0}";
+			sepNavVisRect = "{{0, 12552}, {1236, 645}}";
+			sepNavWindowFrame = "{{0, 4}, {1281, 774}}";
 		};
 	};
 	96E4A86015ADD3A1003BF81E /* tralalaUser.h */ = {
