@@ -37,10 +37,10 @@ typedef ulong (*tllMethod)( );
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL ulong tralala_userKeyA    (t_tll *x, long m);
-PIZ_LOCAL ulong tralala_userKeyC    (t_tll *x, long m);
-PIZ_LOCAL ulong tralala_userKeyV    (t_tll *x, long m);
-PIZ_LOCAL ulong tralala_userKeyX    (t_tll *x, long m);
+PIZ_LOCAL ulong tralala_userKeyAll      (t_tll *x, long m);
+PIZ_LOCAL ulong tralala_userKeyCopy     (t_tll *x, long m);
+PIZ_LOCAL ulong tralala_userKeyPaste    (t_tll *x, long m);
+PIZ_LOCAL ulong tralala_userKeyCut      (t_tll *x, long m);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -69,9 +69,9 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
     ulong dirty = TLL_DIRTY_NONE;
         
     switch (keycode) {
-        case TLL_KEY_A : f = tralala_userKeyA; break;
-        case TLL_KEY_C : f = tralala_userKeyC; break;
-        case TLL_KEY_V : f = tralala_userKeyV; break;
+        case TLL_KEY_A : f = tralala_userKeyAll; break;
+        case TLL_KEY_C : f = tralala_userKeyCopy; break;
+        case TLL_KEY_V : f = tralala_userKeyPaste; break;
     }
     
     if (f) {
@@ -92,7 +92,7 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
     jbox_redraw((t_jbox *)x);
 }
 
-void tralala_wheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc)
+void tralala_mousewheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc)
 {
     long h = object_attr_getlong(x, TLL_SYM_XOFFSET) - (x_inc * 100);
     long v = object_attr_getlong(x, TLL_SYM_YOFFSET) - (y_inc * 100);
@@ -101,7 +101,7 @@ void tralala_wheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc, doub
     object_attr_setlong(x, TLL_SYM_YOFFSET, v);
 }
 
-void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
+void tralala_mousedown(t_tll *x, t_object *pv, t_pt pt, long m)
 {	
     x->cursor.x = pt.x - 1.;
     x->cursor.y = pt.y - 1.;
@@ -127,7 +127,7 @@ void tralala_down(t_tll *x, t_object *pv, t_pt pt, long m)
     jbox_redraw((t_jbox *)x);  
 }
 
-void tralala_move(t_tll *x, t_object *pv, t_pt pt, long m)
+void tralala_mousemove(t_tll *x, t_object *pv, t_pt pt, long m)
 {
     x->cursor.x = pt.x - 1.;
     x->cursor.y = pt.y - 1.;
@@ -135,7 +135,7 @@ void tralala_move(t_tll *x, t_object *pv, t_pt pt, long m)
     jbox_redraw((t_jbox *)x);
 }
 
-void tralala_drag(t_tll *x, t_object *pv, t_pt pt, long m)
+void tralala_mousedrag(t_tll *x, t_object *pv, t_pt pt, long m)
 {
     x->cursor.x = pt.x - 1.;
     x->cursor.y = pt.y - 1.;
@@ -156,7 +156,7 @@ void tralala_drag(t_tll *x, t_object *pv, t_pt pt, long m)
     }
 }
 
-void tralala_up(t_tll *x, t_object *pv, t_pt pt, long m)
+void tralala_mouseup(t_tll *x, t_object *pv, t_pt pt, long m)
 {
     if (x->flags & TLL_FLAG_LASSO) {
         tralala_userReleaseLasso(x);
@@ -188,7 +188,7 @@ ulong tralala_userAbort(t_tll *x)
 #pragma mark ---
 #pragma mark -
 
-ulong tralala_userKeyA(t_tll *x, long m)
+ulong tralala_userKeyAll(t_tll *x, long m)
 {
     ulong dirty = TLL_DIRTY_NONE;
     
@@ -205,7 +205,7 @@ ulong tralala_userKeyA(t_tll *x, long m)
     return dirty;
 }
 
-ulong tralala_userKeyC(t_tll *x, long m)
+ulong tralala_userKeyCopy(t_tll *x, long m)
 {
     if (m & eCommandKey) {
         t_dictionary *t = NULL;
@@ -221,14 +221,14 @@ ulong tralala_userKeyC(t_tll *x, long m)
     return TLL_DIRTY_NONE;
 }
 
-ulong tralala_userKeyV(t_tll *x, long m)
+ulong tralala_userKeyPaste(t_tll *x, long m)
 {
     if (m & eCommandKey) {
         t_dictionary *t = NULL;
         
         if (t = dictionary_new( )) {
             dictionary_copyunique(t, tll_clipboard);
-            tralala_parseDictionary(x, t);  
+            tralala_parseDictionary(x, t, TLL_DEFER);  
             object_free(t);
         }
     }

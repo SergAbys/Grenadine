@@ -22,15 +22,14 @@ t_dictionary *tll_clipboard;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void tralala_send (t_tll *x, PIZEventCode code, long argc, t_atom *argv);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 static t_class *tll_class;
 static t_int32_atomic tll_identifier;
 
-static void destructor(void) __attribute__ ((destructor));
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+PIZ_LOCAL void tralala_send         (t_tll *x, PIZEventCode code, long argc, t_atom *argv);
+PIZ_LOCAL t_symbol *tralala_slot    (long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -52,14 +51,14 @@ int main(void)
     class_addmethod(c, (method)tralala_paint,       "paint",         A_CANT,  0);
     class_addmethod(c, (method)tralala_params,      "getdrawparams", A_CANT,  0);
     class_addmethod(c, (method)tralala_key,         "key",           A_CANT,  0);
-    class_addmethod(c, (method)tralala_wheel,       "mousewheel",    A_CANT,  0);
-    class_addmethod(c, (method)tralala_down,        "mousedown",     A_CANT,  0);
-    class_addmethod(c, (method)tralala_move,        "mousemove",     A_CANT,  0);
-    class_addmethod(c, (method)tralala_drag,        "mousedrag",     A_CANT,  0);
-	class_addmethod(c, (method)tralala_up,          "mouseup",       A_CANT,  0);
+    class_addmethod(c, (method)tralala_mousewheel,  "mousewheel",    A_CANT,  0);
+    class_addmethod(c, (method)tralala_mousedown,   "mousedown",     A_CANT,  0);
+    class_addmethod(c, (method)tralala_mousemove,   "mousemove",     A_CANT,  0);
+    class_addmethod(c, (method)tralala_mousedrag,   "mousedrag",     A_CANT,  0);
+	class_addmethod(c, (method)tralala_mouseup,     "mouseup",       A_CANT,  0);
     class_addmethod(c, (method)tralala_notify,      "notify",        A_CANT,  0);
+    class_addmethod(c, (method)tralala_load,        "load",          A_GIMME, 0);
     class_addmethod(c, (method)tralala_store,       "store",         A_GIMME, 0);
-    class_addmethod(c, (method)tralala_recall,      "recall",        A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "bang",          A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "play",          A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "end",           A_GIMME, 0);
@@ -143,11 +142,6 @@ int main(void)
     tll_clipboard = dictionary_new( );
 
     return 0;
-}
-
-void destructor(void) 
-{
-    cpost("Max: Et voilˆ, tralala, Zut ˆ celui qui le lira !\n");
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -279,58 +273,34 @@ void tralala_jsave(t_tll *x, t_dictionary *d)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+           
+void tralala_load(t_tll *x, t_symbol *s, long argc, t_atom *argv)
+{
+    t_dictionary *d = NULL;
+    t_dictionary *t = NULL;
+    t_symbol *name = tralala_slot(argc, argv);
+        
+    if (!(dictionary_getdictionary(x->data, name, (t_object **)&d))) {
+        if (t = dictionary_new ( )) {
+            dictionary_copyunique(t, d);
+            tralala_send(x, PIZ_EVENT_CLEAR, 0, NULL);
+            tralala_parseDictionary(x, t, TLL_NONE);
+            object_free(t);
+        }
+    }
+}
 
 void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
     t_dictionary *t = NULL;
-    t_symbol *name = TLL_SYM_UNTITLED;
+    t_symbol *name = tralala_slot(argc, argv);
 
-    if (argc && argv) {
-        long k = 0;
-        char *p = NULL;
-        
-        atom_gettext(argc, argv, &k, &p, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
-        
-        if (p) {
-            name = gensym(p);   
-            sysmem_freeptr(p);         
-        }
-    }
-    
     if (t = dictionary_new( )) {
         TLL_LOCK
         dictionary_copyunique(t, x->current);
         TLL_UNLOCK
         dictionary_appenddictionary(x->data, name, (t_object *)t);
         jpatcher_set_dirty(jbox_get_patcher((t_object *)x), 1);
-    }
-}
-           
-void tralala_recall(t_tll *x, t_symbol *s, long argc, t_atom *argv)
-{
-    t_dictionary *d = NULL;
-    t_dictionary *t = NULL;
-    t_symbol *name = TLL_SYM_UNTITLED;
-    
-    if (argc && argv) {
-        long k = 0;
-        char *p = NULL;
-        
-        atom_gettext(argc, argv, &k, &p, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
-        
-        if (p) {
-            name = gensym(p); 
-            sysmem_freeptr(p);           
-        }
-    }
-    
-    if (!(dictionary_getdictionary(x->data, name, (t_object **)&d))) {
-        if (t = dictionary_new ( )) {
-            dictionary_copyunique(t, d);
-            tralala_send(x, PIZ_EVENT_CLEAR, 0, NULL);
-            tralala_parseDictionary(x, t);
-            object_free(t);
-        }
     }
 }
 
@@ -427,7 +397,7 @@ void tralala_anything(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 #pragma mark -
 #pragma mark ---
 #pragma mark -
-        
+
 void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv)
 {
     PIZEvent *event = NULL;
@@ -451,6 +421,25 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv)
     pizAgentDoEvent(x->agent, event);
     //
     }
+}
+
+t_symbol *tralala_slot(long argc, t_atom *argv) 
+{
+    t_symbol *s = TLL_SYM_UNTITLED;
+    
+    if (argc && argv) {
+        long k = 0;
+        char *p = NULL;
+        
+        atom_gettext(argc, argv, &k, &p, OBEX_UTIL_ATOM_GETTEXT_SYM_NO_QUOTE);
+        
+        if (p) {
+            s = gensym(p); 
+            sysmem_freeptr(p);           
+        }
+    }
+    
+    return s;
 }
 
 // -------------------------------------------------------------------------------------------------------------

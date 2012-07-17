@@ -200,7 +200,7 @@ quickmap_add(tll_notification, gensym("zone"),            (void *)(TLL_TINY + PI
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_parseDictionary(t_tll *x, t_dictionary *d)
+void tralala_parseDictionary(t_tll *x, t_dictionary *d, long flag)
 {
     long i, n = 0;
     t_symbol **keys = NULL;
@@ -214,7 +214,7 @@ void tralala_parseDictionary(t_tll *x, t_dictionary *d)
     
     if (!dictionary_getatoms(d, (*(keys + i)), &k, &data)) {
         if (atom_gettype(data) == A_SYM) {
-            tralala_parseMessage(x, atom_getsym(data), k - 1, data + 1, TLL_NONE);
+            tralala_parseMessage(x, atom_getsym(data), k - 1, data + 1, flag);
         }
     }
     //
