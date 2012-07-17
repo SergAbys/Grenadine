@@ -83,13 +83,14 @@ void pizSequenceEachRemove(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNot
     if ((h == -1) || (h < x->chance)) {
     //
     x->lookup[tag] = NULL;
-    pizItemsetUnsetAtIndex(&x->usedNotes, tag);
+    pizItemsetUnsetAtIndex(&x->used, tag);
     pizLinklistRemoveWithPtr(x->timeline[p], (void *)note);
     x->count --; 
     
-    pizItemsetSetAtIndex(&x->removedNotes, tag);
-    pizItemsetUnsetAtIndex(&x->addedNotes, tag);
-    pizItemsetUnsetAtIndex(&x->changedNotes, tag);
+    pizItemsetSetAtIndex(&x->removed, tag);
+    pizItemsetUnsetAtIndex(&x->changed, tag);
+    pizItemsetUnsetAtIndex(&x->addedLow, tag);
+    pizItemsetUnsetAtIndex(&x->addedHigh, tag);
     //
     }
 }
@@ -126,7 +127,7 @@ void pizSequenceEachChange(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNot
     
     if (note->values[s] != t) {
         note->values[s] = t;
-        pizItemsetSetAtIndex(&x->changedNotes, note->tag);
+        pizItemsetSetAtIndex(&x->changed, note->tag);
     }
     //
     }
@@ -150,7 +151,7 @@ void pizSequenceEachCycle(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote
     
     if (note->values[PIZ_VALUE_PITCH] != t) {
         note->values[PIZ_VALUE_PITCH] = t;
-        pizItemsetSetAtIndex(&x->changedNotes, note->tag);
+        pizItemsetSetAtIndex(&x->changed, note->tag);
     }
     //
     }

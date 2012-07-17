@@ -33,7 +33,6 @@
 #define TLL_SYM_CLEAR           (tll_table.clear)
 #define TLL_SYM_TRALALA         (tll_table.tralala)
 #define TLL_SYM_UNTITLED        (tll_table.untitled)
-#define TLL_SYM_IDENTIFIER      (tll_table.identifier)
 #define TLL_SYM_MARK            (tll_table.mark)
 #define TLL_SYM_RUN             (tll_table.run)
 #define TLL_SYM_NOTE            (tll_table.note)
@@ -68,7 +67,6 @@ typedef struct _tllSymbols {
     t_symbol *clear;
     t_symbol *tralala;
     t_symbol *untitled;
-    t_symbol *identifier;
     t_symbol *mark;
     t_symbol *run;
     t_symbol *note;
@@ -91,9 +89,16 @@ typedef struct _tllSymbols {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+#define TLL_NONE    0
+#define TLL_DEFER   1
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 void tralala_parseInit          (t_tllSymbols *table);
 void tralala_parseDictionary    (t_tll *x, t_dictionary *d);
-void tralala_parseMessage       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_parseMessage       (t_tll *x, t_symbol *s, long argc, t_atom *argv, long flag);
 void tralala_parseNotification  (t_tll *x, PIZEvent *event);
           
 // -------------------------------------------------------------------------------------------------------------

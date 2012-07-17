@@ -193,10 +193,11 @@ typedef struct _PIZSequence {
     long                type;
     long                cell;
     long                value;
-    PIZItemset          usedNotes;
-    PIZItemset          addedNotes;
-    PIZItemset          changedNotes;
-    PIZItemset          removedNotes;
+    PIZItemset          used;
+    PIZItemset          changed;
+    PIZItemset          removed;
+    PIZItemset          addedLow;
+    PIZItemset          addedHigh;
     PIZArray            *scale;
     PIZArray            *pattern;
     PIZArray            *map;

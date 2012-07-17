@@ -141,7 +141,7 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     long zoneStatus = 0;
     long i, argc, n = 0;
     t_atom *argv = NULL;
-    t_symbol *last = NULL;
+    t_symbol *mark = NULL;
     t_symbol **keys = NULL;
     t_atomarray *notes[3];
     PIZError err = PIZ_GOOD;
@@ -186,8 +186,8 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
         } 
     }
     
-    if (!(dictionary_getsym(x->status, TLL_SYM_MARK, &last)) 
-        && (!(dictionary_getatoms(x->current, last, &argc, &argv)))) {
+    if (!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) 
+        && (!(dictionary_getatoms(x->current, mark, &argc, &argv)))) {
         tralala_paintStrncatNote(string, argc, argv);
     }
     
@@ -203,7 +203,7 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
                     }
                     if (!k || (status == TLL_UNSELECTED)) {
                         atomarray_appendatoms(notes[0], argc, argv);
-                    } else if (key != last) {
+                    } else if (key != mark) {
                         atomarray_appendatoms(notes[1], argc, argv);
                     } else {
                         atomarray_appendatoms(notes[2], argc, argv);

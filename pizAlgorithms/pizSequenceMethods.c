@@ -143,7 +143,8 @@ PIZError pizSequenceNote(PIZSequence *x, const PIZEvent *event)
     long *argv = NULL;
     
     if (!(pizEventData(event, &argc, &argv))) {
-        long  i;
+        long i;
+        PIZEventType type;
         ulong flags = PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS;
         long  values[ ] = { -1,
                             PIZ_SEQUENCE_DEFAULT_PITCH, 
@@ -153,6 +154,12 @@ PIZError pizSequenceNote(PIZSequence *x, const PIZEvent *event)
         
         for (i = 0; i < MIN(argc, 5); i++) {
             values[i] = argv[i];
+        }
+        
+        pizEventType(event, &type);
+        
+        if (type == PIZ_EVENT_LOW) {
+            flags |= PIZ_SEQUENCE_FLAG_LOW;
         }
         
         if (pizSequenceNewNote(x, values, flags)) {
@@ -635,11 +642,16 @@ PIZNote *pizSequenceNewNote(PIZSequence *x, long *argv, ulong flags)
                                 
         if (!err && !(pizLinklistAppend(x->timeline[newNote->position], (void *)newNote))) {
             x->count ++; 
-            pizItemsetSetAtIndex(&x->addedNotes, newNote->tag);
+            
+            if (flags & PIZ_SEQUENCE_FLAG_LOW) {
+                pizItemsetSetAtIndex(&x->addedLow, newNote->tag);
+            } else {
+                pizItemsetSetAtIndex(&x->addedHigh, newNote->tag);
+            }
             
         } else {
             x->lookup[newNote->tag] = NULL;
-            pizItemsetUnsetAtIndex(&x->usedNotes, newNote->tag);
+            pizItemsetUnsetAtIndex(&x->used, newNote->tag);
             free(newNote);
             newNote = NULL;
         }
@@ -656,8 +668,8 @@ PIZError pizSequenceGetTag(PIZSequence *x, long *ptr)
     PIZError err = PIZ_ERROR;
     
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
-        if (!(pizItemsetIsSetAtIndex(&x->usedNotes, i))) {
-            pizItemsetSetAtIndex(&x->usedNotes, i);
+        if (!(pizItemsetIsSetAtIndex(&x->used, i))) {
+            pizItemsetSetAtIndex(&x->used, i);
             k = i;
             break;
         }
@@ -712,7 +724,7 @@ void pizSequenceSetByTempNotes(PIZSequence *x, long selector, bool reverse)
     
     if (x->tempNotes1[i]->values[selector] != t) {
         x->tempNotes1[i]->values[selector] = t;
-        pizItemsetSetAtIndex(&x->changedNotes, x->tempNotes1[i]->tag);
+        pizItemsetSetAtIndex(&x->changed, x->tempNotes1[i]->tag);
     }
     //
     }

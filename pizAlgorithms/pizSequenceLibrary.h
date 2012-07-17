@@ -53,6 +53,7 @@
 #define PIZ_SEQUENCE_FLAG_SNAP          1UL
 #define PIZ_SEQUENCE_FLAG_AMBITUS       2UL
 #define PIZ_SEQUENCE_FLAG_CLIP          4UL 
+#define PIZ_SEQUENCE_FLAG_LOW           8UL
 
 #define PIZ_SEQUENCE_FLAG_RANDOM        1UL
 #define PIZ_SEQUENCE_FLAG_FILL          2UL

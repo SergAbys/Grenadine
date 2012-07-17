@@ -63,31 +63,6 @@ PIZ_LOCAL void  tralala_userCopySelected        (t_tll *x, t_dictionary *d);
 #pragma mark ---
 #pragma mark -
 
-ulong tralala_userAbort(t_tll *x)
-{
-    if (x->flags & TLL_FLAG_LASSO) {
-        tralala_userReleaseLasso(x);
-        return TLL_DIRTY_LASSO;
-    } 
-    
-    return TLL_DIRTY_NONE;
-}
-
-void tralala_userDeleteStatus(t_tll *x, t_symbol *s)
-{
-    t_symbol *last = NULL;
-    
-    if(!(dictionary_getsym(x->status, TLL_SYM_MARK, &last)) && (s == last)) {
-        dictionary_deleteentry(x->status, TLL_SYM_MARK); 
-    }
-    
-    dictionary_deleteentry(x->status, s);
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacter)
 {
     tllMethod f = NULL;
@@ -197,6 +172,22 @@ void tralala_up(t_tll *x, t_object *pv, t_pt pt, long m)
 #pragma mark ---
 #pragma mark -
 
+ulong tralala_userAbort(t_tll *x)
+{
+    if (x->flags & TLL_FLAG_LASSO) {
+        tralala_userReleaseLasso(x);
+        return TLL_DIRTY_LASSO;
+    } 
+    
+    return TLL_DIRTY_NONE;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark ---
+#pragma mark -
+
 ulong tralala_userKeyA(t_tll *x, long m)
 {
     ulong dirty = TLL_DIRTY_NONE;
@@ -221,7 +212,6 @@ ulong tralala_userKeyC(t_tll *x, long m)
         
         if (t = dictionary_new( )) {
             tralala_userCopySelected(x, t);
-            dictionary_appendlong(t, TLL_SYM_IDENTIFIER, x->identifier);
             dictionary_clear(tll_clipboard);
             dictionary_copyunique(tll_clipboard, t);
             object_free(t);
@@ -234,14 +224,11 @@ ulong tralala_userKeyC(t_tll *x, long m)
 ulong tralala_userKeyV(t_tll *x, long m)
 {
     if (m & eCommandKey) {
-        long k = 0;
         t_dictionary *t = NULL;
         
         if (t = dictionary_new( )) {
             dictionary_copyunique(t, tll_clipboard);
-            if (!(dictionary_getlong(t, TLL_SYM_IDENTIFIER, &k)) && (k != x->identifier)) {
-                tralala_parseDictionary(x, t);  
-            }
+            tralala_parseDictionary(x, t);  
             object_free(t);
         }
     }
@@ -260,7 +247,7 @@ void tralala_userAddNote(t_tll *x)
     atom_setlong(a, TLL_X_TO_POSITION(x->cursor.x));
     atom_setlong(a + 1, TLL_Y_TO_PITCH(x->cursor.y));
     
-    tralala_parseMessage(x, TLL_SYM_NOTE, 2, a);
+    tralala_parseMessage(x, TLL_SYM_NOTE, 2, a, TLL_DEFER);
 }
 
 void tralala_userSelectZone(t_tll *x)
@@ -404,7 +391,12 @@ bool tralala_userHitNote(t_tll *x)
     
     if (s) {
         if (dictionary_hasentry(x->status, s)) {
-            tralala_userDeleteStatus(x, s);
+            t_symbol *mark = NULL;
+            if(!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) && (s == mark)) {
+                dictionary_deleteentry(x->status, TLL_SYM_MARK); 
+            }
+            
+            dictionary_deleteentry(x->status, s);
         } else {
             dictionary_appendsym(x->status, TLL_SYM_MARK, s);
             dictionary_appendlong(x->status, s, TLL_SELECTED);
@@ -499,6 +491,10 @@ bool tralala_userIsNoteInsideLasso(t_tll *x, t_symbol *s, double *c)
     
     return k;
 }
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void tralala_userCopySelected(t_tll *x, t_dictionary *d)
 {

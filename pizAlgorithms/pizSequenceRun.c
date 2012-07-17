@@ -133,23 +133,26 @@ PIZError pizSequenceRefresh(PIZSequence *x)
     //
     }
     
-    if (pizItemsetCount(&x->removedNotes)) {
+    if (pizItemsetCount(&x->removed)) {
     //
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
-        if (pizItemsetIsSetAtIndex(&x->removedNotes, i)) {
+        if (pizItemsetIsSetAtIndex(&x->removed, i)) {
             long a[ ] = { 0, 0, 0, 0, 0, i, x->bpm };
             err |= pizAgentNotify(x->owner, PIZ_EVENT_NOTE_REMOVED, 7, a);
         } 
     }
     
-    pizItemsetClear(&x->removedNotes);
+    pizItemsetClear(&x->removed);
     //
     }
     
-    if (pizItemsetCount(&x->addedNotes)) {
+    if (pizItemsetCount(&x->addedLow) || pizItemsetCount(&x->addedHigh)) {
     //
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
-        if (pizItemsetIsSetAtIndex(&x->addedNotes, i) && (note = x->lookup[i])) {
+        bool low = pizItemsetIsSetAtIndex(&x->addedLow, i);
+        bool high = pizItemsetIsSetAtIndex(&x->addedHigh, i);
+        
+        if ((low || high) && (note = x->lookup[i])) {
 
             long a[ ] = { note->position, 
                           note->values[PIZ_VALUE_PITCH],
@@ -157,22 +160,24 @@ PIZError pizSequenceRefresh(PIZSequence *x)
                           note->values[PIZ_VALUE_DURATION], 
                           note->values[PIZ_VALUE_CHANNEL],
                           note->tag,
-                          x->bpm };
-                
-            err |= pizAgentNotify(x->owner, PIZ_EVENT_NOTE_ADDED, 7, a);
+                          x->bpm,
+                          low };
             
-            pizItemsetUnsetAtIndex(&x->changedNotes, i);
+            err |= pizAgentNotify(x->owner, PIZ_EVENT_NOTE_ADDED, 8, a);
+            
+            pizItemsetUnsetAtIndex(&x->changed, i);
         } 
     }
 
-    pizItemsetClear(&x->addedNotes);
+    pizItemsetClear(&x->addedLow);
+    pizItemsetClear(&x->addedHigh);
     //
     }
     
-    if (pizItemsetCount(&x->changedNotes)) {
+    if (pizItemsetCount(&x->changed)) {
     //
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
-        if (pizItemsetIsSetAtIndex(&x->changedNotes, i) && (note = x->lookup[i])) {
+        if (pizItemsetIsSetAtIndex(&x->changed, i) && (note = x->lookup[i])) {
 
             long a[ ] = { note->position,
                           note->values[PIZ_VALUE_PITCH],
@@ -186,7 +191,7 @@ PIZError pizSequenceRefresh(PIZSequence *x)
         } 
     }
     
-    pizItemsetClear(&x->changedNotes);
+    pizItemsetClear(&x->changed);
     //
     }
     

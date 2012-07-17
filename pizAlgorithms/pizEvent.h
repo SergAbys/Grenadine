@@ -63,7 +63,7 @@
                         event->data[4],             \
                         event->data[5],             \
                         event->data[6],             \
-                        event->data[8],             \
+                        event->data[7],             \
                         __FUNCTION__                \
                         );                          \
                         }
@@ -83,7 +83,8 @@ enum {
     PIZ_EVENT_DATA_DURATION     = 3,
     PIZ_EVENT_DATA_CHANNEL      = 4,
     PIZ_EVENT_DATA_TAG          = 5,
-    PIZ_EVENT_DATA_BPM          = 6
+    PIZ_EVENT_DATA_BPM          = 6,
+    PIZ_EVENT_DATA_ADDED_LOW    = 7
     };
 
 // -------------------------------------------------------------------------------------------------------------
@@ -174,6 +175,7 @@ const char  *pizEventName           (const PIZEvent *x);
 
 void        pizEventFree            (PIZEvent *x);
 void        pizEventSetIdentifier   (PIZEvent *x, long identifier);
+void        pizEventSetType         (PIZEvent *x, PIZEventType type);
 void        pizEventSetTime         (PIZEvent *x, const PIZTime *time);
 void        pizEventSetData         (PIZEvent *x, long argc, const long *argv);
 
@@ -197,6 +199,11 @@ PIZ_EXTERN void pizEventFree(PIZEvent *x)
 PIZ_EXTERN void pizEventSetIdentifier(PIZEvent *x, long identifier)
 {
     x->identifier = identifier;
+}
+
+PIZ_EXTERN void pizEventSetType(PIZEvent *x, PIZEventType type)
+{
+    x->type = type;
 }
 
 PIZ_EXTERN void pizEventCode(const PIZEvent *x, PIZEventCode *code)

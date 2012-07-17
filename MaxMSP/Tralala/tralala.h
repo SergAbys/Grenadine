@@ -34,9 +34,10 @@
 #define TLL_FLAG_NONE   0UL
 #define TLL_FLAG_LASSO  1UL
 #define TLL_FLAG_SHIFT  2UL
-
+    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 #define TLL_LOCK        systhread_mutex_lock(&x->mutex); 
 #define TLL_UNLOCK      systhread_mutex_unlock(&x->mutex); 

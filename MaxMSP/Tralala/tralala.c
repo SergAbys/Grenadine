@@ -347,7 +347,9 @@ void tralala_callback(void *ptr, PIZEvent *event)
     
     x = (t_tll *)ptr;
     pizEventCode(event, &code);
-        
+    
+    PIZ_DEBUGEVENT
+    
     switch (code) {
     //
     case PIZ_EVENT_NOTE_PLAYED :
@@ -412,12 +414,12 @@ void tralala_unloop(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_list(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
-    tralala_parseMessage(x, s, argc, argv);
+    tralala_parseMessage(x, s, argc, argv, TLL_NONE);
 }
 
 void tralala_anything(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
-    tralala_parseMessage(x, s, argc, argv);
+    tralala_parseMessage(x, s, argc, argv, TLL_NONE);
 }
 
 // -------------------------------------------------------------------------------------------------------------

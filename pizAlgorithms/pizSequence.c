@@ -90,10 +90,11 @@ PIZSequence *pizSequenceNew(struct _PIZAgent *owner)
 
         x->flags = PIZ_SEQUENCE_FLAG_NONE;
         
-        pizItemsetClear(&x->usedNotes);
-        pizItemsetClear(&x->addedNotes);
-        pizItemsetClear(&x->removedNotes);
-        pizItemsetClear(&x->changedNotes);
+        pizItemsetClear(&x->used);
+        pizItemsetClear(&x->removed);
+        pizItemsetClear(&x->changed);
+        pizItemsetClear(&x->addedLow);
+        pizItemsetClear(&x->addedHigh);
                 
         x->start     = PIZ_DEFAULT_START;
         x->end       = PIZ_DEFAULT_END;

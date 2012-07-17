@@ -37,25 +37,18 @@ PIZ_INLINE void tralala_tagWithSymbol    (long *tag, t_symbol *s);
 #pragma mark ---
 #pragma mark -
 
-static t_quickmap *tll_code;
-static t_quickmap *tll_type;
-static t_quickmap *tll_length;
-static t_quickmap *tll_direction;
-static t_quickmap *tll_select;
-static t_quickmap *tll_key;
-static t_quickmap *tll_notification;
+static t_quickmap   *tll_type;
+static t_quickmap   *tll_length;
+static t_quickmap   *tll_direction;
+static t_quickmap   *tll_select;
+static t_quickmap   *tll_key;
+static t_quickmap   *tll_notification;
+
+static t_dictionary *tll_code;
 
 void tralala_parseInit(t_tllSymbols *table)
 {
 //
-tll_code         = (t_quickmap *)quickmap_new( );
-tll_type         = (t_quickmap *)quickmap_new( );
-tll_length       = (t_quickmap *)quickmap_new( );
-tll_direction    = (t_quickmap *)quickmap_new( );
-tll_key          = (t_quickmap *)quickmap_new( );
-tll_select       = (t_quickmap *)quickmap_new( );
-tll_notification = (t_quickmap *)quickmap_new( );
-
 table->bpm           = gensym("bpm");
 table->chance        = gensym("chance");
 table->velocity      = gensym("velocity");
@@ -69,7 +62,6 @@ table->end           = gensym("end");
 table->clear         = gensym("clear");
 table->tralala       = gensym("tralala");
 table->untitled      = gensym("untitled");
-table->identifier    = gensym("identifier");
 table->mark          = gensym("mark");
 table->run           = gensym("run");
 table->note          = gensym("note");
@@ -87,33 +79,42 @@ table->attr_modified = gensym("attr_modified");
 table->getname       = gensym("getname");
 table->patching_rect = gensym("patching_rect");
 
-quickmap_add(tll_code, gensym("bpm"),                     (void *)(TLL_TINY + PIZ_EVENT_BPM));
-quickmap_add(tll_code, gensym("learn"),                   (void *)(TLL_TINY + PIZ_EVENT_LEARN));
-quickmap_add(tll_code, gensym("list"),                    (void *)(TLL_TINY + PIZ_EVENT_LEARN));
-quickmap_add(tll_code, gensym("forget"),                  (void *)(TLL_TINY + PIZ_EVENT_FORGET));
-quickmap_add(tll_code, gensym("dump"),                    (void *)(TLL_TINY + PIZ_EVENT_DUMP));
-quickmap_add(tll_code, gensym("chance"),                  (void *)(TLL_TINY + PIZ_EVENT_CHANCE));
-quickmap_add(tll_code, gensym("velocity"),                (void *)(TLL_TINY + PIZ_EVENT_VELOCITY));
-quickmap_add(tll_code, gensym("channel"),                 (void *)(TLL_TINY + PIZ_EVENT_CHANNEL));
-quickmap_add(tll_code, gensym("chord"),                   (void *)(TLL_TINY + PIZ_EVENT_CHORD));
-quickmap_add(tll_code, gensym("cell"),                    (void *)(TLL_TINY + PIZ_EVENT_CELL));
-quickmap_add(tll_code, gensym("value"),                   (void *)(TLL_TINY + PIZ_EVENT_VALUE));
-quickmap_add(tll_code, gensym("scale"),                   (void *)(TLL_TINY + PIZ_EVENT_SCALE));
-quickmap_add(tll_code, gensym("pattern"),                 (void *)(TLL_TINY + PIZ_EVENT_PATTERN));
-quickmap_add(tll_code, gensym("note"),                    (void *)(TLL_TINY + PIZ_EVENT_NOTE));
-quickmap_add(tll_code, gensym("zone"),                    (void *)(TLL_TINY + PIZ_EVENT_ZONE));
-quickmap_add(tll_code, gensym("clear"),                   (void *)(TLL_TINY + PIZ_EVENT_CLEAR));
-quickmap_add(tll_code, gensym("clean"),                   (void *)(TLL_TINY + PIZ_EVENT_CLEAN));
-quickmap_add(tll_code, gensym("rotate"),                  (void *)(TLL_TINY + PIZ_EVENT_ROTATE));
-quickmap_add(tll_code, gensym("scramble"),                (void *)(TLL_TINY + PIZ_EVENT_SCRAMBLE));
-quickmap_add(tll_code, gensym("sort"),                    (void *)(TLL_TINY + PIZ_EVENT_SORT));
-quickmap_add(tll_code, gensym("change"),                  (void *)(TLL_TINY + PIZ_EVENT_CHANGE));
-quickmap_add(tll_code, gensym("fill"),                    (void *)(TLL_TINY + PIZ_EVENT_FILL));
-quickmap_add(tll_code, gensym("kill"),                    (void *)(TLL_TINY + PIZ_EVENT_KILL));
-quickmap_add(tll_code, gensym("cycle"),                   (void *)(TLL_TINY + PIZ_EVENT_CYCLE));
-quickmap_add(tll_code, gensym("zoulou"),                  (void *)(TLL_TINY + PIZ_EVENT_ZOULOU));
-quickmap_add(tll_code, gensym("romeo"),                   (void *)(TLL_TINY + PIZ_EVENT_ROMEO));
-quickmap_add(tll_code, gensym("juliet"),                  (void *)(TLL_TINY + PIZ_EVENT_JULIET));
+tll_code = dictionary_new( );
+
+dictionary_appendlong(tll_code, gensym("bpm"),      (TLL_TINY + PIZ_EVENT_BPM));
+dictionary_appendlong(tll_code, gensym("learn"),    (TLL_TINY + PIZ_EVENT_LEARN));
+dictionary_appendlong(tll_code, gensym("list"),     (TLL_TINY + PIZ_EVENT_LEARN));
+dictionary_appendlong(tll_code, gensym("forget"),   (TLL_TINY + PIZ_EVENT_FORGET));
+dictionary_appendlong(tll_code, gensym("dump"),     (TLL_TINY + PIZ_EVENT_DUMP));
+dictionary_appendlong(tll_code, gensym("chance"),   (TLL_TINY + PIZ_EVENT_CHANCE));
+dictionary_appendlong(tll_code, gensym("velocity"), (TLL_TINY + PIZ_EVENT_VELOCITY));
+dictionary_appendlong(tll_code, gensym("channel"),  (TLL_TINY + PIZ_EVENT_CHANNEL));
+dictionary_appendlong(tll_code, gensym("chord"),    (TLL_TINY + PIZ_EVENT_CHORD));
+dictionary_appendlong(tll_code, gensym("cell"),     (TLL_TINY + PIZ_EVENT_CELL));
+dictionary_appendlong(tll_code, gensym("value"),    (TLL_TINY + PIZ_EVENT_VALUE));
+dictionary_appendlong(tll_code, gensym("scale"),    (TLL_TINY + PIZ_EVENT_SCALE));
+dictionary_appendlong(tll_code, gensym("pattern"),  (TLL_TINY + PIZ_EVENT_PATTERN));
+dictionary_appendlong(tll_code, gensym("note"),     (TLL_TINY + PIZ_EVENT_NOTE));
+dictionary_appendlong(tll_code, gensym("zone"),     (TLL_TINY + PIZ_EVENT_ZONE));
+dictionary_appendlong(tll_code, gensym("clear"),    (TLL_TINY + PIZ_EVENT_CLEAR));
+dictionary_appendlong(tll_code, gensym("clean"),    (TLL_TINY + PIZ_EVENT_CLEAN));
+dictionary_appendlong(tll_code, gensym("rotate"),   (TLL_TINY + PIZ_EVENT_ROTATE));
+dictionary_appendlong(tll_code, gensym("scramble"), (TLL_TINY + PIZ_EVENT_SCRAMBLE));
+dictionary_appendlong(tll_code, gensym("sort"),     (TLL_TINY + PIZ_EVENT_SORT));
+dictionary_appendlong(tll_code, gensym("change"),   (TLL_TINY + PIZ_EVENT_CHANGE));
+dictionary_appendlong(tll_code, gensym("fill"),     (TLL_TINY + PIZ_EVENT_FILL));
+dictionary_appendlong(tll_code, gensym("kill"),     (TLL_TINY + PIZ_EVENT_KILL));
+dictionary_appendlong(tll_code, gensym("cycle"),    (TLL_TINY + PIZ_EVENT_CYCLE));
+dictionary_appendlong(tll_code, gensym("zoulou"),   (TLL_TINY + PIZ_EVENT_ZOULOU));
+dictionary_appendlong(tll_code, gensym("romeo"),    (TLL_TINY + PIZ_EVENT_ROMEO));
+dictionary_appendlong(tll_code, gensym("juliet"),   (TLL_TINY + PIZ_EVENT_JULIET));
+
+tll_type         = (t_quickmap *)quickmap_new( );
+tll_length       = (t_quickmap *)quickmap_new( );
+tll_direction    = (t_quickmap *)quickmap_new( );
+tll_key          = (t_quickmap *)quickmap_new( );
+tll_select       = (t_quickmap *)quickmap_new( );
+tll_notification = (t_quickmap *)quickmap_new( );
 
 quickmap_add(tll_type, gensym("none"),                    (void *)(TLL_TINY + PIZ_MODE_NONE));
 quickmap_add(tll_type, gensym("ionian"),                  (void *)(TLL_TINY + PIZ_IONIAN));
@@ -213,7 +214,7 @@ void tralala_parseDictionary(t_tll *x, t_dictionary *d)
     
     if (!dictionary_getatoms(d, (*(keys + i)), &k, &data)) {
         if (atom_gettype(data) == A_SYM) {
-            tralala_parseMessage(x, atom_getsym(data), k - 1, data + 1);
+            tralala_parseMessage(x, atom_getsym(data), k - 1, data + 1, TLL_NONE);
         }
     }
     //
@@ -224,12 +225,12 @@ void tralala_parseDictionary(t_tll *x, t_dictionary *d)
     }
 }
 
-void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv)
+void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, long flag)
 {
     PIZTime time;
     PIZEventCode code = 0;
         
-    if (!(quickmap_lookup_key1(tll_code, (void *)s, (void **)&code))) {
+    if (!(dictionary_getlong(tll_code, s, (long *)&code))) {
     //
     long i, k = 0, msg = 0;
     long data[PIZ_EVENT_DATA_SIZE] = { 0 };
@@ -296,6 +297,11 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv)
         pizEventSetTime(event, &time);
         pizEventSetData(event, k, data);
         pizEventSetIdentifier(event, x->identifier);
+        
+        if (flag == TLL_DEFER) {
+            pizEventSetType(event, PIZ_EVENT_LOW);
+        }
+        
         pizAgentDoEvent(x->agent, event);
     }
     //
@@ -307,9 +313,9 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
     long i, k = 0;
     long *ptr = NULL;
     t_symbol *s = NULL;
-    t_atom data[PIZ_EVENT_DATA_SIZE + 1];
     PIZEventCode code;
     ulong dirty = TLL_DIRTY_NONE;
+    t_atom data[PIZ_EVENT_DATA_SIZE + 1];
     
     pizEventCode(event, &code);
     pizEventData(event, &k, &ptr);
@@ -348,12 +354,17 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
         
         if (code == PIZ_EVENT_NOTE_REMOVED) {
             if (dictionary_hasentry(x->status, s)) {
-                tralala_userDeleteStatus(x, s);
+                t_symbol *mark = NULL;
+                if (!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) && (s == mark)) {
+                    dictionary_deleteentry(x->status, TLL_SYM_MARK); 
+                }
+                dictionary_deleteentry(x->status, s);
             }
             dictionary_deleteentry(x->current, s);
+            
         } else {
             atom_setsym(data, TLL_SYM_NOTE);
-            dictionary_appendatoms(x->current, s, k - 1, data);
+            dictionary_appendatoms(x->current, s, 6, data);
         }
         
         TLL_UNLOCK

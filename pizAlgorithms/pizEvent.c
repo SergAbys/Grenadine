@@ -187,6 +187,11 @@ void pizEventSetIdentifier(PIZEvent *x, long identifier)
     x->identifier = identifier;
 }
 
+void pizEventSetType(PIZEvent *x, PIZEventType type)
+{
+    x->type = type;
+}
+
 void pizEventSetTime(PIZEvent *x, const PIZTime *time)
 {
     pizTimeCopy(&x->time, time);
