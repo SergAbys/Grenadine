@@ -42,6 +42,8 @@
 
 void        tralala_paint           (t_tll *x, t_object *pv);
 void        tralala_params          (t_tll *x, t_object *pv, t_jboxdrawparams *params);
+void        tralala_focusgained     (t_tll *x, t_object *pv);
+void        tralala_focuslost       (t_tll *x, t_object *pv);
 t_max_err   tralala_notify          (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, void *data);
 
 // -------------------------------------------------------------------------------------------------------------

@@ -34,6 +34,7 @@
 #define TLL_FLAG_NONE   0UL
 #define TLL_FLAG_LASSO  1UL
 #define TLL_FLAG_SHIFT  2UL
+#define TLL_FLAG_FOCUS  4UL
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -62,6 +63,7 @@ typedef struct _tll {
     t_pt                origin;
     t_jrgba             color;
     t_jrgba             textColor;
+    t_jrgba             unfocusedColor;
     t_jrgba             highlightedColor1;
     t_jrgba             highlightedColor2;
     t_jrgba             lassoColor;

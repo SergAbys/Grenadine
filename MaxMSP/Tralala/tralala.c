@@ -50,6 +50,8 @@ int main(void)
     class_addmethod(c, (method)tralala_jsave,       "jsave",         A_CANT,  0);
     class_addmethod(c, (method)tralala_paint,       "paint",         A_CANT,  0);
     class_addmethod(c, (method)tralala_params,      "getdrawparams", A_CANT,  0);
+    class_addmethod(c, (method)tralala_focusgained, "focusgained",   A_CANT, 0);
+	class_addmethod(c, (method)tralala_focuslost,   "focuslost",     A_CANT, 0);	
     class_addmethod(c, (method)tralala_key,         "key",           A_CANT,  0);
     class_addmethod(c, (method)tralala_mousewheel,  "mousewheel",    A_CANT,  0);
     class_addmethod(c, (method)tralala_mousedown,   "mousedown",     A_CANT,  0);
@@ -72,6 +74,11 @@ int main(void)
     CLASS_ATTR_DEFAULT_SAVE (c, "bgcolor", 0, "0. 0. 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "bgcolor", 0, "rgba", "Background Color");
     CLASS_ATTR_CATEGORY     (c, "bgcolor", 0, "Color");
+    
+    CLASS_ATTR_RGBA         (c, "unfocusedcolor", 0, t_tll, unfocusedColor); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "unfocusedcolor", 0, "0.25 0.25 0.25 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "unfocusedcolor", 0, "rgba", "Border Color");
+    CLASS_ATTR_CATEGORY     (c, "unfocusedcolor", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "bordercolor", 0, t_tll, borderColor); 
     CLASS_ATTR_DEFAULT_SAVE (c, "bordercolor", 0, "0. 0. 0. 1."); 
@@ -120,13 +127,14 @@ int main(void)
     CLASS_ATTR_FILTER_CLIP  (c, "viewtext", 0, 1);
     CLASS_ATTR_CATEGORY     (c, "viewtext", 0, "Appearance");
  
-    CLASS_ATTR_ORDER        (c, "color",       0, "1");
-    CLASS_ATTR_ORDER        (c, "hcolor1",     0, "2");
-    CLASS_ATTR_ORDER        (c, "hcolor2",     0, "3");
-    CLASS_ATTR_ORDER        (c, "textcolor",   0, "4");
-    CLASS_ATTR_ORDER        (c, "lassocolor",  0, "5");
-    CLASS_ATTR_ORDER        (c, "bordercolor", 0, "6");
-    CLASS_ATTR_ORDER        (c, "bgcolor",     0, "7");
+    CLASS_ATTR_ORDER        (c, "color",            0, "1");
+    CLASS_ATTR_ORDER        (c, "hcolor1",          0, "2");
+    CLASS_ATTR_ORDER        (c, "hcolor2",          0, "3");
+    CLASS_ATTR_ORDER        (c, "textcolor",        0, "4");
+    CLASS_ATTR_ORDER        (c, "lassocolor",       0, "5");
+    CLASS_ATTR_ORDER        (c, "bordercolor",      0, "6");
+    CLASS_ATTR_ORDER        (c, "unfocusedcolor",   0, "7");
+    CLASS_ATTR_ORDER        (c, "bgcolor",          0, "8");
     
     CLASS_ATTR_DEFAULT      (c, "fontname", 0, "Arial");
     CLASS_ATTR_DEFAULT      (c, "fontsize", 0, "14.");
@@ -317,8 +325,6 @@ void tralala_callback(void *ptr, PIZEvent *event)
     
     x = (t_tll *)ptr;
     pizEventCode(event, &code);
-    
-    PIZ_DEBUGEVENT
     
     switch (code) {
     //

@@ -56,7 +56,22 @@ void tralala_paint(t_tll *x, t_object *pv)
 void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
 {
     jrgba_copy(&params->d_boxfillcolor, &x->backgroundColor);
-    jrgba_copy(&params->d_bordercolor, &x->borderColor);
+    
+    if (x->flags & TLL_FLAG_FOCUS) {
+        jrgba_copy(&params->d_bordercolor, &x->borderColor);
+    } else {
+        jrgba_copy(&params->d_bordercolor, &x->unfocusedColor);
+    }
+}
+
+void tralala_focusgained(t_tll *x, t_object *pv)
+{
+	x->flags |= TLL_FLAG_FOCUS;
+}
+
+void tralala_focuslost(t_tll *x, t_object *pv)
+{
+	x->flags &= ~TLL_FLAG_FOCUS;
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -251,7 +266,7 @@ void tralala_paintText(t_tll *x, t_object *pv, char *string)
                 (jbox_get_fontsize((t_object *)x))); 
     
     jtextlayout_set(x->layer, string, font, 5., 5., r.width - 10., r.height - 5., justification, 0L);
-    jtextlayout_settextcolor(x->layer, &x->textColor);    
+    jtextlayout_settextcolor(x->layer, &x->textColor);
     jtextlayout_draw(x->layer, g);
     
     jfont_destroy(font);
