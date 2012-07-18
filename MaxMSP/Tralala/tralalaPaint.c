@@ -28,11 +28,10 @@ PIZ_LOCAL void tralala_paintText                (t_tll *x, t_object *pv, char *s
 PIZ_LOCAL void tralala_paintZone                (t_tll *x, t_object *pv, long argc, t_atom *argv, long status);
 PIZ_LOCAL void tralala_paintNote                (t_tll *x, t_object *pv, t_atomarray **notes);
 
-PIZ_LOCAL void tralala_paintStrncatZone         (char *dst, long argc, t_atom *argv);
+PIZ_LOCAL void tralala_paintStrncatZone         (char *dst, long argc, t_atom *argv, long status);
 PIZ_LOCAL void tralala_paintStrncatNote         (char *dst, long argc, t_atom *argv);
 PIZ_LOCAL void tralala_paintStrncatAttribute    (char *dst, long argc, t_atom *argv);
-
-PIZ_LOCAL void tralala_paintPitchAsString       (char *s, long k, long size);
+PIZ_LOCAL void tralala_paintPitchAsString       (char *dst, long k, long size);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -179,6 +178,8 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     
     TLL_LOCK
     
+    dictionary_getlong(x->status, TLL_SYM_ZONE, &zoneStatus);
+        
     for (i = 0; i < 9; i++) {
         if (!(dictionary_getatoms(x->current, s[i], &argc, &argv))) {
             tralala_paintStrncatAttribute(string, argc, argv);
@@ -187,7 +188,7 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     
     if (dictionary_hasentry(x->status, TLL_SYM_ZONE)) {
         if (!(dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv))) {
-            tralala_paintStrncatZone(string, argc, argv);
+            tralala_paintStrncatZone(string, argc, argv, zoneStatus);
         } 
     }
     
@@ -199,30 +200,29 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     if (!err && !(dictionary_getkeys(x->current, &n, &keys))) {
     //
     for (i = 0; i < n; i++) {
-        long k, status = 0; 
-        t_symbol *key = (*(keys + i));
-        
-        if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
-            if ((atom_getsym(argv) == TLL_SYM_NOTE)) {
-                if (k = dictionary_hasentry(x->status, key)) {
-                   dictionary_getlong(x->status, key, &status);
-                }
-                if (!k || (status == TLL_UNSELECTED)) {
-                    atomarray_appendatoms(notes[0], argc, argv);
-                } else if (key != mark) {
-                    atomarray_appendatoms(notes[1], argc, argv);
-                } else {
-                    atomarray_appendatoms(notes[2], argc, argv);
-                }
-            }
+    //
+    long k, status = 0; 
+    t_symbol *key = (*(keys + i));
+    
+    if (!(dictionary_getatoms(x->current, key, &argc, &argv)) && (atom_getsym(argv) == TLL_SYM_NOTE)) { 
+        if (k = dictionary_hasentry(x->status, key)) {
+           dictionary_getlong(x->status, key, &status);
         }
+        if (!k || (status == TLL_UNSELECTED)) {
+            atomarray_appendatoms(notes[0], argc, argv);
+        } else if (key != mark) {
+            atomarray_appendatoms(notes[1], argc, argv);
+        } else {
+            atomarray_appendatoms(notes[2], argc, argv);
+        }
+    }
+    //
     }
 
     dictionary_freekeys(x->current, n, keys);
     //
     }
     
-    dictionary_getlong(x->status, TLL_SYM_ZONE, &zoneStatus);
     err |= (dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv)) != MAX_ERR_NONE;
     
     TLL_UNLOCK 
@@ -286,53 +286,23 @@ void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv, long sta
     
     if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_ZONE, w, h)) {
     //
-    long i;
+    t_rect r;
     long zone[4];
-    double a, b, u, v, w, h;
     
     atom_getlong_array(argc - 1, argv + 1, 4, zone);
     
-    a = TLL_POSITION_TO_X(zone[0]);
-    b = TLL_PITCH_TO_Y_UP(zone[3]); 
-    u = TLL_POSITION_TO_X(zone[1]);
-    v = TLL_PITCH_TO_Y_DOWN(zone[2]);
-    w = u - a;
-    h = (v - b) + 1.;
+    r.x = TLL_POSITION_TO_X(zone[0]);
+    r.y = TLL_PITCH_TO_Y_UP(zone[3]); 
+    r.width = TLL_POSITION_TO_X(zone[1]) - r.x;
+    r.height = TLL_PITCH_TO_Y_DOWN(zone[2]) - r.y;
 
     if (status) {
-    //
-    t_rect r[4];
-    long s[4] = { 0 };
-        
-    r[0].x = a; r[0].y = b; r[0].width = w; r[0].height = 1.;
-    r[1].x = u; r[1].y = b; r[1].width = 1.; r[1].height = h;
-    r[2].x = a; r[2].y = v; r[2].width = w; r[2].height = 1.;
-    r[3].x = a; r[3].y = b; r[3].width = 1.; r[3].height = h;
-    
-    switch (status) {
-        case TLL_SELECTED       : s[0] = 1; s[1] = 1; s[2] = 1; s[3] = 1; break; 
-        case TLL_SELECTED_START : s[3] = 1; break;
-        case TLL_SELECTED_END   : s[1] = 1; break;
-        case TLL_SELECTED_DOWN  : s[2] = 1; break;
-        case TLL_SELECTED_UP    : s[0] = 1; break;
-    }
-      
-    for (i = 0; i < 4; i++) {
-    //
-    if (s[i]) {
-        jgraphics_set_source_jrgba(g, &x->hColor2);
+        jgraphics_set_source_jrgba(g, &x->hColor1);
     } else {
         jgraphics_set_source_jrgba(g, &x->color);
     }
     
-    jgraphics_rectangle_draw_fast(g, r[i].x, r[i].y, r[i].width, r[i].height, 1.);
-    //
-    }
-    //
-    } else {
-        jgraphics_set_source_jrgba(g, &x->color);
-        jgraphics_rectangle_draw_fast(g, a, b, w, h, 1.);
-    }
+    jgraphics_rectangle_draw_fast(g, r.x, r.y, r.width, r.height, 1.);
     
     jbox_end_layer((t_object*)x, pv, TLL_SYM_ZONE);
     //
@@ -394,12 +364,19 @@ void tralala_paintNote(t_tll *x, t_object *pv, t_atomarray **notes)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_paintStrncatZone(char *dst, long argc, t_atom *argv)
+void tralala_paintStrncatZone(char *dst, long argc, t_atom *argv, long status)
 {
     char a[4];
     char b[4];
     char temp[32];
-    
+  
+    switch (status) {
+        case TLL_SELECTED_START : strncat_zero(dst, "Start ", TLL_STRING_SIZE); break;
+        case TLL_SELECTED_END   : strncat_zero(dst, "End ",   TLL_STRING_SIZE); break;
+        case TLL_SELECTED_DOWN  : strncat_zero(dst, "Down ",  TLL_STRING_SIZE); break;
+        case TLL_SELECTED_UP    : strncat_zero(dst, "Up ",    TLL_STRING_SIZE); break;
+    }
+      
     tralala_paintPitchAsString(a, atom_getlong(argv + 3), 4);
     tralala_paintPitchAsString(b, atom_getlong(argv + 4), 4);
     snprintf_zero(temp, 32, "%ld %ld %s %s\n", atom_getlong(argv + 1), atom_getlong(argv + 2), a, b);
@@ -436,24 +413,24 @@ void tralala_paintStrncatAttribute(char *dst, long argc, t_atom *argv)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_paintPitchAsString(char *s, long k, long size)
+void tralala_paintPitchAsString(char *dst, long k, long size)
 {
     long m = k % 12;
     long n = ((long)(k / 12.)) - 2;
     
     switch (m) {
-        case 0  : snprintf_zero(s, size, "%s%ld", "C",  n); break;
-        case 1  : snprintf_zero(s, size, "%s%ld", "C#", n); break;
-        case 2  : snprintf_zero(s, size, "%s%ld", "D",  n); break;
-        case 3  : snprintf_zero(s, size, "%s%ld", "D#", n); break;
-        case 4  : snprintf_zero(s, size, "%s%ld", "E",  n); break;
-        case 5  : snprintf_zero(s, size, "%s%ld", "F",  n); break;
-        case 6  : snprintf_zero(s, size, "%s%ld", "F#", n); break;
-        case 7  : snprintf_zero(s, size, "%s%ld", "G",  n); break;
-        case 8  : snprintf_zero(s, size, "%s%ld", "G#", n); break;
-        case 9  : snprintf_zero(s, size, "%s%ld", "A",  n); break;
-        case 10 : snprintf_zero(s, size, "%s%ld", "A#", n); break;
-        case 11 : snprintf_zero(s, size, "%s%ld", "B",  n); break;
+        case 0  : snprintf_zero(dst, size, "%s%ld", "C",  n); break;
+        case 1  : snprintf_zero(dst, size, "%s%ld", "C#", n); break;
+        case 2  : snprintf_zero(dst, size, "%s%ld", "D",  n); break;
+        case 3  : snprintf_zero(dst, size, "%s%ld", "D#", n); break;
+        case 4  : snprintf_zero(dst, size, "%s%ld", "E",  n); break;
+        case 5  : snprintf_zero(dst, size, "%s%ld", "F",  n); break;
+        case 6  : snprintf_zero(dst, size, "%s%ld", "F#", n); break;
+        case 7  : snprintf_zero(dst, size, "%s%ld", "G",  n); break;
+        case 8  : snprintf_zero(dst, size, "%s%ld", "G#", n); break;
+        case 9  : snprintf_zero(dst, size, "%s%ld", "A",  n); break;
+        case 10 : snprintf_zero(dst, size, "%s%ld", "A#", n); break;
+        case 11 : snprintf_zero(dst, size, "%s%ld", "B",  n); break;
     }
 }
 

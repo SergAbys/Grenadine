@@ -77,22 +77,22 @@ int main(void)
     
     CLASS_ATTR_RGBA         (c, "hcolor1", 0, t_tll, hColor1); 
     CLASS_ATTR_DEFAULT_SAVE (c, "hcolor1", 0, "0.83 0.74 0.84 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "hcolor1", 0, "rgba", "Color Highlighted");
+    CLASS_ATTR_STYLE_LABEL  (c, "hcolor1", 0, "rgba", "Color");
     CLASS_ATTR_CATEGORY     (c, "hcolor1", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "hcolor2", 0, t_tll, hColor2); 
     CLASS_ATTR_DEFAULT_SAVE (c, "hcolor2", 0, "1. 0.75 0. 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "hcolor2", 0, "rgba", "Color Highlighted");
+    CLASS_ATTR_STYLE_LABEL  (c, "hcolor2", 0, "rgba", "Color");
     CLASS_ATTR_CATEGORY     (c, "hcolor2", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "textcolor", 0, t_tll, textColor); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "0.51 0.44 0.49 1."); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "0.83 0.74 0.84 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "textcolor", 0, "rgba", "Text Color");
     CLASS_ATTR_CATEGORY     (c, "textcolor", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "utextcolor", 0, t_tll, uTextColor); 
     CLASS_ATTR_DEFAULT_SAVE (c, "utextcolor", 0, "0.51 0.44 0.49 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "utextcolor", 0, "rgba", "Text Color Unfocused");
+    CLASS_ATTR_STYLE_LABEL  (c, "utextcolor", 0, "rgba", "Text Color");
     CLASS_ATTR_CATEGORY     (c, "utextcolor", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "lassocolor", 0, t_tll, lassoColor); 
@@ -106,8 +106,8 @@ int main(void)
     CLASS_ATTR_CATEGORY     (c, "bordercolor", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "ubordercolor", 0, t_tll, uBorderColor); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "ubordercolor", 0, "0.25 0.25 0.25 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "ubordercolor", 0, "rgba", "Border Color Unfocused");
+    CLASS_ATTR_DEFAULT_SAVE (c, "ubordercolor", 0, "0. 0. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "ubordercolor", 0, "rgba", "Border Color");
     CLASS_ATTR_CATEGORY     (c, "ubordercolor", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "bgcolor", 0, t_tll, backgroundColor); 

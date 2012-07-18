@@ -72,7 +72,15 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
         case TLL_KEY_A : f = tralala_userKeyAll;    break;
         case TLL_KEY_C : f = tralala_userKeyCopy;   break;
         case TLL_KEY_V : f = tralala_userKeyPaste;  break;
+        case TLL_KEY_X : f = tralala_userKeyCut;    break;
     }
+    
+    //JKEY_DELETE
+    //JKEY_BACKSPACE
+    //JKEY_UPARROW
+	//JKEY_DOWNARROW
+	//JKEY_LEFTARROW
+	//JKEY_RIGHTARROW
     
     if (f) {
         dirty |= tralala_userAbort(x);
@@ -232,6 +240,15 @@ ulong tralala_userKeyPaste(t_tll *x, long m)
             }
             object_free(t);
         }
+    }
+    
+    return TLL_DIRTY_NONE;
+}
+
+ulong tralala_userKeyCut(t_tll *x, long m)
+{
+    if (m & eCommandKey) {
+
     }
     
     return TLL_DIRTY_NONE;
