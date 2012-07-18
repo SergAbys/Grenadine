@@ -7,9 +7,9 @@
 			"revision" : 9
 		}
 ,
-		"rect" : [ 288.0, 114.0, 589.0, 459.0 ],
+		"rect" : [ 521.0, 101.0, 589.0, 459.0 ],
 		"bglocked" : 0,
-		"defrect" : [ 288.0, 114.0, 589.0, 459.0 ],
+		"defrect" : [ 521.0, 101.0, 589.0, 459.0 ],
 		"openrect" : [ 0.0, 0.0, 0.0, 0.0 ],
 		"openinpresentation" : 0,
 		"default_fontsize" : 14.0,
@@ -26,6 +26,23 @@
 		"devicewidth" : 0.0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"maxclass" : "tralala",
+					"patching_rect" : [ 20.0, 120.0, 200.0, 200.0 ],
+					"ucolor" : [ 0.168627, 0.133333, 0.160784, 1.0 ],
+					"yoffset" : 633,
+					"numinlets" : 1,
+					"numoutlets" : 4,
+					"id" : "obj-1",
+					"outlettype" : [ "list", "", "", "bang" ],
+					"tralala" : 					{
+
+					}
+
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"maxclass" : "message",
 					"text" : "store",
 					"patching_rect" : [ 200.0, 40.0, 42.0, 21.0 ],
@@ -35,51 +52,6 @@
 					"numoutlets" : 1,
 					"id" : "obj-5",
 					"outlettype" : [ "" ]
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"maxclass" : "tralala",
-					"patching_rect" : [ 20.0, 140.0, 258.0, 190.0 ],
-					"lassocolor" : [ 0.827451, 0.827451, 0.827451, 0.345098 ],
-					"yoffset" : 633,
-					"hcolor1" : [ 0.537255, 0.537255, 0.537255, 1.0 ],
-					"ubordercolor" : [ 0.827451, 0.827451, 0.827451, 1.0 ],
-					"color" : [ 0.858824, 0.858824, 0.858824, 1.0 ],
-					"numinlets" : 1,
-					"hcolor2" : [ 0.917647, 0.937255, 0.670588, 1.0 ],
-					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"xoffset" : -41,
-					"textcolor" : [ 0.537255, 0.537255, 0.537255, 1.0 ],
-					"numoutlets" : 4,
-					"utextcolor" : [ 0.694118, 0.694118, 0.694118, 1.0 ],
-					"id" : "obj-1",
-					"outlettype" : [ "list", "", "", "bang" ],
-					"tralala" : 					{
-						"untitled" : 						{
-							"bpm" : [ "bpm", 120 ],
-							"chance" : [ "chance", 100 ],
-							"velocity" : [ "velocity", 0 ],
-							"channel" : [ "channel", 1 ],
-							"chord" : [ "chord", 0 ],
-							"cell" : [ "cell", 12 ],
-							"value" : [ "value", 12 ],
-							"scale" : [ "scale", "C", "none" ],
-							"pattern" : [ "pattern" ],
-							"zone" : [ "zone", 0, 96, 60, 71 ],
-							"0" : [ "note", 12, 70, 80, 12, 0 ],
-							"1" : [ "note", 24, 69, 80, 12, 0 ],
-							"2" : [ "note", 36, 68, 80, 12, 0 ],
-							"3" : [ "note", 48, 67, 80, 12, 0 ],
-							"4" : [ "note", 60, 68, 80, 12, 0 ],
-							"5" : [ "note", 72, 69, 80, 12, 0 ],
-							"6" : [ "note", 84, 70, 80, 12, 0 ],
-							"7" : [ "note", 0, 69, 80, 12, 0 ]
-						}
-
-					}
-
 				}
 
 			}

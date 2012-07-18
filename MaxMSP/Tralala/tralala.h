@@ -64,6 +64,7 @@ typedef struct _tll {
     t_jrgba             color;
     t_jrgba             hColor1;
     t_jrgba             hColor2;
+    t_jrgba             uColor;
     t_jrgba             textColor;
     t_jrgba             uTextColor;
     t_jrgba             lassoColor;

@@ -66,11 +66,21 @@ void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
 void tralala_focusgained(t_tll *x, t_object *pv)
 {
 	x->flags |= TLL_FLAG_FOCUS;
+    
+    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);
+    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
+    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
+    jbox_redraw((t_jbox *)x);
 }
 
 void tralala_focuslost(t_tll *x, t_object *pv)
 {
 	x->flags &= ~TLL_FLAG_FOCUS;
+    
+    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);
+    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
+    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
+    jbox_redraw((t_jbox *)x);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -83,7 +93,7 @@ t_max_err tralala_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, v
     
     if (msg == TLL_SYM_ATTR_MODIFIED && (name = (t_symbol *)object_method(data, TLL_SYM_GETNAME))) {
     //
-    if (name == TLL_SYM_COLOR) {
+    if ((name == TLL_SYM_COLOR) || (name == TLL_SYM_UCOLOR)) {
         jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);
         jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
         jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
@@ -141,7 +151,12 @@ void tralala_paintBackground(t_tll *x, t_object *pv)
     t_jgraphics *g = NULL;
 
     if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_BACKGROUND, w, h)) {
-        jgraphics_set_source_jrgba(g, &x->color);
+        if (x->flags & TLL_FLAG_FOCUS) {
+            jgraphics_set_source_jrgba(g, &x->color);
+        } else {
+            jgraphics_set_source_jrgba(g, &x->uColor);
+        }
+        
         jgraphics_rectangle_draw_fast(g, 0., 0., w, h, 1.);
         jbox_end_layer((t_object*)x, pv, TLL_SYM_BACKGROUND);
     }
@@ -298,8 +313,10 @@ void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv, long sta
 
     if (status) {
         jgraphics_set_source_jrgba(g, &x->hColor1);
-    } else {
+    } else if (x->flags & TLL_FLAG_FOCUS) {
         jgraphics_set_source_jrgba(g, &x->color);
+    } else {
+        jgraphics_set_source_jrgba(g, &x->uColor);
     }
     
     jgraphics_rectangle_draw_fast(g, r.x, r.y, r.width, r.height, 1.);
@@ -338,12 +355,17 @@ void tralala_paintNote(t_tll *x, t_object *pv, t_atomarray **notes)
         r.width  = TLL_POSITION_TO_X(note[0] + note[3]) - r.x; 
         r.height = TLL_PITCH_TO_Y_DOWN(note[1]) - r.y;
     
-        if (i == 0) {
-            jgraphics_set_source_jrgba(g, &x->color);
-        } else if (i == 1) {
-            jgraphics_set_source_jrgba(g, &x->hColor1);
+        if (x->flags & TLL_FLAG_FOCUS) {
+            if (i == 0 ) {
+                jgraphics_set_source_jrgba(g, &x->color);
+            } else if (i == 1) {
+                jgraphics_set_source_jrgba(g, &x->hColor1);
+            } else {
+                jgraphics_set_source_jrgba(g, &x->hColor2);
+            }
+            
         } else {
-            jgraphics_set_source_jrgba(g, &x->hColor2);
+            jgraphics_set_source_jrgba(g, &x->uColor);
         }
         
         jgraphics_rectangle_fill_fast(g, r.x, r.y, r.width, r.height);

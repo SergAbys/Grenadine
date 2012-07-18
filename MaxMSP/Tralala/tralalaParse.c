@@ -75,6 +75,7 @@ table->yoffset          = gensym("yoffset");
 table->color            = gensym("color");
 table->hcolor1          = gensym("hcolor1");
 table->hcolor2          = gensym("hcolor2");
+table->ucolor           = gensym("ucolor");
 table->lassocolor       = gensym("lassocolor");
 table->attr_modified    = gensym("attr_modified");
 table->getname          = gensym("getname");
