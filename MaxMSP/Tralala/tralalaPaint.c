@@ -55,11 +55,11 @@ void tralala_paint(t_tll *x, t_object *pv)
 void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
 {
     if (x->flags & TLL_FLAG_FOCUS) {
-        jrgba_copy(&params->d_bordercolor, &x->borderColor);
-        jrgba_copy(&params->d_boxfillcolor, &x->backgroundColor);
+        jrgba_copy(&params->d_bordercolor, &x->border);
+        jrgba_copy(&params->d_boxfillcolor, &x->background);
     } else {
-        jrgba_copy(&params->d_bordercolor, &x->uBorderColor);
-        jrgba_copy(&params->d_boxfillcolor, &x->uBackgroundColor);
+        jrgba_copy(&params->d_bordercolor, &x->uBorder);
+        jrgba_copy(&params->d_boxfillcolor, &x->uBackground);
     }
 }
 
@@ -132,7 +132,7 @@ void tralala_paintLasso(t_tll *x, t_object *pv)
         r.height = MAX(x->origin.y, x->cursor.y) - r.y;
         
         if (x->flags & TLL_FLAG_LASSO) {
-            jgraphics_set_source_jrgba(g, &x->lassoColor);
+            jgraphics_set_source_jrgba(g, &x->lasso);
             jgraphics_rectangle_fill_fast(g, TLL_X_OFFSET(r.x), TLL_Y_OFFSET(r.y), r.width, r.height);
         }
         
@@ -283,9 +283,9 @@ void tralala_paintText(t_tll *x, t_object *pv, char *string)
     jtextlayout_set(x->layer, string, font, 5., 5., r.width - 10., r.height - 5., justification, 0L);
     
     if (x->flags & TLL_FLAG_FOCUS) {
-        jtextlayout_settextcolor(x->layer, &x->textColor);
+        jtextlayout_settextcolor(x->layer, &x->text);
     } else {
-        jtextlayout_settextcolor(x->layer, &x->uTextColor);
+        jtextlayout_settextcolor(x->layer, &x->uText);
     }
     
     jtextlayout_draw(x->layer, g);

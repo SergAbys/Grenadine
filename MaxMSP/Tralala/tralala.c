@@ -70,10 +70,20 @@ int main(void)
     class_addmethod(c, (method)tralala_list,        "list",          A_GIMME, 0);
     class_addmethod(c, (method)tralala_anything,    "anything",      A_GIMME, 0);
     
+    CLASS_ATTR_RGBA         (c, "lassocolor", 0, t_tll, lasso); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "lassocolor", 0, "0.51 0.44 0.49 0.40"); 
+    CLASS_ATTR_STYLE_LABEL  (c, "lassocolor", 0, "rgba", "Lasso Color");
+    CLASS_ATTR_CATEGORY     (c, "lassocolor", 0, "Color");
+    
     CLASS_ATTR_RGBA         (c, "color", 0, t_tll, color); 
     CLASS_ATTR_DEFAULT_SAVE (c, "color", 0, "0.30 0.24 0.28 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "color", 0, "rgba", "Color");
     CLASS_ATTR_CATEGORY     (c, "color", 0, "Color");
+    
+    CLASS_ATTR_RGBA         (c, "ucolor", 0, t_tll, uColor); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "ucolor", 0, "0.30 0.24 0.28 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "ucolor", 0, "rgba", "Color Unfocused");
+    CLASS_ATTR_CATEGORY     (c, "ucolor", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "hcolor1", 0, t_tll, hColor1); 
     CLASS_ATTR_DEFAULT_SAVE (c, "hcolor1", 0, "0.83 0.74 0.84 1."); 
@@ -84,43 +94,33 @@ int main(void)
     CLASS_ATTR_DEFAULT_SAVE (c, "hcolor2", 0, "1. 0.75 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "hcolor2", 0, "rgba", "Color Highlighted");
     CLASS_ATTR_CATEGORY     (c, "hcolor2", 0, "Color");
-    
-    CLASS_ATTR_RGBA         (c, "ucolor", 0, t_tll, uColor); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "ucolor", 0, "0.30 0.24 0.28 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "ucolor", 0, "rgba", "Color Unfocused");
-    CLASS_ATTR_CATEGORY     (c, "ucolor", 0, "Color");
-    
-    CLASS_ATTR_RGBA         (c, "textcolor", 0, t_tll, textColor); 
+        
+    CLASS_ATTR_RGBA         (c, "textcolor", 0, t_tll, text); 
     CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "0.83 0.74 0.84 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "textcolor", 0, "rgba", "Text Color");
     CLASS_ATTR_CATEGORY     (c, "textcolor", 0, "Color");
     
-    CLASS_ATTR_RGBA         (c, "utextcolor", 0, t_tll, uTextColor); 
+    CLASS_ATTR_RGBA         (c, "utextcolor", 0, t_tll, uText); 
     CLASS_ATTR_DEFAULT_SAVE (c, "utextcolor", 0, "0.51 0.44 0.49 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "utextcolor", 0, "rgba", "Text Unfocused");
     CLASS_ATTR_CATEGORY     (c, "utextcolor", 0, "Color");
-    
-    CLASS_ATTR_RGBA         (c, "lassocolor", 0, t_tll, lassoColor); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "lassocolor", 0, "0.51 0.44 0.49 0.40"); 
-    CLASS_ATTR_STYLE_LABEL  (c, "lassocolor", 0, "rgba", "Lasso Color");
-    CLASS_ATTR_CATEGORY     (c, "lassocolor", 0, "Color");
   
-    CLASS_ATTR_RGBA         (c, "bordercolor", 0, t_tll, borderColor); 
+    CLASS_ATTR_RGBA         (c, "bordercolor", 0, t_tll, border); 
     CLASS_ATTR_DEFAULT_SAVE (c, "bordercolor", 0, "0. 0. 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "bordercolor", 0, "rgba", "Border Color");
     CLASS_ATTR_CATEGORY     (c, "bordercolor", 0, "Color");
     
-    CLASS_ATTR_RGBA         (c, "ubordercolor", 0, t_tll, uBorderColor); 
+    CLASS_ATTR_RGBA         (c, "ubordercolor", 0, t_tll, uBorder); 
     CLASS_ATTR_DEFAULT_SAVE (c, "ubordercolor", 0, "0. 0. 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "ubordercolor", 0, "rgba", "Border Unfocused");
     CLASS_ATTR_CATEGORY     (c, "ubordercolor", 0, "Color");
     
-    CLASS_ATTR_RGBA         (c, "bgcolor", 0, t_tll, backgroundColor); 
+    CLASS_ATTR_RGBA         (c, "bgcolor", 0, t_tll, background); 
     CLASS_ATTR_DEFAULT_SAVE (c, "bgcolor", 0, "0. 0. 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "bgcolor", 0, "rgba", "Background Color");
     CLASS_ATTR_CATEGORY     (c, "bgcolor", 0, "Color");
 
-    CLASS_ATTR_RGBA         (c, "ubgcolor", 0, t_tll, uBackgroundColor); 
+    CLASS_ATTR_RGBA         (c, "ubgcolor", 0, t_tll, uBackground); 
     CLASS_ATTR_DEFAULT_SAVE (c, "ubgcolor", 0, "0. 0. 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "ubgcolor", 0, "rgba", "Background Unfocused");
     CLASS_ATTR_CATEGORY     (c, "ubgcolor", 0, "Color");
