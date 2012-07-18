@@ -286,34 +286,52 @@ void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv, long sta
     
     if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_ZONE, w, h)) {
     //
-    t_rect r; 
+    long i;
     long zone[4];
+    double a, b, u, v, w, h;
     
     atom_getlong_array(argc - 1, argv + 1, 4, zone);
     
-    if (status == TLL_SELECTED) {
+    a = TLL_POSITION_TO_X(zone[0]);
+    b = TLL_PITCH_TO_Y_UP(zone[3]); 
+    u = TLL_POSITION_TO_X(zone[1]);
+    v = TLL_PITCH_TO_Y_DOWN(zone[2]);
+    w = u - a;
+    h = (v - b) + 1.;
+
+    if (status) {
+    //
+    t_rect r[4];
+    long s[4] = { 0 };
+        
+    r[0].x = a; r[0].y = b; r[0].width = w; r[0].height = 1.;
+    r[1].x = u; r[1].y = b; r[1].width = 1.; r[1].height = h;
+    r[2].x = a; r[2].y = v; r[2].width = w; r[2].height = 1.;
+    r[3].x = a; r[3].y = b; r[3].width = 1.; r[3].height = h;
+    
+    switch (status) {
+        case TLL_SELECTED       : s[0] = 1; s[1] = 1; s[2] = 1; s[3] = 1; break; 
+        case TLL_SELECTED_START : s[3] = 1; break;
+        case TLL_SELECTED_END   : s[1] = 1; break;
+        case TLL_SELECTED_DOWN  : s[2] = 1; break;
+        case TLL_SELECTED_UP    : s[0] = 1; break;
+    }
+      
+    for (i = 0; i < 4; i++) {
+    //
+    if (s[i]) {
         jgraphics_set_source_jrgba(g, &x->hColor2);
     } else {
         jgraphics_set_source_jrgba(g, &x->color);
     }
     
-    r.x = TLL_POSITION_TO_X(zone[0]);
-    r.y = TLL_PITCH_TO_Y_UP(zone[3]); 
-    r.width  = TLL_POSITION_TO_X(zone[1]) - r.x; 
-    r.height = TLL_PITCH_TO_Y_DOWN(zone[2]) - r.y;
-        
-    jgraphics_rectangle_draw_fast(g, r.x, r.y, r.width, r.height, 1.);
-    
-    if (status >= TLL_SELECTED_START) {
-        switch (status) {
-            case TLL_SELECTED_START : r.x = TLL_POSITION_TO_X(zone[0]); r.width = 2.; break ;
-            case TLL_SELECTED_END   : r.x = TLL_POSITION_TO_X(zone[1]) - 2.; r.width = 2.; break ;
-            case TLL_SELECTED_DOWN  : r.y = TLL_PITCH_TO_Y_DOWN(zone[2]) - 2.; r.height = 2.; break;
-            case TLL_SELECTED_UP    : r.height = 2.; break;
-        }
-        
-        jgraphics_set_source_jrgba(g, &x->hColor2);
-        jgraphics_rectangle_fill_fast(g, r.x, r.y, r.width, r.height);
+    jgraphics_rectangle_draw_fast(g, r[i].x, r[i].y, r[i].width, r[i].height, 1.);
+    //
+    }
+    //
+    } else {
+        jgraphics_set_source_jrgba(g, &x->color);
+        jgraphics_rectangle_draw_fast(g, a, b, w, h, 1.);
     }
     
     jbox_end_layer((t_object*)x, pv, TLL_SYM_ZONE);
