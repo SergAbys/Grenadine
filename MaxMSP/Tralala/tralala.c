@@ -28,8 +28,8 @@ static t_int32_atomic tll_identifier;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void tralala_send         (t_tll *x, PIZEventCode code, long argc, t_atom *argv);
-PIZ_LOCAL t_symbol *tralala_slot    (long argc, t_atom *argv);
+PIZ_LOCAL void tralala_send             (t_tll *x, PIZEventCode code, long argc, t_atom *argv);
+PIZ_LOCAL t_symbol *tralala_slotName    (long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -141,8 +141,7 @@ int main(void)
     CLASS_ATTR_STYLE        (c, "viewtext", 0, "onoff");
     CLASS_ATTR_FILTER_CLIP  (c, "viewtext", 0, 1);
     CLASS_ATTR_CATEGORY     (c, "viewtext", 0, "Appearance");
- 
- 
+  
     CLASS_ATTR_ORDER        (c, "color",            0, "1");
     CLASS_ATTR_ORDER        (c, "ucolor",           0, "2");
     CLASS_ATTR_ORDER        (c, "hcolor1",          0, "3");
@@ -305,7 +304,7 @@ void tralala_load(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
     t_dictionary *d = NULL;
     t_dictionary *t = NULL;
-    t_symbol *name = tralala_slot(argc, argv);
+    t_symbol *name = tralala_slotName(argc, argv);
         
     if (!(dictionary_getdictionary(x->data, name, (t_object **)&d))) {
         if (t = dictionary_new ( )) {
@@ -320,7 +319,7 @@ void tralala_load(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
     t_dictionary *t = NULL;
-    t_symbol *name = tralala_slot(argc, argv);
+    t_symbol *name = tralala_slotName(argc, argv);
 
     if (t = dictionary_new( )) {
         TLL_LOCK
@@ -448,7 +447,7 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv)
     }
 }
 
-t_symbol *tralala_slot(long argc, t_atom *argv) 
+t_symbol *tralala_slotName(long argc, t_atom *argv) 
 {
     t_symbol *s = TLL_SYM_UNTITLED;
     

@@ -40,6 +40,7 @@
 #include "pizAgentLoop.h"
 #include "pizAgentMethods.h"
 #include "pizSequenceRun.h"
+#include "pizSequenceUser.h"
 #include "pizSequenceMethods.h"
 #include "pizSequenceAttribute.h"
 
@@ -84,6 +85,8 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizSequenceAlgorithm,           // PIZ_EVENT_ZOULOU
                                                     pizSequenceAlgorithm,           // PIZ_EVENT_ROMEO
                                                     pizSequenceJuliet,              // PIZ_EVENT_JULIET
+                                                    //
+                                                    pizSequenceDelete               // PIZ_EVENT_DELETE
                                                     };             
                                                                                                     
 // -------------------------------------------------------------------------------------------------------------

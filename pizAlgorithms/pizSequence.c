@@ -39,6 +39,8 @@
 
 #include "pizEvent.h"
 #include "pizSequence.h"
+#include "pizSequenceRun.h"
+#include "pizSequenceMethods.h"
 #include "pizSequenceLibrary.h"
 
 // -------------------------------------------------------------------------------------------------------------

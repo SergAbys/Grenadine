@@ -37,14 +37,11 @@ typedef ulong (*tllMethod)( );
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL ulong tralala_userKeyAll      (t_tll *x, long m);
-PIZ_LOCAL ulong tralala_userKeyCopy     (t_tll *x, long m);
-PIZ_LOCAL ulong tralala_userKeyPaste    (t_tll *x, long m);
-PIZ_LOCAL ulong tralala_userKeyCut      (t_tll *x, long m);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
+PIZ_LOCAL ulong tralala_userKeyAll              (t_tll *x, long m);
+PIZ_LOCAL ulong tralala_userKeyCopy             (t_tll *x, long m);
+PIZ_LOCAL ulong tralala_userKeyPaste            (t_tll *x, long m);
+PIZ_LOCAL ulong tralala_userKeyCut              (t_tll *x, long m);
+PIZ_LOCAL ulong tralala_userKeyDelete           (t_tll *x, long m);
 
 PIZ_LOCAL void  tralala_userAddNote             (t_tll *x);
 PIZ_LOCAL void  tralala_userSelectZone          (t_tll *x);
@@ -69,14 +66,14 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
     ulong dirty = TLL_DIRTY_NONE;
         
     switch (keycode) {
-        case TLL_KEY_A : f = tralala_userKeyAll;    break;
-        case TLL_KEY_C : f = tralala_userKeyCopy;   break;
-        case TLL_KEY_V : f = tralala_userKeyPaste;  break;
-        case TLL_KEY_X : f = tralala_userKeyCut;    break;
+        case TLL_KEY_A      : f = tralala_userKeyAll;    break;
+        case TLL_KEY_C      : f = tralala_userKeyCopy;   break;
+        case TLL_KEY_V      : f = tralala_userKeyPaste;  break;
+        case TLL_KEY_X      : f = tralala_userKeyCut;    break;
+        case JKEY_DELETE    : f = tralala_userKeyDelete; break;
+        case JKEY_BACKSPACE : f = tralala_userKeyDelete; break;
     }
     
-    //JKEY_DELETE
-    //JKEY_BACKSPACE
     //JKEY_UPARROW
 	//JKEY_DOWNARROW
 	//JKEY_LEFTARROW
@@ -248,7 +245,19 @@ ulong tralala_userKeyPaste(t_tll *x, long m)
 ulong tralala_userKeyCut(t_tll *x, long m)
 {
     if (m & eCommandKey) {
+        ;
+    }
+    
+    return TLL_DIRTY_NONE;
+}
 
+ulong tralala_userKeyDelete(t_tll *x, long m)
+{
+    PIZEvent *event = NULL;
+    
+    if (event = pizEventNew(PIZ_EVENT_DELETE)) {
+        pizEventSetIdentifier(event, x->identifier);
+        pizAgentDoEvent(x->agent, event);
     }
     
     return TLL_DIRTY_NONE;
@@ -509,6 +518,10 @@ bool tralala_userInLasso(t_tll *x, t_symbol *s, double *c)
     
     return k;
 }
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void tralala_userCopyToClipboard(t_tll *x, t_dictionary *d)
 {
