@@ -53,8 +53,8 @@ PIZ_LOCAL void  tralala_userUnselectAll         (t_tll *x);
 PIZ_LOCAL void  tralala_userReleaseLasso        (t_tll *x);
 PIZ_LOCAL void  tralala_userHitZone             (t_tll *x);
 PIZ_LOCAL bool  tralala_userHitNote             (t_tll *x);
-PIZ_LOCAL ulong tralala_userSelectNoteByLasso   (t_tll *x);
-PIZ_LOCAL bool  tralala_userIsNoteInsideLasso   (t_tll *x, t_symbol *s, double *coordinates);
+PIZ_LOCAL ulong tralala_userSelectLasso         (t_tll *x);
+PIZ_LOCAL bool  tralala_userInLasso             (t_tll *x, t_symbol *s, double *coordinates);
 PIZ_LOCAL void  tralala_userCopyToClipboard     (t_tll *x, t_dictionary *d);
 
 // -------------------------------------------------------------------------------------------------------------
@@ -144,7 +144,7 @@ void tralala_mousedrag(t_tll *x, t_object *pv, t_pt pt, long m)
     }
     
     if (x->flags & TLL_FLAG_LASSO) {
-        if (tralala_userSelectNoteByLasso(x)) {
+        if (tralala_userSelectLasso(x)) {
             jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
         }
 
@@ -412,7 +412,7 @@ bool tralala_userHitNote(t_tll *x)
     return k;
 }
 
-ulong tralala_userSelectNoteByLasso(t_tll *x)
+ulong tralala_userSelectLasso(t_tll *x)
 {
     long i, n;
     t_symbol **keys = NULL;
@@ -436,7 +436,7 @@ ulong tralala_userSelectNoteByLasso(t_tll *x)
     //
     long status = 0;
     
-    if (tralala_userIsNoteInsideLasso(x, key, c)) {
+    if (tralala_userInLasso(x, key, c)) {
 
         if (!(dictionary_hasentry(x->status, key))) {
             dictionary_appendlong(x->status, key, TLL_SELECTED_LASSO);
@@ -474,7 +474,7 @@ ulong tralala_userSelectNoteByLasso(t_tll *x)
     return dirty;
 }
 
-bool tralala_userIsNoteInsideLasso(t_tll *x, t_symbol *s, double *c)
+bool tralala_userInLasso(t_tll *x, t_symbol *s, double *c)
 {
     bool k = false;
     long argc;

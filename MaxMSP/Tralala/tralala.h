@@ -62,12 +62,13 @@ typedef struct _tll {
     t_pt                cursor;  
     t_pt                origin;
     t_jrgba             color;
+    t_jrgba             hColor1;
+    t_jrgba             hColor2;
     t_jrgba             textColor;
-    t_jrgba             unfocusedColor;
-    t_jrgba             highlightedColor1;
-    t_jrgba             highlightedColor2;
+    t_jrgba             uTextColor;
     t_jrgba             lassoColor;
     t_jrgba             borderColor;
+    t_jrgba             uBorderColor;
     t_jrgba             backgroundColor;
     t_jtextlayout       *layer; 
     t_dictionary        *data;
