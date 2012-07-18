@@ -54,12 +54,12 @@ void tralala_paint(t_tll *x, t_object *pv)
 
 void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
 {
-    jrgba_copy(&params->d_boxfillcolor, &x->backgroundColor);
-    
     if (x->flags & TLL_FLAG_FOCUS) {
         jrgba_copy(&params->d_bordercolor, &x->borderColor);
+        jrgba_copy(&params->d_boxfillcolor, &x->backgroundColor);
     } else {
         jrgba_copy(&params->d_bordercolor, &x->uBorderColor);
+        jrgba_copy(&params->d_boxfillcolor, &x->uBackgroundColor);
     }
 }
 
@@ -70,7 +70,6 @@ void tralala_focusgained(t_tll *x, t_object *pv)
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
-    jbox_redraw((t_jbox *)x);
 }
 
 void tralala_focuslost(t_tll *x, t_object *pv)
@@ -80,7 +79,6 @@ void tralala_focuslost(t_tll *x, t_object *pv)
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
-    jbox_redraw((t_jbox *)x);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -196,10 +194,12 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     dictionary_getlong(x->status, TLL_SYM_ZONE, &zoneStatus);
         
     for (i = 0; i < 9; i++) {
-        if (!(dictionary_getatoms(x->current, s[i], &argc, &argv))) {
+        if (!(dictionary_getatoms(x->current, s[i], &argc, &argv)) && (argc > 1)) {
             tralala_paintStrncatAttribute(string, argc, argv);
         }
     }
+    
+    strncat_zero(string, "\n", TLL_STRING_SIZE);
     
     if (dictionary_hasentry(x->status, TLL_SYM_ZONE)) {
         if (!(dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv))) {

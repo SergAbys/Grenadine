@@ -70,6 +70,7 @@ typedef struct _tll {
     t_jrgba             lassoColor;
     t_jrgba             borderColor;
     t_jrgba             uBorderColor;
+    t_jrgba             uBackgroundColor;
     t_jrgba             backgroundColor;
     t_jtextlayout       *layer; 
     t_dictionary        *data;

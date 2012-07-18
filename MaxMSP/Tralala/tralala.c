@@ -97,7 +97,7 @@ int main(void)
     
     CLASS_ATTR_RGBA         (c, "utextcolor", 0, t_tll, uTextColor); 
     CLASS_ATTR_DEFAULT_SAVE (c, "utextcolor", 0, "0.51 0.44 0.49 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "utextcolor", 0, "rgba", "Text Color Unfocused");
+    CLASS_ATTR_STYLE_LABEL  (c, "utextcolor", 0, "rgba", "Text Unfocused");
     CLASS_ATTR_CATEGORY     (c, "utextcolor", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "lassocolor", 0, t_tll, lassoColor); 
@@ -112,7 +112,7 @@ int main(void)
     
     CLASS_ATTR_RGBA         (c, "ubordercolor", 0, t_tll, uBorderColor); 
     CLASS_ATTR_DEFAULT_SAVE (c, "ubordercolor", 0, "0. 0. 0. 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "ubordercolor", 0, "rgba", "Border Color Unfocused");
+    CLASS_ATTR_STYLE_LABEL  (c, "ubordercolor", 0, "rgba", "Border Unfocused");
     CLASS_ATTR_CATEGORY     (c, "ubordercolor", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "bgcolor", 0, t_tll, backgroundColor); 
@@ -120,6 +120,11 @@ int main(void)
     CLASS_ATTR_STYLE_LABEL  (c, "bgcolor", 0, "rgba", "Background Color");
     CLASS_ATTR_CATEGORY     (c, "bgcolor", 0, "Color");
 
+    CLASS_ATTR_RGBA         (c, "ubgcolor", 0, t_tll, uBackgroundColor); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "ubgcolor", 0, "0. 0. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "ubgcolor", 0, "rgba", "Background Unfocused");
+    CLASS_ATTR_CATEGORY     (c, "ubgcolor", 0, "Color");
+    
     CLASS_ATTR_LONG         (c, "xoffset", 0, t_tll, offsetX);
     CLASS_ATTR_DEFAULT_SAVE (c, "xoffset", 0, "-37");
     CLASS_ATTR_LABEL        (c, "xoffset", 0, "Offset X");
@@ -137,16 +142,18 @@ int main(void)
     CLASS_ATTR_FILTER_CLIP  (c, "viewtext", 0, 1);
     CLASS_ATTR_CATEGORY     (c, "viewtext", 0, "Appearance");
  
+ 
     CLASS_ATTR_ORDER        (c, "color",            0, "1");
     CLASS_ATTR_ORDER        (c, "ucolor",           0, "2");
     CLASS_ATTR_ORDER        (c, "hcolor1",          0, "3");
     CLASS_ATTR_ORDER        (c, "hcolor2",          0, "4");
     CLASS_ATTR_ORDER        (c, "textcolor",        0, "5");
     CLASS_ATTR_ORDER        (c, "utextcolor",       0, "6");
-    CLASS_ATTR_ORDER        (c, "lassocolor",       0, "7");
-    CLASS_ATTR_ORDER        (c, "bordercolor",      0, "8");
-    CLASS_ATTR_ORDER        (c, "ubordercolor",     0, "9");
-    CLASS_ATTR_ORDER        (c, "bgcolor",          0, "10");
+    CLASS_ATTR_ORDER        (c, "bordercolor",      0, "7");
+    CLASS_ATTR_ORDER        (c, "ubordercolor",     0, "8");
+    CLASS_ATTR_ORDER        (c, "bgcolor",          0, "9");
+    CLASS_ATTR_ORDER        (c, "ubgcolor",         0, "10");
+    CLASS_ATTR_ORDER        (c, "lassocolor",       0, "11");
     
     CLASS_ATTR_DEFAULT      (c, "fontname", 0, "Arial");
     CLASS_ATTR_DEFAULT      (c, "fontsize", 0, "14.");
