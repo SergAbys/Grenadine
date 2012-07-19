@@ -28,8 +28,7 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_INLINE void tralala_symbolWithTag    (t_symbol **s, long tag);
-PIZ_INLINE void tralala_tagWithSymbol    (long *tag, t_symbol *s);
+PIZ_INLINE void tralala_parseSymbolWithTag   (t_symbol **s, long tag);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -350,7 +349,7 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
 
     } else {
         dirty |= tralala_userAbort(x);
-        tralala_symbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
+        tralala_parseSymbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
           
         TLL_LOCK
         
@@ -402,16 +401,11 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
 #pragma mark ---
 #pragma mark -
 
-PIZ_INLINE void tralala_symbolWithTag(t_symbol **s, long tag)
+PIZ_INLINE void tralala_parseSymbolWithTag(t_symbol **s, long tag)
 {
     char string[4];
     snprintf_zero(string, 4, "%ld", tag);
     (*s) = gensym(string);
-}
-
-PIZ_INLINE void tralala_tagWithSymbol(long *tag, t_symbol *s)
-{
-    (*tag) = atoi(s->s_name);
 }
 
 // -------------------------------------------------------------------------------------------------------------

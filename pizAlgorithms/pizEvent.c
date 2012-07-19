@@ -132,7 +132,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_ROMEO
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_JULIET
                                         //    
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_DELETE
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_DELETE
                                         //
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_BPM
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_CHANCE

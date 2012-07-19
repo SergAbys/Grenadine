@@ -37,74 +37,33 @@ typedef ulong (*tllMethod)( );
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL ulong tralala_userKeyAll              (t_tll *x, long m);
-PIZ_LOCAL ulong tralala_userKeyCopy             (t_tll *x, long m);
-PIZ_LOCAL ulong tralala_userKeyPaste            (t_tll *x, long m);
-PIZ_LOCAL ulong tralala_userKeyCut              (t_tll *x, long m);
-PIZ_LOCAL ulong tralala_userKeyDelete           (t_tll *x, long m);
+PIZ_LOCAL   void  tralala_userAddNote           (t_tll *x);
+PIZ_LOCAL   void  tralala_userSelectZone        (t_tll *x);
+PIZ_LOCAL   void  tralala_userSelectAll         (t_tll *x);
+PIZ_LOCAL   void  tralala_userUnselectAll       (t_tll *x);
+PIZ_LOCAL   void  tralala_userReleaseLasso      (t_tll *x);
+PIZ_LOCAL   void  tralala_userHitZone           (t_tll *x);
+PIZ_LOCAL   bool  tralala_userHitNote           (t_tll *x);
+PIZ_INLINE  bool  tralala_userIsInLasso         (t_tll *x, t_symbol *s, double *coordinates);
+PIZ_LOCAL   ulong tralala_userSelectLasso       (t_tll *x);
 
-PIZ_LOCAL void  tralala_userAddNote             (t_tll *x);
-PIZ_LOCAL void  tralala_userSelectZone          (t_tll *x);
-PIZ_LOCAL void  tralala_userSelectAll           (t_tll *x);
-PIZ_LOCAL void  tralala_userUnselectAll         (t_tll *x);
-PIZ_LOCAL void  tralala_userReleaseLasso        (t_tll *x);
-PIZ_LOCAL void  tralala_userHitZone             (t_tll *x);
-PIZ_LOCAL bool  tralala_userHitNote             (t_tll *x);
-PIZ_LOCAL ulong tralala_userSelectLasso         (t_tll *x);
-PIZ_LOCAL bool  tralala_userInLasso             (t_tll *x, t_symbol *s, double *coordinates);
-PIZ_LOCAL void  tralala_userCopyToClipboard     (t_tll *x, t_dictionary *d);
+PIZ_LOCAL   ulong tralala_userKeyAll            (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_userKeyCopy           (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_userKeyPaste          (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_userKeyCut            (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_userKeyDelete         (t_tll *x, long m);
+
+PIZ_LOCAL   void  tralala_userDeleteSelected    (t_tll *x);
+PIZ_LOCAL   void  tralala_userCopyToClipboard   (t_tll *x, t_dictionary *d);
+
+PIZ_LOCAL   void  tralala_userSendTag           (t_tll *x, PIZEventCode code, long tag);
+PIZ_INLINE  void  tralala_userTagWithSymbol     (long *tag, t_symbol *s);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 #pragma mark ---
 #pragma mark -
-
-void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacter)
-{
-    tllMethod f = NULL;
-    ulong dirty = TLL_DIRTY_NONE;
-        
-    switch (keycode) {
-        case TLL_KEY_A      : f = tralala_userKeyAll;    break;
-        case TLL_KEY_C      : f = tralala_userKeyCopy;   break;
-        case TLL_KEY_V      : f = tralala_userKeyPaste;  break;
-        case TLL_KEY_X      : f = tralala_userKeyCut;    break;
-        case JKEY_DELETE    : f = tralala_userKeyDelete; break;
-        case JKEY_BACKSPACE : f = tralala_userKeyDelete; break;
-    }
-    
-    //JKEY_UPARROW
-	//JKEY_DOWNARROW
-	//JKEY_LEFTARROW
-	//JKEY_RIGHTARROW
-    
-    if (f) {
-        dirty |= tralala_userAbort(x);
-        dirty |= (*f)(x, m);
-    }
-    
-    if (dirty & TLL_DIRTY_NOTE) {
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
-    }
-    if (dirty & TLL_DIRTY_ZONE) {
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
-    }
-    if (dirty & TLL_DIRTY_LASSO) {
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
-    }
-    
-    jbox_redraw((t_jbox *)x);
-}
-
-void tralala_mousewheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc)
-{
-    long h = object_attr_getlong(x, TLL_SYM_XOFFSET) - (x_inc * 100);
-    long v = object_attr_getlong(x, TLL_SYM_YOFFSET) - (y_inc * 100);
-        
-    object_attr_setlong(x, TLL_SYM_XOFFSET, h);
-    object_attr_setlong(x, TLL_SYM_YOFFSET, v);
-}
 
 void tralala_mousedown(t_tll *x, t_object *pv, t_pt pt, long m)
 {	
@@ -168,6 +127,52 @@ void tralala_mouseup(t_tll *x, t_object *pv, t_pt pt, long m)
     }
 }
 
+void tralala_mousewheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc)
+{
+    long h = object_attr_getlong(x, TLL_SYM_XOFFSET) - (x_inc * 100);
+    long v = object_attr_getlong(x, TLL_SYM_YOFFSET) - (y_inc * 100);
+        
+    object_attr_setlong(x, TLL_SYM_XOFFSET, h);
+    object_attr_setlong(x, TLL_SYM_YOFFSET, v);
+}
+
+void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacter)
+{
+    tllMethod f = NULL;
+    ulong dirty = TLL_DIRTY_NONE;
+        
+    switch (keycode) {
+        case TLL_KEY_A      : f = tralala_userKeyAll;    break;
+        case TLL_KEY_C      : f = tralala_userKeyCopy;   break;
+        case TLL_KEY_V      : f = tralala_userKeyPaste;  break;
+        case TLL_KEY_X      : f = tralala_userKeyCut;    break;
+        case JKEY_DELETE    : f = tralala_userKeyDelete; break;
+        case JKEY_BACKSPACE : f = tralala_userKeyDelete; break;
+    }
+    
+    //JKEY_UPARROW
+	//JKEY_DOWNARROW
+	//JKEY_LEFTARROW
+	//JKEY_RIGHTARROW
+    
+    if (f) {
+        dirty |= tralala_userAbort(x);
+        dirty |= (*f)(x, m);
+    }
+    
+    if (dirty & TLL_DIRTY_NOTE) {
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
+    }
+    if (dirty & TLL_DIRTY_ZONE) {
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
+    }
+    if (dirty & TLL_DIRTY_LASSO) {
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
+    }
+    
+    jbox_redraw((t_jbox *)x);
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -187,7 +192,261 @@ ulong tralala_userAbort(t_tll *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-#pragma mark ---
+
+void tralala_userAddNote(t_tll *x)
+{
+    t_atom a[2];
+    
+    atom_setlong(a, TLL_X_TO_POSITION(x->cursor.x));
+    atom_setlong(a + 1, TLL_Y_TO_PITCH(x->cursor.y));
+    
+    tralala_parseMessage(x, TLL_SYM_NOTE, 2, a, TLL_DEFER);
+}
+
+void tralala_userSelectZone(t_tll *x)
+{
+    TLL_LOCK
+    dictionary_appendlong(x->status, TLL_SYM_ZONE, TLL_SELECTED);
+    TLL_UNLOCK
+}
+
+void tralala_userSelectAll(t_tll *x)
+{
+    long i, n = 0;
+    t_symbol **keys = NULL;
+    
+    TLL_LOCK
+    
+    if (!(dictionary_getkeys(x->current, &n, &keys))) {
+    //
+    for (i = 0; i < n; i++) {
+        long argc;
+        t_atom *argv = NULL;
+        t_symbol *key = (*(keys + i));
+        
+        if (!(dictionary_getatoms(x->current, key, &argc, &argv)) && ((atom_getsym(argv) == TLL_SYM_NOTE))) { 
+            dictionary_appendlong(x->status, key, TLL_SELECTED); 
+        }
+    }
+    
+    dictionary_freekeys(x->current, n, keys);
+    //
+    }
+    
+    TLL_UNLOCK
+}
+
+void tralala_userUnselectAll(t_tll *x)
+{
+    TLL_LOCK
+    dictionary_clear(x->status);
+    TLL_UNLOCK
+}
+
+void tralala_userReleaseLasso(t_tll *x)
+{
+    long i, n = 0;
+    t_symbol **keys = NULL;
+    
+    TLL_LOCK
+    
+    if (!(dictionary_getkeys(x->current, &n, &keys))) {
+    //
+    long argc;
+    t_atom *argv = NULL;
+    
+    for (i = 0; i < n; i++) {
+    //
+    long status = 0;
+    t_symbol *key = (*(keys + i));
+    
+    if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
+        if ((atom_getsym(argv) == TLL_SYM_NOTE) && (!dictionary_getlong(x->status, key, &status))) {
+            if (status == TLL_UNSELECTED) {
+                dictionary_deleteentry(x->status, key);
+            } else {
+                dictionary_appendlong(x->status, key, TLL_SELECTED);
+            }
+        }
+    }
+    //
+    }
+    
+    dictionary_freekeys(x->current, n, keys);
+    //
+    }
+    
+    TLL_UNLOCK
+    
+    x->flags &= ~TLL_FLAG_LASSO;
+}
+
+void tralala_userHitZone(t_tll *x)
+{
+    long argc, k = TLL_SELECTED;
+    t_atom *argv = NULL;
+    long position = TLL_X_TO_POSITION(x->cursor.x);
+    long pitch = TLL_Y_TO_PITCH(x->cursor.y);
+    
+    TLL_LOCK
+    
+    if (!(dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv))) {
+        if (position < atom_getlong(argv + 1)) { 
+            k = TLL_SELECTED_START;
+        } else if (position > atom_getlong(argv + 2)) { 
+            k = TLL_SELECTED_END;
+        } else if (pitch < atom_getlong(argv + 3)) { 
+            k = TLL_SELECTED_DOWN;
+        } else if (pitch > atom_getlong(argv + 4)) { 
+            k = TLL_SELECTED_UP;
+        } 
+    }
+    
+    dictionary_appendlong(x->status, TLL_SYM_ZONE, k);
+    
+    TLL_UNLOCK
+}
+
+bool tralala_userHitNote(t_tll *x)
+{
+    long i, n = 0;
+    t_symbol *s = NULL;
+    t_symbol **keys = NULL;
+    long position = TLL_X_TO_POSITION(x->cursor.x - 1.);
+    long pitch = TLL_Y_TO_PITCH(x->cursor.y - 1.);
+    bool k = true;
+    
+    TLL_LOCK
+    
+    if (!(dictionary_getkeys(x->current, &n, &keys))) {
+    //
+    long argc;
+    t_atom *argv = NULL;
+    
+    for (i = 0; i < n; i++) {
+        t_symbol *key = (*(keys + i));
+        if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
+            if ((atom_getsym(argv) == TLL_SYM_NOTE)) {
+                long p = atom_getlong(argv + 2);
+                long a = atom_getlong(argv + 1);
+                long b = a + atom_getlong(argv + 4);
+                if ((pitch == p) && (position >= a) && (position <= b)) {
+                    s = key;
+                    break;
+                }
+            }
+        }
+    }
+    
+    dictionary_freekeys(x->current, n, keys);
+    //
+    }
+    
+    if (s) {
+        if (dictionary_hasentry(x->status, s)) {
+            t_symbol *mark = NULL;
+            if(!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) && (s == mark)) {
+                dictionary_deleteentry(x->status, TLL_SYM_MARK); 
+            }
+            
+            dictionary_deleteentry(x->status, s);
+        } else {
+            dictionary_appendsym(x->status, TLL_SYM_MARK, s);
+            dictionary_appendlong(x->status, s, TLL_SELECTED);
+        }
+        
+    } else {
+        k = false;
+    }
+    
+    TLL_UNLOCK
+    
+    return k;
+}
+
+PIZ_INLINE bool tralala_userIsInLasso(t_tll *x, t_symbol *s, double *c)
+{
+    bool k = false;
+    long argc;
+    t_atom *argv = NULL;
+        
+    if (!(dictionary_getatoms(x->current, s, &argc, &argv))) {
+        double a = TLL_POSITION_TO_X(atom_getlong(argv + 1));
+        double b = TLL_PITCH_TO_Y_UP(atom_getlong(argv + 2));
+        double u = TLL_POSITION_TO_X(atom_getlong(argv + 1) + atom_getlong(argv + 4));
+        double v = TLL_PITCH_TO_Y_DOWN(atom_getlong(argv + 2));
+        
+        k  = ((a > c[0]) && (a < c[2])) || ((u > c[0]) && (u < c[2]));
+        k &= ((b > c[1]) && (b < c[3])) || ((v > c[1]) && (v < c[3]));
+    }
+    
+    return k;
+}
+
+ulong tralala_userSelectLasso(t_tll *x)
+{
+    long i, n = 0;
+    t_symbol **keys = NULL;
+    ulong dirty = TLL_DIRTY_NONE;
+    
+    TLL_LOCK
+    
+    if (!(dictionary_getkeys(x->current, &n, &keys))) {
+    //
+    long argc;
+    t_atom *argv = NULL;
+    
+    double c[ ] = { TLL_X_OFFSET(MIN(x->origin.x, x->cursor.x)), TLL_Y_OFFSET(MIN(x->origin.y, x->cursor.y)),
+                    TLL_X_OFFSET(MAX(x->origin.x, x->cursor.x)), TLL_Y_OFFSET(MAX(x->origin.y, x->cursor.y)) };
+    
+    for (i = 0; i < n; i++) {
+    //
+    t_symbol *key = (*(keys + i));
+    
+    if (!(dictionary_getatoms(x->current, key, &argc, &argv)) && ((atom_getsym(argv) == TLL_SYM_NOTE))) { 
+    //
+    long status = 0;
+    
+    if (tralala_userIsInLasso(x, key, c)) {
+
+        if (!(dictionary_hasentry(x->status, key))) {
+            dictionary_appendlong(x->status, key, TLL_SELECTED_LASSO);
+            dirty |= TLL_DIRTY_NOTE;
+            
+        } else if (x->flags & TLL_FLAG_SHIFT) {
+            if (!(dictionary_getlong(x->status, key, &status)) && (status == TLL_SELECTED)) {
+                dictionary_appendlong(x->status, key, TLL_UNSELECTED);
+                dirty |= TLL_DIRTY_NOTE;
+            }
+        }
+        
+    } else if (!(dictionary_getlong(x->status, key, &status))) {
+    
+        if (status == TLL_SELECTED_LASSO) {
+            dictionary_deleteentry(x->status, key);
+            dirty |= TLL_DIRTY_NOTE;
+            
+        } else if ((x->flags & TLL_FLAG_SHIFT) && (status == TLL_UNSELECTED)) {
+            dictionary_appendlong(x->status, key, TLL_SELECTED);
+            dirty |= TLL_DIRTY_NOTE;
+        }
+    }
+    //
+    }
+    //
+    }
+    
+    dictionary_freekeys(x->current, n, keys);
+    //
+    }
+    
+    TLL_UNLOCK
+        
+    return dirty;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 ulong tralala_userKeyAll(t_tll *x, long m)
@@ -253,13 +512,7 @@ ulong tralala_userKeyCut(t_tll *x, long m)
 
 ulong tralala_userKeyDelete(t_tll *x, long m)
 {
-    PIZEvent *event = NULL;
-    
-    if (event = pizEventNew(PIZ_EVENT_DELETE)) {
-        pizEventSetIdentifier(event, x->identifier);
-        pizAgentDoEvent(x->agent, event);
-    }
-    
+    tralala_userDeleteSelected(x);
     return TLL_DIRTY_NONE;
 }
 
@@ -267,265 +520,40 @@ ulong tralala_userKeyDelete(t_tll *x, long m)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_userAddNote(t_tll *x)
+void tralala_userDeleteSelected(t_tll *x)
 {
-    t_atom a[2];
-    
-    atom_setlong(a, TLL_X_TO_POSITION(x->cursor.x));
-    atom_setlong(a + 1, TLL_Y_TO_PITCH(x->cursor.y));
-    
-    tralala_parseMessage(x, TLL_SYM_NOTE, 2, a, TLL_DEFER);
-}
-
-void tralala_userSelectZone(t_tll *x)
-{
-    TLL_LOCK
-    dictionary_appendlong(x->status, TLL_SYM_ZONE, TLL_SELECTED);
-    TLL_UNLOCK
-}
-
-void tralala_userSelectAll(t_tll *x)
-{
-    long i, n;
+    long i, n = 0;
     t_symbol **keys = NULL;
+    PIZArray *t = NULL;
     
     TLL_LOCK
     
-    if (!(dictionary_getkeys(x->current, &n, &keys))) {
+    if (t = pizArrayNew(dictionary_getentrycount(x->status))) {
     //
-    for (i = 0; i < n; i++) {
-        long argc;
-        t_atom *argv = NULL;
-        t_symbol *key = (*(keys + i));
-        
-        if (!(dictionary_getatoms(x->current, key, &argc, &argv)) && ((atom_getsym(argv) == TLL_SYM_NOTE))) { 
-            dictionary_appendlong(x->status, key, TLL_SELECTED); 
-        }
-    }
-    
-    dictionary_freekeys(x->current, n, keys);
-    //
-    }
-    
-    TLL_UNLOCK
-}
-
-void tralala_userUnselectAll(t_tll *x)
-{
-    TLL_LOCK
-    dictionary_clear(x->status);
-    TLL_UNLOCK
-}
-
-void tralala_userReleaseLasso(t_tll *x)
-{
-    long i, n;
-    t_symbol **keys = NULL;
-    
-    TLL_LOCK
-    
-    if (!(dictionary_getkeys(x->current, &n, &keys))) {
-    //
-    long argc;
-    t_atom *argv = NULL;
-    
-    for (i = 0; i < n; i++) {
-    //
-    long status = 0;
-    t_symbol *key = (*(keys + i));
-    
-    if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
-        if ((atom_getsym(argv) == TLL_SYM_NOTE) && (!dictionary_getlong(x->status, key, &status))) {
-            if (status == TLL_UNSELECTED) {
-                dictionary_deleteentry(x->status, key);
-            } else {
-                dictionary_appendlong(x->status, key, TLL_SELECTED);
-            }
-        }
-    }
-    //
-    }
-    
-    dictionary_freekeys(x->current, n, keys);
-    //
-    }
-    
-    TLL_UNLOCK
-    
-    x->flags &= ~TLL_FLAG_LASSO;
-}
-
-void tralala_userHitZone(t_tll *x)
-{
-    long argc, k = TLL_SELECTED;
-    t_atom *argv = NULL;
-    long position = TLL_X_TO_POSITION(x->cursor.x);
-    long pitch = TLL_Y_TO_PITCH(x->cursor.y);
-    
-    TLL_LOCK
-    
-    if (!(dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv))) {
-        if (position < atom_getlong(argv + 1)) { 
-            k = TLL_SELECTED_START;
-        } else if (position > atom_getlong(argv + 2)) { 
-            k = TLL_SELECTED_END;
-        } else if (pitch < atom_getlong(argv + 3)) { 
-            k = TLL_SELECTED_DOWN;
-        } else if (pitch > atom_getlong(argv + 4)) { 
-            k = TLL_SELECTED_UP;
-        } 
-    }
-    
-    dictionary_appendlong(x->status, TLL_SYM_ZONE, k);
-    
-    TLL_UNLOCK
-}
-
-bool tralala_userHitNote(t_tll *x)
-{
-    long i, n;
-    t_symbol *s = NULL;
-    t_symbol **keys = NULL;
-    long position = TLL_X_TO_POSITION(x->cursor.x - 1.);
-    long pitch = TLL_Y_TO_PITCH(x->cursor.y - 1.);
-    bool k = true;
-    
-    TLL_LOCK
-    
-    if (!(dictionary_getkeys(x->current, &n, &keys))) {
-    //
-    long argc;
-    t_atom *argv = NULL;
-    
-    for (i = 0; i < n; i++) {
-        t_symbol *key = (*(keys + i));
-        if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
-            if ((atom_getsym(argv) == TLL_SYM_NOTE)) {
-                long p = atom_getlong(argv + 2);
-                long a = atom_getlong(argv + 1);
-                long b = a + atom_getlong(argv + 4);
-                if ((pitch == p) && (position >= a) && (position <= b)) {
-                    s = key;
-                    break;
-                }
-            }
-        }
-    }
-    
-    dictionary_freekeys(x->current, n, keys);
-    //
-    }
-    
-    if (s) {
-        if (dictionary_hasentry(x->status, s)) {
-            t_symbol *mark = NULL;
-            if(!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) && (s == mark)) {
-                dictionary_deleteentry(x->status, TLL_SYM_MARK); 
-            }
+        if (!(dictionary_getkeys(x->status, &n, &keys))) {
+        //
+        for (i = 0; i < n; i++) {
+            t_symbol *key = (*(keys + i));
             
-            dictionary_deleteentry(x->status, s);
-        } else {
-            dictionary_appendsym(x->status, TLL_SYM_MARK, s);
-            dictionary_appendlong(x->status, s, TLL_SELECTED);
-        }
-        
-    } else {
-        k = false;
-    }
-    
-    TLL_UNLOCK
-    
-    return k;
-}
-
-ulong tralala_userSelectLasso(t_tll *x)
-{
-    long i, n;
-    t_symbol **keys = NULL;
-    ulong dirty = TLL_DIRTY_NONE;
-    
-    TLL_LOCK
-    
-    if (!(dictionary_getkeys(x->current, &n, &keys))) {
-    //
-    long argc;
-    t_atom *argv = NULL;
-    
-    double c[ ] = { TLL_X_OFFSET(MIN(x->origin.x, x->cursor.x)), TLL_Y_OFFSET(MIN(x->origin.y, x->cursor.y)),
-                    TLL_X_OFFSET(MAX(x->origin.x, x->cursor.x)), TLL_Y_OFFSET(MAX(x->origin.y, x->cursor.y)) };
-    
-    for (i = 0; i < n; i++) {
-    //
-    t_symbol *key = (*(keys + i));
-    
-    if (!(dictionary_getatoms(x->current, key, &argc, &argv)) && ((atom_getsym(argv) == TLL_SYM_NOTE))) { 
-    //
-    long status = 0;
-    
-    if (tralala_userInLasso(x, key, c)) {
-
-        if (!(dictionary_hasentry(x->status, key))) {
-            dictionary_appendlong(x->status, key, TLL_SELECTED_LASSO);
-            dirty |= TLL_DIRTY_NOTE;
-            
-        } else if (x->flags & TLL_FLAG_SHIFT) {
-            if (!(dictionary_getlong(x->status, key, &status)) && (status == TLL_SELECTED)) {
-                dictionary_appendlong(x->status, key, TLL_UNSELECTED);
-                dirty |= TLL_DIRTY_NOTE;
+            if ((key != TLL_SYM_ZONE) && (key != TLL_SYM_MARK)) {
+                //
             }
         }
         
-    } else if (!(dictionary_getlong(x->status, key, &status))) {
-    
-        if (status == TLL_SELECTED_LASSO) {
-            dictionary_deleteentry(x->status, key);
-            dirty |= TLL_DIRTY_NOTE;
-            
-        } else if ((x->flags & TLL_FLAG_SHIFT) && (status == TLL_UNSELECTED)) {
-            dictionary_appendlong(x->status, key, TLL_SELECTED);
-            dirty |= TLL_DIRTY_NOTE;
+        dictionary_freekeys(x->current, n, keys);
+        //
         }
-    }
-    //
-    }
-    //
-    }
-    
-    dictionary_freekeys(x->current, n, keys);
     //
     }
     
     TLL_UNLOCK
-        
-    return dirty;
-}
-
-bool tralala_userInLasso(t_tll *x, t_symbol *s, double *c)
-{
-    bool k = false;
-    long argc;
-    t_atom *argv = NULL;
-        
-    if (!(dictionary_getatoms(x->current, s, &argc, &argv))) {
-        double a = TLL_POSITION_TO_X(atom_getlong(argv + 1));
-        double b = TLL_PITCH_TO_Y_UP(atom_getlong(argv + 2));
-        double u = TLL_POSITION_TO_X(atom_getlong(argv + 1) + atom_getlong(argv + 4));
-        double v = TLL_PITCH_TO_Y_DOWN(atom_getlong(argv + 2));
-        
-        k  = ((a > c[0]) && (a < c[2])) || ((u > c[0]) && (u < c[2]));
-        k &= ((b > c[1]) && (b < c[3])) || ((v > c[1]) && (v < c[3]));
-    }
     
-    return k;
+    pizArrayFree(t);
 }
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
+    
 void tralala_userCopyToClipboard(t_tll *x, t_dictionary *d)
 {
-    long i, n;
+    long i, n = 0;
     t_symbol **keys = NULL;
     
     TLL_LOCK
@@ -552,6 +580,28 @@ void tralala_userCopyToClipboard(t_tll *x, t_dictionary *d)
     }
     
     TLL_UNLOCK
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void tralala_userSendTag(t_tll *x, PIZEventCode code, long tag)
+{
+    PIZEvent *event = NULL;
+    
+    if (event = pizEventNew(code)) {
+        pizEventSetData(event, 1, &tag);
+        pizEventSetIdentifier(event, x->identifier);
+        pizAgentDoEvent(x->agent, event);
+    }
+}
+
+PIZ_INLINE void tralala_userTagWithSymbol(long *tag, t_symbol *s)
+{
+    if (s) {
+        (*tag) = atoi(s->s_name);
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------
