@@ -61,6 +61,7 @@ PIZ_LOCAL void pizSequenceForEach               (PIZSequence *x, PIZMethod metho
 
 PIZ_LOCAL void pizSequenceEachRemove            (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
 PIZ_LOCAL void pizSequenceEachChange            (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
+PIZ_LOCAL void pizSequenceEachMove              (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
 PIZ_LOCAL void pizSequenceEachCycle             (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
 PIZ_LOCAL void pizSequenceEachDump              (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
 PIZ_LOCAL void pizSequenceEachFillTempHash      (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);

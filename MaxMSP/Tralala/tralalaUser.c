@@ -52,11 +52,12 @@ PIZ_LOCAL   ulong tralala_userKeyCopy           (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_userKeyPaste          (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_userKeyCut            (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_userKeyDelete         (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_userKeyUpArrow        (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_userKeyDownArrow      (t_tll *x, long m);
 
-PIZ_LOCAL   void  tralala_userDeleteSelected    (t_tll *x);
 PIZ_LOCAL   void  tralala_userCopyToClipboard   (t_tll *x, t_dictionary *d);
 
-PIZ_LOCAL   void  tralala_userSendTag           (t_tll *x, PIZEventCode code, long tag);
+PIZ_LOCAL   void  tralala_userSend              (t_tll *x, PIZEventCode code);
 PIZ_INLINE  void  tralala_userTagWithSymbol     (long *tag, t_symbol *s);
 
 // -------------------------------------------------------------------------------------------------------------
@@ -136,22 +137,26 @@ void tralala_mousewheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc,
     object_attr_setlong(x, TLL_SYM_YOFFSET, v);
 }
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacter)
 {
     tllMethod f = NULL;
     ulong dirty = TLL_DIRTY_NONE;
         
     switch (keycode) {
-        case TLL_KEY_A      : f = tralala_userKeyAll;    break;
-        case TLL_KEY_C      : f = tralala_userKeyCopy;   break;
-        case TLL_KEY_V      : f = tralala_userKeyPaste;  break;
-        case TLL_KEY_X      : f = tralala_userKeyCut;    break;
-        case JKEY_DELETE    : f = tralala_userKeyDelete; break;
-        case JKEY_BACKSPACE : f = tralala_userKeyDelete; break;
+        case TLL_KEY_A      : f = tralala_userKeyAll;       break;
+        case TLL_KEY_C      : f = tralala_userKeyCopy;      break;
+        case TLL_KEY_V      : f = tralala_userKeyPaste;     break;
+        case TLL_KEY_X      : f = tralala_userKeyCut;       break;
+        case JKEY_DELETE    : f = tralala_userKeyDelete;    break;
+        case JKEY_BACKSPACE : f = tralala_userKeyDelete;    break;
+        case JKEY_UPARROW   : f = tralala_userKeyUpArrow;   break;
+        case JKEY_DOWNARROW : f = tralala_userKeyDownArrow; break;
     }
     
-    //JKEY_UPARROW
-	//JKEY_DOWNARROW
 	//JKEY_LEFTARROW
 	//JKEY_RIGHTARROW
     
@@ -514,7 +519,18 @@ ulong tralala_userKeyCut(t_tll *x, long m)
 
 ulong tralala_userKeyDelete(t_tll *x, long m)
 {
-    tralala_userDeleteSelected(x);
+    tralala_userSend(x, PIZ_EVENT_DELETE);
+    
+    return TLL_DIRTY_NONE;
+}
+
+ulong tralala_userKeyUpArrow(t_tll *x, long m)
+{
+    return TLL_DIRTY_NONE;
+}
+
+ulong tralala_userKeyDownArrow(t_tll *x, long m)
+{
     return TLL_DIRTY_NONE;
 }
 
@@ -522,45 +538,6 @@ ulong tralala_userKeyDelete(t_tll *x, long m)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_userDeleteSelected(t_tll *x)
-{
-    long i, n = 0;
-    t_symbol **keys = NULL;
-    PIZArray *t = NULL;
-    
-    TLL_LOCK
-    
-    if (t = pizArrayNew(dictionary_getentrycount(x->status))) {
-    //
-    if (!(dictionary_getkeys(x->status, &n, &keys))) {
-    //
-    for (i = 0; i < n; i++) {
-        t_symbol *key = (*(keys + i));
-        
-        if ((key != TLL_SYM_ZONE) && (key != TLL_SYM_MARK)) {
-            long tag = -1;
-            tralala_userTagWithSymbol(&tag, key);
-            pizArrayAppend(t, tag);
-        }
-    }
-    
-    dictionary_freekeys(x->current, n, keys);
-    //
-    }
-    //
-    }
-    
-    TLL_UNLOCK
-    
-    if (t) {
-        for (i = 0; i < pizArrayCount(t); i++) {
-            tralala_userSendTag(x, PIZ_EVENT_NOTE_DELETE, pizArrayAtIndex(t, i));
-        }
-        
-        pizArrayFree(t);
-    }
-}
-    
 void tralala_userCopyToClipboard(t_tll *x, t_dictionary *d)
 {
     long i, n = 0;
@@ -596,14 +573,52 @@ void tralala_userCopyToClipboard(t_tll *x, t_dictionary *d)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_userSendTag(t_tll *x, PIZEventCode code, long tag)
+void tralala_userSend(t_tll *x, PIZEventCode code)
 {
-    PIZEvent *event = NULL;
+    long i, n = 0;
+    t_symbol **keys = NULL;
+    long *ptr = NULL;
+    PIZArray *t = NULL;
     
-    if (event = pizEventNew(code)) {
-        pizEventSetData(event, 1, &tag);
-        pizEventSetIdentifier(event, x->identifier);
-        pizAgentDoEvent(x->agent, event);
+    TLL_LOCK
+    
+    if (t = pizArrayNew(dictionary_getentrycount(x->status))) {
+    //
+    if (!(dictionary_getkeys(x->status, &n, &keys))) {
+    //
+    for (i = 0; i < n; i++) {
+        t_symbol *key = (*(keys + i));
+        
+        if ((key != TLL_SYM_ZONE) && (key != TLL_SYM_MARK)) {
+            long tag = -1;
+            tralala_userTagWithSymbol(&tag, key);
+            pizArrayAppend(t, tag);
+        }
+    }
+    
+    dictionary_freekeys(x->current, n, keys);
+    //
+    }
+    //
+    }
+    
+    TLL_UNLOCK
+    
+    if (t) {
+    //
+    ptr = pizArrayPtr(t);
+    
+    for (i = 0; i < pizArrayCount(t); i++) {
+        PIZEvent *event = NULL;
+        if (event = pizEventNew(code)) {
+            pizEventSetData(event, 1, ptr + i);
+            pizEventSetIdentifier(event, x->identifier);
+            pizAgentDoEvent(x->agent, event);
+        }
+    }
+    
+    pizArrayFree(t);
+    //
     }
 }
 

@@ -48,24 +48,24 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_DEBUG_EVENT if (event) {                \
-                        PIZTime ttt;                \
-                        pizTimeSet(&ttt);           \
-                        ttt = ttt / 1000000;        \
-                        post("%llu / %ld / %s / %ld %ld %ld %ld %ld %ld %ld %ld / %s",  \
-                        ttt,                        \
-                        event->identifier,          \
-                        pizEventName(event),        \
-                        event->data[0],             \
-                        event->data[1],             \
-                        event->data[2],             \
-                        event->data[3],             \
-                        event->data[4],             \
-                        event->data[5],             \
-                        event->data[6],             \
-                        event->data[7],             \
-                        __FUNCTION__                \
-                        );                          \
+#define PIZ_DEBUG_EVENT if (event) {                    \
+                            PIZTime ttt;                \
+                            pizTimeSet(&ttt);           \
+                            ttt = ttt / 1000000;        \
+                            post("%llu / %ld / %s / %ld %ld %ld %ld %ld %ld %ld %ld / %s",  \
+                            ttt,                        \
+                            event->identifier,          \
+                            pizEventName(event),        \
+                            event->data[0],             \
+                            event->data[1],             \
+                            event->data[2],             \
+                            event->data[3],             \
+                            event->data[4],             \
+                            event->data[5],             \
+                            event->data[6],             \
+                            event->data[7],             \
+                            __FUNCTION__                \
+                            );                          \
                         }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -133,9 +133,9 @@ typedef enum _PIZEventCode {
     PIZ_EVENT_ROMEO,
     PIZ_EVENT_JULIET,
     //   
-    PIZ_EVENT_NOTE_DELETE,
-    //PIZ_EVENT_NOTE_INCREMENT_POSITION,
-    //PIZ_EVENT_NOTE_DECREMENT_POSITION,
+    PIZ_EVENT_DELETE,
+    PIZ_EVENT_INCREMENT_PITCH,
+    PIZ_EVENT_DECREMENT_PITCH,
     //
     PIZ_EVENT_CHANGED_BPM,
     PIZ_EVENT_CHANGED_CHANCE,

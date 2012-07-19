@@ -170,6 +170,35 @@ void pizSequenceEachDump(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
     x->tempError |= pizAgentNotify(x->owner, PIZ_EVENT_NOTE_DUMPED, 7, a);
 }
 
+void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
+{/*
+    long     position = note->position;
+    PIZError err = PIZ_GOOD; 
+    
+    if (position != newPosition) {
+    //
+    if (!x->timeline[newPosition]) {
+        if (!(x->timeline[newPosition] = pizLinklistNew ( ))) {
+            err |= PIZ_MEMORY;
+        }
+    }
+    
+    if (!err) {
+        if (!(err |= pizLinklistChuckByPtr (x->timeline[position], (void *)note))) {            
+            if (!(err |= pizLinklistInsert (x->timeline[newPosition], (void *)note))) {
+                note->position = newPosition;
+                PIZ_TAG (&x->changedNotes, note->tag);
+            } else {
+                pizSequenceRemoveNote (x, note, NULL);
+            }
+        } 
+    }
+    //
+    }
+    
+    return err;*/
+}
+
 void pizSequenceEachFillTempHash(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
 {   
     long k = ((long)(note->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1)) + note->values[PIZ_VALUE_PITCH];
