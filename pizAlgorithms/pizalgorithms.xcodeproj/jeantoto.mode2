@@ -259,8 +259,8 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>19</integer>
-											<integer>9</integer>
+											<integer>27</integer>
+											<integer>22</integer>
 											<integer>2</integer>
 											<integer>0</integer>
 										</array>
@@ -289,7 +289,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>135 114 605 656 0 0 1280 778 </string>
+								<string>225 122 605 656 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -426,8 +426,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>963CAF8415B827860066E754</string>
-				<string>963CAF8515B827860066E754</string>
+				<string>96CE8F9D15B852840065067B</string>
+				<string>96CE8F9E15B852840065067B</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -460,10 +460,12 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D52069F1CE1000CFCEE</string>
+		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/pizAlgorithms/PizAlgorithms.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>135 114 605 656 0 0 1280 778 </string>
+	<string>225 122 605 656 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -641,7 +643,7 @@
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 297}, {1280, 280}}</string>
+								<string>{{0, 106}, {1280, 471}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>
@@ -679,7 +681,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D9F8DC15B8060A00DFC1CA</string>
+				<string>96CE8F9F15B852840065067B</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -819,14 +821,12 @@
 							<key>Dock</key>
 							<array>
 								<dict>
-									<key>BecomeActive</key>
-									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>pizAgentLoop.c</string>
+										<string>pizEvent.h</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -847,6 +847,8 @@
 							<string>324pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -882,8 +884,8 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>96D9F8D615B8057700DFC1CA</string>
-				<string>96D9F8D715B8057700DFC1CA</string>
+				<string>96CE8F9A15B8527D0065067B</string>
+				<string>96CE8F9B15B8527D0065067B</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>

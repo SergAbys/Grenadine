@@ -174,7 +174,7 @@ PIZError pizSequenceNote(PIZSequence *x, const PIZEvent *event)
 PIZError pizSequenceClear(PIZSequence *x, const PIZEvent *event)
 {
     if (x->count) {
-        pizSequenceForEach(x, NULL, PIZ_SEQUENCE_FLAG_NONE, pizSequenceEachRemove);
+        pizSequenceForEach(x, pizSequenceEachRemove, NULL, PIZ_SEQUENCE_FLAG_NONE);
         pizArrayClear(x->map);  
     }
     
@@ -191,11 +191,11 @@ PIZError pizSequenceClean(PIZSequence *x, const PIZEvent *event)
     
     x->tempIndex = 0;
     
-    pizSequenceForEach(x, event, PIZ_SEQUENCE_FLAG_NEARBY, pizSequenceEachFillTempNotes);
+    pizSequenceForEach(x, pizSequenceEachFillTempNotes, event, PIZ_SEQUENCE_FLAG_NEARBY);
     
     if (x->tempIndex) {
         for (i = 0; i < x->tempIndex; i++) {
-            pizSequenceEachRemove(x, NULL, PIZ_SEQUENCE_FLAG_NONE, x->tempNotes1[i]);
+            pizSequenceEachRemove(x, x->tempNotes1[i], NULL, PIZ_SEQUENCE_FLAG_NONE);
         }
         pizSequenceMakeMap(x);
     }
@@ -307,14 +307,14 @@ PIZError pizSequenceSort(PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceChange(PIZSequence *x, const PIZEvent *event)
 {
-    pizSequenceForEach(x, event, PIZ_SEQUENCE_FLAG_RANDOM, pizSequenceEachChange);
+    pizSequenceForEach(x, pizSequenceEachChange, event, PIZ_SEQUENCE_FLAG_RANDOM);
 
     return PIZ_GOOD;
 }
 
 PIZError pizSequenceFill(PIZSequence *x, const PIZEvent *event)
 {
-    pizSequenceForEach(x, event, PIZ_SEQUENCE_FLAG_RANDOM | PIZ_SEQUENCE_FLAG_FILL, pizSequenceEachChange);
+    pizSequenceForEach(x, pizSequenceEachChange, event, PIZ_SEQUENCE_FLAG_RANDOM | PIZ_SEQUENCE_FLAG_FILL);
 
     return PIZ_GOOD;
 }
@@ -324,7 +324,7 @@ PIZError pizSequenceKill(PIZSequence *x, const PIZEvent *event)
     long count = x->count;
      
     if (count) {
-        pizSequenceForEach(x, NULL, PIZ_SEQUENCE_FLAG_RANDOM, pizSequenceEachRemove);
+        pizSequenceForEach(x, pizSequenceEachRemove, NULL, PIZ_SEQUENCE_FLAG_RANDOM);
         
         if (x->count != count) { 
             pizSequenceMakeMap(x); 
@@ -374,7 +374,7 @@ PIZError pizSequenceCycle(PIZSequence *x, const PIZEvent *event)
         x->tempValues[i] = t[(PIZ_MAGIC_SCALE - key + i) % PIZ_MAGIC_SCALE];
     }
     
-    pizSequenceForEach(x, NULL, PIZ_SEQUENCE_FLAG_RANDOM, pizSequenceEachCycle);
+    pizSequenceForEach(x, pizSequenceEachCycle, NULL, PIZ_SEQUENCE_FLAG_RANDOM);
     //
     }
     //
@@ -442,7 +442,7 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
     
     x->tempError = PIZ_GOOD;
     pizHashTableClear(x->tempHash);
-    pizSequenceForEach(x, NULL, PIZ_SEQUENCE_FLAG_NONE, pizSequenceEachFillTempHash);
+    pizSequenceForEach(x, pizSequenceEachFillTempHash, NULL, PIZ_SEQUENCE_FLAG_NONE);
     hashErr = x->tempError;
     
     while (!hashErr && (k < iterate) && (loop < PIZ_MAXIMUM_LOOP)) {
@@ -564,7 +564,7 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
         
     if (death) {
         pizHashTableRemove(x->tempHash, center, (void *)note);
-        pizSequenceEachRemove(x, NULL, PIZ_SEQUENCE_FLAG_NONE, note);
+        pizSequenceEachRemove(x, note, NULL, PIZ_SEQUENCE_FLAG_NONE);
         haveChanged = true;
     }
     //    
@@ -704,7 +704,7 @@ void pizSequenceMakeMap(PIZSequence *x)
 long pizSequenceFillTempNotes(PIZSequence *x)
 {
     x->tempIndex = 0;
-    pizSequenceForEach(x, NULL, PIZ_SEQUENCE_FLAG_NONE, pizSequenceEachFillTempNotes);
+    pizSequenceForEach(x, pizSequenceEachFillTempNotes, NULL, PIZ_SEQUENCE_FLAG_NONE);
     
     return x->tempIndex;
 }

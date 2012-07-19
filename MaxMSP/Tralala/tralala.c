@@ -81,7 +81,7 @@ int main(void)
     CLASS_ATTR_CATEGORY     (c, "color", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "ucolor", 0, t_tll, uColor); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "ucolor", 0, "0.30 0.24 0.28 1."); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "ucolor", 0, "0.83 0.74 0.84 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "ucolor", 0, "rgba", "Color Unfocused");
     CLASS_ATTR_CATEGORY     (c, "ucolor", 0, "Color");
     
@@ -96,12 +96,12 @@ int main(void)
     CLASS_ATTR_CATEGORY     (c, "hcolor2", 0, "Color");
         
     CLASS_ATTR_RGBA         (c, "textcolor", 0, t_tll, text); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "0.83 0.74 0.84 1."); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "0.51 0.44 0.49 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "textcolor", 0, "rgba", "Text Color");
     CLASS_ATTR_CATEGORY     (c, "textcolor", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "utextcolor", 0, t_tll, uText); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "utextcolor", 0, "0.51 0.44 0.49 1."); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "utextcolor", 0, "0.83 0.74 0.84 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "utextcolor", 0, "rgba", "Text Unfocused");
     CLASS_ATTR_CATEGORY     (c, "utextcolor", 0, "Color");
   
@@ -111,7 +111,7 @@ int main(void)
     CLASS_ATTR_CATEGORY     (c, "bordercolor", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "ubordercolor", 0, t_tll, uBorder); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "ubordercolor", 0, "0. 0. 0. 1."); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "ubordercolor", 0, "0.83 0.74 0.84 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "ubordercolor", 0, "rgba", "Border Unfocused");
     CLASS_ATTR_CATEGORY     (c, "ubordercolor", 0, "Color");
     
@@ -121,7 +121,7 @@ int main(void)
     CLASS_ATTR_CATEGORY     (c, "bgcolor", 0, "Color");
 
     CLASS_ATTR_RGBA         (c, "ubgcolor", 0, t_tll, uBackground); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "ubgcolor", 0, "0. 0. 0. 1."); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "ubgcolor", 0, "1. 1. 1. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "ubgcolor", 0, "rgba", "Background Unfocused");
     CLASS_ATTR_CATEGORY     (c, "ubgcolor", 0, "Color");
     
@@ -310,7 +310,7 @@ void tralala_load(t_tll *x, t_symbol *s, long argc, t_atom *argv)
         if (t = dictionary_new ( )) {
             dictionary_copyunique(t, d);
             tralala_send(x, PIZ_EVENT_CLEAR, 0, NULL);
-            tralala_parseDictionary(x, t, TLL_NONE);
+            tralala_parseDictionary(x, t, TLL_AUTOMATIC);
             object_free(t);
         }
     }
@@ -343,6 +343,8 @@ void tralala_callback(void *ptr, PIZEvent *event)
     
     x = (t_tll *)ptr;
     pizEventCode(event, &code);
+    
+    PIZ_DEBUG_EVENT
     
     switch (code) {
     //
@@ -408,12 +410,12 @@ void tralala_unloop(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_list(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
-    tralala_parseMessage(x, s, argc, argv, TLL_NONE);
+    tralala_parseMessage(x, s, argc, argv, TLL_AUTOMATIC);
 }
 
 void tralala_anything(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
-    tralala_parseMessage(x, s, argc, argv, TLL_NONE);
+    tralala_parseMessage(x, s, argc, argv, TLL_AUTOMATIC);
 }
 
 // -------------------------------------------------------------------------------------------------------------

@@ -47,7 +47,7 @@
 #pragma mark ---
 #pragma mark -
 
-void pizSequenceForEach(PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod method)
+void pizSequenceForEach(PIZSequence *x, PIZMethod method, const PIZEvent *e, ulong f)
 {
     long i;
     
@@ -61,7 +61,7 @@ void pizSequenceForEach(PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod me
         
         while (note) {
             pizLinklistNextWithPtr(x->timeline[p], (void *)note, (void **)&nextNote);
-            (*method)(x, e, f, note);
+            (*method)(x, note, e, f);
             note = nextNote;
         }
     }
@@ -70,7 +70,7 @@ void pizSequenceForEach(PIZSequence *x, const PIZEvent *e, ulong f, PIZMethod me
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void pizSequenceEachRemove(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note) 
+void pizSequenceEachRemove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag) 
 {
     long h = -1;
     long p = note->position;
@@ -95,7 +95,7 @@ void pizSequenceEachRemove(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNot
     }
 }
 
-void pizSequenceEachChange(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note)
+void pizSequenceEachChange(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
 {
     long argc;
     long *argv = NULL;
@@ -135,7 +135,7 @@ void pizSequenceEachChange(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNot
     }
 }
  
-void pizSequenceEachCycle(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note)
+void pizSequenceEachCycle(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
 {
     long t, h = -1;
     
@@ -157,7 +157,7 @@ void pizSequenceEachCycle(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote
     }
 }
 
-void pizSequenceEachDump(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note)
+void pizSequenceEachDump(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
 {
     long a[ ] = { note->position, 
                   note->values[PIZ_VALUE_PITCH],
@@ -170,13 +170,13 @@ void pizSequenceEachDump(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote 
     x->tempError |= pizAgentNotify(x->owner, PIZ_EVENT_NOTE_DUMPED, 7, a);
 }
 
-void pizSequenceEachFillTempHash(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note)
+void pizSequenceEachFillTempHash(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
 {   
     long k = ((long)(note->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1)) + note->values[PIZ_VALUE_PITCH];
     x->tempError |= pizHashTableAdd(x->tempHash, k, (void *)note);
 }
 
-void pizSequenceEachFillTempNotes(PIZSequence *x, const PIZEvent *e, ulong flag, PIZNote *note)
+void pizSequenceEachFillTempNotes(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
 {
     if (flag & PIZ_SEQUENCE_FLAG_NEARBY) {
     //

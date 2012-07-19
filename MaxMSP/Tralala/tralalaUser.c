@@ -200,7 +200,7 @@ void tralala_userAddNote(t_tll *x)
     atom_setlong(a, TLL_X_TO_POSITION(x->cursor.x));
     atom_setlong(a + 1, TLL_Y_TO_PITCH(x->cursor.y));
     
-    tralala_parseMessage(x, TLL_SYM_NOTE, 2, a, TLL_DEFER);
+    tralala_parseMessage(x, TLL_SYM_NOTE, 2, a, TLL_LOW);
 }
 
 void tralala_userSelectZone(t_tll *x)
@@ -448,6 +448,8 @@ ulong tralala_userSelectLasso(t_tll *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+#pragma mark ---
+#pragma mark -
 
 ulong tralala_userKeyAll(t_tll *x, long m)
 {
@@ -492,7 +494,7 @@ ulong tralala_userKeyPaste(t_tll *x, long m)
         if (t = dictionary_new( )) {
             dictionary_copyunique(t, tll_clipboard);
             if (!(dictionary_getlong(t, TLL_SYM_IDENTIFIER, &k)) && (k != x->identifier)) {
-                tralala_parseDictionary(x, t, TLL_DEFER);  
+                tralala_parseDictionary(x, t, TLL_LOW);  
             }
             object_free(t);
         }
@@ -530,25 +532,33 @@ void tralala_userDeleteSelected(t_tll *x)
     
     if (t = pizArrayNew(dictionary_getentrycount(x->status))) {
     //
-        if (!(dictionary_getkeys(x->status, &n, &keys))) {
-        //
-        for (i = 0; i < n; i++) {
-            t_symbol *key = (*(keys + i));
-            
-            if ((key != TLL_SYM_ZONE) && (key != TLL_SYM_MARK)) {
-                //
-            }
-        }
+    if (!(dictionary_getkeys(x->status, &n, &keys))) {
+    //
+    for (i = 0; i < n; i++) {
+        t_symbol *key = (*(keys + i));
         
-        dictionary_freekeys(x->current, n, keys);
-        //
+        if ((key != TLL_SYM_ZONE) && (key != TLL_SYM_MARK)) {
+            long tag = -1;
+            tralala_userTagWithSymbol(&tag, key);
+            pizArrayAppend(t, tag);
         }
+    }
+    
+    dictionary_freekeys(x->current, n, keys);
+    //
+    }
     //
     }
     
     TLL_UNLOCK
     
-    pizArrayFree(t);
+    if (t) {
+        for (i = 0; i < pizArrayCount(t); i++) {
+            tralala_userSendTag(x, PIZ_EVENT_NOTE_DELETE, pizArrayAtIndex(t, i));
+        }
+        
+        pizArrayFree(t);
+    }
 }
     
 void tralala_userCopyToClipboard(t_tll *x, t_dictionary *d)

@@ -48,7 +48,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_DEBUGEVENT  if (event) {                \
+#define PIZ_DEBUG_EVENT if (event) {                \
                         PIZTime ttt;                \
                         pizTimeSet(&ttt);           \
                         ttt = ttt / 1000000;        \
@@ -134,15 +134,8 @@ typedef enum _PIZEventCode {
     PIZ_EVENT_JULIET,
     //   
     PIZ_EVENT_NOTE_DELETE,
-    //PIZ_EVENT_NOTE_MOVE_POSITION,
-    //PIZ_EVENT_NOTE_MOVE_PITCH,
-    //PIZ_EVENT_NOTE_MOVE_DURATION,
-    //PIZ_EVENT_NOTE_MOVE_VELOCITY,
-    //PIZ_EVENT_NOTE_MOVE_CHANNEL,
-    //PIZ_EVENT_ZONE_MOVE_START,
-    //PIZ_EVENT_ZONE_MOVE_END,
-    //PIZ_EVENT_ZONE_MOVE_DOWN,
-    //PIZ_EVENT_ZONE_MOVE_UP,
+    //PIZ_EVENT_NOTE_INCREMENT_POSITION,
+    //PIZ_EVENT_NOTE_DECREMENT_POSITION,
     //
     PIZ_EVENT_CHANGED_BPM,
     PIZ_EVENT_CHANGED_CHANCE,
