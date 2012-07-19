@@ -10,7 +10,7 @@
 
 #include "tralalaParse.h"
 #include "tralalaPaint.h"
-#include "tralalaUser.h"
+#include "tralalaMouse.h"
 #include "ext_quickmap.h"
 
 // -------------------------------------------------------------------------------------------------------------

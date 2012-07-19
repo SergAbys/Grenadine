@@ -9,18 +9,21 @@
 /* Begin PBXBuildFile section */
 		9676982713B7784800FE77F4 /* tralala.c in Sources */ = {isa = PBXBuildFile; fileRef = 9676982513B7784800FE77F4 /* tralala.c */; };
 		96A788A6156D3E3800B8CAB7 /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96A788A5156D3E3800B8CAB7 /* libPizAlgorithms.a */; };
+		96A82A5215B873BA00CE73B3 /* tralalaKey.c in Sources */ = {isa = PBXBuildFile; fileRef = 96A82A5115B873BA00CE73B3 /* tralalaKey.c */; };
 		96CF9326154C40F60027BB96 /* tralala.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 96CF9325154C40F60027BB96 /* tralala.xcconfig */; };
 		96CF932A154C41210027BB96 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96CF9329154C41210027BB96 /* MaxAPI.framework */; };
 		96D9672C1507C5EE006A848D /* tralalaHide.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96D9672B1507C5EE006A848D /* tralalaHide.txt */; };
 		96DC326415581A5500C26797 /* tralalaParse.c in Sources */ = {isa = PBXBuildFile; fileRef = 96DC326315581A5500C26797 /* tralalaParse.c */; };
 		96E4A85715ADD2DA003BF81E /* tralalaPaint.c in Sources */ = {isa = PBXBuildFile; fileRef = 96E4A85615ADD2DA003BF81E /* tralalaPaint.c */; };
-		96E4A86115ADD3A1003BF81E /* tralalaUser.c in Sources */ = {isa = PBXBuildFile; fileRef = 96E4A85F15ADD3A1003BF81E /* tralalaUser.c */; };
+		96E4A86115ADD3A1003BF81E /* tralalaMouse.c in Sources */ = {isa = PBXBuildFile; fileRef = 96E4A85F15ADD3A1003BF81E /* tralalaMouse.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8D01CCD20486CAD60068D4B7 /* tralala.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tralala.mxo; sourceTree = BUILT_PRODUCTS_DIR; };
 		9676982513B7784800FE77F4 /* tralala.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tralala.c; sourceTree = "<group>"; };
 		96A788A5156D3E3800B8CAB7 /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../../pizAlgorithms/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
+		96A82A5015B873BA00CE73B3 /* tralalaKey.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = tralalaKey.h; sourceTree = "<group>"; };
+		96A82A5115B873BA00CE73B3 /* tralalaKey.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tralalaKey.c; sourceTree = "<group>"; };
 		96CF9325154C40F60027BB96 /* tralala.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; path = tralala.xcconfig; sourceTree = "<group>"; };
 		96CF9329154C41210027BB96 /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "../../../c74support/max-includes/MaxAPI.framework"; sourceTree = SOURCE_ROOT; };
 		96D843C315824D41005B41A9 /* tralala.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = tralala.h; sourceTree = "<group>"; };
@@ -29,8 +32,8 @@
 		96DC326715581AC500C26797 /* tralalaParse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tralalaParse.h; sourceTree = "<group>"; };
 		96E4A85515ADD2DA003BF81E /* tralalaPaint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tralalaPaint.h; sourceTree = "<group>"; };
 		96E4A85615ADD2DA003BF81E /* tralalaPaint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tralalaPaint.c; sourceTree = "<group>"; };
-		96E4A85F15ADD3A1003BF81E /* tralalaUser.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tralalaUser.c; sourceTree = "<group>"; };
-		96E4A86015ADD3A1003BF81E /* tralalaUser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = tralalaUser.h; sourceTree = "<group>"; };
+		96E4A85F15ADD3A1003BF81E /* tralalaMouse.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = tralalaMouse.c; sourceTree = "<group>"; };
+		96E4A86015ADD3A1003BF81E /* tralalaMouse.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = tralalaMouse.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,13 +82,15 @@
 			isa = PBXGroup;
 			children = (
 				96D843C315824D41005B41A9 /* tralala.h */,
-				96E4A86015ADD3A1003BF81E /* tralalaUser.h */,
 				96DC326715581AC500C26797 /* tralalaParse.h */,
 				96E4A85515ADD2DA003BF81E /* tralalaPaint.h */,
+				96E4A86015ADD3A1003BF81E /* tralalaMouse.h */,
+				96A82A5015B873BA00CE73B3 /* tralalaKey.h */,
 				9676982513B7784800FE77F4 /* tralala.c */,
-				96E4A85F15ADD3A1003BF81E /* tralalaUser.c */,
 				96DC326315581A5500C26797 /* tralalaParse.c */,
 				96E4A85615ADD2DA003BF81E /* tralalaPaint.c */,
+				96E4A85F15ADD3A1003BF81E /* tralalaMouse.c */,
+				96A82A5115B873BA00CE73B3 /* tralalaKey.c */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -154,7 +159,8 @@
 				9676982713B7784800FE77F4 /* tralala.c in Sources */,
 				96DC326415581A5500C26797 /* tralalaParse.c in Sources */,
 				96E4A85715ADD2DA003BF81E /* tralalaPaint.c in Sources */,
-				96E4A86115ADD3A1003BF81E /* tralalaUser.c in Sources */,
+				96E4A86115ADD3A1003BF81E /* tralalaMouse.c in Sources */,
+				96A82A5215B873BA00CE73B3 /* tralalaKey.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,5 +1,5 @@
 /*
- *  tralalaUser.h
+ *  tralalaMouse.h
  *
  *  nicolas.danet@free.fr
  *
@@ -8,8 +8,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef TLL_USER_H
-#define TLL_USER_H
+#ifndef TLL_MOUSE_H
+#define TLL_MOUSE_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -54,8 +54,7 @@ void tralala_mousemove  (t_tll *x, t_object *pv, t_pt pt, long m);
 void tralala_mousedrag  (t_tll *x, t_object *pv, t_pt pt, long m);
 void tralala_mouseup    (t_tll *x, t_object *pv, t_pt pt, long m);
 void tralala_mousewheel (t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc);
-void tralala_key        (t_tll *x, t_object *pv, long keycode, long m, long textcharacter);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // TLL_USER_H
+#endif // TLL_MOUSE_H
