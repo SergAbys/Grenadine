@@ -43,18 +43,24 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
-PIZError pizSequenceDelete(PIZSequence *x, const PIZEvent *event)
+PIZ_LOCAL PIZNote *pizSequenceNoteWithTag(PIZSequence *x, long tag);
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark ---
+#pragma mark -
+
+PIZError pizSequenceDelete(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
     PIZNote *note = NULL;
     
     if (!(pizEventData(event, &argc, &argv))) {
-        if ((argv[0] >= 0) 
-            && (argv[0] < PIZ_SEQUENCE_MAXIMUM_NOTES) 
-            && !(pizItemsetIsSetAtIndex(&x->removed, argv[0]))
-            && (note = x->lookup[argv[0]])) {
+        if (note = pizSequenceNoteWithTag(x, argv[1])) {
             pizSequenceEachRemove(x, note, NULL, PIZ_SEQUENCE_FLAG_NONE);
         }
     }
@@ -62,14 +68,58 @@ PIZError pizSequenceDelete(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceIncrementPitch(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceIncrement(PIZSequence *x, PIZEvent *event)
 {
+    long argc;
+    long *argv = NULL;
+    PIZNote *note = NULL;
+    
+    if (!(pizEventData(event, &argc, &argv))) {
+        if (note = pizSequenceNoteWithTag(x, argv[1])) {
+            long a[ ] = { argv[0], 1 };
+            pizEventSetData(event, 2, a);
+            pizSequenceEachChange(x, note, event, PIZ_SEQUENCE_FLAG_NONE);
+        }
+    }
+    
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceDecrementPitch(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceDecrement(PIZSequence *x, PIZEvent *event)
 {
+    long argc;
+    long *argv = NULL;
+    PIZNote *note = NULL;
+    
+    if (!(pizEventData(event, &argc, &argv))) {
+        if (note = pizSequenceNoteWithTag(x, argv[1])) {
+            long a[ ] = { argv[0], -1 };
+            pizEventSetData(event, 2, a);
+            pizSequenceEachChange(x, note, event, PIZ_SEQUENCE_FLAG_NONE);
+        }
+    }
+    
     return PIZ_GOOD;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark ---
+#pragma mark -
+
+PIZNote *pizSequenceNoteWithTag(PIZSequence *x, long tag)
+{
+    PIZNote *note = NULL;
+    
+    if ((tag >= 0) 
+        && (tag < PIZ_SEQUENCE_MAXIMUM_NOTES) 
+        && !(pizItemsetIsSetAtIndex(&x->removed, tag))
+        && !(pizItemsetIsSetAtIndex(&x->changed, tag))) {
+        note = x->lookup[tag];
+    }
+    
+    return note;
 }
 
 // -------------------------------------------------------------------------------------------------------------

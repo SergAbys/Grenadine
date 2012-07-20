@@ -23,6 +23,11 @@ extern t_dictionary *tll_clipboard;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#define TLL_NADA    0
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
 #define TLL_KEY_A   97
 #define TLL_KEY_C   99
 #define TLL_KEY_V   118
@@ -50,8 +55,8 @@ PIZ_LOCAL   void  tralala_keySelectZone         (t_tll *x);
 PIZ_LOCAL   void  tralala_keySelectAll          (t_tll *x);
 PIZ_LOCAL   void  tralala_keyCopyToClipboard    (t_tll *x, t_dictionary *d);
 
-PIZ_LOCAL   void  tralala_keySend               (t_tll *x, PIZEventCode code);
-PIZ_LOCAL   void  tralala_keySendZone           (t_tll *x, long keycode);
+PIZ_LOCAL   void  tralala_keySendToZone         (t_tll *x, long keycode);
+PIZ_LOCAL   void  tralala_keySendToNotes        (t_tll *x, PIZEventCode code, long selector);
 PIZ_INLINE  void  tralala_keyTagWithSymbol      (long *tag, t_symbol *s);
 
 // -------------------------------------------------------------------------------------------------------------
@@ -162,18 +167,24 @@ ulong tralala_keyCut(t_tll *x, long m)
 
 ulong tralala_keyDelete(t_tll *x, long m)
 {
-    tralala_keySend(x, PIZ_EVENT_DELETE);
+    tralala_keySendToNotes(x, PIZ_EVENT_DELETE, TLL_NADA);
     
     return TLL_DIRTY_NONE;
 }
 
 ulong tralala_keyUpArrow(t_tll *x, long m)
 {
+    tralala_keySendToNotes(x, PIZ_EVENT_INCREMENT, PIZ_VALUE_PITCH);
+    tralala_keySendToZone(x, JKEY_UPARROW);
+    
     return TLL_DIRTY_NONE;
 }
 
 ulong tralala_keyDownArrow(t_tll *x, long m)
 {
+    tralala_keySendToNotes(x, PIZ_EVENT_DECREMENT, PIZ_VALUE_PITCH);
+    tralala_keySendToZone(x, JKEY_DOWNARROW);
+    
     return TLL_DIRTY_NONE;
 }
 
@@ -263,7 +274,12 @@ void tralala_keyCopyToClipboard(t_tll *x, t_dictionary *d)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_keySend(t_tll *x, PIZEventCode code)
+void tralala_keySendToZone(t_tll *x, long keycode)
+{
+    ;
+}
+
+void tralala_keySendToNotes(t_tll *x, PIZEventCode code, long selector)
 {
     long i, n = 0;
     t_symbol **keys = NULL;
@@ -301,8 +317,8 @@ void tralala_keySend(t_tll *x, PIZEventCode code)
     for (i = 0; i < pizArrayCount(t); i++) {
         PIZEvent *event = NULL;
         if (event = pizEventNew(code)) {
-            pizEventSetData(event, 1, ptr + i);
-            pizEventSetIdentifier(event, x->identifier);
+            long a[ ] = { selector, *(ptr + i) };
+            pizEventSetData(event, 2, a);
             pizAgentDoEvent(x->agent, event);
         }
     }
@@ -310,11 +326,6 @@ void tralala_keySend(t_tll *x, PIZEventCode code)
     pizArrayFree(t);
     //
     }
-}
-
-void tralala_keySendZone(t_tll *x, long keycode)
-{
-    ;
 }
 
 PIZ_INLINE void tralala_keyTagWithSymbol(long *tag, t_symbol *s)
