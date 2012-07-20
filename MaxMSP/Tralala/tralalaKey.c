@@ -38,20 +38,20 @@ typedef ulong (*tllMethod)( );
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL   ulong tralala_userKeyAll            (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_userKeyCopy           (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_userKeyPaste          (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_userKeyCut            (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_userKeyDelete         (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_userKeyUpArrow        (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_userKeyDownArrow      (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_userKeyAll                (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_userKeyCopy               (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_userKeyPaste              (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_userKeyCut                (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_userKeyDelete             (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_userKeyUpArrow            (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_userKeyDownArrow          (t_tll *x, long m);
 
-PIZ_LOCAL   void  tralala_userSelectZone        (t_tll *x);
-PIZ_LOCAL   void  tralala_userSelectAll         (t_tll *x);
-PIZ_LOCAL   void  tralala_userCopyToClipboard   (t_tll *x, t_dictionary *d);
+PIZ_LOCAL   void  tralala_userSelectZone            (t_tll *x);
+PIZ_LOCAL   void  tralala_userSelectAll             (t_tll *x);
+PIZ_LOCAL   void  tralala_userCopyToClipboard       (t_tll *x, t_dictionary *d);
 
-PIZ_LOCAL   void  tralala_userSend              (t_tll *x, PIZEventCode code);
-PIZ_INLINE  void  tralala_userTagWithSymbol     (long *tag, t_symbol *s);
+PIZ_LOCAL   void  tralala_userSendToSelectedNotes   (t_tll *x, PIZEventCode code);
+PIZ_INLINE  void  tralala_userTagWithSymbol         (long *tag, t_symbol *s);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -126,7 +126,6 @@ ulong tralala_userKeyCopy(t_tll *x, long m)
         
         if (t = dictionary_new( )) {
             tralala_userCopyToClipboard(x, t);
-            dictionary_appendlong(t, TLL_SYM_IDENTIFIER, x->identifier);
             dictionary_clear(tll_clipboard);
             dictionary_copyunique(tll_clipboard, t);
             object_free(t);
@@ -139,14 +138,12 @@ ulong tralala_userKeyCopy(t_tll *x, long m)
 ulong tralala_userKeyPaste(t_tll *x, long m)
 {
     if (m & eCommandKey) {
-        long k;
         t_dictionary *t = NULL;
         
         if (t = dictionary_new( )) {
+            tralala_userUnselectAll(x);
             dictionary_copyunique(t, tll_clipboard);
-            if (!(dictionary_getlong(t, TLL_SYM_IDENTIFIER, &k)) && (k != x->identifier)) {
-                tralala_parseDictionary(x, t, TLL_LOW);  
-            }
+            tralala_parseDictionary(x, t, TLL_LOW);  
             object_free(t);
         }
     }
@@ -156,16 +153,15 @@ ulong tralala_userKeyPaste(t_tll *x, long m)
 
 ulong tralala_userKeyCut(t_tll *x, long m)
 {
-    if (m & eCommandKey) {
-        ;
-    }
+    tralala_userKeyCopy(x, m);
+    tralala_userKeyDelete(x, m);
     
     return TLL_DIRTY_NONE;
 }
 
 ulong tralala_userKeyDelete(t_tll *x, long m)
 {
-    tralala_userSend(x, PIZ_EVENT_DELETE);
+    tralala_userSendToSelectedNotes(x, PIZ_EVENT_DELETE);
     
     return TLL_DIRTY_NONE;
 }
@@ -252,7 +248,7 @@ void tralala_userCopyToClipboard(t_tll *x, t_dictionary *d)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_userSend(t_tll *x, PIZEventCode code)
+void tralala_userSendToSelectedNotes(t_tll *x, PIZEventCode code)
 {
     long i, n = 0;
     t_symbol **keys = NULL;

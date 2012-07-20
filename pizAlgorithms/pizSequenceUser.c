@@ -51,7 +51,10 @@ PIZError pizSequenceDelete(PIZSequence *x, const PIZEvent *event)
     PIZNote *note = NULL;
     
     if (!(pizEventData(event, &argc, &argv))) {
-        if ((argv[0] >= 0) && (argv[0] < PIZ_SEQUENCE_MAXIMUM_NOTES) && (note = x->lookup[argv[0]])) {
+        if ((argv[0] >= 0) 
+            && (argv[0] < PIZ_SEQUENCE_MAXIMUM_NOTES) 
+            && !(pizItemsetIsSetAtIndex(&x->removed, argv[0]))
+            && (note = x->lookup[argv[0]])) {
             pizSequenceEachRemove(x, note, NULL, PIZ_SEQUENCE_FLAG_NONE);
         }
     }

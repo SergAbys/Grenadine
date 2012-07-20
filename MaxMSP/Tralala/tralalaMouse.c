@@ -23,7 +23,6 @@ extern t_tllSymbols tll_table;
 #pragma mark -
 
 PIZ_LOCAL   void  tralala_userAddNote           (t_tll *x);
-PIZ_LOCAL   void  tralala_userUnselectAll       (t_tll *x);
 PIZ_LOCAL   void  tralala_userReleaseLasso      (t_tll *x);
 PIZ_LOCAL   void  tralala_userHitZone           (t_tll *x);
 PIZ_LOCAL   bool  tralala_userHitNote           (t_tll *x);
@@ -123,6 +122,13 @@ ulong tralala_userAbort(t_tll *x)
     return TLL_DIRTY_NONE;
 }
 
+void tralala_userUnselectAll(t_tll *x)
+{
+    TLL_LOCK
+    dictionary_clear(x->status);
+    TLL_UNLOCK
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -135,13 +141,6 @@ void tralala_userAddNote(t_tll *x)
     atom_setlong(a + 1, TLL_Y_TO_PITCH(x->cursor.y));
     
     tralala_parseMessage(x, TLL_SYM_NOTE, 2, a, TLL_LOW);
-}
-
-void tralala_userUnselectAll(t_tll *x)
-{
-    TLL_LOCK
-    dictionary_clear(x->status);
-    TLL_UNLOCK
 }
 
 void tralala_userReleaseLasso(t_tll *x)
