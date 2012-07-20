@@ -167,14 +167,14 @@ ulong tralala_keyCut(t_tll *x, long m)
 
 ulong tralala_keyDelete(t_tll *x, long m)
 {
-    tralala_keySendToNotes(x, PIZ_EVENT_DELETE, TLL_NADA);
+    tralala_keySendToNotes(x, PIZ_EVENT_NOTE_DELETE, TLL_NADA);
     
     return TLL_DIRTY_NONE;
 }
 
 ulong tralala_keyUpArrow(t_tll *x, long m)
 {
-    tralala_keySendToNotes(x, PIZ_EVENT_INCREMENT, PIZ_VALUE_PITCH);
+    tralala_keySendToNotes(x, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_PITCH);
     tralala_keySendToZone(x, JKEY_UPARROW);
     
     return TLL_DIRTY_NONE;
@@ -182,7 +182,7 @@ ulong tralala_keyUpArrow(t_tll *x, long m)
 
 ulong tralala_keyDownArrow(t_tll *x, long m)
 {
-    tralala_keySendToNotes(x, PIZ_EVENT_DECREMENT, PIZ_VALUE_PITCH);
+    tralala_keySendToNotes(x, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_PITCH);
     tralala_keySendToZone(x, JKEY_DOWNARROW);
     
     return TLL_DIRTY_NONE;
@@ -276,7 +276,15 @@ void tralala_keyCopyToClipboard(t_tll *x, t_dictionary *d)
 
 void tralala_keySendToZone(t_tll *x, long keycode)
 {
-    ;
+    long status = 0;
+    
+    TLL_LOCK
+    
+    if (!(dictionary_getlong(x->status, TLL_SYM_ZONE, &status))) {
+        ;
+    }
+    
+    TLL_UNLOCK
 }
 
 void tralala_keySendToNotes(t_tll *x, PIZEventCode code, long selector)
