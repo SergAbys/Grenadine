@@ -200,7 +200,7 @@ quickmap_add(tll_notification, gensym("zone"),            (void *)(TLL_TINY + PI
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_parseDictionary(t_tll *x, t_dictionary *d, long priority)
+void tralala_parseDictionary(t_tll *x, t_dictionary *d, ulong flags)
 {
     long i, n = 0;
     t_symbol **keys = NULL;
@@ -214,7 +214,7 @@ void tralala_parseDictionary(t_tll *x, t_dictionary *d, long priority)
     
     if (!dictionary_getatoms(d, (*(keys + i)), &k, &data)) {
         if (atom_gettype(data) == A_SYM) {
-            tralala_parseMessage(x, atom_getsym(data), k - 1, data + 1, priority);
+            tralala_parseMessage(x, atom_getsym(data), k - 1, data + 1, flags);
         }
     }
     //
@@ -225,7 +225,7 @@ void tralala_parseDictionary(t_tll *x, t_dictionary *d, long priority)
     }
 }
 
-void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, long priority)
+void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong flags)
 {
     PIZTime time;
     PIZEventCode code = 0;
@@ -298,7 +298,7 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, long p
         pizEventSetData(event, k, data);
         pizEventSetIdentifier(event, x->identifier);
         
-        if (priority == TLL_LOW) {
+        if (flags & TLL_FLAG_LOW) {
             pizEventSetType(event, PIZ_EVENT_LOW);
         }
         
@@ -347,7 +347,7 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
         TLL_UNLOCK
 
     } else {
-        dirty |= tralala_userAbort(x);
+        dirty |= tralala_mouseAbort(x);
         tralala_parseSymbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
           
         TLL_LOCK

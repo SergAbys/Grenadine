@@ -311,7 +311,7 @@ void tralala_load(t_tll *x, t_symbol *s, long argc, t_atom *argv)
         if (t = dictionary_new ( )) {
             dictionary_copyunique(t, d);
             tralala_send(x, PIZ_EVENT_CLEAR, 0, NULL);
-            tralala_parseDictionary(x, t, TLL_AUTOMATIC);
+            tralala_parseDictionary(x, t, TLL_FLAG_NONE);
             object_free(t);
         }
     }
@@ -411,12 +411,12 @@ void tralala_unloop(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_list(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
-    tralala_parseMessage(x, s, argc, argv, TLL_AUTOMATIC);
+    tralala_parseMessage(x, s, argc, argv, TLL_FLAG_NONE);
 }
 
 void tralala_anything(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
-    tralala_parseMessage(x, s, argc, argv, TLL_AUTOMATIC);
+    tralala_parseMessage(x, s, argc, argv, TLL_FLAG_NONE);
 }
 
 // -------------------------------------------------------------------------------------------------------------

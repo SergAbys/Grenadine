@@ -91,16 +91,16 @@ typedef struct _tllSymbols {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_AUTOMATIC  0
-#define TLL_LOW        1
+#define TLL_FLAG_LOW        1UL
+#define TLL_FLAG_FILTER     2UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 void tralala_parseInit          (t_tllSymbols *table);
-void tralala_parseDictionary    (t_tll *x, t_dictionary *d, long priority);
-void tralala_parseMessage       (t_tll *x, t_symbol *s, long argc, t_atom *argv, long priority);
+void tralala_parseDictionary    (t_tll *x, t_dictionary *d, ulong flags);
+void tralala_parseMessage       (t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong flags);
 void tralala_parseNotification  (t_tll *x, PIZEvent *event);
           
 // -------------------------------------------------------------------------------------------------------------

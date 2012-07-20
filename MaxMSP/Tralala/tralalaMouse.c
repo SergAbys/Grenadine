@@ -22,12 +22,12 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL   void  tralala_userAddNote           (t_tll *x);
-PIZ_LOCAL   void  tralala_userReleaseLasso      (t_tll *x);
-PIZ_LOCAL   void  tralala_userHitZone           (t_tll *x);
-PIZ_LOCAL   bool  tralala_userHitNote           (t_tll *x);
-PIZ_INLINE  bool  tralala_userIsInLasso         (t_tll *x, t_symbol *s, double *coordinates);
-PIZ_LOCAL   ulong tralala_userSelectLasso       (t_tll *x);
+PIZ_LOCAL   void  tralala_mouseAddNote          (t_tll *x);
+PIZ_LOCAL   void  tralala_mouseReleaseLasso     (t_tll *x);
+PIZ_LOCAL   void  tralala_mouseHitZone          (t_tll *x);
+PIZ_LOCAL   bool  tralala_mouseHitNote          (t_tll *x);
+PIZ_INLINE  bool  tralala_mouseIsInLasso        (t_tll *x, t_symbol *s, double *coordinates);
+PIZ_LOCAL   ulong tralala_mouseSelectLasso      (t_tll *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -43,16 +43,16 @@ void tralala_mousedown(t_tll *x, t_object *pv, t_pt pt, long m)
     x->origin.y = pt.y - 1.;
     
     if (!(m & eShiftKey)) {
-        tralala_userUnselectAll(x);
+        tralala_mouseUnselectAll(x);
     }
     
     if (m & eCommandKey) {
-        tralala_userAddNote(x);
+        tralala_mouseAddNote(x);
         
     } else if (m & eControlKey) {
-        tralala_userHitZone(x);
+        tralala_mouseHitZone(x);
 
-    } else if (!(tralala_userHitNote(x))) {
+    } else if (!(tralala_mouseHitNote(x))) {
         x->flags |= TLL_FLAG_LASSO;
     }
             
@@ -78,7 +78,7 @@ void tralala_mousedrag(t_tll *x, t_object *pv, t_pt pt, long m)
     }
     
     if (x->flags & TLL_FLAG_LASSO) {
-        if (tralala_userSelectLasso(x)) {
+        if (tralala_mouseSelectLasso(x)) {
             jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
         }
 
@@ -90,7 +90,7 @@ void tralala_mousedrag(t_tll *x, t_object *pv, t_pt pt, long m)
 void tralala_mouseup(t_tll *x, t_object *pv, t_pt pt, long m)
 {
     if (x->flags & TLL_FLAG_LASSO) {
-        tralala_userReleaseLasso(x);
+        tralala_mouseReleaseLasso(x);
         
         jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
         jbox_redraw((t_jbox *)x);
@@ -112,17 +112,17 @@ void tralala_mousewheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc,
 #pragma mark ---
 #pragma mark -
 
-ulong tralala_userAbort(t_tll *x)
+ulong tralala_mouseAbort(t_tll *x)
 {
     if (x->flags & TLL_FLAG_LASSO) {
-        tralala_userReleaseLasso(x);
+        tralala_mouseReleaseLasso(x);
         return TLL_DIRTY_LASSO;
     } 
     
     return TLL_DIRTY_NONE;
 }
 
-void tralala_userUnselectAll(t_tll *x)
+void tralala_mouseUnselectAll(t_tll *x)
 {
     TLL_LOCK
     dictionary_clear(x->status);
@@ -133,17 +133,17 @@ void tralala_userUnselectAll(t_tll *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_userAddNote(t_tll *x)
+void tralala_mouseAddNote(t_tll *x)
 {
     t_atom a[2];
     
     atom_setlong(a, TLL_X_TO_POSITION(x->cursor.x));
     atom_setlong(a + 1, TLL_Y_TO_PITCH(x->cursor.y));
     
-    tralala_parseMessage(x, TLL_SYM_NOTE, 2, a, TLL_LOW);
+    tralala_parseMessage(x, TLL_SYM_NOTE, 2, a, TLL_FLAG_LOW);
 }
 
-void tralala_userReleaseLasso(t_tll *x)
+void tralala_mouseReleaseLasso(t_tll *x)
 {
     long i, n = 0;
     t_symbol **keys = NULL;
@@ -181,7 +181,7 @@ void tralala_userReleaseLasso(t_tll *x)
     x->flags &= ~TLL_FLAG_LASSO;
 }
 
-void tralala_userHitZone(t_tll *x)
+void tralala_mouseHitZone(t_tll *x)
 {
     long argc, k = TLL_SELECTED;
     t_atom *argv = NULL;
@@ -207,7 +207,7 @@ void tralala_userHitZone(t_tll *x)
     TLL_UNLOCK
 }
 
-bool tralala_userHitNote(t_tll *x)
+bool tralala_mouseHitNote(t_tll *x)
 {
     long i, n = 0;
     t_symbol *s = NULL;
@@ -264,7 +264,7 @@ bool tralala_userHitNote(t_tll *x)
     return k;
 }
 
-PIZ_INLINE bool tralala_userIsInLasso(t_tll *x, t_symbol *s, double *c)
+PIZ_INLINE bool tralala_mouseIsInLasso(t_tll *x, t_symbol *s, double *c)
 {
     bool k = false;
     long argc;
@@ -283,7 +283,7 @@ PIZ_INLINE bool tralala_userIsInLasso(t_tll *x, t_symbol *s, double *c)
     return k;
 }
 
-ulong tralala_userSelectLasso(t_tll *x)
+ulong tralala_mouseSelectLasso(t_tll *x)
 {
     long i, n = 0;
     t_symbol **keys = NULL;
@@ -307,7 +307,7 @@ ulong tralala_userSelectLasso(t_tll *x)
     //
     long status = 0;
     
-    if (tralala_userIsInLasso(x, key, c)) {
+    if (tralala_mouseIsInLasso(x, key, c)) {
 
         if (!(dictionary_hasentry(x->status, key))) {
             dictionary_appendlong(x->status, key, TLL_SELECTED_LASSO);
