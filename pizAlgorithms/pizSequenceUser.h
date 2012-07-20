@@ -50,9 +50,9 @@
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL PIZError pizSequenceDelete            (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceIncrementPitch    (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceDecrementPitch    (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceDelete        (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceIncrement     (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceDecrement     (PIZSequence *x, PIZEvent *event);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------

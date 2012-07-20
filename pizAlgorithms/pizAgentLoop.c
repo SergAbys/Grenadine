@@ -87,8 +87,8 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizSequenceJuliet,          // PIZ_EVENT_JULIET
                                                     //
                                                     pizSequenceDelete,          // PIZ_EVENT_DELETE
-                                                    pizSequenceIncrementPitch,  // PIZ_EVENT_INCREMENT_PITCH
-                                                    pizSequenceDecrementPitch   // PIZ_EVENT_DECREMENT_PITCH
+                                                    pizSequenceIncrement,       // PIZ_EVENT_INCREMENT
+                                                    pizSequenceDecrement        // PIZ_EVENT_DECREMENT
                                                     };             
                                                                                                     
 // -------------------------------------------------------------------------------------------------------------

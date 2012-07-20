@@ -227,7 +227,6 @@ void tralala_parseDictionary(t_tll *x, t_dictionary *d, ulong flags)
 
 void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong flags)
 {
-    PIZTime time;
     PIZEventCode code = 0;
         
     if (!(dictionary_getlong(tll_code, s, (long *)&code))) {
@@ -293,10 +292,7 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong 
     }
     
     if (event = pizEventNew(code)) {
-        pizTimeSet(&time);
-        pizEventSetTime(event, &time);
         pizEventSetData(event, k, data);
-        pizEventSetIdentifier(event, x->identifier);
         
         if (flags & TLL_FLAG_LOW) {
             pizEventSetType(event, PIZ_EVENT_LOW);
