@@ -222,6 +222,13 @@ void tralala_userCopyToClipboard(t_tll *x, t_dictionary *d)
     
     if (!(dictionary_getkeys(x->status, &n, &keys))) {
     //
+    long ac, cell = 0;
+    t_atom *av = NULL;
+    
+    if (!(dictionary_getatoms(x->current, TLL_SYM_CELL, &ac, &av))) {
+        cell = atom_getlong(av + 1);
+    }
+        
     for (i = 0; i < n; i++) {
     //
     long status = 0;
@@ -230,8 +237,15 @@ void tralala_userCopyToClipboard(t_tll *x, t_dictionary *d)
     if ((key != TLL_SYM_MARK) && !(dictionary_getlong(x->status, key, &status)) && (status == TLL_SELECTED)) {
         long argc;
         t_atom *argv = NULL;
-        if (!(dictionary_getatoms(x->current, key, &argc, &argv))) {
+        
+        if (!(dictionary_copyatoms(x->current, key, &argc, &argv))) {
+            if (key != TLL_SYM_ZONE) {
+                atom_setlong(argv + 1, (atom_getlong(argv + 1) + cell));
+                atom_setlong(argv + 2, (atom_getlong(argv + 2) - 1));
+            }
+            
             dictionary_appendatoms(d, key, argc, argv);
+            sysmem_freeptr(argv);
         }
     }
     //
