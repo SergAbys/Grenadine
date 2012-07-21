@@ -23,11 +23,6 @@ extern t_dictionary *tll_clipboard;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define TLL_NADA    0
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 #define TLL_KEY_A   97
 #define TLL_KEY_C   99
 #define TLL_KEY_V   118
@@ -167,7 +162,7 @@ ulong tralala_keyCut(t_tll *x, long m)
 
 ulong tralala_keyDelete(t_tll *x, long m)
 {
-    tralala_keySendToNotes(x, PIZ_EVENT_NOTE_DELETE, TLL_NADA);
+    tralala_keySendToNotes(x, PIZ_EVENT_NOTE_DELETE, 0);
     
     return TLL_DIRTY_NONE;
 }
@@ -296,22 +291,32 @@ void tralala_keySendToZone(t_tll *x, long keycode)
     
     TLL_LOCK
     
-    if ((t = pizArrayNew(2)) && !(dictionary_getlong(x->status, TLL_SYM_ZONE, &status))) {
+    if ((t = pizArrayNew(0)) && !(dictionary_getlong(x->status, TLL_SYM_ZONE, &status))) {
     //
     switch (keycode) {
-    //
-    case JKEY_UPARROW :
+    case JKEY_UPARROW    :
         code = PIZ_EVENT_ZONE_INCREMENT;
         if ((status == TLL_SELECTED) || (status == TLL_SELECTED_DOWN)) { pizArrayAppend(t, PIZ_ZONE_DOWN); }
         if ((status == TLL_SELECTED) || (status == TLL_SELECTED_UP)) { pizArrayAppend(t, PIZ_ZONE_UP); }
         break;
         
-    case JKEY_DOWNARROW :
+    case JKEY_DOWNARROW  :
         code = PIZ_EVENT_ZONE_DECREMENT;
         if ((status == TLL_SELECTED) || (status == TLL_SELECTED_DOWN)) { pizArrayAppend(t, PIZ_ZONE_DOWN); }
         if ((status == TLL_SELECTED) || (status == TLL_SELECTED_UP)) { pizArrayAppend(t, PIZ_ZONE_UP); }
         break;
-    //
+        
+    case JKEY_LEFTARROW  :
+        code = PIZ_EVENT_ZONE_DECREMENT;
+        if ((status == TLL_SELECTED) || (status == TLL_SELECTED_START)) { pizArrayAppend(t, PIZ_ZONE_START); }
+        if ((status == TLL_SELECTED) || (status == TLL_SELECTED_END)) { pizArrayAppend(t, PIZ_ZONE_END); }
+        break;
+        
+    case JKEY_RIGHTARROW :
+        code = PIZ_EVENT_ZONE_INCREMENT;
+        if ((status == TLL_SELECTED) || (status == TLL_SELECTED_START)) { pizArrayAppend(t, PIZ_ZONE_START); }
+        if ((status == TLL_SELECTED) || (status == TLL_SELECTED_END)) { pizArrayAppend(t, PIZ_ZONE_END); }
+        break;
     }
     //
     }
@@ -319,18 +324,20 @@ void tralala_keySendToZone(t_tll *x, long keycode)
     TLL_UNLOCK
     
     if (t) {
-        long i;
-        
-        for (i = 0; i < pizArrayCount(t); i++) {
-            PIZEvent *event = NULL;
-            if (event = pizEventNew(code)) {
-                long k = pizArrayAtIndex(t, i);
-                pizEventSetData(event, 1, &k);
-                pizAgentDoEvent(x->agent, event);
-            }
+    //
+    long i;
+    
+    for (i = 0; i < pizArrayCount(t); i++) {
+        PIZEvent *event = NULL;
+        if (event = pizEventNew(code)) {
+            long k = pizArrayAtIndex(t, i);
+            pizEventSetData(event, 1, &k);
+            pizAgentDoEvent(x->agent, event);
         }
-        
-        pizArrayFree(t);
+    }
+    
+    pizArrayFree(t);
+    //
     }
 }
 

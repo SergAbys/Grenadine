@@ -315,10 +315,12 @@ void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv, long sta
     r.width = TLL_POSITION_TO_X(zone[1]) - r.x;
     r.height = TLL_PITCH_TO_Y_DOWN(zone[2]) - r.y;
 
-    if (status) {
-        jgraphics_set_source_jrgba(g, &x->hColor2);
-    } else if (x->flags & TLL_FLAG_FOCUS) {
-        jgraphics_set_source_jrgba(g, &x->color);
+    if (x->flags & TLL_FLAG_FOCUS) {
+        if (status) {
+            jgraphics_set_source_jrgba(g, &x->hColor2);
+        } else  {
+            jgraphics_set_source_jrgba(g, &x->color);
+        }
     } else {
         jgraphics_set_source_jrgba(g, &x->uColor);
     }
