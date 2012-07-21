@@ -424,8 +424,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96DA57FE15A0215500922729</string>
-				<string>96DA57FF15A0215500922729</string>
+				<string>96DFB22E15BAF254008A1ECD</string>
+				<string>96DFB22F15BAF254008A1ECD</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -458,6 +458,7 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/MaxMSP/Ufo/uniform/uniform.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -675,7 +676,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96C5B889159A29240002093C</string>
+				<string>96DFB23015BAF254008A1ECD</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

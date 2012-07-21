@@ -422,8 +422,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>9607B4E515A48D3C0015C9A9</string>
-				<string>9607B4E615A48D3C0015C9A9</string>
+				<string>96DFB24615BAF27D008A1ECD</string>
+				<string>96DFB24715BAF27D008A1ECD</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -456,6 +456,7 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/MaxMSP/Ufo/foxtrot/foxtrot.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -673,7 +674,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96C5B868159A29100002093C</string>
+				<string>96DFB24815BAF27D008A1ECD</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
