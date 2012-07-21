@@ -99,11 +99,12 @@ typedef enum _PIZEventType {
 
 typedef enum _PIZEventCode {
     //
-    PIZ_EVENT_INIT              = 0,
-    PIZ_EVENT_PLAY              = 1,
-    PIZ_EVENT_STOP              = 2,
-    PIZ_EVENT_LOOP              = 3,
-    PIZ_EVENT_UNLOOP            = 4,
+    PIZ_EVENT_NONE              = 0,
+    PIZ_EVENT_INIT              = 1,
+    PIZ_EVENT_PLAY              = 2,
+    PIZ_EVENT_STOP              = 3,
+    PIZ_EVENT_LOOP              = 4,
+    PIZ_EVENT_UNLOOP            = 5,
     //
     PIZ_EVENT_LEARN,
     PIZ_EVENT_FORGET,
@@ -138,8 +139,8 @@ typedef enum _PIZEventCode {
     PIZ_EVENT_NOTE_DECREMENT,
     //PIZ_EVENT_NOTE_FORWARD,
     //PIZ_EVENT_NOTE_BACKWARD,
-    //PIZ_EVENT_ZONE_INCREMENT,
-    //PIZ_EVENT_ZONE_DECREMENT,
+    PIZ_EVENT_ZONE_INCREMENT,
+    PIZ_EVENT_ZONE_DECREMENT,
     //
     PIZ_EVENT_CHANGED_BPM,
     PIZ_EVENT_CHANGED_CHANCE,

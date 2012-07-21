@@ -387,7 +387,7 @@ PIZError pizSequenceAlgorithm(PIZSequence *x, const PIZEvent *event)
 {
     long k;
     PIZError err = PIZ_GOOD;
-    PIZEventCode code;
+    PIZEventCode code = PIZ_EVENT_NONE;
     
     pizEventCode(event, &code);
     k = pizSequenceFillTempNotes(x);

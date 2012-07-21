@@ -227,7 +227,7 @@ void tralala_parseDictionary(t_tll *x, t_dictionary *d, ulong flags)
 
 void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong flags)
 {
-    PIZEventCode code = 0;
+    PIZEventCode code = PIZ_EVENT_NONE;
         
     if (!(dictionary_getlong(tll_code, s, (long *)&code))) {
     //
@@ -309,7 +309,7 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
     long i, k = 0;
     long *ptr = NULL;
     t_symbol *s = NULL;
-    PIZEventCode code;
+    PIZEventCode code = PIZ_EVENT_NONE;
     ulong dirty = TLL_DIRTY_NONE;
     t_atom data[PIZ_EVENT_DATA_SIZE + 1];
     

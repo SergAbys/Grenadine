@@ -52,7 +52,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               // PIZ_EVENT_INIT
+static const PIZMethodError pizEventMethods[ ]  = { NULL,                       // PIZ_EVENT_NONE
+                                                    pizAgentInit,               // PIZ_EVENT_INIT
                                                     pizAgentPlay,               // PIZ_EVENT_PLAY
                                                     pizAgentStop,               // PIZ_EVENT_STOP
                                                     pizAgentLoop,               // PIZ_EVENT_LOOP
@@ -87,8 +88,10 @@ static const PIZMethodError pizEventMethods[ ]  = { pizAgentInit,               
                                                     pizSequenceJuliet,          // PIZ_EVENT_JULIET
                                                     //
                                                     pizSequenceDelete,          // PIZ_EVENT_NOTE_DELETE
-                                                    pizSequenceIncrement,       // PIZ_EVENT_NOTE_INCREMENT
-                                                    pizSequenceDecrement        // PIZ_EVENT_NOTE_DECREMENT
+                                                    pizSequenceIncrementNote,   // PIZ_EVENT_NOTE_INCREMENT
+                                                    pizSequenceDecrementNote,   // PIZ_EVENT_NOTE_DECREMENT
+                                                    pizSequenceIncrementZone,   // PIZ_EVENT_ZONE_INCREMENT
+                                                    pizSequenceDecrementZone    // PIZ_EVENT_ZONE_DECREMENT
                                                     };             
                                                                                                     
 // -------------------------------------------------------------------------------------------------------------
@@ -205,10 +208,10 @@ void pizAgentNotify(PIZAgent *x, PIZEventCode n, long ac, long *av)
 PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q) 
 {
     void *o = NULL;
-    PIZEventCode code;
     PIZEvent *event = NULL;
     PIZError err = PIZ_GOOD;
     PIZMethodError f = NULL;
+    PIZEventCode code = PIZ_EVENT_NONE;
             
     PIZ_AGENT_LOCK_EVENT
     

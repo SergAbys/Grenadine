@@ -42,7 +42,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const char *pizEventNames[ ] = { "Init",
+static const char *pizEventNames[ ] = { "None",
+                                        "Init",
                                         "Play",
                                         "Stop",
                                         "Loop",
@@ -76,8 +77,10 @@ static const char *pizEventNames[ ] = { "Init",
                                         "Juliet",
                                         //    
                                         "Delete",
-                                        "Increment",
-                                        "Decrement", 
+                                        "Increment Note",
+                                        "Decrement Note", 
+                                        "Increment Zone",
+                                        "Decrement Zone",
                                         //
                                         "Changed Bpm",
                                         "Changed Chance",
@@ -101,7 +104,8 @@ static const char *pizEventNames[ ] = { "Init",
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT_INIT
+static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT_NONE
+                                        PIZ_EVENT_RUN,              // PIZ_EVENT_INIT
                                         PIZ_EVENT_RUN,              // PIZ_EVENT_PLAY
                                         PIZ_EVENT_RUN,              // PIZ_EVENT_STOP
                                         PIZ_EVENT_RUN,              // PIZ_EVENT_LOOP
@@ -137,6 +141,8 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_DELETE
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_INCREMENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_DECREMENT
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_ZONE_INCREMENT
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_ZONE_INCREMENT
                                         //
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_BPM
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_CHANCE

@@ -340,7 +340,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
     long k, argc = 0;
     long *argv = NULL;
     t_tll *x = NULL;
-    PIZEventCode code;
+    PIZEventCode code = PIZ_EVENT_NONE;
     
     x = (t_tll *)ptr;
     pizEventCode(event, &code);

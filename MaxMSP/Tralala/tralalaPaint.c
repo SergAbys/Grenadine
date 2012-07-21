@@ -316,7 +316,7 @@ void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv, long sta
     r.height = TLL_PITCH_TO_Y_DOWN(zone[2]) - r.y;
 
     if (status) {
-        jgraphics_set_source_jrgba(g, &x->hColor1);
+        jgraphics_set_source_jrgba(g, &x->hColor2);
     } else if (x->flags & TLL_FLAG_FOCUS) {
         jgraphics_set_source_jrgba(g, &x->color);
     } else {
@@ -397,10 +397,10 @@ void tralala_paintStrncatZone(char *dst, long argc, t_atom *argv, long status)
     char temp[32];
   
     switch (status) {
-        case TLL_SELECTED_START : strncat_zero(dst, "Start ", TLL_STRING_SIZE); break;
-        case TLL_SELECTED_END   : strncat_zero(dst, "End ",   TLL_STRING_SIZE); break;
-        case TLL_SELECTED_DOWN  : strncat_zero(dst, "Down ",  TLL_STRING_SIZE); break;
-        case TLL_SELECTED_UP    : strncat_zero(dst, "Up ",    TLL_STRING_SIZE); break;
+        case TLL_SELECTED_START : strncat_zero(dst, "START ", TLL_STRING_SIZE); break;
+        case TLL_SELECTED_END   : strncat_zero(dst, "END ",   TLL_STRING_SIZE); break;
+        case TLL_SELECTED_DOWN  : strncat_zero(dst, "DOWN ",  TLL_STRING_SIZE); break;
+        case TLL_SELECTED_UP    : strncat_zero(dst, "UP ",    TLL_STRING_SIZE); break;
     }
       
     tralala_paintPitchAsString(a, atom_getlong(argv + 3), 4);

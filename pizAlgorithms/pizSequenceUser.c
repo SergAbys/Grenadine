@@ -37,6 +37,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+#include "pizSequenceRun.h"
 #include "pizSequenceUser.h"
 #include "pizSequenceLibrary.h"
 #include "pizSequenceMethods.h"
@@ -68,7 +69,7 @@ PIZError pizSequenceDelete(PIZSequence *x, PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceIncrement(PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceIncrementNote(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -85,7 +86,7 @@ PIZError pizSequenceIncrement(PIZSequence *x, PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceDecrement(PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceDecrementNote(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -97,6 +98,44 @@ PIZError pizSequenceDecrement(PIZSequence *x, PIZEvent *event)
             pizEventSetData(event, 2, a);
             pizSequenceEachChange(x, note, event, PIZ_SEQUENCE_FLAG_NONE);
         }
+    }
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceIncrementZone(PIZSequence *x, PIZEvent *event)
+{
+    long argc;
+    long *argv = NULL;
+    
+    if (!(pizEventData(event, &argc, &argv))) {
+        switch (argv[0]) {
+            case PIZ_ZONE_START : x->start = MIN(x->start + x->cell, x->end - x->cell); break;
+            case PIZ_ZONE_END   : x->end   = MIN(x->end + x->cell, PIZ_SEQUENCE_SIZE_TIMELINE); break;
+            case PIZ_ZONE_DOWN  : x->down  = MIN(x->down + 1, x->up); break;
+            case PIZ_ZONE_UP    : x->up    = MIN(x->up + 1, PIZ_MAGIC_PITCH); break;
+        }
+        
+        x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
+    }
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceDecrementZone(PIZSequence *x, PIZEvent *event)
+{
+    long argc;
+    long *argv = NULL;
+    
+    if (!(pizEventData(event, &argc, &argv))) {
+        switch (argv[0]) {
+            case PIZ_ZONE_START : x->start = MAX(x->start - x->cell, 0); break;
+            case PIZ_ZONE_END   : x->end   = MAX(x->end - x->cell, x->start + x->cell); break;
+            case PIZ_ZONE_DOWN  : x->down  = MAX(x->down - 1, 0); break;
+            case PIZ_ZONE_UP    : x->up    = MAX(x->up - 1, x->down); break;
+        }
+        
+        x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
     }
     
     return PIZ_GOOD;
