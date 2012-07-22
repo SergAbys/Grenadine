@@ -60,7 +60,7 @@ PIZError pizSequenceDelete(PIZSequence *x, PIZEvent *event)
     long *argv = NULL;
     PIZNote *note = NULL;
     
-    if (!(pizEventData(event, &argc, &argv))) {
+    if (!(pizEventData(event, &argc, &argv)) && (argc > 1)) {
         if (note = pizSequenceNoteWithTag(x, argv[1])) {
             pizSequenceEachRemove(x, note, NULL, PIZ_SEQUENCE_FLAG_NONE);
         }
@@ -75,9 +75,21 @@ PIZError pizSequenceNoteIncrement(PIZSequence *x, PIZEvent *event)
     long *argv = NULL;
     PIZNote *note = NULL;
     
-    if (!(pizEventData(event, &argc, &argv))) {
+    if (!(pizEventData(event, &argc, &argv)) && (argc > 1)) {
         if (note = pizSequenceNoteWithTag(x, argv[1])) {
-            long a[ ] = { argv[0], 1 };
+            long a[2];
+            long step = 1;
+            
+            if (argv[0] == PIZ_VALUE_DURATION) {
+                step = x->cell;
+            } 
+            if ((argv[0] == PIZ_VALUE_VELOCITY) && (argc > 2)) {
+                step *= argv[2];
+            }
+            
+            a[0] = argv[0];
+            a[1] = step;
+            
             pizEventSetData(event, 2, a);
             pizSequenceEachChange(x, note, event, PIZ_SEQUENCE_FLAG_NONE);
         }
@@ -92,9 +104,21 @@ PIZError pizSequenceNoteDecrement(PIZSequence *x, PIZEvent *event)
     long *argv = NULL;
     PIZNote *note = NULL;
     
-    if (!(pizEventData(event, &argc, &argv))) {
+    if (!(pizEventData(event, &argc, &argv)) && (argc > 1)) {
         if (note = pizSequenceNoteWithTag(x, argv[1])) {
-            long a[ ] = { argv[0], -1 };
+            long a[2];
+            long step = -1;
+            
+            if (argv[0] == PIZ_VALUE_DURATION) {
+                step = -x->cell;
+            } 
+            if ((argv[0] == PIZ_VALUE_VELOCITY) && (argc > 2)) {
+                step *= argv[2];
+            }
+            
+            a[0] = argv[0];
+            a[1] = step;
+            
             pizEventSetData(event, 2, a);
             pizSequenceEachChange(x, note, event, PIZ_SEQUENCE_FLAG_NONE);
         }
@@ -111,7 +135,7 @@ PIZError pizSequenceNoteForward(PIZSequence *x, PIZEvent *event)
     
     x->tempError = PIZ_GOOD;
     
-    if (!(pizEventData(event, &argc, &argv))) {
+    if (!(pizEventData(event, &argc, &argv)) && (argc > 1)) {
         if (note = pizSequenceNoteWithTag(x, argv[1])) {
             pizSequenceEachMove(x, note, event, PIZ_SEQUENCE_FLAG_FORWARD);
         }
@@ -128,7 +152,7 @@ PIZError pizSequenceNoteBackward(PIZSequence *x, PIZEvent *event)
     
     x->tempError = PIZ_GOOD;
     
-    if (!(pizEventData(event, &argc, &argv))) {
+    if (!(pizEventData(event, &argc, &argv)) && (argc > 1)) {
         if (note = pizSequenceNoteWithTag(x, argv[1])) {
             pizSequenceEachMove(x, note, event, PIZ_SEQUENCE_FLAG_BACKWARD);
         }

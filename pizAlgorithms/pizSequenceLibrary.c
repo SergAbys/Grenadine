@@ -120,10 +120,23 @@ void pizSequenceEachChange(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulo
     }
     
     switch (s) {
-        case PIZ_VALUE_PITCH    : t = CLAMP(t, 0, PIZ_MAGIC_PITCH);               break;
-        case PIZ_VALUE_VELOCITY : t = CLAMP(t, 0, PIZ_MAGIC_VELOCITY);            break;
-        case PIZ_VALUE_DURATION : t = CLAMP(t, 1, PIZ_SEQUENCE_MAXIMUM_DURATION); break;
-        case PIZ_VALUE_CHANNEL  : t = CLAMP(t, 0, PIZ_MAGIC_CHANNEL);             break;
+        case PIZ_VALUE_PITCH : 
+            t = CLAMP(t, 0, PIZ_MAGIC_PITCH);
+            break;
+            
+        case PIZ_VALUE_VELOCITY : 
+            t = CLAMP(t, 0, PIZ_MAGIC_VELOCITY);
+            break;
+            
+        case PIZ_VALUE_CHANNEL : 
+            t = CLAMP(t, 0, PIZ_MAGIC_CHANNEL);
+            break;
+            
+        case PIZ_VALUE_DURATION : 
+            t = CLAMP(t, 0, PIZ_SEQUENCE_MAXIMUM_DURATION);
+            if (t == 0) { 
+                t = note->values[s]; 
+            } break;
     }
     
     if (note->values[s] != t) {
