@@ -92,10 +92,6 @@ PIZ_LOCAL void      pizSequenceMakeMap          (PIZSequence *x);
 PIZ_LOCAL long      pizSequenceFillTempNotes    (PIZSequence *x);
 PIZ_LOCAL void      pizSequenceSetByTempNotes   (PIZSequence *x, long selector, bool reverse);
 
-PIZ_LOCAL long      pizSequenceSnapByAmbitus    (PIZSequence *x, long pitch);
-PIZ_LOCAL long      pizSequenceSnapByPattern    (PIZSequence *x, long position);
-PIZ_LOCAL long      pizSequenceSnapByCell       (PIZSequence *x, long position);
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -403,7 +399,7 @@ PIZError pizSequenceAlgorithm(PIZSequence *x, const PIZEvent *event)
     long i;  
     
     for (i = 0; i < k; i++) {
-        x->tempValues[i] = pizSequenceSnapByAmbitus(x, x->tempValues[i]);
+        x->tempValues[i] = CLAMP((pizSequenceSnapByAmbitus(x, x->tempValues[i])), 0, PIZ_MAGIC_PITCH);
     }
     
     for (i = 0; i < k; i++) {        
@@ -729,41 +725,6 @@ void pizSequenceSetByTempNotes(PIZSequence *x, long selector, bool reverse)
     }
     //
     }
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-long pizSequenceSnapByAmbitus(PIZSequence *x, long pitch)
-{
-    if (pitch < x->down) {
-        while ((pitch < x->down) && (pitch < PIZ_MAGIC_PITCH)) {
-            pitch += PIZ_MAGIC_SCALE;
-        }
-    } else if (pitch > x->up) {
-        while ((pitch > x->up) && (pitch > 0)) {
-            pitch -= PIZ_MAGIC_SCALE;
-        }
-    }
-    
-    return (CLAMP(pitch, 0, PIZ_MAGIC_PITCH));
-}
-
-long pizSequenceSnapByPattern(PIZSequence *x, long position)
-{
-    long s, j = (long)(position / (double)(x->cell));
-    
-    if (s = pizArrayCount(x->pattern)) {
-        j += pizArrayAtIndex(x->pattern, j % s);
-    }
-
-    return (j * x->cell);
-}
-
-long pizSequenceSnapByCell(PIZSequence *x, long position)
-{
-    return (((long)((position / (double)(x->cell)) + 0.5)) * x->cell);
 }
 
 // -------------------------------------------------------------------------------------------------------------

@@ -37,8 +37,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizSequenceRun.h"
 #include "pizSequenceUser.h"
+#include "pizSequenceRun.h"
 #include "pizSequenceLibrary.h"
 #include "pizSequenceMethods.h"
 
@@ -113,9 +113,7 @@ PIZError pizSequenceNoteForward(PIZSequence *x, PIZEvent *event)
     
     if (!(pizEventData(event, &argc, &argv))) {
         if (note = pizSequenceNoteWithTag(x, argv[1])) {
-            //long a[ ] = { argv[0], -1 };
-            //pizEventSetData(event, 2, a);
-            //pizSequenceEachMove(x, note, event, PIZ_SEQUENCE_FLAG_NONE);
+            pizSequenceEachMove(x, note, event, PIZ_SEQUENCE_FLAG_FORWARD);
         }
     }
     
@@ -124,7 +122,19 @@ PIZError pizSequenceNoteForward(PIZSequence *x, PIZEvent *event)
 
 PIZError pizSequenceNoteBackward(PIZSequence *x, PIZEvent *event)
 {
-    return PIZ_GOOD;
+    long argc;
+    long *argv = NULL;
+    PIZNote *note = NULL;
+    
+    x->tempError = PIZ_GOOD;
+    
+    if (!(pizEventData(event, &argc, &argv))) {
+        if (note = pizSequenceNoteWithTag(x, argv[1])) {
+            pizSequenceEachMove(x, note, event, PIZ_SEQUENCE_FLAG_BACKWARD);
+        }
+    }
+    
+    return x->tempError;
 }
 
 PIZError pizSequenceZoneIncrement(PIZSequence *x, PIZEvent *event)

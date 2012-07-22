@@ -209,9 +209,7 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
         if (!(dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv))) {
             tralala_paintStrncatZone(string, argc, argv, zoneStatus);
         } 
-    }
-    
-    if (!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) 
+    } else if (!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) 
         && (!(dictionary_getatoms(x->current, mark, &argc, &argv)))) {
         tralala_paintStrncatNote(string, argc, argv);
     }

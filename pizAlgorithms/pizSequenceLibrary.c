@@ -39,6 +39,7 @@
 
 #include "pizAgent.h"
 #include "pizSequenceLibrary.h"
+#include "pizSequenceMethods.h"
 #include "pizSequenceRun.h"
 
 // -------------------------------------------------------------------------------------------------------------
@@ -171,32 +172,41 @@ void pizSequenceEachDump(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
 }
 
 void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
-{/*
-    long position = note->position;
+{
+    long b, offset = 0;
+    long a = note->position;
+    long step = x->cell;
     PIZError err = PIZ_GOOD; 
     
-    if (position != newPosition) {
+    if (flag & PIZ_SEQUENCE_FLAG_BACKWARD) {
+        step = -step;
+    }
+    
+    do {
+    offset += step;
+    b = pizSequenceSnapByPattern(x, a + offset);
+    } while (b == a);
+    
+    if ((b >= 0) && (b < (PIZ_SEQUENCE_SIZE_TIMELINE - 1))) {
     //
-    if (!x->timeline[newPosition]) {
-        if (!(x->timeline[newPosition] = pizLinklistNew ( ))) {
+    if (!x->timeline[b]) {
+        if (!(x->timeline[b] = pizLinklistNew ( ))) {
             err |= PIZ_MEMORY;
         }
     }
     
-    if (!err) {
-        if (!(err |= pizLinklistChuckByPtr (x->timeline[position], (void *)note))) {            
-            if (!(err |= pizLinklistInsert (x->timeline[newPosition], (void *)note))) {
-                note->position = newPosition;
-                PIZ_TAG (&x->changedNotes, note->tag);
-            } else {
-                pizSequenceRemoveNote (x, note, NULL);
-            }
-        } 
+    if (!err && (!(err |= pizLinklistChuckWithPtr(x->timeline[a], (void *)note)))) {            
+        if (!(err |= pizLinklistAppend(x->timeline[b], (void *)note))) {
+            note->position = b;
+            pizItemsetSetAtIndex(&x->changed, note->tag);
+        } else {
+            pizSequenceEachRemove(x, note, NULL, PIZ_SEQUENCE_FLAG_NONE);
+        }
     }
     //
     }
     
-    x->tempError |= err;*/
+    x->tempError |= err;
 }
 
 void pizSequenceEachFillTempHash(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
@@ -243,6 +253,41 @@ void pizSequenceEachFillTempNotes(PIZSequence *x, PIZNote *note, const PIZEvent 
         x->tempNotes1[x->tempIndex] = note;
         x->tempIndex ++;
     }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+long pizSequenceSnapByAmbitus(PIZSequence *x, long pitch)
+{
+    if (pitch < x->down) {
+        while ((pitch < x->down) && (pitch < PIZ_MAGIC_PITCH)) {
+            pitch += PIZ_MAGIC_SCALE;
+        }
+    } else if (pitch > x->up) {
+        while ((pitch > x->up) && (pitch > 0)) {
+            pitch -= PIZ_MAGIC_SCALE;
+        }
+    }
+    
+    return pitch;
+}
+
+long pizSequenceSnapByPattern(PIZSequence *x, long position)
+{
+    long s, j = (long)(position / (double)(x->cell));
+    
+    if (s = pizArrayCount(x->pattern)) {
+        j += pizArrayAtIndex(x->pattern, j % s);
+    }
+
+    return (j * x->cell);
+}
+
+long pizSequenceSnapByCell(PIZSequence *x, long position)
+{
+    return (((long)((position / (double)(x->cell)) + 0.5)) * x->cell);
 }
 
 // -------------------------------------------------------------------------------------------------------------

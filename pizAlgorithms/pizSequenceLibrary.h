@@ -52,20 +52,26 @@
 #define PIZ_SEQUENCE_FLAG_RANDOM        1UL
 #define PIZ_SEQUENCE_FLAG_FILL          2UL
 #define PIZ_SEQUENCE_FLAG_NEARBY        4UL
+#define PIZ_SEQUENCE_FLAG_BACKWARD      8UL
+#define PIZ_SEQUENCE_FLAG_FORWARD       16UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL void pizSequenceForEach               (PIZSequence *x, PIZMethod method, const PIZEvent *e, ulong f);
+PIZ_LOCAL void pizSequenceForEach           (PIZSequence *x, PIZMethod method, const PIZEvent *e, ulong f);
 
-PIZ_LOCAL void pizSequenceEachRemove            (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
-PIZ_LOCAL void pizSequenceEachChange            (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
-PIZ_LOCAL void pizSequenceEachMove              (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
-PIZ_LOCAL void pizSequenceEachCycle             (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
-PIZ_LOCAL void pizSequenceEachDump              (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
-PIZ_LOCAL void pizSequenceEachFillTempHash      (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
-PIZ_LOCAL void pizSequenceEachFillTempNotes     (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
+PIZ_LOCAL void pizSequenceEachRemove        (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
+PIZ_LOCAL void pizSequenceEachChange        (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
+PIZ_LOCAL void pizSequenceEachMove          (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
+PIZ_LOCAL void pizSequenceEachCycle         (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
+PIZ_LOCAL void pizSequenceEachDump          (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
+PIZ_LOCAL void pizSequenceEachFillTempHash  (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
+PIZ_LOCAL void pizSequenceEachFillTempNotes (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
+
+PIZ_LOCAL long pizSequenceSnapByAmbitus     (PIZSequence *x, long pitch);
+PIZ_LOCAL long pizSequenceSnapByPattern     (PIZSequence *x, long position);
+PIZ_LOCAL long pizSequenceSnapByCell        (PIZSequence *x, long position);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------

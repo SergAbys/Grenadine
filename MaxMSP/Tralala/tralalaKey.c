@@ -73,6 +73,7 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
         case TLL_KEY_V          : f = tralala_keyPaste;  break;
         case TLL_KEY_X          : f = tralala_keyCut;    break;
         case JKEY_DELETE        : f = tralala_keyDelete; break;
+        case JKEY_BACKSPACE     : f = tralala_keyDelete; break;
         case JKEY_UPARROW       : f = tralala_keyUp;     break;
         case JKEY_DOWNARROW     : f = tralala_keyDown;   break;
         case JKEY_LEFTARROW     : f = tralala_keyLeft;   break;
