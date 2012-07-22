@@ -51,10 +51,12 @@
 PIZ_START_C_LINKAGE
 
 PIZ_LOCAL PIZError pizSequenceDelete            (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceIncrementNote     (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceDecrementNote     (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceIncrementZone     (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceDecrementZone     (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceNoteIncrement     (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceNoteDecrement     (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceNoteForward       (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceNoteBackward      (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceZoneIncrement     (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceZoneDecrement     (PIZSequence *x, PIZEvent *event);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------

@@ -88,10 +88,12 @@ static const PIZMethodError pizEventMethods[ ]  = { NULL,                       
                                                     pizSequenceJuliet,          // PIZ_EVENT_JULIET
                                                     //
                                                     pizSequenceDelete,          // PIZ_EVENT_NOTE_DELETE
-                                                    pizSequenceIncrementNote,   // PIZ_EVENT_NOTE_INCREMENT
-                                                    pizSequenceDecrementNote,   // PIZ_EVENT_NOTE_DECREMENT
-                                                    pizSequenceIncrementZone,   // PIZ_EVENT_ZONE_INCREMENT
-                                                    pizSequenceDecrementZone    // PIZ_EVENT_ZONE_DECREMENT
+                                                    pizSequenceNoteIncrement,   // PIZ_EVENT_NOTE_INCREMENT
+                                                    pizSequenceNoteDecrement,   // PIZ_EVENT_NOTE_DECREMENT
+                                                    pizSequenceNoteForward,     // PIZ_EVENT_NOTE_FORWARD
+                                                    pizSequenceNoteBackward,    // PIZ_EVENT_NOTE_BACKWARD
+                                                    pizSequenceZoneIncrement,   // PIZ_EVENT_ZONE_INCREMENT
+                                                    pizSequenceZoneDecrement    // PIZ_EVENT_ZONE_DECREMENT
                                                     };             
                                                                                                     
 // -------------------------------------------------------------------------------------------------------------

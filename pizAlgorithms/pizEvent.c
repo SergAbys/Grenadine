@@ -77,8 +77,10 @@ static const char *pizEventNames[ ] = { "None",
                                         "Juliet",
                                         //    
                                         "Delete",
-                                        "Increment Note",
-                                        "Decrement Note", 
+                                        "Note Increment",
+                                        "Note Decrement", 
+                                        "Note Forward", 
+                                        "Note Backward",
                                         "Increment Zone",
                                         "Decrement Zone",
                                         //
@@ -141,6 +143,8 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_DELETE
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_INCREMENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_DECREMENT
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_FORWARD
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_BACKWARD
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_ZONE_INCREMENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_ZONE_INCREMENT
                                         //

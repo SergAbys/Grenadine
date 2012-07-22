@@ -172,7 +172,7 @@ void pizSequenceEachDump(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
 
 void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
 {/*
-    long     position = note->position;
+    long position = note->position;
     PIZError err = PIZ_GOOD; 
     
     if (position != newPosition) {
@@ -196,7 +196,7 @@ void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
     //
     }
     
-    return err;*/
+    x->tempError |= err;*/
 }
 
 void pizSequenceEachFillTempHash(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
