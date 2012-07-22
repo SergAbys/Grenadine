@@ -30,12 +30,12 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL   void  tralala_mouseAddNote          (t_tll *x);
-PIZ_LOCAL   void  tralala_mouseReleaseLasso     (t_tll *x);
-PIZ_LOCAL   void  tralala_mouseHitZone          (t_tll *x);
-PIZ_LOCAL   long  tralala_mouseHitNote          (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_mouseSelectLasso      (t_tll *x, long m);
-PIZ_INLINE  bool  tralala_mouseIsInLasso        (t_tll *x, t_symbol *s, double *coordinates);
+PIZ_LOCAL   void  tralala_mouseAddNote      (t_tll *x);
+PIZ_LOCAL   void  tralala_mouseReleaseLasso (t_tll *x);
+PIZ_LOCAL   void  tralala_mouseHitZone      (t_tll *x);
+PIZ_LOCAL   long  tralala_mouseHitNote      (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_mouseSelectLasso  (t_tll *x);
+PIZ_INLINE  bool  tralala_mouseIsInLasso    (t_tll *x, t_symbol *s, double *coordinates);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ void tralala_mousedrag(t_tll *x, t_object *pv, t_pt pt, long m)
     }
     
     if (x->flags & TLL_FLAG_LASSO) {
-        if (tralala_mouseSelectLasso(x, m)) {
+        if (tralala_mouseSelectLasso(x)) {
             jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
         }
 
@@ -276,7 +276,7 @@ long tralala_mouseHitNote(t_tll *x, long m)
     return k;
 }
 
-ulong tralala_mouseSelectLasso(t_tll *x, long m)
+ulong tralala_mouseSelectLasso(t_tll *x)
 {
     long i, n = 0;
     t_symbol **keys = NULL;
