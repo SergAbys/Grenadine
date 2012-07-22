@@ -404,10 +404,10 @@ void tralala_keyChangeNotes(t_tll *x, long m, PIZEventCode code, long selector)
     PIZEvent *event = NULL;
     if (event = pizEventNew(code)) {
         if (m & eAutoRepeat) {
-            long a[ ] = { selector, *(pizArrayPtr(t) + i), 5 };
+            long a[ ] = { selector, (*(pizArrayPtr(t) + i)), true };
             pizEventSetData(event, 3, a);
         } else {
-            long a[ ] = { selector, *(pizArrayPtr(t) + i) };
+            long a[ ] = { selector, (*(pizArrayPtr(t) + i)) };
             pizEventSetData(event, 2, a);
         }
         pizAgentDoEvent(x->agent, event);
