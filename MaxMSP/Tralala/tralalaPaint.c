@@ -396,17 +396,23 @@ void tralala_paintStrncatZone(char *dst, long argc, t_atom *argv, long status)
     char b[4];
     char temp[32];
   
+    if (status >= TLL_SELECTED_START) {
+    //
     switch (status) {
-        case TLL_SELECTED_START : strncat_zero(dst, "start ", TLL_STRING_SIZE); break;
-        case TLL_SELECTED_END   : strncat_zero(dst, "end ",   TLL_STRING_SIZE); break;
-        case TLL_SELECTED_DOWN  : strncat_zero(dst, "down ",  TLL_STRING_SIZE); break;
-        case TLL_SELECTED_UP    : strncat_zero(dst, "up ",    TLL_STRING_SIZE); break;
+    //
+    case TLL_SELECTED_START : strncat_zero(dst, "Start : ", TLL_STRING_SIZE); break;
+    case TLL_SELECTED_END   : strncat_zero(dst, "End : ",   TLL_STRING_SIZE); break;
+    case TLL_SELECTED_DOWN  : strncat_zero(dst, "Down : ",  TLL_STRING_SIZE); break;
+    case TLL_SELECTED_UP    : strncat_zero(dst, "Up : ",    TLL_STRING_SIZE); break;
+    //
+    } 
+    //
+    } else {
+        tralala_paintPitchAsString(a, atom_getlong(argv + 3), 4);
+        tralala_paintPitchAsString(b, atom_getlong(argv + 4), 4);
+        snprintf_zero(temp, 32, "%ld %ld %s %s\n", atom_getlong(argv + 1), atom_getlong(argv + 2), a, b);
+        strncat_zero(dst, temp, TLL_STRING_SIZE);
     }
-      
-    tralala_paintPitchAsString(a, atom_getlong(argv + 3), 4);
-    tralala_paintPitchAsString(b, atom_getlong(argv + 4), 4);
-    snprintf_zero(temp, 32, "%ld %ld %s %s\n", atom_getlong(argv + 1), atom_getlong(argv + 2), a, b);
-    strncat_zero(dst, temp, TLL_STRING_SIZE);
 }
 
 void tralala_paintStrncatNote(char *dst, long argc, t_atom *argv)

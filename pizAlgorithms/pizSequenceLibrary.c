@@ -188,17 +188,20 @@ void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
 {
     long b, offset = 0;
     long a = note->position;
-    long step = x->cell;
     PIZError err = PIZ_GOOD; 
     
     if (flag & PIZ_SEQUENCE_FLAG_BACKWARD) {
-        step = -step;
+        do {
+        b = pizSequenceSnapByPattern(x, a + offset);
+        offset -= x->cell;
+        } while (b >= a);
+        
+    } else {
+        do {
+        b = pizSequenceSnapByPattern(x, a + offset);
+        offset += x->cell;
+        } while (b <= a);
     }
-    
-    do {
-    offset += step;
-    b = pizSequenceSnapByPattern(x, a + offset);
-    } while (b == a);
     
     if ((b >= 0) && (b < (PIZ_SEQUENCE_SIZE_TIMELINE - 1))) {
     //

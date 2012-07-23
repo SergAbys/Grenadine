@@ -29,7 +29,7 @@ static t_int32_atomic tll_identifier;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void tralala_send             (t_tll *x, PIZEventCode code, long argc, t_atom *argv);
+PIZ_LOCAL void tralala_send             (t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags);
 PIZ_LOCAL t_symbol *tralala_slotName    (long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
@@ -245,7 +245,7 @@ void tralala_init(t_tll *x, t_symbol *s, short argc, t_atom *argv)
     link->s_thing = (t_object *)x;
     atom_setsym(&x->link, link);
     
-    tralala_send(x, PIZ_EVENT_INIT, 0, NULL);
+    tralala_send(x, PIZ_EVENT_INIT, 0, NULL, TLL_FLAG_NONE);
 }
 
 void tralala_free(t_tll *x)
@@ -310,8 +310,8 @@ void tralala_load(t_tll *x, t_symbol *s, long argc, t_atom *argv)
     if (!(dictionary_getdictionary(x->data, name, (t_object **)&d))) {
         if (t = dictionary_new ( )) {
             dictionary_copyunique(t, d);
-            tralala_send(x, PIZ_EVENT_CLEAR, 0, NULL);
-            tralala_parseDictionary(x, t, TLL_FLAG_NONE);
+            tralala_send(x, PIZ_EVENT_CLEAR, 0, NULL, TLL_FLAG_RUN);
+            tralala_parseDictionary(x, t, TLL_FLAG_RUN);
             object_free(t);
         }
     }
@@ -391,22 +391,22 @@ void tralala_callback(void *ptr, PIZEvent *event)
 
 void tralala_play(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
-    tralala_send(x, PIZ_EVENT_PLAY, argc, argv);
+    tralala_send(x, PIZ_EVENT_PLAY, argc, argv, TLL_FLAG_NONE);
 }
 
 void tralala_loop(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
-    tralala_send(x, PIZ_EVENT_LOOP, argc, argv);
+    tralala_send(x, PIZ_EVENT_LOOP, argc, argv, TLL_FLAG_NONE);
 }
 
 void tralala_stop(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
-    tralala_send(x, PIZ_EVENT_STOP, 0, NULL);
+    tralala_send(x, PIZ_EVENT_STOP, 0, NULL, TLL_FLAG_NONE);
 }
 
 void tralala_unloop(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
-    tralala_send(x, PIZ_EVENT_UNLOOP, 0, NULL);
+    tralala_send(x, PIZ_EVENT_UNLOOP, 0, NULL, TLL_FLAG_NONE);
 }
 
 void tralala_list(t_tll *x, t_symbol *s, long argc, t_atom *argv)
@@ -425,7 +425,7 @@ void tralala_anything(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 #pragma mark ---
 #pragma mark -
 
-void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv)
+void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags)
 {
     PIZEvent *event = NULL;
     
@@ -442,6 +442,10 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv)
             pizTimeCopy(&time, &ptr->time);
             pizEventSetTime(event, &time);
         }
+    }
+    
+    if (flags & TLL_FLAG_RUN) {
+        pizEventSetType(event, PIZ_EVENT_RUN);
     }
                         
     pizAgentDoEvent(x->agent, event);

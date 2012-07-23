@@ -30,6 +30,7 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+PIZ_LOCAL   void  tralala_mouseUnselectZone (t_tll *x);
 PIZ_LOCAL   void  tralala_mouseAddNote      (t_tll *x);
 PIZ_LOCAL   void  tralala_mouseReleaseLasso (t_tll *x);
 PIZ_LOCAL   void  tralala_mouseHitZone      (t_tll *x);
@@ -65,8 +66,11 @@ void tralala_mousedown(t_tll *x, t_object *pv, t_pt pt, long m)
         }
         x->flags |= TLL_FLAG_LASSO;
         
-    } else if (k == TLL_HIT_GRAB) {
-        post("GRABBED");
+    } else {
+        tralala_mouseUnselectZone(x);
+        if (k == TLL_HIT_GRAB) {
+            post("GRABBED");
+        }
     }
             
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE); 
@@ -144,6 +148,17 @@ void tralala_mouseUnselectAll(t_tll *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+
+void tralala_mouseUnselectZone(t_tll *x)
+{
+    TLL_LOCK
+    
+    if (dictionary_hasentry(x->status, TLL_SYM_ZONE)) {
+        dictionary_deleteentry(x->status, TLL_SYM_ZONE);
+    }
+    
+    TLL_UNLOCK
+}
 
 void tralala_mouseAddNote(t_tll *x)
 {

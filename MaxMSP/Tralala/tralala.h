@@ -31,11 +31,15 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_FLAG_NONE   0UL
-#define TLL_FLAG_LASSO  1UL
-#define TLL_FLAG_FOCUS  2UL
-#define TLL_FLAG_SHIFT  4UL
-    
+#define TLL_FLAG_NONE       0UL
+#define TLL_FLAG_LASSO      1UL
+#define TLL_FLAG_FOCUS      2UL
+#define TLL_FLAG_SHIFT      4UL
+
+#define TLL_FLAG_RUN        1UL
+#define TLL_FLAG_LOW        2UL
+#define TLL_FLAG_FILTER     4UL
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -

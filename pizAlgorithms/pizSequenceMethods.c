@@ -142,7 +142,7 @@ PIZError pizSequenceNote(PIZSequence *x, const PIZEvent *event)
     if (!(pizEventData(event, &argc, &argv))) {
         long i;
         PIZEventType type;
-        ulong flags = PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS;
+        ulong flags = PIZ_SEQUENCE_FLAG_NONE; 
         long  values[ ] = { -1,
                             PIZ_SEQUENCE_DEFAULT_PITCH, 
                             PIZ_SEQUENCE_DEFAULT_VELOCITY, 
@@ -155,9 +155,13 @@ PIZError pizSequenceNote(PIZSequence *x, const PIZEvent *event)
         
         pizEventType(event, &type);
         
+        if (type != PIZ_EVENT_RUN) {
+            flags |= PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS;
+        }
+        
         if (type == PIZ_EVENT_LOW) {
             flags |= PIZ_SEQUENCE_FLAG_LOW;
-        }
+        } 
         
         if (pizSequenceNewNote(x, values, flags)) {
             pizSequenceMakeMap(x);
