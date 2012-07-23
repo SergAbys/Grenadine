@@ -173,18 +173,36 @@ PIZError pizSequenceNoteBackward(PIZSequence *x, PIZEvent *event)
 
 PIZError pizSequenceZoneIncrement(PIZSequence *x, PIZEvent *event)
 {
-    long argc;
+    long a, b, argc;
     long *argv = NULL;
     
     if (!(pizEventData(event, &argc, &argv))) {
-        switch (argv[0]) {
-            case PIZ_ZONE_START : x->start = MIN(x->start + x->cell, x->end - x->cell);         break;
-            case PIZ_ZONE_END   : x->end   = MIN(x->end + x->cell, PIZ_SEQUENCE_SIZE_TIMELINE); break;
-            case PIZ_ZONE_DOWN  : x->down  = MIN(x->down + 1, x->up);                           break;
-            case PIZ_ZONE_UP    : x->up    = MIN(x->up + 1, PIZ_MAGIC_PITCH);                   break;
-        }
+    //
+    switch (argv[0]) {
+    //
+    case PIZ_ZONE_START : 
+        a = pizSequenceSnapByCell(x, x->start + x->cell);
+        b = pizSequenceSnapByCell(x, x->end - x->cell);
+        x->start = MIN(a, b);
+        break;
         
-        x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
+    case PIZ_ZONE_END : 
+        a = pizSequenceSnapByCell(x, x->end + x->cell);
+        x->end = MIN(a, PIZ_SEQUENCE_SIZE_TIMELINE); 
+        break;
+        
+    case PIZ_ZONE_DOWN : 
+        x->down = MIN(x->down + 1, x->up);
+        break;
+        
+    case PIZ_ZONE_UP : 
+        x->up = MIN(x->up + 1, PIZ_MAGIC_PITCH); 
+        break;
+    //
+    }
+    
+    x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
+    //
     }
     
     return PIZ_GOOD;
@@ -192,18 +210,36 @@ PIZError pizSequenceZoneIncrement(PIZSequence *x, PIZEvent *event)
 
 PIZError pizSequenceZoneDecrement(PIZSequence *x, PIZEvent *event)
 {
-    long argc;
+    long a, b, argc;
     long *argv = NULL;
     
     if (!(pizEventData(event, &argc, &argv))) {
-        switch (argv[0]) {
-            case PIZ_ZONE_START : x->start = MAX(x->start - x->cell, 0);                break;
-            case PIZ_ZONE_END   : x->end   = MAX(x->end - x->cell, x->start + x->cell); break;
-            case PIZ_ZONE_DOWN  : x->down  = MAX(x->down - 1, 0);                       break;
-            case PIZ_ZONE_UP    : x->up    = MAX(x->up - 1, x->down);                   break;
-        }
+    //
+    switch (argv[0]) {
+    //
+    case PIZ_ZONE_START : 
+        a = pizSequenceSnapByCell(x, x->start - x->cell);
+        x->start = MAX(a, 0);
+        break;
         
-        x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
+    case PIZ_ZONE_END : 
+        a = pizSequenceSnapByCell(x, x->end - x->cell);
+        b = pizSequenceSnapByCell(x, x->start + x->cell);
+        x->end = MAX(a, b); 
+        break;
+        
+    case PIZ_ZONE_DOWN : 
+        x->down = MAX(x->down - 1, 0);
+        break;
+        
+    case PIZ_ZONE_UP : 
+        x->up = MAX(x->up - 1, x->down); 
+        break;
+    //
+    }
+    
+    x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
+    //
     }
     
     return PIZ_GOOD;

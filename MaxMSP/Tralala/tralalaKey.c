@@ -324,8 +324,8 @@ void tralala_keyChangeZone(t_tll *x, long m, long keycode)
     switch (keycode) {
     case JKEY_UPARROW    :
         code = PIZ_EVENT_ZONE_INCREMENT;
-        if (k || (status == TLL_SELECTED_DOWN)) { pizArrayAppend(t, PIZ_ZONE_DOWN); }
         if (k || (status == TLL_SELECTED_UP))   { pizArrayAppend(t, PIZ_ZONE_UP); }
+        if (k || (status == TLL_SELECTED_DOWN)) { pizArrayAppend(t, PIZ_ZONE_DOWN); }
         break;
         
     case JKEY_DOWNARROW  :
@@ -342,8 +342,8 @@ void tralala_keyChangeZone(t_tll *x, long m, long keycode)
         
     case JKEY_RIGHTARROW :
         code = PIZ_EVENT_ZONE_INCREMENT;
-        if (k || (status == TLL_SELECTED_START)) { pizArrayAppend(t, PIZ_ZONE_START); }
         if (k || (status == TLL_SELECTED_END))   { pizArrayAppend(t, PIZ_ZONE_END); }
+        if (k || (status == TLL_SELECTED_START)) { pizArrayAppend(t, PIZ_ZONE_START); }
         break;
     }
     //
