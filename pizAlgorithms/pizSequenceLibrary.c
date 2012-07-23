@@ -205,7 +205,7 @@ void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
         offset += x->cell;
         } while (b <= a);
         
-    } else if (!(pizEventData(e, &argc, &argv))) {
+    } else if ((flag & PIZ_SEQUENCE_FLAG_PATTERN) && (!(pizEventData(e, &argc, &argv)))) {
         long k = (long)(a / (double)(x->cell));
         k += argv[k % argc];
         b = (MAX(k, 0)) * x->cell;

@@ -54,6 +54,7 @@
 #define PIZ_SEQUENCE_FLAG_NEARBY        4UL
 #define PIZ_SEQUENCE_FLAG_BACKWARD      8UL
 #define PIZ_SEQUENCE_FLAG_FORWARD       16UL
+#define PIZ_SEQUENCE_FLAG_PATTERN       32UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
