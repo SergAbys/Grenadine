@@ -385,7 +385,15 @@ PIZError pizSequenceCycle(PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequencePattern(PIZSequence *x, const PIZEvent *event)
 {
-    post("TOTO");
+    long i, k;  
+
+    if (k = pizSequenceFillTempNotes(x)) {
+        for (i = 0; i < k; i++) {
+            pizSequenceEachMove(x, x->tempNotes1[i], event, PIZ_SEQUENCE_FLAG_NONE);
+        }
+        pizSequenceMakeMap(x);
+    }
+
     return PIZ_GOOD;
 }
 

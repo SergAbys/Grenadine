@@ -186,8 +186,11 @@ void pizSequenceEachDump(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
 
 void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
 {
-    long b, offset = 0;
+    long offset = 0;
     long a = note->position;
+    long b = -1;
+    long argc;
+    long *argv = NULL;
     PIZError err = PIZ_GOOD; 
     
     if (flag & PIZ_SEQUENCE_FLAG_BACKWARD) {
@@ -196,11 +199,16 @@ void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
         offset -= x->cell;
         } while (b >= a);
         
-    } else {
+    } else if (flag & PIZ_SEQUENCE_FLAG_FORWARD) {
         do {
         b = pizSequenceSnapByCell(x, a + offset);
         offset += x->cell;
         } while (b <= a);
+        
+    } else if (!(pizEventData(e, &argc, &argv))) {
+        long k = (long)(a / (double)(x->cell));
+        k += argv[k % argc];
+        b = (MAX(k, 0)) * x->cell;
     }
     
     if ((b >= 0) && (b < (PIZ_SEQUENCE_SIZE_TIMELINE - 1))) {

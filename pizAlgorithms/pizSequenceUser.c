@@ -69,6 +69,7 @@ PIZError pizSequenceDelete(PIZSequence *x, PIZEvent *event)
     if (!(pizEventData(event, &argc, &argv)) && (argc > 1)) {
         if (note = pizSequenceNoteWithTag(x, argv[1])) {
             pizSequenceEachRemove(x, note, NULL, PIZ_SEQUENCE_FLAG_NONE);
+            pizSequenceMakeMap(x);
         }
     }
     
@@ -148,6 +149,7 @@ PIZError pizSequenceNoteForward(PIZSequence *x, PIZEvent *event)
     if (!(pizEventData(event, &argc, &argv)) && (argc > 1)) {
         if (note = pizSequenceNoteWithTag(x, argv[1])) {
             pizSequenceEachMove(x, note, event, PIZ_SEQUENCE_FLAG_FORWARD);
+            pizSequenceMakeMap(x);
         }
     }
     
@@ -165,6 +167,7 @@ PIZError pizSequenceNoteBackward(PIZSequence *x, PIZEvent *event)
     if (!(pizEventData(event, &argc, &argv)) && (argc > 1)) {
         if (note = pizSequenceNoteWithTag(x, argv[1])) {
             pizSequenceEachMove(x, note, event, PIZ_SEQUENCE_FLAG_BACKWARD);
+            pizSequenceMakeMap(x);
         }
     }
     
