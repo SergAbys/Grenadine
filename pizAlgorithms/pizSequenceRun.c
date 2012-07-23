@@ -119,12 +119,6 @@ PIZError pizSequenceRefresh(PIZSequence *x)
         err |= pizAgentNotify(x->owner, PIZ_EVENT_CHANGED_SCALE, 2, a);
     }
     
-    if (x->flags & PIZ_SEQUENCE_FLAG_PATTERN) {
-        long argc  = pizArrayCount(x->pattern);
-        long *argv = pizArrayPtr(x->pattern);
-        err |= pizAgentNotify(x->owner, PIZ_EVENT_CHANGED_PATTERN, argc, argv);
-    }
-    
     if (x->flags & PIZ_SEQUENCE_FLAG_ZONE) {
         long a[ ] = { x->start, x->end, x->down, x->up };
         err |= pizAgentNotify(x->owner, PIZ_EVENT_CHANGED_ZONE, 4, a);

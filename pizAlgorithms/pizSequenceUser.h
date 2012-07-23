@@ -58,7 +58,23 @@ PIZ_LOCAL PIZError pizSequenceNoteBackward      (PIZSequence *x, PIZEvent *event
 PIZ_LOCAL PIZError pizSequenceZoneIncrement     (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizSequenceZoneDecrement     (PIZSequence *x, PIZEvent *event);
 
+PIZ_LOCAL long pizSequenceSnapByAmbitus         (PIZSequence *x, long pitch);
+PIZ_LOCAL long pizSequenceSnapByCell            (PIZSequence *x, long position);
+
 PIZ_END_C_LINKAGE
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#ifdef PIZ_EXTERN_INLINE
+
+PIZ_EXTERN long pizSequenceSnapByCell(PIZSequence *x, long position)
+{
+    return (((long)((position / (double)(x->cell)) + 0.5)) * x->cell);
+}
+
+#endif // PIZ_EXTERN_INLINE
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // PIZ_SEQUENCE_USER_H

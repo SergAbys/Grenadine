@@ -206,7 +206,6 @@ typedef struct _PIZSequence {
     PIZItemset          addedLow;
     PIZItemset          addedHigh;
     PIZArray            *scale;
-    PIZArray            *pattern;
     PIZArray            *map;
     PIZLinklist         **timeline;
     PIZNote             **lookup;

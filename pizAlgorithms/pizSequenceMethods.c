@@ -383,6 +383,12 @@ PIZError pizSequenceCycle(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
+PIZError pizSequencePattern(PIZSequence *x, const PIZEvent *event)
+{
+    post("TOTO");
+    return PIZ_GOOD;
+}
+
 PIZError pizSequenceAlgorithm(PIZSequence *x, const PIZEvent *event)
 {
     long k;
@@ -455,7 +461,6 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
     long hPat[PIZ_SIZE_H] = { -1, -1, -1, -1, -1, -1 };
     long neighbors = 0;
     long err = PIZ_GOOD;
-    long size = pizArrayCount(x->pattern);
     bool death = false;
     PIZNote *note = NULL;
 
@@ -476,11 +481,6 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
     
     if (next >= end) { next = start; }
     if (previous < start) { previous = (end - 1); }
-    
-    if (size) {  
-        previous += pizArrayAtIndex(x->pattern, previous % size);
-        next     += pizArrayAtIndex(x->pattern, next % size);
-    }
 
     if (previous != here) {
         hPat[1] = (previous * (PIZ_MAGIC_PITCH + 1)) + pitch;
@@ -603,7 +603,7 @@ PIZNote *pizSequenceNewNote(PIZSequence *x, long *argv, ulong flags)
     long channel  = argv[4]; 
     
     if (flags & PIZ_SEQUENCE_FLAG_SNAP) {
-        position = pizSequenceSnapByPattern(x, position);
+        position = ((long)((position / (double)(x->cell)))) * x->cell;
     } 
     
     if (flags & PIZ_SEQUENCE_FLAG_AMBITUS) {

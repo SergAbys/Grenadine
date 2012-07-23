@@ -71,7 +71,6 @@ static const PIZMethodError pizEventMethods[ ]  = { NULL,                       
                                                     pizSequenceSetCell,         // PIZ_EVENT_CELL
                                                     pizSequenceSetValue,        // PIZ_EVENT_VALUE
                                                     pizSequenceSetScale,        // PIZ_EVENT_SCALE
-                                                    pizSequenceSetPattern,      // PIZ_EVENT_PATTERN
                                                     pizSequenceZone,            // PIZ_EVENT_ZONE
                                                     pizSequenceNote,            // PIZ_EVENT_NOTE
                                                     pizSequenceClear,           // PIZ_EVENT_CLEAR
@@ -83,6 +82,7 @@ static const PIZMethodError pizEventMethods[ ]  = { NULL,                       
                                                     pizSequenceFill,            // PIZ_EVENT_FILL
                                                     pizSequenceKill,            // PIZ_EVENT_KILL
                                                     pizSequenceCycle,           // PIZ_EVENT_CYCLE 
+                                                    pizSequencePattern,         // PIZ_EVENT_PATTERN
                                                     pizSequenceAlgorithm,       // PIZ_EVENT_ZOULOU
                                                     pizSequenceAlgorithm,       // PIZ_EVENT_ROMEO
                                                     pizSequenceJuliet,          // PIZ_EVENT_JULIET

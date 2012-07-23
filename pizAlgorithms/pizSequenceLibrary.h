@@ -69,10 +69,6 @@ PIZ_LOCAL void pizSequenceEachDump          (PIZSequence *x, PIZNote *note, cons
 PIZ_LOCAL void pizSequenceEachFillTempHash  (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
 PIZ_LOCAL void pizSequenceEachFillTempNotes (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag);
 
-PIZ_LOCAL long pizSequenceSnapByAmbitus     (PIZSequence *x, long pitch);
-PIZ_LOCAL long pizSequenceSnapByPattern     (PIZSequence *x, long position);
-PIZ_LOCAL long pizSequenceSnapByCell        (PIZSequence *x, long position);
-
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

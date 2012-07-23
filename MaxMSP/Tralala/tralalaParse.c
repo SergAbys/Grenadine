@@ -56,7 +56,6 @@ table->chord            = gensym("chord");
 table->cell             = gensym("cell");
 table->value            = gensym("value");
 table->scale            = gensym("scale");
-table->pattern          = gensym("pattern");
 table->end              = gensym("end");
 table->clear            = gensym("clear");
 table->tralala          = gensym("tralala");
@@ -93,7 +92,6 @@ dictionary_appendlong(tll_code, gensym("chord"),    (TLL_TINY + PIZ_EVENT_CHORD)
 dictionary_appendlong(tll_code, gensym("cell"),     (TLL_TINY + PIZ_EVENT_CELL));
 dictionary_appendlong(tll_code, gensym("value"),    (TLL_TINY + PIZ_EVENT_VALUE));
 dictionary_appendlong(tll_code, gensym("scale"),    (TLL_TINY + PIZ_EVENT_SCALE));
-dictionary_appendlong(tll_code, gensym("pattern"),  (TLL_TINY + PIZ_EVENT_PATTERN));
 dictionary_appendlong(tll_code, gensym("note"),     (TLL_TINY + PIZ_EVENT_NOTE));
 dictionary_appendlong(tll_code, gensym("zone"),     (TLL_TINY + PIZ_EVENT_ZONE));
 dictionary_appendlong(tll_code, gensym("clear"),    (TLL_TINY + PIZ_EVENT_CLEAR));
@@ -105,6 +103,7 @@ dictionary_appendlong(tll_code, gensym("change"),   (TLL_TINY + PIZ_EVENT_CHANGE
 dictionary_appendlong(tll_code, gensym("fill"),     (TLL_TINY + PIZ_EVENT_FILL));
 dictionary_appendlong(tll_code, gensym("kill"),     (TLL_TINY + PIZ_EVENT_KILL));
 dictionary_appendlong(tll_code, gensym("cycle"),    (TLL_TINY + PIZ_EVENT_CYCLE));
+dictionary_appendlong(tll_code, gensym("pattern"),  (TLL_TINY + PIZ_EVENT_PATTERN));
 dictionary_appendlong(tll_code, gensym("zoulou"),   (TLL_TINY + PIZ_EVENT_ZOULOU));
 dictionary_appendlong(tll_code, gensym("romeo"),    (TLL_TINY + PIZ_EVENT_ROMEO));
 dictionary_appendlong(tll_code, gensym("juliet"),   (TLL_TINY + PIZ_EVENT_JULIET));
@@ -191,7 +190,6 @@ quickmap_add(tll_notification, gensym("chord"),           (void *)(TLL_TINY + PI
 quickmap_add(tll_notification, gensym("cell"),            (void *)(TLL_TINY + PIZ_EVENT_CHANGED_CELL));
 quickmap_add(tll_notification, gensym("value"),           (void *)(TLL_TINY + PIZ_EVENT_CHANGED_VALUE));
 quickmap_add(tll_notification, gensym("scale"),           (void *)(TLL_TINY + PIZ_EVENT_CHANGED_SCALE));
-quickmap_add(tll_notification, gensym("pattern"),         (void *)(TLL_TINY + PIZ_EVENT_CHANGED_PATTERN)); 
 quickmap_add(tll_notification, gensym("zone"),            (void *)(TLL_TINY + PIZ_EVENT_CHANGED_ZONE));
 //
 }

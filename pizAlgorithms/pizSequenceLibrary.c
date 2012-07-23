@@ -192,13 +192,13 @@ void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
     
     if (flag & PIZ_SEQUENCE_FLAG_BACKWARD) {
         do {
-        b = pizSequenceSnapByPattern(x, a + offset);
+        b = pizSequenceSnapByCell(x, a + offset);
         offset -= x->cell;
         } while (b >= a);
         
     } else {
         do {
-        b = pizSequenceSnapByPattern(x, a + offset);
+        b = pizSequenceSnapByCell(x, a + offset);
         offset += x->cell;
         } while (b <= a);
     }
@@ -269,41 +269,6 @@ void pizSequenceEachFillTempNotes(PIZSequence *x, PIZNote *note, const PIZEvent 
         x->tempNotes1[x->tempIndex] = note;
         x->tempIndex ++;
     }
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-long pizSequenceSnapByAmbitus(PIZSequence *x, long pitch)
-{
-    if (pitch < x->down) {
-        while ((pitch < x->down) && (pitch < PIZ_MAGIC_PITCH)) {
-            pitch += PIZ_MAGIC_SCALE;
-        }
-    } else if (pitch > x->up) {
-        while ((pitch > x->up) && (pitch > 0)) {
-            pitch -= PIZ_MAGIC_SCALE;
-        }
-    }
-    
-    return pitch;
-}
-
-long pizSequenceSnapByPattern(PIZSequence *x, long position)
-{
-    long s, j = (long)(position / (double)(x->cell));
-    
-    if (s = pizArrayCount(x->pattern)) {
-        j += pizArrayAtIndex(x->pattern, j % s);
-    }
-
-    return (j * x->cell);
-}
-
-long pizSequenceSnapByCell(PIZSequence *x, long position)
-{
-    return (((long)((position / (double)(x->cell)) + 0.5)) * x->cell);
 }
 
 // -------------------------------------------------------------------------------------------------------------

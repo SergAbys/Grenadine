@@ -248,6 +248,30 @@ PIZError pizSequenceZoneDecrement(PIZSequence *x, PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+
+long pizSequenceSnapByAmbitus(PIZSequence *x, long pitch)
+{
+    if (pitch < x->down) {
+        while ((pitch < x->down) && (pitch < PIZ_MAGIC_PITCH)) {
+            pitch += PIZ_MAGIC_SCALE;
+        }
+    } else if (pitch > x->up) {
+        while ((pitch > x->up) && (pitch > 0)) {
+            pitch -= PIZ_MAGIC_SCALE;
+        }
+    }
+    
+    return pitch;
+}
+
+long pizSequenceSnapByCell(PIZSequence *x, long position)
+{
+    return (((long)((position / (double)(x->cell)) + 0.5)) * x->cell);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 #pragma mark ---
 #pragma mark -
 

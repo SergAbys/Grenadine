@@ -186,7 +186,6 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
         TLL_SYM_CELL, 
         TLL_SYM_VALUE, 
         TLL_SYM_SCALE, 
-        TLL_SYM_PATTERN 
         };
 
     err |= !(notes[0] = atomarray_new(0, NULL));

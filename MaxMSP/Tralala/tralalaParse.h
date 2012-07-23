@@ -28,7 +28,6 @@
 #define TLL_SYM_CELL            (tll_table.cell)
 #define TLL_SYM_VALUE           (tll_table.value)
 #define TLL_SYM_SCALE           (tll_table.scale)
-#define TLL_SYM_PATTERN         (tll_table.pattern)
 #define TLL_SYM_END             (tll_table.end)
 #define TLL_SYM_CLEAR           (tll_table.clear)
 #define TLL_SYM_TRALALA         (tll_table.tralala)
@@ -63,7 +62,6 @@ typedef struct _tllSymbols {
     t_symbol *cell;
     t_symbol *value;
     t_symbol *scale;
-    t_symbol *pattern;
     t_symbol *end;
     t_symbol *clear;
     t_symbol *tralala;
