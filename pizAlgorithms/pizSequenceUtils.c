@@ -1,5 +1,5 @@
-/**
- * \file    pizSequenceUser.h
+/*
+ * \file    pizSequenceUtils.c
  * \author  Jean Sapristi
  */
  
@@ -37,28 +37,33 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_SEQUENCE_USER_H
-#define PIZ_SEQUENCE_USER_H
+#include "pizSequenceUtils.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+#pragma mark ---
+#pragma mark -
 
-#include "pizEvent.h"
-#include "pizSequence.h"
+long pizSequenceSnapByAmbitus(PIZSequence *x, long pitch)
+{
+    if (pitch < x->down) {
+        while ((pitch < x->down) && (pitch < PIZ_MAGIC_PITCH)) {
+            pitch += PIZ_MAGIC_SCALE;
+        }
+    } else if (pitch > x->up) {
+        while ((pitch > x->up) && (pitch > 0)) {
+            pitch -= PIZ_MAGIC_SCALE;
+        }
+    }
+    
+    return pitch;
+}
+
+long pizSequenceSnapByCell(PIZSequence *x, long position)
+{
+    return (((long)((position / (double)(x->cell)) + 0.5)) * x->cell);
+}
 
 // -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-PIZ_START_C_LINKAGE
-
-PIZ_LOCAL PIZError pizSequenceDelete            (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceNoteIncrement     (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceNoteDecrement     (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceNoteForward       (PIZSequence *x, PIZEvent *event); //
-PIZ_LOCAL PIZError pizSequenceNoteBackward      (PIZSequence *x, PIZEvent *event); //
-PIZ_LOCAL PIZError pizSequenceZoneIncrement     (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceZoneDecrement     (PIZSequence *x, PIZEvent *event);
-
-PIZ_END_C_LINKAGE
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_USER_H
+// -----------------------------------------------------------------------------------------------------------:x

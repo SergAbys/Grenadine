@@ -39,8 +39,9 @@
 
 #include "pizAgent.h"
 #include "pizSequenceRun.h"
+#include "pizSequenceEach.h"
 #include "pizSequenceMethods.h"
-#include "pizSequenceLibrary.h"
+#include "pizSequenceUtils.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

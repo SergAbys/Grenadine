@@ -159,7 +159,7 @@ int main(void)
     CLASS_ATTR_DEFAULT      (c, "fontsize", 0, "14.");
     CLASS_ATTR_DEFAULT      (c, "fontface", 0, "1");
 
-    CLASS_ATTR_DEFAULT      (c, "patching_rect", 0, "0. 0. 200. 200.");
+    CLASS_ATTR_DEFAULT      (c, "patching_rect", 0, "0. 0. 250. 200.");
     
     class_register(CLASS_BOX, c);
 

@@ -173,7 +173,7 @@ ulong tralala_keyDelete(t_tll *x, long m)
 
 ulong tralala_keyUp(t_tll *x, long m)
 {
-    if (m & eShiftKey) {
+    if (m & eControlKey) {
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_VELOCITY);
         
     } else {
@@ -186,7 +186,7 @@ ulong tralala_keyUp(t_tll *x, long m)
 
 ulong tralala_keyDown(t_tll *x, long m)
 {
-    if (m & eShiftKey) {
+    if (m & eControlKey) {
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_VELOCITY);
     
     } else {
@@ -199,7 +199,7 @@ ulong tralala_keyDown(t_tll *x, long m)
 
 ulong tralala_keyLeft(t_tll *x, long m)
 {
-    if (m & eShiftKey) {
+    if (m & eControlKey) {
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_DURATION);
         
     } else {
@@ -212,7 +212,7 @@ ulong tralala_keyLeft(t_tll *x, long m)
 
 ulong tralala_keyRight(t_tll *x, long m)
 {
-    if (m & eShiftKey) {
+    if (m & eControlKey) {
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_DURATION);
         
     } else {
@@ -358,7 +358,12 @@ void tralala_keyChangeZone(t_tll *x, long m, long keycode)
     for (i = 0; i < pizArrayCount(t); i++) {
         PIZEvent *event = NULL;
         if (event = pizEventNew(code)) {
-            pizEventSetData(event, 1, (pizArrayPtr(t) + i));
+            if ((m & eAutoRepeat) || (m & eShiftKey)) {
+                long a[ ] = { (*(pizArrayPtr(t) + i)), true };
+                pizEventSetData(event, 2, a);
+            } else {
+                pizEventSetData(event, 1, (pizArrayPtr(t) + i));
+            }
             pizAgentDoEvent(x->agent, event);
         }
     }
@@ -403,7 +408,7 @@ void tralala_keyChangeNotes(t_tll *x, long m, PIZEventCode code, long selector)
     //
     PIZEvent *event = NULL;
     if (event = pizEventNew(code)) {
-        if (m & eAutoRepeat) {
+        if ((m & eAutoRepeat) || (m & eShiftKey)) {
             long a[ ] = { selector, (*(pizArrayPtr(t) + i)), true };
             pizEventSetData(event, 3, a);
         } else {

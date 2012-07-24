@@ -1,5 +1,5 @@
 /*
- * \file    pizSequenceLibrary.c
+ * \file    pizSequenceEach.c
  * \author  Jean Sapristi
  */
  
@@ -38,9 +38,10 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizAgent.h"
-#include "pizSequenceLibrary.h"
-#include "pizSequenceMethods.h"
 #include "pizSequenceRun.h"
+#include "pizSequenceEach.h"
+#include "pizSequenceMethods.h"
+#include "pizSequenceUtils.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
