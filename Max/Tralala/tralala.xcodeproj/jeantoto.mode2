@@ -425,8 +425,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D81AA215C0317E00CD5966</string>
-				<string>96D81AA315C0317E00CD5966</string>
+				<string>96D81ABC15C03C4A00CD5966</string>
+				<string>96D81ABD15C03C4A00CD5966</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -459,8 +459,6 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D52069F1CE1000CFCEE</string>
-		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/Max/Tralala/tralala.xcodeproj</string>
 	</array>
 	<key>WindowString</key>

@@ -52,6 +52,7 @@ PIZ_LOCAL   void  tralala_keySelectAll          (t_tll *x);
 PIZ_LOCAL   void  tralala_keySelectZone         (t_tll *x);
 PIZ_LOCAL   void  tralala_keyCopySelected       (t_tll *x, t_dictionary *d, bool clipboard);
 
+PIZ_LOCAL   void  tralala_keyDuplicate          (t_tll *x, long m);
 PIZ_LOCAL   void  tralala_keyChangeZone         (t_tll *x, long m, long keycode);
 PIZ_LOCAL   void  tralala_keyChangeNotes        (t_tll *x, long m, PIZEventCode code, long s);
 PIZ_INLINE  void  tralala_keyTagWithSymbol      (long *tag, t_symbol *s);
@@ -177,6 +178,7 @@ ulong tralala_keyUp(t_tll *x, long m)
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_VELOCITY);
         
     } else {
+        tralala_keyDuplicate(x, m);
         tralala_keyChangeZone(x, m, JKEY_UPARROW);
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_PITCH);
     }
@@ -190,6 +192,7 @@ ulong tralala_keyDown(t_tll *x, long m)
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_VELOCITY);
     
     } else {
+        tralala_keyDuplicate(x, m);
         tralala_keyChangeZone(x, m, JKEY_DOWNARROW);
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_PITCH);
     }
@@ -203,6 +206,7 @@ ulong tralala_keyLeft(t_tll *x, long m)
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_DURATION);
         
     } else {
+        tralala_keyDuplicate(x, m);
         tralala_keyChangeZone(x, m, JKEY_LEFTARROW);
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_BACKWARD, 0);
     }
@@ -216,6 +220,7 @@ ulong tralala_keyRight(t_tll *x, long m)
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_DURATION);
         
     } else {
+        tralala_keyDuplicate(x, m);
         tralala_keyChangeZone(x, m, JKEY_RIGHTARROW);
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_FORWARD, 0);
     }
@@ -272,7 +277,7 @@ void tralala_keyCopySelected(t_tll *x, t_dictionary *d, bool clipboard)
     long ac, cell = 0;
     t_atom *av = NULL;
     
-    if (!(dictionary_getatoms(x->current, TLL_SYM_CELL, &ac, &av))) {
+    if (clipboard && !(dictionary_getatoms(x->current, TLL_SYM_CELL, &ac, &av))) {
         cell = atom_getlong(av + 1);
     }
         
@@ -291,7 +296,10 @@ void tralala_keyCopySelected(t_tll *x, t_dictionary *d, bool clipboard)
                 atom_setlong(argv + 2, (atom_getlong(argv + 2) - 1));
             }
             
-            dictionary_appendatoms(d, key, argc, argv);
+            if (clipboard || (key != TLL_SYM_ZONE) ) {
+                dictionary_appendatoms(d, key, argc, argv);
+            }
+            
             sysmem_freeptr(argv);
         }
     }
@@ -308,6 +316,17 @@ void tralala_keyCopySelected(t_tll *x, t_dictionary *d, bool clipboard)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+
+void tralala_keyDuplicate(t_tll *x, long m)
+{
+    t_dictionary *t = NULL;
+            
+    if ((m & eAltKey) && (t = dictionary_new( ))) {
+        tralala_keyCopySelected(x, t, false);
+        tralala_parseDictionary(x, t, TLL_FLAG_NONE);  
+        object_free(t);
+    }
+}
 
 void tralala_keyChangeZone(t_tll *x, long m, long keycode)
 {
