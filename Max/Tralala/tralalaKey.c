@@ -50,7 +50,7 @@ PIZ_LOCAL   ulong tralala_keyRight              (t_tll *x, long m);
 
 PIZ_LOCAL   void  tralala_keySelectAll          (t_tll *x);
 PIZ_LOCAL   void  tralala_keySelectZone         (t_tll *x);
-PIZ_LOCAL   void  tralala_keyCopyToClipboard    (t_tll *x, t_dictionary *d);
+PIZ_LOCAL   void  tralala_keyCopySelected       (t_tll *x, t_dictionary *d, bool clipboard);
 
 PIZ_LOCAL   void  tralala_keyChangeZone         (t_tll *x, long m, long keycode);
 PIZ_LOCAL   void  tralala_keyChangeNotes        (t_tll *x, long m, PIZEventCode code, long s);
@@ -127,7 +127,7 @@ ulong tralala_keyCopy(t_tll *x, long m)
         t_dictionary *t = NULL;
         
         if (t = dictionary_new( )) {
-            tralala_keyCopyToClipboard(x, t);
+            tralala_keyCopySelected(x, t, true);
             dictionary_clear(tll_clipboard);
             dictionary_copyunique(tll_clipboard, t);
             object_free(t);
@@ -260,7 +260,7 @@ void tralala_keySelectZone(t_tll *x)
     TLL_UNLOCK
 }
 
-void tralala_keyCopyToClipboard(t_tll *x, t_dictionary *d)
+void tralala_keyCopySelected(t_tll *x, t_dictionary *d, bool clipboard)
 {
     long i, n = 0;
     t_symbol **keys = NULL;
@@ -286,7 +286,7 @@ void tralala_keyCopyToClipboard(t_tll *x, t_dictionary *d)
         t_atom *argv = NULL;
         
         if (!(dictionary_copyatoms(x->current, key, &argc, &argv))) {
-            if (key != TLL_SYM_ZONE) {
+            if (clipboard && (key != TLL_SYM_ZONE)) {
                 atom_setlong(argv + 1, (atom_getlong(argv + 1) + cell));
                 atom_setlong(argv + 2, (atom_getlong(argv + 2) - 1));
             }

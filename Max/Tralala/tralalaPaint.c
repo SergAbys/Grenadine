@@ -224,7 +224,7 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
         if (k = dictionary_hasentry(x->status, key)) {
            dictionary_getlong(x->status, key, &status);
         }
-        if (!k || (status == TLL_UNSELECTED)) {
+        if (!k || (status == TLL_LASSO_UNSELECTED)) {
             atomarray_appendatoms(notes[0], argc, argv);
         } else if (key != mark) {
             atomarray_appendatoms(notes[1], argc, argv);

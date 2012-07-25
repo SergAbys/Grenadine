@@ -30,13 +30,12 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL   void  tralala_mouseUnselectZone (t_tll *x);
-PIZ_LOCAL   void  tralala_mouseAddNote      (t_tll *x);
-PIZ_LOCAL   void  tralala_mouseReleaseLasso (t_tll *x);
-PIZ_LOCAL   void  tralala_mouseHitZone      (t_tll *x);
-PIZ_LOCAL   long  tralala_mouseHitNote      (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_mouseSelectLasso  (t_tll *x);
-PIZ_INLINE  bool  tralala_mouseIsInLasso    (t_tll *x, t_symbol *s, double *coordinates);
+PIZ_LOCAL   void    tralala_mouseAddNote        (t_tll *x);
+PIZ_LOCAL   void    tralala_mouseHitZone        (t_tll *x);
+PIZ_LOCAL   long    tralala_mouseHitNote        (t_tll *x, long m);
+PIZ_LOCAL   ulong   tralala_mouseSelectLasso    (t_tll *x);
+PIZ_LOCAL   void    tralala_mouseReleaseLasso   (t_tll *x);
+PIZ_LOCAL   void    tralala_mouseUnselectZone   (t_tll *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -149,17 +148,6 @@ void tralala_mouseUnselectAll(t_tll *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_mouseUnselectZone(t_tll *x)
-{
-    TLL_LOCK
-    
-    if (dictionary_hasentry(x->status, TLL_SYM_ZONE)) {
-        dictionary_deleteentry(x->status, TLL_SYM_ZONE);
-    }
-    
-    TLL_UNLOCK
-}
-
 void tralala_mouseAddNote(t_tll *x)
 {
     t_atom a[2];
@@ -168,44 +156,6 @@ void tralala_mouseAddNote(t_tll *x)
     atom_setlong(a + 1, TLL_Y_TO_PITCH(x->cursor.y));
     
     tralala_parseMessage(x, TLL_SYM_NOTE, 2, a, TLL_FLAG_LOW);
-}
-
-void tralala_mouseReleaseLasso(t_tll *x)
-{
-    long i, n = 0;
-    t_symbol **keys = NULL;
-    
-    TLL_LOCK
-    
-    if (!(dictionary_getkeys(x->current, &n, &keys))) {
-    //
-    long argc;
-    t_atom *argv = NULL;
-    
-    for (i = 0; i < n; i++) {
-    //
-    long status = 0;
-    t_symbol *key = (*(keys + i));
-    
-    if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
-        if ((atom_getsym(argv) == TLL_SYM_NOTE) && (!dictionary_getlong(x->status, key, &status))) {
-            if (status == TLL_UNSELECTED) {
-                dictionary_deleteentry(x->status, key);
-            } else {
-                dictionary_appendlong(x->status, key, TLL_SELECTED);
-            }
-        }
-    }
-    //
-    }
-    
-    dictionary_freekeys(x->current, n, keys);
-    //
-    }
-    
-    TLL_UNLOCK
-    
-    x->flags &= ~TLL_FLAG_LASSO;
 }
 
 void tralala_mouseHitZone(t_tll *x)
@@ -314,27 +264,35 @@ ulong tralala_mouseSelectLasso(t_tll *x)
     if (!(dictionary_getatoms(x->current, key, &argc, &argv)) && ((atom_getsym(argv) == TLL_SYM_NOTE))) { 
     //
     long status = 0;
+    double a = TLL_POSITION_TO_X(atom_getlong(argv + 1));
+    double b = TLL_PITCH_TO_Y_UP(atom_getlong(argv + 2));
+    double u = TLL_POSITION_TO_X(atom_getlong(argv + 1) + atom_getlong(argv + 4));
+    double v = TLL_PITCH_TO_Y_DOWN(atom_getlong(argv + 2));
+    bool k = false;
+        
+    k =  ((a > c[0]) && (a < c[2])) || ((u > c[0]) && (u < c[2]));
+    k &= ((b > c[1]) && (b < c[3])) || ((v > c[1]) && (v < c[3]));
     
-    if (tralala_mouseIsInLasso(x, key, c)) {
+    if (k) {
 
         if (!(dictionary_hasentry(x->status, key))) {
-            dictionary_appendlong(x->status, key, TLL_SELECTED_LASSO);
+            dictionary_appendlong(x->status, key, TLL_LASSO_SELECTED);
             dirty |= TLL_DIRTY_NOTE;
             
         } else if (x->flags & TLL_FLAG_SHIFT) {
             if (!(dictionary_getlong(x->status, key, &status)) && (status == TLL_SELECTED)) {
-                dictionary_appendlong(x->status, key, TLL_UNSELECTED);
+                dictionary_appendlong(x->status, key, TLL_LASSO_UNSELECTED);
                 dirty |= TLL_DIRTY_NOTE;
             }
         }
         
     } else if (!(dictionary_getlong(x->status, key, &status))) {
     
-        if (status == TLL_SELECTED_LASSO) {
+        if (status == TLL_LASSO_SELECTED) {
             dictionary_deleteentry(x->status, key);
             dirty |= TLL_DIRTY_NOTE;
             
-        } else if ((x->flags & TLL_FLAG_SHIFT) && (status == TLL_UNSELECTED)) {
+        } else if ((x->flags & TLL_FLAG_SHIFT) && (status == TLL_LASSO_UNSELECTED)) {
             dictionary_appendlong(x->status, key, TLL_SELECTED);
             dirty |= TLL_DIRTY_NOTE;
         }
@@ -353,23 +311,53 @@ ulong tralala_mouseSelectLasso(t_tll *x)
     return dirty;
 }
 
-PIZ_INLINE bool tralala_mouseIsInLasso(t_tll *x, t_symbol *s, double *c)
+void tralala_mouseReleaseLasso(t_tll *x)
 {
-    bool k = false;
+    long i, n = 0;
+    t_symbol **keys = NULL;
+    
+    TLL_LOCK
+    
+    if (!(dictionary_getkeys(x->current, &n, &keys))) {
+    //
     long argc;
     t_atom *argv = NULL;
-        
-    if (!(dictionary_getatoms(x->current, s, &argc, &argv))) {
-        double a = TLL_POSITION_TO_X(atom_getlong(argv + 1));
-        double b = TLL_PITCH_TO_Y_UP(atom_getlong(argv + 2));
-        double u = TLL_POSITION_TO_X(atom_getlong(argv + 1) + atom_getlong(argv + 4));
-        double v = TLL_PITCH_TO_Y_DOWN(atom_getlong(argv + 2));
-        
-        k  = ((a > c[0]) && (a < c[2])) || ((u > c[0]) && (u < c[2]));
-        k &= ((b > c[1]) && (b < c[3])) || ((v > c[1]) && (v < c[3]));
+    
+    for (i = 0; i < n; i++) {
+    //
+    long status = 0;
+    t_symbol *key = (*(keys + i));
+    
+    if (!(dictionary_getatoms(x->current, key, &argc, &argv))) { 
+        if ((atom_getsym(argv) == TLL_SYM_NOTE) && (!dictionary_getlong(x->status, key, &status))) {
+            if (status == TLL_LASSO_UNSELECTED) {
+                dictionary_deleteentry(x->status, key);
+            } else {
+                dictionary_appendlong(x->status, key, TLL_SELECTED);
+            }
+        }
+    }
+    //
     }
     
-    return k;
+    dictionary_freekeys(x->current, n, keys);
+    //
+    }
+    
+    TLL_UNLOCK
+    
+    x->flags &= ~TLL_FLAG_LASSO;
+}
+
+void tralala_mouseUnselectZone(t_tll *x)
+{
+    TLL_LOCK
+    
+    if (dictionary_hasentry(x->status, TLL_SYM_ZONE)) {
+        dictionary_deleteentry(x->status, TLL_SYM_ZONE);
+    }
+    
+    TLL_UNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------

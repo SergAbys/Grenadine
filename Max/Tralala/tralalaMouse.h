@@ -21,13 +21,13 @@
 #pragma mark -
 
 enum {
-    TLL_SELECTED        = 1,
-    TLL_UNSELECTED      = 2,
-    TLL_SELECTED_LASSO  = 3,
-    TLL_SELECTED_START  = 4,
-    TLL_SELECTED_END    = 5,
-    TLL_SELECTED_DOWN   = 6,
-    TLL_SELECTED_UP     = 7
+    TLL_SELECTED            = 1,
+    TLL_LASSO_SELECTED      = 2,
+    TLL_LASSO_UNSELECTED    = 3,
+    TLL_SELECTED_START      = 4,
+    TLL_SELECTED_END        = 5,
+    TLL_SELECTED_DOWN       = 6,
+    TLL_SELECTED_UP         = 7
     };
 
 // -------------------------------------------------------------------------------------------------------------

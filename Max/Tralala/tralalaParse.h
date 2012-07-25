@@ -89,6 +89,13 @@ typedef struct _tllSymbols {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+#define TLL_FLAG_RUN    1UL
+#define TLL_FLAG_LOW    2UL
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 void tralala_parseInit          (t_tllSymbols *table);
 void tralala_parseDictionary    (t_tll *x, t_dictionary *d, ulong flags);
 void tralala_parseMessage       (t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong flags);

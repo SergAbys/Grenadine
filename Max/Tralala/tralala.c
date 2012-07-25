@@ -92,7 +92,7 @@ int main(void)
     CLASS_ATTR_CATEGORY     (c, "hcolor1", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "hcolor2", 0, t_tll, hColor2); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor2", 0, "1. 0.75 0. 1."); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor2", 0, "1. 1. 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "hcolor2", 0, "rgba", "Color Highlighted");
     CLASS_ATTR_CATEGORY     (c, "hcolor2", 0, "Color");
         
