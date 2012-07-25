@@ -1,8 +1,0 @@
-_quebec_assist
-_quebec_attachView
-_quebec_bang
-_quebec_dumpLocked
-_quebec_dumpTitle
-_quebec_free
-_quebec_new
-_quebec_notify
