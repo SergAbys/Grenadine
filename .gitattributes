@@ -1,5 +1,4 @@
 *.pbxproj -crlf -diff -merge
 *.pbxuser -crlf -diff -merge
 *.mode2 -crlf -diff -merge
-*.maxpat -crlf -diff -merge
-*.maxhelp -crlf -diff -merge
+
