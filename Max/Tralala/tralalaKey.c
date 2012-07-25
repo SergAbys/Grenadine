@@ -50,7 +50,7 @@ PIZ_LOCAL   ulong tralala_keyRight              (t_tll *x, long m);
 
 PIZ_LOCAL   void  tralala_keySelectAll          (t_tll *x);
 PIZ_LOCAL   void  tralala_keySelectZone         (t_tll *x);
-PIZ_LOCAL   void  tralala_keyCopySelected       (t_tll *x, t_dictionary *d, bool clipboard);
+PIZ_LOCAL   void  tralala_keyCopySelected       (t_tll *x, t_dictionary *d);
 
 PIZ_LOCAL   void  tralala_keyDuplicate          (t_tll *x, long m);
 PIZ_LOCAL   void  tralala_keyChangeZone         (t_tll *x, long m, long keycode);
@@ -123,16 +123,15 @@ ulong tralala_keyAll(t_tll *x, long m)
 }
 
 ulong tralala_keyCopy(t_tll *x, long m)
-{
-    if (m & eCommandKey) {
-        t_dictionary *t = NULL;
-        
-        if (t = dictionary_new( )) {
-            tralala_keyCopySelected(x, t, true);
-            dictionary_clear(tll_clipboard);
-            dictionary_copyunique(tll_clipboard, t);
-            object_free(t);
-        }
+{   
+    t_dictionary *t = NULL;
+            
+    if ((m & eCommandKey) && (t = dictionary_new( ))) {
+        tralala_keyCopySelected(x, t);
+        dictionary_appendlong(t, TLL_SYM_IDENTIFIER, x->identifier);
+        dictionary_clear(tll_clipboard);
+        dictionary_copyunique(tll_clipboard, t);
+        object_free(t);
     }
     
     return TLL_DIRTY_NONE;
@@ -140,21 +139,23 @@ ulong tralala_keyCopy(t_tll *x, long m)
 
 ulong tralala_keyPaste(t_tll *x, long m)
 {
-    ulong dirty = TLL_DIRTY_NONE;
+    long k;
+    t_dictionary *t = NULL;
     
-    if (m & eCommandKey) {
-        t_dictionary *t = NULL;
-        
-        if (t = dictionary_new( )) {
-            tralala_mouseUnselectAll(x);
-            dirty |= TLL_DIRTY_ZONE | TLL_DIRTY_NOTE;
-            dictionary_copyunique(t, tll_clipboard);
-            tralala_parseDictionary(x, t, TLL_FLAG_LOW);  
-            object_free(t);
-        }
+    if ((m & eCommandKey) && (t = dictionary_new( ))) {
+    //
+    dictionary_copyunique(t, tll_clipboard);
+    
+    if (!(dictionary_getlong(t, TLL_SYM_IDENTIFIER, &k)) && (k != x->identifier)) {
+        tralala_mouseUnselectAll(x);
+        tralala_parseDictionary(x, t, TLL_FLAG_LOW);  
     }
     
-    return dirty;
+    object_free(t);
+    //
+    }
+    
+    return (TLL_DIRTY_ZONE | TLL_DIRTY_NOTE);
 }
 
 ulong tralala_keyCut(t_tll *x, long m)
@@ -265,7 +266,7 @@ void tralala_keySelectZone(t_tll *x)
     TLL_UNLOCK
 }
 
-void tralala_keyCopySelected(t_tll *x, t_dictionary *d, bool clipboard)
+void tralala_keyCopySelected(t_tll *x, t_dictionary *d)
 {
     long i, n = 0;
     t_symbol **keys = NULL;
@@ -274,13 +275,6 @@ void tralala_keyCopySelected(t_tll *x, t_dictionary *d, bool clipboard)
     
     if (!(dictionary_getkeys(x->status, &n, &keys))) {
     //
-    long ac, cell = 0;
-    t_atom *av = NULL;
-    
-    if (clipboard && !(dictionary_getatoms(x->current, TLL_SYM_CELL, &ac, &av))) {
-        cell = atom_getlong(av + 1);
-    }
-        
     for (i = 0; i < n; i++) {
     //
     long status = 0;
@@ -290,17 +284,8 @@ void tralala_keyCopySelected(t_tll *x, t_dictionary *d, bool clipboard)
         long argc;
         t_atom *argv = NULL;
         
-        if (!(dictionary_copyatoms(x->current, key, &argc, &argv))) {
-            if (clipboard && (key != TLL_SYM_ZONE)) {
-                atom_setlong(argv + 1, (atom_getlong(argv + 1) + cell));
-                atom_setlong(argv + 2, (atom_getlong(argv + 2) - 1));
-            }
-            
-            if (clipboard || (key != TLL_SYM_ZONE) ) {
-                dictionary_appendatoms(d, key, argc, argv);
-            }
-            
-            sysmem_freeptr(argv);
+        if (!(dictionary_getatoms(x->current, key, &argc, &argv))) {
+            dictionary_appendatoms(d, key, argc, argv);
         }
     }
     //
@@ -322,7 +307,7 @@ void tralala_keyDuplicate(t_tll *x, long m)
     t_dictionary *t = NULL;
             
     if ((m & eAltKey) && (t = dictionary_new( ))) {
-        tralala_keyCopySelected(x, t, false);
+        tralala_keyCopySelected(x, t);
         tralala_parseDictionary(x, t, TLL_FLAG_NONE);  
         object_free(t);
     }
