@@ -83,13 +83,13 @@
 			children = (
 				96D843C315824D41005B41A9 /* tralala.h */,
 				96A82A5015B873BA00CE73B3 /* tralalaKey.h */,
-				96DC326715581AC500C26797 /* tralalaParse.h */,
 				96E4A85515ADD2DA003BF81E /* tralalaPaint.h */,
+				96DC326715581AC500C26797 /* tralalaParse.h */,
 				96E4A86015ADD3A1003BF81E /* tralalaMouse.h */,
 				9676982513B7784800FE77F4 /* tralala.c */,
 				96A82A5115B873BA00CE73B3 /* tralalaKey.c */,
-				96DC326315581A5500C26797 /* tralalaParse.c */,
 				96E4A85615ADD2DA003BF81E /* tralalaPaint.c */,
+				96DC326315581A5500C26797 /* tralalaParse.c */,
 				96E4A85F15ADD3A1003BF81E /* tralalaMouse.c */,
 			);
 			name = Source;

@@ -47,7 +47,8 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define PIZ_SEQUENCE_VELOCITY_FACTOR 5;
+#define PIZ_SEQUENCE_AUTOREPEAT_PITCH       12
+#define PIZ_SEQUENCE_AUTOREPEAT_VELOCITY    5
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -89,12 +90,15 @@ PIZError pizSequenceNoteIncrement(PIZSequence *x, PIZEvent *event)
         long a[2];
         long step = 1;
         
-        if (argv[0] == PIZ_VALUE_DURATION) {
+        if ((argv[0] == PIZ_VALUE_PITCH) && (argc > 2) && argv[2]) {
+            step = PIZ_SEQUENCE_AUTOREPEAT_PITCH;
+            
+        } else if ((argv[0] == PIZ_VALUE_VELOCITY) && (argc > 2) && argv[2]) {
+            step = PIZ_SEQUENCE_AUTOREPEAT_VELOCITY;
+            
+        } else if (argv[0] == PIZ_VALUE_DURATION) {
             step = x->cell;
         } 
-        if ((argv[0] == PIZ_VALUE_VELOCITY) && (argc > 2) && argv[2]) {
-            step *= PIZ_SEQUENCE_VELOCITY_FACTOR;
-        }
         
         a[0] = argv[0];
         a[1] = step;
@@ -120,11 +124,14 @@ PIZError pizSequenceNoteDecrement(PIZSequence *x, PIZEvent *event)
         long a[2];
         long step = -1;
         
-        if (argv[0] == PIZ_VALUE_DURATION) {
+        if ((argv[0] == PIZ_VALUE_PITCH) && (argc > 2) && argv[2]) {
+            step = -PIZ_SEQUENCE_AUTOREPEAT_PITCH;
+            
+        } else if ((argv[0] == PIZ_VALUE_VELOCITY) && (argc > 2) && argv[2]) {
+            step = -PIZ_SEQUENCE_AUTOREPEAT_VELOCITY;
+            
+        } else if (argv[0] == PIZ_VALUE_DURATION) {
             step = -x->cell;
-        } 
-        if ((argv[0] == PIZ_VALUE_VELOCITY) && (argc > 2) && argv[2]) {
-            step *= PIZ_SEQUENCE_VELOCITY_FACTOR;
         }
         
         a[0] = argv[0];
@@ -177,30 +184,38 @@ PIZError pizSequenceNoteBackward(PIZSequence *x, PIZEvent *event)
 
 PIZError pizSequenceZoneIncrement(PIZSequence *x, PIZEvent *event)
 {
-    long a, b, argc;
+    long argc;
     long *argv = NULL;
     
     if (!(pizEventData(event, &argc, &argv))) {
     //
+    long a, b;
+    long hStep = x->cell;
+    long vStep = 1;
+    
+    if ((argc > 1) && argv[1]) {
+        vStep = PIZ_SEQUENCE_AUTOREPEAT_PITCH;
+    }
+    
     switch (argv[0]) {
     //
     case PIZ_ZONE_START : 
-        a = pizSequenceSnapByCell(x, x->start + x->cell);
-        b = pizSequenceSnapByCell(x, x->end - x->cell);
+        a = pizSequenceSnapByCell(x, x->start + hStep);
+        b = pizSequenceSnapByCell(x, x->end - hStep);
         x->start = MIN(a, b);
         break;
         
     case PIZ_ZONE_END : 
-        a = pizSequenceSnapByCell(x, x->end + x->cell);
+        a = pizSequenceSnapByCell(x, x->end + hStep);
         x->end = MIN(a, PIZ_SEQUENCE_SIZE_TIMELINE); 
         break;
         
     case PIZ_ZONE_DOWN : 
-        x->down = MIN(x->down + 1, x->up);
+        x->down = MIN(x->down + vStep, x->up);
         break;
         
     case PIZ_ZONE_UP : 
-        x->up = MIN(x->up + 1, PIZ_MAGIC_PITCH); 
+        x->up = MIN(x->up + vStep, PIZ_MAGIC_PITCH); 
         break;
     //
     }
@@ -214,30 +229,38 @@ PIZError pizSequenceZoneIncrement(PIZSequence *x, PIZEvent *event)
 
 PIZError pizSequenceZoneDecrement(PIZSequence *x, PIZEvent *event)
 {
-    long a, b, argc;
+    long argc;
     long *argv = NULL;
     
     if (!(pizEventData(event, &argc, &argv))) {
     //
+    long a, b;
+    long hStep = x->cell;
+    long vStep = 1;
+    
+    if ((argc > 1) && argv[1]) {
+        vStep = PIZ_SEQUENCE_AUTOREPEAT_PITCH;
+    }
+    
     switch (argv[0]) {
     //
     case PIZ_ZONE_START : 
-        a = pizSequenceSnapByCell(x, x->start - x->cell);
+        a = pizSequenceSnapByCell(x, x->start - hStep);
         x->start = MAX(a, 0);
         break;
         
     case PIZ_ZONE_END : 
-        a = pizSequenceSnapByCell(x, x->end - x->cell);
-        b = pizSequenceSnapByCell(x, x->start + x->cell);
+        a = pizSequenceSnapByCell(x, x->end - hStep);
+        b = pizSequenceSnapByCell(x, x->start + hStep);
         x->end = MAX(a, b); 
         break;
         
     case PIZ_ZONE_DOWN : 
-        x->down = MAX(x->down - 1, 0);
+        x->down = MAX(x->down - vStep, 0);
         break;
         
     case PIZ_ZONE_UP : 
-        x->up = MAX(x->up - 1, x->down); 
+        x->up = MAX(x->up - vStep, x->down); 
         break;
     //
     }

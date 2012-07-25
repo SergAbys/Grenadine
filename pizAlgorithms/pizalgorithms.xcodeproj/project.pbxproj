@@ -161,17 +161,17 @@
 				96A16F7E148CF856008268A6 /* pizSequence.h */,
 				96FF9E831540640D0081EB6A /* pizSequenceRun.h */,
 				96E3A43215B7134D00FA94B8 /* pizSequenceUser.h */,
-				96CA4C5A157CFC3E00C75C68 /* pizSequenceEach.h */,
-				9602461815BEA749000A914A /* pizSequenceUtils.h */,
 				96F915081538024D00202438 /* pizSequenceAttribute.h */,
 				96A16F7D148CF856008268A6 /* pizSequenceMethods.h */,
+				96CA4C5A157CFC3E00C75C68 /* pizSequenceEach.h */,
+				9602461815BEA749000A914A /* pizSequenceUtils.h */,
 				96A16F78148CF839008268A6 /* pizSequence.c */,
 				96FF9E821540640D0081EB6A /* pizSequenceRun.c */,
 				96E3A43115B7134D00FA94B8 /* pizSequenceUser.c */,
-				96CA4C5B157CFC3E00C75C68 /* pizSequenceEach.c */,
-				9602461915BEA749000A914A /* pizSequenceUtils.c */,
 				96F915071538024D00202438 /* pizSequenceAttribute.c */,
 				96A16F77148CF839008268A6 /* pizSequenceMethods.c */,
+				96CA4C5B157CFC3E00C75C68 /* pizSequenceEach.c */,
+				9602461915BEA749000A914A /* pizSequenceUtils.c */,
 			);
 			name = Sequence;
 			sourceTree = "<group>";
