@@ -121,8 +121,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 364888197;
-			PBXWorkspaceStateSaveDate = 364888197;
+			PBXPerProjectTemplateStateSaveDate = 364891233;
+			PBXWorkspaceStateSaveDate = 364891233;
 		};
 		sourceControlManager = 965F6CC112FF252E00F96EF1 /* Source Control */;
 		userBuildSettings = {
