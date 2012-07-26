@@ -48,7 +48,7 @@
 #pragma mark -
 
 #define PIZ_SEQUENCE_AUTOREPEAT_PITCH       12
-#define PIZ_SEQUENCE_AUTOREPEAT_VELOCITY    5
+#define PIZ_SEQUENCE_AUTOREPEAT_VELOCITY    10
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
