@@ -47,6 +47,8 @@ PIZ_LOCAL   ulong tralala_keyUp                 (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_keyDown               (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_keyLeft               (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_keyRight              (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_keyPageUp             (t_tll *x, long m);
+PIZ_LOCAL   ulong tralala_keyPageDown           (t_tll *x, long m);
 
 PIZ_LOCAL   void  tralala_keySelectAll          (t_tll *x);
 PIZ_LOCAL   void  tralala_keySelectZone         (t_tll *x);
@@ -67,18 +69,20 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
 {
     tllMethod f = NULL;
     ulong dirty = TLL_DIRTY_NONE;
-            
+    
     switch (keycode) {
-        case TLL_KEY_A          : f = tralala_keyAll;    break;
-        case TLL_KEY_C          : f = tralala_keyCopy;   break;
-        case TLL_KEY_V          : f = tralala_keyPaste;  break;
-        case TLL_KEY_X          : f = tralala_keyCut;    break;
-        case JKEY_DELETE        : f = tralala_keyDelete; break;
-        case JKEY_BACKSPACE     : f = tralala_keyDelete; break;
-        case JKEY_UPARROW       : f = tralala_keyUp;     break;
-        case JKEY_DOWNARROW     : f = tralala_keyDown;   break;
-        case JKEY_LEFTARROW     : f = tralala_keyLeft;   break;
-        case JKEY_RIGHTARROW    : f = tralala_keyRight;  break;
+        case TLL_KEY_A          : f = tralala_keyAll;       break;
+        case TLL_KEY_C          : f = tralala_keyCopy;      break;
+        case TLL_KEY_V          : f = tralala_keyPaste;     break;
+        case TLL_KEY_X          : f = tralala_keyCut;       break;
+        case JKEY_DELETE        : f = tralala_keyDelete;    break;
+        case JKEY_BACKSPACE     : f = tralala_keyDelete;    break;
+        case JKEY_UPARROW       : f = tralala_keyUp;        break;
+        case JKEY_DOWNARROW     : f = tralala_keyDown;      break;
+        case JKEY_LEFTARROW     : f = tralala_keyLeft;      break;
+        case JKEY_RIGHTARROW    : f = tralala_keyRight;     break;
+        case JKEY_PAGEUP        : f = tralala_keyPageUp;    break;
+        case JKEY_PAGEDOWN      : f = tralala_keyPageDown;  break;
     }
     
     if (f) {
@@ -225,6 +229,20 @@ ulong tralala_keyRight(t_tll *x, long m)
         tralala_keyChangeZone(x, m, JKEY_RIGHTARROW);
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_FORWARD, 0);
     }
+    
+    return TLL_DIRTY_NONE;
+}
+
+ulong tralala_keyPageUp(t_tll *x, long m)
+{
+    tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_CHANNEL);
+    
+    return TLL_DIRTY_NONE;
+}
+
+ulong tralala_keyPageDown(t_tll *x, long m)
+{
+    tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_CHANNEL);
     
     return TLL_DIRTY_NONE;
 }
