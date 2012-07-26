@@ -296,6 +296,8 @@ void tralala_keyCopySelected(t_tll *x, t_dictionary *d)
     }
     
     TLL_UNLOCK
+    
+    x->flags |= TLL_FLAG_COPY;
 }
 
 // -------------------------------------------------------------------------------------------------------------

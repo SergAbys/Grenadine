@@ -108,8 +108,14 @@ void tralala_mousedrag(t_tll *x, t_object *pv, t_pt pt, long m)
         
     } else if (x->flags & TLL_FLAG_GRAB) {
         ulong k;
-        if ((k = tralala_mouseMove(x)) != TLL_MOVE_NONE) {
+        
+        if (x->flags & TLL_FLAG_COPY) {
+            m &= ~(eShiftKey | eControlKey | eAltKey);
+        } else {
             m &= ~(eShiftKey | eControlKey);
+        }
+        
+        if ((k = tralala_mouseMove(x)) != TLL_MOVE_NONE) {
             if (k & TLL_MOVE_UP)    { tralala_key(x, pv, JKEY_UPARROW,      m, -1); }
             if (k & TLL_MOVE_DOWN)  { tralala_key(x, pv, JKEY_DOWNARROW,    m, -1); }
             if (k & TLL_MOVE_LEFT)  { tralala_key(x, pv, JKEY_LEFTARROW,    m, -1); }
@@ -120,8 +126,7 @@ void tralala_mousedrag(t_tll *x, t_object *pv, t_pt pt, long m)
 
 void tralala_mouseup(t_tll *x, t_object *pv, t_pt pt, long m)
 {
-    x->flags &= ~TLL_FLAG_GRAB;
-    x->flags &= ~TLL_FLAG_SHIFT;
+    x->flags &= ~(TLL_FLAG_GRAB | TLL_FLAG_COPY | TLL_FLAG_SHIFT);
     
     if (x->flags & TLL_FLAG_LASSO) {
         tralala_mouseReleaseLasso(x);
@@ -168,10 +173,12 @@ void tralala_mouseUnselectAll(t_tll *x)
 
 ulong tralala_mouseMove(t_tll *x)
 {
+    long h = 0;
     long argc, cell;
     t_atom *argv = NULL;
-    long h = TLL_X_TO_POSITION(x->cursor.x) - TLL_X_TO_POSITION(x->origin.x);
     long v = TLL_Y_TO_PITCH(x->cursor.y) - TLL_Y_TO_PITCH(x->origin.y);
+    long h1 = TLL_X_TO_POSITION(x->cursor.x);
+    long h2 = TLL_X_TO_POSITION(x->origin.x);
     PIZError err = PIZ_GOOD;
     ulong k = TLL_MOVE_NONE;
         
@@ -179,7 +186,7 @@ ulong tralala_mouseMove(t_tll *x)
     
     if (!(err |= (dictionary_getatoms(x->current, TLL_SYM_CELL, &argc, &argv)) != MAX_ERR_NONE)) {
         if (cell = atom_getlong(argv + 1)) {
-            h = h / cell;
+            h = ((long)(h1 / cell)) - ((long)(h2 / cell));
         }
     }
     
