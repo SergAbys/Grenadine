@@ -11,6 +11,7 @@
 #include "tralalaMouse.h"
 #include "tralalaParse.h"
 #include "tralalaPaint.h"
+#include "tralalaKey.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -22,14 +23,15 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_HIT_NONE    0
-#define TLL_HIT_SWAP    1
-#define TLL_HIT_GRAB    2
+#define TLL_HIT_NONE        0
+#define TLL_HIT_SWAP        1
+#define TLL_HIT_GRAB        2
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+PIZ_LOCAL   long    tralala_mouseMove           (t_tll *x);
 PIZ_LOCAL   void    tralala_mouseAddNote        (t_tll *x);
 PIZ_LOCAL   void    tralala_mouseHitZone        (t_tll *x);
 PIZ_LOCAL   long    tralala_mouseHitNote        (t_tll *x, long m);
@@ -68,18 +70,13 @@ void tralala_mousedown(t_tll *x, t_object *pv, t_pt pt, long m)
     } else {
         tralala_mouseUnselectZone(x);
         if (k == TLL_HIT_GRAB) {
-            post("GRABBED");
+            x->flags |= TLL_FLAG_GRAB;
         }
     }
             
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE); 
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
     jbox_redraw((t_jbox *)x);  
-}
-
-void tralala_mousemove(t_tll *x, t_object *pv, t_pt pt, long m)
-{
-    ;
 }
 
 void tralala_mousedrag(t_tll *x, t_object *pv, t_pt pt, long m)
@@ -98,11 +95,18 @@ void tralala_mousedrag(t_tll *x, t_object *pv, t_pt pt, long m)
 
         jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
         jbox_redraw((t_jbox *)x);
+        
+    } else if (x->flags & TLL_FLAG_GRAB) {
+        long k;
+        if ((k = tralala_mouseMove(x)) != JKEY_NONE) {
+            //tralala_key(x, pv, k, (m &= ~eShiftKey), -1);
+        }
     }
 }
 
 void tralala_mouseup(t_tll *x, t_object *pv, t_pt pt, long m)
 {
+    x->flags &= ~TLL_FLAG_GRAB;
     x->flags &= ~TLL_FLAG_SHIFT;
     
     if (x->flags & TLL_FLAG_LASSO) {
@@ -147,6 +151,21 @@ void tralala_mouseUnselectAll(t_tll *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+
+long tralala_mouseMove(t_tll *x)
+{
+    long k = JKEY_NONE;
+    long h = TLL_X_TO_POSITION(x->cursor.x) - TLL_X_TO_POSITION(x->origin.x);
+    long v = TLL_Y_TO_PITCH(x->cursor.y) - TLL_Y_TO_PITCH(x->origin.y);
+     
+    
+    //JKEY_UPARROW 
+    //JKEY_DOWNARROW
+    //JKEY_LEFTARROW
+    //JKEY_RIGHTARROW  
+    
+    return k;
+}
 
 void tralala_mouseAddNote(t_tll *x)
 {

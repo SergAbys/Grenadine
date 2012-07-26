@@ -32,9 +32,10 @@
 #pragma mark -
 
 #define TLL_FLAG_NONE       0UL
-#define TLL_FLAG_LASSO      1UL
-#define TLL_FLAG_FOCUS      2UL
-#define TLL_FLAG_SHIFT      4UL
+#define TLL_FLAG_GRAB       1UL
+#define TLL_FLAG_LASSO      2UL
+#define TLL_FLAG_FOCUS      4UL
+#define TLL_FLAG_SHIFT      8UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

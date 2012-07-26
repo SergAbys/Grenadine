@@ -67,7 +67,7 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
 {
     tllMethod f = NULL;
     ulong dirty = TLL_DIRTY_NONE;
-        
+            
     switch (keycode) {
         case TLL_KEY_A          : f = tralala_keyAll;    break;
         case TLL_KEY_C          : f = tralala_keyCopy;   break;
@@ -362,16 +362,20 @@ void tralala_keyChangeZone(t_tll *x, long m, long keycode)
     long i;
     
     for (i = 0; i < pizArrayCount(t); i++) {
-        PIZEvent *event = NULL;
-        if (event = pizEventNew(code)) {
-            if ((m & eAutoRepeat) || (m & eShiftKey)) {
-                long a[ ] = { (*(pizArrayPtr(t) + i)), true };
-                pizEventSetData(event, 2, a);
-            } else {
-                pizEventSetData(event, 1, (pizArrayPtr(t) + i));
-            }
-            pizAgentDoEvent(x->agent, event);
+    //
+    PIZEvent *event = NULL;
+    if (event = pizEventNew(code)) {
+    
+        if (m & (eAutoRepeat | eShiftKey)) {
+            long a[ ] = { (*(pizArrayPtr(t) + i)), true };
+            pizEventSetData(event, 2, a);
+        } else {
+            pizEventSetData(event, 1, (pizArrayPtr(t) + i));
         }
+        
+        pizAgentDoEvent(x->agent, event);
+    }
+    //
     }
     
     pizArrayFree(t);
@@ -414,13 +418,15 @@ void tralala_keyChangeNotes(t_tll *x, long m, PIZEventCode code, long selector)
     //
     PIZEvent *event = NULL;
     if (event = pizEventNew(code)) {
-        if ((m & eAutoRepeat) || (m & eShiftKey)) {
+    
+        if (m & (eAutoRepeat | eShiftKey)) {
             long a[ ] = { selector, (*(pizArrayPtr(t) + i)), true };
             pizEventSetData(event, 3, a);
         } else {
             long a[ ] = { selector, (*(pizArrayPtr(t) + i)) };
             pizEventSetData(event, 2, a);
         }
+        
         pizAgentDoEvent(x->agent, event);
     }
     //

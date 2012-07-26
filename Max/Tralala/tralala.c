@@ -56,7 +56,6 @@ int main(void)
     class_addmethod(c, (method)tralala_key,         "key",           A_CANT,  0);
     class_addmethod(c, (method)tralala_mousewheel,  "mousewheel",    A_CANT,  0);
     class_addmethod(c, (method)tralala_mousedown,   "mousedown",     A_CANT,  0);
-    class_addmethod(c, (method)tralala_mousemove,   "mousemove",     A_CANT,  0);
     class_addmethod(c, (method)tralala_mousedrag,   "mousedrag",     A_CANT,  0);
 	class_addmethod(c, (method)tralala_mouseup,     "mouseup",       A_CANT,  0);
     class_addmethod(c, (method)tralala_notify,      "notify",        A_CANT,  0);
