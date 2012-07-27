@@ -11,8 +11,8 @@
 		breakpointsGroup = 9699A8E613D9A57300D9A0AD /* XCBreakpointsBucket */;
 		codeSenseManager = 96CFCDA713D7F01D004431BB /* Code sense */;
 		perUserDictionary = {
-			PBXPerProjectTemplateStateSaveDate = 365095595;
-			PBXWorkspaceStateSaveDate = 365095595;
+			PBXPerProjectTemplateStateSaveDate = 365097166;
+			PBXWorkspaceStateSaveDate = 365097166;
 		};
 		sourceControlManager = 96CFCDA613D7F01D004431BB /* Source Control */;
 		userBuildSettings = {
@@ -230,9 +230,9 @@
 	};
 	96D67644151C892100AFA120 /* pizAgentLoop.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1737.48, 10075}}";
-			sepNavSelRange = "{7405, 0}";
-			sepNavVisRect = "{{0, 2496}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 10125}}";
+			sepNavSelRange = "{6849, 0}";
+			sepNavVisRect = "{{0, 3987}, {1235, 645}}";
 			sepNavWindowFrame = "{{1, 4}, {1280, 774}}";
 		};
 	};
@@ -270,17 +270,17 @@
 	};
 	96D796C5151716AC00109654 /* pizEvent.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1235, 6075}}";
-			sepNavSelRange = "{5711, 0}";
-			sepNavVisRect = "{{0, 3929}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 6125}}";
+			sepNavSelRange = "{5633, 0}";
+			sepNavVisRect = "{{0, 3305}, {1235, 645}}";
 			sepNavWindowFrame = "{{0, 4}, {1280, 774}}";
 		};
 	};
 	96D796C6151716AC00109654 /* pizEvent.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1478.24, 7050}}";
-			sepNavSelRange = "{10150, 0}";
-			sepNavVisRect = "{{0, 3673}, {1235, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1235, 7150}}";
+			sepNavSelRange = "{4272, 0}";
+			sepNavVisRect = "{{0, 2011}, {1235, 645}}";
 			sepNavWindowFrame = "{{0, 2}, {1280, 774}}";
 		};
 	};
@@ -390,17 +390,17 @@
 	};
 	96E3A43115B7134D00FA94B8 /* pizSequenceUser.c */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1233, 11800}}";
-			sepNavSelRange = "{9933, 41}";
-			sepNavVisRect = "{{0, 8429}, {1233, 218}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1236, 12200}}";
+			sepNavSelRange = "{8841, 0}";
+			sepNavVisRect = "{{0, 6967}, {1236, 645}}";
 			sepNavWindowFrame = "{{4, 4}, {1281, 774}}";
 		};
 	};
 	96E3A43215B7134D00FA94B8 /* pizSequenceUser.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1236, 1825}}";
-			sepNavSelRange = "{3044, 0}";
-			sepNavVisRect = "{{0, 1180}, {1236, 645}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1236, 1875}}";
+			sepNavSelRange = "{3176, 0}";
+			sepNavVisRect = "{{0, 1230}, {1236, 645}}";
 			sepNavWindowFrame = "{{15, -1}, {1281, 774}}";
 		};
 	};

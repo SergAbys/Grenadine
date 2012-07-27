@@ -268,14 +268,22 @@ ulong tralala_keyRight(t_tll *x, long m)
 
 ulong tralala_keyPageUp(t_tll *x, long m)
 {
-    tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_CHANNEL);
+    if (m & eShiftKey) {
+        tralala_keyChangeAttribute(x, m, PIZ_EVENT_CHANNEL_INCREMENT);
+    } else {
+        tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_CHANNEL);
+    }
     
     return TLL_DIRTY_NONE;
 }
 
 ulong tralala_keyPageDown(t_tll *x, long m)
 {
-    tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_CHANNEL);
+    if (m & eShiftKey) {
+        tralala_keyChangeAttribute(x, m, PIZ_EVENT_CHANNEL_DECREMENT);
+    } else {
+        tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_CHANNEL);
+    }
     
     return TLL_DIRTY_NONE;
 }

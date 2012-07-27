@@ -280,6 +280,22 @@ PIZError pizSequenceZoneDecrement(PIZSequence *x, PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+PIZError pizSequenceChannelIncrement(PIZSequence *x, PIZEvent *event)
+{
+    x->channel = CLAMP(x->channel + 1, 1, PIZ_MAGIC_CHANNEL);
+    x->flags |= PIZ_SEQUENCE_FLAG_CHANNEL;
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceChannelDecrement(PIZSequence *x, PIZEvent *event)
+{
+    x->channel = CLAMP(x->channel - 1, 1, PIZ_MAGIC_CHANNEL);
+    x->flags |= PIZ_SEQUENCE_FLAG_CHANNEL;
+    
+    return PIZ_GOOD;
+}
+
 PIZError pizSequenceCellIncrement(PIZSequence *x, PIZEvent *event)
 {
     x->cell = pizSequenceLenghtIncrement(x->cell);

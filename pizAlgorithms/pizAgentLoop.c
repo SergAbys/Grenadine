@@ -52,56 +52,58 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const PIZMethodError pizEventMethods[ ]  = { NULL,                       // PIZ_EVENT_NONE
-                                                    pizAgentInit,               // PIZ_EVENT_INIT
-                                                    pizAgentPlay,               // PIZ_EVENT_PLAY
-                                                    pizAgentStop,               // PIZ_EVENT_STOP
-                                                    pizAgentLoop,               // PIZ_EVENT_LOOP
-                                                    pizAgentUnloop,             // PIZ_EVENT_UNLOOP
+static const PIZMethodError pizEventMethods[ ]  = { NULL,                        // PIZ_EVENT_NONE
+                                                    pizAgentInit,                // PIZ_EVENT_INIT
+                                                    pizAgentPlay,                // PIZ_EVENT_PLAY
+                                                    pizAgentStop,                // PIZ_EVENT_STOP
+                                                    pizAgentLoop,                // PIZ_EVENT_LOOP
+                                                    pizAgentUnloop,              // PIZ_EVENT_UNLOOP
                                                     //
-                                                    pizAgentLearn,              // PIZ_EVENT_LEARN
-                                                    pizAgentForget,             // PIZ_EVENT_FORGET
-                                                    pizAgentDump,               // PIZ_EVENT_DUMP
-                                                    pizAgentBpm,                // PIZ_EVENT_BPM
+                                                    pizAgentLearn,               // PIZ_EVENT_LEARN
+                                                    pizAgentForget,              // PIZ_EVENT_FORGET
+                                                    pizAgentDump,                // PIZ_EVENT_DUMP
+                                                    pizAgentBpm,                 // PIZ_EVENT_BPM
                                                     //
-                                                    pizSequenceSetChance,       // PIZ_EVENT_CHANCE
-                                                    pizSequenceSetVelocity,     // PIZ_EVENT_VELOCITY
-                                                    pizSequenceSetChannel,      // PIZ_EVENT_CHANNEL
-                                                    pizSequenceSetChord,        // PIZ_EVENT_CHORD
-                                                    pizSequenceSetCell,         // PIZ_EVENT_CELL
-                                                    pizSequenceSetValue,        // PIZ_EVENT_VALUE
-                                                    pizSequenceSetScale,        // PIZ_EVENT_SCALE
-                                                    pizSequenceZone,            // PIZ_EVENT_ZONE
-                                                    pizSequenceNote,            // PIZ_EVENT_NOTE
-                                                    pizSequenceClear,           // PIZ_EVENT_CLEAR
-                                                    pizSequenceClean,           // PIZ_EVENT_CLEAN
-                                                    pizSequenceRotate,          // PIZ_EVENT_ROTATE
-                                                    pizSequenceScramble,        // PIZ_EVENT_SCRAMBLE
-                                                    pizSequenceSort,            // PIZ_EVENT_SORT
-                                                    pizSequenceChange,          // PIZ_EVENT_CHANGE
-                                                    pizSequenceFill,            // PIZ_EVENT_FILL
-                                                    pizSequenceKill,            // PIZ_EVENT_KILL
-                                                    pizSequenceCycle,           // PIZ_EVENT_CYCLE 
-                                                    pizSequencePattern,         // PIZ_EVENT_PATTERN
-                                                    pizSequenceAlgorithm,       // PIZ_EVENT_ZOULOU
-                                                    pizSequenceAlgorithm,       // PIZ_EVENT_ROMEO
-                                                    pizSequenceJuliet,          // PIZ_EVENT_JULIET
+                                                    pizSequenceSetChance,        // PIZ_EVENT_CHANCE
+                                                    pizSequenceSetVelocity,      // PIZ_EVENT_VELOCITY
+                                                    pizSequenceSetChannel,       // PIZ_EVENT_CHANNEL
+                                                    pizSequenceSetChord,         // PIZ_EVENT_CHORD
+                                                    pizSequenceSetCell,          // PIZ_EVENT_CELL
+                                                    pizSequenceSetValue,         // PIZ_EVENT_VALUE
+                                                    pizSequenceSetScale,         // PIZ_EVENT_SCALE
+                                                    pizSequenceZone,             // PIZ_EVENT_ZONE
+                                                    pizSequenceNote,             // PIZ_EVENT_NOTE
+                                                    pizSequenceClear,            // PIZ_EVENT_CLEAR
+                                                    pizSequenceClean,            // PIZ_EVENT_CLEAN
+                                                    pizSequenceRotate,           // PIZ_EVENT_ROTATE
+                                                    pizSequenceScramble,         // PIZ_EVENT_SCRAMBLE
+                                                    pizSequenceSort,             // PIZ_EVENT_SORT
+                                                    pizSequenceChange,           // PIZ_EVENT_CHANGE
+                                                    pizSequenceFill,             // PIZ_EVENT_FILL
+                                                    pizSequenceKill,             // PIZ_EVENT_KILL
+                                                    pizSequenceCycle,            // PIZ_EVENT_CYCLE 
+                                                    pizSequencePattern,          // PIZ_EVENT_PATTERN
+                                                    pizSequenceAlgorithm,        // PIZ_EVENT_ZOULOU
+                                                    pizSequenceAlgorithm,        // PIZ_EVENT_ROMEO
+                                                    pizSequenceJuliet,           // PIZ_EVENT_JULIET
                                                     //
-                                                    pizSequenceDelete,          // PIZ_EVENT_NOTE_DELETE
-                                                    pizSequenceNoteIncrement,   // PIZ_EVENT_NOTE_INCREMENT
-                                                    pizSequenceNoteDecrement,   // PIZ_EVENT_NOTE_DECREMENT
-                                                    pizSequenceNoteForward,     // PIZ_EVENT_NOTE_FORWARD
-                                                    pizSequenceNoteBackward,    // PIZ_EVENT_NOTE_BACKWARD
-                                                    pizSequenceZoneIncrement,   // PIZ_EVENT_ZONE_INCREMENT
-                                                    pizSequenceZoneDecrement,   // PIZ_EVENT_ZONE_DECREMENT
-                                                    pizSequenceCellIncrement,   // PIZ_EVENT_CELL_INCREMENT
-                                                    pizSequenceCellDecrement,   // PIZ_EVENT_CELL_DECREMENT
-                                                    pizSequenceCellUp,          // PIZ_EVENT_CELL_UP
-                                                    pizSequenceCellDown,        // PIZ_EVENT_CELL_DOWN
-                                                    pizSequenceValueIncrement,  // PIZ_EVENT_VALUE_INCREMENT
-                                                    pizSequenceValueDecrement,  // PIZ_EVENT_VALUE_DECREMENT
-                                                    pizSequenceValueUp,         // PIZ_EVENT_VALUE_UP
-                                                    pizSequenceValueDown        // PIZ_EVENT_VALUE_DOWN
+                                                    pizSequenceDelete,           // PIZ_EVENT_NOTE_DELETE
+                                                    pizSequenceNoteIncrement,    // PIZ_EVENT_NOTE_INCREMENT
+                                                    pizSequenceNoteDecrement,    // PIZ_EVENT_NOTE_DECREMENT
+                                                    pizSequenceNoteForward,      // PIZ_EVENT_NOTE_FORWARD
+                                                    pizSequenceNoteBackward,     // PIZ_EVENT_NOTE_BACKWARD
+                                                    pizSequenceZoneIncrement,    // PIZ_EVENT_ZONE_INCREMENT
+                                                    pizSequenceZoneDecrement,    // PIZ_EVENT_ZONE_DECREMENT
+                                                    pizSequenceChannelIncrement, // PIZ_EVENT_CHANNEL_INCREMENT
+                                                    pizSequenceChannelDecrement, // PIZ_EVENT_CHANNEL_DECREMENT
+                                                    pizSequenceCellIncrement,    // PIZ_EVENT_CELL_INCREMENT
+                                                    pizSequenceCellDecrement,    // PIZ_EVENT_CELL_DECREMENT
+                                                    pizSequenceCellUp,           // PIZ_EVENT_CELL_UP
+                                                    pizSequenceCellDown,         // PIZ_EVENT_CELL_DOWN
+                                                    pizSequenceValueIncrement,   // PIZ_EVENT_VALUE_INCREMENT
+                                                    pizSequenceValueDecrement,   // PIZ_EVENT_VALUE_DECREMENT
+                                                    pizSequenceValueUp,          // PIZ_EVENT_VALUE_UP
+                                                    pizSequenceValueDown         // PIZ_EVENT_VALUE_DOWN
                                                     };             
                                                                                                     
 // -------------------------------------------------------------------------------------------------------------

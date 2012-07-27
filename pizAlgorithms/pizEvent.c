@@ -83,6 +83,8 @@ static const char *pizEventNames[ ] = { "None",
                                         "Note Backward",
                                         "Increment Zone",
                                         "Decrement Zone",
+                                        "Increment Channel",
+                                        "Decrement Channel",
                                         "Increment Cell", 
                                         "Decrement Cell",
                                         "Cell Up",
@@ -154,6 +156,8 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_BACKWARD
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_ZONE_INCREMENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_ZONE_DECREMENT
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_CHANNEL_INCREMENT
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_CHANNEL_DECREMENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_CELL_INCREMENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_CELL_DECREMENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_CELL_UP
