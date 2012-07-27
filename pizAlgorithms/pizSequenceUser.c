@@ -272,6 +272,30 @@ PIZError pizSequenceZoneDecrement(PIZSequence *x, PIZEvent *event)
     return PIZ_GOOD;
 }
 
+PIZError pizSequenceCellIncrement(PIZSequence *x, PIZEvent *event)
+{
+    post("TOTO");
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceCellDecrement(PIZSequence *x, PIZEvent *event)
+{
+    post("TOTO");
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceCellUp(PIZSequence *x, PIZEvent *event)
+{
+    post("TOTO");
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceCellDown(PIZSequence *x, PIZEvent *event)
+{
+    post("TOTO");
+    return PIZ_GOOD;
+}
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -

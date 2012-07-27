@@ -57,6 +57,10 @@ PIZ_LOCAL PIZError pizSequenceNoteForward       (PIZSequence *x, PIZEvent *event
 PIZ_LOCAL PIZError pizSequenceNoteBackward      (PIZSequence *x, PIZEvent *event); //
 PIZ_LOCAL PIZError pizSequenceZoneIncrement     (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizSequenceZoneDecrement     (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceCellIncrement     (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceCellDecrement     (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceCellUp            (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceCellDown          (PIZSequence *x, PIZEvent *event);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------

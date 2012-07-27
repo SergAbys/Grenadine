@@ -50,12 +50,17 @@ PIZ_LOCAL   ulong tralala_keyRight              (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_keyPageUp             (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_keyPageDown           (t_tll *x, long m);
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 PIZ_LOCAL   void  tralala_keySelectAll          (t_tll *x);
 PIZ_LOCAL   void  tralala_keySelectZone         (t_tll *x);
 PIZ_LOCAL   void  tralala_keyCopySelected       (t_tll *x, t_dictionary *d);
 
 PIZ_LOCAL   void  tralala_keyDuplicate          (t_tll *x, long m);
 PIZ_LOCAL   void  tralala_keyChangeZone         (t_tll *x, long m, long keycode);
+PIZ_LOCAL   void  tralala_keyChangeAttribute    (t_tll *x, long m, PIZEventCode code);
 PIZ_LOCAL   void  tralala_keyChangeNotes        (t_tll *x, long m, PIZEventCode code, long s);
 PIZ_INLINE  void  tralala_keyTagWithSymbol      (long *tag, t_symbol *s);
 
@@ -181,6 +186,9 @@ ulong tralala_keyUp(t_tll *x, long m)
 {
     if (m & eControlKey) {
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_VELOCITY);
+    
+    } else if (m & eCommandKey) {
+        tralala_keyChangeAttribute(x, m, PIZ_EVENT_CELL_INCREMENT);
         
     } else {
         tralala_keyDuplicate(x, m);
@@ -196,6 +204,9 @@ ulong tralala_keyDown(t_tll *x, long m)
     if (m & eControlKey) {
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_VELOCITY);
     
+    } else if (m & eCommandKey) {
+        tralala_keyChangeAttribute(x, m, PIZ_EVENT_CELL_DECREMENT);
+        
     } else {
         tralala_keyDuplicate(x, m);
         tralala_keyChangeZone(x, m, JKEY_DOWNARROW);
@@ -209,6 +220,9 @@ ulong tralala_keyLeft(t_tll *x, long m)
 {
     if (m & eControlKey) {
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_DURATION);
+    
+    } else if (m & eCommandKey) {
+        tralala_keyChangeAttribute(x, m, PIZ_EVENT_CELL_DOWN);
         
     } else {
         tralala_keyDuplicate(x, m);
@@ -223,6 +237,9 @@ ulong tralala_keyRight(t_tll *x, long m)
 {
     if (m & eControlKey) {
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_DURATION);
+       
+    } else if (m & eCommandKey) {
+        tralala_keyChangeAttribute(x, m, PIZ_EVENT_CELL_UP);
         
     } else {
         tralala_keyDuplicate(x, m);
@@ -400,6 +417,14 @@ void tralala_keyChangeZone(t_tll *x, long m, long keycode)
     
     pizArrayFree(t);
     //
+    }
+}
+
+void tralala_keyChangeAttribute(t_tll *x, long m, PIZEventCode code)
+{
+    PIZEvent *event = NULL;
+    if (event = pizEventNew(code)) {
+        pizAgentDoEvent(x->agent, event);
     }
 }
 

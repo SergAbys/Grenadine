@@ -64,8 +64,7 @@
                             event->data[5],             \
                             event->data[6],             \
                             event->data[7],             \
-                            __FUNCTION__                \
-                            );                          \
+                            __FUNCTION__);              \
                         }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -141,6 +140,10 @@ typedef enum _PIZEventCode {
     PIZ_EVENT_NOTE_BACKWARD,
     PIZ_EVENT_ZONE_INCREMENT,
     PIZ_EVENT_ZONE_DECREMENT,
+    PIZ_EVENT_CELL_INCREMENT,
+    PIZ_EVENT_CELL_DECREMENT,
+    PIZ_EVENT_CELL_UP,
+    PIZ_EVENT_CELL_DOWN,
     //
     PIZ_EVENT_CHANGED_BPM,
     PIZ_EVENT_CHANGED_CHANCE,

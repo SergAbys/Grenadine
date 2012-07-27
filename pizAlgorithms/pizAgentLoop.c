@@ -93,7 +93,11 @@ static const PIZMethodError pizEventMethods[ ]  = { NULL,                       
                                                     pizSequenceNoteForward,     // PIZ_EVENT_NOTE_FORWARD
                                                     pizSequenceNoteBackward,    // PIZ_EVENT_NOTE_BACKWARD
                                                     pizSequenceZoneIncrement,   // PIZ_EVENT_ZONE_INCREMENT
-                                                    pizSequenceZoneDecrement    // PIZ_EVENT_ZONE_DECREMENT
+                                                    pizSequenceZoneDecrement,   // PIZ_EVENT_ZONE_DECREMENT
+                                                    pizSequenceCellIncrement,   // PIZ_EVENT_CELL_INCREMENT
+                                                    pizSequenceCellDecrement,   // PIZ_EVENT_CELL_DECREMENT
+                                                    pizSequenceCellUp,          // PIZ_EVENT_CELL_UP
+                                                    pizSequenceCellDown         // PIZ_EVENT_CELL_DOWN
                                                     };             
                                                                                                     
 // -------------------------------------------------------------------------------------------------------------
