@@ -178,7 +178,7 @@ PIZError pizSequenceSetValue(PIZSequence *x, const PIZEvent *event)
     if (!(pizEventData(event, &argc, &argv))) {
         if ((pizSequenceIsValidNoteValue(argv[0]))) {
             x->value = argv[0];
-            x->flags |= PIZ_SEQUENCE_FLAG_NOTE_VALUE;
+            x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
         }
     }
     

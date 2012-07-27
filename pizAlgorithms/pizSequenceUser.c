@@ -276,6 +276,10 @@ PIZError pizSequenceZoneDecrement(PIZSequence *x, PIZEvent *event)
     return PIZ_GOOD;
 }
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 PIZError pizSequenceCellIncrement(PIZSequence *x, PIZEvent *event)
 {
     x->cell = pizSequenceLenghtIncrement(x->cell);
@@ -304,6 +308,38 @@ PIZError pizSequenceCellDown(PIZSequence *x, PIZEvent *event)
 {
     x->cell = pizSequenceLenghtDown(x->cell);
     x->flags |= PIZ_SEQUENCE_FLAG_CELL;
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceValueIncrement(PIZSequence *x, PIZEvent *event)
+{
+    x->value = pizSequenceLenghtIncrement(x->value);
+    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceValueDecrement(PIZSequence *x, PIZEvent *event)
+{
+    x->value = pizSequenceLenghtDecrement(x->value);
+    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceValueUp(PIZSequence *x, PIZEvent *event)
+{
+    x->value = pizSequenceLenghtUp(x->value);
+    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceValueDown(PIZSequence *x, PIZEvent *event)
+{
+    x->value = pizSequenceLenghtDown(x->value);
+    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
     
     return PIZ_GOOD;
 }

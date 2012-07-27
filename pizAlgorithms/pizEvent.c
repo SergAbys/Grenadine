@@ -87,6 +87,10 @@ static const char *pizEventNames[ ] = { "None",
                                         "Decrement Cell",
                                         "Cell Up",
                                         "Cell Down",
+                                        "Increment Value", 
+                                        "Decrement Value",
+                                        "Value Up",
+                                        "Value Down",
                                         //
                                         "Changed Bpm",
                                         "Changed Chance",
@@ -152,8 +156,12 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_ZONE_DECREMENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_CELL_INCREMENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_CELL_DECREMENT
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_CELL_MODIFIER_UP
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_CELL_MODIFIER_DOWN
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_CELL_UP
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_CELL_DOWN
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_VALUE_INCREMENT
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_VALUE_DECREMENT
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_VALUE_MODIFIER_UP
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_VALUE_MODIFIER_DOWN
                                         //
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_BPM
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_CHANCE

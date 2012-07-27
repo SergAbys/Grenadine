@@ -110,7 +110,7 @@ PIZError pizSequenceRefresh(PIZSequence *x)
         err |= pizAgentNotify(x->owner, PIZ_EVENT_CHANGED_CELL, 1, &x->cell);
     }
     
-    if (x->flags & PIZ_SEQUENCE_FLAG_NOTE_VALUE) {
+    if (x->flags & PIZ_SEQUENCE_FLAG_VALUE) {
         err |= pizAgentNotify(x->owner, PIZ_EVENT_CHANGED_VALUE, 1, &x->value);
     }
     

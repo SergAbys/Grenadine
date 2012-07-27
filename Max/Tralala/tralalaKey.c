@@ -188,7 +188,11 @@ ulong tralala_keyUp(t_tll *x, long m)
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_VELOCITY);
     
     } else if (m & eCommandKey) {
-        tralala_keyChangeAttribute(x, m, PIZ_EVENT_CELL_INCREMENT);
+        if (m & eShiftKey) {
+            tralala_keyChangeAttribute(x, m, PIZ_EVENT_VALUE_INCREMENT);
+        } else {
+            tralala_keyChangeAttribute(x, m, PIZ_EVENT_CELL_INCREMENT);
+        }
         
     } else {
         tralala_keyDuplicate(x, m);
@@ -205,7 +209,11 @@ ulong tralala_keyDown(t_tll *x, long m)
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_VELOCITY);
     
     } else if (m & eCommandKey) {
-        tralala_keyChangeAttribute(x, m, PIZ_EVENT_CELL_DECREMENT);
+        if (m & eShiftKey) {
+            tralala_keyChangeAttribute(x, m, PIZ_EVENT_VALUE_DECREMENT);
+        } else {
+            tralala_keyChangeAttribute(x, m, PIZ_EVENT_CELL_DECREMENT);
+        }
         
     } else {
         tralala_keyDuplicate(x, m);
@@ -222,7 +230,11 @@ ulong tralala_keyLeft(t_tll *x, long m)
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_DURATION);
     
     } else if (m & eCommandKey) {
-        tralala_keyChangeAttribute(x, m, PIZ_EVENT_CELL_DOWN);
+        if (m & eShiftKey) {
+            tralala_keyChangeAttribute(x, m, PIZ_EVENT_VALUE_DOWN);
+        } else {
+            tralala_keyChangeAttribute(x, m, PIZ_EVENT_CELL_DOWN);
+        }
         
     } else {
         tralala_keyDuplicate(x, m);
@@ -239,7 +251,11 @@ ulong tralala_keyRight(t_tll *x, long m)
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_DURATION);
        
     } else if (m & eCommandKey) {
-        tralala_keyChangeAttribute(x, m, PIZ_EVENT_CELL_UP);
+        if (m & eShiftKey) {
+            tralala_keyChangeAttribute(x, m, PIZ_EVENT_VALUE_UP);
+        } else {
+            tralala_keyChangeAttribute(x, m, PIZ_EVENT_CELL_UP);
+        }
         
     } else {
         tralala_keyDuplicate(x, m);
