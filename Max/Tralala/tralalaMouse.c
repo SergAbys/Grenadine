@@ -171,40 +171,6 @@ void tralala_mouseUnselectAll(t_tll *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-ulong tralala_mouseMove(t_tll *x)
-{
-    long h = 0;
-    long argc, cell;
-    t_atom *argv = NULL;
-    long v = TLL_Y_TO_PITCH(x->cursor.y) - TLL_Y_TO_PITCH(x->origin.y);
-    long h1 = TLL_X_TO_POSITION(x->cursor.x);
-    long h2 = TLL_X_TO_POSITION(x->origin.x);
-    PIZError err = PIZ_GOOD;
-    ulong k = TLL_MOVE_NONE;
-        
-    TLL_LOCK
-    
-    if (!(err |= (dictionary_getatoms(x->current, TLL_SYM_CELL, &argc, &argv)) != MAX_ERR_NONE)) {
-        if (cell = atom_getlong(argv + 1)) {
-            h = ((long)(h1 / cell)) - ((long)(h2 / cell));
-        }
-    }
-    
-    TLL_UNLOCK
-    
-    if (!err) {
-       if (v > 0) { k |= TLL_MOVE_UP; } else if (v < 0) { k |= TLL_MOVE_DOWN; }
-       if (h > 0) { k |= TLL_MOVE_RIGHT; } else if (h < 0) { k |= TLL_MOVE_LEFT; }
-    }
-    
-    if (k) {
-        x->origin.x = x->cursor.x;
-        x->origin.y = x->cursor.y;
-    }
-    
-    return k;
-}
-
 void tralala_mouseAddNote(t_tll *x)
 {
     t_atom a[2];
@@ -294,6 +260,40 @@ long tralala_mouseHitNote(t_tll *x, long m)
     } 
     
     TLL_UNLOCK
+    
+    return k;
+}
+
+ulong tralala_mouseMove(t_tll *x)
+{
+    long h = 0;
+    long argc, cell;
+    t_atom *argv = NULL;
+    long v = TLL_Y_TO_PITCH(x->cursor.y) - TLL_Y_TO_PITCH(x->origin.y);
+    long h1 = TLL_X_TO_POSITION(x->cursor.x);
+    long h2 = TLL_X_TO_POSITION(x->origin.x);
+    PIZError err = PIZ_GOOD;
+    ulong k = TLL_MOVE_NONE;
+        
+    TLL_LOCK
+    
+    if (!(err |= (dictionary_getatoms(x->current, TLL_SYM_CELL, &argc, &argv)) != MAX_ERR_NONE)) {
+        if (cell = atom_getlong(argv + 1)) {
+            h = ((long)(h1 / cell)) - ((long)(h2 / cell));
+        }
+    }
+    
+    TLL_UNLOCK
+    
+    if (!err) {
+       if (v > 0) { k |= TLL_MOVE_UP; } else if (v < 0) { k |= TLL_MOVE_DOWN; }
+       if (h > 0) { k |= TLL_MOVE_RIGHT; } else if (h < 0) { k |= TLL_MOVE_LEFT; }
+    }
+    
+    if (k) {
+        x->origin.x = x->cursor.x;
+        x->origin.y = x->cursor.y;
+    }
     
     return k;
 }
