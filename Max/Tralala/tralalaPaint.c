@@ -21,8 +21,8 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 
 PIZ_LOCAL void tralala_paintLasso               (t_tll *x, t_object *pv);
+PIZ_LOCAL void tralala_paintCurrent             (t_tll *x, t_object *pv);
 PIZ_LOCAL void tralala_paintBackground          (t_tll *x, t_object *pv);
-PIZ_LOCAL void tralala_paintDictionary          (t_tll *x, t_object *pv);
 
 PIZ_LOCAL void tralala_paintText                (t_tll *x, t_object *pv, char *string);
 PIZ_LOCAL void tralala_paintZone                (t_tll *x, t_object *pv, long argc, t_atom *argv, long status);
@@ -48,7 +48,7 @@ PIZ_LOCAL void tralala_paintPitchAsString       (char *dst, long k, long size);
 void tralala_paint(t_tll *x, t_object *pv)
 {
     tralala_paintBackground(x, pv);
-    tralala_paintDictionary(x, pv);
+    tralala_paintCurrent(x, pv);
     tralala_paintLasso(x, pv);
 }
 
@@ -146,27 +146,7 @@ void tralala_paintLasso(t_tll *x, t_object *pv)
     jbox_paint_layer((t_object *)x, pv, TLL_SYM_LASSO, -x->offsetX, -x->offsetY);
 }
 
-void tralala_paintBackground(t_tll *x, t_object *pv)
-{
-    double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
-    double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
-    t_jgraphics *g = NULL;
-
-    if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_BACKGROUND, w, h)) {
-        if (x->flags & TLL_FLAG_FOCUS) {
-            jgraphics_set_source_jrgba(g, &x->color);
-        } else {
-            jgraphics_set_source_jrgba(g, &x->uColor);
-        }
-        
-        jgraphics_rectangle_draw_fast(g, 0., 0., w, h, 1.);
-        jbox_end_layer((t_object*)x, pv, TLL_SYM_BACKGROUND);
-    }
-        
-    jbox_paint_layer((t_object *)x, pv, TLL_SYM_BACKGROUND, -x->offsetX, -x->offsetY);
-}
-
-void tralala_paintDictionary(t_tll *x, t_object *pv)
+void tralala_paintCurrent(t_tll *x, t_object *pv)
 {
     long zoneStatus = 0;
     long i, argc, n = 0;
@@ -260,6 +240,27 @@ void tralala_paintDictionary(t_tll *x, t_object *pv)
     object_free(notes[0]);
     object_free(notes[1]);
     object_free(notes[2]);
+}
+
+
+void tralala_paintBackground(t_tll *x, t_object *pv)
+{
+    double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
+    double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
+    t_jgraphics *g = NULL;
+
+    if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_BACKGROUND, w, h)) {
+        if (x->flags & TLL_FLAG_FOCUS) {
+            jgraphics_set_source_jrgba(g, &x->color);
+        } else {
+            jgraphics_set_source_jrgba(g, &x->uColor);
+        }
+        
+        jgraphics_rectangle_draw_fast(g, 0., 0., w, h, 1.);
+        jbox_end_layer((t_object*)x, pv, TLL_SYM_BACKGROUND);
+    }
+        
+    jbox_paint_layer((t_object *)x, pv, TLL_SYM_BACKGROUND, -x->offsetX, -x->offsetY);
 }
 
 // -------------------------------------------------------------------------------------------------------------

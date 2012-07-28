@@ -194,7 +194,9 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     
     jbox_new((t_jbox *)x, boxflags, argc, argv);
     x->box.b_firstin = (void *)x;
-                        
+    
+    x->clock = clock_new(x, (method)tralala_task);
+
     x->right = bangout((t_object *)x);
     x->middleRight = outlet_new((t_object *)x, NULL);
     x->middleLeft = outlet_new((t_object *)x, NULL);
@@ -208,7 +210,8 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     err |= !(x->status = dictionary_new( ));
     err |= !(x->layer = jtextlayout_create( ));
     
-    err |= (systhread_mutex_new(&x->mutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
+    err |= (systhread_mutex_new(&x->runMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
+    err |= (systhread_mutex_new(&x->paintMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
     
     if (!err) {
         if (dictionary_entryisdictionary(d, TLL_SYM_TRALALA)) {
@@ -254,12 +257,21 @@ void tralala_free(t_tll *x)
         pizAgentFree(x->agent);
     }
     
-    if (x->mutex) {
-        systhread_mutex_free(x->mutex);
+    if (x->paintMutex) {
+        systhread_mutex_free(x->paintMutex);
+    }
+    
+    if (x->runMutex) {
+        systhread_mutex_free(x->runMutex);
     }
     
     if (x->layer) {
         jtextlayout_destroy(x->layer);
+    }
+    
+    if (x->clock) {
+        clock_unset(x->clock);
+        object_free(x->clock);
     }
     
     object_free(x->status);
@@ -382,6 +394,11 @@ void tralala_callback(void *ptr, PIZEvent *event)
     }
             
     pizEventFree(event);
+}
+
+void tralala_task (t_tll *x)
+{
+    ;
 }
 
 // -------------------------------------------------------------------------------------------------------------

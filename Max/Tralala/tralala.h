@@ -42,8 +42,8 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_LOCK        systhread_mutex_lock(x->mutex); 
-#define TLL_UNLOCK      systhread_mutex_unlock(x->mutex); 
+#define TLL_LOCK        systhread_mutex_lock(x->paintMutex); 
+#define TLL_UNLOCK      systhread_mutex_unlock(x->paintMutex); 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -51,7 +51,8 @@
 
 typedef struct _tll {
     t_jbox              box;
-    t_systhread_mutex   mutex;
+    t_systhread_mutex   runMutex;
+    t_systhread_mutex   paintMutex;
     t_atom              played[4];
     t_atom              dumped[5];
     t_atom              link;
@@ -79,6 +80,7 @@ typedef struct _tll {
     t_dictionary        *current;
     t_dictionary        *status;
     PIZAgent            *agent;
+    void                *clock;
     void                *left;
     void                *middleLeft;
     void                *middleRight;
@@ -100,6 +102,7 @@ void tralala_load       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_store      (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 
 void tralala_callback   (void *ptr, PIZEvent *event);
+void tralala_task       (t_tll *x);
 
 void tralala_play       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_loop       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
