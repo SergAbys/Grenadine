@@ -15,6 +15,11 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+#define TLL_CLOCK_PERIOD 53.
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 t_tllSymbols tll_table;
@@ -400,16 +405,15 @@ void tralala_callback(void *ptr, PIZEvent *event)
     //
     }
     
-    /*
     if (code == PIZ_EVENT_NOTE_PLAYED) {
         TLL_RUN_LOCK
         pizLinklistAppend(x->run, event);
         TLL_RUN_UNLOCK
-        clock_delay(x->clock, a[2]);
+        jbox_redraw((t_jbox *)x);
         
-    } else { */
+    } else {
         pizEventFree(event);
-    //} 
+    } 
 }
 
 void tralala_task (t_tll *x)
@@ -418,6 +422,7 @@ void tralala_task (t_tll *x)
     PIZTime now, t;
     PIZEvent *event = NULL;
     PIZEvent *nextEvent = NULL;
+    bool dirty = false;
     
     pizTimeSet(&now);
     
@@ -434,11 +439,13 @@ void tralala_task (t_tll *x)
     
     pizEventTime(event, &t);
     pizEventData(event, &argc, &argv);
+    
     pizNanoSet(&n, argv[PIZ_EVENT_DATA_DURATION] * (PIZ_AGENT_CONSTANT_BPM_NS / argv[PIZ_EVENT_DATA_BPM]));
     pizTimeAddNano(&t, &n);
 
     if (pizTimeElapsedNano(&now, &t, &m)) {
        pizLinklistRemoveWithPtr(x->run, (void *)event);
+       dirty = true;
     }
         
     event = nextEvent;
@@ -446,6 +453,12 @@ void tralala_task (t_tll *x)
     }
        
     TLL_RUN_UNLOCK
+    
+    if (dirty) {
+        jbox_redraw((t_jbox *)x);
+    }
+    
+    clock_fdelay(x->clock, TLL_CLOCK_PERIOD);
 }
 
 // -------------------------------------------------------------------------------------------------------------
