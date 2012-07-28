@@ -205,6 +205,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     jbox_ready((t_jbox *)x);
     attr_dictionary_process(x, d);
     
+    err |= !(x->run = pizLinklistNew( ));
     err |= !(x->data = dictionary_new( ));
     err |= !(x->current = dictionary_new( ));
     err |= !(x->status = dictionary_new( ));
@@ -273,6 +274,8 @@ void tralala_free(t_tll *x)
         clock_unset(x->clock);
         object_free(x->clock);
     }
+    
+    pizLinklistFree(x->run);
     
     object_free(x->status);
     object_free(x->current);
@@ -348,10 +351,11 @@ void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_callback(void *ptr, PIZEvent *event)
 {
-    long k, argc = 0;
+    long argc;
     long *argv = NULL;
     t_tll *x = NULL;
     PIZEventCode code = PIZ_EVENT_NONE;
+    long a[ ] = { 0, 0, 0, 0 };
     
     x = (t_tll *)ptr;
     pizEventCode(event, &code);
@@ -362,9 +366,12 @@ void tralala_callback(void *ptr, PIZEvent *event)
     //
     case PIZ_EVENT_NOTE_PLAYED :
         pizEventData(event, &argc, &argv);
-        k = argv[PIZ_EVENT_DATA_DURATION]; 
-        argv[PIZ_EVENT_DATA_DURATION] = (long)(k * (PIZ_AGENT_CONSTANT_BPM_MS / argv[PIZ_EVENT_DATA_BPM]));
-        atom_setlong_array(4, x->played, 4, argv + 1);
+        a[0] = argv[PIZ_EVENT_DATA_PITCH];
+        a[1] = argv[PIZ_EVENT_DATA_VELOCITY];
+        a[2] = argv[PIZ_EVENT_DATA_DURATION];
+        a[2] = (long)(a[2] * (PIZ_AGENT_CONSTANT_BPM_MS / argv[PIZ_EVENT_DATA_BPM]));
+        a[3] = argv[PIZ_EVENT_DATA_CHANNEL];
+        atom_setlong_array(4, x->played, 4, a);
         outlet_list(x->left, NULL, 4, x->played); 
         break;
         
@@ -392,13 +399,53 @@ void tralala_callback(void *ptr, PIZEvent *event)
         break;
     //
     }
-            
-    pizEventFree(event);
+    
+    /*
+    if (code == PIZ_EVENT_NOTE_PLAYED) {
+        TLL_RUN_LOCK
+        pizLinklistAppend(x->run, event);
+        TLL_RUN_UNLOCK
+        clock_delay(x->clock, a[2]);
+        
+    } else { */
+        pizEventFree(event);
+    //} 
 }
 
 void tralala_task (t_tll *x)
 {
-    ;
+    PIZNano m, n;
+    PIZTime now, t;
+    PIZEvent *event = NULL;
+    PIZEvent *nextEvent = NULL;
+    
+    pizTimeSet(&now);
+    
+    TLL_RUN_LOCK
+    
+    pizLinklistPtrAtIndex(x->run, 0, (void **)&event);
+    
+    while (event) {
+    //
+    long argc;
+    long *argv = NULL;
+
+    pizLinklistNextWithPtr(x->run, (void *)event, (void **)&nextEvent);
+    
+    pizEventTime(event, &t);
+    pizEventData(event, &argc, &argv);
+    pizNanoSet(&n, argv[PIZ_EVENT_DATA_DURATION] * (PIZ_AGENT_CONSTANT_BPM_NS / argv[PIZ_EVENT_DATA_BPM]));
+    pizTimeAddNano(&t, &n);
+
+    if (pizTimeElapsedNano(&now, &t, &m)) {
+       pizLinklistRemoveWithPtr(x->run, (void *)event);
+    }
+        
+    event = nextEvent;
+    //
+    }
+       
+    TLL_RUN_UNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------

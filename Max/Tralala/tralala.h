@@ -45,6 +45,9 @@
 #define TLL_LOCK        systhread_mutex_lock(x->paintMutex); 
 #define TLL_UNLOCK      systhread_mutex_unlock(x->paintMutex); 
 
+#define TLL_RUN_LOCK    systhread_mutex_lock(x->runMutex); 
+#define TLL_RUN_UNLOCK  systhread_mutex_unlock(x->runMutex); 
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -80,6 +83,7 @@ typedef struct _tll {
     t_dictionary        *current;
     t_dictionary        *status;
     PIZAgent            *agent;
+    PIZLinklist         *run;
     void                *clock;
     void                *left;
     void                *middleLeft;

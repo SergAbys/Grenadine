@@ -185,48 +185,7 @@
 	<key>Notifications</key>
 	<array/>
 	<key>OpenEditors</key>
-	<array>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>96D6A6CC15C4207700541E5A</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>tralala.c</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>96D6A6CD15C4207700541E5A</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>tralala.c</string>
-						<key>_historyCapacity</key>
-						<integer>40</integer>
-						<key>bookmark</key>
-						<string>96D6A6CE15C4207700541E5A</string>
-						<key>history</key>
-						<array>
-							<string>96D6A6C815C4203800541E5A</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {1278, 675}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>-1 62 1278 716 0 0 1280 778 </string>
-			</dict>
-		</dict>
-	</array>
+	<array/>
 	<key>PerspectiveWidths</key>
 	<array>
 		<integer>-1</integer>
@@ -326,7 +285,7 @@
 									<real>43</real>
 								</array>
 								<key>RubberWindowFrame</key>
-								<string>362 233 471 424 0 0 1280 778 </string>
+								<string>112 278 471 424 0 0 1280 778 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXSmartGroupTreeModule</string>
@@ -503,10 +462,9 @@
 		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Dev/Grenadine/Max/Tralala/tralala.xcodeproj</string>
-		<string>96D6A6CC15C4207700541E5A</string>
 	</array>
 	<key>WindowString</key>
-	<string>362 233 471 424 0 0 1280 778 </string>
+	<string>112 278 471 424 0 0 1280 778 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -664,7 +622,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string></string>
+								<string>tralala.c</string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -681,10 +639,12 @@
 							<string>159pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 5}, {1205, 425}}</string>
+								<string>{{0, 321}, {1205, 109}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>
@@ -862,8 +822,6 @@
 							<key>Dock</key>
 							<array>
 								<dict>
-									<key>BecomeActive</key>
-									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
@@ -890,6 +848,8 @@
 							<string>443pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
