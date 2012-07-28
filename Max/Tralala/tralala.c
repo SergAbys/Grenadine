@@ -35,6 +35,7 @@ static t_int32_atomic tll_identifier;
 // -------------------------------------------------------------------------------------------------------------
 
 PIZ_LOCAL void tralala_send             (t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags);
+PIZ_LOCAL void tralala_clock            (t_tll *x, PIZEventCode code);
 PIZ_LOCAL t_symbol *tralala_slotName    (long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
@@ -397,6 +398,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
     case PIZ_EVENT_END :
         pizEventTime(event, &x->time);
         outlet_anything(x->middleRight, TLL_SYM_END, 1, &x->link);
+        tralala_clock(x, PIZ_EVENT_END);
         break;
     
     default :
@@ -525,8 +527,15 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong fl
     }
                         
     pizAgentDoEvent(x->agent, event);
+    
+    tralala_clock(x, code);
     //
     }
+}
+
+void tralala_clock(t_tll *x, PIZEventCode code)
+{
+    ;
 }
 
 t_symbol *tralala_slotName(long argc, t_atom *argv) 
