@@ -45,12 +45,12 @@
 
 #ifdef __MACH__
 
-    typedef volatile uint32_t t_uint32_atomic;
+typedef volatile uint32_t t_uint32_atomic;
     
-    #define TLL_FLAG_SET(mask)      OSAtomicOr32((uint32_t)(mask), (uint32_t *)&x->flags); 
-    #define TLL_FLAG_UNSET(mask)    OSAtomicAnd32((uint32_t)(~(mask)), (uint32_t *)&x->flags);
-    #define TLL_FLAG_TRUE(mask)     (x->flags & (mask)) 
-    #define TLL_FLAG_FALSE(mask)    !(x->flags & (mask))
+#define TLL_FLAG_SET(mask)      OSAtomicOr32((uint32_t)(mask), (uint32_t *)&x->flags); 
+#define TLL_FLAG_UNSET(mask)    OSAtomicAnd32((uint32_t)(~(mask)), (uint32_t *)&x->flags);
+#define TLL_FLAG_TRUE(mask)     ((mask) & (OSAtomicOr32(0UL, (uint32_t *)&x->flags))) 
+#define TLL_FLAG_FALSE(mask)    !((mask) & (OSAtomicOr32(0UL, (uint32_t *)&x->flags)))
     
 #endif // __MACH__
 
