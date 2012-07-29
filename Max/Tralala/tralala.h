@@ -43,11 +43,24 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_LOCK            systhread_mutex_lock(x->paintMutex); 
-#define TLL_UNLOCK          systhread_mutex_unlock(x->paintMutex); 
+#ifdef __MACH__
 
-#define TLL_RUN_LOCK        systhread_mutex_lock(x->runMutex); 
-#define TLL_RUN_UNLOCK      systhread_mutex_unlock(x->runMutex); 
+    typedef volatile uint32_t t_uint32_atomic;
+    
+    #define TLL_FLAG_SET(mask)      OSAtomicOr32((uint32_t)(mask), (uint32_t *)&x->flags); 
+    #define TLL_FLAG_UNSET(mask)    OSAtomicAnd32((uint32_t)(~(mask)), (uint32_t *)&x->flags);
+    
+#endif // __MACH__
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+#define TLL_LOCK        systhread_mutex_lock(x->paintMutex); 
+#define TLL_UNLOCK      systhread_mutex_unlock(x->paintMutex); 
+
+#define TLL_RUN_LOCK    systhread_mutex_lock(x->runMutex); 
+#define TLL_RUN_UNLOCK  systhread_mutex_unlock(x->runMutex); 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -55,13 +68,13 @@
 
 typedef struct _tll {
     t_jbox              box;
+    ulong               flags;
     t_systhread_mutex   runMutex;
     t_systhread_mutex   paintMutex;
     t_atom              played[4];
     t_atom              dumped[5];
     t_atom              link;
     PIZTime             time;
-    ulong               flags;
     long                identifier;
     long                offsetX;
     long                offsetY;
