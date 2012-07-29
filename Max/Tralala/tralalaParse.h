@@ -32,6 +32,7 @@
 #define TLL_SYM_CLEAR           (tll_table.clear)
 #define TLL_SYM_TRALALA         (tll_table.tralala)
 #define TLL_SYM_UNTITLED        (tll_table.untitled)
+#define TLL_SYM_LOAD            (tll_table.load)
 #define TLL_SYM_IDENTIFIER      (tll_table.identifier)
 #define TLL_SYM_MARK            (tll_table.mark)
 #define TLL_SYM_RUN             (tll_table.run)
@@ -67,6 +68,7 @@ typedef struct _tllSymbols {
     t_symbol *clear;
     t_symbol *tralala;
     t_symbol *untitled;
+    t_symbol *load;
     t_symbol *identifier;
     t_symbol *mark;
     t_symbol *run;
@@ -91,8 +93,9 @@ typedef struct _tllSymbols {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_FLAG_RUN    1UL
-#define TLL_FLAG_LOW    2UL
+#define TLL_FLAG_RUN        1UL
+#define TLL_FLAG_LOW        2UL
+#define TLL_FLAG_FILTER     4UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

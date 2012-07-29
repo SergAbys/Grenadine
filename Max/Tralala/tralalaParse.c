@@ -60,6 +60,7 @@ table->end              = gensym("end");
 table->clear            = gensym("clear");
 table->tralala          = gensym("tralala");
 table->untitled         = gensym("untitled");
+table->load             = gensym("load");
 table->identifier       = gensym("identifier");
 table->mark             = gensym("mark");
 table->run              = gensym("run");
@@ -230,11 +231,13 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong 
         
     if (!(dictionary_getlong(tll_code, s, (long *)&code))) {
     //
+    code -= TLL_TINY;
+    
+    if (!(((flags & TLL_FLAG_FILTER) && (code != PIZ_EVENT_NOTE) && (code != PIZ_EVENT_ZONE)))) {
+    //
     long i, k = 0, msg = 0;
     long data[PIZ_EVENT_DATA_SIZE] = { 0 };
     PIZEvent *event = NULL;
-     
-    code -= TLL_TINY;
     
     if (msg = ((code == PIZ_EVENT_ROTATE)   ||
                (code == PIZ_EVENT_SCRAMBLE) ||
@@ -300,6 +303,8 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong 
         }
         
         pizAgentDoEvent(x->agent, event);
+    }
+    //
     }
     //
     }

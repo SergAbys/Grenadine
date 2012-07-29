@@ -20,13 +20,14 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
+PIZ_LOCAL void tralala_paintRun                 (t_tll *x, t_object *pv);
 PIZ_LOCAL void tralala_paintLasso               (t_tll *x, t_object *pv);
 PIZ_LOCAL void tralala_paintCurrent             (t_tll *x, t_object *pv);
 PIZ_LOCAL void tralala_paintBackground          (t_tll *x, t_object *pv);
 
-PIZ_LOCAL void tralala_paintText                (t_tll *x, t_object *pv, char *string);
-PIZ_LOCAL void tralala_paintZone                (t_tll *x, t_object *pv, long argc, t_atom *argv, long status);
-PIZ_LOCAL void tralala_paintNote                (t_tll *x, t_object *pv, t_atomarray **notes);
+PIZ_LOCAL void tralala_paintCurrentText         (t_tll *x, t_object *pv, char *string);
+PIZ_LOCAL void tralala_paintCurrentZone         (t_tll *x, t_object *pv, long argc, t_atom *argv, long status);
+PIZ_LOCAL void tralala_paintCurrentNotes        (t_tll *x, t_object *pv, t_atomarray **notes);
 
 PIZ_LOCAL void tralala_paintStrncatZone         (char *dst, long argc, t_atom *argv, long status);
 PIZ_LOCAL void tralala_paintStrncatNote         (char *dst, long argc, t_atom *argv);
@@ -49,6 +50,7 @@ void tralala_paint(t_tll *x, t_object *pv)
 {
     tralala_paintBackground(x, pv);
     tralala_paintCurrent(x, pv);
+    tralala_paintRun(x, pv);
     tralala_paintLasso(x, pv);
 }
 
@@ -120,6 +122,13 @@ t_max_err tralala_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, v
 #pragma mark -
 #pragma mark ---
 #pragma mark -
+
+void tralala_paintRun(t_tll *x, t_object *pv)
+{
+    TLL_RUN_LOCK
+    ;
+    TLL_RUN_UNLOCK
+}
 
 void tralala_paintLasso(t_tll *x, t_object *pv)
 {
@@ -225,15 +234,15 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
     
     if (!err) {
         if (!zoneStatus) {
-            tralala_paintZone(x, pv, argc, argv, zoneStatus);
-            tralala_paintNote(x, pv, notes);
+            tralala_paintCurrentZone(x, pv, argc, argv, zoneStatus);
+            tralala_paintCurrentNotes(x, pv, notes);
         } else {
-            tralala_paintNote(x, pv, notes);
-            tralala_paintZone(x, pv, argc, argv, zoneStatus);
+            tralala_paintCurrentNotes(x, pv, notes);
+            tralala_paintCurrentZone(x, pv, argc, argv, zoneStatus);
         }
         
         if (x->viewText) {
-            tralala_paintText(x, pv, string);
+            tralala_paintCurrentText(x, pv, string);
         }
     }
     
@@ -267,7 +276,7 @@ void tralala_paintBackground(t_tll *x, t_object *pv)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_paintText(t_tll *x, t_object *pv, char *string)
+void tralala_paintCurrentText(t_tll *x, t_object *pv, char *string)
 {
     t_rect r;
     t_jgraphics *g = NULL; 
@@ -295,7 +304,7 @@ void tralala_paintText(t_tll *x, t_object *pv, char *string)
     jfont_destroy(font);
 }
 
-void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv, long status)
+void tralala_paintCurrentZone(t_tll *x, t_object *pv, long argc, t_atom *argv, long status)
 {
     double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
     double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
@@ -332,7 +341,7 @@ void tralala_paintZone(t_tll *x, t_object *pv, long argc, t_atom *argv, long sta
     jbox_paint_layer((t_object *)x, pv, TLL_SYM_ZONE, -x->offsetX, -x->offsetY);
 }
 
-void tralala_paintNote(t_tll *x, t_object *pv, t_atomarray **notes)
+void tralala_paintCurrentNotes(t_tll *x, t_object *pv, t_atomarray **notes)
 {
     double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
     double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);

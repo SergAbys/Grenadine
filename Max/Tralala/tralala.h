@@ -16,7 +16,6 @@
 
 #include "ext.h"
 #include "ext_obex.h"
-#include "ext_atomic.h"
 #include "ext_strings.h"
 #include "ext_systhread.h"
 #include "jpatcher_api.h"
@@ -103,8 +102,8 @@ void tralala_free       (t_tll *x);
 void tralala_assist     (t_tll *x, void *b, long m, long a, char *s);
 void tralala_jsave      (t_tll *x, t_dictionary *d);
 
-void tralala_load       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_store      (t_tll *x, t_symbol *s, long argc, t_atom *argv);
+void tralala_recall     (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 
 void tralala_callback   (void *ptr, PIZEvent *event);
 void tralala_task       (t_tll *x);
