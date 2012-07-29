@@ -29,7 +29,7 @@ t_dictionary *tll_clipboard;
 // -------------------------------------------------------------------------------------------------------------
 
 static t_class *tll_class;
-static long tll_identifier;
+static t_int32_atomic tll_identifier;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -221,7 +221,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     err |= (systhread_mutex_new(&x->runMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
     err |= (systhread_mutex_new(&x->paintMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
     
-    x->identifier = ++tll_identifier;
+    x->identifier = ATOMIC_INCREMENT(&tll_identifier);
     
     if (!err) {
         if (dictionary_entryisdictionary(d, TLL_SYM_TRALALA)) {
