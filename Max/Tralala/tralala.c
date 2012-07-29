@@ -16,7 +16,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define TLL_CLOCK_PERIOD 53.
+#define TLL_CLOCK_PERIOD 47.
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ static t_int32_atomic tll_identifier;
 // -------------------------------------------------------------------------------------------------------------
 
 PIZ_LOCAL void tralala_send             (t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags);
-PIZ_LOCAL void tralala_clock            (t_tll *x, PIZEventCode code);
+PIZ_LOCAL void tralala_switchClock      (t_tll *x, PIZEventCode code);
 PIZ_LOCAL t_symbol *tralala_slotName    (long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
@@ -58,12 +58,12 @@ int main(void)
     class_addmethod(c, (method)tralala_paint,       "paint",         A_CANT,  0);
     class_addmethod(c, (method)tralala_params,      "getdrawparams", A_CANT,  0);
     class_addmethod(c, (method)tralala_focusgained, "focusgained",   A_CANT, 0);
-	class_addmethod(c, (method)tralala_focuslost,   "focuslost",     A_CANT, 0);	
+    class_addmethod(c, (method)tralala_focuslost,   "focuslost",     A_CANT, 0);	
     class_addmethod(c, (method)tralala_key,         "key",           A_CANT,  0);
     class_addmethod(c, (method)tralala_mousewheel,  "mousewheel",    A_CANT,  0);
     class_addmethod(c, (method)tralala_mousedown,   "mousedown",     A_CANT,  0);
     class_addmethod(c, (method)tralala_mousedrag,   "mousedrag",     A_CANT,  0);
-	class_addmethod(c, (method)tralala_mouseup,     "mouseup",       A_CANT,  0);
+    class_addmethod(c, (method)tralala_mouseup,     "mouseup",       A_CANT,  0);
     class_addmethod(c, (method)tralala_notify,      "notify",        A_CANT,  0);
     class_addmethod(c, (method)tralala_load,        "load",          A_GIMME, 0);
     class_addmethod(c, (method)tralala_store,       "store",         A_GIMME, 0);
@@ -398,7 +398,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
     case PIZ_EVENT_END :
         pizEventTime(event, &x->time);
         outlet_anything(x->middleRight, TLL_SYM_END, 1, &x->link);
-        tralala_clock(x, PIZ_EVENT_END);
+        tralala_switchClock(x, PIZ_EVENT_END);
         break;
     
     default :
@@ -408,10 +408,14 @@ void tralala_callback(void *ptr, PIZEvent *event)
     }
     
     if (code == PIZ_EVENT_NOTE_PLAYED) {
+    
         TLL_RUN_LOCK
         pizLinklistAppend(x->run, event);
         TLL_RUN_UNLOCK
-        jbox_redraw((t_jbox *)x);
+        
+        tralala_switchClock(x, PIZ_EVENT_NOTE_PLAYED);
+        //jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_RUN);
+        //jbox_redraw((t_jbox *)x);
         
     } else {
         pizEventFree(event);
@@ -456,11 +460,15 @@ void tralala_task (t_tll *x)
        
     TLL_RUN_UNLOCK
     
+    /*
     if (dirty) {
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_RUN);
         jbox_redraw((t_jbox *)x);
+    }*/
+            
+    if (x->flags & TLL_FLAG_CLOCK) {
+        clock_fdelay(x->clock, TLL_CLOCK_PERIOD);
     }
-    
-    clock_fdelay(x->clock, TLL_CLOCK_PERIOD);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -528,14 +536,31 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong fl
                         
     pizAgentDoEvent(x->agent, event);
     
-    tralala_clock(x, code);
+    tralala_switchClock(x, code);
     //
     }
 }
 
-void tralala_clock(t_tll *x, PIZEventCode code)
+void tralala_switchClock(t_tll *x, PIZEventCode code)
 {
-    ;
+    switch (code) {
+        case PIZ_EVENT_NOTE_PLAYED :
+            if (!(x->flags & TLL_FLAG_CLOCK)) { 
+                clock_fdelay(x->clock, TLL_CLOCK_PERIOD); 
+                x->flags |= TLL_FLAG_CLOCK;
+            } break;
+        
+        case PIZ_EVENT_STOP :
+            x->flags &= ~TLL_FLAG_CLOCK;
+            break;
+        
+        case PIZ_EVENT_END :
+            x->flags &= ~TLL_FLAG_CLOCK;
+            break;
+        
+        default : 
+            break;
+    }
 }
 
 t_symbol *tralala_slotName(long argc, t_atom *argv) 

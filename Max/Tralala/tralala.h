@@ -37,16 +37,17 @@
 #define TLL_FLAG_LASSO      4UL
 #define TLL_FLAG_FOCUS      8UL
 #define TLL_FLAG_SHIFT      16UL
+#define TLL_FLAG_CLOCK      32UL
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_LOCK        systhread_mutex_lock(x->paintMutex); 
-#define TLL_UNLOCK      systhread_mutex_unlock(x->paintMutex); 
+#define TLL_LOCK            systhread_mutex_lock(x->paintMutex); 
+#define TLL_UNLOCK          systhread_mutex_unlock(x->paintMutex); 
 
-#define TLL_RUN_LOCK    systhread_mutex_lock(x->runMutex); 
-#define TLL_RUN_UNLOCK  systhread_mutex_unlock(x->runMutex); 
+#define TLL_RUN_LOCK        systhread_mutex_lock(x->runMutex); 
+#define TLL_RUN_UNLOCK      systhread_mutex_unlock(x->runMutex); 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
