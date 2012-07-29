@@ -75,12 +75,12 @@ void tralala_mousedown(t_tll *x, t_object *pv, t_pt pt, long m)
         if (!(m & eShiftKey)) {
             tralala_mouseUnselectAll(x);
         }
-        x->flags |= TLL_FLAG_LASSO;
+        TLL_FLAG_SET(TLL_FLAG_LASSO)
         
     } else {
         tralala_mouseUnselectZone(x);
         if (k == TLL_HIT_GRAB) {
-            x->flags |= TLL_FLAG_GRAB;
+            TLL_FLAG_SET(TLL_FLAG_GRAB)
         }
     }
             
@@ -95,10 +95,10 @@ void tralala_mousedrag(t_tll *x, t_object *pv, t_pt pt, long m)
     x->cursor.y = pt.y - 1.;
     
     if (m & eShiftKey) {
-        x->flags |= TLL_FLAG_SHIFT;
+        TLL_FLAG_SET(TLL_FLAG_SHIFT)
     }
     
-    if (x->flags & TLL_FLAG_LASSO) {
+    if (TLL_FLAG_TRUE(TLL_FLAG_LASSO)) {
         if (tralala_mouseSelectLasso(x)) {
             jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
         }
@@ -106,10 +106,10 @@ void tralala_mousedrag(t_tll *x, t_object *pv, t_pt pt, long m)
         jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
         jbox_redraw((t_jbox *)x);
         
-    } else if (x->flags & TLL_FLAG_GRAB) {
+    } else if (TLL_FLAG_TRUE(TLL_FLAG_GRAB)) {
         ulong k;
         
-        if (x->flags & TLL_FLAG_COPY) {
+        if (TLL_FLAG_TRUE(TLL_FLAG_COPY)) {
             m &= ~(eShiftKey | eControlKey | eAltKey);
         } else {
             m &= ~(eShiftKey | eControlKey);
@@ -126,9 +126,9 @@ void tralala_mousedrag(t_tll *x, t_object *pv, t_pt pt, long m)
 
 void tralala_mouseup(t_tll *x, t_object *pv, t_pt pt, long m)
 {
-    x->flags &= ~(TLL_FLAG_GRAB | TLL_FLAG_COPY | TLL_FLAG_SHIFT);
+    TLL_FLAG_UNSET(TLL_FLAG_GRAB | TLL_FLAG_COPY | TLL_FLAG_SHIFT)
     
-    if (x->flags & TLL_FLAG_LASSO) {
+    if (TLL_FLAG_TRUE(TLL_FLAG_LASSO)) {
         tralala_mouseReleaseLasso(x);
         jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
         jbox_redraw((t_jbox *)x);
@@ -152,7 +152,7 @@ void tralala_mousewheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc,
 
 ulong tralala_mouseAbort(t_tll *x)
 {
-    if (x->flags & TLL_FLAG_LASSO) {
+    if (TLL_FLAG_TRUE(TLL_FLAG_LASSO)) {
         tralala_mouseReleaseLasso(x);
         return TLL_DIRTY_LASSO;
     } 
@@ -336,7 +336,7 @@ ulong tralala_mouseSelectLasso(t_tll *x)
             dictionary_appendlong(x->status, key, TLL_LASSO_SELECTED);
             dirty |= TLL_DIRTY_NOTE;
             
-        } else if (x->flags & TLL_FLAG_SHIFT) {
+        } else if (TLL_FLAG_TRUE(TLL_FLAG_SHIFT)) {
             if (!(dictionary_getlong(x->status, key, &status)) && (status == TLL_SELECTED)) {
                 dictionary_appendlong(x->status, key, TLL_LASSO_UNSELECTED);
                 dirty |= TLL_DIRTY_NOTE;
@@ -349,7 +349,7 @@ ulong tralala_mouseSelectLasso(t_tll *x)
             dictionary_deleteentry(x->status, key);
             dirty |= TLL_DIRTY_NOTE;
             
-        } else if ((x->flags & TLL_FLAG_SHIFT) && (status == TLL_LASSO_UNSELECTED)) {
+        } else if ((TLL_FLAG_TRUE(TLL_FLAG_SHIFT)) && (status == TLL_LASSO_UNSELECTED)) {
             dictionary_appendlong(x->status, key, TLL_SELECTED);
             dirty |= TLL_DIRTY_NOTE;
         }
@@ -403,7 +403,7 @@ void tralala_mouseReleaseLasso(t_tll *x)
     
     TLL_UNLOCK
     
-    x->flags &= ~TLL_FLAG_LASSO;
+    TLL_FLAG_UNSET(TLL_FLAG_LASSO)
 }
 
 void tralala_mouseUnselectZone(t_tll *x)

@@ -49,6 +49,8 @@
     
     #define TLL_FLAG_SET(mask)      OSAtomicOr32((uint32_t)(mask), (uint32_t *)&x->flags); 
     #define TLL_FLAG_UNSET(mask)    OSAtomicAnd32((uint32_t)(~(mask)), (uint32_t *)&x->flags);
+    #define TLL_FLAG_TRUE(mask)     (x->flags & (mask)) 
+    #define TLL_FLAG_FALSE(mask)    !(x->flags & (mask))
     
 #endif // __MACH__
 
@@ -68,7 +70,7 @@
 
 typedef struct _tll {
     t_jbox              box;
-    ulong               flags;
+    t_uint32_atomic     flags;
     t_systhread_mutex   runMutex;
     t_systhread_mutex   paintMutex;
     t_atom              played[4];

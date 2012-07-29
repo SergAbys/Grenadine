@@ -56,7 +56,7 @@ void tralala_paint(t_tll *x, t_object *pv)
 
 void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
 {
-    if (x->flags & TLL_FLAG_FOCUS) {
+    if (TLL_FLAG_TRUE(TLL_FLAG_FOCUS)) {
         jrgba_copy(&params->d_bordercolor, &x->border);
         jrgba_copy(&params->d_boxfillcolor, &x->background);
     } else {
@@ -67,7 +67,7 @@ void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
 
 void tralala_focusgained(t_tll *x, t_object *pv)
 {
-	x->flags |= TLL_FLAG_FOCUS;
+	TLL_FLAG_SET(TLL_FLAG_FOCUS)
     
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
@@ -78,7 +78,7 @@ void tralala_focusgained(t_tll *x, t_object *pv)
 
 void tralala_focuslost(t_tll *x, t_object *pv)
 {
-	x->flags &= ~TLL_FLAG_FOCUS;
+	TLL_FLAG_UNSET(TLL_FLAG_FOCUS)
     
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
@@ -144,7 +144,7 @@ void tralala_paintLasso(t_tll *x, t_object *pv)
         r.width = MAX(x->origin.x, x->cursor.x) - r.x;
         r.height = MAX(x->origin.y, x->cursor.y) - r.y;
         
-        if (x->flags & TLL_FLAG_LASSO) {
+        if (TLL_FLAG_TRUE(TLL_FLAG_LASSO)) {
             jgraphics_set_source_jrgba(g, &x->lasso);
             jgraphics_rectangle_fill_fast(g, TLL_X_OFFSET(r.x), TLL_Y_OFFSET(r.y), r.width, r.height);
         }
@@ -259,7 +259,7 @@ void tralala_paintBackground(t_tll *x, t_object *pv)
     t_jgraphics *g = NULL;
 
     if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_BACKGROUND, w, h)) {
-        if (x->flags & TLL_FLAG_FOCUS) {
+        if (TLL_FLAG_TRUE(TLL_FLAG_FOCUS)) {
             jgraphics_set_source_jrgba(g, &x->color);
         } else {
             jgraphics_set_source_jrgba(g, &x->uColor);
@@ -293,7 +293,7 @@ void tralala_paintCurrentText(t_tll *x, t_object *pv, char *string)
     
     jtextlayout_set(x->layer, string, font, 5., 5., r.width - 10., r.height - 5., justification, 0L);
     
-    if (x->flags & TLL_FLAG_FOCUS) {
+    if (TLL_FLAG_TRUE(TLL_FLAG_FOCUS)) {
         jtextlayout_settextcolor(x->layer, &x->text);
     } else {
         jtextlayout_settextcolor(x->layer, &x->uText);
@@ -322,7 +322,7 @@ void tralala_paintCurrentZone(t_tll *x, t_object *pv, long argc, t_atom *argv, l
     r.width = TLL_POSITION_TO_X(zone[1]) - r.x;
     r.height = TLL_PITCH_TO_Y_DOWN(zone[2]) - r.y;
 
-    if (x->flags & TLL_FLAG_FOCUS) {
+    if (TLL_FLAG_TRUE(TLL_FLAG_FOCUS)) {
         if (status) {
             jgraphics_set_source_jrgba(g, &x->hColor2);
         } else  {
@@ -368,7 +368,7 @@ void tralala_paintCurrentNotes(t_tll *x, t_object *pv, t_atomarray **notes)
         r.width  = TLL_POSITION_TO_X(note[0] + note[3]) - r.x; 
         r.height = TLL_PITCH_TO_Y_DOWN(note[1]) - r.y;
     
-        if (x->flags & TLL_FLAG_FOCUS) {
+        if (TLL_FLAG_TRUE(TLL_FLAG_FOCUS)) {
             if (i == 0 ) {
                 jgraphics_set_source_jrgba(g, &x->color);
             } else if (i == 1) {

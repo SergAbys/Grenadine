@@ -471,7 +471,7 @@ void tralala_task (t_tll *x)
         jbox_redraw((t_jbox *)x);
     }
             
-    if (x->flags & TLL_FLAG_CLOCK) {
+    if (TLL_FLAG_TRUE(TLL_FLAG_CLOCK)) {
         clock_fdelay(x->clock, TLL_CLOCK_PERIOD);
     }
 }
@@ -550,17 +550,17 @@ void tralala_switchClock(t_tll *x, PIZEventCode code)
 {
     switch (code) {
         case PIZ_EVENT_NOTE_PLAYED :
-            if (!(x->flags & TLL_FLAG_CLOCK)) { 
+            if (TLL_FLAG_FALSE(TLL_FLAG_CLOCK)) { 
                 clock_fdelay(x->clock, TLL_CLOCK_PERIOD); 
-                x->flags |= TLL_FLAG_CLOCK;
+                TLL_FLAG_SET(TLL_FLAG_CLOCK)
             } break;
         
         case PIZ_EVENT_STOP :
-            x->flags &= ~TLL_FLAG_CLOCK;
+            TLL_FLAG_UNSET(TLL_FLAG_CLOCK)
             break;
         
         case PIZ_EVENT_END :
-            x->flags &= ~TLL_FLAG_CLOCK;
+            TLL_FLAG_UNSET(TLL_FLAG_CLOCK)
             break;
         
         default : 
