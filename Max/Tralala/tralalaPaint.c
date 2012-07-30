@@ -50,7 +50,11 @@ void tralala_paint(t_tll *x, t_object *pv)
 {
     tralala_paintBackground(x, pv);
     tralala_paintCurrent(x, pv);
-    tralala_paintRun(x, pv);
+    
+    if (TLL_FLAG_TRUE(TLL_FLAG_FOCUS)) {
+        tralala_paintRun(x, pv);
+    }
+    
     tralala_paintLasso(x, pv);
 }
 
@@ -125,9 +129,60 @@ t_max_err tralala_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, v
 
 void tralala_paintRun(t_tll *x, t_object *pv)
 {
+    double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
+    double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
+    t_jgraphics *g = NULL;
+    
+    PIZEvent *event = NULL;
+    PIZEvent *nextEvent = NULL;
+    
+    pizArrayClear(x->temp);
+    
     TLL_RUN_LOCK
-    ;
+    
+    pizLinklistPtrAtIndex(x->run, 0, (void **)&event);
+    
+    while (event) {
+    //
+    long argc;
+    long *argv = NULL;
+
+    pizLinklistNextWithPtr(x->run, (void *)event, (void **)&nextEvent);
+    
+    pizEventData(event, &argc, &argv);
+    
+    pizArrayAppend(x->temp, argv[0]);
+    pizArrayAppend(x->temp, argv[1]);
+    pizArrayAppend(x->temp, argv[2]);
+    pizArrayAppend(x->temp, argv[3]);
+        
+    event = nextEvent;
+    //
+    }
+    
     TLL_RUN_UNLOCK
+    
+    if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_RUN, w, h)) {
+    //
+    long j;
+    long *note = pizArrayPtr(x->temp);
+    
+    for (j = 0; j < pizArrayCount(x->temp); j += 4) {
+        t_rect r;
+        r.x = TLL_POSITION_TO_X(note[j]);
+        r.y = TLL_PITCH_TO_Y_UP(note[j + 1]); 
+        r.width  = TLL_POSITION_TO_X(note[j] + note[j + 3]) - r.x; 
+        r.height = TLL_PITCH_TO_Y_DOWN(note[j + 1]) - r.y;
+    
+        jgraphics_set_source_jrgba(g, &x->rColor);
+        jgraphics_rectangle_fill_fast(g, r.x, r.y, r.width, r.height);
+    }
+    
+    jbox_end_layer((t_object*)x, pv, TLL_SYM_RUN);
+    //
+    }
+        
+    jbox_paint_layer((t_object *)x, pv, TLL_SYM_RUN, -x->offsetX, -x->offsetY);
 }
 
 void tralala_paintLasso(t_tll *x, t_object *pv)
@@ -359,9 +414,9 @@ void tralala_paintCurrentNotes(t_tll *x, t_object *pv, t_atomarray **notes)
     long j;
     for (j = 0; j < atomarray_getsize(notes[i]); j += 6) {
         t_rect r;
-        long note[5];
+        long note[4];
         
-        atom_getlong_array(5, argv + 1 + j, 5, note);
+        atom_getlong_array(4, argv + 1 + j, 4, note);
         
         r.x = TLL_POSITION_TO_X(note[0]);
         r.y = TLL_PITCH_TO_Y_UP(note[1]); 

@@ -15,11 +15,6 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-
-#define TLL_CLOCK_PERIOD 47.
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 t_tllSymbols tll_table;
@@ -87,6 +82,11 @@ int main(void)
     CLASS_ATTR_STYLE_LABEL  (c, "color", 0, "rgba", "Color");
     CLASS_ATTR_CATEGORY     (c, "color", 0, "Color");
     
+    CLASS_ATTR_RGBA         (c, "rcolor", 0, t_tll, rColor); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "rcolor", 0, "0.80 1. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "rcolor", 0, "rgba", "Color Run");
+    CLASS_ATTR_CATEGORY     (c, "rcolor", 0, "Color");
+    
     CLASS_ATTR_RGBA         (c, "ucolor", 0, t_tll, uColor); 
     CLASS_ATTR_DEFAULT_SAVE (c, "ucolor", 0, "0.83 0.74 0.84 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "ucolor", 0, "rgba", "Color Unfocused");
@@ -150,16 +150,17 @@ int main(void)
     CLASS_ATTR_CATEGORY     (c, "viewtext", 0, "Appearance");
   
     CLASS_ATTR_ORDER        (c, "color",            0, "1");
-    CLASS_ATTR_ORDER        (c, "ucolor",           0, "2");
-    CLASS_ATTR_ORDER        (c, "hcolor1",          0, "3");
-    CLASS_ATTR_ORDER        (c, "hcolor2",          0, "4");
-    CLASS_ATTR_ORDER        (c, "textcolor",        0, "5");
-    CLASS_ATTR_ORDER        (c, "utextcolor",       0, "6");
-    CLASS_ATTR_ORDER        (c, "bordercolor",      0, "7");
-    CLASS_ATTR_ORDER        (c, "ubordercolor",     0, "8");
-    CLASS_ATTR_ORDER        (c, "bgcolor",          0, "9");
-    CLASS_ATTR_ORDER        (c, "ubgcolor",         0, "10");
-    CLASS_ATTR_ORDER        (c, "lassocolor",       0, "11");
+    CLASS_ATTR_ORDER        (c, "rcolor",           0, "2");
+    CLASS_ATTR_ORDER        (c, "ucolor",           0, "3");
+    CLASS_ATTR_ORDER        (c, "hcolor1",          0, "4");
+    CLASS_ATTR_ORDER        (c, "hcolor2",          0, "5");
+    CLASS_ATTR_ORDER        (c, "textcolor",        0, "6");
+    CLASS_ATTR_ORDER        (c, "utextcolor",       0, "7");
+    CLASS_ATTR_ORDER        (c, "bordercolor",      0, "8");
+    CLASS_ATTR_ORDER        (c, "ubordercolor",     0, "9");
+    CLASS_ATTR_ORDER        (c, "bgcolor",          0, "10");
+    CLASS_ATTR_ORDER        (c, "ubgcolor",         0, "11");
+    CLASS_ATTR_ORDER        (c, "lassocolor",       0, "12");
     
     CLASS_ATTR_DEFAULT      (c, "fontname", 0, "Arial");
     CLASS_ATTR_DEFAULT      (c, "fontsize", 0, "14.");
@@ -212,6 +213,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     jbox_ready((t_jbox *)x);
     attr_dictionary_process(x, d);
     
+    err |= !(x->temp = pizArrayNew(0));
     err |= !(x->run = pizLinklistNew( ));
     err |= !(x->data = dictionary_new( ));
     err |= !(x->current = dictionary_new( ));
@@ -282,6 +284,7 @@ void tralala_free(t_tll *x)
         object_free(x->clock);
     }
     
+    pizArrayFree(x->temp);
     pizLinklistFree(x->run);
     
     object_free(x->status);

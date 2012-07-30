@@ -83,6 +83,10 @@ void tralala_mousedown(t_tll *x, t_object *pv, t_pt pt, long m)
             TLL_FLAG_SET(TLL_FLAG_GRAB)
         }
     }
+    
+    if (TLL_FLAG_FALSE(TLL_FLAG_CLOCK)) {
+        clock_fdelay(x->clock, TLL_CLOCK_PERIOD);
+    }
             
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE); 
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
