@@ -330,6 +330,8 @@ void tralala_keyCopySelected(t_tll *x, t_dictionary *d)
     long i, n = 0;
     t_symbol **keys = NULL;
     
+    TLL_FLAG_SET(TLL_FLAG_COPY)
+    
     TLL_LOCK
     
     if (!(dictionary_getkeys(x->status, &n, &keys))) {
@@ -355,8 +357,6 @@ void tralala_keyCopySelected(t_tll *x, t_dictionary *d)
     }
     
     TLL_UNLOCK
-    
-    TLL_FLAG_SET(TLL_FLAG_COPY)
 }
 
 // -------------------------------------------------------------------------------------------------------------

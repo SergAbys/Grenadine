@@ -551,8 +551,8 @@ void tralala_switchClock(t_tll *x, PIZEventCode code)
     switch (code) {
         case PIZ_EVENT_NOTE_PLAYED :
             if (TLL_FLAG_FALSE(TLL_FLAG_CLOCK)) { 
-                clock_fdelay(x->clock, TLL_CLOCK_PERIOD); 
                 TLL_FLAG_SET(TLL_FLAG_CLOCK)
+                clock_fdelay(x->clock, TLL_CLOCK_PERIOD); 
             } break;
         
         case PIZ_EVENT_STOP :
