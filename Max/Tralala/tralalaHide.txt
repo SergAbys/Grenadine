@@ -100,3 +100,5 @@ _tralala_stop
 _tralala_store
 _tralala_task
 _tralala_unloop
+
+_pizEventName

@@ -251,14 +251,15 @@
 										<string>08FB7794FE84155DC02AAC07</string>
 										<string>08FB7795FE84155DC02AAC07</string>
 										<string>96D425811529D3170055F6A9</string>
+										<string>96D8682714FF5A4B00849A50</string>
 										<string>C6A0FF2B0290797F04C91782</string>
 										<string>1AB674ADFE9D54B511CA2CBB</string>
 									</array>
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>8</integer>
-											<integer>6</integer>
+											<integer>15</integer>
+											<integer>10</integer>
 											<integer>2</integer>
 											<integer>0</integer>
 										</array>
@@ -424,8 +425,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96951D3715C819AF00BA972B</string>
-				<string>96951D3815C819AF00BA972B</string>
+				<string>96C17C4515C832D900C432B7</string>
+				<string>96C17C4615C832D900C432B7</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -640,7 +641,7 @@
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXBuildLogShowsTranscriptDefaultKey</key>
-								<string>{{0, 97}, {1280, 325}}</string>
+								<string>{{0, 14}, {1280, 408}}</string>
 								<key>PBXProjectModuleGUID</key>
 								<string>XCMainBuildResultsModuleGUID</string>
 								<key>PBXProjectModuleLabel</key>
@@ -678,7 +679,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96951D3915C819AF00BA972B</string>
+				<string>96C17C4715C832D900C432B7</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
