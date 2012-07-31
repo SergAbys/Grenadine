@@ -84,7 +84,7 @@ void tralala_mousedown(t_tll *x, t_object *pv, t_pt pt, long m)
         }
     }
     
-    if (TLL_FLAG_TRUE(TLL_FLAG_CLOCK)) {
+    if (TLL_FLAG_FALSE(TLL_FLAG_CLOCK)) {
         clock_fdelay(x->clock, TLL_CLOCK_RUN);
     }
             

@@ -69,6 +69,7 @@ void tralala_focusgained(t_tll *x, t_object *pv)
 {
 	TLL_FLAG_SET(TLL_FLAG_FOCUS)
     
+    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_RUN);
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
@@ -80,6 +81,7 @@ void tralala_focuslost(t_tll *x, t_object *pv)
 {
 	TLL_FLAG_UNSET(TLL_FLAG_FOCUS)
     
+    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_RUN);
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
     jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
