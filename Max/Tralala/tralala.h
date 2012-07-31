@@ -31,7 +31,8 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_CLOCK_PERIOD    31.
+#define TLL_CLOCK_RUN       47.
+#define TLL_CLOCK_DAEMON    3947.    
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -91,10 +92,11 @@ typedef struct _tll {
     t_pt                origin;
     t_jrgba             lasso;
     t_jrgba             color;
-    t_jrgba             rColor;
     t_jrgba             uColor;
     t_jrgba             hColor1;
     t_jrgba             hColor2;
+    t_jrgba             hColor3;
+    t_jrgba             hColor4;
     t_jrgba             text;
     t_jrgba             uText;
     t_jrgba             border;

@@ -82,11 +82,6 @@ int main(void)
     CLASS_ATTR_STYLE_LABEL  (c, "color", 0, "rgba", "Color");
     CLASS_ATTR_CATEGORY     (c, "color", 0, "Color");
     
-    CLASS_ATTR_RGBA         (c, "rcolor", 0, t_tll, rColor); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "rcolor", 0, "0.80 1. 0. 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "rcolor", 0, "rgba", "Color Run");
-    CLASS_ATTR_CATEGORY     (c, "rcolor", 0, "Color");
-    
     CLASS_ATTR_RGBA         (c, "ucolor", 0, t_tll, uColor); 
     CLASS_ATTR_DEFAULT_SAVE (c, "ucolor", 0, "0.83 0.74 0.84 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "ucolor", 0, "rgba", "Color Unfocused");
@@ -101,6 +96,16 @@ int main(void)
     CLASS_ATTR_DEFAULT_SAVE (c, "hcolor2", 0, "1. 1. 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "hcolor2", 0, "rgba", "Color Highlighted");
     CLASS_ATTR_CATEGORY     (c, "hcolor2", 0, "Color");
+    
+    CLASS_ATTR_RGBA         (c, "hcolor3", 0, t_tll, hColor3); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor3", 0, "0.80 1. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "hcolor3", 0, "rgba", "Color Highlighted");
+    CLASS_ATTR_CATEGORY     (c, "hcolor3", 0, "Color");
+    
+    CLASS_ATTR_RGBA         (c, "hcolor4", 0, t_tll, hColor4); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor4", 0, "0.51 0.44 0.49 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "hcolor4", 0, "rgba", "Color Highlighted");
+    CLASS_ATTR_CATEGORY     (c, "hcolor4", 0, "Color");
         
     CLASS_ATTR_RGBA         (c, "textcolor", 0, t_tll, text); 
     CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "0.51 0.44 0.49 1."); 
@@ -150,17 +155,18 @@ int main(void)
     CLASS_ATTR_CATEGORY     (c, "viewtext", 0, "Appearance");
   
     CLASS_ATTR_ORDER        (c, "color",            0, "1");
-    CLASS_ATTR_ORDER        (c, "rcolor",           0, "2");
-    CLASS_ATTR_ORDER        (c, "ucolor",           0, "3");
-    CLASS_ATTR_ORDER        (c, "hcolor1",          0, "4");
-    CLASS_ATTR_ORDER        (c, "hcolor2",          0, "5");
-    CLASS_ATTR_ORDER        (c, "textcolor",        0, "6");
-    CLASS_ATTR_ORDER        (c, "utextcolor",       0, "7");
-    CLASS_ATTR_ORDER        (c, "bordercolor",      0, "8");
-    CLASS_ATTR_ORDER        (c, "ubordercolor",     0, "9");
-    CLASS_ATTR_ORDER        (c, "bgcolor",          0, "10");
-    CLASS_ATTR_ORDER        (c, "ubgcolor",         0, "11");
-    CLASS_ATTR_ORDER        (c, "lassocolor",       0, "12");
+    CLASS_ATTR_ORDER        (c, "ucolor",           0, "2");
+    CLASS_ATTR_ORDER        (c, "hcolor1",          0, "3");
+    CLASS_ATTR_ORDER        (c, "hcolor2",          0, "4");
+    CLASS_ATTR_ORDER        (c, "hcolor3",          0, "5");
+    CLASS_ATTR_ORDER        (c, "hcolor4",          0, "6");
+    CLASS_ATTR_ORDER        (c, "textcolor",        0, "7");
+    CLASS_ATTR_ORDER        (c, "utextcolor",       0, "8");
+    CLASS_ATTR_ORDER        (c, "bordercolor",      0, "9");
+    CLASS_ATTR_ORDER        (c, "ubordercolor",     0, "10");
+    CLASS_ATTR_ORDER        (c, "bgcolor",          0, "11");
+    CLASS_ATTR_ORDER        (c, "ubgcolor",         0, "12");
+    CLASS_ATTR_ORDER        (c, "lassocolor",       0, "13");
     
     CLASS_ATTR_DEFAULT      (c, "fontname", 0, "Arial");
     CLASS_ATTR_DEFAULT      (c, "fontsize", 0, "14.");
@@ -374,9 +380,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
     
     x = (t_tll *)ptr;
     pizEventCode(event, &code);
-    
-    PIZ_DEBUG_EVENT
-    
+        
     switch (code) {
     //
     case PIZ_EVENT_NOTE_PLAYED :
@@ -440,7 +444,7 @@ void tralala_task (t_tll *x)
     bool dirty = false;
     
     pizTimeSet(&now);
-    
+        
     TLL_RUN_LOCK
     
     pizLinklistPtrAtIndex(x->run, 0, (void **)&event);
@@ -475,7 +479,9 @@ void tralala_task (t_tll *x)
     }
             
     if (TLL_FLAG_TRUE(TLL_FLAG_CLOCK)) {
-        clock_fdelay(x->clock, TLL_CLOCK_PERIOD);
+        clock_fdelay(x->clock, TLL_CLOCK_RUN);
+    } else {
+        clock_fdelay(x->clock, TLL_CLOCK_DAEMON);
     }
 }
 
@@ -555,7 +561,7 @@ void tralala_switchClock(t_tll *x, PIZEventCode code)
         case PIZ_EVENT_NOTE_PLAYED :
             if (TLL_FLAG_FALSE(TLL_FLAG_CLOCK)) { 
                 TLL_FLAG_SET(TLL_FLAG_CLOCK)
-                clock_fdelay(x->clock, TLL_CLOCK_PERIOD); 
+                clock_fdelay(x->clock, TLL_CLOCK_RUN); 
             } break;
         
         case PIZ_EVENT_STOP :

@@ -50,11 +50,7 @@ void tralala_paint(t_tll *x, t_object *pv)
 {
     tralala_paintBackground(x, pv);
     tralala_paintCurrent(x, pv);
-    
-    if (TLL_FLAG_TRUE(TLL_FLAG_FOCUS)) {
-        tralala_paintRun(x, pv);
-    }
-    
+    tralala_paintRun(x, pv);
     tralala_paintLasso(x, pv);
 }
 
@@ -174,7 +170,12 @@ void tralala_paintRun(t_tll *x, t_object *pv)
         r.width  = TLL_POSITION_TO_X(note[j] + note[j + 3]) - r.x; 
         r.height = TLL_PITCH_TO_Y_DOWN(note[j + 1]) - r.y;
     
-        jgraphics_set_source_jrgba(g, &x->rColor);
+        if (TLL_FLAG_TRUE(TLL_FLAG_FOCUS)) {
+            jgraphics_set_source_jrgba(g, &x->hColor3);
+        } else {
+            jgraphics_set_source_jrgba(g, &x->hColor4);
+        }
+        
         jgraphics_rectangle_fill_fast(g, r.x, r.y, r.width, r.height);
     }
     
