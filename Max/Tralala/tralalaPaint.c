@@ -382,7 +382,7 @@ void tralala_paintCurrentZone(t_tll *x, t_object *pv, long argc, t_atom *argv, l
 
     if (TLL_FLAG_TRUE(TLL_FLAG_FOCUS)) {
         if (status) {
-            jgraphics_set_source_jrgba(g, &x->hColor2);
+            jgraphics_set_source_jrgba(g, &x->hColor1);
         } else  {
             jgraphics_set_source_jrgba(g, &x->color);
         }

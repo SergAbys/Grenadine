@@ -380,7 +380,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
     
     x = (t_tll *)ptr;
     pizEventCode(event, &code);
-            
+        
     switch (code) {
     //
     case PIZ_EVENT_NOTE_PLAYED :

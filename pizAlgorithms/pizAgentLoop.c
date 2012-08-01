@@ -152,24 +152,18 @@ void *pizAgentEventLoop(void *agent)
         
     if (!PIZ_EXIT) {
     //
-    bool idle = true;
-    
     pizAgentEventLoopInit(x);
      
     while (pizAgentEventLoopIsWorkTime(x)) {
         if (pizAgentEventLoopDoEvent(x, x->run)) {
             break;
-        } else if (idle) {
-            idle = false;
         }
     }
     
     while (pizAgentEventLoopIsWorkTime(x)) {
         if (pizAgentEventLoopDoEvent(x, x->high)) {
             break;
-        } else if (idle) {
-            idle = false;
-        }
+        } 
     }
     
     if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
@@ -180,14 +174,12 @@ void *pizAgentEventLoop(void *agent)
         }
     }
 
-    if (idle) {
-        while (pizAgentEventLoopIsWorkTime(x)) {
-            if (pizAgentEventLoopDoEvent(x, x->low)) {
-                pizAgentEventLoopDoRefresh(x);
-                break;
-            } 
-        }
-    } 
+    while (pizAgentEventLoopIsWorkTime(x)) {
+        if (pizAgentEventLoopDoEvent(x, x->low)) {
+            pizAgentEventLoopDoRefresh(x);
+            break;
+        } 
+    }
     
     pizAgentEventLoopSleep(x); 
     //    
@@ -235,14 +227,16 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
             
     PIZ_AGENT_LOCK_EVENT
     
-    if (!(pizLinklistCount(q))) {
-        err = PIZ_ERROR;
-    } else if (!(pizLinklistPtrAtIndex(q, 0, (void **)&event))) {
+    if (!(pizLinklistPtrAtIndex(q, 0, (void **)&event))) {
         pizLinklistChuckWithPtr(q, event);
     }
     
+    if (!(pizLinklistCount(q))) {
+        err = PIZ_ERROR;
+    }
+    
     PIZ_AGENT_UNLOCK_EVENT
-        
+                    
     if (event) {
     //
     pizEventCode(event, &code);
@@ -378,8 +372,7 @@ bool pizAgentEventLoopIsCondition(PIZAgent *x)
     if ((x->flags & PIZ_AGENT_FLAG_RUNNING)
         || pizLinklistCount(x->run)  
         || pizLinklistCount(x->low)  
-        || pizLinklistCount(x->high) 
-        || pizSequenceIsDirty(x->sequence)) {
+        || pizLinklistCount(x->high)) {
         return true;
     }
     
