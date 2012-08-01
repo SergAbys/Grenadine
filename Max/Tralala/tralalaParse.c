@@ -79,6 +79,7 @@ table->lassocolor       = gensym("lassocolor");
 table->attr_modified    = gensym("attr_modified");
 table->getname          = gensym("getname");
 table->patching_rect    = gensym("patching_rect");
+table->list             = gensym("list");
 
 tll_code = dictionary_new( );
 

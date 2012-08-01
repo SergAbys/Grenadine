@@ -391,7 +391,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
         a[2] = (long)(a[2] * (PIZ_AGENT_CONSTANT_BPM_MS / argv[PIZ_EVENT_DATA_BPM]));
         a[3] = argv[PIZ_EVENT_DATA_CHANNEL];
         atom_setlong_array(4, x->played, 4, a);
-        outlet_list(x->left, NULL, 4, x->played); 
+        outlet_list(x->left, TLL_SYM_LIST, 4, x->played); 
         break;
         
     case PIZ_EVENT_NOTE_DUMPED :

@@ -51,6 +51,7 @@
 #define TLL_SYM_ATTR_MODIFIED   (tll_table.attr_modified)
 #define TLL_SYM_GETNAME         (tll_table.getname)
 #define TLL_SYM_PATCHING_RECT   (tll_table.patching_rect)
+#define TLL_SYM_LIST            (tll_table.list)
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -87,6 +88,7 @@ typedef struct _tllSymbols {
     t_symbol *attr_modified;
     t_symbol *getname;
     t_symbol *patching_rect;
+    t_symbol *list;
     } t_tllSymbols;
 
 // -------------------------------------------------------------------------------------------------------------
