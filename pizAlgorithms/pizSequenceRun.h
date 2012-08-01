@@ -64,6 +64,7 @@
 PIZ_START_C_LINKAGE
 
 PIZ_LOCAL bool      pizSequenceIsAtEnd      (PIZSequence *x);
+PIZ_LOCAL bool      pizSequenceIsDirty      (PIZSequence *x);
 PIZ_LOCAL void      pizSequenceJumpToStart  (PIZSequence *x);
 
 PIZ_LOCAL PIZError  pizSequenceDump         (PIZSequence *x); //

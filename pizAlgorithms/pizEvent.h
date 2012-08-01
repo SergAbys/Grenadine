@@ -52,10 +52,11 @@
                             PIZTime ttt;                \
                             pizTimeSet(&ttt);           \
                             ttt = ttt / 1000000;        \
-                            post("%llu / %ld / %s / %ld %ld %ld %ld %ld %ld %ld %ld / %s",  \
+                            post("%llu / %ld / %s / %ld / %ld %ld %ld %ld %ld %ld %ld %ld / %s",  \
                             ttt,                        \
                             event->identifier,          \
                             pizEventName(event),        \
+                            event->type,                \
                             event->data[0],             \
                             event->data[1],             \
                             event->data[2],             \

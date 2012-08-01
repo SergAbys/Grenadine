@@ -380,9 +380,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
     
     x = (t_tll *)ptr;
     pizEventCode(event, &code);
-        
-    PIZ_DEBUG_EVENT
-    
+            
     switch (code) {
     //
     case PIZ_EVENT_NOTE_PLAYED :
@@ -549,7 +547,8 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong fl
     if (flags & TLL_FLAG_RUN) {
         pizEventSetType(event, PIZ_EVENT_RUN);
     }
-                        
+    
+    pizEventSetIdentifier(event, x->identifier);
     pizAgentDoEvent(x->agent, event);
     
     tralala_switchClock(x, code);

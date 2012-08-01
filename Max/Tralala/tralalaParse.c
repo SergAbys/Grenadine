@@ -302,6 +302,7 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong 
             pizEventSetType(event, PIZ_EVENT_RUN);
         }
         
+        pizEventSetIdentifier(event, x->identifier);
         pizAgentDoEvent(x->agent, event);
     }
     //

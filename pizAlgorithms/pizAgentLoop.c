@@ -152,18 +152,24 @@ void *pizAgentEventLoop(void *agent)
         
     if (!PIZ_EXIT) {
     //
+    bool idle = true;
+    
     pizAgentEventLoopInit(x);
      
     while (pizAgentEventLoopIsWorkTime(x)) {
         if (pizAgentEventLoopDoEvent(x, x->run)) {
             break;
-        } 
+        } else if (idle) {
+            idle = false;
+        }
     }
     
     while (pizAgentEventLoopIsWorkTime(x)) {
         if (pizAgentEventLoopDoEvent(x, x->high)) {
             break;
-        } 
+        } else if (idle) {
+            idle = false;
+        }
     }
     
     if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
@@ -173,13 +179,15 @@ void *pizAgentEventLoop(void *agent)
             pizAgentEventLoopDoStep(x, 1);
         }
     }
-    
-    while (pizAgentEventLoopIsWorkTime(x)) {
-        if (pizAgentEventLoopDoEvent(x, x->low)) {
-            pizAgentEventLoopDoRefresh(x);
-            break;
-        } 
-    }
+
+    if (idle) {
+        while (pizAgentEventLoopIsWorkTime(x)) {
+            if (pizAgentEventLoopDoEvent(x, x->low)) {
+                pizAgentEventLoopDoRefresh(x);
+                break;
+            } 
+        }
+    } 
     
     pizAgentEventLoopSleep(x); 
     //    
@@ -227,17 +235,14 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
             
     PIZ_AGENT_LOCK_EVENT
     
-    if (!(pizLinklistPtrAtIndex(q, 0, (void **)&event))) {
-        pizLinklistChuckWithPtr(q, event);
-    }
     if (!(pizLinklistCount(q))) {
         err = PIZ_ERROR;
+    } else if (!(pizLinklistPtrAtIndex(q, 0, (void **)&event))) {
+        pizLinklistChuckWithPtr(q, event);
     }
     
     PIZ_AGENT_UNLOCK_EVENT
-    
-    PIZ_DEBUG_EVENT
-    
+        
     if (event) {
     //
     pizEventCode(event, &code);
@@ -370,16 +375,15 @@ void pizAgentEventLoopSleep(PIZAgent *x)
 
 bool pizAgentEventLoopIsCondition(PIZAgent *x)
 {
-    bool condition = false;
-    
-    if (pizLinklistCount(x->run)  ||
-        pizLinklistCount(x->low)  ||
-        pizLinklistCount(x->high) ||
-        (x->flags & PIZ_AGENT_FLAG_RUNNING)) {
-        condition = true;
+    if ((x->flags & PIZ_AGENT_FLAG_RUNNING)
+        || pizLinklistCount(x->run)  
+        || pizLinklistCount(x->low)  
+        || pizLinklistCount(x->high) 
+        || pizSequenceIsDirty(x->sequence)) {
+        return true;
     }
     
-    return condition;
+    return false;
 }
 
 bool pizAgentEventLoopIsWorkTime(PIZAgent *x)

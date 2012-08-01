@@ -59,6 +59,19 @@ bool pizSequenceIsAtEnd(PIZSequence *x)
     return (x->index >= x->end);
 }
 
+bool pizSequenceIsDirty(PIZSequence *x)
+{
+    if (x->flags 
+        || pizItemsetCount(&x->changed)
+        || pizItemsetCount(&x->removed) 
+        || pizItemsetCount(&x->addedLow) 
+        || pizItemsetCount(&x->addedHigh)) {
+        return true;
+    }
+    
+    return false;
+}
+
 void pizSequenceJumpToStart(PIZSequence *x)
 {
     x->index = x->start;
