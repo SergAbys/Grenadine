@@ -71,7 +71,7 @@ PIZ_INLINE  void  tralala_keyTagWithSymbol      (long *tag, t_symbol *s);
 void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacter)
 {
     tllMethod f = NULL;
-    ulong dirty = TLL_DIRTY_NONE;
+    ulong dirty = TLL_FLAG_NONE;
     
     switch (keycode) {
         case TLL_KEY_A          : f = tralala_keyAll;       break;
@@ -92,16 +92,7 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
         dirty |= (*f)(x, m);
     }
     
-    if (dirty & TLL_DIRTY_NOTE) {
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
-    }
-    if (dirty & TLL_DIRTY_ZONE) {
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
-    }
-    if (dirty & TLL_DIRTY_LASSO) {
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
-    }
-    
+    TLL_FLAG_SET(dirty)
     jbox_redraw((t_jbox *)x);
 }
 
@@ -113,7 +104,7 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
 
 ulong tralala_keyAll(t_tll *x, long m)
 {
-    ulong dirty = TLL_DIRTY_NONE;
+    ulong dirty = TLL_FLAG_NONE;
     
     if (m & eCommandKey) {
         tralala_keySelectAll(x);
@@ -140,7 +131,7 @@ ulong tralala_keyCopy(t_tll *x, long m)
         object_free(t);
     }
     
-    return TLL_DIRTY_NONE;
+    return TLL_FLAG_NONE;
 }
 
 ulong tralala_keyPaste(t_tll *x, long m)
@@ -166,7 +157,7 @@ ulong tralala_keyDelete(t_tll *x, long m)
 {
     tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DELETE, 0);
     
-    return TLL_DIRTY_NONE;
+    return TLL_FLAG_NONE;
 }
 
 ulong tralala_keyUp(t_tll *x, long m)
@@ -187,7 +178,7 @@ ulong tralala_keyUp(t_tll *x, long m)
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_PITCH);
     }
     
-    return TLL_DIRTY_NONE;
+    return TLL_FLAG_NONE;
 }
 
 ulong tralala_keyDown(t_tll *x, long m)
@@ -208,7 +199,7 @@ ulong tralala_keyDown(t_tll *x, long m)
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_PITCH);
     }
     
-    return TLL_DIRTY_NONE;
+    return TLL_FLAG_NONE;
 }
 
 ulong tralala_keyLeft(t_tll *x, long m)
@@ -229,7 +220,7 @@ ulong tralala_keyLeft(t_tll *x, long m)
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_BACKWARD, 0);
     }
     
-    return TLL_DIRTY_NONE;
+    return TLL_FLAG_NONE;
 }
 
 ulong tralala_keyRight(t_tll *x, long m)
@@ -250,7 +241,7 @@ ulong tralala_keyRight(t_tll *x, long m)
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_FORWARD, 0);
     }
     
-    return TLL_DIRTY_NONE;
+    return TLL_FLAG_NONE;
 }
 
 ulong tralala_keyPageUp(t_tll *x, long m)
@@ -261,7 +252,7 @@ ulong tralala_keyPageUp(t_tll *x, long m)
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_CHANNEL);
     }
     
-    return TLL_DIRTY_NONE;
+    return TLL_FLAG_NONE;
 }
 
 ulong tralala_keyPageDown(t_tll *x, long m)
@@ -272,7 +263,7 @@ ulong tralala_keyPageDown(t_tll *x, long m)
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_CHANNEL);
     }
     
-    return TLL_DIRTY_NONE;
+    return TLL_FLAG_NONE;
 }
 
 // -------------------------------------------------------------------------------------------------------------

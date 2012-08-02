@@ -428,7 +428,8 @@ void tralala_callback(void *ptr, PIZEvent *event)
         TLL_RUN_UNLOCK
         
         tralala_switchClock(x, PIZ_EVENT_NOTE_PLAYED);
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_RUN);
+        
+        TLL_FLAG_SET(TLL_DIRTY_RUN)
         jbox_redraw((t_jbox *)x);
         
     } else {
@@ -475,7 +476,7 @@ void tralala_task (t_tll *x)
     TLL_RUN_UNLOCK
     
     if (dirty) {
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_RUN);
+        TLL_FLAG_SET(TLL_DIRTY_RUN)
         jbox_redraw((t_jbox *)x);
     }
             

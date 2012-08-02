@@ -319,7 +319,7 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
     long *ptr = NULL;
     t_symbol *s = NULL;
     PIZEventCode code = PIZ_EVENT_NONE;
-    ulong dirty = TLL_DIRTY_NONE;
+    ulong dirty = TLL_FLAG_NONE;
     t_atom data[PIZ_EVENT_DATA_SIZE + 1];
     
     pizEventCode(event, &code);
@@ -386,16 +386,7 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
         dirty |= TLL_DIRTY_NOTE;
     }
         
-    if (dirty & TLL_DIRTY_ZONE) { 
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
-    } else if (dirty & TLL_DIRTY_NOTE) { 
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE); 
-    }
-    
-    if (dirty & TLL_DIRTY_LASSO) { 
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO); 
-    }
-
+    TLL_FLAG_SET(dirty)
     jbox_redraw((t_jbox *)x);
 }
 

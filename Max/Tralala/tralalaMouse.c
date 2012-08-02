@@ -88,8 +88,7 @@ void tralala_mouseDown(t_tll *x, t_object *pv, t_pt pt, long m)
         clock_fdelay(x->clock, TLL_CLOCK_RUN);
     }
             
-    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE); 
-    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
+    TLL_FLAG_SET(TLL_DIRTY_ZONE | TLL_DIRTY_NOTE)
     jbox_redraw((t_jbox *)x);  
 }
 
@@ -104,10 +103,10 @@ void tralala_mouseDrag(t_tll *x, t_object *pv, t_pt pt, long m)
     
     if (TLL_FLAG_TRUE(TLL_FLAG_LASSO)) {
         if (tralala_mouseSelectLasso(x)) {
-            jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
+            TLL_FLAG_SET(TLL_DIRTY_NOTE)
         }
 
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
+        TLL_FLAG_SET(TLL_DIRTY_LASSO)
         jbox_redraw((t_jbox *)x);
         
     } else if (TLL_FLAG_TRUE(TLL_FLAG_GRAB)) {
@@ -134,7 +133,7 @@ void tralala_mouseUp(t_tll *x, t_object *pv, t_pt pt, long m)
     
     if (TLL_FLAG_TRUE(TLL_FLAG_LASSO)) {
         tralala_mouseReleaseLasso(x);
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
+        TLL_FLAG_SET(TLL_DIRTY_LASSO)
         jbox_redraw((t_jbox *)x);
     }
 }
@@ -161,7 +160,7 @@ ulong tralala_mouseAbort(t_tll *x)
         return TLL_DIRTY_LASSO;
     } 
     
-    return TLL_DIRTY_NONE;
+    return TLL_FLAG_NONE;
 }
 
 void tralala_mouseUnselectAll(t_tll *x)
@@ -306,7 +305,7 @@ ulong tralala_mouseSelectLasso(t_tll *x)
 {
     long i, n = 0;
     t_symbol **keys = NULL;
-    ulong dirty = TLL_DIRTY_NONE;
+    ulong dirty = TLL_FLAG_NONE;
     
     TLL_LOCK
     

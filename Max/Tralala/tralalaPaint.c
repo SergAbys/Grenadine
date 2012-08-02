@@ -48,6 +48,31 @@ PIZ_LOCAL void tralala_paintPitchAsString       (char *dst, long k, long size);
 
 void tralala_paint(t_tll *x, t_object *pv)
 {
+    if (TLL_FLAG_TRUE(TLL_DIRTY_RUN)) {
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_RUN);
+        TLL_FLAG_UNSET(TLL_DIRTY_RUN)
+    }
+    
+    if (TLL_FLAG_TRUE(TLL_DIRTY_ZONE)) {
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
+        TLL_FLAG_UNSET(TLL_DIRTY_ZONE)
+    }
+    
+    if (TLL_FLAG_TRUE(TLL_DIRTY_NOTE)) {
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
+        TLL_FLAG_UNSET(TLL_DIRTY_NOTE)
+    }
+    
+    if (TLL_FLAG_TRUE(TLL_DIRTY_LASSO)) {
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
+        TLL_FLAG_UNSET(TLL_DIRTY_LASSO)
+    }
+    
+    if (TLL_FLAG_TRUE(TLL_DIRTY_BACKGROUND)) {
+        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);
+        TLL_FLAG_UNSET(TLL_DIRTY_BACKGROUND)
+    }
+    
     tralala_paintBackground(x, pv);
     tralala_paintCurrent(x, pv);
     tralala_paintRun(x, pv);
@@ -68,24 +93,14 @@ void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
 void tralala_focusGained(t_tll *x, t_object *pv)
 {
 	TLL_FLAG_SET(TLL_FLAG_FOCUS)
-    
-    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_RUN);
-    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);
-    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
-    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
-    
+    TLL_FLAG_SET(TLL_DIRTY_RUN | TLL_DIRTY_BACKGROUND | TLL_DIRTY_ZONE | TLL_DIRTY_NOTE)
     jbox_redraw((t_jbox *)x);
 }
 
 void tralala_focusLost(t_tll *x, t_object *pv)
 {
 	TLL_FLAG_UNSET(TLL_FLAG_FOCUS)
-    
-    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_RUN);
-    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);
-    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
-    jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
-    
+    TLL_FLAG_SET(TLL_DIRTY_RUN | TLL_DIRTY_BACKGROUND | TLL_DIRTY_ZONE | TLL_DIRTY_NOTE)
     jbox_redraw((t_jbox *)x);
 }
 
@@ -93,23 +108,21 @@ void tralala_focusLost(t_tll *x, t_object *pv)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-t_max_err tralala_notify (t_jbox *x, t_symbol *s, t_symbol *msg, void *sender, void *data)
+t_max_err tralala_notify (t_jbox *jbox, t_symbol *s, t_symbol *msg, void *sender, void *data)
 {
     t_symbol *name = NULL;
+    t_tll *x = (t_tll *)jbox;
     
     if (msg == TLL_SYM_ATTR_MODIFIED && (name = (t_symbol *)object_method(data, TLL_SYM_GETNAME))) {
     //
     if ((name == TLL_SYM_COLOR) || (name == TLL_SYM_UCOLOR)) {
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_BACKGROUND);
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
+        TLL_FLAG_SET(TLL_DIRTY_BACKGROUND | TLL_DIRTY_ZONE | TLL_DIRTY_NOTE)
         
     } else if ((name == TLL_SYM_HCOLOR1) || (name == TLL_SYM_HCOLOR2)) {
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_ZONE);
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_NOTE);
+        TLL_FLAG_SET(TLL_DIRTY_ZONE | TLL_DIRTY_NOTE)
         
     } else if (name == TLL_SYM_LASSOCOLOR) {
-        jbox_invalidate_layer((t_object *)x, NULL, TLL_SYM_LASSO);
+        TLL_FLAG_SET(TLL_DIRTY_LASSO)
     }
     
     jbox_redraw((t_jbox *)x);

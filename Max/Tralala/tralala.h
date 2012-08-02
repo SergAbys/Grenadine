@@ -38,13 +38,18 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_FLAG_NONE       0UL
-#define TLL_FLAG_GRAB       1UL
-#define TLL_FLAG_COPY       2UL
-#define TLL_FLAG_LASSO      4UL
-#define TLL_FLAG_FOCUS      8UL
-#define TLL_FLAG_SHIFT      16UL
-#define TLL_FLAG_CLOCK      32UL
+#define TLL_FLAG_NONE           0UL
+#define TLL_FLAG_GRAB           (1UL << 0)
+#define TLL_FLAG_COPY           (1UL << 1)
+#define TLL_FLAG_LASSO          (1UL << 2)
+#define TLL_FLAG_FOCUS          (1UL << 3)
+#define TLL_FLAG_SHIFT          (1UL << 4)
+#define TLL_FLAG_CLOCK          (1UL << 5)
+#define TLL_DIRTY_RUN           (1UL << 6)
+#define TLL_DIRTY_ZONE          (1UL << 7)
+#define TLL_DIRTY_NOTE          (1UL << 8)
+#define TLL_DIRTY_LASSO         (1UL << 9)
+#define TLL_DIRTY_BACKGROUND    (1UL << 10)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -54,8 +59,8 @@
 
 typedef uint32_t t_uint32_atomic;
     
-#define TLL_FLAG_SET(mask)      OSAtomicOr32((mask), &x->flags); 
-#define TLL_FLAG_UNSET(mask)    OSAtomicAnd32((~(mask)), &x->flags);
+#define TLL_FLAG_SET(mask)      OSAtomicOr32Barrier((mask), &x->flags); 
+#define TLL_FLAG_UNSET(mask)    OSAtomicAnd32Barrier((~(mask)), &x->flags);
 #define TLL_FLAG_TRUE(mask)     (x->flags & (mask)) 
 #define TLL_FLAG_FALSE(mask)    !(x->flags & (mask))
     
