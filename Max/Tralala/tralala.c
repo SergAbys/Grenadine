@@ -381,7 +381,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
     
     x = (t_tll *)ptr;
     pizEventCode(event, &code);
-        
+    
     switch (code) {
     //
     case PIZ_EVENT_NOTE_PLAYED :
@@ -427,7 +427,9 @@ void tralala_callback(void *ptr, PIZEvent *event)
         pizLinklistAppend(x->run, event);
         TLL_RUN_UNLOCK
         
-        tralala_switchClock(x, PIZ_EVENT_NOTE_PLAYED);
+        if (TLL_FLAG_FALSE(TLL_FLAG_CLOCK)) { 
+            tralala_switchClock(x, PIZ_EVENT_NOTE_PLAYED);
+        }
         
         TLL_FLAG_SET(TLL_DIRTY_RUN)
         jbox_redraw((t_jbox *)x);
@@ -562,10 +564,9 @@ void tralala_switchClock(t_tll *x, PIZEventCode code)
 {
     switch (code) {
         case PIZ_EVENT_NOTE_PLAYED :
-            if (TLL_FLAG_FALSE(TLL_FLAG_CLOCK)) { 
-                TLL_FLAG_SET(TLL_FLAG_CLOCK)
-                clock_fdelay(x->clock, TLL_CLOCK_RUN); 
-            } break;
+            TLL_FLAG_SET(TLL_FLAG_CLOCK)
+            clock_fdelay(x->clock, TLL_CLOCK_RUN); 
+            break;
         
         case PIZ_EVENT_STOP :
             TLL_FLAG_UNSET(TLL_FLAG_CLOCK)
