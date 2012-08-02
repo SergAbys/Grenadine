@@ -65,7 +65,7 @@ void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
     }
 }
 
-void tralala_focusgained(t_tll *x, t_object *pv)
+void tralala_focusGained(t_tll *x, t_object *pv)
 {
 	TLL_FLAG_SET(TLL_FLAG_FOCUS)
     
@@ -77,7 +77,7 @@ void tralala_focusgained(t_tll *x, t_object *pv)
     jbox_redraw((t_jbox *)x);
 }
 
-void tralala_focuslost(t_tll *x, t_object *pv)
+void tralala_focusLost(t_tll *x, t_object *pv)
 {
 	TLL_FLAG_UNSET(TLL_FLAG_FOCUS)
     

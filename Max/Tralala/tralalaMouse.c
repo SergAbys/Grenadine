@@ -55,7 +55,7 @@ PIZ_LOCAL void      tralala_mouseUnselectZone   (t_tll *x);
 #pragma mark ---
 #pragma mark -
 
-void tralala_mousedown(t_tll *x, t_object *pv, t_pt pt, long m)
+void tralala_mouseDown(t_tll *x, t_object *pv, t_pt pt, long m)
 {	
     long k;
     
@@ -93,7 +93,7 @@ void tralala_mousedown(t_tll *x, t_object *pv, t_pt pt, long m)
     jbox_redraw((t_jbox *)x);  
 }
 
-void tralala_mousedrag(t_tll *x, t_object *pv, t_pt pt, long m)
+void tralala_mouseDrag(t_tll *x, t_object *pv, t_pt pt, long m)
 {
     x->cursor.x = pt.x - 1.;
     x->cursor.y = pt.y - 1.;
@@ -128,7 +128,7 @@ void tralala_mousedrag(t_tll *x, t_object *pv, t_pt pt, long m)
     }
 }
 
-void tralala_mouseup(t_tll *x, t_object *pv, t_pt pt, long m)
+void tralala_mouseUp(t_tll *x, t_object *pv, t_pt pt, long m)
 {
     TLL_FLAG_UNSET(TLL_FLAG_GRAB | TLL_FLAG_COPY | TLL_FLAG_SHIFT)
     
@@ -139,7 +139,7 @@ void tralala_mouseup(t_tll *x, t_object *pv, t_pt pt, long m)
     }
 }
 
-void tralala_mousewheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc)
+void tralala_mouseWheel(t_tll *x, t_object *view, t_pt pt, long m, double x_inc, double y_inc)
 {
     long h = object_attr_getlong(x, TLL_SYM_XOFFSET) - (x_inc * 100);
     long v = object_attr_getlong(x, TLL_SYM_YOFFSET) - (y_inc * 100);
