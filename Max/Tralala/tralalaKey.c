@@ -26,7 +26,6 @@ extern t_dictionary *tll_clipboard;
 #define TLL_KEY_A   97
 #define TLL_KEY_C   99
 #define TLL_KEY_V   118
-#define TLL_KEY_X   120
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -41,7 +40,6 @@ typedef ulong (*tllMethod)( );
 PIZ_LOCAL   ulong tralala_keyAll                (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_keyCopy               (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_keyPaste              (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_keyCut                (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_keyDelete             (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_keyUp                 (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_keyDown               (t_tll *x, long m);
@@ -79,7 +77,6 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
         case TLL_KEY_A          : f = tralala_keyAll;       break;
         case TLL_KEY_C          : f = tralala_keyCopy;      break;
         case TLL_KEY_V          : f = tralala_keyPaste;     break;
-        case TLL_KEY_X          : f = tralala_keyCut;       break;
         case JKEY_DELETE        : f = tralala_keyDelete;    break;
         case JKEY_BACKSPACE     : f = tralala_keyDelete;    break;
         case JKEY_UPARROW       : f = tralala_keyUp;        break;
@@ -152,27 +149,17 @@ ulong tralala_keyPaste(t_tll *x, long m)
     t_dictionary *t = NULL;
     
     if ((m & eCommandKey) && (t = dictionary_new( ))) {
-    //
-    dictionary_copyunique(t, tll_clipboard);
-    
-    if (!(dictionary_getlong(t, TLL_SYM_IDENTIFIER, &k)) && (k != x->identifier)) {
-        tralala_mouseUnselectAll(x);
-        tralala_parseDictionary(x, t, TLL_FLAG_LOW);  
-    }
-    
-    object_free(t);
-    //
+        dictionary_copyunique(t, tll_clipboard);
+        
+        if (!(dictionary_getlong(t, TLL_SYM_IDENTIFIER, &k)) && (k != x->identifier)) {
+            tralala_mouseUnselectAll(x);
+            tralala_parseDictionary(x, t, TLL_FLAG_LOW | TLL_FLAG_FILTER);  
+        }
+         
+        object_free(t);
     }
     
     return (TLL_DIRTY_ZONE | TLL_DIRTY_NOTE);
-}
-
-ulong tralala_keyCut(t_tll *x, long m)
-{
-    tralala_keyCopy(x, m);
-    tralala_keyDelete(x, m);
-    
-    return TLL_DIRTY_NONE;
 }
 
 ulong tralala_keyDelete(t_tll *x, long m)
@@ -369,7 +356,7 @@ void tralala_keyDuplicate(t_tll *x, long m)
             
     if ((m & eAltKey) && (t = dictionary_new( ))) {
         tralala_keyCopySelected(x, t);
-        tralala_parseDictionary(x, t, TLL_FLAG_NONE);  
+        tralala_parseDictionary(x, t, TLL_FLAG_FILTER);  
         object_free(t);
     }
 }

@@ -24,6 +24,7 @@
 #pragma mark -
 
 extern t_tllSymbols tll_table;
+extern t_dictionary *tll_clipboard;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -61,8 +62,8 @@ table->clear            = gensym("clear");
 table->tralala          = gensym("tralala");
 table->untitled         = gensym("untitled");
 table->load             = gensym("load");
-table->identifier       = gensym("identifier");
 table->mark             = gensym("mark");
+table->identifier       = gensym("identifier");
 table->run              = gensym("run");
 table->note             = gensym("note");
 table->text             = gensym("text");

@@ -33,8 +33,8 @@
 #define TLL_SYM_TRALALA         (tll_table.tralala)
 #define TLL_SYM_UNTITLED        (tll_table.untitled)
 #define TLL_SYM_LOAD            (tll_table.load)
-#define TLL_SYM_IDENTIFIER      (tll_table.identifier)
 #define TLL_SYM_MARK            (tll_table.mark)
+#define TLL_SYM_IDENTIFIER      (tll_table.identifier)
 #define TLL_SYM_RUN             (tll_table.run)
 #define TLL_SYM_NOTE            (tll_table.note)
 #define TLL_SYM_TEXT            (tll_table.text)
@@ -70,8 +70,8 @@ typedef struct _tllSymbols {
     t_symbol *tralala;
     t_symbol *untitled;
     t_symbol *load;
-    t_symbol *identifier;
     t_symbol *mark;
+    t_symbol *identifier;
     t_symbol *run;
     t_symbol *note;
     t_symbol *text;
