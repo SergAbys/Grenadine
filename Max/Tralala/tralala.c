@@ -32,6 +32,7 @@ static t_int32_atomic tll_identifier;
 PIZ_LOCAL void tralala_send             (t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags);
 PIZ_LOCAL void tralala_switchClock      (t_tll *x, PIZEventCode code);
 PIZ_LOCAL t_symbol *tralala_slotName    (long argc, t_atom *argv);
+PIZ_LOCAL t_symbol *tralala_unique      (t_tll *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -259,7 +260,7 @@ void tralala_init(t_tll *x, t_symbol *s, short argc, t_atom *argv)
 {
     t_symbol *link = NULL;
     
-    link = symbol_unique( );
+    link = tralala_unique(x);
     link->s_thing = (t_object *)x;
     atom_setsym(&x->link, link);
     
@@ -595,6 +596,13 @@ t_symbol *tralala_slotName(long argc, t_atom *argv)
     }
     
     return s;
+}
+
+t_symbol *tralala_unique(t_tll *x)
+{
+    char string[16];    
+    snprintf_zero(string, 16, "%s%ld", "_tralala", x->identifier);
+    return gensym(string);
 }
 
 // -------------------------------------------------------------------------------------------------------------
