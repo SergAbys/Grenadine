@@ -37,6 +37,7 @@ typedef ulong (*tllMethod)( );
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+PIZ_LOCAL   ulong tralala_keyEnter              (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_keyAll                (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_keyCopy               (t_tll *x, long m);
 PIZ_LOCAL   ulong tralala_keyPaste              (t_tll *x, long m);
@@ -74,6 +75,7 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
     ulong dirty = TLL_FLAG_NONE;
     
     switch (keycode) {
+        case JKEY_ENTER         : f = tralala_keyEnter;     break;
         case TLL_KEY_A          : f = tralala_keyAll;       break;
         case TLL_KEY_C          : f = tralala_keyCopy;      break;
         case TLL_KEY_V          : f = tralala_keyPaste;     break;
@@ -101,6 +103,13 @@ void tralala_key(t_tll *x, t_object *pv, long keycode, long m, long textcharacte
 #pragma mark -
 #pragma mark ---
 #pragma mark -
+
+ulong tralala_keyEnter(t_tll *x, long m)
+{
+    object_method_typed(x, TLL_SYM_RELOAD, 0, NULL, NULL);
+    
+    return TLL_FLAG_NONE; 
+}
 
 ulong tralala_keyAll(t_tll *x, long m)
 {

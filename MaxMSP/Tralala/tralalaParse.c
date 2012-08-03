@@ -62,6 +62,7 @@ table->clear            = gensym("clear");
 table->tralala          = gensym("tralala");
 table->untitled         = gensym("untitled");
 table->load             = gensym("load");
+table->reload           = gensym("reload");
 table->mark             = gensym("mark");
 table->identifier       = gensym("identifier");
 table->run              = gensym("run");

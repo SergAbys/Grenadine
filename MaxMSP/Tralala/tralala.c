@@ -64,6 +64,7 @@ int main(void)
     class_addmethod(c, (method)tralala_store,       "store",         A_GIMME, 0);
     class_addmethod(c, (method)tralala_recall,      "recall",        A_GIMME, 0);
     class_addmethod(c, (method)tralala_recall,      "load",          A_GIMME, 0);
+    class_addmethod(c, (method)tralala_recall,      "reload",        A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "bang",          A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "play",          A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "end",           A_GIMME, 0);
@@ -350,10 +351,17 @@ void tralala_recall(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
     t_dictionary *d = NULL;
     t_dictionary *t = NULL;
-    t_symbol *name = tralala_slotName(argc, argv);
+    t_symbol *name = NULL;
     ulong flags = TLL_FLAG_RUN;
     
-    if (s == TLL_SYM_LOAD) {
+    if (s == TLL_SYM_RELOAD) {
+        name = x->name;
+    } else {
+        name = tralala_slotName(argc, argv);
+        x->name = name;
+    }        
+    
+    if ((s == TLL_SYM_LOAD) || (s == TLL_SYM_RELOAD)) {
         flags |= TLL_FLAG_FILTER;
     } 
     

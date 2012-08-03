@@ -108,6 +108,7 @@ typedef struct _tll {
     t_jrgba             uBorder;
     t_jrgba             background;
     t_jrgba             uBackground;
+    t_symbol            *name;
     t_jtextlayout       *layer; 
     t_dictionary        *data;
     t_dictionary        *current;
