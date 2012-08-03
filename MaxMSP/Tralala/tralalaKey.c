@@ -173,6 +173,7 @@ ulong tralala_keyUp(t_tll *x, long m)
         }
         
     } else {
+        m &= ~eAutoRepeat;
         tralala_keyDuplicate(x, m);
         tralala_keyChangeZone(x, m, JKEY_UPARROW);
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_INCREMENT, PIZ_VALUE_PITCH);
@@ -194,6 +195,7 @@ ulong tralala_keyDown(t_tll *x, long m)
         }
         
     } else {
+        m &= ~eAutoRepeat;
         tralala_keyDuplicate(x, m);
         tralala_keyChangeZone(x, m, JKEY_DOWNARROW);
         tralala_keyChangeNotes(x, m, PIZ_EVENT_NOTE_DECREMENT, PIZ_VALUE_PITCH);

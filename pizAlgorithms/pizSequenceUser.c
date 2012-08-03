@@ -101,7 +101,7 @@ PIZError pizSequenceNoteIncrement(PIZSequence *x, PIZEvent *event)
             step = PIZ_SEQUENCE_AUTOREPEAT_VELOCITY;
             
         } else if (argv[0] == PIZ_VALUE_DURATION) {
-            step = x->cell;
+            step = x->value;
         } 
         
         a[0] = argv[0];
@@ -135,7 +135,7 @@ PIZError pizSequenceNoteDecrement(PIZSequence *x, PIZEvent *event)
             step = -PIZ_SEQUENCE_AUTOREPEAT_VELOCITY;
             
         } else if (argv[0] == PIZ_VALUE_DURATION) {
-            step = -x->cell;
+            step = -x->value;
         }
         
         a[0] = argv[0];
