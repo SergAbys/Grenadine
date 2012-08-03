@@ -385,6 +385,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
     switch (code) {
     //
     case PIZ_EVENT_NOTE_PLAYED :
+        evnum_incr( );
         pizEventData(event, &argc, &argv);
         a[0] = argv[PIZ_EVENT_DATA_PITCH];
         a[1] = argv[PIZ_EVENT_DATA_VELOCITY];
@@ -402,14 +403,17 @@ void tralala_callback(void *ptr, PIZEvent *event)
         break;
 
     case PIZ_EVENT_WILL_DUMP :
+        evnum_incr( );
         outlet_anything(x->middleLeft, TLL_SYM_CLEAR, 0, NULL);
         break;
 
     case PIZ_EVENT_WILL_END :
+        evnum_incr( );
         outlet_bang(x->right);
         break;
     
     case PIZ_EVENT_END :
+        evnum_incr( );
         pizEventTime(event, &x->time);
         outlet_anything(x->middleRight, TLL_SYM_END, 1, &x->link);
         tralala_switchClock(x, PIZ_EVENT_END);
