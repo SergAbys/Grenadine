@@ -128,8 +128,8 @@ typedef struct _tll {
     t_dictionary        *status;
     PIZAgent            *agent;
     PIZLinklist         *run;
+    PIZLinklist         *runCopy;
     PIZLinklist         *daemon;
-    PIZLinklist         *linklist;
     PIZArray            *array;
     void                *runClock;
     void                *daemonClock;

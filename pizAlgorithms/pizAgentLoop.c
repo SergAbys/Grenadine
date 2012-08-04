@@ -224,7 +224,7 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
     PIZError err = PIZ_GOOD;
     PIZMethodError f = NULL;
     PIZEventCode code = PIZ_EVENT_NONE;
-            
+    
     PIZ_AGENT_LOCK_EVENT
     
     if (!(pizLinklistPtrAtIndex(q, 0, (void **)&event))) {
@@ -236,7 +236,9 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
     }
     
     PIZ_AGENT_UNLOCK_EVENT
-                    
+       
+    PIZ_DEBUG_EVENT
+    
     if (event) {
     //
     pizEventCode(event, &code);

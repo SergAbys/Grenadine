@@ -221,7 +221,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     attr_dictionary_process(x, d);
     
     err |= !(x->array = pizArrayNew(0));
-    err |= !(x->linklist = pizLinklistNew( ));
+    err |= !(x->runCopy = pizLinklistNew( ));
     err |= !(x->run = pizLinklistNew( ));
     err |= !(x->daemon = pizLinklistNew( ));
     err |= !(x->data = dictionary_new( ));
@@ -306,7 +306,7 @@ void tralala_free(t_tll *x)
     }
     
     pizArrayFree(x->array);
-    pizLinklistFree(x->linklist);
+    pizLinklistFree(x->runCopy);
     pizLinklistFree(x->run);
     pizLinklistFree(x->daemon);
 
@@ -401,7 +401,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
     PIZEventCode code = PIZ_EVENT_NONE;
 
     TLL_RUN_LOCK
-    pizLinklistAppend(x->run, event);
+    pizLinklistAppend(x->run, (void *)event);
     TLL_RUN_UNLOCK
     
     clock_fdelay(x->runClock, 0.);
@@ -411,7 +411,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
     if ((code == PIZ_EVENT_NOTE_PLAYED) && (copy = pizEventNewCopy(event))) {
     //
     TLL_DAEMON_LOCK
-    pizLinklistAppend(x->daemon, copy);
+    pizLinklistAppend(x->daemon, (void *)copy);
     TLL_DAEMON_UNLOCK
         
     if (TLL_FLAG_FALSE(TLL_FLAG_WORK)) { 
@@ -424,22 +424,42 @@ void tralala_callback(void *ptr, PIZEvent *event)
     } 
 }
 
-/*
-void tralala_callback(void *ptr, PIZEvent *event)
+void tralala_runTask (t_tll *x)
 {
+    PIZEvent *event = NULL;
+    PIZEvent *nextEvent = NULL;
+    
+    TLL_RUN_LOCK
+    
+    pizLinklistPtrAtIndex(x->run, 0, (void **)&event);
+    
+    while (event) {
+        pizLinklistNextWithPtr(x->run, (void *)event, (void **)&nextEvent);
+        pizLinklistAppend(x->runCopy, (void *)event);
+        pizLinklistChuckWithPtr(x->run, (void *)event);
+        event = nextEvent;
+    }
+    
+    TLL_RUN_UNLOCK
+    
+    pizLinklistPtrAtIndex(x->runCopy, 0, (void **)&event);
+    
+    while (event) {
+    //
     long argc;
     long *argv = NULL;
-    t_tll *x = NULL;
     PIZEventCode code = PIZ_EVENT_NONE;
     long a[ ] = { 0, 0, 0, 0 };
     
-    x = (t_tll *)ptr;
+    pizLinklistNextWithPtr(x->runCopy, (void *)event, (void **)&nextEvent);
+    
+    PIZ_DEBUG_EVENT
+    
     pizEventCode(event, &code);
     
     switch (code) {
     //
     case PIZ_EVENT_NOTE_PLAYED :
-        evnum_incr( );
         pizEventData(event, &argc, &argv);
         a[0] = argv[PIZ_EVENT_DATA_PITCH];
         a[1] = argv[PIZ_EVENT_DATA_VELOCITY];
@@ -457,17 +477,14 @@ void tralala_callback(void *ptr, PIZEvent *event)
         break;
 
     case PIZ_EVENT_WILL_DUMP :
-        evnum_incr( );
         outlet_anything(x->middleLeft, TLL_SYM_CLEAR, 0, NULL);
         break;
 
     case PIZ_EVENT_WILL_END :
-        evnum_incr( );
         outlet_bang(x->right);
         break;
     
     case PIZ_EVENT_END :
-        evnum_incr( );
         pizEventTime(event, &x->time);
         outlet_anything(x->middleRight, TLL_SYM_END, 1, &x->link);
         tralala_switchDaemon(x, PIZ_EVENT_END);
@@ -479,27 +496,10 @@ void tralala_callback(void *ptr, PIZEvent *event)
     //
     }
     
-    if (code == PIZ_EVENT_NOTE_PLAYED) {
-    
-        TLL_DAEMON_LOCK
-        pizLinklistAppend(x->daemon, event);
-        TLL_DAEMON_UNLOCK
-        
-        if (TLL_FLAG_FALSE(TLL_FLAG_WORK)) { 
-            tralala_switchDaemon(x, PIZ_EVENT_NOTE_PLAYED);
-        }
-        
-        TLL_FLAG_SET(TLL_DIRTY_RUN)
-        jbox_redraw((t_jbox *)x);
-        
-    } else {
-        pizEventFree(event);
-    } 
-}*/
-
-void tralala_runTask (t_tll *x)
-{
-    
+    pizLinklistRemoveWithPtr(x->runCopy, (void *)event);
+    event = nextEvent;
+    //
+    }
 }
 
 void tralala_daemonTask (t_tll *x)
