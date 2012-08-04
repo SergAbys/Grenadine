@@ -25,14 +25,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizAgent.h"
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-#define TLL_CLOCK_RUN       47.
-#define TLL_CLOCK_DAEMON    3947.    
+#include "pizAgent.h"  
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -44,7 +37,8 @@
 #define TLL_FLAG_LASSO          (1UL << 2)
 #define TLL_FLAG_FOCUS          (1UL << 3)
 #define TLL_FLAG_SHIFT          (1UL << 4)
-#define TLL_FLAG_CLOCK          (1UL << 5)
+#define TLL_FLAG_DAEMON         (1UL << 5)
+
 #define TLL_DIRTY_RUN           (1UL << 6)
 #define TLL_DIRTY_ZONE          (1UL << 7)
 #define TLL_DIRTY_NOTE          (1UL << 8)
@@ -55,10 +49,25 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+#define TLL_CLOCK_DAEMON_BUSY   47.
+#define TLL_CLOCK_DAEMON_IDLE   3947.  
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 #ifdef __MACH__
 
 typedef uint32_t t_uint32_atomic;
-    
+
+#endif // __MACH__
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+#ifdef __MACH__
+
 #define TLL_FLAG_SET(mask)      OSAtomicOr32Barrier((mask), &x->flags); 
 #define TLL_FLAG_UNSET(mask)    OSAtomicAnd32Barrier((~(mask)), &x->flags);
 #define TLL_FLAG_TRUE(mask)     (x->flags & (mask)) 
@@ -70,11 +79,14 @@ typedef uint32_t t_uint32_atomic;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_LOCK        systhread_mutex_lock(x->paintMutex); 
-#define TLL_UNLOCK      systhread_mutex_unlock(x->paintMutex); 
+#define TLL_GUI_LOCK        systhread_mutex_lock(x->guiMutex); 
+#define TLL_GUI_UNLOCK      systhread_mutex_unlock(x->guiMutex); 
 
-#define TLL_RUN_LOCK    systhread_mutex_lock(x->runMutex); 
-#define TLL_RUN_UNLOCK  systhread_mutex_unlock(x->runMutex); 
+#define TLL_RUN_LOCK        systhread_mutex_lock(x->runMutex); 
+#define TLL_RUN_UNLOCK      systhread_mutex_unlock(x->runMutex); 
+
+#define TLL_DAEMON_LOCK     systhread_mutex_lock(x->daemonMutex); 
+#define TLL_DAEMON_UNLOCK   systhread_mutex_unlock(x->daemonMutex); 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -83,8 +95,9 @@ typedef uint32_t t_uint32_atomic;
 typedef struct _tll {
     t_jbox              box;
     t_uint32_atomic     flags;
+    t_systhread_mutex   guiMutex;
     t_systhread_mutex   runMutex;
-    t_systhread_mutex   paintMutex;
+    t_systhread_mutex   daemonMutex;
     t_atom              played[4];
     t_atom              dumped[5];
     t_atom              link;
@@ -114,9 +127,11 @@ typedef struct _tll {
     t_dictionary        *current;
     t_dictionary        *status;
     PIZAgent            *agent;
-    PIZLinklist         *run;
     PIZArray            *temp;
-    void                *clock;
+    PIZLinklist         *run;
+    PIZLinklist         *daemon;
+    void                *runClock;
+    void                *daemonClock;
     void                *left;
     void                *middleLeft;
     void                *middleRight;
@@ -138,7 +153,8 @@ void tralala_store      (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_recall     (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 
 void tralala_callback   (void *ptr, PIZEvent *event);
-void tralala_task       (t_tll *x);
+void tralala_runTask    (t_tll *x);
+void tralala_daemonTask (t_tll *x);
 
 void tralala_play       (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_loop       (t_tll *x, t_symbol *s, long argc, t_atom *argv);

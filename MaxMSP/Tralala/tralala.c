@@ -30,7 +30,7 @@ static t_int32_atomic tll_identifier;
 // -------------------------------------------------------------------------------------------------------------
 
 PIZ_LOCAL void tralala_send             (t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags);
-PIZ_LOCAL void tralala_switchClock      (t_tll *x, PIZEventCode code);
+PIZ_LOCAL void tralala_switchDaemon     (t_tll *x, PIZEventCode code);
 PIZ_LOCAL t_symbol *tralala_slotName    (long argc, t_atom *argv);
 PIZ_LOCAL t_symbol *tralala_unique      (t_tll *x);
 
@@ -210,8 +210,6 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     
     jbox_new((t_jbox *)x, boxflags, argc, argv);
     x->box.b_firstin = (void *)x;
-    
-    x->clock = clock_new(x, (method)tralala_task);
 
     x->right = bangout((t_object *)x);
     x->middleRight = outlet_new((t_object *)x, NULL);
@@ -223,13 +221,17 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     
     err |= !(x->temp = pizArrayNew(0));
     err |= !(x->run = pizLinklistNew( ));
+    err |= !(x->daemon = pizLinklistNew( ));
     err |= !(x->data = dictionary_new( ));
     err |= !(x->current = dictionary_new( ));
     err |= !(x->status = dictionary_new( ));
     err |= !(x->layer = jtextlayout_create( ));
+    err |= !(x->runClock = clock_new(x, (method)tralala_runTask));
+    err |= !(x->daemonClock = clock_new(x, (method)tralala_daemonTask));
     
+    err |= (systhread_mutex_new(&x->guiMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
     err |= (systhread_mutex_new(&x->runMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
-    err |= (systhread_mutex_new(&x->paintMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
+    err |= (systhread_mutex_new(&x->daemonMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
     
     x->identifier = ATOMIC_INCREMENT(&tll_identifier);
     
@@ -275,25 +277,35 @@ void tralala_free(t_tll *x)
         pizAgentFree(x->agent);
     }
     
-    if (x->paintMutex) {
-        systhread_mutex_free(x->paintMutex);
+    if (x->guiMutex) {
+        systhread_mutex_free(x->guiMutex);
     }
     
     if (x->runMutex) {
         systhread_mutex_free(x->runMutex);
     }
     
+    if (x->daemonMutex) {
+        systhread_mutex_free(x->daemonMutex);
+    }
+    
     if (x->layer) {
         jtextlayout_destroy(x->layer);
     }
     
-    if (x->clock) {
-        clock_unset(x->clock);
-        object_free(x->clock);
+    if (x->runClock) {
+        clock_unset(x->runClock);
+        object_free(x->runClock);
+    }
+    
+    if (x->daemonClock) {
+        clock_unset(x->daemonClock);
+        object_free(x->daemonClock);
     }
     
     pizArrayFree(x->temp);
     pizLinklistFree(x->run);
+    pizLinklistFree(x->daemon);
     
     object_free(x->status);
     object_free(x->current);
@@ -339,9 +351,9 @@ void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
     t_symbol *name = tralala_slotName(argc, argv);
 
     if (t = dictionary_new( )) {
-        TLL_LOCK
+        TLL_GUI_LOCK
         dictionary_copyunique(t, x->current);
-        TLL_UNLOCK
+        TLL_GUI_UNLOCK
         dictionary_appenddictionary(x->data, name, (t_object *)t);
         jpatcher_set_dirty(jbox_get_patcher((t_object *)x), 1);
     }
@@ -424,7 +436,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
         evnum_incr( );
         pizEventTime(event, &x->time);
         outlet_anything(x->middleRight, TLL_SYM_END, 1, &x->link);
-        tralala_switchClock(x, PIZ_EVENT_END);
+        tralala_switchDaemon(x, PIZ_EVENT_END);
         break;
     
     default :
@@ -435,12 +447,12 @@ void tralala_callback(void *ptr, PIZEvent *event)
     
     if (code == PIZ_EVENT_NOTE_PLAYED) {
     
-        TLL_RUN_LOCK
-        pizLinklistAppend(x->run, event);
-        TLL_RUN_UNLOCK
+        TLL_DAEMON_LOCK
+        pizLinklistAppend(x->daemon, event);
+        TLL_DAEMON_UNLOCK
         
-        if (TLL_FLAG_FALSE(TLL_FLAG_CLOCK)) { 
-            tralala_switchClock(x, PIZ_EVENT_NOTE_PLAYED);
+        if (TLL_FLAG_FALSE(TLL_FLAG_DAEMON)) { 
+            tralala_switchDaemon(x, PIZ_EVENT_NOTE_PLAYED);
         }
         
         TLL_FLAG_SET(TLL_DIRTY_RUN)
@@ -451,7 +463,12 @@ void tralala_callback(void *ptr, PIZEvent *event)
     } 
 }
 
-void tralala_task (t_tll *x)
+void tralala_runTask (t_tll *x)
+{
+    ;
+}
+
+void tralala_daemonTask (t_tll *x)
 {
     PIZNano m, n;
     PIZTime now, t;
@@ -461,16 +478,16 @@ void tralala_task (t_tll *x)
     
     pizTimeSet(&now);
         
-    TLL_RUN_LOCK
+    TLL_DAEMON_LOCK
     
-    pizLinklistPtrAtIndex(x->run, 0, (void **)&event);
+    pizLinklistPtrAtIndex(x->daemon, 0, (void **)&event);
     
     while (event) {
     //
     long argc;
     long *argv = NULL;
 
-    pizLinklistNextWithPtr(x->run, (void *)event, (void **)&nextEvent);
+    pizLinklistNextWithPtr(x->daemon, (void *)event, (void **)&nextEvent);
     
     pizEventTime(event, &t);
     pizEventData(event, &argc, &argv);
@@ -479,7 +496,7 @@ void tralala_task (t_tll *x)
     pizTimeAddNano(&t, &n);
 
     if (pizTimeElapsedNano(&now, &t, &m)) {
-       pizLinklistRemoveWithPtr(x->run, (void *)event);
+       pizLinklistRemoveWithPtr(x->daemon, (void *)event);
        dirty = true;
     }
         
@@ -487,17 +504,17 @@ void tralala_task (t_tll *x)
     //
     }
        
-    TLL_RUN_UNLOCK
+    TLL_DAEMON_UNLOCK
     
     if (dirty) {
         TLL_FLAG_SET(TLL_DIRTY_RUN)
         jbox_redraw((t_jbox *)x);
     }
             
-    if (TLL_FLAG_TRUE(TLL_FLAG_CLOCK)) {
-        clock_fdelay(x->clock, TLL_CLOCK_RUN);
+    if (TLL_FLAG_TRUE(TLL_FLAG_DAEMON)) {
+        clock_fdelay(x->daemonClock, TLL_CLOCK_DAEMON_BUSY);
     } else {
-        clock_fdelay(x->clock, TLL_CLOCK_DAEMON);
+        clock_fdelay(x->daemonClock, TLL_CLOCK_DAEMON_IDLE);
     }
 }
 
@@ -567,25 +584,25 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong fl
     pizEventSetIdentifier(event, x->identifier);
     pizAgentDoEvent(x->agent, event);
     
-    tralala_switchClock(x, code);
+    tralala_switchDaemon(x, code);
     //
     }
 }
 
-void tralala_switchClock(t_tll *x, PIZEventCode code)
+void tralala_switchDaemon(t_tll *x, PIZEventCode code)
 {
     switch (code) {
         case PIZ_EVENT_NOTE_PLAYED :
-            TLL_FLAG_SET(TLL_FLAG_CLOCK)
-            clock_fdelay(x->clock, TLL_CLOCK_RUN); 
+            TLL_FLAG_SET(TLL_FLAG_DAEMON)
+            clock_fdelay(x->daemonClock, TLL_CLOCK_DAEMON_BUSY); 
             break;
         
         case PIZ_EVENT_STOP :
-            TLL_FLAG_UNSET(TLL_FLAG_CLOCK)
+            TLL_FLAG_UNSET(TLL_FLAG_DAEMON)
             break;
         
         case PIZ_EVENT_END :
-            TLL_FLAG_UNSET(TLL_FLAG_CLOCK)
+            TLL_FLAG_UNSET(TLL_FLAG_DAEMON)
             break;
         
         default : 

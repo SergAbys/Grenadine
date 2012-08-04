@@ -98,7 +98,7 @@ _tralala_play
 _tralala_recall
 _tralala_stop
 _tralala_store
-_tralala_task
+_tralala_daemonTask
 _tralala_unloop
 
 _pizEventName

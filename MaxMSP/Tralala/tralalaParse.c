@@ -153,13 +153,13 @@ quickmap_add(tll_length, gensym("half"),                  (void *)(TLL_TINY + PI
 quickmap_add(tll_length, gensym("quarter"),               (void *)(TLL_TINY + PIZ_QUARTER_NOTE));
 quickmap_add(tll_length, gensym("eighth"),                (void *)(TLL_TINY + PIZ_EIGHTH_NOTE));
 quickmap_add(tll_length, gensym("sixteenth"),             (void *)(TLL_TINY + PIZ_SIXTEENTH_NOTE));
-quickmap_add(tll_length, gensym("thirty_second"),         (void *)(TLL_TINY + PIZ_THIRTY_SECOND_NOTE));
+quickmap_add(tll_length, gensym("thirty-second"),         (void *)(TLL_TINY + PIZ_THIRTY_SECOND_NOTE));
 quickmap_add(tll_length, gensym("whole_triplet"),         (void *)(TLL_TINY + PIZ_WHOLE_NOTE_TRIPLET));
 quickmap_add(tll_length, gensym("half_triplet"),          (void *)(TLL_TINY + PIZ_HALF_NOTE_TRIPLET));
 quickmap_add(tll_length, gensym("quarter_triplet"),       (void *)(TLL_TINY + PIZ_QUARTER_NOTE_TRIPLET));
 quickmap_add(tll_length, gensym("eighth_triplet"),        (void *)(TLL_TINY + PIZ_EIGHTH_NOTE_TRIPLET));
 quickmap_add(tll_length, gensym("sixteenth_triplet"),     (void *)(TLL_TINY + PIZ_SIXTEENTH_NOTE_TRIPLET));
-quickmap_add(tll_length, gensym("thirty_second_triplet"), (void *)(TLL_TINY + PIZ_THIRTY_SECOND_NOTE_TRIPLET));
+quickmap_add(tll_length, gensym("thirty-second_triplet"), (void *)(TLL_TINY + PIZ_THIRTY_SECOND_NOTE_TRIPLET));
 quickmap_add(tll_length, gensym("whole_dotted"),          (void *)(TLL_TINY + PIZ_WHOLE_NOTE_DOTTED));
 quickmap_add(tll_length, gensym("half_dotted"),           (void *)(TLL_TINY + PIZ_HALF_NOTE_DOTTED));
 quickmap_add(tll_length, gensym("quarter_dotted"),        (void *)(TLL_TINY + PIZ_QUARTER_NOTE_DOTTED));
@@ -348,15 +348,15 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
 
         atom_setsym(data, s);
         
-        TLL_LOCK
+        TLL_GUI_LOCK
         dictionary_appendatoms(x->current, s, k + 1, data); 
-        TLL_UNLOCK
+        TLL_GUI_UNLOCK
 
     } else {
         dirty |= tralala_mouseAbort(x);
         tralala_parseSymbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
           
-        TLL_LOCK
+        TLL_GUI_LOCK
         
         if (code == PIZ_EVENT_NOTE_REMOVED) {
         
@@ -382,7 +382,7 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
             dictionary_appendatoms(x->current, s, 6, data);
         }
         
-        TLL_UNLOCK
+        TLL_GUI_UNLOCK
         
         dirty |= TLL_DIRTY_NOTE;
     }

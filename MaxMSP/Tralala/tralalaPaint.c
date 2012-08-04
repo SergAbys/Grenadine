@@ -149,16 +149,16 @@ void tralala_paintRun(t_tll *x, t_object *pv)
     
     pizArrayClear(x->temp);
     
-    TLL_RUN_LOCK
+    TLL_DAEMON_LOCK
     
-    pizLinklistPtrAtIndex(x->run, 0, (void **)&event);
+    pizLinklistPtrAtIndex(x->daemon, 0, (void **)&event);
     
     while (event) {
     //
     long argc;
     long *argv = NULL;
 
-    pizLinklistNextWithPtr(x->run, (void *)event, (void **)&nextEvent);
+    pizLinklistNextWithPtr(x->daemon, (void *)event, (void **)&nextEvent);
     
     pizEventData(event, &argc, &argv);
     
@@ -171,7 +171,7 @@ void tralala_paintRun(t_tll *x, t_object *pv)
     //
     }
     
-    TLL_RUN_UNLOCK
+    TLL_DAEMON_UNLOCK
     
     if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_RUN, w, h)) {
     //
@@ -252,7 +252,7 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
     err |= !(notes[1] = atomarray_new(0, NULL));
     err |= !(notes[2] = atomarray_new(0, NULL));
     
-    TLL_LOCK
+    TLL_GUI_LOCK
     
     dictionary_getlong(x->status, TLL_SYM_ZONE, &zoneStatus);
         
@@ -301,7 +301,7 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
     
     err |= (dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv)) != MAX_ERR_NONE;
     
-    TLL_UNLOCK 
+    TLL_GUI_UNLOCK 
     
     if (!err) {
         if (!zoneStatus) {
