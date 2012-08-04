@@ -286,7 +286,7 @@ void tralala_keySelectAll(t_tll *x)
     long i, n = 0;
     t_symbol **keys = NULL;
     
-    TLL_GUI_LOCK
+    TLL_DATA_LOCK
     
     if (!(dictionary_getkeys(x->current, &n, &keys))) {
     //
@@ -304,14 +304,14 @@ void tralala_keySelectAll(t_tll *x)
     //
     }
     
-    TLL_GUI_UNLOCK
+    TLL_DATA_UNLOCK
 }
 
 void tralala_keySelectZone(t_tll *x)
 {
-    TLL_GUI_LOCK
+    TLL_DATA_LOCK
     dictionary_appendlong(x->status, TLL_SYM_ZONE, TLL_SELECTED);
-    TLL_GUI_UNLOCK
+    TLL_DATA_UNLOCK
 }
 
 void tralala_keyCopySelected(t_tll *x, t_dictionary *d)
@@ -321,7 +321,7 @@ void tralala_keyCopySelected(t_tll *x, t_dictionary *d)
     
     TLL_FLAG_SET(TLL_FLAG_COPY)
     
-    TLL_GUI_LOCK
+    TLL_DATA_LOCK
     
     if (!(dictionary_getkeys(x->status, &n, &keys))) {
     //
@@ -345,7 +345,7 @@ void tralala_keyCopySelected(t_tll *x, t_dictionary *d)
     //
     }
     
-    TLL_GUI_UNLOCK
+    TLL_DATA_UNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -369,7 +369,7 @@ void tralala_keyChangeZone(t_tll *x, long m, long keycode)
     PIZArray *t = NULL;
     PIZEventCode code = PIZ_EVENT_NONE;
     
-    TLL_GUI_LOCK
+    TLL_DATA_LOCK
     
     if ((t = pizArrayNew(0)) && !(dictionary_getlong(x->status, TLL_SYM_ZONE, &status))) {
     //
@@ -405,7 +405,7 @@ void tralala_keyChangeZone(t_tll *x, long m, long keycode)
     //
     }
     
-    TLL_GUI_UNLOCK
+    TLL_DATA_UNLOCK
     
     if (t) {
     //
@@ -447,7 +447,7 @@ void tralala_keyChangeNotes(t_tll *x, long m, PIZEventCode code, long selector)
     t_symbol **keys = NULL;
     PIZArray *t = NULL;
     
-    TLL_GUI_LOCK
+    TLL_DATA_LOCK
     
     if (t = pizArrayNew(dictionary_getentrycount(x->status))) {
     //
@@ -468,7 +468,7 @@ void tralala_keyChangeNotes(t_tll *x, long m, PIZEventCode code, long selector)
     //
     }
     
-    TLL_GUI_UNLOCK
+    TLL_DATA_UNLOCK
     
     if (t) {
     //

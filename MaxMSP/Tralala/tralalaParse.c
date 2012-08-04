@@ -348,15 +348,15 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
 
         atom_setsym(data, s);
         
-        TLL_GUI_LOCK
+        TLL_DATA_LOCK
         dictionary_appendatoms(x->current, s, k + 1, data); 
-        TLL_GUI_UNLOCK
+        TLL_DATA_UNLOCK
 
     } else {
         dirty |= tralala_mouseAbort(x);
         tralala_parseSymbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
           
-        TLL_GUI_LOCK
+        TLL_DATA_LOCK
         
         if (code == PIZ_EVENT_NOTE_REMOVED) {
         
@@ -365,10 +365,8 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
                 if (!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) && (s == mark)) {
                     dictionary_deleteentry(x->status, TLL_SYM_MARK); 
                 }
-                
                 dictionary_deleteentry(x->status, s);
             }
-            
             dictionary_deleteentry(x->current, s);
         
         } else {
@@ -382,7 +380,7 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
             dictionary_appendatoms(x->current, s, 6, data);
         }
         
-        TLL_GUI_UNLOCK
+        TLL_DATA_UNLOCK
         
         dirty |= TLL_DIRTY_NOTE;
     }

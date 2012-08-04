@@ -189,6 +189,7 @@ typedef struct _PIZEvent {
 PIZ_START_C_LINKAGE
 
 PIZEvent    *pizEventNew            (PIZEventCode code);
+PIZEvent    *pizEventNewCopy        (PIZEvent *event);
 const char  *pizEventName           (const PIZEvent *x);
 
 void        pizEventFree            (PIZEvent *x);

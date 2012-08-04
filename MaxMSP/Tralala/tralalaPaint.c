@@ -147,7 +147,7 @@ void tralala_paintRun(t_tll *x, t_object *pv)
     PIZEvent *event = NULL;
     PIZEvent *nextEvent = NULL;
     
-    pizArrayClear(x->temp);
+    pizArrayClear(x->array);
     
     TLL_DAEMON_LOCK
     
@@ -162,10 +162,10 @@ void tralala_paintRun(t_tll *x, t_object *pv)
     
     pizEventData(event, &argc, &argv);
     
-    pizArrayAppend(x->temp, argv[0]);
-    pizArrayAppend(x->temp, argv[1]);
-    pizArrayAppend(x->temp, argv[2]);
-    pizArrayAppend(x->temp, argv[3]);
+    pizArrayAppend(x->array, argv[0]);
+    pizArrayAppend(x->array, argv[1]);
+    pizArrayAppend(x->array, argv[2]);
+    pizArrayAppend(x->array, argv[3]);
         
     event = nextEvent;
     //
@@ -176,9 +176,9 @@ void tralala_paintRun(t_tll *x, t_object *pv)
     if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_RUN, w, h)) {
     //
     long j;
-    long *note = pizArrayPtr(x->temp);
+    long *note = pizArrayPtr(x->array);
     
-    for (j = 0; j < pizArrayCount(x->temp); j += 4) {
+    for (j = 0; j < pizArrayCount(x->array); j += 4) {
         t_rect r;
         r.x = TLL_POSITION_TO_X(note[j]);
         r.y = TLL_PITCH_TO_Y_UP(note[j + 1]); 
@@ -252,7 +252,7 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
     err |= !(notes[1] = atomarray_new(0, NULL));
     err |= !(notes[2] = atomarray_new(0, NULL));
     
-    TLL_GUI_LOCK
+    TLL_DATA_LOCK
     
     dictionary_getlong(x->status, TLL_SYM_ZONE, &zoneStatus);
         
@@ -301,7 +301,7 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
     
     err |= (dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv)) != MAX_ERR_NONE;
     
-    TLL_GUI_UNLOCK 
+    TLL_DATA_UNLOCK 
     
     if (!err) {
         if (!zoneStatus) {

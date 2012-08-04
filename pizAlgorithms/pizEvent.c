@@ -205,6 +205,30 @@ PIZEvent *pizEventNew(PIZEventCode code)
     return x;
 }
 
+PIZEvent *pizEventNewCopy(PIZEvent *event)
+{
+    PIZEvent *x = NULL;
+    
+    if (event && (x = (PIZEvent *)calloc(1, sizeof(PIZEvent)))) {
+    //
+    long i;
+    
+    x->code = event->code;
+    x->type = event->type;
+    pizTimeCopy(&x->time, &event->time);
+    x->identifier = event->identifier;
+    x->size = event->size;
+    
+    for (i = 0; i < PIZ_EVENT_DATA_SIZE; i++) {
+        x->data[i] = event->data[i];
+    }
+        
+    //
+    }
+    
+    return x;
+}
+    
 const char *pizEventName(const PIZEvent *x)
 {
     return pizEventNames[x->code];

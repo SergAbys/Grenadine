@@ -31,26 +31,26 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_FLAG_NONE           0UL
-#define TLL_FLAG_GRAB           (1UL << 0)
-#define TLL_FLAG_COPY           (1UL << 1)
-#define TLL_FLAG_LASSO          (1UL << 2)
-#define TLL_FLAG_FOCUS          (1UL << 3)
-#define TLL_FLAG_SHIFT          (1UL << 4)
-#define TLL_FLAG_DAEMON         (1UL << 5)
-
-#define TLL_DIRTY_RUN           (1UL << 6)
-#define TLL_DIRTY_ZONE          (1UL << 7)
-#define TLL_DIRTY_NOTE          (1UL << 8)
-#define TLL_DIRTY_LASSO         (1UL << 9)
-#define TLL_DIRTY_BACKGROUND    (1UL << 10)
+#define TLL_DAEMON_WORK         47.
+#define TLL_DAEMON_IDLE         3947. 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_CLOCK_DAEMON_BUSY   47.
-#define TLL_CLOCK_DAEMON_IDLE   3947.  
+#define TLL_FLAG_NONE           0UL
+#define TLL_FLAG_WORK           (1UL << 0)
+#define TLL_FLAG_GRAB           (1UL << 1)
+#define TLL_FLAG_COPY           (1UL << 2)
+#define TLL_FLAG_LASSO          (1UL << 3)
+#define TLL_FLAG_FOCUS          (1UL << 4)
+#define TLL_FLAG_SHIFT          (1UL << 5)
+
+#define TLL_DIRTY_RUN           (1UL << 6)
+#define TLL_DIRTY_ZONE          (1UL << 7)
+#define TLL_DIRTY_NOTE          (1UL << 8)
+#define TLL_DIRTY_LASSO         (1UL << 9)
+#define TLL_DIRTY_BACKGROUND    (1UL << 10) 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -79,11 +79,11 @@ typedef uint32_t t_uint32_atomic;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_GUI_LOCK        systhread_mutex_lock(x->guiMutex); 
-#define TLL_GUI_UNLOCK      systhread_mutex_unlock(x->guiMutex); 
-
 #define TLL_RUN_LOCK        systhread_mutex_lock(x->runMutex); 
 #define TLL_RUN_UNLOCK      systhread_mutex_unlock(x->runMutex); 
+
+#define TLL_DATA_LOCK       systhread_mutex_lock(x->dataMutex); 
+#define TLL_DATA_UNLOCK     systhread_mutex_unlock(x->dataMutex); 
 
 #define TLL_DAEMON_LOCK     systhread_mutex_lock(x->daemonMutex); 
 #define TLL_DAEMON_UNLOCK   systhread_mutex_unlock(x->daemonMutex); 
@@ -95,8 +95,8 @@ typedef uint32_t t_uint32_atomic;
 typedef struct _tll {
     t_jbox              box;
     t_uint32_atomic     flags;
-    t_systhread_mutex   guiMutex;
     t_systhread_mutex   runMutex;
+    t_systhread_mutex   dataMutex;
     t_systhread_mutex   daemonMutex;
     t_atom              played[4];
     t_atom              dumped[5];
@@ -127,9 +127,10 @@ typedef struct _tll {
     t_dictionary        *current;
     t_dictionary        *status;
     PIZAgent            *agent;
-    PIZArray            *temp;
     PIZLinklist         *run;
     PIZLinklist         *daemon;
+    PIZLinklist         *linklist;
+    PIZArray            *array;
     void                *runClock;
     void                *daemonClock;
     void                *left;

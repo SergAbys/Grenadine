@@ -81,8 +81,8 @@ void tralala_mouseDown(t_tll *x, t_object *pv, t_pt pt, long m)
         }
     }
     
-    if (TLL_FLAG_FALSE(TLL_FLAG_DAEMON)) {
-        clock_fdelay(x->daemonClock, TLL_CLOCK_DAEMON_BUSY);
+    if (TLL_FLAG_FALSE(TLL_FLAG_WORK)) {
+        clock_fdelay(x->daemonClock, TLL_DAEMON_WORK);
     }
             
     TLL_FLAG_SET(TLL_DIRTY_ZONE | TLL_DIRTY_NOTE)
@@ -162,9 +162,9 @@ ulong tralala_mouseAbort(t_tll *x)
 
 void tralala_mouseUnselectAll(t_tll *x)
 {
-    TLL_GUI_LOCK
+    TLL_DATA_LOCK
     dictionary_clear(x->status);
-    TLL_GUI_UNLOCK
+    TLL_DATA_UNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -188,7 +188,7 @@ void tralala_mouseHitZone(t_tll *x)
     long position = TLL_X_TO_POSITION(x->cursor.x);
     long pitch = TLL_Y_TO_PITCH(x->cursor.y);
     
-    TLL_GUI_LOCK
+    TLL_DATA_LOCK
     
     if (!(dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv))) {
         if (position < atom_getlong(argv + 1)) { 
@@ -204,7 +204,7 @@ void tralala_mouseHitZone(t_tll *x)
     
     dictionary_appendlong(x->status, TLL_SYM_ZONE, k);
     
-    TLL_GUI_UNLOCK
+    TLL_DATA_UNLOCK
 }
 
 long tralala_mouseHitNote(t_tll *x, long m)
@@ -216,7 +216,7 @@ long tralala_mouseHitNote(t_tll *x, long m)
     long pitch = TLL_Y_TO_PITCH(x->cursor.y - 1.);
     long k = TLL_HIT_NONE;
     
-    TLL_GUI_LOCK
+    TLL_DATA_LOCK
     
     if (!(m & eShiftKey)) {
         dictionary_clear(x->status);
@@ -263,7 +263,7 @@ long tralala_mouseHitNote(t_tll *x, long m)
         }
     } 
     
-    TLL_GUI_UNLOCK
+    TLL_DATA_UNLOCK
     
     return k;
 }
@@ -279,7 +279,7 @@ ulong tralala_mouseMove(t_tll *x)
     PIZError err = PIZ_GOOD;
     ulong k = TLL_MOVE_NONE;
         
-    TLL_GUI_LOCK
+    TLL_DATA_LOCK
     
     if (!(err |= (dictionary_getatoms(x->current, TLL_SYM_CELL, &argc, &argv)) != MAX_ERR_NONE)) {
         if (cell = atom_getlong(argv + 1)) {
@@ -287,7 +287,7 @@ ulong tralala_mouseMove(t_tll *x)
         }
     }
     
-    TLL_GUI_UNLOCK
+    TLL_DATA_UNLOCK
     
     if (!err) {
        if (v > 0) { k |= TLL_MOVE_UP; } else if (v < 0) { k |= TLL_MOVE_DOWN; }
@@ -308,7 +308,7 @@ ulong tralala_mouseSelectLasso(t_tll *x)
     t_symbol **keys = NULL;
     ulong dirty = TLL_FLAG_NONE;
     
-    TLL_GUI_LOCK
+    TLL_DATA_LOCK
     
     if (!(dictionary_getkeys(x->current, &n, &keys))) {
     //
@@ -367,7 +367,7 @@ ulong tralala_mouseSelectLasso(t_tll *x)
     //
     }
     
-    TLL_GUI_UNLOCK
+    TLL_DATA_UNLOCK
         
     return dirty;
 }
@@ -377,7 +377,7 @@ void tralala_mouseReleaseLasso(t_tll *x)
     long i, n = 0;
     t_symbol **keys = NULL;
     
-    TLL_GUI_LOCK
+    TLL_DATA_LOCK
     
     if (!(dictionary_getkeys(x->current, &n, &keys))) {
     //
@@ -405,20 +405,20 @@ void tralala_mouseReleaseLasso(t_tll *x)
     //
     }
     
-    TLL_GUI_UNLOCK
+    TLL_DATA_UNLOCK
     
     TLL_FLAG_UNSET(TLL_FLAG_LASSO)
 }
 
 void tralala_mouseUnselectZone(t_tll *x)
 {
-    TLL_GUI_LOCK
+    TLL_DATA_LOCK
     
     if (dictionary_hasentry(x->status, TLL_SYM_ZONE)) {
         dictionary_deleteentry(x->status, TLL_SYM_ZONE);
     }
     
-    TLL_GUI_UNLOCK
+    TLL_DATA_UNLOCK
 }
 
 // -------------------------------------------------------------------------------------------------------------
