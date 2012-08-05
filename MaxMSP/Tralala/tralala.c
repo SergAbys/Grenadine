@@ -400,28 +400,25 @@ void tralala_callback(void *ptr, PIZEvent *event)
     t_tll *x = (t_tll *)ptr;
     PIZEventCode code = PIZ_EVENT_NONE;
 
-    pizEventCode(event, &code);
-        
     TLL_RUN_LOCK
     pizLinklistAppend(x->run, (void *)event);
     TLL_RUN_UNLOCK
     
     clock_fdelay(x->runClock, 0.);
     
+    pizEventCode(event, &code);
+    tralala_switchDaemon(x, code);
+        
     if ((code == PIZ_EVENT_NOTE_PLAYED) && (copy = pizEventNewCopy(event))) {
     //
     TLL_DAEMON_LOCK
     pizLinklistAppend(x->daemon, (void *)copy);
     TLL_DAEMON_UNLOCK
         
-    if (TLL_FLAG_FALSE(TLL_FLAG_WORK)) { 
-        tralala_switchDaemon(x, PIZ_EVENT_NOTE_PLAYED);
-    }
-    
     TLL_FLAG_SET(TLL_DIRTY_RUN)
     jbox_redraw((t_jbox *)x);
     //
-    } 
+    }
 }
 
 void tralala_runTask (t_tll *x)
@@ -452,7 +449,7 @@ void tralala_runTask (t_tll *x)
     long a[ ] = { 0, 0, 0, 0 };
     
     pizLinklistNextWithPtr(x->runCopy, (void *)event, (void **)&nextEvent);
-        
+    
     pizEventCode(event, &code);
     
     switch (code) {
@@ -485,7 +482,6 @@ void tralala_runTask (t_tll *x)
     case PIZ_EVENT_END :
         pizEventTime(event, &x->time);
         outlet_anything(x->middleRight, TLL_SYM_END, 1, &x->link);
-        tralala_switchDaemon(x, PIZ_EVENT_END);
         break;
     
     default :
@@ -543,7 +539,7 @@ void tralala_daemonTask (t_tll *x)
         jbox_redraw((t_jbox *)x);
     }
             
-    if (TLL_FLAG_TRUE(TLL_FLAG_WORK)) {
+    if (TLL_FLAG_TRUE(TLL_FLAG_DAEMON)) {
         clock_fdelay(x->daemonClock, TLL_DAEMON_WORK);
     } else {
         clock_fdelay(x->daemonClock, TLL_DAEMON_IDLE);
@@ -623,22 +619,12 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong fl
 
 void tralala_switchDaemon(t_tll *x, PIZEventCode code)
 {
-    switch (code) {
-        case PIZ_EVENT_NOTE_PLAYED :
-            TLL_FLAG_SET(TLL_FLAG_WORK)
-            clock_fdelay(x->daemonClock, TLL_DAEMON_WORK); 
-            break;
-        
-        case PIZ_EVENT_STOP :
-            TLL_FLAG_UNSET(TLL_FLAG_WORK)
-            break;
-        
-        case PIZ_EVENT_END :
-            TLL_FLAG_UNSET(TLL_FLAG_WORK)
-            break;
-        
-        default : 
-            break;
+    if ((code == PIZ_EVENT_END) || (code == PIZ_EVENT_STOP)) {
+        TLL_FLAG_UNSET(TLL_FLAG_DAEMON)
+
+    } else if ((code == PIZ_EVENT_NOTE_PLAYED) && (TLL_FLAG_FALSE(TLL_FLAG_DAEMON))) {
+        TLL_FLAG_SET(TLL_FLAG_DAEMON)
+        clock_fdelay(x->daemonClock, TLL_DAEMON_WORK); 
     }
 }
 

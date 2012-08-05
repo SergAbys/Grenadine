@@ -81,7 +81,7 @@ void tralala_mouseDown(t_tll *x, t_object *pv, t_pt pt, long m)
         }
     }
     
-    if (TLL_FLAG_FALSE(TLL_FLAG_WORK)) {
+    if (TLL_FLAG_FALSE(TLL_FLAG_DAEMON)) {
         clock_fdelay(x->daemonClock, TLL_DAEMON_WORK);
     }
             

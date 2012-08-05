@@ -31,7 +31,7 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_DAEMON_WORK         47.
+#define TLL_DAEMON_WORK         31.
 #define TLL_DAEMON_IDLE         3947. 
 
 // -------------------------------------------------------------------------------------------------------------
@@ -39,12 +39,12 @@
 #pragma mark -
 
 #define TLL_FLAG_NONE           0UL
-#define TLL_FLAG_WORK           (1UL << 0)
-#define TLL_FLAG_GRAB           (1UL << 1)
-#define TLL_FLAG_COPY           (1UL << 2)
-#define TLL_FLAG_LASSO          (1UL << 3)
-#define TLL_FLAG_FOCUS          (1UL << 4)
-#define TLL_FLAG_SHIFT          (1UL << 5)
+#define TLL_FLAG_GRAB           (1UL << 0)
+#define TLL_FLAG_COPY           (1UL << 1)
+#define TLL_FLAG_LASSO          (1UL << 2)
+#define TLL_FLAG_FOCUS          (1UL << 3)
+#define TLL_FLAG_SHIFT          (1UL << 4)
+#define TLL_FLAG_DAEMON         (1UL << 5)
 
 #define TLL_DIRTY_RUN           (1UL << 6)
 #define TLL_DIRTY_ZONE          (1UL << 7)
