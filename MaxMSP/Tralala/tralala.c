@@ -400,13 +400,13 @@ void tralala_callback(void *ptr, PIZEvent *event)
     t_tll *x = (t_tll *)ptr;
     PIZEventCode code = PIZ_EVENT_NONE;
 
+    pizEventCode(event, &code);
+        
     TLL_RUN_LOCK
     pizLinklistAppend(x->run, (void *)event);
     TLL_RUN_UNLOCK
     
     clock_fdelay(x->runClock, 0.);
-    
-    pizEventCode(event, &code);
     
     if ((code == PIZ_EVENT_NOTE_PLAYED) && (copy = pizEventNewCopy(event))) {
     //
@@ -452,9 +452,7 @@ void tralala_runTask (t_tll *x)
     long a[ ] = { 0, 0, 0, 0 };
     
     pizLinklistNextWithPtr(x->runCopy, (void *)event, (void **)&nextEvent);
-    
-    PIZ_DEBUG_EVENT
-    
+        
     pizEventCode(event, &code);
     
     switch (code) {
