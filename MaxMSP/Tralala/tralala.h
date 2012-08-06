@@ -115,6 +115,7 @@ typedef struct _tll {
     t_jrgba             hColor2;
     t_jrgba             hColor3;
     t_jrgba             hColor4;
+    t_jrgba             hColor5;
     t_jrgba             text;
     t_jrgba             uText;
     t_jrgba             border;

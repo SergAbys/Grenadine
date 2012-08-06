@@ -120,6 +120,9 @@ t_max_err tralala_notify (t_jbox *jbox, t_symbol *s, t_symbol *msg, void *sender
         
     } else if ((name == TLL_SYM_HCOLOR1) || (name == TLL_SYM_HCOLOR2)) {
         TLL_FLAG_SET(TLL_DIRTY_ZONE | TLL_DIRTY_NOTE)
+    
+    } else if (name == TLL_SYM_HCOLOR5) {
+        TLL_FLAG_SET(TLL_DIRTY_ZONE)
         
     } else if (name == TLL_SYM_LASSOCOLOR) {
         TLL_FLAG_SET(TLL_DIRTY_LASSO)
@@ -395,7 +398,7 @@ void tralala_paintCurrentZone(t_tll *x, t_object *pv, long argc, t_atom *argv, l
 
     if (TLL_FLAG_TRUE(TLL_FLAG_FOCUS)) {
         if (status) {
-            jgraphics_set_source_jrgba(g, &x->hColor2);
+            jgraphics_set_source_jrgba(g, &x->hColor5);
         } else  {
             jgraphics_set_source_jrgba(g, &x->color);
         }
@@ -482,25 +485,10 @@ void tralala_paintStrncatZone(char *dst, long argc, t_atom *argv, long status)
     if (status >= TLL_SELECTED_START) {
     //
     switch (status) {
-        case TLL_SELECTED_START : 
-            strncat_zero(dst, "Start : ", TLL_STRING_SIZE); 
-            snprintf_zero(temp, 32, "%ld\n", atom_getlong(argv + 1));
-            break;
-            
-        case TLL_SELECTED_END : 
-            strncat_zero(dst, "End : ", TLL_STRING_SIZE); 
-            snprintf_zero(temp, 32, "%ld\n", atom_getlong(argv + 2));
-            break;
-            
-        case TLL_SELECTED_DOWN : 
-            strncat_zero(dst, "Down : ", TLL_STRING_SIZE); 
-            snprintf_zero(temp, 32, "%s\n", a);
-            break;
-            
-        case TLL_SELECTED_UP : 
-            strncat_zero(dst, "Up : ", TLL_STRING_SIZE); 
-            snprintf_zero(temp, 32, "%s\n", b);
-            break;
+        case TLL_SELECTED_START : snprintf_zero(temp, 32, "%ld\n", atom_getlong(argv + 1)); break;
+        case TLL_SELECTED_END   : snprintf_zero(temp, 32, "%ld\n", atom_getlong(argv + 2)); break;
+        case TLL_SELECTED_DOWN  : snprintf_zero(temp, 32, "%s\n", a); break;
+        case TLL_SELECTED_UP    : snprintf_zero(temp, 32, "%s\n", b); break;
     } 
     //
     } else {

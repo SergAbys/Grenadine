@@ -69,13 +69,13 @@ void tralala_mouseDown(t_tll *x, t_object *pv, t_pt pt, long m)
         tralala_mouseHitZone(x);
     
     } else if (m & eCommandKey) {
+        tralala_mouseUnselectZone(x);
         tralala_mouseAddNote(x);
 
     } else if (!(k = tralala_mouseHitNote(x, m))) {
         TLL_FLAG_SET(TLL_FLAG_LASSO)
         
     } else {
-        tralala_mouseUnselectZone(x);
         if (k == TLL_HIT_GRAB) {
             TLL_FLAG_SET(TLL_FLAG_GRAB)
         }
@@ -221,6 +221,8 @@ long tralala_mouseHitNote(t_tll *x, long m)
     if (!(m & eShiftKey)) {
         dictionary_clear(x->status);
     }
+    
+    dictionary_deleteentry(x->status, TLL_SYM_ZONE);
     
     if (!(dictionary_getkeys(x->current, &n, &keys))) {
     //
@@ -414,9 +416,7 @@ void tralala_mouseUnselectZone(t_tll *x)
 {
     TLL_DATA_LOCK
     
-    if (dictionary_hasentry(x->status, TLL_SYM_ZONE)) {
-        dictionary_deleteentry(x->status, TLL_SYM_ZONE);
-    }
+    dictionary_deleteentry(x->status, TLL_SYM_ZONE);
     
     TLL_DATA_UNLOCK
 }

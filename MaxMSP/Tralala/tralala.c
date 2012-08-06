@@ -109,7 +109,12 @@ int main(void)
     CLASS_ATTR_DEFAULT_SAVE (c, "hcolor4", 0, "0.51 0.44 0.49 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "hcolor4", 0, "rgba", "Color Highlighted");
     CLASS_ATTR_CATEGORY     (c, "hcolor4", 0, "Color");
-        
+    
+    CLASS_ATTR_RGBA         (c, "hcolor5", 0, t_tll, hColor5); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor5", 0, "0.80 1. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "hcolor5", 0, "rgba", "Color Highlighted");
+    CLASS_ATTR_CATEGORY     (c, "hcolor5", 0, "Color");
+    
     CLASS_ATTR_RGBA         (c, "textcolor", 0, t_tll, text); 
     CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "0.51 0.44 0.49 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "textcolor", 0, "rgba", "Text Color");
@@ -163,13 +168,14 @@ int main(void)
     CLASS_ATTR_ORDER        (c, "hcolor2",          0, "4");
     CLASS_ATTR_ORDER        (c, "hcolor3",          0, "5");
     CLASS_ATTR_ORDER        (c, "hcolor4",          0, "6");
-    CLASS_ATTR_ORDER        (c, "textcolor",        0, "7");
-    CLASS_ATTR_ORDER        (c, "utextcolor",       0, "8");
-    CLASS_ATTR_ORDER        (c, "bordercolor",      0, "9");
-    CLASS_ATTR_ORDER        (c, "ubordercolor",     0, "10");
-    CLASS_ATTR_ORDER        (c, "bgcolor",          0, "11");
-    CLASS_ATTR_ORDER        (c, "ubgcolor",         0, "12");
-    CLASS_ATTR_ORDER        (c, "lassocolor",       0, "13");
+    CLASS_ATTR_ORDER        (c, "hcolor5",          0, "7");
+    CLASS_ATTR_ORDER        (c, "textcolor",        0, "8");
+    CLASS_ATTR_ORDER        (c, "utextcolor",       0, "9");
+    CLASS_ATTR_ORDER        (c, "bordercolor",      0, "10");
+    CLASS_ATTR_ORDER        (c, "ubordercolor",     0, "11");
+    CLASS_ATTR_ORDER        (c, "bgcolor",          0, "12");
+    CLASS_ATTR_ORDER        (c, "ubgcolor",         0, "13");
+    CLASS_ATTR_ORDER        (c, "lassocolor",       0, "14");
     
     CLASS_ATTR_DEFAULT      (c, "fontname", 0, "Arial");
     CLASS_ATTR_DEFAULT      (c, "fontsize", 0, "14.");
