@@ -45,12 +45,13 @@
 #define TLL_FLAG_FOCUS          (1UL << 3)
 #define TLL_FLAG_SHIFT          (1UL << 4)
 #define TLL_FLAG_DAEMON         (1UL << 5)
+#define TLL_FLAG_VISIBLE        (1UL << 6)
 
-#define TLL_DIRTY_RUN           (1UL << 6)
-#define TLL_DIRTY_ZONE          (1UL << 7)
-#define TLL_DIRTY_NOTE          (1UL << 8)
-#define TLL_DIRTY_LASSO         (1UL << 9)
-#define TLL_DIRTY_BACKGROUND    (1UL << 10) 
+#define TLL_DIRTY_RUN           (1UL << 7)
+#define TLL_DIRTY_ZONE          (1UL << 8)
+#define TLL_DIRTY_NOTE          (1UL << 9)
+#define TLL_DIRTY_LASSO         (1UL << 10)
+#define TLL_DIRTY_BACKGROUND    (1UL << 11) 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

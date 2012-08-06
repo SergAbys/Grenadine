@@ -92,9 +92,13 @@ void tralala_params(t_tll *x, t_object *pv, t_jboxdrawparams *params)
 
 void tralala_focusGained(t_tll *x, t_object *pv)
 {
-	TLL_FLAG_SET(TLL_FLAG_FOCUS)
+    if (TLL_FLAG_TRUE(TLL_FLAG_VISIBLE)) {
+    //
+    TLL_FLAG_SET(TLL_FLAG_FOCUS)
     TLL_FLAG_SET(TLL_DIRTY_RUN | TLL_DIRTY_BACKGROUND | TLL_DIRTY_ZONE | TLL_DIRTY_NOTE)
     jbox_redraw((t_jbox *)x);
+    //
+    }
 }
 
 void tralala_focusLost(t_tll *x, t_object *pv)
@@ -102,6 +106,16 @@ void tralala_focusLost(t_tll *x, t_object *pv)
 	TLL_FLAG_UNSET(TLL_FLAG_FOCUS)
     TLL_FLAG_SET(TLL_DIRTY_RUN | TLL_DIRTY_BACKGROUND | TLL_DIRTY_ZONE | TLL_DIRTY_NOTE)
     jbox_redraw((t_jbox *)x);
+}
+
+void tralala_visible(t_tll *x, t_object *pv)
+{
+    TLL_FLAG_SET(TLL_FLAG_VISIBLE)
+}
+
+void tralala_invisible(t_tll *x, t_object *pv)
+{
+    TLL_FLAG_UNSET(TLL_FLAG_VISIBLE)
 }
 
 // -------------------------------------------------------------------------------------------------------------
