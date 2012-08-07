@@ -98,8 +98,8 @@ void tralala_focusGained(t_tll *x, t_object *pv)
 void tralala_focusLost(t_tll *x, t_object *pv)
 {
     clock_unset(x->focusClock);
-    
-	TLL_FLAG_UNSET(TLL_FLAG_FOCUS)
+
+    TLL_FLAG_UNSET(TLL_FLAG_FOCUS)
     TLL_FLAG_SET(TLL_DIRTY_RUN | TLL_DIRTY_BACKGROUND | TLL_DIRTY_ZONE | TLL_DIRTY_NOTE)
     jbox_redraw((t_jbox *)x);
 }
