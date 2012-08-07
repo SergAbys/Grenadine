@@ -77,6 +77,7 @@ _tralala_assist
 _tralala_callback
 _tralala_focusGained
 _tralala_focusLost
+_tralala_focusTask
 _tralala_free
 _tralala_init
 _tralala_invisible
