@@ -238,6 +238,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     err |= !(x->layer = jtextlayout_create( ));
     err |= !(x->runClock = clock_new(x, (method)tralala_runTask));
     err |= !(x->daemonClock = clock_new(x, (method)tralala_daemonTask));
+    err |= !(x->focusClock = clock_new(x, (method)tralala_focusTask));
     
     err |= (systhread_mutex_new(&x->dataMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
     err |= (systhread_mutex_new(&x->runMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
@@ -311,6 +312,11 @@ void tralala_free(t_tll *x)
     if (x->daemonClock) {
         clock_unset(x->daemonClock);
         object_free(x->daemonClock);
+    }
+    
+    if (x->focusClock) {
+        clock_unset(x->focusClock);
+        object_free(x->focusClock);
     }
     
     pizArrayFree(x->array);
@@ -548,9 +554,9 @@ void tralala_daemonTask (t_tll *x)
     }
             
     if (TLL_FLAG_TRUE(TLL_FLAG_DAEMON)) {
-        clock_fdelay(x->daemonClock, TLL_DAEMON_WORK);
+        clock_fdelay(x->daemonClock, TLL_CLOCK_DAEMON_WORK);
     } else {
-        clock_fdelay(x->daemonClock, TLL_DAEMON_IDLE);
+        clock_fdelay(x->daemonClock, TLL_CLOCK_DAEMON_IDLE);
     }
 }
 
@@ -632,7 +638,7 @@ void tralala_switchDaemon(t_tll *x, PIZEventCode code)
 
     } else if ((code == PIZ_EVENT_NOTE_PLAYED) && (TLL_FLAG_FALSE(TLL_FLAG_DAEMON))) {
         TLL_FLAG_SET(TLL_FLAG_DAEMON)
-        clock_fdelay(x->daemonClock, TLL_DAEMON_WORK); 
+        clock_fdelay(x->daemonClock, TLL_CLOCK_DAEMON_WORK); 
     }
 }
 

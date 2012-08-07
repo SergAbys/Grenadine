@@ -210,14 +210,14 @@ PIZError pizSequenceStep(PIZSequence *x)
     if (x->timeline[x->index] && (count = pizLinklistCount(x->timeline[x->index]))) {
         long i = 0;
         ulong mask = ~0UL;
-        long scale = pizArrayCount(x->scale);
         PIZNote *note = NULL;
         PIZNote *nextNote = NULL;
+        long scale = pizArrayCount(x->scale);
         
         if (x->chord && (x->chord < count)) {
             mask = pizSequenceStepMask(x, x->chord, count);
         }
-        
+                
         pizLinklistPtrAtIndex(x->timeline[x->index], 0, (void **)&note);
         
         while (note) {

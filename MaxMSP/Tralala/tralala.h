@@ -31,8 +31,9 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_DAEMON_WORK         31.
-#define TLL_DAEMON_IDLE         3947. 
+#define TLL_CLOCK_FOCUS         23.
+#define TLL_CLOCK_DAEMON_WORK   31.
+#define TLL_CLOCK_DAEMON_IDLE   3947. 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -45,13 +46,12 @@
 #define TLL_FLAG_FOCUS          (1UL << 3)
 #define TLL_FLAG_SHIFT          (1UL << 4)
 #define TLL_FLAG_DAEMON         (1UL << 5)
-#define TLL_FLAG_VISIBLE        (1UL << 6)
 
-#define TLL_DIRTY_RUN           (1UL << 7)
-#define TLL_DIRTY_ZONE          (1UL << 8)
-#define TLL_DIRTY_NOTE          (1UL << 9)
-#define TLL_DIRTY_LASSO         (1UL << 10)
-#define TLL_DIRTY_BACKGROUND    (1UL << 11) 
+#define TLL_DIRTY_RUN           (1UL << 6)
+#define TLL_DIRTY_ZONE          (1UL << 7)
+#define TLL_DIRTY_NOTE          (1UL << 8)
+#define TLL_DIRTY_LASSO         (1UL << 9)
+#define TLL_DIRTY_BACKGROUND    (1UL << 10) 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -135,6 +135,7 @@ typedef struct _tll {
     PIZArray            *array;
     void                *runClock;
     void                *daemonClock;
+    void                *focusClock;
     void                *left;
     void                *middleLeft;
     void                *middleRight;
