@@ -29,7 +29,10 @@ extern t_dictionary *tll_clipboard;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_INLINE void tralala_parseSymbolWithTag   (t_symbol **s, long tag);
+//PIZ_LOCAL  void tralala_parseNote   (t_tll *x, long argc, t_atom *argv, long *k, long *data);
+//PIZ_LOCAL  void tralala_parseZone   (t_tll *x, long argc, t_atom *argv, long *k, long *data);
+
+PIZ_INLINE void tralala_parseSymbolWithTag  (t_symbol **s, long tag);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -269,14 +272,14 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong 
         } else {
             continue;
         }
-        
+    
     } else if (msg) {
         if (!(quickmap_lookup_key1(tll_direction, (void *)atom_getsym(argv + i), (void **)&t))) {
             j = t - TLL_BIAS; p = 1;
         } else if (!(quickmap_lookup_key1(tll_select, (void *)atom_getsym(argv + i), (void **)&t))) {
             j = t - TLL_BIAS;
         }
-        
+    
     } else {
         continue;
     }
@@ -289,12 +292,10 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong 
     }
     
     for (i = 0; i < argc; i++) {
-    //
-    if ((k < PIZ_EVENT_DATA_SIZE) && (atom_gettype(argv + i) == A_LONG)) {
-        data[k] = atom_getlong(argv + i);
-        k++;
-    }
-    //
+        if ((k < PIZ_EVENT_DATA_SIZE) && (atom_gettype(argv + i) == A_LONG)) {
+            data[k] = atom_getlong(argv + i);
+            k++;
+        }
     }
     
     if (event = pizEventNew(code)) {

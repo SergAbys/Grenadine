@@ -156,12 +156,11 @@ PIZError pizSequenceNote(PIZSequence *x, const PIZEvent *event)
         
         pizEventType(event, &type);
         
-        if (type != PIZ_EVENT_RUN) {
+        if (type == PIZ_EVENT_HIGH) {
             flags |= PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS;
-        }
-        
-        if (type == PIZ_EVENT_LOW) {
-            flags |= PIZ_SEQUENCE_FLAG_LOW;
+            
+        } else if (type == PIZ_EVENT_LOW) {
+            flags |= PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_LOW;
         } 
         
         if (pizSequenceNewNote(x, values, flags)) {
