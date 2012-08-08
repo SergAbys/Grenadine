@@ -1,6 +1,6 @@
 .DS_Store
-.xcodeproj
-.xconfig
+*.xcodeproj
+*.xcconfig
 .plist
 
 build/
