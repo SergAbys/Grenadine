@@ -47,18 +47,18 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define PIZ_SEQUENCE_AUTOREPEAT_PITCH       12
-#define PIZ_SEQUENCE_AUTOREPEAT_VELOCITY    10
+#define PIZ_SEQUENCE_REPEAT_PITCH       12
+#define PIZ_SEQUENCE_REPEAT_VELOCITY    10
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
    
-PIZ_LOCAL PIZNote   *pizSequenceNoteWithTag         (PIZSequence *x, long tag);
-PIZ_LOCAL long      pizSequenceLenghtIncrement      (long value);
-PIZ_LOCAL long      pizSequenceLenghtDecrement      (long value);
-PIZ_LOCAL long      pizSequenceLenghtUp             (long value);
-PIZ_LOCAL long      pizSequenceLenghtDown           (long value);
+PIZ_LOCAL PIZNote   *pizSequenceNoteWithTag     (PIZSequence *x, long tag);
+PIZ_LOCAL long      pizSequenceLenghtIncrement  (long value);
+PIZ_LOCAL long      pizSequenceLenghtDecrement  (long value);
+PIZ_LOCAL long      pizSequenceLenghtUp         (long value);
+PIZ_LOCAL long      pizSequenceLenghtDown       (long value);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -95,10 +95,10 @@ PIZError pizSequenceNoteIncrement(PIZSequence *x, PIZEvent *event)
         long step = 1;
         
         if ((argv[0] == PIZ_VALUE_PITCH) && (argc > 2) && argv[2]) {
-            step = PIZ_SEQUENCE_AUTOREPEAT_PITCH;
+            step = PIZ_SEQUENCE_REPEAT_PITCH;
             
         } else if ((argv[0] == PIZ_VALUE_VELOCITY) && (argc > 2) && argv[2]) {
-            step = PIZ_SEQUENCE_AUTOREPEAT_VELOCITY;
+            step = PIZ_SEQUENCE_REPEAT_VELOCITY;
             
         } else if (argv[0] == PIZ_VALUE_DURATION) {
             step = x->value;
@@ -129,10 +129,10 @@ PIZError pizSequenceNoteDecrement(PIZSequence *x, PIZEvent *event)
         long step = -1;
         
         if ((argv[0] == PIZ_VALUE_PITCH) && (argc > 2) && argv[2]) {
-            step = -PIZ_SEQUENCE_AUTOREPEAT_PITCH;
+            step = -PIZ_SEQUENCE_REPEAT_PITCH;
             
         } else if ((argv[0] == PIZ_VALUE_VELOCITY) && (argc > 2) && argv[2]) {
-            step = -PIZ_SEQUENCE_AUTOREPEAT_VELOCITY;
+            step = -PIZ_SEQUENCE_REPEAT_VELOCITY;
             
         } else if (argv[0] == PIZ_VALUE_DURATION) {
             step = -x->value;
@@ -198,7 +198,7 @@ PIZError pizSequenceZoneIncrement(PIZSequence *x, PIZEvent *event)
     long vStep = 1;
     
     if ((argc > 1) && argv[1]) {
-        vStep = PIZ_SEQUENCE_AUTOREPEAT_PITCH;
+        vStep = PIZ_SEQUENCE_REPEAT_PITCH;
     }
     
     switch (argv[0]) {
@@ -243,7 +243,7 @@ PIZError pizSequenceZoneDecrement(PIZSequence *x, PIZEvent *event)
     long vStep = 1;
     
     if ((argc > 1) && argv[1]) {
-        vStep = PIZ_SEQUENCE_AUTOREPEAT_PITCH;
+        vStep = PIZ_SEQUENCE_REPEAT_PITCH;
     }
     
     switch (argv[0]) {
@@ -437,23 +437,23 @@ long pizSequenceLenghtDecrement(long value)
 long pizSequenceLenghtUp(long value)
 {
         switch (value) {
-        case PIZ_THIRTY_SECOND_NOTE_TRIPLET : return PIZ_THIRTY_SECOND_NOTE;
-        case PIZ_THIRTY_SECOND_NOTE         : return PIZ_THIRTY_SECOND_NOTE_TRIPLET;
-        case PIZ_SIXTEENTH_NOTE_TRIPLET     : return PIZ_SIXTEENTH_NOTE;
-        case PIZ_SIXTEENTH_NOTE             : return PIZ_SIXTEENTH_NOTE_DOTTED;
-        case PIZ_SIXTEENTH_NOTE_DOTTED      : return PIZ_SIXTEENTH_NOTE_TRIPLET;
-        case PIZ_EIGHTH_NOTE_TRIPLET        : return PIZ_EIGHTH_NOTE;
-        case PIZ_EIGHTH_NOTE                : return PIZ_EIGHTH_NOTE_DOTTED;
-        case PIZ_EIGHTH_NOTE_DOTTED         : return PIZ_EIGHTH_NOTE_TRIPLET;
-        case PIZ_QUARTER_NOTE_TRIPLET       : return PIZ_QUARTER_NOTE;
-        case PIZ_QUARTER_NOTE               : return PIZ_QUARTER_NOTE_DOTTED;
-        case PIZ_QUARTER_NOTE_DOTTED        : return PIZ_QUARTER_NOTE_TRIPLET;
-        case PIZ_HALF_NOTE_TRIPLET          : return PIZ_HALF_NOTE;
-        case PIZ_HALF_NOTE                  : return PIZ_HALF_NOTE_DOTTED;
-        case PIZ_HALF_NOTE_DOTTED           : return PIZ_HALF_NOTE_TRIPLET;
-        case PIZ_WHOLE_NOTE_TRIPLET         : return PIZ_WHOLE_NOTE;
-        case PIZ_WHOLE_NOTE                 : return PIZ_WHOLE_NOTE_DOTTED;
-        case PIZ_WHOLE_NOTE_DOTTED          : return PIZ_WHOLE_NOTE_TRIPLET;
+            case PIZ_THIRTY_SECOND_NOTE_TRIPLET : return PIZ_THIRTY_SECOND_NOTE;
+            case PIZ_THIRTY_SECOND_NOTE         : return PIZ_THIRTY_SECOND_NOTE_TRIPLET;
+            case PIZ_SIXTEENTH_NOTE_TRIPLET     : return PIZ_SIXTEENTH_NOTE;
+            case PIZ_SIXTEENTH_NOTE             : return PIZ_SIXTEENTH_NOTE_DOTTED;
+            case PIZ_SIXTEENTH_NOTE_DOTTED      : return PIZ_SIXTEENTH_NOTE_TRIPLET;
+            case PIZ_EIGHTH_NOTE_TRIPLET        : return PIZ_EIGHTH_NOTE;
+            case PIZ_EIGHTH_NOTE                : return PIZ_EIGHTH_NOTE_DOTTED;
+            case PIZ_EIGHTH_NOTE_DOTTED         : return PIZ_EIGHTH_NOTE_TRIPLET;
+            case PIZ_QUARTER_NOTE_TRIPLET       : return PIZ_QUARTER_NOTE;
+            case PIZ_QUARTER_NOTE               : return PIZ_QUARTER_NOTE_DOTTED;
+            case PIZ_QUARTER_NOTE_DOTTED        : return PIZ_QUARTER_NOTE_TRIPLET;
+            case PIZ_HALF_NOTE_TRIPLET          : return PIZ_HALF_NOTE;
+            case PIZ_HALF_NOTE                  : return PIZ_HALF_NOTE_DOTTED;
+            case PIZ_HALF_NOTE_DOTTED           : return PIZ_HALF_NOTE_TRIPLET;
+            case PIZ_WHOLE_NOTE_TRIPLET         : return PIZ_WHOLE_NOTE;
+            case PIZ_WHOLE_NOTE                 : return PIZ_WHOLE_NOTE_DOTTED;
+            case PIZ_WHOLE_NOTE_DOTTED          : return PIZ_WHOLE_NOTE_TRIPLET;
     }
     
     return value;
@@ -462,23 +462,23 @@ long pizSequenceLenghtUp(long value)
 long pizSequenceLenghtDown(long value)
 {
         switch (value) {
-        case PIZ_THIRTY_SECOND_NOTE_TRIPLET : return PIZ_THIRTY_SECOND_NOTE;
-        case PIZ_THIRTY_SECOND_NOTE         : return PIZ_THIRTY_SECOND_NOTE_TRIPLET;
-        case PIZ_SIXTEENTH_NOTE_TRIPLET     : return PIZ_SIXTEENTH_NOTE_DOTTED;
-        case PIZ_SIXTEENTH_NOTE             : return PIZ_SIXTEENTH_NOTE_TRIPLET;
-        case PIZ_SIXTEENTH_NOTE_DOTTED      : return PIZ_SIXTEENTH_NOTE;
-        case PIZ_EIGHTH_NOTE_TRIPLET        : return PIZ_EIGHTH_NOTE_DOTTED;
-        case PIZ_EIGHTH_NOTE                : return PIZ_EIGHTH_NOTE_TRIPLET;
-        case PIZ_EIGHTH_NOTE_DOTTED         : return PIZ_EIGHTH_NOTE;
-        case PIZ_QUARTER_NOTE_TRIPLET       : return PIZ_QUARTER_NOTE_DOTTED;
-        case PIZ_QUARTER_NOTE               : return PIZ_QUARTER_NOTE_TRIPLET;
-        case PIZ_QUARTER_NOTE_DOTTED        : return PIZ_QUARTER_NOTE;
-        case PIZ_HALF_NOTE_TRIPLET          : return PIZ_HALF_NOTE_DOTTED;
-        case PIZ_HALF_NOTE                  : return PIZ_HALF_NOTE_TRIPLET;
-        case PIZ_HALF_NOTE_DOTTED           : return PIZ_HALF_NOTE;
-        case PIZ_WHOLE_NOTE_TRIPLET         : return PIZ_WHOLE_NOTE_DOTTED;
-        case PIZ_WHOLE_NOTE                 : return PIZ_WHOLE_NOTE_TRIPLET;
-        case PIZ_WHOLE_NOTE_DOTTED          : return PIZ_WHOLE_NOTE;
+            case PIZ_THIRTY_SECOND_NOTE_TRIPLET : return PIZ_THIRTY_SECOND_NOTE;
+            case PIZ_THIRTY_SECOND_NOTE         : return PIZ_THIRTY_SECOND_NOTE_TRIPLET;
+            case PIZ_SIXTEENTH_NOTE_TRIPLET     : return PIZ_SIXTEENTH_NOTE_DOTTED;
+            case PIZ_SIXTEENTH_NOTE             : return PIZ_SIXTEENTH_NOTE_TRIPLET;
+            case PIZ_SIXTEENTH_NOTE_DOTTED      : return PIZ_SIXTEENTH_NOTE;
+            case PIZ_EIGHTH_NOTE_TRIPLET        : return PIZ_EIGHTH_NOTE_DOTTED;
+            case PIZ_EIGHTH_NOTE                : return PIZ_EIGHTH_NOTE_TRIPLET;
+            case PIZ_EIGHTH_NOTE_DOTTED         : return PIZ_EIGHTH_NOTE;
+            case PIZ_QUARTER_NOTE_TRIPLET       : return PIZ_QUARTER_NOTE_DOTTED;
+            case PIZ_QUARTER_NOTE               : return PIZ_QUARTER_NOTE_TRIPLET;
+            case PIZ_QUARTER_NOTE_DOTTED        : return PIZ_QUARTER_NOTE;
+            case PIZ_HALF_NOTE_TRIPLET          : return PIZ_HALF_NOTE_DOTTED;
+            case PIZ_HALF_NOTE                  : return PIZ_HALF_NOTE_TRIPLET;
+            case PIZ_HALF_NOTE_DOTTED           : return PIZ_HALF_NOTE;
+            case PIZ_WHOLE_NOTE_TRIPLET         : return PIZ_WHOLE_NOTE_DOTTED;
+            case PIZ_WHOLE_NOTE                 : return PIZ_WHOLE_NOTE_TRIPLET;
+            case PIZ_WHOLE_NOTE_DOTTED          : return PIZ_WHOLE_NOTE;
     }
     
     return value;

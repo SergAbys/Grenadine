@@ -29,10 +29,10 @@ extern t_dictionary *tll_clipboard;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-//PIZ_LOCAL  void tralala_parseNote   (t_tll *x, long argc, t_atom *argv, long *k, long *data);
-//PIZ_LOCAL  void tralala_parseZone   (t_tll *x, long argc, t_atom *argv, long *k, long *data);
-
-PIZ_INLINE void tralala_parseSymbolWithTag  (t_symbol **s, long tag);
+PIZ_LOCAL  void     tralala_parseNote           (t_tll *x, long argc, t_atom *argv, long *k, long *data);
+PIZ_LOCAL  void     tralala_parseZone           (t_tll *x, long argc, t_atom *argv, long *k, long *data);
+PIZ_LOCAL  PIZError tralala_parsePitchToLong    (t_tll *x, t_atom *a, long *t);
+PIZ_INLINE void     tralala_parseSymbolWithTag  (t_symbol **s, long tag);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -238,13 +238,21 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong 
         
     if (!(dictionary_getlong(tll_code, s, (long *)&code))) {
     //
-    code -= TLL_BIAS;
-    
-    if (!(((flags & TLL_FLAG_FILTER) && (code != PIZ_EVENT_NOTE) && (code != PIZ_EVENT_ZONE)))) {
-    //
-    long i, k = 0, msg = 0;
+    long k = 0;
     long data[PIZ_EVENT_DATA_SIZE] = { 0 };
     PIZEvent *event = NULL;
+    
+    code -= TLL_BIAS;
+    
+    if (code == PIZ_EVENT_NOTE) {
+        tralala_parseNote(x, argc, argv, &k, data);
+        
+    } else if (code == PIZ_EVENT_ZONE) {
+        tralala_parseZone(x, argc, argv, &k, data);
+        
+    } else if (!(x->flags & TLL_FLAG_FILTER)) {
+    //
+    long i, msg = 0;
     
     if (msg = ((code == PIZ_EVENT_ROTATE)   ||
                (code == PIZ_EVENT_SCRAMBLE) ||
@@ -297,20 +305,15 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong 
             k++;
         }
     }
+    //
+    }
     
     if (event = pizEventNew(code)) {
+        if (flags & TLL_FLAG_LOW) { pizEventSetType(event, PIZ_EVENT_LOW); } 
+        else if (flags & TLL_FLAG_RUN) { pizEventSetType(event, PIZ_EVENT_RUN); }
         pizEventSetData(event, k, data);
-        
-        if (flags & TLL_FLAG_LOW) {
-            pizEventSetType(event, PIZ_EVENT_LOW);
-        } else if (flags & TLL_FLAG_RUN) {
-            pizEventSetType(event, PIZ_EVENT_RUN);
-        }
-        
         pizEventSetIdentifier(event, x->identifier);
         pizAgentDoEvent(x->agent, event);
-    }
-    //
     }
     //
     }
@@ -361,7 +364,6 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
         TLL_DATA_LOCK
         
         if (code == PIZ_EVENT_NOTE_REMOVED) {
-        
             if (dictionary_hasentry(x->status, s)) {
                 t_symbol *mark = NULL;
                 if (!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) && (s == mark)) {
@@ -372,7 +374,6 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
             dictionary_deleteentry(x->current, s);
         
         } else {
-        
             if ((code == PIZ_EVENT_NOTE_ADDED) && (*(ptr + PIZ_EVENT_DATA_LOW))) {
                 dictionary_appendsym(x->status, TLL_SYM_MARK, s);
                 dictionary_appendlong(x->status, s, TLL_SELECTED);
@@ -396,6 +397,82 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
 #pragma mark -
 #pragma mark ---
 #pragma mark -
+
+void tralala_parseNote(t_tll *x, long argc, t_atom *argv, long *k, long *data)
+{
+    long i, temp;
+    
+    for (i = 0; i < argc; i++) {
+        if ((*k) < PIZ_EVENT_DATA_SIZE) {
+            if (atom_gettype(argv + i) == A_LONG) {
+                data[(*k)] = atom_getlong(argv + i);
+                (*k)++;
+                
+            } else if ((i == 1) && (atom_gettype(argv + i) == A_SYM)) {
+                if (!(tralala_parsePitchToLong(x, argv + i, &temp))) {
+                    data[(*k)] = temp;
+                    (*k)++;
+                }
+            }
+        }
+    }
+}
+
+void tralala_parseZone(t_tll *x, long argc, t_atom *argv, long *k, long *data)
+{
+    long i, temp;
+    
+    for (i = 0; i < argc; i++) {
+        if ((*k) < PIZ_EVENT_DATA_SIZE) {
+            if (atom_gettype(argv + i) == A_LONG) {
+                data[(*k)] = atom_getlong(argv + i);
+                (*k)++;
+                
+            } else if (((i == 2) || (i == 3)) && (atom_gettype(argv + i) == A_SYM)) {
+                if (!(tralala_parsePitchToLong(x, argv + i, &temp))) {
+                    data[(*k)] = temp;
+                    (*k)++;
+                }
+            }
+        }
+    }
+}
+
+PIZError tralala_parsePitchToLong(t_tll *x, t_atom *a, long *t)
+{
+    long k;
+    PIZError err = PIZ_ERROR;
+    t_symbol *s = atom_getsym(a);
+    
+    if ((k = strlen(s->s_name)) <= 4) {
+    //
+    long i, p, n = 1, v = 4;
+    char string[5];
+    strncpy_zero(string, s->s_name, 5);
+    
+    for (i = 0; i < k; i++) {
+        if (string[i] == '-') { 
+            n = -1; string[i] = 0; 
+            
+        } else if ((string[i] >= '0') && (string[i] <= '8')) {
+            v = string[i] - '0'; string[i] = 0; break;
+        }
+    }
+    
+    if (!(quickmap_lookup_key1(tll_key, (void *)gensym(string), (void **)&p))) {
+        p -= TLL_BIAS;
+        p += ((n * v) + 2) * 12;
+        
+        if ((p >= 0) && (p <= PIZ_MAGIC_PITCH)) {
+            (*t) = p;
+            err = PIZ_GOOD;
+        }
+    }
+    //
+    }
+    
+    return err;
+}
 
 PIZ_INLINE void tralala_parseSymbolWithTag(t_symbol **s, long tag)
 {

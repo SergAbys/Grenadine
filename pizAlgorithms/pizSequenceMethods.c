@@ -140,7 +140,7 @@ PIZError pizSequenceNote(PIZSequence *x, const PIZEvent *event)
     long argc;
     long *argv = NULL;
     
-    if (!(pizEventData(event, &argc, &argv))) {
+    if (!(pizEventData(event, &argc, &argv)) && (argc >= 2)) {
         long i;
         PIZEventType type;
         ulong flags = PIZ_SEQUENCE_FLAG_NONE; 
