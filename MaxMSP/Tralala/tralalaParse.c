@@ -64,6 +64,7 @@ table->end              = gensym("end");
 table->clear            = gensym("clear");
 table->tralala          = gensym("tralala");
 table->untitled         = gensym("untitled");
+table->save             = gensym("save");
 table->load             = gensym("load");
 table->reload           = gensym("reload");
 table->mark             = gensym("mark");
@@ -235,12 +236,13 @@ void tralala_parseDictionary(t_tll *x, t_dictionary *d, ulong flags)
 void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong flags)
 {
     PIZEventCode code = PIZ_EVENT_NONE;
-        
+
     if (!(dictionary_getlong(tll_code, s, (long *)&code))) {
     //
     long k = 0;
     long data[PIZ_EVENT_DATA_SIZE] = { 0 };
     PIZEvent *event = NULL;
+    PIZError err = PIZ_GOOD;
     
     code -= TLL_BIAS;
     
@@ -250,7 +252,7 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong 
     } else if (code == PIZ_EVENT_ZONE) {
         tralala_parseZone(x, argc, argv, &k, data);
         
-    } else if (!(x->flags & TLL_FLAG_FILTER)) {
+    } else if (!(flags & TLL_FLAG_FILTER)) {
     //
     long i, msg = 0;
     
@@ -306,9 +308,11 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong 
         }
     }
     //
+    } else {
+        err = PIZ_ERROR;
     }
     
-    if (event = pizEventNew(code)) {
+    if (!err && (event = pizEventNew(code))) {
         if (flags & TLL_FLAG_LOW) { pizEventSetType(event, PIZ_EVENT_LOW); } 
         else if (flags & TLL_FLAG_RUN) { pizEventSetType(event, PIZ_EVENT_RUN); }
         pizEventSetData(event, k, data);

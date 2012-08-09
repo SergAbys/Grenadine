@@ -32,6 +32,7 @@
 #define TLL_SYM_CLEAR           (tll_table.clear)
 #define TLL_SYM_TRALALA         (tll_table.tralala)
 #define TLL_SYM_UNTITLED        (tll_table.untitled)
+#define TLL_SYM_SAVE            (tll_table.save)
 #define TLL_SYM_LOAD            (tll_table.load)
 #define TLL_SYM_RELOAD          (tll_table.reload)
 #define TLL_SYM_MARK            (tll_table.mark)
@@ -71,6 +72,7 @@ typedef struct _tllSymbols {
     t_symbol *clear;
     t_symbol *tralala;
     t_symbol *untitled;
+    t_symbol *save;
     t_symbol *load;
     t_symbol *reload;
     t_symbol *mark;

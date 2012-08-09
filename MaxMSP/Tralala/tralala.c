@@ -29,11 +29,12 @@ static t_int32_atomic tll_identifier;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void tralala_send             (t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags);
-PIZ_LOCAL void tralala_switchDaemon     (t_tll *x, PIZEventCode code);
+PIZ_LOCAL void tralala_send                 (t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags);
+PIZ_LOCAL void tralala_switchDaemon         (t_tll *x, PIZEventCode code);
+PIZ_LOCAL void tralala_deleteAttributes     (t_dictionary *d);
 
-PIZ_LOCAL t_symbol *tralala_unique      (t_tll *x);
-PIZ_LOCAL t_symbol *tralala_slotName    (long argc, t_atom *argv);
+PIZ_LOCAL t_symbol *tralala_unique          (t_tll *x);
+PIZ_LOCAL t_symbol *tralala_slotName        (long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -65,6 +66,7 @@ int main(void)
     class_addmethod(c, (method)tralala_mouseUp,     "mouseup",              A_CANT,  0);
     class_addmethod(c, (method)tralala_notify,      "notify",               A_CANT,  0);
     class_addmethod(c, (method)tralala_store,       "store",                A_GIMME, 0);
+    class_addmethod(c, (method)tralala_store,       "save",                 A_GIMME, 0);
     class_addmethod(c, (method)tralala_recall,      "recall",               A_GIMME, 0);
     class_addmethod(c, (method)tralala_recall,      "load",                 A_GIMME, 0);
     class_addmethod(c, (method)tralala_recall,      "reload",               A_GIMME, 0);
@@ -371,6 +373,9 @@ void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
         TLL_DATA_LOCK
         dictionary_copyunique(t, x->current);
         TLL_DATA_UNLOCK
+    
+        if (s == TLL_SYM_SAVE) { tralala_deleteAttributes(t); }
+    
         dictionary_appenddictionary(x->data, name, (t_object *)t);
         jpatcher_set_dirty(jbox_get_patcher((t_object *)x), 1);
     }
@@ -639,6 +644,25 @@ void tralala_switchDaemon(t_tll *x, PIZEventCode code)
     } else if ((code == PIZ_EVENT_NOTE_PLAYED) && (TLL_FLAG_FALSE(TLL_FLAG_DAEMON))) {
         TLL_FLAG_SET(TLL_FLAG_DAEMON)
         clock_fdelay(x->daemonClock, TLL_CLOCK_DAEMON_WORK); 
+    }
+}
+
+void tralala_deleteAttributes(t_dictionary *d)
+{
+    long i;
+    t_symbol *s[ ] = { 
+        TLL_SYM_BPM, 
+        TLL_SYM_CHANCE, 
+        TLL_SYM_VELOCITY, 
+        TLL_SYM_CHANNEL, 
+        TLL_SYM_CHORD,
+        TLL_SYM_CELL, 
+        TLL_SYM_VALUE, 
+        TLL_SYM_SCALE, 
+        };
+        
+    for (i = 0; i < 9; i++) {
+        dictionary_deleteentry(d, s[i]);
     }
 }
 
