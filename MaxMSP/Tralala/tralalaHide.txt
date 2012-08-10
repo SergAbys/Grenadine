@@ -99,6 +99,7 @@ _tralala_parseMessage
 _tralala_parseNotification
 _tralala_play
 _tralala_recall
+_tralala_remove
 _tralala_runTask
 _tralala_stop
 _tralala_store

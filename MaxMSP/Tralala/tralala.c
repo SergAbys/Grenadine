@@ -70,6 +70,7 @@ int main(void)
     class_addmethod(c, (method)tralala_recall,      "recall",               A_GIMME, 0);
     class_addmethod(c, (method)tralala_recall,      "load",                 A_GIMME, 0);
     class_addmethod(c, (method)tralala_recall,      "reload",               A_GIMME, 0);
+    class_addmethod(c, (method)tralala_remove,      "remove",               A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "bang",                 A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "play",                 A_GIMME, 0);
     class_addmethod(c, (method)tralala_play,        "end",                  A_GIMME, 0);
@@ -400,13 +401,20 @@ void tralala_recall(t_tll *x, t_symbol *s, long argc, t_atom *argv)
         flags |= TLL_FLAG_FILTER;
     } 
     
-    if (!(dictionary_getdictionary(x->data, name, (t_object **)&d))) {
+    if (name && !(dictionary_getdictionary(x->data, name, (t_object **)&d))) {
         if (t = dictionary_new ( )) {
             dictionary_copyunique(t, d);
             tralala_send(x, PIZ_EVENT_CLEAR, 0, NULL, TLL_FLAG_RUN);
             tralala_parseDictionary(x, t, flags);
             object_free(t);
         }
+    }
+}
+
+void tralala_remove(t_tll *x, t_symbol *s, long argc, t_atom *argv)
+{
+    if (!(dictionary_deleteentry(x->data, tralala_slotName(argc, argv)))) {
+        jpatcher_set_dirty(jbox_get_patcher((t_object *)x), 1);
     }
 }
 
@@ -666,6 +674,10 @@ void tralala_keepAttributes(t_tll *x, t_symbol *name, t_dictionary *t)
         dictionary_copyentries(d, t, s);
     }
 }
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 t_symbol *tralala_unique(t_tll *x)
 {
