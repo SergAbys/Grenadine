@@ -29,12 +29,12 @@ static t_int32_atomic tll_identifier;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void tralala_send                 (t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags);
-PIZ_LOCAL void tralala_switchDaemon         (t_tll *x, PIZEventCode code);
-PIZ_LOCAL void tralala_deleteAttributes     (t_dictionary *d);
+PIZ_LOCAL void tralala_send             (t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags);
+PIZ_LOCAL void tralala_switchDaemon     (t_tll *x, PIZEventCode code);
+PIZ_LOCAL void tralala_keepAttributes   (t_tll *x, t_symbol *name, t_dictionary *t);
 
-PIZ_LOCAL t_symbol *tralala_unique          (t_tll *x);
-PIZ_LOCAL t_symbol *tralala_slotName        (long argc, t_atom *argv);
+PIZ_LOCAL t_symbol *tralala_unique      (t_tll *x);
+PIZ_LOCAL t_symbol *tralala_slotName    (long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -370,11 +370,12 @@ void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
     t_symbol *name = tralala_slotName(argc, argv);
 
     if (t = dictionary_new( )) {
+    
         TLL_DATA_LOCK
         dictionary_copyunique(t, x->current);
         TLL_DATA_UNLOCK
     
-        if (s == TLL_SYM_SAVE) { tralala_deleteAttributes(t); }
+        if (s == TLL_SYM_SAVE) { tralala_keepAttributes(x, name, t); }
     
         dictionary_appenddictionary(x->data, name, (t_object *)t);
         jpatcher_set_dirty(jbox_get_patcher((t_object *)x), 1);
@@ -647,9 +648,9 @@ void tralala_switchDaemon(t_tll *x, PIZEventCode code)
     }
 }
 
-void tralala_deleteAttributes(t_dictionary *d)
+void tralala_keepAttributes(t_tll *x, t_symbol *name, t_dictionary *t)
 {
-    long i;
+    t_dictionary *d = NULL;
     t_symbol *s[ ] = { 
         TLL_SYM_BPM, 
         TLL_SYM_CHANCE, 
@@ -659,10 +660,10 @@ void tralala_deleteAttributes(t_dictionary *d)
         TLL_SYM_CELL, 
         TLL_SYM_VALUE, 
         TLL_SYM_SCALE, 
-        };
-        
-    for (i = 0; i < 9; i++) {
-        dictionary_deleteentry(d, s[i]);
+    };
+    
+    if (!(dictionary_getdictionary(x->data, name, (t_object **)&d))) {
+        dictionary_copyentries(d, t, s);
     }
 }
 
