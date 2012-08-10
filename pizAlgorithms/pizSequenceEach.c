@@ -53,11 +53,25 @@ void pizSequenceForEach(PIZSequence *x, PIZMethod method, const PIZEvent *e, ulo
 {
     long i;
     
-    for (i = 0; i < pizArrayCount(x->map); i++) {   
+    if (x->dirty) {
+    //
+    pizArrayClear(x->buffer);
+    
+    for (i = 0; i < PIZ_SEQUENCE_SIZE_TIMELINE; i++) {
+        if (x->timeline[i] && pizLinklistCount(x->timeline[i])) {
+            pizArrayAppend(x->buffer, i);
+        }
+    }
+    
+    x->dirty = false;
+    //
+    }
+    
+    for (i = 0; i < pizArrayCount(x->buffer); i++) {   
         PIZNote *note       = NULL;
         PIZNote *nextNote   = NULL;
         
-        long p = pizArrayAtIndex(x->map, i);
+        long p = pizArrayAtIndex(x->buffer, i);
         
         pizLinklistPtrAtIndex(x->timeline[p], 0, (void **)&note);
         
@@ -88,6 +102,7 @@ void pizSequenceEachRemove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulo
     pizItemsetUnsetAtIndex(&x->used, tag);
     pizLinklistRemoveWithPtr(x->timeline[p], (void *)note);
     x->count --; 
+    x->dirty = true;
     
     pizItemsetSetAtIndex(&x->removed, tag);
     pizItemsetUnsetAtIndex(&x->changed, tag);
@@ -224,6 +239,7 @@ void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
         if (!(err |= pizLinklistAppend(x->timeline[b], (void *)note))) {
             note->position = b;
             pizItemsetSetAtIndex(&x->changed, note->tag);
+            x->dirty = true;
         } else {
             pizSequenceEachRemove(x, note, NULL, PIZ_SEQUENCE_FLAG_NONE);
         }

@@ -200,15 +200,16 @@ typedef struct _PIZSequence {
     long                type;
     long                cell;
     long                value;
+    long                dirty;
     PIZItemset          used;
     PIZItemset          changed;
     PIZItemset          removed;
     PIZItemset          addedLow;
     PIZItemset          addedHigh;
     PIZArray            *scale;
-    PIZArray            *map;
-    PIZLinklist         **timeline;
+    PIZArray            *buffer;
     PIZNote             **lookup;
+    PIZLinklist         **timeline;
     PIZNote             **tempNotes1;
     PIZNote             **tempNotes2;
     PIZHashTable        *tempHash;
