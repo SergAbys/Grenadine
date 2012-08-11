@@ -186,9 +186,9 @@ struct _PIZBuffer {
     PIZError        error;
     long            index;
     long            *values;
-    PIZHashTable    *hash;
     PIZNote         **notes1;
     PIZNote         **notes2;
+    PIZHashTable    *hash;
     };
     
 typedef struct _PIZSequence {
