@@ -135,7 +135,8 @@ typedef struct _tll {
     PIZArray            *array;
     void                *runClock;
     void                *daemonClock;
-    void                *focusClock;
+    void                *gainedClock;
+    void                *lostClock;
     void                *left;
     void                *middleLeft;
     void                *middleRight;

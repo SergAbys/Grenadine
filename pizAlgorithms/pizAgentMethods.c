@@ -103,8 +103,8 @@ PIZError pizAgentUnloop(PIZAgent *x, const PIZEvent *event)
 
 PIZError pizAgentForget(PIZAgent *x, const PIZEvent *event)
 {
-    pizFactorOracleClear(x->factorOracle);
-    pizGaloisLatticeClear(x->galoisLattice);
+    pizFactorOracleClear(x->oracle);
+    pizGaloisLatticeClear(x->lattice);
         
     return PIZ_GOOD;
 }
@@ -121,8 +121,8 @@ PIZError pizAgentLearn(PIZAgent *x, const PIZEvent *event)
     pizArrayAppend(x->learn, argv[0]);
     
     if (h < (pizArrayCount(x->learn) * PIZ_CONSTANT_LEARN)) {
-        pizFactorOracleAdd(x->factorOracle, pizArrayCount(x->learn), pizArrayPtr(x->learn));
-        pizGaloisLatticeAdd(x->galoisLattice, pizArrayCount(x->learn), pizArrayPtr(x->learn));
+        pizFactorOracleAdd(x->oracle, pizArrayCount(x->learn), pizArrayPtr(x->learn));
+        pizGaloisLatticeAdd(x->lattice, pizArrayCount(x->learn), pizArrayPtr(x->learn));
         pizArrayClear(x->learn);
     }
     //

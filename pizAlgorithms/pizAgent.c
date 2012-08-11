@@ -54,28 +54,28 @@ PIZAgent *pizAgentNew(long identifier)
     //
     long err = PIZ_GOOD;
     
-    x->identifier    = identifier;
-    x->bpm           = PIZ_SEQUENCE_DEFAULT_BPM;  
-    x->flags         = PIZ_AGENT_FLAG_INIT; 
-    x->run           = pizLinklistNew( );
-    x->low           = pizLinklistNew( );
-    x->high          = pizLinklistNew( );
-    x->sequence      = pizSequenceNew(x);
-    x->learn         = pizArrayNew(0);
-    x->factorOracle  = pizFactorOracleNew(0, NULL);
-    x->galoisLattice = pizGaloisLatticeNew(0, NULL);
-    x->observer      = NULL;
-    x->notify        = NULL;
-    x->error         = PIZ_ERROR;
-    x->seed          = PIZ_SEED;
+    x->identifier   = identifier;
+    x->bpm          = PIZ_SEQUENCE_DEFAULT_BPM;  
+    x->flags        = PIZ_AGENT_FLAG_INIT; 
+    x->run          = pizLinklistNew( );
+    x->low          = pizLinklistNew( );
+    x->high         = pizLinklistNew( );
+    x->sequence     = pizSequenceNew(x);
+    x->learn        = pizArrayNew(0);
+    x->oracle       = pizFactorOracleNew(0, NULL);
+    x->lattice      = pizGaloisLatticeNew(0, NULL);
+    x->observer     = NULL;
+    x->callback     = NULL;
+    x->error        = PIZ_ERROR;
+    x->seed         = PIZ_SEED;
     
-    if (!(x->run         &&  
-        x->low           &&
-        x->high          &&
-        x->sequence      &&
-        x->learn         &&
-        x->factorOracle  &&
-        x->galoisLattice )) { err |= PIZ_MEMORY; }
+    if (!(x->run    &&  
+        x->low      &&
+        x->high     &&
+        x->sequence &&
+        x->learn    &&
+        x->oracle   &&
+        x->lattice )) { err |= PIZ_MEMORY; }
     
     err |= pthread_attr_init(&x->attr);
     err |= pthread_cond_init(&x->condition, NULL);
@@ -123,8 +123,8 @@ void pizAgentFree(PIZAgent *x)
     
     pizArrayFree(x->learn);
     
-    pizFactorOracleFree(x->factorOracle);
-    pizGaloisLatticeFree(x->galoisLattice);
+    pizFactorOracleFree(x->oracle);
+    pizGaloisLatticeFree(x->lattice);
     
     pizLinklistFree(x->run);
     pizLinklistFree(x->low);
@@ -148,7 +148,7 @@ PIZError pizAgentAttach(PIZAgent *x, void *observer, PIZMethod f)
     PIZ_AGENT_LOCK_OBSERVER
     
     x->observer = observer;
-    x->notify   = f;
+    x->callback = f;
     
     PIZ_AGENT_UNLOCK_OBSERVER
 
@@ -164,7 +164,7 @@ PIZError pizAgentDetach(PIZAgent *x, void *observer)
     PIZ_AGENT_LOCK_OBSERVER
         
     x->observer = NULL;
-    x->notify   = NULL;
+    x->callback = NULL;
         
     PIZ_AGENT_UNLOCK_OBSERVER
     

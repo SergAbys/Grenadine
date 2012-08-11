@@ -77,10 +77,10 @@ _tralala_assist
 _tralala_callback
 _tralala_focusGained
 _tralala_focusLost
-_tralala_focusTask
+_tralala_gainedTask
+_tralala_lostTask
 _tralala_free
 _tralala_init
-_tralala_invisible
 _tralala_jsave
 _tralala_key
 _tralala_list
@@ -105,6 +105,5 @@ _tralala_stop
 _tralala_store
 _tralala_daemonTask
 _tralala_unloop
-_tralala_visible
 
 _pizEventName

@@ -202,8 +202,8 @@ void pizAgentNotify(PIZAgent *x, PIZEventCode n, long ac, long *av)
  
     PIZ_AGENT_LOCK_OBSERVER
         
-    if (x->observer && x->notify) {
-        (*x->notify)(x->observer, notification);
+    if (x->observer && x->callback) {
+        (*x->callback)(x->observer, notification);
     }
     
     PIZ_AGENT_UNLOCK_OBSERVER

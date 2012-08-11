@@ -57,8 +57,6 @@ int main(void)
     class_addmethod(c, (method)tralala_params,      "getdrawparams",        A_CANT,  0);
     class_addmethod(c, (method)tralala_focusGained, "focusgained",          A_CANT,  0);
     class_addmethod(c, (method)tralala_focusLost,   "focuslost",            A_CANT,  0);
-    class_addmethod(c, (method)tralala_visible,     "patcherview_vis",      A_CANT,  0);
-	class_addmethod(c, (method)tralala_invisible,   "patcherview_invis",    A_CANT,  0);	
     class_addmethod(c, (method)tralala_key,         "key",                  A_CANT,  0);
     class_addmethod(c, (method)tralala_mouseWheel,  "mousewheel",           A_CANT,  0);
     class_addmethod(c, (method)tralala_mouseDown,   "mousedown",            A_CANT,  0);
@@ -241,7 +239,8 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     err |= !(x->layer = jtextlayout_create( ));
     err |= !(x->runClock = clock_new(x, (method)tralala_runTask));
     err |= !(x->daemonClock = clock_new(x, (method)tralala_daemonTask));
-    err |= !(x->focusClock = clock_new(x, (method)tralala_focusTask));
+    err |= !(x->gainedClock = clock_new(x, (method)tralala_gainedTask));
+    err |= !(x->lostClock = clock_new(x, (method)tralala_lostTask));
     
     err |= (systhread_mutex_new(&x->dataMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
     err |= (systhread_mutex_new(&x->runMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
@@ -317,9 +316,14 @@ void tralala_free(t_tll *x)
         object_free(x->daemonClock);
     }
     
-    if (x->focusClock) {
-        clock_unset(x->focusClock);
-        object_free(x->focusClock);
+    if (x->gainedClock) {
+        clock_unset(x->gainedClock);
+        object_free(x->gainedClock);
+    }
+    
+    if (x->lostClock) {
+        clock_unset(x->lostClock);
+        object_free(x->lostClock);
     }
     
     pizArrayFree(x->array);

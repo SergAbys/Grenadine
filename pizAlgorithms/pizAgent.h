@@ -89,26 +89,26 @@
 typedef struct _PIZAgent {
     long                identifier;
     long                bpm;
+    uint                seed;
     ulong               flags;
     PIZNano             grainSize;
     PIZTime             grainStart;
     PIZTime             grainEnd;
+    PIZMethod           callback;
+    void                *observer;
+    PIZArray            *learn;
+    PIZFactorOracle     *oracle;
+    PIZGaloisLattice    *lattice;
     PIZLinklist         *run;
     PIZLinklist         *low;
     PIZLinklist         *high;
     PIZSequence         *sequence;
-    PIZArray            *learn;
-    PIZFactorOracle     *factorOracle;
-    PIZGaloisLattice    *galoisLattice;
-    void                *observer;
-    PIZMethod           notify;
     pthread_attr_t      attr;
     pthread_cond_t      condition;
     pthread_mutex_t     eventLock;
     pthread_mutex_t     observerLock;
     pthread_t           eventLoop;
     PIZError            error;
-    uint                seed;
     } PIZAgent;  
 
 // -------------------------------------------------------------------------------------------------------------

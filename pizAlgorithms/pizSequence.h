@@ -182,7 +182,7 @@ typedef struct _PIZNote {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-struct _PIZBuffer {
+struct _PIZTemp {
     PIZError        error;
     long            index;
     long            *values;
@@ -214,12 +214,12 @@ typedef struct _PIZSequence {
     PIZItemset          removed;
     PIZItemset          addedLow;
     PIZItemset          addedHigh;
+    struct _PIZTemp     temp;
+    struct _PIZAgent    *owner;
     PIZArray            *scale;
     PIZArray            *map;
     PIZNote             **lookup;
     PIZLinklist         **timeline;
-    struct _PIZAgent    *owner;
-    struct _PIZBuffer   temp;
     } PIZSequence;
     
 // -------------------------------------------------------------------------------------------------------------
