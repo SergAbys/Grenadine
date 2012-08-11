@@ -155,7 +155,7 @@ PIZError pizSequenceNoteForward(PIZSequence *x, PIZEvent *event)
     long *argv = NULL;
     PIZNote *note = NULL;
     
-    x->tempError = PIZ_GOOD;
+    x->temp.error = PIZ_GOOD;
     
     if (!(pizEventData(event, &argc, &argv)) && (argc > 1)) {
         if (note = pizSequenceNoteWithTag(x, argv[1])) {
@@ -163,7 +163,7 @@ PIZError pizSequenceNoteForward(PIZSequence *x, PIZEvent *event)
         }
     }
     
-    return x->tempError;
+    return x->temp.error;
 }
 
 PIZError pizSequenceNoteBackward(PIZSequence *x, PIZEvent *event)
@@ -172,7 +172,7 @@ PIZError pizSequenceNoteBackward(PIZSequence *x, PIZEvent *event)
     long *argv = NULL;
     PIZNote *note = NULL;
     
-    x->tempError = PIZ_GOOD;
+    x->temp.error = PIZ_GOOD;
     
     if (!(pizEventData(event, &argc, &argv)) && (argc > 1)) {
         if (note = pizSequenceNoteWithTag(x, argv[1])) {
@@ -180,7 +180,7 @@ PIZError pizSequenceNoteBackward(PIZSequence *x, PIZEvent *event)
         }
     }
     
-    return x->tempError;
+    return x->temp.error;
 }
 
 PIZError pizSequenceZoneIncrement(PIZSequence *x, PIZEvent *event)

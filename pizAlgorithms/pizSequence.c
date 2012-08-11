@@ -68,23 +68,23 @@ PIZSequence *pizSequenceNew(struct _PIZAgent *owner)
     //
     long argv[ ] = { 0, PIZ_SEQUENCE_MAXIMUM_NOTES };
     
-    x->owner      = owner;
-    x->map        = pizArrayNew(PIZ_SEQUENCE_MAXIMUM_NOTES);
-    x->scale      = pizArrayNew(PIZ_MAGIC_SCALE);
-    x->tempValues = (long *)malloc(sizeof(long) * PIZ_SEQUENCE_SIZE_TEMPORARY);
-    x->tempNotes1 = (PIZNote **)malloc(sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMPORARY);
-    x->tempNotes2 = (PIZNote **)malloc(sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMPORARY);
-    x->lookup     = (PIZNote **)calloc(PIZ_SEQUENCE_MAXIMUM_NOTES, sizeof(PIZNote *));
-    x->tempHash   = pizHashTableNew(2, argv);
+    x->owner        = owner;
+    x->map          = pizArrayNew(PIZ_SEQUENCE_MAXIMUM_NOTES);
+    x->scale        = pizArrayNew(PIZ_MAGIC_SCALE);
+    x->temp.values  = (long *)malloc(sizeof(long) * PIZ_SEQUENCE_SIZE_TEMPORARY);
+    x->temp.notes1  = (PIZNote **)malloc(sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMPORARY);
+    x->temp.notes2  = (PIZNote **)malloc(sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMPORARY);
+    x->lookup       = (PIZNote **)calloc(PIZ_SEQUENCE_MAXIMUM_NOTES, sizeof(PIZNote *));
+    x->temp.hash    = pizHashTableNew(2, argv);
     
-    if (x->map           && 
-        x->scale         &&
-        x->tempValues    &&
-        x->tempNotes1    &&
-        x->tempNotes2    &&
-        x->lookup        &&
-        x->tempHash      &&
-        x->owner         &&
+    if (x->map          && 
+        x->scale        &&
+        x->temp.values  &&
+        x->temp.notes1  &&
+        x->temp.notes2  &&
+        x->lookup       &&
+        x->temp.hash    &&
+        x->owner        &&
         (x->timeline = (PIZLinklist **)calloc(PIZ_SEQUENCE_SIZE_TIMELINE, sizeof(PIZLinklist **)))) {
 
         x->flags = PIZ_SEQUENCE_FLAG_NONE;
@@ -142,19 +142,19 @@ void pizSequenceFree(PIZSequence *x)
     pizArrayFree(x->scale);
     pizArrayFree(x->map);
     
-    pizHashTableFree(x->tempHash);
+    pizHashTableFree(x->temp.hash);
     
     if (x->lookup) {
         free(x->lookup);
     }
-    if (x->tempValues) {
-        free(x->tempValues);
+    if (x->temp.values) {
+        free(x->temp.values);
     }
-    if (x->tempNotes1) {
-        free(x->tempNotes1);
+    if (x->temp.notes1) {
+        free(x->temp.notes1);
     }
-    if (x->tempNotes2) {
-        free(x->tempNotes2);
+    if (x->temp.notes2) {
+        free(x->temp.notes2);
     }
     
     free(x);

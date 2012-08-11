@@ -181,10 +181,17 @@ typedef struct _PIZNote {
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+struct _PIZBuffer {
+    PIZError        error;
+    long            index;
+    long            *values;
+    PIZHashTable    *hash;
+    PIZNote         **notes1;
+    PIZNote         **notes2;
+    };
     
 typedef struct _PIZSequence {
-    ulong               flags;
-    uint                seed;
     long                start;
     long                end;
     long                down;
@@ -201,6 +208,8 @@ typedef struct _PIZSequence {
     long                cell;
     long                value;
     long                dirty;
+    uint                seed;
+    ulong               flags;
     PIZItemset          changed;
     PIZItemset          removed;
     PIZItemset          addedLow;
@@ -210,12 +219,7 @@ typedef struct _PIZSequence {
     PIZNote             **lookup;
     PIZLinklist         **timeline;
     struct _PIZAgent    *owner;
-    PIZError            tempError;
-    long                tempIndex;
-    long                *tempValues;
-    PIZHashTable        *tempHash;
-    PIZNote             **tempNotes1;
-    PIZNote             **tempNotes2;
+    struct _PIZBuffer   temp;
     } PIZSequence;
     
 // -------------------------------------------------------------------------------------------------------------

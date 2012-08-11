@@ -61,7 +61,7 @@ PIZAgent *pizAgentNew(long identifier)
     x->low           = pizLinklistNew( );
     x->high          = pizLinklistNew( );
     x->sequence      = pizSequenceNew(x);
-    x->buffer        = pizArrayNew(0);
+    x->learn         = pizArrayNew(0);
     x->factorOracle  = pizFactorOracleNew(0, NULL);
     x->galoisLattice = pizGaloisLatticeNew(0, NULL);
     x->observer      = NULL;
@@ -73,7 +73,7 @@ PIZAgent *pizAgentNew(long identifier)
         x->low           &&
         x->high          &&
         x->sequence      &&
-        x->buffer        &&
+        x->learn         &&
         x->factorOracle  &&
         x->galoisLattice )) { err |= PIZ_MEMORY; }
     
@@ -121,7 +121,7 @@ void pizAgentFree(PIZAgent *x)
     pthread_mutex_destroy(&x->eventLock);
     pthread_mutex_destroy(&x->observerLock);
     
-    pizArrayFree(x->buffer);
+    pizArrayFree(x->learn);
     
     pizFactorOracleFree(x->factorOracle);
     pizGaloisLatticeFree(x->galoisLattice);

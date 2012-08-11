@@ -97,7 +97,7 @@ typedef struct _PIZAgent {
     PIZLinklist         *low;
     PIZLinklist         *high;
     PIZSequence         *sequence;
-    PIZArray            *buffer;
+    PIZArray            *learn;
     PIZFactorOracle     *factorOracle;
     PIZGaloisLattice    *galoisLattice;
     void                *observer;

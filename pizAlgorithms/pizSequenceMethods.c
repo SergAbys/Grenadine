@@ -182,16 +182,16 @@ PIZError pizSequenceClean(PIZSequence *x, const PIZEvent *event)
     long i;
     
     for (i = 0; i < (PIZ_MAGIC_PITCH + 1); i++) {
-        x->tempValues[i] = 0;
+        x->temp.values[i] = 0;
     }
     
-    x->tempIndex = 0;
+    x->temp.index = 0;
     
     pizSequenceForEach(x, pizSequenceEachFillTempNotes, event, PIZ_SEQUENCE_FLAG_NEARBY);
     
-    if (x->tempIndex) {
-        for (i = 0; i < x->tempIndex; i++) {
-            pizSequenceEachRemove(x, x->tempNotes1[i], NULL, PIZ_SEQUENCE_FLAG_NONE);
+    if (x->temp.index) {
+        for (i = 0; i < x->temp.index; i++) {
+            pizSequenceEachRemove(x, x->temp.notes1[i], NULL, PIZ_SEQUENCE_FLAG_NONE);
         }
     }
     
@@ -217,7 +217,7 @@ PIZError pizSequenceRotate(PIZSequence *x, const PIZEvent *event)
     }
 
     for (i = 0; i < k; i++) {
-        x->tempValues[i] = x->tempNotes1[(i + shift) % k]->values[selector];
+        x->temp.values[i] = x->temp.notes1[(i + shift) % k]->values[selector];
     }
                 
     pizSequenceWithTempNotes(x, selector, 0);
@@ -239,16 +239,16 @@ PIZError pizSequenceScramble(PIZSequence *x, const PIZEvent *event)
     k = pizSequenceFillTempNotes(x);
     
     for (i = 0; i < k; i++) {
-        x->tempValues[i] = x->tempNotes1[i]->values[selector];
+        x->temp.values[i] = x->temp.notes1[i]->values[selector];
     }
         
     for (i = (k - 1); i > 0; i--) {
         long h = (i + 1) * (rand_r(&x->seed) / (RAND_MAX + 1.0));
         PIZNote *temp = NULL;
             
-        temp = x->tempNotes1[h];
-        x->tempNotes1[h] = x->tempNotes1[i];
-        x->tempNotes1[i] = temp;
+        temp = x->temp.notes1[h];
+        x->temp.notes1[h] = x->temp.notes1[i];
+        x->temp.notes1[i] = temp;
     }
             
     pizSequenceWithTempNotes(x, selector, 0);
@@ -271,24 +271,24 @@ PIZError pizSequenceSort(PIZSequence *x, const PIZEvent *event)
     k = pizSequenceFillTempNotes(x);
     
     for (i = 0; i < PIZ_SEQUENCE_SIZE_TEMPORARY; i++) {
-        x->tempValues[i] = 0;
+        x->temp.values[i] = 0;
     }
     
     for (i = 0; i < k; i++) { 
-        x->tempValues[x->tempNotes1[i]->values[selector]] ++; 
+        x->temp.values[x->temp.notes1[i]->values[selector]] ++; 
     }   
         
     for (i = 1; i < PIZ_SEQUENCE_SIZE_TEMPORARY; i++) {
-        x->tempValues[i] += x->tempValues[i - 1];
+        x->temp.values[i] += x->temp.values[i - 1];
     }
                 
     for (i = (k - 1); i >= 0; i--) {    
-        x->tempNotes2[x->tempValues[x->tempNotes1[i]->values[selector]] - 1] = x->tempNotes1[i];
-        x->tempValues[x->tempNotes1[i]->values[selector]] --;
+        x->temp.notes2[x->temp.values[x->temp.notes1[i]->values[selector]] - 1] = x->temp.notes1[i];
+        x->temp.values[x->temp.notes1[i]->values[selector]] --;
     }
     
     for (i = 0; i < k; i++) {
-        x->tempValues[i] = x->tempNotes2[i]->values[selector];
+        x->temp.values[i] = x->temp.notes2[i]->values[selector];
     }
      
     if (down) {
@@ -362,7 +362,7 @@ PIZError pizSequenceCycle(PIZSequence *x, const PIZEvent *event)
     t[m] = o - m;
     
     for (i = 0; i < PIZ_MAGIC_SCALE; i++) {
-        x->tempValues[i] = t[(PIZ_MAGIC_SCALE - key + i) % PIZ_MAGIC_SCALE];
+        x->temp.values[i] = t[(PIZ_MAGIC_SCALE - key + i) % PIZ_MAGIC_SCALE];
     }
     
     pizSequenceForEach(x, pizSequenceEachCycle, NULL, PIZ_SEQUENCE_FLAG_RANDOM);
@@ -380,7 +380,7 @@ PIZError pizSequencePattern(PIZSequence *x, const PIZEvent *event)
 
     if (k = pizSequenceFillTempNotes(x)) {
         for (i = 0; i < k; i++) {
-            pizSequenceEachMove(x, x->tempNotes1[i], event, PIZ_SEQUENCE_FLAG_PATTERN);
+            pizSequenceEachMove(x, x->temp.notes1[i], event, PIZ_SEQUENCE_FLAG_PATTERN);
         }
     }
 
@@ -397,9 +397,9 @@ PIZError pizSequenceAlgorithm(PIZSequence *x, const PIZEvent *event)
     k = pizSequenceFillTempNotes(x);
     
     if (code == PIZ_EVENT_ZOULOU) {
-        err = pizFactorOracleProceed(x->owner->factorOracle, k, x->tempValues);
+        err = pizFactorOracleProceed(x->owner->factorOracle, k, x->temp.values);
     } else {
-        err = pizGaloisLatticeProceed(x->owner->galoisLattice, k, x->tempValues);
+        err = pizGaloisLatticeProceed(x->owner->galoisLattice, k, x->temp.values);
     }
     
     if (!err) {
@@ -407,13 +407,13 @@ PIZError pizSequenceAlgorithm(PIZSequence *x, const PIZEvent *event)
     long i;  
     
     for (i = 0; i < k; i++) {
-        x->tempValues[i] = CLAMP((pizSequenceSnapByAmbitus(x, x->tempValues[i])), 0, PIZ_MAGIC_PITCH);
+        x->temp.values[i] = CLAMP((pizSequenceSnapByAmbitus(x, x->temp.values[i])), 0, PIZ_MAGIC_PITCH);
     }
     
     for (i = 0; i < k; i++) {        
         long h = 100 * (rand_r(&x->seed) / (RAND_MAX + 1.0));
         if (h >= x->chance) {
-            x->tempValues[i] = x->tempNotes1[i]->values[PIZ_VALUE_PITCH];
+            x->temp.values[i] = x->temp.notes1[i]->values[PIZ_VALUE_PITCH];
         } 
     }
     
@@ -441,10 +441,10 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
     long start = PIZ_CEIL(x->start, x->cell);
     long end = PIZ_CEIL(x->end, x->cell);
         
-    x->tempError = PIZ_GOOD;
-    pizHashTableClear(x->tempHash);
+    x->temp.error = PIZ_GOOD;
+    pizHashTableClear(x->temp.hash);
     pizSequenceForEach(x, pizSequenceEachFillTempHash, NULL, PIZ_SEQUENCE_FLAG_NONE);
-    hashError = x->tempError;
+    hashError = x->temp.error;
     
     while (!hashError && (k < iterate) && (loop < PIZ_MAXIMUM_LOOP)) {
     //
@@ -505,7 +505,7 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
     if (!err) {
     //
     for (i = 0; i < PIZ_SIZE_DEATH; i++) {
-        if (pizHashTableContainsKey(x->tempHash, (center + pizSequenceNeighbors[i]))) {
+        if (pizHashTableContainsKey(x->temp.hash, (center + pizSequenceNeighbors[i]))) {
             neighbors ++;
         }
     }
@@ -517,11 +517,11 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
     
     for (i = 0; i < PIZ_SIZE_H; i++) {
         if ((hPat[i] >= 0) && 
-            !(pizHashTableContainsKey(x->tempHash, hPat[i] - 2)) &&
-            !(pizHashTableContainsKey(x->tempHash, hPat[i] - 1)) &&
-            !(pizHashTableContainsKey(x->tempHash, hPat[i]))     &&
-            !(pizHashTableContainsKey(x->tempHash, hPat[i] + 1)) &&
-            !(pizHashTableContainsKey(x->tempHash, hPat[i] + 2))) {
+            !(pizHashTableContainsKey(x->temp.hash, hPat[i] - 2)) &&
+            !(pizHashTableContainsKey(x->temp.hash, hPat[i] - 1)) &&
+            !(pizHashTableContainsKey(x->temp.hash, hPat[i]))     &&
+            !(pizHashTableContainsKey(x->temp.hash, hPat[i] + 1)) &&
+            !(pizHashTableContainsKey(x->temp.hash, hPat[i] + 2))) {
             long t;
             PIZNote *temp = NULL;
             PIZNote *toCopy = NULL;
@@ -531,7 +531,7 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
             
             for (t = 0; t < PIZ_SIZE_BIRTH; t++) {
             //
-            if (!(pizHashTablePtrWithKey(x->tempHash, hPat[i] + pizSequenceNeighbors[t], (void **)&temp))) {
+            if (!(pizHashTablePtrWithKey(x->temp.hash, hPat[i] + pizSequenceNeighbors[t], (void **)&temp))) {
                 toCopy = temp;
                 neighbors ++;
             }
@@ -547,7 +547,7 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
                                toCopy->values[PIZ_VALUE_CHANNEL] };
                         
             if (newNote = pizSequenceNewNote(x, values, PIZ_SEQUENCE_FLAG_CLIP)) {
-                hashError |= pizHashTableAdd(x->tempHash, hPat[i], (void *)newNote);
+                hashError |= pizHashTableAdd(x->temp.hash, hPat[i], (void *)newNote);
                 k ++;
             }
             
@@ -558,7 +558,7 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
     }
         
     if (death) {
-        pizHashTableRemove(x->tempHash, center, (void *)note);
+        pizHashTableRemove(x->temp.hash, center, (void *)note);
         pizSequenceEachRemove(x, note, NULL, PIZ_SEQUENCE_FLAG_NONE);
     }
     //    
@@ -681,29 +681,29 @@ PIZError pizSequenceGetTag(PIZSequence *x, long *ptr)
 
 long pizSequenceFillTempNotes(PIZSequence *x)
 {
-    x->tempIndex = 0;
+    x->temp.index = 0;
     pizSequenceForEach(x, pizSequenceEachFillTempNotes, NULL, PIZ_SEQUENCE_FLAG_NONE);
     
-    return x->tempIndex;
+    return x->temp.index;
 }
 
 void pizSequenceWithTempNotes(PIZSequence *x, long selector, bool reverse)
 {
     long i;
     
-    for (i = 0; i < x->tempIndex; i++) {
+    for (i = 0; i < x->temp.index; i++) {
     //
     long t;
 
     if (!reverse) {
-        t = x->tempValues[i];
+        t = x->temp.values[i];
     } else {
-        t = x->tempValues[(x->tempIndex - 1) - i];
+        t = x->temp.values[(x->temp.index - 1) - i];
     }
     
-    if (x->tempNotes1[i]->values[selector] != t) {
-        x->tempNotes1[i]->values[selector] = t;
-        pizItemsetSetAtIndex(&x->changed, x->tempNotes1[i]->tag);
+    if (x->temp.notes1[i]->values[selector] != t) {
+        x->temp.notes1[i]->values[selector] = t;
+        pizItemsetSetAtIndex(&x->changed, x->temp.notes1[i]->tag);
     }
     //
     }

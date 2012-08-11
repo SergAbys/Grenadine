@@ -175,7 +175,7 @@ void pizSequenceEachCycle(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulon
     if ((h == -1) || (h < x->chance)) {
     //
     t = note->values[PIZ_VALUE_PITCH];
-    t += x->tempValues[t % PIZ_MAGIC_SCALE];
+    t += x->temp.values[t % PIZ_MAGIC_SCALE];
     t = CLAMP(t, 0, PIZ_MAGIC_PITCH);
     
     if (note->values[PIZ_VALUE_PITCH] != t) {
@@ -196,7 +196,7 @@ void pizSequenceEachDump(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
                   note->tag,
                   x->bpm };
                 
-    x->tempError |= pizAgentNotify(x->owner, PIZ_EVENT_NOTE_DUMPED, 7, a);
+    x->temp.error |= pizAgentNotify(x->owner, PIZ_EVENT_NOTE_DUMPED, 7, a);
 }
 
 void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
@@ -246,13 +246,13 @@ void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
     //
     }
     
-    x->tempError |= err;
+    x->temp.error |= err;
 }
 
 void pizSequenceEachFillTempHash(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
 {   
     long k = ((long)(note->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1)) + note->values[PIZ_VALUE_PITCH];
-    x->tempError |= pizHashTableAdd(x->tempHash, k, (void *)note);
+    x->temp.error |= pizHashTableAdd(x->temp.hash, k, (void *)note);
 }
 
 void pizSequenceEachFillTempNotes(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
@@ -274,24 +274,24 @@ void pizSequenceEachFillTempNotes(PIZSequence *x, PIZNote *note, const PIZEvent 
     b = CLAMP((pitch + value), 0, PIZ_MAGIC_PITCH);
     
     for (j = a; j <= b; j++) {
-        if (x->tempValues[j] == (note->position + 1)) {
+        if (x->temp.values[j] == (note->position + 1)) {
             death = true;
         }
     }
     
     if (death) {
-        x->tempNotes1[x->tempIndex] = note;
-        x->tempIndex ++;
+        x->temp.notes1[x->temp.index] = note;
+        x->temp.index ++;
     } else {
-        x->tempValues[pitch] = (note->position + 1);
+        x->temp.values[pitch] = (note->position + 1);
     }
     //
     }
     //
     
     } else {
-        x->tempNotes1[x->tempIndex] = note;
-        x->tempIndex ++;
+        x->temp.notes1[x->temp.index] = note;
+        x->temp.index ++;
     }
 }
 

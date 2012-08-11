@@ -70,11 +70,11 @@ void pizSequenceJumpToStart(PIZSequence *x)
 
 PIZError pizSequenceDump(PIZSequence *x)
 {
-    x->tempError = pizAgentNotify(x->owner, PIZ_EVENT_WILL_DUMP, 0, NULL);
+    x->temp.error = pizAgentNotify(x->owner, PIZ_EVENT_WILL_DUMP, 0, NULL);
     
     pizSequenceForEach(x, pizSequenceEachDump, NULL, PIZ_SEQUENCE_FLAG_NONE);
     
-    return x->tempError;
+    return x->temp.error;
 }
 
 PIZError pizSequenceRefresh(PIZSequence *x)
