@@ -69,7 +69,7 @@ PIZSequence *pizSequenceNew(struct _PIZAgent *owner)
     long argv[ ] = { 0, PIZ_SEQUENCE_MAXIMUM_NOTES };
     
     x->owner      = owner;
-    x->buffer     = pizArrayNew(PIZ_SEQUENCE_MAXIMUM_NOTES);
+    x->map        = pizArrayNew(PIZ_SEQUENCE_MAXIMUM_NOTES);
     x->scale      = pizArrayNew(PIZ_MAGIC_SCALE);
     x->tempValues = (long *)malloc(sizeof(long) * PIZ_SEQUENCE_SIZE_TEMPORARY);
     x->tempNotes1 = (PIZNote **)malloc(sizeof(PIZNote *) * PIZ_SEQUENCE_SIZE_TEMPORARY);
@@ -77,7 +77,7 @@ PIZSequence *pizSequenceNew(struct _PIZAgent *owner)
     x->lookup     = (PIZNote **)calloc(PIZ_SEQUENCE_MAXIMUM_NOTES, sizeof(PIZNote *));
     x->tempHash   = pizHashTableNew(2, argv);
     
-    if (x->buffer        && 
+    if (x->map           && 
         x->scale         &&
         x->tempValues    &&
         x->tempNotes1    &&
@@ -89,7 +89,6 @@ PIZSequence *pizSequenceNew(struct _PIZAgent *owner)
 
         x->flags = PIZ_SEQUENCE_FLAG_NONE;
         
-        pizItemsetClear(&x->used);
         pizItemsetClear(&x->removed);
         pizItemsetClear(&x->changed);
         pizItemsetClear(&x->addedLow);
@@ -141,7 +140,7 @@ void pizSequenceFree(PIZSequence *x)
     }
     
     pizArrayFree(x->scale);
-    pizArrayFree(x->buffer);
+    pizArrayFree(x->map);
     
     pizHashTableFree(x->tempHash);
     

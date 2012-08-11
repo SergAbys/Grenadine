@@ -201,22 +201,21 @@ typedef struct _PIZSequence {
     long                cell;
     long                value;
     long                dirty;
-    PIZItemset          used;
     PIZItemset          changed;
     PIZItemset          removed;
     PIZItemset          addedLow;
     PIZItemset          addedHigh;
     PIZArray            *scale;
-    PIZArray            *buffer;
+    PIZArray            *map;
     PIZNote             **lookup;
     PIZLinklist         **timeline;
+    struct _PIZAgent    *owner;
+    PIZError            tempError;
+    long                tempIndex;
+    long                *tempValues;
+    PIZHashTable        *tempHash;
     PIZNote             **tempNotes1;
     PIZNote             **tempNotes2;
-    PIZHashTable        *tempHash;
-    long                *tempValues;
-    long                tempIndex;
-    PIZError            tempError;
-    struct _PIZAgent    *owner;
     } PIZSequence;
     
 // -------------------------------------------------------------------------------------------------------------
@@ -225,10 +224,10 @@ typedef struct _PIZSequence {
 
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL PIZSequence   *pizSequenceNew (struct _PIZAgent *owner);
+PIZ_LOCAL PIZSequence   *pizSequenceNew     (struct _PIZAgent *owner);
 
-PIZ_LOCAL void          pizSequenceFree (PIZSequence *x);
-PIZ_LOCAL void          pizSequenceInit (PIZSequence *x);
+PIZ_LOCAL void          pizSequenceFree     (PIZSequence *x);
+PIZ_LOCAL void          pizSequenceInit     (PIZSequence *x);
 
 PIZ_END_C_LINKAGE
 

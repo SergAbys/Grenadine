@@ -55,11 +55,11 @@ void pizSequenceForEach(PIZSequence *x, PIZMethod method, const PIZEvent *e, ulo
     
     if (x->dirty) {
     //
-    pizArrayClear(x->buffer);
+    pizArrayClear(x->map);
     
     for (i = 0; i < PIZ_SEQUENCE_SIZE_TIMELINE; i++) {
         if (x->timeline[i] && pizLinklistCount(x->timeline[i])) {
-            pizArrayAppend(x->buffer, i);
+            pizArrayAppend(x->map, i);
         }
     }
     
@@ -67,11 +67,11 @@ void pizSequenceForEach(PIZSequence *x, PIZMethod method, const PIZEvent *e, ulo
     //
     }
     
-    for (i = 0; i < pizArrayCount(x->buffer); i++) {   
+    for (i = 0; i < pizArrayCount(x->map); i++) {   
         PIZNote *note       = NULL;
         PIZNote *nextNote   = NULL;
         
-        long p = pizArrayAtIndex(x->buffer, i);
+        long p = pizArrayAtIndex(x->map, i);
         
         pizLinklistPtrAtIndex(x->timeline[p], 0, (void **)&note);
         
@@ -99,7 +99,6 @@ void pizSequenceEachRemove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulo
     if ((h == -1) || (h < x->chance)) {
     //
     x->lookup[tag] = NULL;
-    pizItemsetUnsetAtIndex(&x->used, tag);
     pizLinklistRemoveWithPtr(x->timeline[p], (void *)note);
     x->count --; 
     x->dirty = true;

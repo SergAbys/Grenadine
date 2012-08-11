@@ -644,7 +644,6 @@ PIZNote *pizSequenceNewNote(PIZSequence *x, long *argv, ulong flags)
         
     } else {
         x->lookup[newNote->tag] = NULL;
-        pizItemsetUnsetAtIndex(&x->used, newNote->tag);
         free(newNote);
         newNote = NULL;
     }
@@ -662,8 +661,7 @@ PIZError pizSequenceGetTag(PIZSequence *x, long *ptr)
     PIZError err = PIZ_ERROR;
     
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
-        if (!(pizItemsetIsSetAtIndex(&x->used, i))) {
-            pizItemsetSetAtIndex(&x->used, i);
+        if (!x->lookup[i]) {
             k = i;
             break;
         }
