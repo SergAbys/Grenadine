@@ -56,6 +56,7 @@
 #define TLL_SYM_PATCHING_RECT   (tll_table.patching_rect)
 #define TLL_SYM_LIST            (tll_table.list)
 #define TLL_SYM_DUMPOUT         (tll_table.dumpout)
+#define TLL_SYM_COUNT           (tll_table.count)
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -97,6 +98,7 @@ typedef struct _tllSymbols {
     t_symbol *patching_rect;
     t_symbol *list;
     t_symbol *dumpout;
+    t_symbol *count;
     } t_tllSymbols;
 
 // -------------------------------------------------------------------------------------------------------------

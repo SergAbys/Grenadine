@@ -108,7 +108,8 @@ typedef enum _PIZEventCode {
     //
     PIZ_EVENT_LEARN,
     PIZ_EVENT_FORGET,
-    PIZ_EVENT_DUMP,
+    PIZ_EVENT_DUMP, 
+    PIZ_EVENT_INFO,
     PIZ_EVENT_BPM,
     //
     PIZ_EVENT_CHANCE,
@@ -133,7 +134,7 @@ typedef enum _PIZEventCode {
     PIZ_EVENT_ZOULOU,
     PIZ_EVENT_ROMEO,
     PIZ_EVENT_JULIET,
-    //   
+    //
     PIZ_EVENT_NOTE_DELETE,
     PIZ_EVENT_NOTE_INCREMENT,
     PIZ_EVENT_NOTE_DECREMENT,
@@ -151,6 +152,8 @@ typedef enum _PIZEventCode {
     PIZ_EVENT_VALUE_DECREMENT,
     PIZ_EVENT_VALUE_UP,
     PIZ_EVENT_VALUE_DOWN,
+    //
+    PIZ_EVENT_INFO_COUNT,
     //
     PIZ_EVENT_CHANGED_BPM,
     PIZ_EVENT_CHANGED_CHANCE,

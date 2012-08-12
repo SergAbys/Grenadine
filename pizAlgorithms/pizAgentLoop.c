@@ -62,6 +62,7 @@ static const PIZMethodError pizEventMethods[ ]  = { NULL,                       
                                                     pizAgentLearn,               // PIZ_EVENT_LEARN
                                                     pizAgentForget,              // PIZ_EVENT_FORGET
                                                     pizAgentDump,                // PIZ_EVENT_DUMP
+                                                    pizAgentInfo,                // PIZ_EVENT_INFO
                                                     pizAgentBpm,                 // PIZ_EVENT_BPM
                                                     //
                                                     pizSequenceSetChance,        // PIZ_EVENT_CHANCE
@@ -240,7 +241,7 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
     }
     
     PIZ_AGENT_UNLOCK_EVENT
-        
+    
     if (event) {
     //
     pizEventCode(event, &code);

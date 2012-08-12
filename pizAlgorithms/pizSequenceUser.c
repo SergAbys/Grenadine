@@ -55,6 +55,7 @@
 #pragma mark -
    
 PIZ_LOCAL PIZNote   *pizSequenceNoteWithTag     (PIZSequence *x, long tag);
+
 PIZ_LOCAL long      pizSequenceLenghtIncrement  (long value);
 PIZ_LOCAL long      pizSequenceLenghtDecrement  (long value);
 PIZ_LOCAL long      pizSequenceLenghtUp         (long value);

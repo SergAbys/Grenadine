@@ -51,6 +51,7 @@ static const char *pizEventNames[ ] = { "None",
                                         "Learn",
                                         "Forget",
                                         "Dump",
+                                        "Info",
                                         "Bpm",
                                         //
                                         "Chance",
@@ -94,6 +95,8 @@ static const char *pizEventNames[ ] = { "None",
                                         "Value Up",
                                         "Value Down",
                                         //
+                                        "Count",
+                                        //
                                         "Changed Bpm",
                                         "Changed Chance",
                                         "Changed Velocity",
@@ -124,6 +127,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_LEARN
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_FORGET
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_DUMP
+                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_INFO
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_BPM
                                         //
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CHANCE
@@ -167,6 +171,8 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_VALUE_MODIFIER_UP
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_VALUE_MODIFIER_DOWN
                                         //
+                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_INFO_COUNT
+                                        //                            
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_BPM
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_CHANCE
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_VELOCITY

@@ -101,6 +101,7 @@ typedef struct _tll {
     t_systhread_mutex   daemonMutex;
     t_atom              played[4];
     t_atom              dumped[5];
+    t_atom              info;
     t_atom              link;
     PIZTime             time;
     long                identifier;

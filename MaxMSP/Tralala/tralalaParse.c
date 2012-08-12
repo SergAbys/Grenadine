@@ -88,6 +88,7 @@ table->getname          = gensym("getname");
 table->patching_rect    = gensym("patching_rect");
 table->list             = gensym("list");
 table->dumpout          = gensym("dumpout");
+table->count            = gensym("count");
 
 tll_code = dictionary_new( );
 
@@ -96,6 +97,7 @@ dictionary_appendlong(tll_code, gensym("learn"),    (TLL_BIAS + PIZ_EVENT_LEARN)
 dictionary_appendlong(tll_code, gensym("list"),     (TLL_BIAS + PIZ_EVENT_LEARN));
 dictionary_appendlong(tll_code, gensym("forget"),   (TLL_BIAS + PIZ_EVENT_FORGET));
 dictionary_appendlong(tll_code, gensym("dump"),     (TLL_BIAS + PIZ_EVENT_DUMP));
+dictionary_appendlong(tll_code, gensym("info"),     (TLL_BIAS + PIZ_EVENT_INFO));
 dictionary_appendlong(tll_code, gensym("chance"),   (TLL_BIAS + PIZ_EVENT_CHANCE));
 dictionary_appendlong(tll_code, gensym("velocity"), (TLL_BIAS + PIZ_EVENT_VELOCITY));
 dictionary_appendlong(tll_code, gensym("channel"),  (TLL_BIAS + PIZ_EVENT_CHANNEL));
@@ -341,56 +343,58 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
     }
     
     if (!(quickmap_lookup_key2(tll_notification, (void *)(code + TLL_BIAS), (void **)&s))) {
+    //
+    atom_setsym(data, s);
+    
+    if (code == PIZ_EVENT_CHANGED_ZONE) {
+        dirty |= TLL_DIRTY_ZONE;
         
-        if (code == PIZ_EVENT_CHANGED_ZONE) {
-            dirty |= TLL_DIRTY_ZONE;
-            
-        } else if (code == PIZ_EVENT_CHANGED_SCALE) {
-            t_symbol *sym1 = NULL;
-            t_symbol *sym2 = NULL;
+    } else if (code == PIZ_EVENT_CHANGED_SCALE) {
+        t_symbol *sym1 = NULL;
+        t_symbol *sym2 = NULL;
 
-            quickmap_lookup_key2(tll_key,  (void *)((*(ptr + 0)) + TLL_BIAS), (void **)&sym1);
-            quickmap_lookup_key2(tll_type, (void *)((*(ptr + 1)) + TLL_BIAS), (void **)&sym2);
+        quickmap_lookup_key2(tll_key,  (void *)((*(ptr + 0)) + TLL_BIAS), (void **)&sym1);
+        quickmap_lookup_key2(tll_type, (void *)((*(ptr + 1)) + TLL_BIAS), (void **)&sym2);
 
-            atom_setsym(data + 1, sym1);
-            atom_setsym(data + 2, sym2);
-        }
-
-        atom_setsym(data, s);
-        
-        TLL_DATA_LOCK
-        dictionary_appendatoms(x->current, s, k + 1, data); 
-        TLL_DATA_UNLOCK
-
+        atom_setsym(data + 1, sym1);
+        atom_setsym(data + 2, sym2);
+    }
+    
+    TLL_DATA_LOCK
+    dictionary_appendatoms(x->current, s, k + 1, data); 
+    TLL_DATA_UNLOCK
+    //
     } else {
-        dirty |= tralala_mouseAbort(x);
-        tralala_parseSymbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
-          
-        TLL_DATA_LOCK
-        
-        if (code == PIZ_EVENT_NOTE_REMOVED) {
-            if (dictionary_hasentry(x->status, s)) {
-                t_symbol *mark = NULL;
-                if (!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) && (s == mark)) {
-                    dictionary_deleteentry(x->status, TLL_SYM_MARK); 
-                }
-                dictionary_deleteentry(x->status, s);
+    //
+    dirty |= tralala_mouseAbort(x);
+    tralala_parseSymbolWithTag(&s, ptr[PIZ_EVENT_DATA_TAG]);
+      
+    TLL_DATA_LOCK
+    
+    if (code == PIZ_EVENT_NOTE_REMOVED) {
+        if (dictionary_hasentry(x->status, s)) {
+            t_symbol *mark = NULL;
+            if (!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) && (s == mark)) {
+                dictionary_deleteentry(x->status, TLL_SYM_MARK); 
             }
-            dictionary_deleteentry(x->current, s);
-        
-        } else {
-            if ((code == PIZ_EVENT_NOTE_ADDED) && (*(ptr + PIZ_EVENT_DATA_LOW))) {
-                dictionary_appendsym(x->status, TLL_SYM_MARK, s);
-                dictionary_appendlong(x->status, s, TLL_SELECTED);
-            }
-            
-            atom_setsym(data, TLL_SYM_NOTE);
-            dictionary_appendatoms(x->current, s, 6, data);
+            dictionary_deleteentry(x->status, s);
+        }
+        dictionary_deleteentry(x->current, s);
+    
+    } else if ((code == PIZ_EVENT_NOTE_ADDED) || (code == PIZ_EVENT_NOTE_CHANGED)) {
+        if (*(ptr + PIZ_EVENT_DATA_LOW)) {
+            dictionary_appendsym(x->status, TLL_SYM_MARK, s);
+            dictionary_appendlong(x->status, s, TLL_SELECTED);
         }
         
-        TLL_DATA_UNLOCK
-        
-        dirty |= TLL_DIRTY_NOTE;
+        atom_setsym(data, TLL_SYM_NOTE);
+        dictionary_appendatoms(x->current, s, 6, data);
+    }
+    
+    TLL_DATA_UNLOCK
+    
+    dirty |= TLL_DIRTY_NOTE;
+    //
     }
         
     TLL_FLAG_SET(dirty)
