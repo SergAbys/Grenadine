@@ -63,6 +63,7 @@ int main(void)
     class_addmethod(c, (method)tralala_mouseDrag,   "mousedrag",            A_CANT,  0);
     class_addmethod(c, (method)tralala_mouseUp,     "mouseup",              A_CANT,  0);
     class_addmethod(c, (method)tralala_notify,      "notify",               A_CANT,  0);
+    class_addmethod(c, (method)object_obex_dumpout, "dumpout",              A_CANT,  0);
     class_addmethod(c, (method)tralala_store,       "store",                A_GIMME, 0);
     class_addmethod(c, (method)tralala_store,       "save",                 A_GIMME, 0);
     class_addmethod(c, (method)tralala_recall,      "recall",               A_GIMME, 0);
@@ -221,11 +222,14 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     jbox_new((t_jbox *)x, boxflags, argc, argv);
     x->box.b_firstin = (void *)x;
 
-    x->right = bangout((t_object *)x);
-    x->middleRight = outlet_new((t_object *)x, NULL);
+    x->right = outlet_new((t_object *)x, NULL);
+    x->middleRight = bangout((t_object *)x);
+    x->middle = outlet_new((t_object *)x, NULL);
     x->middleLeft = outlet_new((t_object *)x, NULL);
     x->left = listout((t_object *)x);
     
+    object_obex_store((void *)x, TLL_SYM_DUMPOUT, (t_object *)x->right);
+
     jbox_ready((t_jbox *)x);
     attr_dictionary_process(x, d);
     
@@ -345,10 +349,11 @@ void tralala_assist(t_tll *x, void *b, long m, long a, char *s)
         
     } else {	
         switch (a) {
-            case 0 : sprintf(s, "(List) Played");     break;
-            case 1 : sprintf(s, "(Anything) Dumped"); break;
-            case 2 : sprintf(s, "(Anything) End");    break;
-            case 3 : sprintf(s, "(Bang) Will End");   break;
+            case 0 : sprintf(s, "(List) Played Notes");     break;
+            case 1 : sprintf(s, "(Anything) Dumped Notes"); break;
+            case 2 : sprintf(s, "(Anything) End");          break;
+            case 3 : sprintf(s, "(Bang) Will End");         break;
+            case 4 : sprintf(s, "(Anything) Dumpout");      break;
         }
     }
 }
@@ -508,12 +513,12 @@ void tralala_runTask (t_tll *x)
         break;
 
     case PIZ_EVENT_WILL_END :
-        outlet_bang(x->right);
+        outlet_bang(x->middleRight);
         break;
     
     case PIZ_EVENT_END :
         pizEventTime(event, &x->time);
-        outlet_anything(x->middleRight, TLL_SYM_END, 1, &x->link);
+        outlet_anything(x->middle, TLL_SYM_END, 1, &x->link);
         break;
     
     default :

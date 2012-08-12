@@ -87,6 +87,7 @@ table->attr_modified    = gensym("attr_modified");
 table->getname          = gensym("getname");
 table->patching_rect    = gensym("patching_rect");
 table->list             = gensym("list");
+table->dumpout          = gensym("dumpout");
 
 tll_code = dictionary_new( );
 

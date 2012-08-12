@@ -374,19 +374,6 @@ PIZError pizSequenceCycle(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequencePattern(PIZSequence *x, const PIZEvent *event)
-{
-    long i, k;  
-
-    if (k = pizSequenceFillTempNotes(x)) {
-        for (i = 0; i < k; i++) {
-            pizSequenceEachMove(x, x->temp.notes1[i], event, PIZ_SEQUENCE_FLAG_PATTERN);
-        }
-    }
-
-    return PIZ_GOOD;
-}
-
 PIZError pizSequenceAlgorithm(PIZSequence *x, const PIZEvent *event)
 {
     long k;
@@ -422,6 +409,21 @@ PIZError pizSequenceAlgorithm(PIZSequence *x, const PIZEvent *event)
     }
     
     return err;
+}
+
+PIZError pizSequencePattern(PIZSequence *x, const PIZEvent *event)
+{
+    long i, k;  
+
+    x->temp.error = PIZ_GOOD;
+    
+    if (k = pizSequenceFillTempNotes(x)) {
+        for (i = 0; i < k; i++) {
+            pizSequenceEachMove(x, x->temp.notes1[i], event, PIZ_SEQUENCE_FLAG_PATTERN);
+        }
+    }
+
+    return x->temp.error;
 }
 
 PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)

@@ -196,6 +196,9 @@ void pizAgentDoEvent(PIZAgent *x, PIZEvent *event)
         
         if (err) {
             pizEventFree(event);
+        }
+        
+        if (err & PIZ_MEMORY) {
             PIZ_AGENT_MEMORY
         }
     }

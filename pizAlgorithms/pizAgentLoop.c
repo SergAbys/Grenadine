@@ -190,7 +190,7 @@ void *pizAgentEventLoop(void *agent)
     pthread_exit(NULL);
 }
 
-void pizAgentNotify(PIZAgent *x, PIZEventCode n, long ac, long *av)
+PIZError pizAgentNotify(PIZAgent *x, PIZEventCode n, long ac, long *av)
 {
     PIZEvent *notification = NULL;
 
@@ -207,8 +207,12 @@ void pizAgentNotify(PIZAgent *x, PIZEventCode n, long ac, long *av)
     }
     
     PIZ_AGENT_UNLOCK_OBSERVER
+    
+    return PIZ_GOOD;
     //
     }
+    
+    return PIZ_MEMORY;
 } 
 
 // -------------------------------------------------------------------------------------------------------------
@@ -247,7 +251,7 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
         o = x->sequence;
     }
     
-    if (o && (f = pizEventMethods[code]) && ((*f)(o, event) == PIZ_MEMORY)) {
+    if (o && (f = pizEventMethods[code]) && ((*f)(o, event) & PIZ_MEMORY)) {
         PIZ_AGENT_MEMORY
     }
         
@@ -261,23 +265,24 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
 void pizAgentEventLoopDoStep(PIZAgent *x, bool blank)
 {   
     bool k = false;
-    PIZError err = PIZ_GOOD; 
+    PIZError err1 = PIZ_GOOD; 
+    PIZError err2 = PIZ_GOOD; 
     
     do {
     //
     if (!blank) {
-        err = pizSequenceStep(x->sequence);
+        err1 = pizSequenceStep(x->sequence);
     } else {
-        err = pizSequenceStepBlank(x->sequence); 
+        err1 = pizSequenceStepBlank(x->sequence); 
     }
     
-    if (err == PIZ_GOOD) {
+    if (err1 == PIZ_GOOD) {
         if (pizSequenceIsAtEnd(x->sequence)) {
-            pizAgentNotify(x, PIZ_EVENT_WILL_END, 0, NULL);
+            err2 |= pizAgentNotify(x, PIZ_EVENT_WILL_END, 0, NULL);
         }
         k = false;  
         
-    } else if (err == PIZ_ERROR) {
+    } else if (err1 == PIZ_ERROR) {
         if (x->flags & (PIZ_AGENT_FLAG_LOOPED | PIZ_AGENT_FLAG_REPLAY)) {
             k = true;
             x->flags &= ~PIZ_AGENT_FLAG_REPLAY;
@@ -287,9 +292,10 @@ void pizAgentEventLoopDoStep(PIZAgent *x, bool blank)
         }
         
         pizSequenceJumpToStart(x->sequence);
-        pizAgentNotify(x, PIZ_EVENT_END, 0, NULL);
-  
-    } else if (err == PIZ_MEMORY) { 
+        err2 |= pizAgentNotify(x, PIZ_EVENT_END, 0, NULL);
+    } 
+    
+    if ((err1 | err2) & PIZ_MEMORY) { 
         PIZ_AGENT_MEMORY 
     }
     //
@@ -298,9 +304,7 @@ void pizAgentEventLoopDoStep(PIZAgent *x, bool blank)
 
 void pizAgentEventLoopDoRefresh(PIZAgent *x)
 {
-    PIZError err = PIZ_ERROR;
-  
-    if ((err = pizSequenceRefresh(x->sequence)) == PIZ_MEMORY) {
+    if (pizSequenceRefresh(x->sequence) & PIZ_MEMORY) {
         PIZ_AGENT_MEMORY
     }
 }

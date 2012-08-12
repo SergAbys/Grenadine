@@ -113,6 +113,7 @@ PIZError pizAgentLearn(PIZAgent *x, const PIZEvent *event)
 {   
     long argc;
     long *argv = NULL;
+    PIZError err = PIZ_GOOD;
     
     if (!(pizEventData(event, &argc, &argv))) {
     //
@@ -121,25 +122,19 @@ PIZError pizAgentLearn(PIZAgent *x, const PIZEvent *event)
     pizArrayAppend(x->learn, argv[0]);
     
     if (h < (pizArrayCount(x->learn) * PIZ_CONSTANT_LEARN)) {
-        pizFactorOracleAdd(x->oracle, pizArrayCount(x->learn), pizArrayPtr(x->learn));
-        pizGaloisLatticeAdd(x->lattice, pizArrayCount(x->learn), pizArrayPtr(x->learn));
+        err |= pizFactorOracleAdd(x->oracle, pizArrayCount(x->learn), pizArrayPtr(x->learn));
+        err |= pizGaloisLatticeAdd(x->lattice, pizArrayCount(x->learn), pizArrayPtr(x->learn));
         pizArrayClear(x->learn);
     }
     //
     }
         
-    return PIZ_GOOD;
+    return err;
 }
 
 PIZError pizAgentDump(PIZAgent *x, const PIZEvent *event)
 {
-    PIZError err = PIZ_ERROR;
-        
-    if ((err = pizSequenceDump(x->sequence)) == PIZ_MEMORY) {
-        PIZ_AGENT_MEMORY
-    }
-    
-    return PIZ_GOOD;
+    return pizSequenceDump(x->sequence);
 }
 
 PIZError pizAgentBpm(PIZAgent *x, const PIZEvent *event)

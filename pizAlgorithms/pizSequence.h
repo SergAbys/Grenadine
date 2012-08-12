@@ -192,12 +192,6 @@ struct _PIZTemp {
     };
     
 typedef struct _PIZSequence {
-    long                start;
-    long                end;
-    long                down;
-    long                up;
-    long                count;
-    long                index;
     long                bpm;
     long                chance;
     long                velocity;
@@ -207,6 +201,12 @@ typedef struct _PIZSequence {
     long                type;
     long                cell;
     long                value;
+    long                start;
+    long                end;
+    long                down;
+    long                up;
+    long                count;
+    long                index;
     long                dirty;
     uint                seed;
     ulong               flags;
@@ -228,10 +228,10 @@ typedef struct _PIZSequence {
 
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL PIZSequence   *pizSequenceNew     (struct _PIZAgent *owner);
+PIZ_LOCAL PIZSequence   *pizSequenceNew (struct _PIZAgent *owner);
 
-PIZ_LOCAL void          pizSequenceFree     (PIZSequence *x);
-PIZ_LOCAL void          pizSequenceInit     (PIZSequence *x);
+PIZ_LOCAL void          pizSequenceFree (PIZSequence *x);
+PIZ_LOCAL void          pizSequenceInit (PIZSequence *x);
 
 PIZ_END_C_LINKAGE
 

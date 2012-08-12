@@ -55,6 +55,7 @@
 #define TLL_SYM_GETNAME         (tll_table.getname)
 #define TLL_SYM_PATCHING_RECT   (tll_table.patching_rect)
 #define TLL_SYM_LIST            (tll_table.list)
+#define TLL_SYM_DUMPOUT         (tll_table.dumpout)
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -95,6 +96,7 @@ typedef struct _tllSymbols {
     t_symbol *getname;
     t_symbol *patching_rect;
     t_symbol *list;
+    t_symbol *dumpout;
     } t_tllSymbols;
 
 // -------------------------------------------------------------------------------------------------------------

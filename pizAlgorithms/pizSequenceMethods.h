@@ -70,8 +70,8 @@ PIZ_LOCAL PIZError  pizSequenceChange       (PIZSequence *x, const PIZEvent *eve
 PIZ_LOCAL PIZError  pizSequenceFill         (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceKill         (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceCycle        (PIZSequence *x, const PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequencePattern      (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceAlgorithm    (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequencePattern      (PIZSequence *x, const PIZEvent *event); //
 PIZ_LOCAL PIZError  pizSequenceJuliet       (PIZSequence *x, const PIZEvent *event); //
 
 PIZ_END_C_LINKAGE
