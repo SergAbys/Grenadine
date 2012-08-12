@@ -77,18 +77,18 @@ PIZAgent *pizAgentNew(long identifier)
         x->oracle   &&
         x->lattice )) { err |= PIZ_MEMORY; }
     
-    err |= pthread_attr_init(&x->attr);
+    err |= pthread_attr_init(&x->attribute);
     err |= pthread_cond_init(&x->condition, NULL);
     err |= pthread_mutex_init(&x->eventLock, NULL);
     err |= pthread_mutex_init(&x->observerLock, NULL);
     
     if (!err) {
     //
-    pthread_attr_setscope(&x->attr, PTHREAD_SCOPE_PROCESS);
-    pthread_attr_setdetachstate(&x->attr, PTHREAD_CREATE_JOINABLE);
-    pthread_attr_setschedpolicy(&x->attr, SCHED_OTHER);
+    pthread_attr_setscope(&x->attribute, PTHREAD_SCOPE_PROCESS);
+    pthread_attr_setdetachstate(&x->attribute, PTHREAD_CREATE_JOINABLE);
+    pthread_attr_setschedpolicy(&x->attribute, SCHED_OTHER);
     
-    x->error = (pthread_create(&x->eventLoop, &x->attr, pizAgentEventLoop, (void *)x) != 0); 
+    x->error = (pthread_create(&x->eventLoop, &x->attribute, pizAgentEventLoop, (void *)x) != 0); 
     err |= x->error;
     //
     }
@@ -116,7 +116,7 @@ void pizAgentFree(PIZAgent *x)
         pthread_join(x->eventLoop, NULL); 
     }
     
-    pthread_attr_destroy(&x->attr);
+    pthread_attr_destroy(&x->attribute);
     pthread_cond_destroy(&x->condition);
     pthread_mutex_destroy(&x->eventLock);
     pthread_mutex_destroy(&x->observerLock);

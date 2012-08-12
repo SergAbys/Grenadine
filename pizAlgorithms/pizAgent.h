@@ -103,7 +103,7 @@ typedef struct _PIZAgent {
     PIZLinklist         *low;
     PIZLinklist         *high;
     PIZSequence         *sequence;
-    pthread_attr_t      attr;
+    pthread_attr_t      attribute;
     pthread_cond_t      condition;
     pthread_mutex_t     eventLock;
     pthread_mutex_t     observerLock;
