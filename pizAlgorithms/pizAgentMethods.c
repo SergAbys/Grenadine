@@ -119,7 +119,7 @@ PIZError pizAgentLearn(PIZAgent *x, const PIZEvent *event)
     //
     long h = (100 * (rand_r(&x->seed) / (RAND_MAX + 1.0)));
     
-    pizArrayAppend(x->learn, argv[0]);
+    err |= pizArrayAppend(x->learn, argv[0]);
     
     if (h < (pizArrayCount(x->learn) * PIZ_CONSTANT_LEARN)) {
         err |= pizFactorOracleAdd(x->oracle, pizArrayCount(x->learn), pizArrayPtr(x->learn));

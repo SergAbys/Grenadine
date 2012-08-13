@@ -117,12 +117,12 @@ typedef struct _PIZAgent {
 
 PIZ_START_C_LINKAGE
 
-PIZAgent    *pizAgentNew        (long identifier);
+PIZAgent    *pizAgentNew    (long identifier);
 
-void        pizAgentFree        (PIZAgent *x);
-PIZError    pizAgentAttach      (PIZAgent *x, void *observer, PIZMethod f); 
-PIZError    pizAgentDetach      (PIZAgent *x, void *observer);
-void        pizAgentDoEvent     (PIZAgent *x, PIZEvent *event);
+void        pizAgentFree    (PIZAgent *x);
+PIZError    pizAgentAttach  (PIZAgent *x, void *observer, PIZMethod f); 
+PIZError    pizAgentDetach  (PIZAgent *x, void *observer);
+void        pizAgentDoEvent (PIZAgent *x, PIZEvent *event);
 
 PIZ_END_C_LINKAGE
 
