@@ -66,6 +66,7 @@ int main(void)
     class_addmethod(c, (method)object_obex_dumpout, "dumpout",              A_CANT,  0);
     class_addmethod(c, (method)tralala_store,       "store",                A_GIMME, 0);
     class_addmethod(c, (method)tralala_store,       "save",                 A_GIMME, 0);
+    class_addmethod(c, (method)tralala_store,       "resave",               A_GIMME, 0);
     class_addmethod(c, (method)tralala_recall,      "recall",               A_GIMME, 0);
     class_addmethod(c, (method)tralala_recall,      "load",                 A_GIMME, 0);
     class_addmethod(c, (method)tralala_recall,      "reload",               A_GIMME, 0);
@@ -377,18 +378,28 @@ void tralala_jsave(t_tll *x, t_dictionary *d)
 void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
     t_dictionary *t = NULL;
-    t_symbol *name = tralala_slotName(argc, argv);
+    t_symbol *name = NULL;
 
     if (t = dictionary_new( )) {
-    
         TLL_DATA_LOCK
         dictionary_copyunique(t, x->current);
         TLL_DATA_UNLOCK
     
-        if (s == TLL_SYM_SAVE) { tralala_keepAttributes(x, name, t); }
+        if (s == TLL_SYM_RESAVE) {
+            name = x->name;
+        } else {
+            name = tralala_slotName(argc, argv);
+            x->name = name;
+        }  
     
-        dictionary_appenddictionary(x->data, name, (t_object *)t);
-        jpatcher_set_dirty(jbox_get_patcher((t_object *)x), 1);
+        if ((s == TLL_SYM_SAVE) ||(s == TLL_SYM_RESAVE)) { 
+            tralala_keepAttributes(x, name, t); 
+        }
+    
+        if (name) {
+            dictionary_appenddictionary(x->data, name, (t_object *)t);
+            jpatcher_set_dirty(jbox_get_patcher((t_object *)x), 1);
+        }
     }
 }
 

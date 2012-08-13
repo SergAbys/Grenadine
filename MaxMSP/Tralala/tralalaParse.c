@@ -67,6 +67,7 @@ table->untitled         = gensym("untitled");
 table->save             = gensym("save");
 table->load             = gensym("load");
 table->reload           = gensym("reload");
+table->resave           = gensym("resave");
 table->mark             = gensym("mark");
 table->identifier       = gensym("identifier");
 table->run              = gensym("run");

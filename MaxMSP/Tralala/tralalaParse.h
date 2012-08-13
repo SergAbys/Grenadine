@@ -35,6 +35,7 @@
 #define TLL_SYM_SAVE            (tll_table.save)
 #define TLL_SYM_LOAD            (tll_table.load)
 #define TLL_SYM_RELOAD          (tll_table.reload)
+#define TLL_SYM_RESAVE          (tll_table.resave)
 #define TLL_SYM_MARK            (tll_table.mark)
 #define TLL_SYM_IDENTIFIER      (tll_table.identifier)
 #define TLL_SYM_RUN             (tll_table.run)
@@ -77,6 +78,7 @@ typedef struct _tllSymbols {
     t_symbol *save;
     t_symbol *load;
     t_symbol *reload;
+    t_symbol *resave;
     t_symbol *mark;
     t_symbol *identifier;
     t_symbol *run;
