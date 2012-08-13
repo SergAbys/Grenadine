@@ -139,7 +139,7 @@ PIZError pizAgentDump(PIZAgent *x, const PIZEvent *event)
 
 PIZError pizAgentInfo(PIZAgent *x, const PIZEvent *event)
 {
-    return pizAgentNotify(x, PIZ_EVENT_INFO_COUNT, 1, &x->sequence->count);
+    return pizSequenceInfo(x->sequence);
 }
 
 PIZError pizAgentBpm(PIZAgent *x, const PIZEvent *event)

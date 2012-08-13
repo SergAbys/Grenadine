@@ -77,6 +77,11 @@ PIZError pizSequenceDump(PIZSequence *x)
     return x->temp.error;
 }
 
+PIZError pizSequenceInfo(PIZSequence *x)
+{
+    return pizAgentNotify(x->owner, PIZ_EVENT_INFO_COUNT, 1, &x->count);
+}
+
 PIZError pizSequenceRefresh(PIZSequence *x)
 {
     long i;
