@@ -55,6 +55,7 @@ static t_quickmap   *tll_length;
 static t_quickmap   *tll_direction;
 static t_quickmap   *tll_select;
 static t_quickmap   *tll_key;
+static t_quickmap   *tll_info;
 static t_quickmap   *tll_changed;
 
 static t_dictionary *tll_code;
@@ -100,7 +101,6 @@ table->getname          = gensym("getname");
 table->patching_rect    = gensym("patching_rect");
 table->list             = gensym("list");
 table->dumpout          = gensym("dumpout");
-table->count            = gensym("count");
 
 tll_code = dictionary_new( );
 
@@ -139,6 +139,7 @@ tll_length      = (t_quickmap *)quickmap_new( );
 tll_direction   = (t_quickmap *)quickmap_new( );
 tll_key         = (t_quickmap *)quickmap_new( );
 tll_select      = (t_quickmap *)quickmap_new( );
+tll_info        = (t_quickmap *)quickmap_new( );
 tll_changed     = (t_quickmap *)quickmap_new( );
 
 quickmap_add(tll_type, gensym("none"),                    (void *)(TLL_BIAS + PIZ_MODE_NONE));
@@ -208,6 +209,8 @@ quickmap_add(tll_key, gensym("A"),                        (void *)(TLL_BIAS + PI
 quickmap_add(tll_key, gensym("A#"),                       (void *)(TLL_BIAS + PIZ_KEY_A_SHARP));
 quickmap_add(tll_key, gensym("B"),                        (void *)(TLL_BIAS + PIZ_KEY_B));
 
+quickmap_add(tll_info, gensym("count"),                   (void *)(TLL_BIAS + PIZ_EVENT_INFO_COUNT));
+
 quickmap_add(tll_changed, gensym("bpm"),                  (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_BPM));
 quickmap_add(tll_changed, gensym("chance"),               (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_CHANCE));
 quickmap_add(tll_changed, gensym("velocity"),             (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_VELOCITY));
@@ -238,6 +241,10 @@ void tralala_parseEvent(t_tll *x, PIZEvent *event)
         
     if (!(quickmap_lookup_key2(tll_changed, (void *)(code + TLL_BIAS), (void **)&s))) {
         dirty |= tralala_eventCode(x, k, data, code, s);
+        
+    } else if (!(quickmap_lookup_key2(tll_info, (void *)(code + TLL_BIAS), (void **)&s))) {
+        tralala_eventInfo(x, k, data, code, s);
+        
     } else {
         dirty |= tralala_eventNote(x, k, data, code);
     }
@@ -398,8 +405,16 @@ ulong tralala_eventCode(t_tll *x, long k, long *data, PIZEventCode code, t_symbo
 }
 
 void  tralala_eventInfo(t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s)
-{
-
+{       
+    switch (code) {
+        case PIZ_EVENT_INFO_COUNT : 
+            atom_setlong_array(1, &x->info, 1, data);
+            outlet_anything(x->right, s, 1, &x->info);
+            break;
+        
+        default :
+            break;
+    }
 }
 
 // -------------------------------------------------------------------------------------------------------------

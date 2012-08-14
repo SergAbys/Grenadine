@@ -533,11 +533,6 @@ void tralala_runTask (t_tll *x)
         pizEventTime(event, &x->time);
         outlet_anything(x->middle, TLL_SYM_END, 1, &x->link);
         break;
-        
-    case PIZ_EVENT_INFO_COUNT : 
-        pizEventData(event, &argc, &argv);
-        atom_setlong_array(1, &x->info, 1, argv);
-        outlet_anything(x->right, TLL_SYM_COUNT, 1, &x->info);
     
     default :
         tralala_parseEvent(x, event);
