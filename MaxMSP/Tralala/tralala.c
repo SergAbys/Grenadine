@@ -500,8 +500,6 @@ void tralala_runTask (t_tll *x)
     
     pizEventCode(event, &code);
     
-    PIZ_DEBUG_EVENT
-
     switch (code) {
     //
     case PIZ_EVENT_NOTE_PLAYED :

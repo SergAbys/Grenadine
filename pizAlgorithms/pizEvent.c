@@ -96,6 +96,16 @@ static const char *pizEventNames[ ] = { "None",
                                         "Value Up",
                                         "Value Down",
                                         //
+                                        "Info Bpm",
+                                        "Info Chance",
+                                        "Info Velocity",
+                                        "Info Channel",
+                                        "Info Chord",
+                                        "Info Cell",
+                                        "Info Value",
+                                        "Info Scale",
+                                        "Info Mute",
+                                        "Info Zone",
                                         "Info Count",
                                         //
                                         "Changed Bpm",
@@ -174,6 +184,16 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_VALUE_MODIFIER_UP
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_VALUE_MODIFIER_DOWN
                                         //
+                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_INFO_BPM
+                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_INFO_CHANCE
+                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_INFO_VELOCITY
+                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_INFO_CHANNEL
+                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_INFO_CHORD
+                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_INFO_CELL
+                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_INFO_VALUE
+                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_INFO_SCALE
+                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_INFO_MUTE
+                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_INFO_ZONE
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_INFO_COUNT
                                         //                            
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_BPM

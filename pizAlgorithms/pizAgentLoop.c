@@ -242,9 +242,7 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
     }
     
     PIZ_AGENT_UNLOCK_EVENT
-    
-    PIZ_DEBUG_EVENT
-    
+        
     if (event) {
     //
     pizEventCode(event, &code);

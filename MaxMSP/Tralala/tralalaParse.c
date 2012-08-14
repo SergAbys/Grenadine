@@ -209,8 +209,18 @@ quickmap_add(tll_key, gensym("A"),                        (void *)(TLL_BIAS + PI
 quickmap_add(tll_key, gensym("A#"),                       (void *)(TLL_BIAS + PIZ_KEY_A_SHARP));
 quickmap_add(tll_key, gensym("B"),                        (void *)(TLL_BIAS + PIZ_KEY_B));
 
+quickmap_add(tll_info, gensym("bpm"),                     (void *)(TLL_BIAS + PIZ_EVENT_INFO_BPM));
+quickmap_add(tll_info, gensym("chance"),                  (void *)(TLL_BIAS + PIZ_EVENT_INFO_CHANCE));
+quickmap_add(tll_info, gensym("velocity"),                (void *)(TLL_BIAS + PIZ_EVENT_INFO_VELOCITY));
+quickmap_add(tll_info, gensym("channel"),                 (void *)(TLL_BIAS + PIZ_EVENT_INFO_CHANNEL));
+quickmap_add(tll_info, gensym("chord"),                   (void *)(TLL_BIAS + PIZ_EVENT_INFO_CHORD));
+quickmap_add(tll_info, gensym("cell"),                    (void *)(TLL_BIAS + PIZ_EVENT_INFO_CELL));
+quickmap_add(tll_info, gensym("value"),                   (void *)(TLL_BIAS + PIZ_EVENT_INFO_VALUE));
+quickmap_add(tll_info, gensym("scale"),                   (void *)(TLL_BIAS + PIZ_EVENT_INFO_SCALE));
+quickmap_add(tll_info, gensym("mute"),                    (void *)(TLL_BIAS + PIZ_EVENT_INFO_MUTE));
+quickmap_add(tll_info, gensym("zone"),                    (void *)(TLL_BIAS + PIZ_EVENT_INFO_ZONE));
 quickmap_add(tll_info, gensym("count"),                   (void *)(TLL_BIAS + PIZ_EVENT_INFO_COUNT));
-
+    
 quickmap_add(tll_changed, gensym("bpm"),                  (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_BPM));
 quickmap_add(tll_changed, gensym("chance"),               (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_CHANCE));
 quickmap_add(tll_changed, gensym("velocity"),             (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_VELOCITY));
@@ -405,15 +415,22 @@ ulong tralala_eventCode(t_tll *x, long k, long *data, PIZEventCode code, t_symbo
 }
 
 void  tralala_eventInfo(t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s)
-{       
-    switch (code) {
-        case PIZ_EVENT_INFO_COUNT : 
-            atom_setlong_array(1, &x->info, 1, data);
-            outlet_anything(x->right, s, 1, &x->info);
-            break;
+{    
+    if (code == PIZ_EVENT_INFO_SCALE) {
+        t_symbol *sym1 = NULL;
+        t_symbol *sym2 = NULL;
+
+        quickmap_lookup_key2(tll_key,  (void *)((*(data + 0)) + TLL_BIAS), (void **)&sym1);
+        quickmap_lookup_key2(tll_type, (void *)((*(data + 1)) + TLL_BIAS), (void **)&sym2);
+
+        atom_setsym(x->info + 0, sym1);
+        atom_setsym(x->info + 1, sym2);
         
-        default :
-            break;
+        outlet_anything(x->right, s, 2, x->info);
+        
+    } else {
+        atom_setlong_array(k, x->info, k, data);
+        outlet_anything(x->right, s, k, x->info);
     }
 }
 
