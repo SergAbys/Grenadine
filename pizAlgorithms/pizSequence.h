@@ -197,10 +197,11 @@ typedef struct _PIZSequence {
     long                velocity;
     long                channel;
     long                chord;
-    long                key;
-    long                type;
     long                cell;
     long                value;
+    long                key;
+    long                type;
+    long                mute;
     long                start;
     long                end;
     long                down;

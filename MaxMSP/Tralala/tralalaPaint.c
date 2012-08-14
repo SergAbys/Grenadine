@@ -260,7 +260,7 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
         TLL_SYM_CHORD,
         TLL_SYM_CELL, 
         TLL_SYM_VALUE, 
-        TLL_SYM_SCALE, 
+        TLL_SYM_SCALE
         };
 
     err |= !(notes[0] = atomarray_new(0, NULL));
@@ -270,14 +270,21 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
     TLL_DATA_LOCK
     
     dictionary_getlong(x->status, TLL_SYM_ZONE, &zoneStatus);
-        
+    
     for (i = 0; i < 9; i++) {
         if (!(dictionary_getatoms(x->current, s[i], &argc, &argv)) && (argc > 1)) {
             tralala_paintStrncatAttribute(string, argc, argv);
         }
     }
     
-    strncat_zero(string, "\n", TLL_STRING_SIZE);
+    if (!(dictionary_getatoms(x->current, TLL_SYM_MUTE, &argc, &argv)) 
+        && (argc > 1)
+        && (atom_gettype(argv + 1) == A_LONG)
+        && (atom_getlong(argv + 1) == 1)) {
+        strncat_zero(string, "•\n", TLL_STRING_SIZE);
+    } else {
+        strncat_zero(string, "\n", TLL_STRING_SIZE);
+    }
     
     if (dictionary_hasentry(x->status, TLL_SYM_ZONE)) {
         if (!(dictionary_getatoms(x->current, TLL_SYM_ZONE, &argc, &argv))) {

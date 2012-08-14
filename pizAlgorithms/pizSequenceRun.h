@@ -57,7 +57,8 @@
 #define PIZ_SEQUENCE_FLAG_CELL          (1UL << 5)
 #define PIZ_SEQUENCE_FLAG_VALUE         (1UL << 6)
 #define PIZ_SEQUENCE_FLAG_SCALE         (1UL << 7)
-#define PIZ_SEQUENCE_FLAG_ZONE          (1UL << 8)
+#define PIZ_SEQUENCE_FLAG_MUTE          (1UL << 8)
+#define PIZ_SEQUENCE_FLAG_ZONE          (1UL << 9)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

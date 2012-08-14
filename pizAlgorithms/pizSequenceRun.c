@@ -90,7 +90,7 @@ PIZError pizSequenceRefresh(PIZSequence *x)
     
     if (x->flags) {
     //
-    
+        
     if (x->flags & PIZ_SEQUENCE_FLAG_BPM) {
         err |= pizAgentNotify(x->owner, PIZ_EVENT_CHANGED_BPM, 1, &x->bpm);
     }
@@ -122,6 +122,10 @@ PIZError pizSequenceRefresh(PIZSequence *x)
     if (x->flags & PIZ_SEQUENCE_FLAG_SCALE) {
         long a[ ] = { x->key, x->type };
         err |= pizAgentNotify(x->owner, PIZ_EVENT_CHANGED_SCALE, 2, a);
+    }
+    
+    if (x->flags & PIZ_SEQUENCE_FLAG_MUTE) {
+        err |= pizAgentNotify(x->owner, PIZ_EVENT_CHANGED_MUTE, 1, &x->mute);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_ZONE) {
@@ -237,6 +241,10 @@ PIZError pizSequenceStep(PIZSequence *x)
             pitch += pizArrayAtIndex(x->scale, pitch % scale);
         }
 
+        if (x->mute) {
+            velocity = 0;
+        }
+        
         if (velocity) {
             velocity += x->velocity;
         } 

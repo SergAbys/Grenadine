@@ -29,8 +29,10 @@ extern t_dictionary *tll_clipboard;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL  void     tralala_parseNote           (t_tll *x, long argc, t_atom *argv, long *k, long *data);
-PIZ_LOCAL  void     tralala_parseZone           (t_tll *x, long argc, t_atom *argv, long *k, long *data);
+PIZ_LOCAL void tralala_parseNote    (t_tll *x, long argc, t_atom *argv, long *k, long *data);
+PIZ_LOCAL void tralala_parseZone    (t_tll *x, long argc, t_atom *argv, long *k, long *data);
+PIZ_LOCAL void tralala_parseMessage (t_tll *x, long argc, t_atom *argv, long *k, long *data, PIZEventCode code);
+
 PIZ_LOCAL  PIZError tralala_parsePitchToLong    (t_tll *x, t_atom *a, long *t);
 PIZ_INLINE void     tralala_parseSymbolWithTag  (t_symbol **s, long tag);
 
@@ -60,6 +62,7 @@ table->chord            = gensym("chord");
 table->cell             = gensym("cell");
 table->value            = gensym("value");
 table->scale            = gensym("scale");
+table->mute             = gensym("mute");
 table->end              = gensym("end");
 table->clear            = gensym("clear");
 table->tralala          = gensym("tralala");
@@ -93,12 +96,12 @@ table->count            = gensym("count");
 
 tll_code = dictionary_new( );
 
-dictionary_appendlong(tll_code, gensym("bpm"),      (TLL_BIAS + PIZ_EVENT_BPM));
 dictionary_appendlong(tll_code, gensym("learn"),    (TLL_BIAS + PIZ_EVENT_LEARN));
 dictionary_appendlong(tll_code, gensym("list"),     (TLL_BIAS + PIZ_EVENT_LEARN));
 dictionary_appendlong(tll_code, gensym("forget"),   (TLL_BIAS + PIZ_EVENT_FORGET));
 dictionary_appendlong(tll_code, gensym("dump"),     (TLL_BIAS + PIZ_EVENT_DUMP));
 dictionary_appendlong(tll_code, gensym("info"),     (TLL_BIAS + PIZ_EVENT_INFO));
+dictionary_appendlong(tll_code, gensym("bpm"),      (TLL_BIAS + PIZ_EVENT_BPM));
 dictionary_appendlong(tll_code, gensym("chance"),   (TLL_BIAS + PIZ_EVENT_CHANCE));
 dictionary_appendlong(tll_code, gensym("velocity"), (TLL_BIAS + PIZ_EVENT_VELOCITY));
 dictionary_appendlong(tll_code, gensym("channel"),  (TLL_BIAS + PIZ_EVENT_CHANNEL));
@@ -106,8 +109,9 @@ dictionary_appendlong(tll_code, gensym("chord"),    (TLL_BIAS + PIZ_EVENT_CHORD)
 dictionary_appendlong(tll_code, gensym("cell"),     (TLL_BIAS + PIZ_EVENT_CELL));
 dictionary_appendlong(tll_code, gensym("value"),    (TLL_BIAS + PIZ_EVENT_VALUE));
 dictionary_appendlong(tll_code, gensym("scale"),    (TLL_BIAS + PIZ_EVENT_SCALE));
-dictionary_appendlong(tll_code, gensym("note"),     (TLL_BIAS + PIZ_EVENT_NOTE));
+dictionary_appendlong(tll_code, gensym("mute"),     (TLL_BIAS + PIZ_EVENT_MUTE));
 dictionary_appendlong(tll_code, gensym("zone"),     (TLL_BIAS + PIZ_EVENT_ZONE));
+dictionary_appendlong(tll_code, gensym("note"),     (TLL_BIAS + PIZ_EVENT_NOTE));
 dictionary_appendlong(tll_code, gensym("clear"),    (TLL_BIAS + PIZ_EVENT_CLEAR));
 dictionary_appendlong(tll_code, gensym("clean"),    (TLL_BIAS + PIZ_EVENT_CLEAN));
 dictionary_appendlong(tll_code, gensym("rotate"),   (TLL_BIAS + PIZ_EVENT_ROTATE));
@@ -204,6 +208,7 @@ quickmap_add(tll_notification, gensym("chord"),           (void *)(TLL_BIAS + PI
 quickmap_add(tll_notification, gensym("cell"),            (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_CELL));
 quickmap_add(tll_notification, gensym("value"),           (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_VALUE));
 quickmap_add(tll_notification, gensym("scale"),           (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_SCALE));
+quickmap_add(tll_notification, gensym("mute"),            (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_MUTE));
 quickmap_add(tll_notification, gensym("zone"),            (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_ZONE));
 //
 }
@@ -226,7 +231,7 @@ void tralala_parseDictionary(t_tll *x, t_dictionary *d, ulong flags)
     
     if (!dictionary_getatoms(d, (*(keys + i)), &k, &data)) {
         if (atom_gettype(data) == A_SYM) {
-            tralala_parseMessage(x, atom_getsym(data), k - 1, data + 1, flags);
+            tralala_parseEntry(x, atom_getsym(data), k - 1, data + 1, flags);
         }
     }
     //
@@ -237,7 +242,7 @@ void tralala_parseDictionary(t_tll *x, t_dictionary *d, ulong flags)
     }
 }
 
-void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong flags)
+void tralala_parseEntry(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong flags)
 {
     PIZEventCode code = PIZ_EVENT_NONE;
 
@@ -257,61 +262,8 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong 
         tralala_parseZone(x, argc, argv, &k, data);
         
     } else if (!(flags & TLL_FLAG_FILTER)) {
-    //
-    long i, msg = 0;
+        tralala_parseMessage(x, argc, argv, &k, data, code);
     
-    if (msg = ((code == PIZ_EVENT_ROTATE)   ||
-               (code == PIZ_EVENT_SCRAMBLE) ||
-               (code == PIZ_EVENT_SORT)     ||
-               (code == PIZ_EVENT_CHANGE)   ||
-               (code == PIZ_EVENT_FILL)     ||
-               (code == PIZ_EVENT_CYCLE)))  { k = 1; }
-                     
-    for (i = 0; i < argc; i++) {
-    //
-    if (atom_gettype(argv + i) == A_SYM) {
-    //
-    long t, j = 0, p = 0;
-     
-    if ((code == PIZ_EVENT_SCALE) || (code == PIZ_EVENT_CYCLE)) {
-        if (!(quickmap_lookup_key1(tll_type, (void *)atom_getsym(argv + i), (void **)&t))) {
-            j = t - TLL_BIAS; p = 1; 
-        } else if (!(quickmap_lookup_key1(tll_key, (void *)atom_getsym(argv + i), (void **)&t))) {
-            j = t - TLL_BIAS;
-        }
-        
-    } else if ((code == PIZ_EVENT_CELL) || (code == PIZ_EVENT_VALUE)) {
-        if (!(quickmap_lookup_key1(tll_length, (void *)atom_getsym(argv + i), (void **)&t))) {
-            j = t - TLL_BIAS; p = 0;
-        } else {
-            continue;
-        }
-    
-    } else if (msg) {
-        if (!(quickmap_lookup_key1(tll_direction, (void *)atom_getsym(argv + i), (void **)&t))) {
-            j = t - TLL_BIAS; p = 1;
-        } else if (!(quickmap_lookup_key1(tll_select, (void *)atom_getsym(argv + i), (void **)&t))) {
-            j = t - TLL_BIAS;
-        }
-    
-    } else {
-        continue;
-    }
-
-    data[p] = j;
-    k = MAX(p + 1, k);
-    //
-    }
-    //
-    }
-    
-    for (i = 0; i < argc; i++) {
-        if ((k < PIZ_EVENT_DATA_SIZE) && (atom_gettype(argv + i) == A_LONG)) {
-            data[k] = atom_getlong(argv + i);
-            k++;
-        }
-    }
-    //
     } else {
         err = PIZ_ERROR;
     }
@@ -327,7 +279,7 @@ void tralala_parseMessage(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong 
     }
 }
 
-void tralala_parseNotification(t_tll *x, PIZEvent *event)
+void tralala_parseEvent(t_tll *x, PIZEvent *event)
 {
     long i, k = 0;
     long *ptr = NULL;
@@ -447,6 +399,67 @@ void tralala_parseZone(t_tll *x, long argc, t_atom *argv, long *k, long *data)
         }
     }
 }
+
+void tralala_parseMessage(t_tll *x, long argc, t_atom *argv, long *k, long *data, PIZEventCode code)
+{        
+    long i, msg = 0;
+    
+    if (msg = ((code == PIZ_EVENT_ROTATE)   ||
+               (code == PIZ_EVENT_SCRAMBLE) ||
+               (code == PIZ_EVENT_SORT)     ||
+               (code == PIZ_EVENT_CHANGE)   ||
+               (code == PIZ_EVENT_FILL)     ||
+               (code == PIZ_EVENT_CYCLE)))  { (*k) = 1; }
+                     
+    for (i = 0; i < argc; i++) {
+    //
+    if (atom_gettype(argv + i) == A_SYM) {
+    //
+    long t, j = 0, p = 0;
+     
+    if ((code == PIZ_EVENT_SCALE) || (code == PIZ_EVENT_CYCLE)) {
+        if (!(quickmap_lookup_key1(tll_type, (void *)atom_getsym(argv + i), (void **)&t))) {
+            j = t - TLL_BIAS; p = 1; 
+        } else if (!(quickmap_lookup_key1(tll_key, (void *)atom_getsym(argv + i), (void **)&t))) {
+            j = t - TLL_BIAS;
+        }
+        
+    } else if ((code == PIZ_EVENT_CELL) || (code == PIZ_EVENT_VALUE)) {
+        if (!(quickmap_lookup_key1(tll_length, (void *)atom_getsym(argv + i), (void **)&t))) {
+            j = t - TLL_BIAS; p = 0;
+        } else {
+            continue;
+        }
+    
+    } else if (msg) {
+        if (!(quickmap_lookup_key1(tll_direction, (void *)atom_getsym(argv + i), (void **)&t))) {
+            j = t - TLL_BIAS; p = 1;
+        } else if (!(quickmap_lookup_key1(tll_select, (void *)atom_getsym(argv + i), (void **)&t))) {
+            j = t - TLL_BIAS;
+        }
+    
+    } else {
+        continue;
+    }
+
+    data[p] = j;
+    (*k) = MAX(p + 1, (*k));
+    //
+    }
+    //
+    }
+    
+    for (i = 0; i < argc; i++) {
+        if (((*k) < PIZ_EVENT_DATA_SIZE) && (atom_gettype(argv + i) == A_LONG)) {
+            data[(*k)] = atom_getlong(argv + i);
+            (*k) ++;
+        }
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZError tralala_parsePitchToLong(t_tll *x, t_atom *a, long *t)
 {

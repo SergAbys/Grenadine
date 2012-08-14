@@ -93,22 +93,24 @@ PIZSequence *pizSequenceNew(struct _PIZAgent *owner)
         pizItemsetClear(&x->changed);
         pizItemsetClear(&x->addedLow);
         pizItemsetClear(&x->addedHigh);
-                
+             
+        x->bpm       = PIZ_SEQUENCE_DEFAULT_BPM;
+        x->chance    = PIZ_DEFAULT_CHANCE;
+        x->velocity  = 0;
+        x->channel   = PIZ_DEFAULT_CHANNEL;
+        x->chord     = 0;
+        x->cell      = PIZ_EIGHTH_NOTE;
+        x->value     = PIZ_EIGHTH_NOTE;
+        x->key       = PIZ_KEY_C;
+        x->type      = PIZ_MODE_NONE;
+        x->mute      = 0;
         x->start     = PIZ_DEFAULT_START;
         x->end       = PIZ_DEFAULT_END;
         x->down      = PIZ_DEFAULT_DOWN;
         x->up        = PIZ_DEFAULT_UP;
         x->count     = 0;
         x->index     = 0;
-        x->bpm       = PIZ_SEQUENCE_DEFAULT_BPM;
-        x->chance    = PIZ_DEFAULT_CHANCE;
-        x->velocity  = 0;
-        x->channel   = PIZ_DEFAULT_CHANNEL;
-        x->chord     = 0;
-        x->key       = PIZ_KEY_C;
-        x->type      = PIZ_MODE_NONE;
-        x->cell      = PIZ_EIGHTH_NOTE;
-        x->value     = PIZ_EIGHTH_NOTE;
+        x->dirty     = 0;
         
         x->seed = PIZ_SEED;
             

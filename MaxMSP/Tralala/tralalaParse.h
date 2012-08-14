@@ -28,6 +28,7 @@
 #define TLL_SYM_CELL            (tll_table.cell)
 #define TLL_SYM_VALUE           (tll_table.value)
 #define TLL_SYM_SCALE           (tll_table.scale)
+#define TLL_SYM_MUTE            (tll_table.mute)
 #define TLL_SYM_END             (tll_table.end)
 #define TLL_SYM_CLEAR           (tll_table.clear)
 #define TLL_SYM_TRALALA         (tll_table.tralala)
@@ -71,6 +72,7 @@ typedef struct _tllSymbols {
     t_symbol *cell;
     t_symbol *value;
     t_symbol *scale;
+    t_symbol *mute;
     t_symbol *end;
     t_symbol *clear;
     t_symbol *tralala;
@@ -117,8 +119,8 @@ typedef struct _tllSymbols {
 
 void tralala_parseInit          (t_tllSymbols *table);
 void tralala_parseDictionary    (t_tll *x, t_dictionary *d, ulong flags);
-void tralala_parseMessage       (t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong flags);
-void tralala_parseNotification  (t_tll *x, PIZEvent *event);
+void tralala_parseEntry         (t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong flags);
+void tralala_parseEvent         (t_tll *x, PIZEvent *event);
           
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

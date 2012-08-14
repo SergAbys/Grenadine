@@ -488,7 +488,7 @@ void tralala_runTask (t_tll *x)
     TLL_RUN_UNLOCK
     
     pizLinklistPtrAtIndex(x->runCopy, 0, (void **)&event);
-        
+          
     while (event) {
     //
     long argc;
@@ -499,7 +499,9 @@ void tralala_runTask (t_tll *x)
     pizLinklistNextWithPtr(x->runCopy, (void *)event, (void **)&nextEvent);
     
     pizEventCode(event, &code);
-        
+    
+    PIZ_DEBUG_EVENT
+
     switch (code) {
     //
     case PIZ_EVENT_NOTE_PLAYED :
@@ -538,7 +540,7 @@ void tralala_runTask (t_tll *x)
         outlet_anything(x->right, TLL_SYM_COUNT, 1, &x->info);
     
     default :
-        tralala_parseNotification(x, event);
+        tralala_parseEvent(x, event);
         break;
     //
     }
@@ -625,12 +627,12 @@ void tralala_unloop(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_list(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
-    tralala_parseMessage(x, s, argc, argv, TLL_FLAG_NONE);
+    tralala_parseEntry(x, s, argc, argv, TLL_FLAG_NONE);
 }
 
 void tralala_anything(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 {
-    tralala_parseMessage(x, s, argc, argv, TLL_FLAG_NONE);
+    tralala_parseEntry(x, s, argc, argv, TLL_FLAG_NONE);
 }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -693,6 +695,7 @@ void tralala_keepAttributes(t_tll *x, t_symbol *name, t_dictionary *t)
         TLL_SYM_CELL, 
         TLL_SYM_VALUE, 
         TLL_SYM_SCALE, 
+        TLL_SYM_MUTE
     };
     
     if (!(dictionary_getdictionary(x->data, name, (t_object **)&d))) {

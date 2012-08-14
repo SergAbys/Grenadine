@@ -178,7 +178,7 @@ void tralala_mouseAddNote(t_tll *x)
     atom_setlong(a, TLL_X_TO_POSITION(x->cursor.x));
     atom_setlong(a + 1, TLL_Y_TO_PITCH(x->cursor.y));
     
-    tralala_parseMessage(x, TLL_SYM_NOTE, 2, a, TLL_FLAG_LOW);
+    tralala_parseEntry(x, TLL_SYM_NOTE, 2, a, TLL_FLAG_LOW);
 }
 
 void tralala_mouseHitZone(t_tll *x)

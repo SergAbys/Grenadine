@@ -61,6 +61,7 @@ static const char *pizEventNames[ ] = { "None",
                                         "Cell",
                                         "Value",
                                         "Scale",
+                                        "Mute",
                                         "Zone",
                                         "Note",
                                         "Clear",
@@ -95,7 +96,7 @@ static const char *pizEventNames[ ] = { "None",
                                         "Value Up",
                                         "Value Down",
                                         //
-                                        "Count",
+                                        "Info Count",
                                         //
                                         "Changed Bpm",
                                         "Changed Chance",
@@ -105,6 +106,7 @@ static const char *pizEventNames[ ] = { "None",
                                         "Changed Cell",
                                         "Changed Value",
                                         "Changed Scale",
+                                        "Changed Mute",
                                         "Changed Zone",
                                         "Note Added",
                                         "Note Changed",
@@ -127,7 +129,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_LEARN
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_FORGET
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_DUMP
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_INFO
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_INFO
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_BPM
                                         //
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CHANCE
@@ -137,6 +139,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CELL
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_VALUE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_SCALE
+                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_MUTE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_ZONE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_NOTE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CLEAR
@@ -181,6 +184,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_CELL
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_VALUE
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_SCALE
+                                        PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_MUTE
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_CHANGED_ZONE
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_NOTE_ADDED
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_NOTE_CHANGED

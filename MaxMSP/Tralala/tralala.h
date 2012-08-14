@@ -31,7 +31,7 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_CLOCK_FOCUS         53.
+#define TLL_CLOCK_FOCUS         83.
 #define TLL_CLOCK_DAEMON_WORK   31.
 #define TLL_CLOCK_DAEMON_IDLE   3947. 
 

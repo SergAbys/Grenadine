@@ -185,9 +185,6 @@ PIZError pizSequenceSetValue(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 PIZError pizSequenceSetScale(PIZSequence *x, const PIZEvent *event)
 {
     long argc;
@@ -218,6 +215,19 @@ PIZError pizSequenceSetScale(PIZSequence *x, const PIZEvent *event)
     
     return err;
 }   
+
+PIZError pizSequenceSetMute(PIZSequence *x, const PIZEvent *event)
+{
+    long argc;
+    long *argv = NULL;
+    
+    if (!(pizEventData(event, &argc, &argv))) {
+        x->mute = (argv[0] != 0);
+        x->flags |= PIZ_SEQUENCE_FLAG_MUTE;
+    }
+    
+    return PIZ_GOOD;
+}
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

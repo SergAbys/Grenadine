@@ -72,6 +72,7 @@ static const PIZMethodError pizEventMethods[ ]  = { NULL,                       
                                                     pizSequenceSetCell,          // PIZ_EVENT_CELL
                                                     pizSequenceSetValue,         // PIZ_EVENT_VALUE
                                                     pizSequenceSetScale,         // PIZ_EVENT_SCALE
+                                                    pizSequenceSetMute,          // PIZ_EVENT_MUTE
                                                     pizSequenceZone,             // PIZ_EVENT_ZONE
                                                     pizSequenceNote,             // PIZ_EVENT_NOTE
                                                     pizSequenceClear,            // PIZ_EVENT_CLEAR
@@ -241,6 +242,8 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
     }
     
     PIZ_AGENT_UNLOCK_EVENT
+    
+    PIZ_DEBUG_EVENT
     
     if (event) {
     //
