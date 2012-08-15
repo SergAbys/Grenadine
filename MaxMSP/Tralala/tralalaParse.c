@@ -29,13 +29,13 @@ extern t_dictionary *tll_clipboard;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL ulong tralala_eventNote   (t_tll *x, long k, long *data, PIZEventCode code);
-PIZ_LOCAL void  tralala_eventInfo   (t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s);
-PIZ_LOCAL ulong tralala_eventCode   (t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s);
+PIZ_LOCAL ulong tralala_parseEventNote (t_tll *x, long k, long *data, PIZEventCode code);
+PIZ_LOCAL void  tralala_parseEventInfo (t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s);
+PIZ_LOCAL ulong tralala_parseEventCode (t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s);
 
-PIZ_LOCAL void  tralala_entryNote   (t_tll *x, long ac, t_atom *av, long *k, long *data);
-PIZ_LOCAL void  tralala_entryZone   (t_tll *x, long ac, t_atom *av, long *k, long *data);
-PIZ_LOCAL void  tralala_entryCode   (t_tll *x, long ac, t_atom *av, long *k, long *data, PIZEventCode code);
+PIZ_LOCAL void  tralala_parseEntryNote (t_tll *x, long ac, t_atom *av, long *k, long *data);
+PIZ_LOCAL void  tralala_parseEntryZone (t_tll *x, long ac, t_atom *av, long *k, long *data);
+PIZ_LOCAL void  tralala_parseEntryCode (t_tll *x, long ac, t_atom *av, long *k, long *data, PIZEventCode code);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -239,7 +239,7 @@ quickmap_add(tll_changed, gensym("zone"),                 (void *)(TLL_BIAS + PI
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_parseNotification(t_tll *x, PIZEvent *event)
+void tralala_parseEvent(t_tll *x, PIZEvent *event)
 {
     long k;
     long *data = NULL;
@@ -251,13 +251,13 @@ void tralala_parseNotification(t_tll *x, PIZEvent *event)
     pizEventData(event, &k, &data);
         
     if (!(quickmap_lookup_key2(tll_changed, (void *)(code + TLL_BIAS), (void **)&s))) {
-        dirty |= tralala_eventCode(x, k, data, code, s);
+        dirty |= tralala_parseEventCode(x, k, data, code, s);
         
     } else if (!(quickmap_lookup_key2(tll_info, (void *)(code + TLL_BIAS), (void **)&s))) {
-        tralala_eventInfo(x, k, data, code, s);
+        tralala_parseEventInfo(x, k, data, code, s);
         
     } else {
-        dirty |= tralala_eventNote(x, k, data, code);
+        dirty |= tralala_parseEventNote(x, k, data, code);
     }
         
     TLL_FLAG_SET(dirty)
@@ -278,13 +278,13 @@ void tralala_parseEntry(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong fl
     code -= TLL_BIAS;
     
     if (code == PIZ_EVENT_NOTE) {
-        tralala_entryNote(x, argc, argv, &k, data);
+        tralala_parseEntryNote(x, argc, argv, &k, data);
         
     } else if (code == PIZ_EVENT_ZONE) {
-        tralala_entryZone(x, argc, argv, &k, data);
+        tralala_parseEntryZone(x, argc, argv, &k, data);
         
     } else if (!(flags & TLL_FLAG_FILTER)) {
-        tralala_entryCode(x, argc, argv, &k, data, code);
+        tralala_parseEntryCode(x, argc, argv, &k, data, code);
     
     } else {
         err = PIZ_ERROR;
@@ -332,7 +332,7 @@ void tralala_parseDictionary(t_tll *x, t_dictionary *d, ulong flags)
 #pragma mark ---
 #pragma mark -
 
-ulong tralala_eventNote(t_tll *x, long k, long *data, PIZEventCode code)
+ulong tralala_parseEventNote(t_tll *x, long k, long *data, PIZEventCode code)
 {
     t_symbol *s = NULL;
     ulong dirty = TLL_DIRTY_NOTE;
@@ -382,7 +382,7 @@ ulong tralala_eventNote(t_tll *x, long k, long *data, PIZEventCode code)
     return dirty;
 }
 
-ulong tralala_eventCode(t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s)
+ulong tralala_parseEventCode(t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s)
 {
     long i;
     ulong dirty = TLL_FLAG_NONE;
@@ -415,7 +415,7 @@ ulong tralala_eventCode(t_tll *x, long k, long *data, PIZEventCode code, t_symbo
     return dirty;
 }
 
-void  tralala_eventInfo(t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s)
+void  tralala_parseEventInfo(t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s)
 {    
     if (code == PIZ_EVENT_INFO_SCALE) {
         t_symbol *sym1 = NULL;
@@ -439,7 +439,7 @@ void  tralala_eventInfo(t_tll *x, long k, long *data, PIZEventCode code, t_symbo
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_entryNote(t_tll *x, long ac, t_atom *av, long *k, long *data)
+void tralala_parseEntryNote(t_tll *x, long ac, t_atom *av, long *k, long *data)
 {
     long i, temp;
     
@@ -459,7 +459,7 @@ void tralala_entryNote(t_tll *x, long ac, t_atom *av, long *k, long *data)
     }
 }
 
-void tralala_entryZone(t_tll *x, long ac, t_atom *av, long *k, long *data)
+void tralala_parseEntryZone(t_tll *x, long ac, t_atom *av, long *k, long *data)
 {
     long i, temp;
     
@@ -479,16 +479,20 @@ void tralala_entryZone(t_tll *x, long ac, t_atom *av, long *k, long *data)
     }
 }
 
-void tralala_entryCode(t_tll *x, long ac, t_atom *av, long *k, long *data, PIZEventCode code)
+void tralala_parseEntryCode(t_tll *x, long ac, t_atom *av, long *k, long *data, PIZEventCode code)
 {        
     long i, msg = 0;
     
-    if (msg = ((code == PIZ_EVENT_ROTATE)   ||
-               (code == PIZ_EVENT_SCRAMBLE) ||
-               (code == PIZ_EVENT_SORT)     ||
-               (code == PIZ_EVENT_CHANGE)   ||
-               (code == PIZ_EVENT_FILL)     ||
-               (code == PIZ_EVENT_CYCLE)))  { (*k) = 1; }
+    msg |= (code == PIZ_EVENT_ROTATE);
+    msg |= (code == PIZ_EVENT_SCRAMBLE);
+    msg |= (code == PIZ_EVENT_SORT);
+    msg |= (code == PIZ_EVENT_CHANGE);
+    msg |= (code == PIZ_EVENT_FILL);
+    msg |= (code == PIZ_EVENT_CYCLE);
+    
+    if (msg || (code == PIZ_EVENT_TRANSPOSE)) {
+        (*k) = 1;
+    }
                      
     for (i = 0; i < ac; i++) {
     //

@@ -199,22 +199,27 @@ PIZError pizSequenceClean(PIZSequence *x, const PIZEvent *event)
 }
 
 PIZError pizSequenceTranspose(PIZSequence *x, const PIZEvent *event)
-{/*
+{
     long argc, down, up;
     long *argv = NULL;
     PIZError err = PIZ_ERROR;
     
-    if (!(pizEventData(event, &argc, &argv))) {
+    if (!(pizEventData(event, &argc, &argv)) && (argc > 1)) {
         err = PIZ_GOOD;
-        down = x->down + argv[0];
-        up = x->up + argv[0];
+        
+        down = x->down + argv[1];
+        up = x->up + argv[1];
+        
         err |= ((down < 0) || (down > PIZ_MAGIC_PITCH));
         err |= ((up < 0) || (up > PIZ_MAGIC_PITCH));
     }
     
     if (!err) {
-        //x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
-    }*/
+        x->up = up;
+        x->down = down;
+        x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
+        pizSequenceForEach(x, pizSequenceEachChange, event, PIZ_SEQUENCE_FLAG_NONE);
+    }
     
     return PIZ_GOOD;
 }

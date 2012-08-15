@@ -535,7 +535,7 @@ void tralala_runTask (t_tll *x)
         break;
     
     default :
-        tralala_parseNotification(x, event);
+        tralala_parseEvent(x, event);
         break;
     //
     }

@@ -136,8 +136,9 @@ void pizSequenceEachChange(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulo
     
     switch (s) {
         case PIZ_VALUE_PITCH : 
-            t = CLAMP(t, 0, PIZ_MAGIC_PITCH);
-            break;
+            if ((t < 0) || (t > PIZ_MAGIC_PITCH)) {
+                t = note->values[s];
+            } break;
             
         case PIZ_VALUE_VELOCITY : 
             t = CLAMP(t, 0, PIZ_MAGIC_VELOCITY);
@@ -154,7 +155,7 @@ void pizSequenceEachChange(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulo
             } break;
     }
     
-    if (note->values[s] != t) {
+    if (t != note->values[s]) {
         note->values[s] = t;
         pizItemsetSetAtIndex(&x->changed, note->tag);
     }
