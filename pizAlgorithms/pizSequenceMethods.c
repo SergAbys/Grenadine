@@ -198,6 +198,27 @@ PIZError pizSequenceClean(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
+PIZError pizSequenceTranspose(PIZSequence *x, const PIZEvent *event)
+{/*
+    long argc, down, up;
+    long *argv = NULL;
+    PIZError err = PIZ_ERROR;
+    
+    if (!(pizEventData(event, &argc, &argv))) {
+        err = PIZ_GOOD;
+        down = x->down + argv[0];
+        up = x->up + argv[0];
+        err |= ((down < 0) || (down > PIZ_MAGIC_PITCH));
+        err |= ((up < 0) || (up > PIZ_MAGIC_PITCH));
+    }
+    
+    if (!err) {
+        //x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
+    }*/
+    
+    return PIZ_GOOD;
+}
+
 PIZError pizSequenceRotate(PIZSequence *x, const PIZEvent *event)
 {
     long i, k, argc, shift = 1, selector = 0;
@@ -228,7 +249,7 @@ PIZError pizSequenceRotate(PIZSequence *x, const PIZEvent *event)
 PIZError pizSequenceScramble(PIZSequence *x, const PIZEvent *event)
 {
     long i, k, argc, selector = 0;
-    long *argv;
+    long *argv = NULL;
     
     if (!(pizEventData(event, &argc, &argv))) {
         selector = argv[0];

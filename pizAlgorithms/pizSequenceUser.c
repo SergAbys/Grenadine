@@ -54,12 +54,16 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
    
-PIZ_LOCAL PIZNote   *pizSequenceNoteWithTag     (PIZSequence *x, long tag);
+PIZ_LOCAL PIZNote *pizSequenceNoteWithTag   (PIZSequence *x, long tag);
 
-PIZ_LOCAL long      pizSequenceLenghtIncrement  (long value);
-PIZ_LOCAL long      pizSequenceLenghtDecrement  (long value);
-PIZ_LOCAL long      pizSequenceLenghtUp         (long value);
-PIZ_LOCAL long      pizSequenceLenghtDown       (long value);
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZ_LOCAL long pizSequenceLenghtIncrement   (long value);
+PIZ_LOCAL long pizSequenceLenghtDecrement   (long value);
+PIZ_LOCAL long pizSequenceLenghtUp          (long value);
+PIZ_LOCAL long pizSequenceLenghtDown        (long value);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -201,23 +205,50 @@ PIZError pizSequenceZoneIncrement(PIZSequence *x, PIZEvent *event)
     
     switch (argv[0]) {
     //
+    case (PIZ_ZONE_START | PIZ_ZONE_END) :
+        a = pizSequenceSnapByCell(x, x->start + hStep);
+        b = pizSequenceSnapByCell(x, x->end + hStep);
+        if ((a != b) && (b <= PIZ_SEQUENCE_SIZE_TIMELINE)) {
+            x->start = a;
+            x->end = b;
+        }
+        break;
+    
+    case (PIZ_ZONE_DOWN | PIZ_ZONE_UP) :
+        a = x->down + vStep;
+        b = x->up + vStep;
+        if (b < PIZ_MAGIC_PITCH) {
+            x->down = a;
+            x->up = b;
+        }
+        break;
+        
     case PIZ_ZONE_START : 
         a = pizSequenceSnapByCell(x, x->start + hStep);
-        b = pizSequenceSnapByCell(x, x->end - hStep);
-        x->start = MIN(a, b);
+        if (a < x->end) {
+            x->start = a;
+        }
         break;
         
     case PIZ_ZONE_END : 
         a = pizSequenceSnapByCell(x, x->end + hStep);
-        x->end = MIN(a, PIZ_SEQUENCE_SIZE_TIMELINE); 
+        if (a <= PIZ_SEQUENCE_SIZE_TIMELINE) {
+            x->end = a; 
+        }
         break;
         
     case PIZ_ZONE_DOWN : 
-        x->down = MIN(x->down + vStep, x->up);
+        a = x->down + vStep;
+        if (a <= x->up) {
+            x->down = a;
+        }
         break;
         
-    case PIZ_ZONE_UP : 
-        x->up = MIN(x->up + vStep, PIZ_MAGIC_PITCH); 
+    case PIZ_ZONE_UP :
+        a = x->up + vStep;
+        if (a <= PIZ_MAGIC_PITCH) {
+            x->up = a; 
+        }
         break;
     //
     }
@@ -246,23 +277,50 @@ PIZError pizSequenceZoneDecrement(PIZSequence *x, PIZEvent *event)
     
     switch (argv[0]) {
     //
+    case (PIZ_ZONE_START | PIZ_ZONE_END) :
+        a = pizSequenceSnapByCell(x, x->start - hStep);
+        b = pizSequenceSnapByCell(x, x->end - hStep);
+        if ((a != x->start) && (a != b) && (a >= 0)) {
+            x->start = a;
+            x->end = b;
+        }
+        break;
+    
+    case (PIZ_ZONE_DOWN | PIZ_ZONE_UP) :
+        a = x->down - vStep;
+        b = x->up - vStep;
+        if (a >= 0) {
+            x->down = a;
+            x->up = b;
+        }
+        break;
+        
     case PIZ_ZONE_START : 
         a = pizSequenceSnapByCell(x, x->start - hStep);
-        x->start = MAX(a, 0);
+        if (a >= 0) {
+            x->start = a;
+        }
         break;
         
     case PIZ_ZONE_END : 
         a = pizSequenceSnapByCell(x, x->end - hStep);
-        b = pizSequenceSnapByCell(x, x->start + hStep);
-        x->end = MAX(a, b); 
+        if (a > x->start) {
+            x->end = a; 
+        }
         break;
         
     case PIZ_ZONE_DOWN : 
-        x->down = MAX(x->down - vStep, 0);
+        a = x->down - vStep;
+        if (a >= 0) {
+            x->down = a;
+        }
         break;
         
     case PIZ_ZONE_UP : 
-        x->up = MAX(x->up - vStep, x->down); 
+        a = x->up - vStep;
+        if (a >= x->down) {
+            x->up = a; 
+        }
         break;
     //
     }
@@ -434,24 +492,24 @@ long pizSequenceLenghtDecrement(long value)
 
 long pizSequenceLenghtUp(long value)
 {
-        switch (value) {
-            case PIZ_THIRTY_SECOND_NOTE_TRIPLET : return PIZ_THIRTY_SECOND_NOTE;
-            case PIZ_THIRTY_SECOND_NOTE         : return PIZ_THIRTY_SECOND_NOTE_TRIPLET;
-            case PIZ_SIXTEENTH_NOTE_TRIPLET     : return PIZ_SIXTEENTH_NOTE;
-            case PIZ_SIXTEENTH_NOTE             : return PIZ_SIXTEENTH_NOTE_DOTTED;
-            case PIZ_SIXTEENTH_NOTE_DOTTED      : return PIZ_SIXTEENTH_NOTE_TRIPLET;
-            case PIZ_EIGHTH_NOTE_TRIPLET        : return PIZ_EIGHTH_NOTE;
-            case PIZ_EIGHTH_NOTE                : return PIZ_EIGHTH_NOTE_DOTTED;
-            case PIZ_EIGHTH_NOTE_DOTTED         : return PIZ_EIGHTH_NOTE_TRIPLET;
-            case PIZ_QUARTER_NOTE_TRIPLET       : return PIZ_QUARTER_NOTE;
-            case PIZ_QUARTER_NOTE               : return PIZ_QUARTER_NOTE_DOTTED;
-            case PIZ_QUARTER_NOTE_DOTTED        : return PIZ_QUARTER_NOTE_TRIPLET;
-            case PIZ_HALF_NOTE_TRIPLET          : return PIZ_HALF_NOTE;
-            case PIZ_HALF_NOTE                  : return PIZ_HALF_NOTE_DOTTED;
-            case PIZ_HALF_NOTE_DOTTED           : return PIZ_HALF_NOTE_TRIPLET;
-            case PIZ_WHOLE_NOTE_TRIPLET         : return PIZ_WHOLE_NOTE;
-            case PIZ_WHOLE_NOTE                 : return PIZ_WHOLE_NOTE_DOTTED;
-            case PIZ_WHOLE_NOTE_DOTTED          : return PIZ_WHOLE_NOTE_TRIPLET;
+    switch (value) {
+        case PIZ_THIRTY_SECOND_NOTE_TRIPLET : return PIZ_THIRTY_SECOND_NOTE;
+        case PIZ_THIRTY_SECOND_NOTE         : return PIZ_THIRTY_SECOND_NOTE_TRIPLET;
+        case PIZ_SIXTEENTH_NOTE_TRIPLET     : return PIZ_SIXTEENTH_NOTE;
+        case PIZ_SIXTEENTH_NOTE             : return PIZ_SIXTEENTH_NOTE_DOTTED;
+        case PIZ_SIXTEENTH_NOTE_DOTTED      : return PIZ_SIXTEENTH_NOTE_TRIPLET;
+        case PIZ_EIGHTH_NOTE_TRIPLET        : return PIZ_EIGHTH_NOTE;
+        case PIZ_EIGHTH_NOTE                : return PIZ_EIGHTH_NOTE_DOTTED;
+        case PIZ_EIGHTH_NOTE_DOTTED         : return PIZ_EIGHTH_NOTE_TRIPLET;
+        case PIZ_QUARTER_NOTE_TRIPLET       : return PIZ_QUARTER_NOTE;
+        case PIZ_QUARTER_NOTE               : return PIZ_QUARTER_NOTE_DOTTED;
+        case PIZ_QUARTER_NOTE_DOTTED        : return PIZ_QUARTER_NOTE_TRIPLET;
+        case PIZ_HALF_NOTE_TRIPLET          : return PIZ_HALF_NOTE;
+        case PIZ_HALF_NOTE                  : return PIZ_HALF_NOTE_DOTTED;
+        case PIZ_HALF_NOTE_DOTTED           : return PIZ_HALF_NOTE_TRIPLET;
+        case PIZ_WHOLE_NOTE_TRIPLET         : return PIZ_WHOLE_NOTE;
+        case PIZ_WHOLE_NOTE                 : return PIZ_WHOLE_NOTE_DOTTED;
+        case PIZ_WHOLE_NOTE_DOTTED          : return PIZ_WHOLE_NOTE_TRIPLET;
     }
     
     return value;
@@ -459,24 +517,24 @@ long pizSequenceLenghtUp(long value)
 
 long pizSequenceLenghtDown(long value)
 {
-        switch (value) {
-            case PIZ_THIRTY_SECOND_NOTE_TRIPLET : return PIZ_THIRTY_SECOND_NOTE;
-            case PIZ_THIRTY_SECOND_NOTE         : return PIZ_THIRTY_SECOND_NOTE_TRIPLET;
-            case PIZ_SIXTEENTH_NOTE_TRIPLET     : return PIZ_SIXTEENTH_NOTE_DOTTED;
-            case PIZ_SIXTEENTH_NOTE             : return PIZ_SIXTEENTH_NOTE_TRIPLET;
-            case PIZ_SIXTEENTH_NOTE_DOTTED      : return PIZ_SIXTEENTH_NOTE;
-            case PIZ_EIGHTH_NOTE_TRIPLET        : return PIZ_EIGHTH_NOTE_DOTTED;
-            case PIZ_EIGHTH_NOTE                : return PIZ_EIGHTH_NOTE_TRIPLET;
-            case PIZ_EIGHTH_NOTE_DOTTED         : return PIZ_EIGHTH_NOTE;
-            case PIZ_QUARTER_NOTE_TRIPLET       : return PIZ_QUARTER_NOTE_DOTTED;
-            case PIZ_QUARTER_NOTE               : return PIZ_QUARTER_NOTE_TRIPLET;
-            case PIZ_QUARTER_NOTE_DOTTED        : return PIZ_QUARTER_NOTE;
-            case PIZ_HALF_NOTE_TRIPLET          : return PIZ_HALF_NOTE_DOTTED;
-            case PIZ_HALF_NOTE                  : return PIZ_HALF_NOTE_TRIPLET;
-            case PIZ_HALF_NOTE_DOTTED           : return PIZ_HALF_NOTE;
-            case PIZ_WHOLE_NOTE_TRIPLET         : return PIZ_WHOLE_NOTE_DOTTED;
-            case PIZ_WHOLE_NOTE                 : return PIZ_WHOLE_NOTE_TRIPLET;
-            case PIZ_WHOLE_NOTE_DOTTED          : return PIZ_WHOLE_NOTE;
+    switch (value) {
+        case PIZ_THIRTY_SECOND_NOTE_TRIPLET : return PIZ_THIRTY_SECOND_NOTE;
+        case PIZ_THIRTY_SECOND_NOTE         : return PIZ_THIRTY_SECOND_NOTE_TRIPLET;
+        case PIZ_SIXTEENTH_NOTE_TRIPLET     : return PIZ_SIXTEENTH_NOTE_DOTTED;
+        case PIZ_SIXTEENTH_NOTE             : return PIZ_SIXTEENTH_NOTE_TRIPLET;
+        case PIZ_SIXTEENTH_NOTE_DOTTED      : return PIZ_SIXTEENTH_NOTE;
+        case PIZ_EIGHTH_NOTE_TRIPLET        : return PIZ_EIGHTH_NOTE_DOTTED;
+        case PIZ_EIGHTH_NOTE                : return PIZ_EIGHTH_NOTE_TRIPLET;
+        case PIZ_EIGHTH_NOTE_DOTTED         : return PIZ_EIGHTH_NOTE;
+        case PIZ_QUARTER_NOTE_TRIPLET       : return PIZ_QUARTER_NOTE_DOTTED;
+        case PIZ_QUARTER_NOTE               : return PIZ_QUARTER_NOTE_TRIPLET;
+        case PIZ_QUARTER_NOTE_DOTTED        : return PIZ_QUARTER_NOTE;
+        case PIZ_HALF_NOTE_TRIPLET          : return PIZ_HALF_NOTE_DOTTED;
+        case PIZ_HALF_NOTE                  : return PIZ_HALF_NOTE_TRIPLET;
+        case PIZ_HALF_NOTE_DOTTED           : return PIZ_HALF_NOTE;
+        case PIZ_WHOLE_NOTE_TRIPLET         : return PIZ_WHOLE_NOTE_DOTTED;
+        case PIZ_WHOLE_NOTE                 : return PIZ_WHOLE_NOTE_TRIPLET;
+        case PIZ_WHOLE_NOTE_DOTTED          : return PIZ_WHOLE_NOTE;
     }
     
     return value;

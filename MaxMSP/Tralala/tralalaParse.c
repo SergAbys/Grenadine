@@ -104,35 +104,36 @@ table->dumpout          = gensym("dumpout");
 
 tll_code = dictionary_new( );
 
-dictionary_appendlong(tll_code, gensym("learn"),    (TLL_BIAS + PIZ_EVENT_LEARN));
-dictionary_appendlong(tll_code, gensym("list"),     (TLL_BIAS + PIZ_EVENT_LEARN));
-dictionary_appendlong(tll_code, gensym("forget"),   (TLL_BIAS + PIZ_EVENT_FORGET));
-dictionary_appendlong(tll_code, gensym("dump"),     (TLL_BIAS + PIZ_EVENT_DUMP));
-dictionary_appendlong(tll_code, gensym("info"),     (TLL_BIAS + PIZ_EVENT_INFO));
-dictionary_appendlong(tll_code, gensym("bpm"),      (TLL_BIAS + PIZ_EVENT_BPM));
-dictionary_appendlong(tll_code, gensym("chance"),   (TLL_BIAS + PIZ_EVENT_CHANCE));
-dictionary_appendlong(tll_code, gensym("velocity"), (TLL_BIAS + PIZ_EVENT_VELOCITY));
-dictionary_appendlong(tll_code, gensym("channel"),  (TLL_BIAS + PIZ_EVENT_CHANNEL));
-dictionary_appendlong(tll_code, gensym("chord"),    (TLL_BIAS + PIZ_EVENT_CHORD));
-dictionary_appendlong(tll_code, gensym("cell"),     (TLL_BIAS + PIZ_EVENT_CELL));
-dictionary_appendlong(tll_code, gensym("value"),    (TLL_BIAS + PIZ_EVENT_VALUE));
-dictionary_appendlong(tll_code, gensym("scale"),    (TLL_BIAS + PIZ_EVENT_SCALE));
-dictionary_appendlong(tll_code, gensym("mute"),     (TLL_BIAS + PIZ_EVENT_MUTE));
-dictionary_appendlong(tll_code, gensym("zone"),     (TLL_BIAS + PIZ_EVENT_ZONE));
-dictionary_appendlong(tll_code, gensym("note"),     (TLL_BIAS + PIZ_EVENT_NOTE));
-dictionary_appendlong(tll_code, gensym("clear"),    (TLL_BIAS + PIZ_EVENT_CLEAR));
-dictionary_appendlong(tll_code, gensym("clean"),    (TLL_BIAS + PIZ_EVENT_CLEAN));
-dictionary_appendlong(tll_code, gensym("rotate"),   (TLL_BIAS + PIZ_EVENT_ROTATE));
-dictionary_appendlong(tll_code, gensym("scramble"), (TLL_BIAS + PIZ_EVENT_SCRAMBLE));
-dictionary_appendlong(tll_code, gensym("sort"),     (TLL_BIAS + PIZ_EVENT_SORT));
-dictionary_appendlong(tll_code, gensym("change"),   (TLL_BIAS + PIZ_EVENT_CHANGE));
-dictionary_appendlong(tll_code, gensym("fill"),     (TLL_BIAS + PIZ_EVENT_FILL));
-dictionary_appendlong(tll_code, gensym("kill"),     (TLL_BIAS + PIZ_EVENT_KILL));
-dictionary_appendlong(tll_code, gensym("cycle"),    (TLL_BIAS + PIZ_EVENT_CYCLE));
-dictionary_appendlong(tll_code, gensym("pattern"),  (TLL_BIAS + PIZ_EVENT_PATTERN));
-dictionary_appendlong(tll_code, gensym("zoulou"),   (TLL_BIAS + PIZ_EVENT_ZOULOU));
-dictionary_appendlong(tll_code, gensym("romeo"),    (TLL_BIAS + PIZ_EVENT_ROMEO));
-dictionary_appendlong(tll_code, gensym("juliet"),   (TLL_BIAS + PIZ_EVENT_JULIET));
+dictionary_appendlong(tll_code, gensym("learn"),        (TLL_BIAS + PIZ_EVENT_LEARN));
+dictionary_appendlong(tll_code, gensym("list"),         (TLL_BIAS + PIZ_EVENT_LEARN));
+dictionary_appendlong(tll_code, gensym("forget"),       (TLL_BIAS + PIZ_EVENT_FORGET));
+dictionary_appendlong(tll_code, gensym("dump"),         (TLL_BIAS + PIZ_EVENT_DUMP));
+dictionary_appendlong(tll_code, gensym("info"),         (TLL_BIAS + PIZ_EVENT_INFO));
+dictionary_appendlong(tll_code, gensym("bpm"),          (TLL_BIAS + PIZ_EVENT_BPM));
+dictionary_appendlong(tll_code, gensym("chance"),       (TLL_BIAS + PIZ_EVENT_CHANCE));
+dictionary_appendlong(tll_code, gensym("velocity"),     (TLL_BIAS + PIZ_EVENT_VELOCITY));
+dictionary_appendlong(tll_code, gensym("channel"),      (TLL_BIAS + PIZ_EVENT_CHANNEL));
+dictionary_appendlong(tll_code, gensym("chord"),        (TLL_BIAS + PIZ_EVENT_CHORD));
+dictionary_appendlong(tll_code, gensym("cell"),         (TLL_BIAS + PIZ_EVENT_CELL));
+dictionary_appendlong(tll_code, gensym("value"),        (TLL_BIAS + PIZ_EVENT_VALUE));
+dictionary_appendlong(tll_code, gensym("scale"),        (TLL_BIAS + PIZ_EVENT_SCALE));
+dictionary_appendlong(tll_code, gensym("mute"),         (TLL_BIAS + PIZ_EVENT_MUTE));
+dictionary_appendlong(tll_code, gensym("zone"),         (TLL_BIAS + PIZ_EVENT_ZONE));
+dictionary_appendlong(tll_code, gensym("note"),         (TLL_BIAS + PIZ_EVENT_NOTE));
+dictionary_appendlong(tll_code, gensym("clear"),        (TLL_BIAS + PIZ_EVENT_CLEAR));
+dictionary_appendlong(tll_code, gensym("clean"),        (TLL_BIAS + PIZ_EVENT_CLEAN));
+dictionary_appendlong(tll_code, gensym("transpose"),    (TLL_BIAS + PIZ_EVENT_TRANSPOSE));
+dictionary_appendlong(tll_code, gensym("rotate"),       (TLL_BIAS + PIZ_EVENT_ROTATE));
+dictionary_appendlong(tll_code, gensym("scramble"),     (TLL_BIAS + PIZ_EVENT_SCRAMBLE));
+dictionary_appendlong(tll_code, gensym("sort"),         (TLL_BIAS + PIZ_EVENT_SORT));
+dictionary_appendlong(tll_code, gensym("change"),       (TLL_BIAS + PIZ_EVENT_CHANGE));
+dictionary_appendlong(tll_code, gensym("fill"),         (TLL_BIAS + PIZ_EVENT_FILL));
+dictionary_appendlong(tll_code, gensym("kill"),         (TLL_BIAS + PIZ_EVENT_KILL));
+dictionary_appendlong(tll_code, gensym("cycle"),        (TLL_BIAS + PIZ_EVENT_CYCLE));
+dictionary_appendlong(tll_code, gensym("pattern"),      (TLL_BIAS + PIZ_EVENT_PATTERN));
+dictionary_appendlong(tll_code, gensym("zoulou"),       (TLL_BIAS + PIZ_EVENT_ZOULOU));
+dictionary_appendlong(tll_code, gensym("romeo"),        (TLL_BIAS + PIZ_EVENT_ROMEO));
+dictionary_appendlong(tll_code, gensym("juliet"),       (TLL_BIAS + PIZ_EVENT_JULIET));
 
 tll_type        = (t_quickmap *)quickmap_new( );
 tll_length      = (t_quickmap *)quickmap_new( );
@@ -238,7 +239,7 @@ quickmap_add(tll_changed, gensym("zone"),                 (void *)(TLL_BIAS + PI
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-void tralala_parseEvent(t_tll *x, PIZEvent *event)
+void tralala_parseNotification(t_tll *x, PIZEvent *event)
 {
     long k;
     long *data = NULL;

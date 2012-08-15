@@ -116,7 +116,7 @@ typedef struct _tllSymbols {
 #pragma mark -
 
 void tralala_parseInit          (t_tllSymbols *table);
-void tralala_parseEvent         (t_tll *x, PIZEvent *event);
+void tralala_parseNotification  (t_tll *x, PIZEvent *event);
 void tralala_parseEntry         (t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong flags);
 void tralala_parseDictionary    (t_tll *x, t_dictionary *d, ulong flags);
           

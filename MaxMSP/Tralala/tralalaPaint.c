@@ -494,12 +494,12 @@ void tralala_paintCurrentNotes(t_tll *x, t_object *pv, t_atomarray **notes)
 
 void tralala_paintStrncatZone(char *dst, long argc, t_atom *argv, long status)
 {
-    char a[4];
-    char b[4];
+    char a[5];
+    char b[5];
     char temp[32];
   
-    tralala_paintPitchAsString(a, atom_getlong(argv + 3), 4);
-    tralala_paintPitchAsString(b, atom_getlong(argv + 4), 4);
+    tralala_paintPitchAsString(a, atom_getlong(argv + 3), 5);
+    tralala_paintPitchAsString(b, atom_getlong(argv + 4), 5);
         
     if (status >= TLL_SELECTED_START) {
     //
@@ -519,14 +519,14 @@ void tralala_paintStrncatZone(char *dst, long argc, t_atom *argv, long status)
 
 void tralala_paintStrncatNote(char *dst, long argc, t_atom *argv)
 {
-    char a[4];
+    char a[5];
     char temp[32];
     long p = atom_getlong(argv + 1);
     long v = atom_getlong(argv + 3);
     long d = atom_getlong(argv + 4);
     long c = atom_getlong(argv + 5);
     
-    tralala_paintPitchAsString(a, atom_getlong(argv + 2), 4);
+    tralala_paintPitchAsString(a, atom_getlong(argv + 2), 5);
     snprintf_zero(temp, 32, "%ld %s %ld %ld %ld\n", p, a, v, d, c);
     strncat_zero(dst, temp, TLL_STRING_SIZE);
 }
