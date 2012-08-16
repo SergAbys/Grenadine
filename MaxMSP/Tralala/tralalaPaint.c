@@ -504,10 +504,10 @@ void tralala_paintStrncatZone(char *dst, long argc, t_atom *argv, long status)
     if (status >= TLL_SELECTED_START) {
     //
     switch (status) {
-        case TLL_SELECTED_START : snprintf_zero(temp, 32, "%ld\n", atom_getlong(argv + 1)); break;
-        case TLL_SELECTED_END   : snprintf_zero(temp, 32, "%ld\n", atom_getlong(argv + 2)); break;
-        case TLL_SELECTED_DOWN  : snprintf_zero(temp, 32, "%s\n", a); break;
-        case TLL_SELECTED_UP    : snprintf_zero(temp, 32, "%s\n", b); break;
+        case TLL_SELECTED_START : snprintf_zero(temp, 32, "Start : %ld\n", atom_getlong(argv + 1)); break;
+        case TLL_SELECTED_END   : snprintf_zero(temp, 32, "End : %ld\n", atom_getlong(argv + 2)); break;
+        case TLL_SELECTED_DOWN  : snprintf_zero(temp, 32, "Down : %s\n", a); break;
+        case TLL_SELECTED_UP    : snprintf_zero(temp, 32, "Up : %s\n", b); break;
     } 
     //
     } else {

@@ -243,9 +243,7 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
     }
     
     PIZ_AGENT_UNLOCK_EVENT
-      
-    PIZ_DEBUG_EVENT    
-            
+                  
     if (event) {
     //
     pizEventCode(event, &code);
@@ -257,7 +255,7 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
     }
     
     if (o && (f = pizEventMethods[code]) && ((*f)(o, event) & PIZ_MEMORY)) {
-        PIZ_AGENT_MEMORY
+        PIZ_AGENT_BAD_MEMORY
     }
         
     pizEventFree(event);
@@ -301,7 +299,7 @@ void pizAgentEventLoopDoStep(PIZAgent *x, bool blank)
     } 
     
     if ((err1 | err2) & PIZ_MEMORY) { 
-        PIZ_AGENT_MEMORY 
+        PIZ_AGENT_BAD_MEMORY 
     }
     //
     } while (k);
@@ -310,7 +308,7 @@ void pizAgentEventLoopDoStep(PIZAgent *x, bool blank)
 void pizAgentEventLoopDoRefresh(PIZAgent *x)
 {
     if (pizSequenceRefresh(x->sequence) & PIZ_MEMORY) {
-        PIZ_AGENT_MEMORY
+        PIZ_AGENT_BAD_MEMORY
     }
 }
 
