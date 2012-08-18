@@ -133,7 +133,7 @@ typedef struct _tll {
     PIZLinklist         *run;
     PIZLinklist         *runCopy;
     PIZLinklist         *daemon;
-    PIZArray            *array;
+    PIZArray            *temp[3];
     void                *runClock;
     void                *daemonClock;
     void                *gainedClock;

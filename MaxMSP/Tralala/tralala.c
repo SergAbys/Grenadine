@@ -234,7 +234,9 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     jbox_ready((t_jbox *)x);
     attr_dictionary_process(x, d);
     
-    err |= !(x->array = pizArrayNew(0));
+    err |= !(x->temp[0] = pizArrayNew(0));
+    err |= !(x->temp[1] = pizArrayNew(0));
+    err |= !(x->temp[2] = pizArrayNew(0));
     err |= !(x->runCopy = pizLinklistNew( ));
     err |= !(x->run = pizLinklistNew( ));
     err |= !(x->daemon = pizLinklistNew( ));
@@ -331,7 +333,10 @@ void tralala_free(t_tll *x)
         object_free(x->lostClock);
     }
     
-    pizArrayFree(x->array);
+    pizArrayFree(x->temp[0]);
+    pizArrayFree(x->temp[1]);
+    pizArrayFree(x->temp[2]);
+    
     pizLinklistFree(x->runCopy);
     pizLinklistFree(x->run);
     pizLinklistFree(x->daemon);

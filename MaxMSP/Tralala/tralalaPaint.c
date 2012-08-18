@@ -25,9 +25,9 @@ PIZ_LOCAL void tralala_paintLasso               (t_tll *x, t_object *pv);
 PIZ_LOCAL void tralala_paintCurrent             (t_tll *x, t_object *pv);
 PIZ_LOCAL void tralala_paintBackground          (t_tll *x, t_object *pv);
 
+PIZ_LOCAL void tralala_paintCurrentNote         (t_tll *x, t_object *pv);
 PIZ_LOCAL void tralala_paintCurrentText         (t_tll *x, t_object *pv, char *string);
 PIZ_LOCAL void tralala_paintCurrentZone         (t_tll *x, t_object *pv, long argc, t_atom *argv, long status);
-PIZ_LOCAL void tralala_paintCurrentNotes        (t_tll *x, t_object *pv, t_atomarray **notes);
 
 PIZ_LOCAL void tralala_paintStrncatZone         (char *dst, long argc, t_atom *argv, long status);
 PIZ_LOCAL void tralala_paintStrncatNote         (char *dst, long argc, t_atom *argv);
@@ -162,7 +162,7 @@ void tralala_paintRun(t_tll *x, t_object *pv)
     PIZEvent *event = NULL;
     PIZEvent *nextEvent = NULL;
     
-    pizArrayClear(x->array);
+    pizArrayClear(x->temp[0]);
     
     TLL_DAEMON_LOCK
     
@@ -177,10 +177,10 @@ void tralala_paintRun(t_tll *x, t_object *pv)
     
     pizEventData(event, &argc, &argv);
     
-    pizArrayAppend(x->array, argv[0]);
-    pizArrayAppend(x->array, argv[1]);
-    pizArrayAppend(x->array, argv[2]);
-    pizArrayAppend(x->array, argv[3]);
+    pizArrayAppend(x->temp[0], argv[0]);
+    pizArrayAppend(x->temp[0], argv[1]);
+    pizArrayAppend(x->temp[0], argv[2]);
+    pizArrayAppend(x->temp[0], argv[3]);
         
     event = nextEvent;
     //
@@ -191,9 +191,9 @@ void tralala_paintRun(t_tll *x, t_object *pv)
     if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_RUN, w, h)) {
     //
     long j;
-    long *note = pizArrayPtr(x->array);
+    long *note = pizArrayPtr(x->temp[0]);
     
-    for (j = 0; j < pizArrayCount(x->array); j += 4) {
+    for (j = 0; j < pizArrayCount(x->temp[0]); j += 4) {
         t_rect r;
         r.x = TLL_POSITION_TO_X(note[j]);
         r.y = TLL_PITCH_TO_Y_UP(note[j + 1]); 
@@ -248,8 +248,8 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
     t_atom *argv = NULL;
     t_symbol *mark = NULL;
     t_symbol **keys = NULL;
-    t_atomarray *notes[3];
     PIZError err = PIZ_GOOD;
+    
     char string[TLL_STRING_SIZE] = "";
     
     t_symbol *s[ ] = { 
@@ -262,10 +262,10 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
         TLL_SYM_VALUE, 
         TLL_SYM_SCALE
         };
-
-    err |= !(notes[0] = atomarray_new(0, NULL));
-    err |= !(notes[1] = atomarray_new(0, NULL));
-    err |= !(notes[2] = atomarray_new(0, NULL));
+    
+    pizArrayClear(x->temp[0]);
+    pizArrayClear(x->temp[1]);
+    pizArrayClear(x->temp[2]);
     
     TLL_DATA_LOCK
     
@@ -295,23 +295,28 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
         tralala_paintStrncatNote(string, argc, argv);
     }
     
-    if (!err && !(dictionary_getkeys(x->current, &n, &keys))) {
+    if (!(dictionary_getkeys(x->current, &n, &keys))) {
     //
     for (i = 0; i < n; i++) {
     //
-    long k, status = 0; 
+    long k, j, p, status = 0; 
     t_symbol *key = (*(keys + i));
     
-    if (!(dictionary_getatoms(x->current, key, &argc, &argv)) && (atom_getsym(argv) == TLL_SYM_NOTE)) { 
+    if (!(dictionary_getatoms(x->current, key, &argc, &argv)) 
+        && (atom_getsym(argv) == TLL_SYM_NOTE)
+        && (argc == 6)) { 
         if (k = dictionary_hasentry(x->status, key)) {
            dictionary_getlong(x->status, key, &status);
         }
         if (!k || (status == TLL_LASSO_UNSELECTED)) {
-            atomarray_appendatoms(notes[0], argc, argv);
+            p = 0;
         } else if (key != mark) {
-            atomarray_appendatoms(notes[1], argc, argv);
+            p = 1;
         } else {
-            atomarray_appendatoms(notes[2], argc, argv);
+            p = 2;
+        }
+        for (j = 1; j < 5; j++) {
+            pizArrayAppend(x->temp[p], atom_getlong(argv + j));
         }
     }
     //
@@ -328,9 +333,9 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
     if (!err) {
         if (!zoneStatus) {
             tralala_paintCurrentZone(x, pv, argc, argv, zoneStatus);
-            tralala_paintCurrentNotes(x, pv, notes);
+            tralala_paintCurrentNote(x, pv);
         } else {
-            tralala_paintCurrentNotes(x, pv, notes);
+            tralala_paintCurrentNote(x, pv);
             tralala_paintCurrentZone(x, pv, argc, argv, zoneStatus);
         }
         
@@ -338,12 +343,7 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
             tralala_paintCurrentText(x, pv, string);
         }
     }
-    
-    object_free(notes[0]);
-    object_free(notes[1]);
-    object_free(notes[2]);
 }
-
 
 void tralala_paintBackground(t_tll *x, t_object *pv)
 {
@@ -368,6 +368,52 @@ void tralala_paintBackground(t_tll *x, t_object *pv)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
+
+void tralala_paintCurrentNote(t_tll *x, t_object *pv)
+{  
+    double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
+    double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
+    t_jgraphics *g = NULL;
+    
+    if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_NOTE, w, h)) {
+    //
+    long i;
+    for (i = 0; i < 3; i++) {
+    //
+    long j;
+    long *note = pizArrayPtr(x->temp[i]);
+    
+    for (j = 0; j < pizArrayCount(x->temp[i]); j += 4) {
+        t_rect r;
+        r.x = TLL_POSITION_TO_X(note[j + 0]);
+        r.y = TLL_PITCH_TO_Y_UP(note[j + 1]); 
+        r.width  = TLL_POSITION_TO_X(note[j + 0] + note[j + 3]) - r.x; 
+        r.height = TLL_PITCH_TO_Y_DOWN(note[j + 1]) - r.y;
+    
+        if (TLL_FLAG_TRUE(TLL_FLAG_FOCUS)) {
+            if (i == 0 ) {
+                jgraphics_set_source_jrgba(g, &x->color);
+            } else if (i == 1) {
+                jgraphics_set_source_jrgba(g, &x->hColor1);
+            } else {
+                jgraphics_set_source_jrgba(g, &x->hColor2);
+            }
+            
+        } else {
+            jgraphics_set_source_jrgba(g, &x->uColor);
+        }
+        
+        jgraphics_rectangle_fill_fast(g, r.x, r.y, r.width, r.height);
+    }
+    //
+    }
+    
+    jbox_end_layer((t_object*)x, pv, TLL_SYM_NOTE);
+    //
+    }
+        
+    jbox_paint_layer((t_object *)x, pv, TLL_SYM_NOTE, -x->offsetX, -x->offsetY);
+}
 
 void tralala_paintCurrentText(t_tll *x, t_object *pv, char *string)
 {
@@ -432,60 +478,6 @@ void tralala_paintCurrentZone(t_tll *x, t_object *pv, long argc, t_atom *argv, l
     }
         
     jbox_paint_layer((t_object *)x, pv, TLL_SYM_ZONE, -x->offsetX, -x->offsetY);
-}
-
-void tralala_paintCurrentNotes(t_tll *x, t_object *pv, t_atomarray **notes)
-{
-    double w = (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP);
-    double h = ((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE);
-    t_jgraphics *g = NULL;
-    
-    if (g = jbox_start_layer((t_object *)x, pv, TLL_SYM_NOTE, w, h)) {
-    //
-    long i, argc;
-    t_atom *argv = NULL;
-    
-    for (i = 0; i < 3; i++) {
-    //
-    if (!atomarray_getatoms(notes[i], &argc, &argv)) {
-    //
-    long j;
-    for (j = 0; j < atomarray_getsize(notes[i]); j += 6) {
-        t_rect r;
-        long note[4];
-        
-        atom_getlong_array(4, argv + 1 + j, 4, note);
-        
-        r.x = TLL_POSITION_TO_X(note[0]);
-        r.y = TLL_PITCH_TO_Y_UP(note[1]); 
-        r.width  = TLL_POSITION_TO_X(note[0] + note[3]) - r.x; 
-        r.height = TLL_PITCH_TO_Y_DOWN(note[1]) - r.y;
-    
-        if (TLL_FLAG_TRUE(TLL_FLAG_FOCUS)) {
-            if (i == 0 ) {
-                jgraphics_set_source_jrgba(g, &x->color);
-            } else if (i == 1) {
-                jgraphics_set_source_jrgba(g, &x->hColor1);
-            } else {
-                jgraphics_set_source_jrgba(g, &x->hColor2);
-            }
-            
-        } else {
-            jgraphics_set_source_jrgba(g, &x->uColor);
-        }
-        
-        jgraphics_rectangle_fill_fast(g, r.x, r.y, r.width, r.height);
-    }
-    //
-    }
-    //
-    }
-    
-    jbox_end_layer((t_object*)x, pv, TLL_SYM_NOTE);
-    //
-    }
-        
-    jbox_paint_layer((t_object *)x, pv, TLL_SYM_NOTE, -x->offsetX, -x->offsetY);
 }
 
 // -------------------------------------------------------------------------------------------------------------
