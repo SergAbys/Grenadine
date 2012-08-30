@@ -55,7 +55,6 @@ PIZAgent *pizAgentNew(long identifier)
     long err = PIZ_GOOD;
     
     x->identifier   = identifier;
-    x->bpm          = PIZ_SEQUENCE_DEFAULT_BPM;  
     x->flags        = PIZ_AGENT_FLAG_INIT; 
     x->run          = pizLinklistNew( );
     x->low          = pizLinklistNew( );
@@ -139,16 +138,16 @@ void pizAgentFree(PIZAgent *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizAgentAttach(PIZAgent *x, void *observer, PIZMethod f)
+PIZError pizAgentAttach(PIZAgent *x, void *observer, PIZMethod callback)
 {
     PIZError err = PIZ_ERROR;
     
-    if (observer && f) {
+    if (observer && callback) {
     //
     PIZ_AGENT_LOCK_OBSERVER
     
     x->observer = observer;
-    x->callback = f;
+    x->callback = callback;
     
     PIZ_AGENT_UNLOCK_OBSERVER
 
@@ -202,6 +201,20 @@ void pizAgentDoEvent(PIZAgent *x, PIZEvent *event)
             PIZ_AGENT_BAD_MEMORY
         }
     }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZFactorOracle *pizAgentOraclePtr(PIZAgent *x)
+{
+    return x->oracle;
+}
+
+PIZGaloisLattice *pizAgentLatticePtr(PIZAgent *x)
+{
+    return x->lattice;
 }
 
 // -------------------------------------------------------------------------------------------------------------

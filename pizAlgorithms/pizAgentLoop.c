@@ -326,7 +326,7 @@ void pizAgentEventLoopInit(PIZAgent *x)
         pizTimeCopy(&x->grainStart, &x->grainEnd);
     }
     
-    pizNanoSet(&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);
+    pizNanoSet(&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / pizSequenceBpm(x->sequence));
     pizTimeCopy(&x->grainEnd, &x->grainStart);
     pizTimeAddNano(&x->grainEnd, &x->grainSize);
 }
@@ -394,7 +394,7 @@ bool pizAgentEventLoopIsWorkTime(PIZAgent *x)
     bool isWorkTime = false;
     
     pizTimeSet(&now);
-    pizNanoSet(&timeOut, PIZ_AGENT_CONSTANT_RATIO_WORK / x->bpm);
+    pizNanoSet(&timeOut, PIZ_AGENT_CONSTANT_RATIO_WORK / pizSequenceBpm(x->sequence));
     
     if (!(pizTimeElapsedNano(&x->grainStart, &now, &elapsed))) {
         if (elapsed < timeOut) {

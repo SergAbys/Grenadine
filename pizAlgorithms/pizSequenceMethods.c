@@ -410,9 +410,9 @@ PIZError pizSequenceAlgorithm(PIZSequence *x, const PIZEvent *event)
     k = pizSequenceFillTempNotes(x);
     
     if (code == PIZ_EVENT_ZOULOU) {
-        err = pizFactorOracleProceed(x->owner->oracle, k, x->temp.values);
+        err = pizFactorOracleProceed(pizAgentOraclePtr(x->agent), k, x->temp.values);
     } else {
-        err = pizGaloisLatticeProceed(x->owner->lattice, k, x->temp.values);
+        err = pizGaloisLatticeProceed(pizAgentLatticePtr(x->agent), k, x->temp.values);
     }
     
     if (!err) {

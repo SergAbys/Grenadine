@@ -88,7 +88,6 @@
 
 typedef struct _PIZAgent {
     long                identifier;
-    long                bpm;
     uint                seed;
     ulong               flags;
     PIZNano             grainSize;
@@ -118,13 +117,33 @@ typedef struct _PIZAgent {
 PIZ_START_C_LINKAGE
 
 PIZAgent    *pizAgentNew    (long identifier);
-
 void        pizAgentFree    (PIZAgent *x);
-PIZError    pizAgentAttach  (PIZAgent *x, void *observer, PIZMethod f); 
+
+PIZError    pizAgentAttach  (PIZAgent *x, void *observer, PIZMethod callback); 
 PIZError    pizAgentDetach  (PIZAgent *x, void *observer);
 void        pizAgentDoEvent (PIZAgent *x, PIZEvent *event);
 
+PIZFactorOracle     *pizAgentOraclePtr    (PIZAgent *x);
+PIZGaloisLattice    *pizAgentLatticePtr   (PIZAgent *x);
+
 PIZ_END_C_LINKAGE
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+
+#ifdef PIZ_EXTERN_INLINE
+
+PIZ_EXTERN PIZFactorOracle *pizAgentOraclePtr(PIZAgent *x)
+{
+    return x->oracle;
+}
+
+PIZ_EXTERN PIZGaloisLattice *pizAgentLatticePtr(PIZAgent *x)
+{
+    return x->lattice;
+}
+
+#endif // PIZ_EXTERN_INLINE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -150,10 +150,9 @@ PIZError pizAgentBpm(PIZAgent *x, const PIZEvent *event)
     if (!(pizEventData(event, &argc, &argv))) {
     //
     if ((argv[0] >= PIZ_SEQUENCE_MINIMUM_BPM) && (argv[0] <= PIZ_SEQUENCE_MAXIMUM_BPM)) {
-        x->bpm = argv[0];
         pizSequenceSetBpm(x->sequence, event);
             
-        pizNanoSet(&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / x->bpm);    
+        pizNanoSet(&x->grainSize, PIZ_AGENT_CONSTANT_BPM_NS / pizSequenceBpm(x->sequence));    
         pizTimeCopy(&x->grainEnd, &x->grainStart);
         pizTimeAddNano(&x->grainEnd, &x->grainSize);
     }

@@ -216,7 +216,7 @@ typedef struct _PIZSequence {
     PIZItemset          addedLow;
     PIZItemset          addedHigh;
     struct _PIZTemp     temp;
-    struct _PIZAgent    *owner;
+    struct _PIZAgent    *agent;
     PIZArray            *scale;
     PIZArray            *map;
     PIZNote             **lookup;
@@ -229,7 +229,7 @@ typedef struct _PIZSequence {
 
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL PIZSequence   *pizSequenceNew (struct _PIZAgent *owner);
+PIZ_LOCAL PIZSequence   *pizSequenceNew (struct _PIZAgent *agent);
 
 PIZ_LOCAL void          pizSequenceFree (PIZSequence *x);
 PIZ_LOCAL void          pizSequenceInit (PIZSequence *x);

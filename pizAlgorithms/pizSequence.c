@@ -60,7 +60,7 @@
 #pragma mark ---
 #pragma mark -
 
-PIZSequence *pizSequenceNew(struct _PIZAgent *owner)
+PIZSequence *pizSequenceNew(struct _PIZAgent *agent)
 {
     PIZSequence *x = NULL;
     
@@ -68,7 +68,7 @@ PIZSequence *pizSequenceNew(struct _PIZAgent *owner)
     //
     long argv[ ] = { 0, PIZ_SEQUENCE_MAXIMUM_NOTES };
     
-    x->owner        = owner;
+    x->agent        = agent;
     x->map          = pizArrayNew(PIZ_SEQUENCE_MAXIMUM_NOTES);
     x->scale        = pizArrayNew(PIZ_MAGIC_SCALE);
     x->temp.values  = (long *)malloc(sizeof(long) * PIZ_SEQUENCE_SIZE_TEMPORARY);
@@ -84,7 +84,7 @@ PIZSequence *pizSequenceNew(struct _PIZAgent *owner)
         x->temp.notes2  &&
         x->lookup       &&
         x->temp.hash    &&
-        x->owner        &&
+        x->agent        &&
         (x->timeline = (PIZLinklist **)calloc(PIZ_SEQUENCE_SIZE_TIMELINE, sizeof(PIZLinklist **)))) {
 
         x->flags = PIZ_SEQUENCE_FLAG_NONE;
