@@ -123,8 +123,8 @@ PIZError    pizAgentAttach  (PIZAgent *x, void *observer, PIZMethod callback);
 PIZError    pizAgentDetach  (PIZAgent *x, void *observer);
 void        pizAgentDoEvent (PIZAgent *x, PIZEvent *event);
 
-PIZFactorOracle     *pizAgentOraclePtr    (PIZAgent *x);
-PIZGaloisLattice    *pizAgentLatticePtr   (PIZAgent *x);
+PIZ_LOCAL   PIZFactorOracle     *pizAgentOraclePtr    (PIZAgent *x);
+PIZ_LOCAL   PIZGaloisLattice    *pizAgentLatticePtr   (PIZAgent *x);
 
 PIZ_END_C_LINKAGE
 
