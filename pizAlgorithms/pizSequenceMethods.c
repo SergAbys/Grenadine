@@ -363,7 +363,7 @@ PIZError pizSequenceCycle(PIZSequence *x, const PIZEvent *event)
     long a[ ] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     long t[ ] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     
-    long  key = CLAMP(argv[0], PIZ_KEY_C, PIZ_KEY_B);
+    long key = CLAMP(argv[0], PIZ_KEY_C, PIZ_KEY_B);
     
     for (i = 1; i < argc; i++) {
         long j = CLAMP(argv[i], 0, PIZ_MAGIC_SCALE - 1);
