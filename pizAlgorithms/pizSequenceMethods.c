@@ -491,9 +491,8 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
             if (j == 0) {
                 note = x->lookup[i];
                 break;
-            } else {
-                j--;
             }
+            j--;
         }
     }
     
