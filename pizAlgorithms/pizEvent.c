@@ -37,98 +37,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizEvent.h"
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-static const char *pizEventNames[ ] = { "None",
-                                        "Init",
-                                        "Play",
-                                        "Stop",
-                                        "Loop",
-                                        "Unloop",
-                                        "Learn",
-                                        "Forget",
-                                        //
-                                        "Bpm",
-                                        "Chance",
-                                        "Velocity",
-                                        "Channel",
-                                        "Chord",
-                                        "Cell",
-                                        "Value",
-                                        "Scale",
-                                        "Mute",
-                                        "Zone",
-                                        "Note",
-                                        "Clear",
-                                        "Clean",
-                                        "Transpose",
-                                        "Rotate",
-                                        "Scramble",
-                                        "Sort",
-                                        "Change",
-                                        "Fill",
-                                        "Kill",
-                                        "Cycle",
-                                        "Pattern",
-                                        "Zoulou",
-                                        "Romeo",
-                                        "Juliet",
-                                        //  
-                                        "Dump",
-                                        "Statistics",
-                                        "Attributes",
-                                        //  
-                                        "Delete",
-                                        "Note Increment",
-                                        "Note Decrement", 
-                                        "Note Forward", 
-                                        "Note Backward",
-                                        "Increment Zone",
-                                        "Decrement Zone",
-                                        "Increment Channel",
-                                        "Decrement Channel",
-                                        "Increment Cell", 
-                                        "Decrement Cell",
-                                        "Cell Up",
-                                        "Cell Down",
-                                        "Increment Value", 
-                                        "Decrement Value",
-                                        "Value Up",
-                                        "Value Down",
-                                        //
-                                        "Info Bpm",
-                                        "Info Chance",
-                                        "Info Velocity",
-                                        "Info Channel",
-                                        "Info Chord",
-                                        "Info Cell",
-                                        "Info Value",
-                                        "Info Scale",
-                                        "Info Mute",
-                                        "Info Zone",
-                                        "Info Count",
-                                        //
-                                        "Changed Bpm",
-                                        "Changed Chance",
-                                        "Changed Velocity",
-                                        "Changed Channel",
-                                        "Changed Chord",
-                                        "Changed Cell",
-                                        "Changed Value",
-                                        "Changed Scale",
-                                        "Changed Mute",
-                                        "Changed Zone",
-                                        "Note Added",
-                                        "Note Changed",
-                                        "Note Removed",
-                                        "Note Played",
-                                        "Note Dumped",
-                                        "End",
-                                        "Will End",
-                                        "Will Dump" };   
+#include "pizEvent.h" 
                                                                               
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -153,6 +62,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_SCALE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_MUTE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_ZONE
+                                        //
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_NOTE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CLEAR
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CLEAN
@@ -266,11 +176,6 @@ PIZEvent *pizEventNewCopy(PIZEvent *event)
     return x;
 }
     
-const char *pizEventName(const PIZEvent *x)
-{
-    return pizEventNames[x->code];
-}
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -

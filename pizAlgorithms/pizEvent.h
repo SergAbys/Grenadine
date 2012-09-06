@@ -48,29 +48,6 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_DEBUG_EVENT if (event) {                    \
-                            PIZTime ttt;                \
-                            pizTimeSet(&ttt);           \
-                            ttt = ttt / 1000000;        \
-                            post("%llu / %ld / %s / %ld / %ld %ld %ld %ld %ld %ld %ld %ld / %s",  \
-                            ttt,                        \
-                            event->identifier,          \
-                            pizEventName(event),        \
-                            event->type,                \
-                            event->data[0],             \
-                            event->data[1],             \
-                            event->data[2],             \
-                            event->data[3],             \
-                            event->data[4],             \
-                            event->data[5],             \
-                            event->data[6],             \
-                            event->data[7],             \
-                            __FUNCTION__);              \
-                        }
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
 #define PIZ_EVENT_DATA_SIZE     14
 
 // -------------------------------------------------------------------------------------------------------------
@@ -210,7 +187,6 @@ PIZ_START_C_LINKAGE
 
 PIZEvent    *pizEventNew            (PIZEventCode code);
 PIZEvent    *pizEventNewCopy        (PIZEvent *event);
-const char  *pizEventName           (const PIZEvent *x);
 
 void        pizEventFree            (PIZEvent *x);
 void        pizEventSetIdentifier   (PIZEvent *x, long identifier);

@@ -19,7 +19,6 @@ _pizEventCode
 _pizEventData
 _pizEventFree
 _pizEventIdentifier
-_pizEventName
 _pizEventNew
 _pizEventNewCopy
 _pizEventSetData
