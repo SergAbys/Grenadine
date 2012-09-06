@@ -82,7 +82,7 @@ PIZError pizSequenceDump(PIZSequence *x)
     return x->temp.error;
 }
 
-PIZError pizSequenceInfo(PIZSequence *x)
+PIZError pizSequenceStatistics(PIZSequence *x)
 {
     PIZError err = PIZ_GOOD;
     long a[ ] = { x->key, x->type };

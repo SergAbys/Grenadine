@@ -98,42 +98,6 @@ PIZ_LOCAL void      pizSequenceWithTempNotes    (PIZSequence *x, long selector, 
 #pragma mark ---
 #pragma mark -
 
-PIZError pizSequenceZone(PIZSequence *x, const PIZEvent *event)
-{
-    long argc;
-    long *argv = NULL;
-    
-    if (!(pizEventData(event, &argc, &argv))) {
-    //
-    long i;
-    long v[ ] = { x->start, x->end, x->down, x->up };
-    
-    for (i = 0; i < MIN(argc, 4); i++) {
-        v[i] = argv[i];
-    }
-    
-    v[0] = pizSequenceSnapByCell(x, v[0]);
-    v[1] = pizSequenceSnapByCell(x, v[1]);
-    
-    v[0] = CLAMP(v[0], 0, PIZ_SEQUENCE_SIZE_TIMELINE);
-    v[1] = CLAMP(v[1], 0, PIZ_SEQUENCE_SIZE_TIMELINE);
-    v[2] = CLAMP(v[2], 0, PIZ_MAGIC_PITCH);
-    v[3] = CLAMP(v[3], 0, PIZ_MAGIC_PITCH);
-    
-    if (v[0] != v[1]) {
-    //
-    if (v[0] < v[1]) { x->start = v[0]; x->end = v[1]; } else { x->end = v[0]; x->start = v[1]; }
-    if (v[2] < v[3]) { x->down = v[2]; x->up = v[3]; } else { x->up = v[2]; x->down = v[3]; }
-    //
-    }
-        
-    x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
-    //
-    }
-    
-    return PIZ_GOOD;
-}
-
 PIZError pizSequenceNote(PIZSequence *x, const PIZEvent *event)
 {
     long argc;

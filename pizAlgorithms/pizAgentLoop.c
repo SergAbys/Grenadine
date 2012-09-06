@@ -42,7 +42,7 @@
 #include "pizSequenceRun.h"
 #include "pizSequenceUser.h"
 #include "pizSequenceMethods.h"
-#include "pizSequenceAttribute.h"
+#include "pizSequenceAttributes.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ static const PIZMethodError pizEventMethods[ ]  = { NULL,                       
                                                     pizAgentLearn,               // PIZ_EVENT_LEARN
                                                     pizAgentForget,              // PIZ_EVENT_FORGET
                                                     pizAgentDump,                // PIZ_EVENT_DUMP
-                                                    pizAgentInfo,                // PIZ_EVENT_INFO
+                                                    pizAgentStatistics,          // PIZ_EVENT_STATISTICS
                                                     pizAgentBpm,                 // PIZ_EVENT_BPM
                                                     //
                                                     pizSequenceSetChance,        // PIZ_EVENT_CHANCE
@@ -73,7 +73,7 @@ static const PIZMethodError pizEventMethods[ ]  = { NULL,                       
                                                     pizSequenceSetValue,         // PIZ_EVENT_VALUE
                                                     pizSequenceSetScale,         // PIZ_EVENT_SCALE
                                                     pizSequenceSetMute,          // PIZ_EVENT_MUTE
-                                                    pizSequenceZone,             // PIZ_EVENT_ZONE
+                                                    pizSequenceSetZone,          // PIZ_EVENT_ZONE
                                                     pizSequenceNote,             // PIZ_EVENT_NOTE
                                                     pizSequenceClear,            // PIZ_EVENT_CLEAR
                                                     pizSequenceClean,            // PIZ_EVENT_CLEAN

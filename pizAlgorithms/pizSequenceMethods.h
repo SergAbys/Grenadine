@@ -59,7 +59,6 @@
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL PIZError  pizSequenceZone         (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceNote         (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceClear        (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceClean        (PIZSequence *x, const PIZEvent *event);

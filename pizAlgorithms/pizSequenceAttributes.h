@@ -1,5 +1,5 @@
 /**
- * \file    pizSequenceAttribute.h
+ * \file    pizSequenceAttributes.h
  * \author  Jean Sapristi
  */
  
@@ -37,8 +37,8 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_SEQUENCE_ATTRIBUTE_H
-#define PIZ_SEQUENCE_ATTRIBUTE_H
+#ifndef PIZ_SEQUENCE_ATTRIBUTES_H
+#define PIZ_SEQUENCE_ATTRIBUTES_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -59,8 +59,9 @@ PIZ_LOCAL PIZError  pizSequenceSetCell          (PIZSequence *x, const PIZEvent 
 PIZ_LOCAL PIZError  pizSequenceSetValue         (PIZSequence *x, const PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceSetScale         (PIZSequence *x, const PIZEvent *event); //
 PIZ_LOCAL PIZError  pizSequenceSetMute          (PIZSequence *x, const PIZEvent *event);
+PIZ_LOCAL PIZError  pizSequenceSetZone          (PIZSequence *x, const PIZEvent *event);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_ATTRIBUTE_H
+#endif // PIZ_SEQUENCE_ATTRIBUTES_H
