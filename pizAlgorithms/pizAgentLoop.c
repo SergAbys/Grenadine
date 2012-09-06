@@ -203,7 +203,6 @@ PIZError pizAgentNotify(PIZAgent *x, PIZEventCode n, long ac, long *av)
     if (notification = pizEventNew(n)) {
     //
     pizEventSetData(notification, ac, av);
-    pizEventSetIdentifier(notification, x->identifier);
     pizEventSetTime(notification, &x->grainStart);
  
     PIZ_AGENT_LOCK_OBSERVER

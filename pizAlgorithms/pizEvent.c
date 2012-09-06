@@ -163,7 +163,6 @@ PIZEvent *pizEventNewCopy(PIZEvent *event)
     x->code = event->code;
     x->type = event->type;
     pizTimeCopy(&x->time, &event->time);
-    x->identifier = event->identifier;
     x->size = event->size;
     
     for (i = 0; i < PIZ_EVENT_DATA_SIZE; i++) {
@@ -183,11 +182,6 @@ PIZEvent *pizEventNewCopy(PIZEvent *event)
 void pizEventFree(PIZEvent *x)
 {
     free(x);
-}
-
-void pizEventSetIdentifier(PIZEvent *x, long identifier)
-{
-    x->identifier = identifier;
 }
 
 void pizEventSetType(PIZEvent *x, PIZEventType type)
@@ -223,11 +217,6 @@ void pizEventCode(const PIZEvent *x, PIZEventCode *code)
 void pizEventType(const PIZEvent *x, PIZEventType *type)
 {
     (*type) = x->type;
-}
-
-void pizEventIdentifier(const PIZEvent *x, long *identifier)
-{
-    (*identifier) = x->identifier;
 }
 
 void pizEventTime(const PIZEvent *x, PIZTime *time)

@@ -18,11 +18,9 @@ _pizArraySetAtIndex
 _pizEventCode
 _pizEventData
 _pizEventFree
-_pizEventIdentifier
 _pizEventNew
 _pizEventNewCopy
 _pizEventSetData
-_pizEventSetIdentifier
 _pizEventSetTime
 _pizEventSetType
 _pizEventTime

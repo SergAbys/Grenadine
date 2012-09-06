@@ -176,7 +176,6 @@ typedef struct _PIZEvent {
     PIZEventCode    code;
     PIZEventType    type;
     PIZTime         time;
-    long            identifier;
     long            size;
     long            data[PIZ_EVENT_DATA_SIZE];
     } PIZEvent;
@@ -185,20 +184,18 @@ typedef struct _PIZEvent {
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZEvent    *pizEventNew            (PIZEventCode code);
-PIZEvent    *pizEventNewCopy        (PIZEvent *event);
+PIZEvent    *pizEventNew        (PIZEventCode code);
+PIZEvent    *pizEventNewCopy    (PIZEvent *event);
 
-void        pizEventFree            (PIZEvent *x);
-void        pizEventSetIdentifier   (PIZEvent *x, long identifier);
-void        pizEventSetType         (PIZEvent *x, PIZEventType type);
-void        pizEventSetTime         (PIZEvent *x, const PIZTime *time);
-void        pizEventSetData         (PIZEvent *x, long argc, const long *argv);
+void        pizEventFree        (PIZEvent *x);
+void        pizEventSetType     (PIZEvent *x, PIZEventType type);
+void        pizEventSetTime     (PIZEvent *x, const PIZTime *time);
+void        pizEventSetData     (PIZEvent *x, long argc, const long *argv);
 
-void        pizEventCode            (const PIZEvent *x, PIZEventCode *code);
-void        pizEventType            (const PIZEvent *x, PIZEventType *type);
-void        pizEventIdentifier      (const PIZEvent *x, long *identifier);
-void        pizEventTime            (const PIZEvent *x, PIZTime *time);
-PIZError    pizEventData            (const PIZEvent *x, long *argc, long **argv);
+void        pizEventCode        (const PIZEvent *x, PIZEventCode *code);
+void        pizEventType        (const PIZEvent *x, PIZEventType *type);
+void        pizEventTime        (const PIZEvent *x, PIZTime *time);
+PIZError    pizEventData        (const PIZEvent *x, long *argc, long **argv);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
@@ -209,11 +206,6 @@ PIZ_END_C_LINKAGE
 PIZ_EXTERN void pizEventFree(PIZEvent *x)
 {
     free(x);
-}
-
-PIZ_EXTERN void pizEventSetIdentifier(PIZEvent *x, long identifier)
-{
-    x->identifier = identifier;
 }
 
 PIZ_EXTERN void pizEventSetType(PIZEvent *x, PIZEventType type)
@@ -229,11 +221,6 @@ PIZ_EXTERN void pizEventCode(const PIZEvent *x, PIZEventCode *code)
 PIZ_EXTERN void pizEventType(const PIZEvent *x, PIZEventType *type)
 {
     (*type) = x->type;
-}
-
-PIZ_EXTERN void pizEventIdentifier(const PIZEvent *x, long *identifier)
-{
-    (*identifier) = x->identifier;
 }
 
 #endif // PIZ_EXTERN_INLINE

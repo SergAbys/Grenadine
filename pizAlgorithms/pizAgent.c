@@ -46,7 +46,7 @@
 #pragma mark ---
 #pragma mark -
 
-PIZAgent *pizAgentNew(long identifier)
+PIZAgent *pizAgentNew(void)
 {
     PIZAgent *x = NULL;
     
@@ -54,7 +54,6 @@ PIZAgent *pizAgentNew(long identifier)
     //
     long err = PIZ_GOOD;
     
-    x->identifier   = identifier;
     x->flags        = PIZ_AGENT_FLAG_INIT; 
     x->run          = pizLinklistNew( );
     x->low          = pizLinklistNew( );

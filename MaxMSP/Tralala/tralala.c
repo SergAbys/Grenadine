@@ -261,7 +261,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
             dictionary_copyunique(x->data, t);
         } 
         
-        if (!(err |= !(x->agent = pizAgentNew(x->identifier)))) {
+        if (!(err |= !(x->agent = pizAgentNew( )))) {
             pizAgentAttach(x->agent, (void *)x, (PIZMethod)tralala_callback);
             defer_low(x, (method)tralala_init, NULL, 0, NULL);
         } 
@@ -662,7 +662,6 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong fl
         pizEventSetType(event, PIZ_EVENT_RUN);
     }
     
-    pizEventSetIdentifier(event, x->identifier);
     pizAgentDoEvent(x->agent, event);
     
     tralala_switchDaemon(x, code);
@@ -708,7 +707,7 @@ void tralala_keepAttributes(t_tll *x, t_symbol *name, t_dictionary *t)
 t_symbol *tralala_unique(t_tll *x)
 {
     char string[16];    
-    snprintf_zero(string, 16, "%s%ld", "_tralala", x->identifier);
+    snprintf_zero(string, 16, "%s%ld", "_tll_", x->identifier);
     return gensym(string);
 }
 

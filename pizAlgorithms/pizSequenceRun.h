@@ -65,7 +65,6 @@
 PIZ_START_C_LINKAGE
 
 PIZ_LOCAL long      pizSequenceBpm          (PIZSequence *x);
-
 PIZ_LOCAL bool      pizSequenceIsAtEnd      (PIZSequence *x);
 PIZ_LOCAL void      pizSequenceJumpToStart  (PIZSequence *x);
 

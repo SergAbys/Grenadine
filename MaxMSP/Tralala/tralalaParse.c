@@ -295,7 +295,6 @@ void tralala_parseEntry(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong fl
         if (flags & TLL_FLAG_LOW) { pizEventSetType(event, PIZ_EVENT_LOW); } 
         else if (flags & TLL_FLAG_RUN) { pizEventSetType(event, PIZ_EVENT_RUN); }
         pizEventSetData(event, k, data);
-        pizEventSetIdentifier(event, x->identifier);
         pizAgentDoEvent(x->agent, event);
     }
     //
