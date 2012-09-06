@@ -107,9 +107,6 @@ tll_code = dictionary_new( );
 dictionary_appendlong(tll_code, gensym("learn"),        (TLL_BIAS + PIZ_EVENT_LEARN));
 dictionary_appendlong(tll_code, gensym("list"),         (TLL_BIAS + PIZ_EVENT_LEARN));
 dictionary_appendlong(tll_code, gensym("forget"),       (TLL_BIAS + PIZ_EVENT_FORGET));
-dictionary_appendlong(tll_code, gensym("dump"),         (TLL_BIAS + PIZ_EVENT_DUMP));
-dictionary_appendlong(tll_code, gensym("statistics"),   (TLL_BIAS + PIZ_EVENT_STATISTICS));
-dictionary_appendlong(tll_code, gensym("attributes"),   (TLL_BIAS + PIZ_EVENT_ATTRIBUTES));
 dictionary_appendlong(tll_code, gensym("bpm"),          (TLL_BIAS + PIZ_EVENT_BPM));
 dictionary_appendlong(tll_code, gensym("chance"),       (TLL_BIAS + PIZ_EVENT_CHANCE));
 dictionary_appendlong(tll_code, gensym("velocity"),     (TLL_BIAS + PIZ_EVENT_VELOCITY));
@@ -135,6 +132,9 @@ dictionary_appendlong(tll_code, gensym("pattern"),      (TLL_BIAS + PIZ_EVENT_PA
 dictionary_appendlong(tll_code, gensym("zoulou"),       (TLL_BIAS + PIZ_EVENT_ZOULOU));
 dictionary_appendlong(tll_code, gensym("romeo"),        (TLL_BIAS + PIZ_EVENT_ROMEO));
 dictionary_appendlong(tll_code, gensym("juliet"),       (TLL_BIAS + PIZ_EVENT_JULIET));
+dictionary_appendlong(tll_code, gensym("dump"),         (TLL_BIAS + PIZ_EVENT_DUMP));
+dictionary_appendlong(tll_code, gensym("statistics"),   (TLL_BIAS + PIZ_EVENT_STATISTICS));
+dictionary_appendlong(tll_code, gensym("attributes"),   (TLL_BIAS + PIZ_EVENT_ATTRIBUTES));
 
 tll_type        = (t_quickmap *)quickmap_new( );
 tll_length      = (t_quickmap *)quickmap_new( );

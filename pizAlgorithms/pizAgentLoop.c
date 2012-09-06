@@ -61,11 +61,8 @@ static const PIZMethodError pizEventMethods[ ]  = { NULL,                       
                                                     //
                                                     pizAgentLearn,               // PIZ_EVENT_LEARN
                                                     pizAgentForget,              // PIZ_EVENT_FORGET
-                                                    pizAgentDump,                // PIZ_EVENT_DUMP
-                                                    pizAgentStatistics,          // PIZ_EVENT_STATISTICS
-                                                    pizAgentAttributes,          // PIZ_EVENT_ATTRIBUTES
                                                     //
-                                                    pizAgentBpm,                 // PIZ_EVENT_BPM
+                                                    pizAgentSetBpm,              // PIZ_EVENT_BPM
                                                     pizSequenceSetChance,        // PIZ_EVENT_CHANCE
                                                     pizSequenceSetVelocity,      // PIZ_EVENT_VELOCITY
                                                     pizSequenceSetChannel,       // PIZ_EVENT_CHANNEL
@@ -75,6 +72,7 @@ static const PIZMethodError pizEventMethods[ ]  = { NULL,                       
                                                     pizSequenceSetScale,         // PIZ_EVENT_SCALE
                                                     pizSequenceSetMute,          // PIZ_EVENT_MUTE
                                                     pizSequenceSetZone,          // PIZ_EVENT_ZONE
+                                                    //
                                                     pizSequenceNote,             // PIZ_EVENT_NOTE
                                                     pizSequenceClear,            // PIZ_EVENT_CLEAR
                                                     pizSequenceClean,            // PIZ_EVENT_CLEAN
@@ -90,6 +88,10 @@ static const PIZMethodError pizEventMethods[ ]  = { NULL,                       
                                                     pizSequenceAlgorithm,        // PIZ_EVENT_ZOULOU
                                                     pizSequenceAlgorithm,        // PIZ_EVENT_ROMEO
                                                     pizSequenceJuliet,           // PIZ_EVENT_JULIET
+                                                    //
+                                                    pizSequenceDump,             // PIZ_EVENT_DUMP
+                                                    pizSequenceStatistics,       // PIZ_EVENT_STATISTICS
+                                                    pizSequenceAttributes,       // PIZ_EVENT_ATTRIBUTES
                                                     //
                                                     pizSequenceDelete,           // PIZ_EVENT_NOTE_DELETE
                                                     pizSequenceNoteIncrement,    // PIZ_EVENT_NOTE_INCREMENT

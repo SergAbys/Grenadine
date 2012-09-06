@@ -50,9 +50,6 @@ static const char *pizEventNames[ ] = { "None",
                                         "Unloop",
                                         "Learn",
                                         "Forget",
-                                        "Dump",
-                                        "Statistics",
-                                        "Attributes",
                                         //
                                         "Bpm",
                                         "Chance",
@@ -79,7 +76,11 @@ static const char *pizEventNames[ ] = { "None",
                                         "Zoulou",
                                         "Romeo",
                                         "Juliet",
-                                        //    
+                                        //  
+                                        "Dump",
+                                        "Statistics",
+                                        "Attributes",
+                                        //  
                                         "Delete",
                                         "Note Increment",
                                         "Note Decrement", 
@@ -141,9 +142,6 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         //
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_LEARN
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_FORGET
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_DUMP
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_STATISTICS
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_ATTRIBUTES
                                         //
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_BPM
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CHANCE
@@ -170,7 +168,11 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_ZOULOU
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_ROMEO
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_JULIET
-                                        //    
+                                        //  
+                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_DUMP
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_STATISTICS
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_ATTRIBUTES
+                                        //  
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_DELETE
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_INCREMENT
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_DECREMENT

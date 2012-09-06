@@ -56,10 +56,7 @@ PIZ_LOCAL PIZError pizAgentLoop         (PIZAgent *x, const PIZEvent *event);
 PIZ_LOCAL PIZError pizAgentUnloop       (PIZAgent *x, const PIZEvent *event);
 PIZ_LOCAL PIZError pizAgentLearn        (PIZAgent *x, const PIZEvent *event); //
 PIZ_LOCAL PIZError pizAgentForget       (PIZAgent *x, const PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentDump         (PIZAgent *x, const PIZEvent *event); //
-PIZ_LOCAL PIZError pizAgentStatistics   (PIZAgent *x, const PIZEvent *event); //
-PIZ_LOCAL PIZError pizAgentAttributes   (PIZAgent *x, const PIZEvent *event); //
-PIZ_LOCAL PIZError pizAgentBpm          (PIZAgent *x, const PIZEvent *event);
+PIZ_LOCAL PIZError pizAgentSetBpm       (PIZAgent *x, const PIZEvent *event);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------

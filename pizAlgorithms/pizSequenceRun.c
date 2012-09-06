@@ -73,40 +73,6 @@ void pizSequenceJumpToStart(PIZSequence *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizSequenceDump(PIZSequence *x)
-{
-    x->temp.error = pizAgentNotify(x->agent, PIZ_EVENT_WILL_DUMP, 0, NULL);
-    
-    pizSequenceForEach(x, pizSequenceEachDump, NULL, PIZ_SEQUENCE_FLAG_NONE);
-    
-    return x->temp.error;
-}
-
-PIZError pizSequenceStatistics(PIZSequence *x)
-{
-    return pizAgentNotify(x->agent, PIZ_EVENT_INFO_COUNT, 1, &x->count);
-}
-
-PIZError pizSequenceAttributes(PIZSequence *x)
-{
-    PIZError err = PIZ_GOOD;
-    long a[ ] = { x->key, x->type };
-    long b[ ] = { x->start, x->end, x->down, x->up };
-    
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_BPM, 1, &x->bpm);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_CHANCE, 1, &x->chance);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_VELOCITY, 1, &x->velocity);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_CHANNEL, 1, &x->channel);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_CHORD, 1, &x->chord);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_CELL, 1, &x->cell);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_VALUE, 1, &x->value);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_SCALE, 2, a);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_MUTE, 1, &x->mute);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_ZONE, 4, b);
-    
-    return err;
-}
-
 PIZError pizSequenceRefresh(PIZSequence *x)
 {
     long i;
