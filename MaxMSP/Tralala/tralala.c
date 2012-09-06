@@ -287,7 +287,7 @@ void tralala_init(t_tll *x, t_symbol *s, short argc, t_atom *argv)
     link->s_thing = (t_object *)x;
     atom_setsym(&x->link, link);
     
-    tralala_send(x, PIZ_EVENT_INIT, 0, NULL, TLL_FLAG_NONE);
+    tralala_send(x, PIZ_MESSAGE_INIT, 0, NULL, TLL_FLAG_NONE);
 }
 
 void tralala_free(t_tll *x)
@@ -429,7 +429,7 @@ void tralala_recall(t_tll *x, t_symbol *s, long argc, t_atom *argv)
     if (name && !(dictionary_getdictionary(x->data, name, (t_object **)&d))) {
         if (t = dictionary_new ( )) {
             dictionary_copyunique(t, d);
-            tralala_send(x, PIZ_EVENT_CLEAR, 0, NULL, TLL_FLAG_RUN);
+            tralala_send(x, PIZ_MESSAGE_CLEAR, 0, NULL, TLL_FLAG_RUN);
             tralala_parseDictionary(x, t, flags);
             object_free(t);
         }
@@ -451,7 +451,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
 {
     PIZEvent *copy = NULL;
     t_tll *x = (t_tll *)ptr;
-    PIZEventCode code = PIZ_EVENT_NONE;
+    PIZEventCode code = PIZ_MESSAGE_NONE;
 
     TLL_RUN_LOCK
     pizLinklistAppend(x->run, (void *)event);
@@ -498,7 +498,7 @@ void tralala_runTask (t_tll *x)
     //
     long argc;
     long *argv = NULL;
-    PIZEventCode code = PIZ_EVENT_NONE;
+    PIZEventCode code = PIZ_MESSAGE_NONE;
     long a[ ] = { 0, 0, 0, 0 };
     
     pizLinklistNextWithPtr(x->runCopy, (void *)event, (void **)&nextEvent);
@@ -605,22 +605,22 @@ void tralala_daemonTask (t_tll *x)
 
 void tralala_play(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
-    tralala_send(x, PIZ_EVENT_PLAY, argc, argv, TLL_FLAG_NONE);
+    tralala_send(x, PIZ_MESSAGE_PLAY, argc, argv, TLL_FLAG_NONE);
 }
 
 void tralala_loop(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
-    tralala_send(x, PIZ_EVENT_LOOP, argc, argv, TLL_FLAG_NONE);
+    tralala_send(x, PIZ_MESSAGE_LOOP, argc, argv, TLL_FLAG_NONE);
 }
 
 void tralala_stop(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
-    tralala_send(x, PIZ_EVENT_STOP, 0, NULL, TLL_FLAG_NONE);
+    tralala_send(x, PIZ_MESSAGE_STOP, 0, NULL, TLL_FLAG_NONE);
 }
 
 void tralala_unloop(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
-    tralala_send(x, PIZ_EVENT_UNLOOP, 0, NULL, TLL_FLAG_NONE);
+    tralala_send(x, PIZ_MESSAGE_UNLOOP, 0, NULL, TLL_FLAG_NONE);
 }
 
 void tralala_list(t_tll *x, t_symbol *s, long argc, t_atom *argv)
@@ -671,7 +671,7 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong fl
 
 void tralala_switchDaemon(t_tll *x, PIZEventCode code)
 {
-    if ((code == PIZ_EVENT_END) || (code == PIZ_EVENT_STOP)) {
+    if ((code == PIZ_EVENT_END) || (code == PIZ_MESSAGE_STOP)) {
         TLL_FLAG_UNSET(TLL_FLAG_DAEMON)
 
     } else if ((code == PIZ_EVENT_NOTE_PLAYED) && (TLL_FLAG_FALSE(TLL_FLAG_DAEMON))) {

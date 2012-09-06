@@ -60,10 +60,10 @@ PIZ_LOCAL PIZNote *pizSequenceNoteWithTag   (PIZSequence *x, long tag);
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL long pizSequenceLenghtIncrement   (long value);
-PIZ_LOCAL long pizSequenceLenghtDecrement   (long value);
-PIZ_LOCAL long pizSequenceLenghtUp          (long value);
-PIZ_LOCAL long pizSequenceLenghtDown        (long value);
+PIZ_LOCAL long pizSequenceLengthUp      (long value);
+PIZ_LOCAL long pizSequenceLengthDown    (long value);
+PIZ_LOCAL long pizSequenceLengthRight   (long value);
+PIZ_LOCAL long pizSequenceLengthLeft    (long value);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -71,7 +71,75 @@ PIZ_LOCAL long pizSequenceLenghtDown        (long value);
 #pragma mark ---
 #pragma mark -
 
-PIZError pizSequenceDelete(PIZSequence *x, PIZEvent *event)
+PIZError pizSequenceCellUp(PIZSequence *x, PIZEvent *event)
+{
+    x->cell = pizSequenceLengthUp(x->cell);
+    x->flags |= PIZ_SEQUENCE_FLAG_CELL;
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceCellDown(PIZSequence *x, PIZEvent *event)
+{
+    x->cell = pizSequenceLengthDown(x->cell);
+    x->flags |= PIZ_SEQUENCE_FLAG_CELL;
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceCellRight(PIZSequence *x, PIZEvent *event)
+{
+    x->cell = pizSequenceLengthRight(x->cell);
+    x->flags |= PIZ_SEQUENCE_FLAG_CELL;
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceCellLeft(PIZSequence *x, PIZEvent *event)
+{
+    x->cell = pizSequenceLengthLeft(x->cell);
+    x->flags |= PIZ_SEQUENCE_FLAG_CELL;
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceValueUp(PIZSequence *x, PIZEvent *event)
+{
+    x->value = pizSequenceLengthUp(x->value);
+    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceValueDown(PIZSequence *x, PIZEvent *event)
+{
+    x->value = pizSequenceLengthDown(x->value);
+    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceValueRight(PIZSequence *x, PIZEvent *event)
+{
+    x->value = pizSequenceLengthRight(x->value);
+    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
+    
+    return PIZ_GOOD;
+}
+
+PIZError pizSequenceValueLeft(PIZSequence *x, PIZEvent *event)
+{
+    x->value = pizSequenceLengthLeft(x->value);
+    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
+    
+    return PIZ_GOOD;
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZError pizSequenceNoteDelete(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -332,10 +400,6 @@ PIZError pizSequenceZoneDecrement(PIZSequence *x, PIZEvent *event)
     return PIZ_GOOD;
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 PIZError pizSequenceChannelIncrement(PIZSequence *x, PIZEvent *event)
 {
     x->channel = CLAMP(x->channel + 1, 1, PIZ_MAGIC_CHANNEL);
@@ -348,70 +412,6 @@ PIZError pizSequenceChannelDecrement(PIZSequence *x, PIZEvent *event)
 {
     x->channel = CLAMP(x->channel - 1, 1, PIZ_MAGIC_CHANNEL);
     x->flags |= PIZ_SEQUENCE_FLAG_CHANNEL;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceCellIncrement(PIZSequence *x, PIZEvent *event)
-{
-    x->cell = pizSequenceLenghtIncrement(x->cell);
-    x->flags |= PIZ_SEQUENCE_FLAG_CELL;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceCellDecrement(PIZSequence *x, PIZEvent *event)
-{
-    x->cell = pizSequenceLenghtDecrement(x->cell);
-    x->flags |= PIZ_SEQUENCE_FLAG_CELL;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceCellUp(PIZSequence *x, PIZEvent *event)
-{
-    x->cell = pizSequenceLenghtUp(x->cell);
-    x->flags |= PIZ_SEQUENCE_FLAG_CELL;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceCellDown(PIZSequence *x, PIZEvent *event)
-{
-    x->cell = pizSequenceLenghtDown(x->cell);
-    x->flags |= PIZ_SEQUENCE_FLAG_CELL;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceValueIncrement(PIZSequence *x, PIZEvent *event)
-{
-    x->value = pizSequenceLenghtIncrement(x->value);
-    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceValueDecrement(PIZSequence *x, PIZEvent *event)
-{
-    x->value = pizSequenceLenghtDecrement(x->value);
-    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceValueUp(PIZSequence *x, PIZEvent *event)
-{
-    x->value = pizSequenceLenghtUp(x->value);
-    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceValueDown(PIZSequence *x, PIZEvent *event)
-{
-    x->value = pizSequenceLenghtDown(x->value);
-    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
     
     return PIZ_GOOD;
 }
@@ -440,7 +440,7 @@ PIZNote *pizSequenceNoteWithTag(PIZSequence *x, long tag)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-long pizSequenceLenghtIncrement(long value)
+long pizSequenceLengthUp(long value)
 {
     switch (value) {
         case PIZ_THIRTY_SECOND_NOTE_TRIPLET : return PIZ_SIXTEENTH_NOTE_TRIPLET;
@@ -465,7 +465,7 @@ long pizSequenceLenghtIncrement(long value)
     return value;
 }
 
-long pizSequenceLenghtDecrement(long value)
+long pizSequenceLengthDown(long value)
 {
     switch (value) {
         case PIZ_THIRTY_SECOND_NOTE_TRIPLET : return PIZ_WHOLE_NOTE_TRIPLET;
@@ -490,7 +490,7 @@ long pizSequenceLenghtDecrement(long value)
     return value;
 }
 
-long pizSequenceLenghtUp(long value)
+long pizSequenceLengthRight(long value)
 {
     switch (value) {
         case PIZ_THIRTY_SECOND_NOTE_TRIPLET : return PIZ_THIRTY_SECOND_NOTE;
@@ -515,7 +515,7 @@ long pizSequenceLenghtUp(long value)
     return value;
 }
 
-long pizSequenceLenghtDown(long value)
+long pizSequenceLengthLeft(long value)
 {
     switch (value) {
         case PIZ_THIRTY_SECOND_NOTE_TRIPLET : return PIZ_THIRTY_SECOND_NOTE;

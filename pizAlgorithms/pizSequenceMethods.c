@@ -368,12 +368,12 @@ PIZError pizSequenceAlgorithm(PIZSequence *x, const PIZEvent *event)
 {
     long k;
     PIZError err = PIZ_GOOD;
-    PIZEventCode code = PIZ_EVENT_NONE;
+    PIZEventCode code = PIZ_MESSAGE_NONE;
     
     pizEventCode(event, &code);
     k = pizSequenceFillTempNotes(x);
     
-    if (code == PIZ_EVENT_ZOULOU) {
+    if (code == PIZ_MESSAGE_ZOULOU) {
         err = pizFactorOracleProceed(pizAgentOraclePtr(x->agent), k, x->temp.values);
     } else {
         err = pizGaloisLatticeProceed(pizAgentLatticePtr(x->agent), k, x->temp.values);

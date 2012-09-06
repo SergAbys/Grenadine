@@ -42,64 +42,64 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT_NONE
-                                        PIZ_EVENT_RUN,              // PIZ_EVENT_INIT
-                                        PIZ_EVENT_RUN,              // PIZ_EVENT_PLAY
-                                        PIZ_EVENT_RUN,              // PIZ_EVENT_STOP
-                                        PIZ_EVENT_RUN,              // PIZ_EVENT_LOOP
-                                        PIZ_EVENT_RUN,              // PIZ_EVENT_UNLOOP
+static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_MESSAGE_NONE
+                                        PIZ_EVENT_RUN,              // PIZ_MESSAGE_INIT
+                                        PIZ_EVENT_RUN,              // PIZ_MESSAGE_PLAY
+                                        PIZ_EVENT_RUN,              // PIZ_MESSAGE_STOP
+                                        PIZ_EVENT_RUN,              // PIZ_MESSAGE_LOOP
+                                        PIZ_EVENT_RUN,              // PIZ_MESSAGE_UNLOOP
                                         //
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_LEARN
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_FORGET
+                                        PIZ_EVENT_LOW,              // PIZ_MESSAGE_LEARN
+                                        PIZ_EVENT_LOW,              // PIZ_MESSAGE_FORGET
                                         //
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_BPM
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_CHANCE
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_VELOCITY
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_CHANNEL
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_CHORD
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_CELL
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_VALUE
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_SCALE
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_MUTE
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_ZONE
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_BPM
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_CHANCE
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_VELOCITY
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_CHANNEL
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_CHORD
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_CELL
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_VALUE
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_SCALE
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_MUTE
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_ZONE
                                         //
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_NOTE
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_CLEAR
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_CLEAN
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_TRANSPOSE
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_ROTATE
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_SCRAMBLE
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_SORT
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_CHANGE
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_FILL
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_KILL
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_CYCLE
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_PATTERN
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_ZOULOU
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_ROMEO
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_JULIET
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_NOTE
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_CLEAR
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_CLEAN
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_TRANSPOSE
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_ROTATE
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_SCRAMBLE
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_SORT
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_CHANGE
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_FILL
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_KILL
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_CYCLE
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_PATTERN
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_ZOULOU
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_ROMEO
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_JULIET
                                         //  
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_DUMP
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_STATISTICS
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_ATTRIBUTES
+                                        PIZ_EVENT_HIGH,             // PIZ_MESSAGE_DUMP
+                                        PIZ_EVENT_LOW,              // PIZ_MESSAGE_STATISTICS
+                                        PIZ_EVENT_LOW,              // PIZ_MESSAGE_ATTRIBUTES
                                         //  
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_DELETE
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_INCREMENT
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_DECREMENT
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_FORWARD
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_NOTE_BACKWARD
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_ZONE_INCREMENT
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_ZONE_DECREMENT
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_CHANNEL_INCREMENT
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_CHANNEL_DECREMENT
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_CELL_INCREMENT
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_CELL_DECREMENT
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_CELL_UP
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_CELL_DOWN
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_VALUE_INCREMENT
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_VALUE_DECREMENT
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_VALUE_MODIFIER_UP
-                                        PIZ_EVENT_LOW,              // PIZ_EVENT_VALUE_MODIFIER_DOWN
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_CELL_UP
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_CELL_DOWN
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_CELL_RIGHT
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_CELL_LEFT
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_VALUE_UP
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_VALUE_DOWN
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_VALUE_RIGHT
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_VALUE_LEFT
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_NOTE_DELETE
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_NOTE_INCREMENT
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_NOTE_DECREMENT
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_NOTE_FORWARD
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_NOTE_BACKWARD
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_ZONE_INCREMENT
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_ZONE_DECREMENT
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_CHANNEL_INCREMENT
+                                        PIZ_EVENT_LOW,              // PIZ_GRAPHIC_CHANNEL_DECREMENT
                                         //
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_INFO_BPM
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_EVENT_INFO_CHANCE
@@ -162,13 +162,13 @@ PIZEvent *pizEventNewCopy(PIZEvent *event)
     
     x->code = event->code;
     x->type = event->type;
-    pizTimeCopy(&x->time, &event->time);
     x->size = event->size;
+    
+    pizTimeCopy(&x->time, &event->time);
     
     for (i = 0; i < PIZ_EVENT_DATA_SIZE; i++) {
         x->data[i] = event->data[i];
     }
-        
     //
     }
     

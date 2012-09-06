@@ -116,8 +116,8 @@ typedef struct _PIZAgent {
 PIZ_START_C_LINKAGE
 
 PIZAgent    *pizAgentNew    (void);
-void        pizAgentFree    (PIZAgent *x);
 
+void        pizAgentFree    (PIZAgent *x);
 PIZError    pizAgentAttach  (PIZAgent *x, void *observer, PIZMethod callback); 
 PIZError    pizAgentDetach  (PIZAgent *x, void *observer);
 void        pizAgentDoEvent (PIZAgent *x, PIZEvent *event);

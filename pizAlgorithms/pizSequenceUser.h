@@ -50,7 +50,16 @@
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL PIZError pizSequenceDelete            (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceCellUp            (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceCellDown          (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceCellRight         (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceCellLeft          (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceValueUp           (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceValueDown         (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceValueRight        (PIZSequence *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizSequenceValueLeft         (PIZSequence *x, PIZEvent *event);
+
+PIZ_LOCAL PIZError pizSequenceNoteDelete        (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizSequenceNoteIncrement     (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizSequenceNoteDecrement     (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizSequenceNoteForward       (PIZSequence *x, PIZEvent *event); //
@@ -59,14 +68,6 @@ PIZ_LOCAL PIZError pizSequenceZoneIncrement     (PIZSequence *x, PIZEvent *event
 PIZ_LOCAL PIZError pizSequenceZoneDecrement     (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizSequenceChannelIncrement  (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizSequenceChannelDecrement  (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceCellIncrement     (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceCellDecrement     (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceCellUp            (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceCellDown          (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceValueIncrement    (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceValueDecrement    (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceValueUp           (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError pizSequenceValueDown         (PIZSequence *x, PIZEvent *event);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
