@@ -109,6 +109,7 @@ dictionary_appendlong(tll_code, gensym("list"),         (TLL_BIAS + PIZ_EVENT_LE
 dictionary_appendlong(tll_code, gensym("forget"),       (TLL_BIAS + PIZ_EVENT_FORGET));
 dictionary_appendlong(tll_code, gensym("dump"),         (TLL_BIAS + PIZ_EVENT_DUMP));
 dictionary_appendlong(tll_code, gensym("statistics"),   (TLL_BIAS + PIZ_EVENT_STATISTICS));
+dictionary_appendlong(tll_code, gensym("attributes"),   (TLL_BIAS + PIZ_EVENT_ATTRIBUTES));
 dictionary_appendlong(tll_code, gensym("bpm"),          (TLL_BIAS + PIZ_EVENT_BPM));
 dictionary_appendlong(tll_code, gensym("chance"),       (TLL_BIAS + PIZ_EVENT_CHANCE));
 dictionary_appendlong(tll_code, gensym("velocity"),     (TLL_BIAS + PIZ_EVENT_VELOCITY));
@@ -424,14 +425,14 @@ void  tralala_parseEventInfo(t_tll *x, long k, long *data, PIZEventCode code, t_
         quickmap_lookup_key2(tll_key,  (void *)((*(data + 0)) + TLL_BIAS), (void **)&sym1);
         quickmap_lookup_key2(tll_type, (void *)((*(data + 1)) + TLL_BIAS), (void **)&sym2);
 
-        atom_setsym(x->statistics + 0, sym1);
-        atom_setsym(x->statistics + 1, sym2);
+        atom_setsym(x->info + 0, sym1);
+        atom_setsym(x->info + 1, sym2);
         
-        outlet_anything(x->right, s, 2, x->statistics );
+        outlet_anything(x->right, s, 2, x->info);
         
     } else {
-        atom_setlong_array(k, x->statistics , k, data);
-        outlet_anything(x->right, s, k, x->statistics );
+        atom_setlong_array(k, x->info, k, data);
+        outlet_anything(x->right, s, k, x->info);
     }
 }
 

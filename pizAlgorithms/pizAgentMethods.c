@@ -142,6 +142,11 @@ PIZError pizAgentStatistics(PIZAgent *x, const PIZEvent *event)
     return pizSequenceStatistics(x->sequence);
 }
 
+PIZError pizAgentAttributes(PIZAgent *x, const PIZEvent *event)
+{
+    return pizSequenceAttributes(x->sequence);
+}
+
 PIZError pizAgentBpm(PIZAgent *x, const PIZEvent *event)
 {
     long argc;

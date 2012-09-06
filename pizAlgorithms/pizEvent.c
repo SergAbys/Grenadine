@@ -51,9 +51,10 @@ static const char *pizEventNames[ ] = { "None",
                                         "Learn",
                                         "Forget",
                                         "Dump",
-                                        "Info",
-                                        "Bpm",
+                                        "Statistics",
+                                        "Attributes",
                                         //
+                                        "Bpm",
                                         "Chance",
                                         "Velocity",
                                         "Channel",
@@ -137,12 +138,14 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_EVENT
                                         PIZ_EVENT_RUN,              // PIZ_EVENT_STOP
                                         PIZ_EVENT_RUN,              // PIZ_EVENT_LOOP
                                         PIZ_EVENT_RUN,              // PIZ_EVENT_UNLOOP
+                                        //
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_LEARN
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_FORGET
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_DUMP
                                         PIZ_EVENT_LOW,              // PIZ_EVENT_STATISTICS
-                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_BPM
+                                        PIZ_EVENT_LOW,              // PIZ_EVENT_ATTRIBUTES
                                         //
+                                        PIZ_EVENT_HIGH,             // PIZ_EVENT_BPM
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CHANCE
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_VELOCITY
                                         PIZ_EVENT_HIGH,             // PIZ_EVENT_CHANNEL
