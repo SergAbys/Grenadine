@@ -89,7 +89,7 @@ PIZError pizSequenceSetBpm(PIZSequence *x, const PIZEvent *event)
     
     if (!(pizEventData(event, &argc, &argv))) {
         x->bpm = argv[0];
-        x->flags |= PIZ_SEQUENCE_FLAG_BPM;
+        x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_BPM;
     }
     
     return PIZ_GOOD;
@@ -103,7 +103,7 @@ PIZError pizSequenceSetChance(PIZSequence *x, const PIZEvent *event)
     if (!(pizEventData(event, &argc, &argv))) {
         if ((argv[0] >= 0) && (argv[0] <= 100)) {
             x->chance = argv[0];
-            x->flags |= PIZ_SEQUENCE_FLAG_CHANCE;
+            x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CHANCE;
         }
     }
     
@@ -118,7 +118,7 @@ PIZError pizSequenceSetVelocity(PIZSequence *x, const PIZEvent *event)
     if (!(pizEventData(event, &argc, &argv))) {
         if ((argv[0] >= -PIZ_MAGIC_VELOCITY) && (argv[0] <= PIZ_MAGIC_VELOCITY)) {
             x->velocity = argv[0];
-            x->flags |= PIZ_SEQUENCE_FLAG_VELOCITY;
+            x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_VELOCITY;
         }
     }
     
@@ -133,7 +133,7 @@ PIZError pizSequenceSetChannel(PIZSequence *x, const PIZEvent *event)
     if (!(pizEventData(event, &argc, &argv))) {
         if ((argv[0] >= 0) && (argv[0] <= PIZ_MAGIC_CHANNEL)) {
             x->channel = argv[0];
-            x->flags |= PIZ_SEQUENCE_FLAG_CHANNEL;
+            x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CHANNEL;
         }
     }
     
@@ -148,7 +148,7 @@ PIZError pizSequenceSetChord(PIZSequence *x, const PIZEvent *event)
     if (!(pizEventData(event, &argc, &argv))) {
         if ((argv[0] >= 0) && (argv[0] < PIZ_MAGIC_ULONG)) {
             x->chord = argv[0];
-            x->flags |= PIZ_SEQUENCE_FLAG_CHORD;
+            x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CHORD;
         }
     }
     
@@ -163,7 +163,7 @@ PIZError pizSequenceSetCell(PIZSequence *x, const PIZEvent *event)
     if (!(pizEventData(event, &argc, &argv))) {
         if ((pizSequenceIsValidNoteValue(argv[0]))) {
             x->cell = argv[0];
-            x->flags |= PIZ_SEQUENCE_FLAG_CELL;
+            x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CELL;
         }
     }
     
@@ -178,7 +178,7 @@ PIZError pizSequenceSetValue(PIZSequence *x, const PIZEvent *event)
     if (!(pizEventData(event, &argc, &argv))) {
         if ((pizSequenceIsValidNoteValue(argv[0]))) {
             x->value = argv[0];
-            x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
+            x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_VALUE;
         }
     }
     
@@ -209,7 +209,7 @@ PIZError pizSequenceSetScale(PIZSequence *x, const PIZEvent *event)
         }
     }
     
-    x->flags |= PIZ_SEQUENCE_FLAG_SCALE;
+    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_SCALE;
     //
     } 
     
@@ -223,7 +223,7 @@ PIZError pizSequenceSetMute(PIZSequence *x, const PIZEvent *event)
     
     if (!(pizEventData(event, &argc, &argv))) {
         x->mute = (argv[0] != 0);
-        x->flags |= PIZ_SEQUENCE_FLAG_MUTE;
+        x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_MUTE;
     }
     
     return PIZ_GOOD;
@@ -258,7 +258,7 @@ PIZError pizSequenceSetZone(PIZSequence *x, const PIZEvent *event)
     //
     }
         
-    x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
+    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_ZONE;
     //
     }
     

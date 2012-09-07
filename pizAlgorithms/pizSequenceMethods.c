@@ -120,10 +120,10 @@ PIZError pizSequenceNote(PIZSequence *x, const PIZEvent *event)
         pizEventType(event, &type);
         
         if (type == PIZ_EVENT_HIGH) {
-            flags |= PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_AMBITUS;
+            flags |= PIZ_SEQUENCE_FLAG_ADD_SNAP | PIZ_SEQUENCE_FLAG_ADD_AMBITUS;
             
         } else if (type == PIZ_EVENT_LOW) {
-            flags |= PIZ_SEQUENCE_FLAG_SNAP | PIZ_SEQUENCE_FLAG_LOW;
+            flags |= PIZ_SEQUENCE_FLAG_ADD_SNAP | PIZ_SEQUENCE_FLAG_ADD_LOW;
         } 
         
         pizSequenceNewNote(x, values, flags);
@@ -151,7 +151,7 @@ PIZError pizSequenceClean(PIZSequence *x, const PIZEvent *event)
     
     x->temp.index = 0;
     
-    pizSequenceForEach(x, pizSequenceEachFillTempNotes, event, PIZ_SEQUENCE_FLAG_NEARBY);
+    pizSequenceForEach(x, pizSequenceEachFillTempNotes, event, PIZ_SEQUENCE_FLAG_EACH_NEARBY);
     
     if (x->temp.index) {
         for (i = 0; i < x->temp.index; i++) {
@@ -181,7 +181,7 @@ PIZError pizSequenceTranspose(PIZSequence *x, const PIZEvent *event)
     if (!err) {
         x->up = up;
         x->down = down;
-        x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
+        x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_ZONE;
         pizSequenceForEach(x, pizSequenceEachChange, event, PIZ_SEQUENCE_FLAG_NONE);
     }
     
@@ -292,14 +292,16 @@ PIZError pizSequenceSort(PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceChange(PIZSequence *x, const PIZEvent *event)
 {
-    pizSequenceForEach(x, pizSequenceEachChange, event, PIZ_SEQUENCE_FLAG_RANDOM);
+    pizSequenceForEach(x, pizSequenceEachChange, event, PIZ_SEQUENCE_FLAG_EACH_RANDOM);
 
     return PIZ_GOOD;
 }
 
 PIZError pizSequenceFill(PIZSequence *x, const PIZEvent *event)
 {
-    pizSequenceForEach(x, pizSequenceEachChange, event, PIZ_SEQUENCE_FLAG_RANDOM | PIZ_SEQUENCE_FLAG_FILL);
+    ulong flags = PIZ_SEQUENCE_FLAG_EACH_RANDOM | PIZ_SEQUENCE_FLAG_EACH_SET;
+    
+    pizSequenceForEach(x, pizSequenceEachChange, event, flags);
 
     return PIZ_GOOD;
 }
@@ -309,7 +311,7 @@ PIZError pizSequenceKill(PIZSequence *x, const PIZEvent *event)
     long count = x->count;
      
     if (count) {
-        pizSequenceForEach(x, pizSequenceEachRemove, NULL, PIZ_SEQUENCE_FLAG_RANDOM);
+        pizSequenceForEach(x, pizSequenceEachRemove, NULL, PIZ_SEQUENCE_FLAG_EACH_RANDOM);
     }
     
     return PIZ_GOOD;
@@ -355,7 +357,7 @@ PIZError pizSequenceCycle(PIZSequence *x, const PIZEvent *event)
         x->temp.values[i] = t[(PIZ_MAGIC_SCALE - key + i) % PIZ_MAGIC_SCALE];
     }
     
-    pizSequenceForEach(x, pizSequenceEachCycle, NULL, PIZ_SEQUENCE_FLAG_RANDOM);
+    pizSequenceForEach(x, pizSequenceEachCycle, NULL, PIZ_SEQUENCE_FLAG_EACH_RANDOM);
     //
     }
     //
@@ -409,7 +411,7 @@ PIZError pizSequencePattern(PIZSequence *x, const PIZEvent *event)
     
     if (k = pizSequenceFillTempNotes(x)) {
         for (i = 0; i < k; i++) {
-            pizSequenceEachMove(x, x->temp.notes1[i], event, PIZ_SEQUENCE_FLAG_PATTERN);
+            pizSequenceEachMove(x, x->temp.notes1[i], event, PIZ_SEQUENCE_FLAG_EACH_PATTERN);
         }
     }
 
@@ -537,7 +539,7 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
                                toCopy->values[PIZ_VALUE_DURATION],
                                toCopy->values[PIZ_VALUE_CHANNEL] };
                         
-            if (newNote = pizSequenceNewNote(x, values, PIZ_SEQUENCE_FLAG_CLIP)) {
+            if (newNote = pizSequenceNewNote(x, values, PIZ_SEQUENCE_FLAG_ADD_CLIP)) {
                 hashError |= pizHashTableAdd(x->temp.hash, hPat[i], (void *)newNote);
                 k ++;
             }
@@ -617,11 +619,11 @@ PIZNote *pizSequenceNewNote(PIZSequence *x, long *argv, ulong flags)
     long duration = argv[3]; 
     long channel  = argv[4]; 
     
-    if (flags & PIZ_SEQUENCE_FLAG_SNAP) {
+    if (flags & PIZ_SEQUENCE_FLAG_ADD_SNAP) {
         position = ((long)((position / (double)(x->cell)))) * x->cell;
     } 
     
-    if (flags & PIZ_SEQUENCE_FLAG_AMBITUS) {
+    if (flags & PIZ_SEQUENCE_FLAG_ADD_AMBITUS) {
         pitch = pizSequenceSnapByAmbitus(x, pitch);
     }
                 
@@ -629,7 +631,7 @@ PIZNote *pizSequenceNewNote(PIZSequence *x, long *argv, ulong flags)
     err |= (position > (PIZ_SEQUENCE_SIZE_TIMELINE - 1));
     err |= (x->count >= PIZ_SEQUENCE_MAXIMUM_NOTES);
     
-    if (flags & PIZ_SEQUENCE_FLAG_CLIP) {
+    if (flags & PIZ_SEQUENCE_FLAG_ADD_CLIP) {
         err |= (pitch > x->up);
         err |= (pitch < x->down);
         err |= (position < x->start);
@@ -661,7 +663,7 @@ PIZNote *pizSequenceNewNote(PIZSequence *x, long *argv, ulong flags)
         x->count ++; 
         x->dirty = true;
         
-        if (flags & PIZ_SEQUENCE_FLAG_LOW) {
+        if (flags & PIZ_SEQUENCE_FLAG_ADD_LOW) {
             pizItemsetSetAtIndex(&x->addedLow, newNote->tag);
         } else {
             pizItemsetSetAtIndex(&x->addedHigh, newNote->tag);

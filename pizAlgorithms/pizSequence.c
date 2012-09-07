@@ -166,7 +166,7 @@ void pizSequenceFree(PIZSequence *x)
 
 void pizSequenceInit(PIZSequence *x)
 {
-    x->flags = PIZ_SEQUENCE_FLAG_INIT;
+    x->flags = PIZ_SEQUENCE_FLAG_NOTIFY_INIT;
 }
 
 // -------------------------------------------------------------------------------------------------------------

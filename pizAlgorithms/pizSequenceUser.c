@@ -74,7 +74,7 @@ PIZ_LOCAL long pizSequenceLengthLeft    (long value);
 PIZError pizSequenceCellUp(PIZSequence *x, PIZEvent *event)
 {
     x->cell = pizSequenceLengthUp(x->cell);
-    x->flags |= PIZ_SEQUENCE_FLAG_CELL;
+    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CELL;
     
     return PIZ_GOOD;
 }
@@ -82,7 +82,7 @@ PIZError pizSequenceCellUp(PIZSequence *x, PIZEvent *event)
 PIZError pizSequenceCellDown(PIZSequence *x, PIZEvent *event)
 {
     x->cell = pizSequenceLengthDown(x->cell);
-    x->flags |= PIZ_SEQUENCE_FLAG_CELL;
+    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CELL;
     
     return PIZ_GOOD;
 }
@@ -90,7 +90,7 @@ PIZError pizSequenceCellDown(PIZSequence *x, PIZEvent *event)
 PIZError pizSequenceCellRight(PIZSequence *x, PIZEvent *event)
 {
     x->cell = pizSequenceLengthRight(x->cell);
-    x->flags |= PIZ_SEQUENCE_FLAG_CELL;
+    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CELL;
     
     return PIZ_GOOD;
 }
@@ -98,7 +98,7 @@ PIZError pizSequenceCellRight(PIZSequence *x, PIZEvent *event)
 PIZError pizSequenceCellLeft(PIZSequence *x, PIZEvent *event)
 {
     x->cell = pizSequenceLengthLeft(x->cell);
-    x->flags |= PIZ_SEQUENCE_FLAG_CELL;
+    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CELL;
     
     return PIZ_GOOD;
 }
@@ -106,7 +106,7 @@ PIZError pizSequenceCellLeft(PIZSequence *x, PIZEvent *event)
 PIZError pizSequenceValueUp(PIZSequence *x, PIZEvent *event)
 {
     x->value = pizSequenceLengthUp(x->value);
-    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
+    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_VALUE;
     
     return PIZ_GOOD;
 }
@@ -114,7 +114,7 @@ PIZError pizSequenceValueUp(PIZSequence *x, PIZEvent *event)
 PIZError pizSequenceValueDown(PIZSequence *x, PIZEvent *event)
 {
     x->value = pizSequenceLengthDown(x->value);
-    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
+    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_VALUE;
     
     return PIZ_GOOD;
 }
@@ -122,7 +122,7 @@ PIZError pizSequenceValueDown(PIZSequence *x, PIZEvent *event)
 PIZError pizSequenceValueRight(PIZSequence *x, PIZEvent *event)
 {
     x->value = pizSequenceLengthRight(x->value);
-    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
+    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_VALUE;
     
     return PIZ_GOOD;
 }
@@ -130,7 +130,7 @@ PIZError pizSequenceValueRight(PIZSequence *x, PIZEvent *event)
 PIZError pizSequenceValueLeft(PIZSequence *x, PIZEvent *event)
 {
     x->value = pizSequenceLengthLeft(x->value);
-    x->flags |= PIZ_SEQUENCE_FLAG_VALUE;
+    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_VALUE;
     
     return PIZ_GOOD;
 }
@@ -232,7 +232,7 @@ PIZError pizSequenceNoteForward(PIZSequence *x, PIZEvent *event)
     
     if (!(pizEventData(event, &argc, &argv)) && (argc > 1)) {
         if (note = pizSequenceNoteWithTag(x, argv[1])) {
-            pizSequenceEachMove(x, note, event, PIZ_SEQUENCE_FLAG_FORWARD);
+            pizSequenceEachMove(x, note, event, PIZ_SEQUENCE_FLAG_EACH_FORWARD);
         }
     }
     
@@ -249,7 +249,7 @@ PIZError pizSequenceNoteBackward(PIZSequence *x, PIZEvent *event)
     
     if (!(pizEventData(event, &argc, &argv)) && (argc > 1)) {
         if (note = pizSequenceNoteWithTag(x, argv[1])) {
-            pizSequenceEachMove(x, note, event, PIZ_SEQUENCE_FLAG_BACKWARD);
+            pizSequenceEachMove(x, note, event, PIZ_SEQUENCE_FLAG_EACH_BACKWARD);
         }
     }
     
@@ -321,7 +321,7 @@ PIZError pizSequenceZoneIncrement(PIZSequence *x, PIZEvent *event)
     //
     }
     
-    x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
+    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_ZONE;
     //
     }
     
@@ -393,7 +393,7 @@ PIZError pizSequenceZoneDecrement(PIZSequence *x, PIZEvent *event)
     //
     }
     
-    x->flags |= PIZ_SEQUENCE_FLAG_ZONE;
+    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_ZONE;
     //
     }
     
@@ -403,7 +403,7 @@ PIZError pizSequenceZoneDecrement(PIZSequence *x, PIZEvent *event)
 PIZError pizSequenceChannelIncrement(PIZSequence *x, PIZEvent *event)
 {
     x->channel = CLAMP(x->channel + 1, 1, PIZ_MAGIC_CHANNEL);
-    x->flags |= PIZ_SEQUENCE_FLAG_CHANNEL;
+    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CHANNEL;
     
     return PIZ_GOOD;
 }
@@ -411,7 +411,7 @@ PIZError pizSequenceChannelIncrement(PIZSequence *x, PIZEvent *event)
 PIZError pizSequenceChannelDecrement(PIZSequence *x, PIZEvent *event)
 {
     x->channel = CLAMP(x->channel - 1, 1, PIZ_MAGIC_CHANNEL);
-    x->flags |= PIZ_SEQUENCE_FLAG_CHANNEL;
+    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CHANNEL;
     
     return PIZ_GOOD;
 }

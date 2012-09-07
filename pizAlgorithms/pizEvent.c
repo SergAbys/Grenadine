@@ -48,8 +48,10 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_MSG_N
                                         PIZ_EVENT_RUN,              // PIZ_MSG_STOP
                                         PIZ_EVENT_RUN,              // PIZ_MSG_LOOP
                                         PIZ_EVENT_RUN,              // PIZ_MSG_UNLOOP
+                                        //
                                         PIZ_EVENT_LOW,              // PIZ_MSG_LEARN
                                         PIZ_EVENT_LOW,              // PIZ_MSG_FORGET
+                                        //
                                         PIZ_EVENT_HIGH,             // PIZ_MSG_BPM
                                         PIZ_EVENT_HIGH,             // PIZ_MSG_CHANCE
                                         PIZ_EVENT_HIGH,             // PIZ_MSG_VELOCITY
@@ -76,8 +78,8 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_MSG_N
                                         PIZ_EVENT_HIGH,             // PIZ_MSG_ROMEO
                                         PIZ_EVENT_HIGH,             // PIZ_MSG_JULIET
                                         PIZ_EVENT_HIGH,             // PIZ_MSG_DUMP
-                                        PIZ_EVENT_LOW,              // PIZ_MSG_STATISTICS
-                                        PIZ_EVENT_LOW,              // PIZ_MSG_ATTRIBUTES
+                                        PIZ_EVENT_HIGH,             // PIZ_MSG_STATISTICS
+                                        PIZ_EVENT_HIGH,             // PIZ_MSG_ATTRIBUTES
                                         //  
                                         PIZ_EVENT_LOW,              // PIZ_GUI_CELL_UP
                                         PIZ_EVENT_LOW,              // PIZ_GUI_CELL_DOWN

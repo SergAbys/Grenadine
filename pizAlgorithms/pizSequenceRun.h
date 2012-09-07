@@ -48,17 +48,17 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_FLAG_INIT          (1023UL)
-#define PIZ_SEQUENCE_FLAG_BPM           (1UL << 0)
-#define PIZ_SEQUENCE_FLAG_CHANCE        (1UL << 1)
-#define PIZ_SEQUENCE_FLAG_VELOCITY      (1UL << 2)
-#define PIZ_SEQUENCE_FLAG_CHANNEL       (1UL << 3)
-#define PIZ_SEQUENCE_FLAG_CHORD         (1UL << 4)
-#define PIZ_SEQUENCE_FLAG_CELL          (1UL << 5)
-#define PIZ_SEQUENCE_FLAG_VALUE         (1UL << 6)
-#define PIZ_SEQUENCE_FLAG_SCALE         (1UL << 7)
-#define PIZ_SEQUENCE_FLAG_MUTE          (1UL << 8)
-#define PIZ_SEQUENCE_FLAG_ZONE          (1UL << 9)
+#define PIZ_SEQUENCE_FLAG_NOTIFY_INIT       (1023UL)
+#define PIZ_SEQUENCE_FLAG_NOTIFY_BPM        (1UL << 0)
+#define PIZ_SEQUENCE_FLAG_NOTIFY_CHANCE     (1UL << 1)
+#define PIZ_SEQUENCE_FLAG_NOTIFY_VELOCITY   (1UL << 2)
+#define PIZ_SEQUENCE_FLAG_NOTIFY_CHANNEL    (1UL << 3)
+#define PIZ_SEQUENCE_FLAG_NOTIFY_CHORD      (1UL << 4)
+#define PIZ_SEQUENCE_FLAG_NOTIFY_CELL       (1UL << 5)
+#define PIZ_SEQUENCE_FLAG_NOTIFY_VALUE      (1UL << 6)
+#define PIZ_SEQUENCE_FLAG_NOTIFY_SCALE      (1UL << 7)
+#define PIZ_SEQUENCE_FLAG_NOTIFY_MUTE       (1UL << 8)
+#define PIZ_SEQUENCE_FLAG_NOTIFY_ZONE       (1UL << 9)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -72,7 +72,6 @@ PIZ_LOCAL PIZError  pizSequenceStep         (PIZSequence *x); //
 PIZ_LOCAL PIZError  pizSequenceStepBlank    (PIZSequence *x);
 
 PIZ_END_C_LINKAGE
-
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 

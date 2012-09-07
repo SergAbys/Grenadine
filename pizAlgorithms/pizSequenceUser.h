@@ -58,6 +58,7 @@ PIZ_LOCAL PIZError pizSequenceValueUp           (PIZSequence *x, PIZEvent *event
 PIZ_LOCAL PIZError pizSequenceValueDown         (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizSequenceValueRight        (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizSequenceValueLeft         (PIZSequence *x, PIZEvent *event);
+
 PIZ_LOCAL PIZError pizSequenceNoteDelete        (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizSequenceNoteIncrement     (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizSequenceNoteDecrement     (PIZSequence *x, PIZEvent *event);

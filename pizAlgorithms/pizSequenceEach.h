@@ -49,12 +49,12 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_FLAG_FILL          1UL
-#define PIZ_SEQUENCE_FLAG_RANDOM        2UL
-#define PIZ_SEQUENCE_FLAG_NEARBY        4UL
-#define PIZ_SEQUENCE_FLAG_BACKWARD      8UL
-#define PIZ_SEQUENCE_FLAG_FORWARD       16UL
-#define PIZ_SEQUENCE_FLAG_PATTERN       32UL
+#define PIZ_SEQUENCE_FLAG_EACH_SET          (1UL << 0)
+#define PIZ_SEQUENCE_FLAG_EACH_RANDOM       (1UL << 1)
+#define PIZ_SEQUENCE_FLAG_EACH_NEARBY       (1UL << 2)
+#define PIZ_SEQUENCE_FLAG_EACH_BACKWARD     (1UL << 3)
+#define PIZ_SEQUENCE_FLAG_EACH_FORWARD      (1UL << 4)
+#define PIZ_SEQUENCE_FLAG_EACH_PATTERN      (1UL << 5)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

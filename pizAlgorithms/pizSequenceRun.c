@@ -77,44 +77,44 @@ PIZError pizSequenceRefresh(PIZSequence *x)
     if (x->flags) {
     //
         
-    if (x->flags & PIZ_SEQUENCE_FLAG_BPM) {
+    if (x->flags & PIZ_SEQUENCE_FLAG_NOTIFY_BPM) {
         err |= pizAgentNotify(x->agent, PIZ_NOTIFY_BPM, 1, &x->bpm);
     }
     
-    if (x->flags & PIZ_SEQUENCE_FLAG_CHANCE) {
+    if (x->flags & PIZ_SEQUENCE_FLAG_NOTIFY_CHANCE) {
         err |= pizAgentNotify(x->agent, PIZ_NOTIFY_CHANCE, 1, &x->chance);
     }
     
-    if (x->flags & PIZ_SEQUENCE_FLAG_VELOCITY) {
+    if (x->flags & PIZ_SEQUENCE_FLAG_NOTIFY_VELOCITY) {
         err |= pizAgentNotify(x->agent, PIZ_NOTIFY_VELOCITY, 1, &x->velocity);
     }
     
-    if (x->flags & PIZ_SEQUENCE_FLAG_CHANNEL) {
+    if (x->flags & PIZ_SEQUENCE_FLAG_NOTIFY_CHANNEL) {
         err |= pizAgentNotify(x->agent, PIZ_NOTIFY_CHANNEL, 1, &x->channel);
     }
     
-    if (x->flags & PIZ_SEQUENCE_FLAG_CHORD) {
+    if (x->flags & PIZ_SEQUENCE_FLAG_NOTIFY_CHORD) {
         err |= pizAgentNotify(x->agent, PIZ_NOTIFY_CHORD, 1, &x->chord);
     }
     
-    if (x->flags & PIZ_SEQUENCE_FLAG_CELL) {
+    if (x->flags & PIZ_SEQUENCE_FLAG_NOTIFY_CELL) {
         err |= pizAgentNotify(x->agent, PIZ_NOTIFY_CELL, 1, &x->cell);
     }
     
-    if (x->flags & PIZ_SEQUENCE_FLAG_VALUE) {
+    if (x->flags & PIZ_SEQUENCE_FLAG_NOTIFY_VALUE) {
         err |= pizAgentNotify(x->agent, PIZ_NOTIFY_VALUE, 1, &x->value);
     }
     
-    if (x->flags & PIZ_SEQUENCE_FLAG_SCALE) {
+    if (x->flags & PIZ_SEQUENCE_FLAG_NOTIFY_SCALE) {
         long a[ ] = { x->key, x->type };
         err |= pizAgentNotify(x->agent, PIZ_NOTIFY_SCALE, 2, a);
     }
     
-    if (x->flags & PIZ_SEQUENCE_FLAG_MUTE) {
+    if (x->flags & PIZ_SEQUENCE_FLAG_NOTIFY_MUTE) {
         err |= pizAgentNotify(x->agent, PIZ_NOTIFY_MUTE, 1, &x->mute);
     }
     
-    if (x->flags & PIZ_SEQUENCE_FLAG_ZONE) {
+    if (x->flags & PIZ_SEQUENCE_FLAG_NOTIFY_ZONE) {
         long a[ ] = { x->start, x->end, x->down, x->up };
         err |= pizAgentNotify(x->agent, PIZ_NOTIFY_ZONE, 4, a);
     }

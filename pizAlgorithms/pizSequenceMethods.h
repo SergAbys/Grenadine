@@ -49,11 +49,11 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_FLAG_NONE          0UL
-#define PIZ_SEQUENCE_FLAG_SNAP          1UL
-#define PIZ_SEQUENCE_FLAG_AMBITUS       2UL
-#define PIZ_SEQUENCE_FLAG_CLIP          4UL 
-#define PIZ_SEQUENCE_FLAG_LOW           8UL
+#define PIZ_SEQUENCE_FLAG_NONE              (0UL)
+#define PIZ_SEQUENCE_FLAG_ADD_SNAP          (1UL << 0)
+#define PIZ_SEQUENCE_FLAG_ADD_AMBITUS       (1UL << 1)
+#define PIZ_SEQUENCE_FLAG_ADD_CLIP          (1UL << 2) 
+#define PIZ_SEQUENCE_FLAG_ADD_LOW           (1UL << 3)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

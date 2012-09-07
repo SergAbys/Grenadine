@@ -92,7 +92,7 @@ void pizSequenceEachRemove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulo
     long p = note->position;
     long tag = note->tag;
     
-    if (flag & PIZ_SEQUENCE_FLAG_RANDOM) {
+    if (flag & PIZ_SEQUENCE_FLAG_EACH_RANDOM) {
         h = 100 * (rand_r(&x->seed) / (RAND_MAX + 1.0));
     }
     
@@ -122,13 +122,13 @@ void pizSequenceEachChange(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulo
     long v = argv[1];
     long s = CLAMP(argv[0], PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
     
-    if (flag & PIZ_SEQUENCE_FLAG_RANDOM) {
+    if (flag & PIZ_SEQUENCE_FLAG_EACH_RANDOM) {
         h = 100 * (rand_r(&x->seed) / (RAND_MAX + 1.0));
     }
           
     if ((h == -1) || (h < x->chance)) {
     //
-    if (flag & PIZ_SEQUENCE_FLAG_FILL) {
+    if (flag & PIZ_SEQUENCE_FLAG_EACH_SET) {
         t = v;
     } else {
         t = note->values[s] + v;
@@ -169,7 +169,7 @@ void pizSequenceEachCycle(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulon
 {
     long t, h = -1;
     
-    if (flag & PIZ_SEQUENCE_FLAG_RANDOM) {
+    if (flag & PIZ_SEQUENCE_FLAG_EACH_RANDOM) {
         h = 100 * (rand_r(&x->seed) / (RAND_MAX + 1.0));
     }
           
@@ -209,19 +209,19 @@ void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
     long *argv = NULL;
     PIZError err = PIZ_GOOD; 
     
-    if (flag & PIZ_SEQUENCE_FLAG_BACKWARD) {
+    if (flag & PIZ_SEQUENCE_FLAG_EACH_BACKWARD) {
         do {
         b = pizSequenceSnapByCell(x, a + offset);
         offset -= x->cell;
         } while (b >= a);
         
-    } else if (flag & PIZ_SEQUENCE_FLAG_FORWARD) {
+    } else if (flag & PIZ_SEQUENCE_FLAG_EACH_FORWARD) {
         do {
         b = pizSequenceSnapByCell(x, a + offset);
         offset += x->cell;
         } while (b <= a);
         
-    } else if ((flag & PIZ_SEQUENCE_FLAG_PATTERN) && (!(pizEventData(e, &argc, &argv)))) {
+    } else if ((flag & PIZ_SEQUENCE_FLAG_EACH_PATTERN) && (!(pizEventData(e, &argc, &argv)))) {
         long k = (long)(a / (double)(x->cell));
         k += argv[k % argc];
         b = (MAX(k, 0)) * x->cell;
@@ -258,7 +258,7 @@ void pizSequenceEachFillTempHash(PIZSequence *x, PIZNote *note, const PIZEvent *
 
 void pizSequenceEachFillTempNotes(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
 {
-    if (flag & PIZ_SEQUENCE_FLAG_NEARBY) {
+    if (flag & PIZ_SEQUENCE_FLAG_EACH_NEARBY) {
     //
     long argc;
     long *argv = NULL;
