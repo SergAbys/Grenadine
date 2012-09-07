@@ -197,7 +197,7 @@ void pizSequenceEachDump(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
                   note->tag,
                   x->bpm };
                 
-    x->temp.error |= pizAgentNotify(x->agent, PIZ_NOTIFICATION_DUMPED, 7, a);
+    x->temp.error |= pizAgentNotify(x->agent, PIZ_NOTIFY_DUMPED, 7, a);
 }
 
 void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)

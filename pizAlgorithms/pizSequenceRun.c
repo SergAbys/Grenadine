@@ -83,45 +83,45 @@ PIZError pizSequenceRefresh(PIZSequence *x)
     //
         
     if (x->flags & PIZ_SEQUENCE_FLAG_BPM) {
-        err |= pizAgentNotify(x->agent, PIZ_NOTIFICATION_BPM, 1, &x->bpm);
+        err |= pizAgentNotify(x->agent, PIZ_NOTIFY_BPM, 1, &x->bpm);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANCE) {
-        err |= pizAgentNotify(x->agent, PIZ_NOTIFICATION_CHANCE, 1, &x->chance);
+        err |= pizAgentNotify(x->agent, PIZ_NOTIFY_CHANCE, 1, &x->chance);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_VELOCITY) {
-        err |= pizAgentNotify(x->agent, PIZ_NOTIFICATION_VELOCITY, 1, &x->velocity);
+        err |= pizAgentNotify(x->agent, PIZ_NOTIFY_VELOCITY, 1, &x->velocity);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CHANNEL) {
-        err |= pizAgentNotify(x->agent, PIZ_NOTIFICATION_CHANNEL, 1, &x->channel);
+        err |= pizAgentNotify(x->agent, PIZ_NOTIFY_CHANNEL, 1, &x->channel);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CHORD) {
-        err |= pizAgentNotify(x->agent, PIZ_NOTIFICATION_CHORD, 1, &x->chord);
+        err |= pizAgentNotify(x->agent, PIZ_NOTIFY_CHORD, 1, &x->chord);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_CELL) {
-        err |= pizAgentNotify(x->agent, PIZ_NOTIFICATION_CELL, 1, &x->cell);
+        err |= pizAgentNotify(x->agent, PIZ_NOTIFY_CELL, 1, &x->cell);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_VALUE) {
-        err |= pizAgentNotify(x->agent, PIZ_NOTIFICATION_VALUE, 1, &x->value);
+        err |= pizAgentNotify(x->agent, PIZ_NOTIFY_VALUE, 1, &x->value);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_SCALE) {
         long a[ ] = { x->key, x->type };
-        err |= pizAgentNotify(x->agent, PIZ_NOTIFICATION_SCALE, 2, a);
+        err |= pizAgentNotify(x->agent, PIZ_NOTIFY_SCALE, 2, a);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_MUTE) {
-        err |= pizAgentNotify(x->agent, PIZ_NOTIFICATION_MUTE, 1, &x->mute);
+        err |= pizAgentNotify(x->agent, PIZ_NOTIFY_MUTE, 1, &x->mute);
     }
     
     if (x->flags & PIZ_SEQUENCE_FLAG_ZONE) {
         long a[ ] = { x->start, x->end, x->down, x->up };
-        err |= pizAgentNotify(x->agent, PIZ_NOTIFICATION_ZONE, 4, a);
+        err |= pizAgentNotify(x->agent, PIZ_NOTIFY_ZONE, 4, a);
     }
     
     x->flags = PIZ_SEQUENCE_FLAG_NONE;
@@ -133,7 +133,7 @@ PIZError pizSequenceRefresh(PIZSequence *x)
     for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
         if (pizItemsetIsSetAtIndex(&x->removed, i)) {
             long a[ ] = { 0, 0, 0, 0, 0, i, x->bpm };
-            err |= pizAgentNotify(x->agent, PIZ_NOTIFICATION_REMOVED, 7, a);
+            err |= pizAgentNotify(x->agent, PIZ_NOTIFY_REMOVED, 7, a);
         } 
     }
     
@@ -158,7 +158,7 @@ PIZError pizSequenceRefresh(PIZSequence *x)
                           x->bpm,
                           low };
             
-            err |= pizAgentNotify(x->agent, PIZ_NOTIFICATION_ADDED, 8, a);
+            err |= pizAgentNotify(x->agent, PIZ_NOTIFY_ADDED, 8, a);
             
             pizItemsetUnsetAtIndex(&x->changed, i);
         } 
@@ -182,7 +182,7 @@ PIZError pizSequenceRefresh(PIZSequence *x)
                           note->tag,
                           x->bpm };
             
-            err |= pizAgentNotify(x->agent, PIZ_NOTIFICATION_CHANGED, 7, a);
+            err |= pizAgentNotify(x->agent, PIZ_NOTIFY_CHANGED, 7, a);
         } 
     }
     
@@ -254,7 +254,7 @@ PIZError pizSequenceStep(PIZSequence *x)
                       note->tag,
                       x->bpm };
         
-        err |= pizAgentNotify(x->agent, PIZ_NOTIFICATION_PLAYED, 7, a);
+        err |= pizAgentNotify(x->agent, PIZ_NOTIFY_PLAYED, 7, a);
         //
         }
         

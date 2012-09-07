@@ -287,7 +287,7 @@ void tralala_init(t_tll *x, t_symbol *s, short argc, t_atom *argv)
     link->s_thing = (t_object *)x;
     atom_setsym(&x->link, link);
     
-    tralala_send(x, PIZ_MESSAGE_INIT, 0, NULL, TLL_FLAG_NONE);
+    tralala_send(x, PIZ_MSG_INIT, 0, NULL, TLL_FLAG_NONE);
 }
 
 void tralala_free(t_tll *x)
@@ -429,7 +429,7 @@ void tralala_recall(t_tll *x, t_symbol *s, long argc, t_atom *argv)
     if (name && !(dictionary_getdictionary(x->data, name, (t_object **)&d))) {
         if (t = dictionary_new ( )) {
             dictionary_copyunique(t, d);
-            tralala_send(x, PIZ_MESSAGE_CLEAR, 0, NULL, TLL_FLAG_RUN);
+            tralala_send(x, PIZ_MSG_CLEAR, 0, NULL, TLL_FLAG_RUN);
             tralala_parseDictionary(x, t, flags);
             object_free(t);
         }
@@ -451,7 +451,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
 {
     PIZEvent *copy = NULL;
     t_tll *x = (t_tll *)ptr;
-    PIZEventCode code = PIZ_MESSAGE_NONE;
+    PIZEventCode code = PIZ_MSG_NONE;
 
     TLL_RUN_LOCK
     pizLinklistAppend(x->run, (void *)event);
@@ -462,7 +462,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
     pizEventCode(event, &code);
     tralala_switchDaemon(x, code);
         
-    if ((code == PIZ_NOTIFICATION_PLAYED) && (copy = pizEventNewCopy(event))) {
+    if ((code == PIZ_NOTIFY_PLAYED) && (copy = pizEventNewCopy(event))) {
     //
     TLL_DAEMON_LOCK
     pizLinklistAppend(x->daemon, (void *)copy);
@@ -498,7 +498,7 @@ void tralala_runTask (t_tll *x)
     //
     long argc;
     long *argv = NULL;
-    PIZEventCode code = PIZ_MESSAGE_NONE;
+    PIZEventCode code = PIZ_MSG_NONE;
     long a[ ] = { 0, 0, 0, 0 };
     
     pizLinklistNextWithPtr(x->runCopy, (void *)event, (void **)&nextEvent);
@@ -507,7 +507,7 @@ void tralala_runTask (t_tll *x)
         
     switch (code) {
     //
-    case PIZ_NOTIFICATION_PLAYED :
+    case PIZ_NOTIFY_PLAYED :
         pizEventData(event, &argc, &argv);
         a[0] = argv[PIZ_EVENT_DATA_PITCH];
         a[1] = argv[PIZ_EVENT_DATA_VELOCITY];
@@ -518,21 +518,21 @@ void tralala_runTask (t_tll *x)
         outlet_list(x->left, TLL_SYM_LIST, 4, x->played); 
         break;
         
-    case PIZ_NOTIFICATION_DUMPED :
+    case PIZ_NOTIFY_DUMPED :
         pizEventData(event, &argc, &argv);
         atom_setlong_array(5, x->dumped, 5, argv);
         outlet_anything(x->middleLeft, TLL_SYM_NOTE, 5, x->dumped); 
         break;
 
-    case PIZ_NOTIFICATION_WILL_DUMP :
+    case PIZ_NOTIFY_WILL_DUMP :
         outlet_anything(x->middleLeft, TLL_SYM_CLEAR, 0, NULL);
         break;
 
-    case PIZ_NOTIFICATION_WILL_END :
+    case PIZ_NOTIFY_WILL_END :
         outlet_bang(x->middleRight);
         break;
     
-    case PIZ_NOTIFICATION_END :
+    case PIZ_NOTIFY_END :
         pizEventTime(event, &x->time);
         outlet_anything(x->middle, TLL_SYM_END, 1, &x->link);
         break;
@@ -605,22 +605,22 @@ void tralala_daemonTask (t_tll *x)
 
 void tralala_play(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
-    tralala_send(x, PIZ_MESSAGE_PLAY, argc, argv, TLL_FLAG_NONE);
+    tralala_send(x, PIZ_MSG_PLAY, argc, argv, TLL_FLAG_NONE);
 }
 
 void tralala_loop(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
-    tralala_send(x, PIZ_MESSAGE_LOOP, argc, argv, TLL_FLAG_NONE);
+    tralala_send(x, PIZ_MSG_LOOP, argc, argv, TLL_FLAG_NONE);
 }
 
 void tralala_stop(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
-    tralala_send(x, PIZ_MESSAGE_STOP, 0, NULL, TLL_FLAG_NONE);
+    tralala_send(x, PIZ_MSG_STOP, 0, NULL, TLL_FLAG_NONE);
 }
 
 void tralala_unloop(t_tll *x, t_symbol *s, long argc, t_atom *argv) 
 {   
-    tralala_send(x, PIZ_MESSAGE_UNLOOP, 0, NULL, TLL_FLAG_NONE);
+    tralala_send(x, PIZ_MSG_UNLOOP, 0, NULL, TLL_FLAG_NONE);
 }
 
 void tralala_list(t_tll *x, t_symbol *s, long argc, t_atom *argv)
@@ -671,10 +671,10 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong fl
 
 void tralala_switchDaemon(t_tll *x, PIZEventCode code)
 {
-    if ((code == PIZ_NOTIFICATION_END) || (code == PIZ_MESSAGE_STOP)) {
+    if ((code == PIZ_NOTIFY_END) || (code == PIZ_MSG_STOP)) {
         TLL_FLAG_UNSET(TLL_FLAG_DAEMON)
 
-    } else if ((code == PIZ_NOTIFICATION_PLAYED) && (TLL_FLAG_FALSE(TLL_FLAG_DAEMON))) {
+    } else if ((code == PIZ_NOTIFY_PLAYED) && (TLL_FLAG_FALSE(TLL_FLAG_DAEMON))) {
         TLL_FLAG_SET(TLL_FLAG_DAEMON)
         clock_fdelay(x->daemonClock, TLL_CLOCK_DAEMON_WORK); 
     }

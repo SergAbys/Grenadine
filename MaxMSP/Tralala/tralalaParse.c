@@ -104,37 +104,37 @@ table->dumpout          = gensym("dumpout");
 
 tll_code = dictionary_new( );
 
-dictionary_appendlong(tll_code, gensym("learn"),        (TLL_BIAS + PIZ_MESSAGE_LEARN));
-dictionary_appendlong(tll_code, gensym("list"),         (TLL_BIAS + PIZ_MESSAGE_LEARN));
-dictionary_appendlong(tll_code, gensym("forget"),       (TLL_BIAS + PIZ_MESSAGE_FORGET));
-dictionary_appendlong(tll_code, gensym("bpm"),          (TLL_BIAS + PIZ_MESSAGE_BPM));
-dictionary_appendlong(tll_code, gensym("chance"),       (TLL_BIAS + PIZ_MESSAGE_CHANCE));
-dictionary_appendlong(tll_code, gensym("velocity"),     (TLL_BIAS + PIZ_MESSAGE_VELOCITY));
-dictionary_appendlong(tll_code, gensym("channel"),      (TLL_BIAS + PIZ_MESSAGE_CHANNEL));
-dictionary_appendlong(tll_code, gensym("chord"),        (TLL_BIAS + PIZ_MESSAGE_CHORD));
-dictionary_appendlong(tll_code, gensym("cell"),         (TLL_BIAS + PIZ_MESSAGE_CELL));
-dictionary_appendlong(tll_code, gensym("value"),        (TLL_BIAS + PIZ_MESSAGE_VALUE));
-dictionary_appendlong(tll_code, gensym("scale"),        (TLL_BIAS + PIZ_MESSAGE_SCALE));
-dictionary_appendlong(tll_code, gensym("mute"),         (TLL_BIAS + PIZ_MESSAGE_MUTE));
-dictionary_appendlong(tll_code, gensym("zone"),         (TLL_BIAS + PIZ_MESSAGE_ZONE));
-dictionary_appendlong(tll_code, gensym("note"),         (TLL_BIAS + PIZ_MESSAGE_NOTE));
-dictionary_appendlong(tll_code, gensym("clear"),        (TLL_BIAS + PIZ_MESSAGE_CLEAR));
-dictionary_appendlong(tll_code, gensym("clean"),        (TLL_BIAS + PIZ_MESSAGE_CLEAN));
-dictionary_appendlong(tll_code, gensym("transpose"),    (TLL_BIAS + PIZ_MESSAGE_TRANSPOSE));
-dictionary_appendlong(tll_code, gensym("rotate"),       (TLL_BIAS + PIZ_MESSAGE_ROTATE));
-dictionary_appendlong(tll_code, gensym("scramble"),     (TLL_BIAS + PIZ_MESSAGE_SCRAMBLE));
-dictionary_appendlong(tll_code, gensym("sort"),         (TLL_BIAS + PIZ_MESSAGE_SORT));
-dictionary_appendlong(tll_code, gensym("change"),       (TLL_BIAS + PIZ_MESSAGE_CHANGE));
-dictionary_appendlong(tll_code, gensym("fill"),         (TLL_BIAS + PIZ_MESSAGE_FILL));
-dictionary_appendlong(tll_code, gensym("kill"),         (TLL_BIAS + PIZ_MESSAGE_KILL));
-dictionary_appendlong(tll_code, gensym("cycle"),        (TLL_BIAS + PIZ_MESSAGE_CYCLE));
-dictionary_appendlong(tll_code, gensym("pattern"),      (TLL_BIAS + PIZ_MESSAGE_PATTERN));
-dictionary_appendlong(tll_code, gensym("zoulou"),       (TLL_BIAS + PIZ_MESSAGE_ZOULOU));
-dictionary_appendlong(tll_code, gensym("romeo"),        (TLL_BIAS + PIZ_MESSAGE_ROMEO));
-dictionary_appendlong(tll_code, gensym("juliet"),       (TLL_BIAS + PIZ_MESSAGE_JULIET));
-dictionary_appendlong(tll_code, gensym("dump"),         (TLL_BIAS + PIZ_MESSAGE_DUMP));
-dictionary_appendlong(tll_code, gensym("statistics"),   (TLL_BIAS + PIZ_MESSAGE_STATISTICS));
-dictionary_appendlong(tll_code, gensym("attributes"),   (TLL_BIAS + PIZ_MESSAGE_ATTRIBUTES));
+dictionary_appendlong(tll_code, gensym("learn"),        (TLL_BIAS + PIZ_MSG_LEARN));
+dictionary_appendlong(tll_code, gensym("list"),         (TLL_BIAS + PIZ_MSG_LEARN));
+dictionary_appendlong(tll_code, gensym("forget"),       (TLL_BIAS + PIZ_MSG_FORGET));
+dictionary_appendlong(tll_code, gensym("bpm"),          (TLL_BIAS + PIZ_MSG_BPM));
+dictionary_appendlong(tll_code, gensym("chance"),       (TLL_BIAS + PIZ_MSG_CHANCE));
+dictionary_appendlong(tll_code, gensym("velocity"),     (TLL_BIAS + PIZ_MSG_VELOCITY));
+dictionary_appendlong(tll_code, gensym("channel"),      (TLL_BIAS + PIZ_MSG_CHANNEL));
+dictionary_appendlong(tll_code, gensym("chord"),        (TLL_BIAS + PIZ_MSG_CHORD));
+dictionary_appendlong(tll_code, gensym("cell"),         (TLL_BIAS + PIZ_MSG_CELL));
+dictionary_appendlong(tll_code, gensym("value"),        (TLL_BIAS + PIZ_MSG_VALUE));
+dictionary_appendlong(tll_code, gensym("scale"),        (TLL_BIAS + PIZ_MSG_SCALE));
+dictionary_appendlong(tll_code, gensym("mute"),         (TLL_BIAS + PIZ_MSG_MUTE));
+dictionary_appendlong(tll_code, gensym("zone"),         (TLL_BIAS + PIZ_MSG_ZONE));
+dictionary_appendlong(tll_code, gensym("note"),         (TLL_BIAS + PIZ_MSG_NOTE));
+dictionary_appendlong(tll_code, gensym("clear"),        (TLL_BIAS + PIZ_MSG_CLEAR));
+dictionary_appendlong(tll_code, gensym("clean"),        (TLL_BIAS + PIZ_MSG_CLEAN));
+dictionary_appendlong(tll_code, gensym("transpose"),    (TLL_BIAS + PIZ_MSG_TRANSPOSE));
+dictionary_appendlong(tll_code, gensym("rotate"),       (TLL_BIAS + PIZ_MSG_ROTATE));
+dictionary_appendlong(tll_code, gensym("scramble"),     (TLL_BIAS + PIZ_MSG_SCRAMBLE));
+dictionary_appendlong(tll_code, gensym("sort"),         (TLL_BIAS + PIZ_MSG_SORT));
+dictionary_appendlong(tll_code, gensym("change"),       (TLL_BIAS + PIZ_MSG_CHANGE));
+dictionary_appendlong(tll_code, gensym("fill"),         (TLL_BIAS + PIZ_MSG_FILL));
+dictionary_appendlong(tll_code, gensym("kill"),         (TLL_BIAS + PIZ_MSG_KILL));
+dictionary_appendlong(tll_code, gensym("cycle"),        (TLL_BIAS + PIZ_MSG_CYCLE));
+dictionary_appendlong(tll_code, gensym("pattern"),      (TLL_BIAS + PIZ_MSG_PATTERN));
+dictionary_appendlong(tll_code, gensym("zoulou"),       (TLL_BIAS + PIZ_MSG_ZOULOU));
+dictionary_appendlong(tll_code, gensym("romeo"),        (TLL_BIAS + PIZ_MSG_ROMEO));
+dictionary_appendlong(tll_code, gensym("juliet"),       (TLL_BIAS + PIZ_MSG_JULIET));
+dictionary_appendlong(tll_code, gensym("dump"),         (TLL_BIAS + PIZ_MSG_DUMP));
+dictionary_appendlong(tll_code, gensym("statistics"),   (TLL_BIAS + PIZ_MSG_STATISTICS));
+dictionary_appendlong(tll_code, gensym("attributes"),   (TLL_BIAS + PIZ_MSG_ATTRIBUTES));
 
 tll_type        = (t_quickmap *)quickmap_new( );
 tll_length      = (t_quickmap *)quickmap_new( );
@@ -211,28 +211,28 @@ quickmap_add(tll_key, gensym("A"),                        (void *)(TLL_BIAS + PI
 quickmap_add(tll_key, gensym("A#"),                       (void *)(TLL_BIAS + PIZ_KEY_A_SHARP));
 quickmap_add(tll_key, gensym("B"),                        (void *)(TLL_BIAS + PIZ_KEY_B));
 
-quickmap_add(tll_info, gensym("bpm"),                     (void *)(TLL_BIAS + PIZ_INFORMATION_BPM));
-quickmap_add(tll_info, gensym("chance"),                  (void *)(TLL_BIAS + PIZ_INFORMATION_CHANCE));
-quickmap_add(tll_info, gensym("velocity"),                (void *)(TLL_BIAS + PIZ_INFORMATION_VELOCITY));
-quickmap_add(tll_info, gensym("channel"),                 (void *)(TLL_BIAS + PIZ_INFORMATION_CHANNEL));
-quickmap_add(tll_info, gensym("chord"),                   (void *)(TLL_BIAS + PIZ_INFORMATION_CHORD));
-quickmap_add(tll_info, gensym("cell"),                    (void *)(TLL_BIAS + PIZ_INFORMATION_CELL));
-quickmap_add(tll_info, gensym("value"),                   (void *)(TLL_BIAS + PIZ_INFORMATION_VALUE));
-quickmap_add(tll_info, gensym("scale"),                   (void *)(TLL_BIAS + PIZ_INFORMATION_SCALE));
-quickmap_add(tll_info, gensym("mute"),                    (void *)(TLL_BIAS + PIZ_INFORMATION_MUTE));
-quickmap_add(tll_info, gensym("zone"),                    (void *)(TLL_BIAS + PIZ_INFORMATION_ZONE));
-quickmap_add(tll_info, gensym("count"),                   (void *)(TLL_BIAS + PIZ_INFORMATION_COUNT));
+quickmap_add(tll_info, gensym("bpm"),                     (void *)(TLL_BIAS + PIZ_INFORM_BPM));
+quickmap_add(tll_info, gensym("chance"),                  (void *)(TLL_BIAS + PIZ_INFORM_CHANCE));
+quickmap_add(tll_info, gensym("velocity"),                (void *)(TLL_BIAS + PIZ_INFORM_VELOCITY));
+quickmap_add(tll_info, gensym("channel"),                 (void *)(TLL_BIAS + PIZ_INFORM_CHANNEL));
+quickmap_add(tll_info, gensym("chord"),                   (void *)(TLL_BIAS + PIZ_INFORM_CHORD));
+quickmap_add(tll_info, gensym("cell"),                    (void *)(TLL_BIAS + PIZ_INFORM_CELL));
+quickmap_add(tll_info, gensym("value"),                   (void *)(TLL_BIAS + PIZ_INFORM_VALUE));
+quickmap_add(tll_info, gensym("scale"),                   (void *)(TLL_BIAS + PIZ_INFORM_SCALE));
+quickmap_add(tll_info, gensym("mute"),                    (void *)(TLL_BIAS + PIZ_INFORM_MUTE));
+quickmap_add(tll_info, gensym("zone"),                    (void *)(TLL_BIAS + PIZ_INFORM_ZONE));
+quickmap_add(tll_info, gensym("count"),                   (void *)(TLL_BIAS + PIZ_INFORM_COUNT));
     
-quickmap_add(tll_changed, gensym("bpm"),                  (void *)(TLL_BIAS + PIZ_NOTIFICATION_BPM));
-quickmap_add(tll_changed, gensym("chance"),               (void *)(TLL_BIAS + PIZ_NOTIFICATION_CHANCE));
-quickmap_add(tll_changed, gensym("velocity"),             (void *)(TLL_BIAS + PIZ_NOTIFICATION_VELOCITY));
-quickmap_add(tll_changed, gensym("channel"),              (void *)(TLL_BIAS + PIZ_NOTIFICATION_CHANNEL));
-quickmap_add(tll_changed, gensym("chord"),                (void *)(TLL_BIAS + PIZ_NOTIFICATION_CHORD));
-quickmap_add(tll_changed, gensym("cell"),                 (void *)(TLL_BIAS + PIZ_NOTIFICATION_CELL));
-quickmap_add(tll_changed, gensym("value"),                (void *)(TLL_BIAS + PIZ_NOTIFICATION_VALUE));
-quickmap_add(tll_changed, gensym("scale"),                (void *)(TLL_BIAS + PIZ_NOTIFICATION_SCALE));
-quickmap_add(tll_changed, gensym("mute"),                 (void *)(TLL_BIAS + PIZ_NOTIFICATION_MUTE));
-quickmap_add(tll_changed, gensym("zone"),                 (void *)(TLL_BIAS + PIZ_NOTIFICATION_ZONE));
+quickmap_add(tll_changed, gensym("bpm"),                  (void *)(TLL_BIAS + PIZ_NOTIFY_BPM));
+quickmap_add(tll_changed, gensym("chance"),               (void *)(TLL_BIAS + PIZ_NOTIFY_CHANCE));
+quickmap_add(tll_changed, gensym("velocity"),             (void *)(TLL_BIAS + PIZ_NOTIFY_VELOCITY));
+quickmap_add(tll_changed, gensym("channel"),              (void *)(TLL_BIAS + PIZ_NOTIFY_CHANNEL));
+quickmap_add(tll_changed, gensym("chord"),                (void *)(TLL_BIAS + PIZ_NOTIFY_CHORD));
+quickmap_add(tll_changed, gensym("cell"),                 (void *)(TLL_BIAS + PIZ_NOTIFY_CELL));
+quickmap_add(tll_changed, gensym("value"),                (void *)(TLL_BIAS + PIZ_NOTIFY_VALUE));
+quickmap_add(tll_changed, gensym("scale"),                (void *)(TLL_BIAS + PIZ_NOTIFY_SCALE));
+quickmap_add(tll_changed, gensym("mute"),                 (void *)(TLL_BIAS + PIZ_NOTIFY_MUTE));
+quickmap_add(tll_changed, gensym("zone"),                 (void *)(TLL_BIAS + PIZ_NOTIFY_ZONE));
 //
 }
 
@@ -246,7 +246,7 @@ void tralala_parseEvent(t_tll *x, PIZEvent *event)
     long *data = NULL;
     t_symbol *s = NULL;
     ulong dirty = TLL_FLAG_NONE;
-    PIZEventCode code = PIZ_MESSAGE_NONE;
+    PIZEventCode code = PIZ_MSG_NONE;
         
     pizEventCode(event, &code);
     pizEventData(event, &k, &data);
@@ -267,7 +267,7 @@ void tralala_parseEvent(t_tll *x, PIZEvent *event)
 
 void tralala_parseEntry(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong flags)
 {
-    PIZEventCode code = PIZ_MESSAGE_NONE;
+    PIZEventCode code = PIZ_MSG_NONE;
 
     if (!(dictionary_getlong(tll_code, s, (long *)&code))) {
     //
@@ -278,10 +278,10 @@ void tralala_parseEntry(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong fl
     
     code -= TLL_BIAS;
     
-    if (code == PIZ_MESSAGE_NOTE) {
+    if (code == PIZ_MSG_NOTE) {
         tralala_parseEntryNote(x, argc, argv, &k, data);
         
-    } else if (code == PIZ_MESSAGE_ZONE) {
+    } else if (code == PIZ_MSG_ZONE) {
         tralala_parseEntryZone(x, argc, argv, &k, data);
         
     } else if (!(flags & TLL_FLAG_FILTER)) {
@@ -342,7 +342,7 @@ ulong tralala_parseEventNote(t_tll *x, long k, long *data, PIZEventCode code)
       
     TLL_DATA_LOCK
     
-    if (code == PIZ_NOTIFICATION_REMOVED) {
+    if (code == PIZ_NOTIFY_REMOVED) {
     //
     if (dictionary_hasentry(x->status, s)) {
     //
@@ -358,7 +358,7 @@ ulong tralala_parseEventNote(t_tll *x, long k, long *data, PIZEventCode code)
     
     dictionary_deleteentry(x->current, s);
     //
-    } else if ((code == PIZ_NOTIFICATION_ADDED) || (code == PIZ_NOTIFICATION_CHANGED)) {
+    } else if ((code == PIZ_NOTIFY_ADDED) || (code == PIZ_NOTIFY_CHANGED)) {
     //
     long i;
     t_atom atoms[PIZ_EVENT_DATA_SIZE + 1];
@@ -394,10 +394,10 @@ ulong tralala_parseEventCode(t_tll *x, long k, long *data, PIZEventCode code, t_
     
     atom_setsym(atoms, s);
     
-    if (code == PIZ_NOTIFICATION_ZONE) {
+    if (code == PIZ_NOTIFY_ZONE) {
         dirty |= TLL_DIRTY_ZONE;
         
-    } else if (code == PIZ_NOTIFICATION_SCALE) {
+    } else if (code == PIZ_NOTIFY_SCALE) {
         t_symbol *sym1 = NULL;
         t_symbol *sym2 = NULL;
 
@@ -417,7 +417,7 @@ ulong tralala_parseEventCode(t_tll *x, long k, long *data, PIZEventCode code, t_
 
 void  tralala_parseEventInfo(t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s)
 {    
-    if (code == PIZ_INFORMATION_SCALE) {
+    if (code == PIZ_INFORM_SCALE) {
         t_symbol *sym1 = NULL;
         t_symbol *sym2 = NULL;
 
@@ -483,14 +483,14 @@ void tralala_parseEntryCode(t_tll *x, long ac, t_atom *av, long *k, long *data, 
 {        
     long i, msg = 0;
     
-    msg |= (code == PIZ_MESSAGE_ROTATE);
-    msg |= (code == PIZ_MESSAGE_SCRAMBLE);
-    msg |= (code == PIZ_MESSAGE_SORT);
-    msg |= (code == PIZ_MESSAGE_CHANGE);
-    msg |= (code == PIZ_MESSAGE_FILL);
-    msg |= (code == PIZ_MESSAGE_CYCLE);
+    msg |= (code == PIZ_MSG_ROTATE);
+    msg |= (code == PIZ_MSG_SCRAMBLE);
+    msg |= (code == PIZ_MSG_SORT);
+    msg |= (code == PIZ_MSG_CHANGE);
+    msg |= (code == PIZ_MSG_FILL);
+    msg |= (code == PIZ_MSG_CYCLE);
     
-    if (msg || (code == PIZ_MESSAGE_TRANSPOSE)) {
+    if (msg || (code == PIZ_MSG_TRANSPOSE)) {
         (*k) = 1;
     }
                      
@@ -500,14 +500,14 @@ void tralala_parseEntryCode(t_tll *x, long ac, t_atom *av, long *k, long *data, 
     //
     long t, j = 0, p = 0;
      
-    if ((code == PIZ_MESSAGE_SCALE) || (code == PIZ_MESSAGE_CYCLE)) {
+    if ((code == PIZ_MSG_SCALE) || (code == PIZ_MSG_CYCLE)) {
         if (!(quickmap_lookup_key1(tll_type, (void *)atom_getsym(av + i), (void **)&t))) {
             j = t - TLL_BIAS; p = 1; 
         } else if (!(quickmap_lookup_key1(tll_key, (void *)atom_getsym(av + i), (void **)&t))) {
             j = t - TLL_BIAS;
         }
         
-    } else if ((code == PIZ_MESSAGE_CELL) || (code == PIZ_MESSAGE_VALUE)) {
+    } else if ((code == PIZ_MSG_CELL) || (code == PIZ_MSG_VALUE)) {
         if (!(quickmap_lookup_key1(tll_length, (void *)atom_getsym(av + i), (void **)&t))) {
             j = t - TLL_BIAS; p = 0;
         } else {

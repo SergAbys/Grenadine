@@ -158,7 +158,7 @@ ulong tralala_keyPaste(t_tll *x, long m)
 
 ulong tralala_keyDelete(t_tll *x, long m)
 {
-    tralala_keyChangeNotes(x, m, PIZ_GRAPHIC_NOTE_DELETE, 0);
+    tralala_keyChangeNotes(x, m, PIZ_GUI_NOTE_DELETE, 0);
     
     return TLL_FLAG_NONE;
 }
@@ -166,19 +166,19 @@ ulong tralala_keyDelete(t_tll *x, long m)
 ulong tralala_keyUp(t_tll *x, long m)
 {
     if (m & eControlKey) {
-        tralala_keyChangeNotes(x, m, PIZ_GRAPHIC_NOTE_INCREMENT, PIZ_VALUE_VELOCITY);
+        tralala_keyChangeNotes(x, m, PIZ_GUI_NOTE_INCREMENT, PIZ_VALUE_VELOCITY);
     
     } else if (m & eCommandKey) {
         if (m & eShiftKey) {
-            tralala_keyChangeAttribute(x, m, PIZ_GRAPHIC_VALUE_UP);
+            tralala_keyChangeAttribute(x, m, PIZ_GUI_VALUE_UP);
         } else {
-            tralala_keyChangeAttribute(x, m, PIZ_GRAPHIC_CELL_UP);
+            tralala_keyChangeAttribute(x, m, PIZ_GUI_CELL_UP);
         }
         
     } else {
         tralala_keyDuplicate(x, m);
         tralala_keyChangeZone(x, m, JKEY_UPARROW);
-        tralala_keyChangeNotes(x, m, PIZ_GRAPHIC_NOTE_INCREMENT, PIZ_VALUE_PITCH);
+        tralala_keyChangeNotes(x, m, PIZ_GUI_NOTE_INCREMENT, PIZ_VALUE_PITCH);
     }
     
     return TLL_FLAG_NONE;
@@ -187,19 +187,19 @@ ulong tralala_keyUp(t_tll *x, long m)
 ulong tralala_keyDown(t_tll *x, long m)
 {
     if (m & eControlKey) {
-        tralala_keyChangeNotes(x, m, PIZ_GRAPHIC_NOTE_DECREMENT, PIZ_VALUE_VELOCITY);
+        tralala_keyChangeNotes(x, m, PIZ_GUI_NOTE_DECREMENT, PIZ_VALUE_VELOCITY);
     
     } else if (m & eCommandKey) {
         if (m & eShiftKey) {
-            tralala_keyChangeAttribute(x, m, PIZ_GRAPHIC_VALUE_DOWN);
+            tralala_keyChangeAttribute(x, m, PIZ_GUI_VALUE_DOWN);
         } else {
-            tralala_keyChangeAttribute(x, m, PIZ_GRAPHIC_CELL_DOWN);
+            tralala_keyChangeAttribute(x, m, PIZ_GUI_CELL_DOWN);
         }
         
     } else {
         tralala_keyDuplicate(x, m);
         tralala_keyChangeZone(x, m, JKEY_DOWNARROW);
-        tralala_keyChangeNotes(x, m, PIZ_GRAPHIC_NOTE_DECREMENT, PIZ_VALUE_PITCH);
+        tralala_keyChangeNotes(x, m, PIZ_GUI_NOTE_DECREMENT, PIZ_VALUE_PITCH);
     }
     
     return TLL_FLAG_NONE;
@@ -208,19 +208,19 @@ ulong tralala_keyDown(t_tll *x, long m)
 ulong tralala_keyLeft(t_tll *x, long m)
 {
     if (m & eControlKey) {
-        tralala_keyChangeNotes(x, m, PIZ_GRAPHIC_NOTE_DECREMENT, PIZ_VALUE_DURATION);
+        tralala_keyChangeNotes(x, m, PIZ_GUI_NOTE_DECREMENT, PIZ_VALUE_DURATION);
     
     } else if (m & eCommandKey) {
         if (m & eShiftKey) {
-            tralala_keyChangeAttribute(x, m, PIZ_GRAPHIC_VALUE_RIGHT);
+            tralala_keyChangeAttribute(x, m, PIZ_GUI_VALUE_RIGHT);
         } else {
-            tralala_keyChangeAttribute(x, m, PIZ_GRAPHIC_CELL_RIGHT);
+            tralala_keyChangeAttribute(x, m, PIZ_GUI_CELL_RIGHT);
         }
         
     } else {
         tralala_keyDuplicate(x, m);
         tralala_keyChangeZone(x, m, JKEY_LEFTARROW);
-        tralala_keyChangeNotes(x, m, PIZ_GRAPHIC_NOTE_BACKWARD, 0);
+        tralala_keyChangeNotes(x, m, PIZ_GUI_NOTE_BACKWARD, 0);
     }
     
     return TLL_FLAG_NONE;
@@ -229,19 +229,19 @@ ulong tralala_keyLeft(t_tll *x, long m)
 ulong tralala_keyRight(t_tll *x, long m)
 {
     if (m & eControlKey) {
-        tralala_keyChangeNotes(x, m, PIZ_GRAPHIC_NOTE_INCREMENT, PIZ_VALUE_DURATION);
+        tralala_keyChangeNotes(x, m, PIZ_GUI_NOTE_INCREMENT, PIZ_VALUE_DURATION);
        
     } else if (m & eCommandKey) {
         if (m & eShiftKey) {
-            tralala_keyChangeAttribute(x, m, PIZ_GRAPHIC_VALUE_LEFT);
+            tralala_keyChangeAttribute(x, m, PIZ_GUI_VALUE_LEFT);
         } else {
-            tralala_keyChangeAttribute(x, m, PIZ_GRAPHIC_CELL_LEFT);
+            tralala_keyChangeAttribute(x, m, PIZ_GUI_CELL_LEFT);
         }
         
     } else {
         tralala_keyDuplicate(x, m);
         tralala_keyChangeZone(x, m, JKEY_RIGHTARROW);
-        tralala_keyChangeNotes(x, m, PIZ_GRAPHIC_NOTE_FORWARD, 0);
+        tralala_keyChangeNotes(x, m, PIZ_GUI_NOTE_FORWARD, 0);
     }
     
     return TLL_FLAG_NONE;
@@ -250,9 +250,9 @@ ulong tralala_keyRight(t_tll *x, long m)
 ulong tralala_keyPageUp(t_tll *x, long m)
 {
     if (m & eShiftKey) {
-        tralala_keyChangeAttribute(x, m, PIZ_GRAPHIC_CHANNEL_INCREMENT);
+        tralala_keyChangeAttribute(x, m, PIZ_GUI_CHANNEL_INCREMENT);
     } else {
-        tralala_keyChangeNotes(x, m, PIZ_GRAPHIC_NOTE_INCREMENT, PIZ_VALUE_CHANNEL);
+        tralala_keyChangeNotes(x, m, PIZ_GUI_NOTE_INCREMENT, PIZ_VALUE_CHANNEL);
     }
     
     return TLL_FLAG_NONE;
@@ -261,9 +261,9 @@ ulong tralala_keyPageUp(t_tll *x, long m)
 ulong tralala_keyPageDown(t_tll *x, long m)
 {
     if (m & eShiftKey) {
-        tralala_keyChangeAttribute(x, m, PIZ_GRAPHIC_CHANNEL_DECREMENT);
+        tralala_keyChangeAttribute(x, m, PIZ_GUI_CHANNEL_DECREMENT);
     } else {
-        tralala_keyChangeNotes(x, m, PIZ_GRAPHIC_NOTE_DECREMENT, PIZ_VALUE_CHANNEL);
+        tralala_keyChangeNotes(x, m, PIZ_GUI_NOTE_DECREMENT, PIZ_VALUE_CHANNEL);
     }
     
     return TLL_FLAG_NONE;
@@ -352,7 +352,7 @@ void tralala_keyChangeZone(t_tll *x, long m, long keycode)
 {
     long side = 0;
     long status = 0;
-    PIZEventCode code = PIZ_MESSAGE_NONE;
+    PIZEventCode code = PIZ_MSG_NONE;
     PIZEvent *event = NULL;
     
     TLL_DATA_LOCK
@@ -364,25 +364,25 @@ void tralala_keyChangeZone(t_tll *x, long m, long keycode)
     switch (keycode) {
     //
     case JKEY_UPARROW    :
-        code = PIZ_GRAPHIC_ZONE_INCREMENT;
+        code = PIZ_GUI_ZONE_INCREMENT;
         if (k || (status == TLL_SELECTED_UP))   { side |= PIZ_ZONE_UP; }
         if (k || (status == TLL_SELECTED_DOWN)) { side |= PIZ_ZONE_DOWN; }
         break;
         
     case JKEY_DOWNARROW  :
-        code = PIZ_GRAPHIC_ZONE_DECREMENT;
+        code = PIZ_GUI_ZONE_DECREMENT;
         if (k || (status == TLL_SELECTED_DOWN)) { side |= PIZ_ZONE_DOWN; }
         if (k || (status == TLL_SELECTED_UP))   { side |= PIZ_ZONE_UP; }
         break;
         
     case JKEY_LEFTARROW  :
-        code = PIZ_GRAPHIC_ZONE_DECREMENT;
+        code = PIZ_GUI_ZONE_DECREMENT;
         if (k || (status == TLL_SELECTED_START)) { side |= PIZ_ZONE_START; }
         if (k || (status == TLL_SELECTED_END))   { side |= PIZ_ZONE_END; }
         break;
         
     case JKEY_RIGHTARROW :
-        code = PIZ_GRAPHIC_ZONE_INCREMENT;
+        code = PIZ_GUI_ZONE_INCREMENT;
         if (k || (status == TLL_SELECTED_END))   { side |= PIZ_ZONE_END; }
         if (k || (status == TLL_SELECTED_START)) { side |= PIZ_ZONE_START; }
         break;
