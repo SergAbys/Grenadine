@@ -39,7 +39,6 @@
 
 #include "pizAgentLoop.h"
 #include "pizAgentMethods.h"
-#include "pizSequenceRun.h"
 #include "pizSequenceUser.h"
 #include "pizSequenceMethods.h"
 #include "pizSequenceAttributes.h"

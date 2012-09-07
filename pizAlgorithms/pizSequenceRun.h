@@ -64,7 +64,6 @@
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL long      pizSequenceBpm          (PIZSequence *x);
 PIZ_LOCAL bool      pizSequenceIsAtEnd      (PIZSequence *x);
 PIZ_LOCAL void      pizSequenceJumpToStart  (PIZSequence *x);
 
@@ -73,15 +72,11 @@ PIZ_LOCAL PIZError  pizSequenceStep         (PIZSequence *x); //
 PIZ_LOCAL PIZError  pizSequenceStepBlank    (PIZSequence *x);
 
 PIZ_END_C_LINKAGE
+
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
 #ifdef PIZ_EXTERN_INLINE
-
-PIZ_EXTERN long pizSequenceBpm(PIZSequence *x)
-{
-    return x->bpm;
-}
 
 PIZ_EXTERN bool pizSequenceIsAtEnd(PIZSequence *x)
 {

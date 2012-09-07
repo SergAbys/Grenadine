@@ -54,11 +54,6 @@ PIZ_LOCAL ulong pizSequenceStepMask(PIZSequence *x, long n, long count);
 #pragma mark ---
 #pragma mark -
 
-long pizSequenceBpm(PIZSequence *x)
-{
-    return x->bpm;
-}
-
 bool pizSequenceIsAtEnd(PIZSequence *x)
 {
     return (x->index >= x->end);
