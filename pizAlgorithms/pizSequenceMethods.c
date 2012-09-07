@@ -568,7 +568,7 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceDump(PIZSequence *x, const PIZEvent *event)
 {
-    x->temp.error = pizAgentNotify(x->agent, PIZ_EVENT_WILL_DUMP, 0, NULL);
+    x->temp.error = pizAgentNotify(x->agent, PIZ_NOTIFICATION_WILL_DUMP, 0, NULL);
     
     pizSequenceForEach(x, pizSequenceEachDump, NULL, PIZ_SEQUENCE_FLAG_NONE);
     
@@ -577,7 +577,7 @@ PIZError pizSequenceDump(PIZSequence *x, const PIZEvent *event)
 
 PIZError pizSequenceStatistics(PIZSequence *x, const PIZEvent *event)
 {
-    return pizAgentNotify(x->agent, PIZ_EVENT_INFO_COUNT, 1, &x->count);
+    return pizAgentNotify(x->agent, PIZ_INFORMATION_COUNT, 1, &x->count);
 }
 
 PIZError pizSequenceAttributes(PIZSequence *x, const PIZEvent *event)
@@ -586,16 +586,16 @@ PIZError pizSequenceAttributes(PIZSequence *x, const PIZEvent *event)
     long a[ ] = { x->key, x->type };
     long b[ ] = { x->start, x->end, x->down, x->up };
     
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_BPM, 1, &x->bpm);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_CHANCE, 1, &x->chance);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_VELOCITY, 1, &x->velocity);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_CHANNEL, 1, &x->channel);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_CHORD, 1, &x->chord);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_CELL, 1, &x->cell);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_VALUE, 1, &x->value);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_SCALE, 2, a);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_MUTE, 1, &x->mute);
-    err |= pizAgentNotify(x->agent, PIZ_EVENT_INFO_ZONE, 4, b);
+    err |= pizAgentNotify(x->agent, PIZ_INFORMATION_BPM, 1, &x->bpm);
+    err |= pizAgentNotify(x->agent, PIZ_INFORMATION_CHANCE, 1, &x->chance);
+    err |= pizAgentNotify(x->agent, PIZ_INFORMATION_VELOCITY, 1, &x->velocity);
+    err |= pizAgentNotify(x->agent, PIZ_INFORMATION_CHANNEL, 1, &x->channel);
+    err |= pizAgentNotify(x->agent, PIZ_INFORMATION_CHORD, 1, &x->chord);
+    err |= pizAgentNotify(x->agent, PIZ_INFORMATION_CELL, 1, &x->cell);
+    err |= pizAgentNotify(x->agent, PIZ_INFORMATION_VALUE, 1, &x->value);
+    err |= pizAgentNotify(x->agent, PIZ_INFORMATION_SCALE, 2, a);
+    err |= pizAgentNotify(x->agent, PIZ_INFORMATION_MUTE, 1, &x->mute);
+    err |= pizAgentNotify(x->agent, PIZ_INFORMATION_ZONE, 4, b);
     
     return err;
 }

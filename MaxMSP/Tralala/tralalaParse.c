@@ -211,28 +211,28 @@ quickmap_add(tll_key, gensym("A"),                        (void *)(TLL_BIAS + PI
 quickmap_add(tll_key, gensym("A#"),                       (void *)(TLL_BIAS + PIZ_KEY_A_SHARP));
 quickmap_add(tll_key, gensym("B"),                        (void *)(TLL_BIAS + PIZ_KEY_B));
 
-quickmap_add(tll_info, gensym("bpm"),                     (void *)(TLL_BIAS + PIZ_EVENT_INFO_BPM));
-quickmap_add(tll_info, gensym("chance"),                  (void *)(TLL_BIAS + PIZ_EVENT_INFO_CHANCE));
-quickmap_add(tll_info, gensym("velocity"),                (void *)(TLL_BIAS + PIZ_EVENT_INFO_VELOCITY));
-quickmap_add(tll_info, gensym("channel"),                 (void *)(TLL_BIAS + PIZ_EVENT_INFO_CHANNEL));
-quickmap_add(tll_info, gensym("chord"),                   (void *)(TLL_BIAS + PIZ_EVENT_INFO_CHORD));
-quickmap_add(tll_info, gensym("cell"),                    (void *)(TLL_BIAS + PIZ_EVENT_INFO_CELL));
-quickmap_add(tll_info, gensym("value"),                   (void *)(TLL_BIAS + PIZ_EVENT_INFO_VALUE));
-quickmap_add(tll_info, gensym("scale"),                   (void *)(TLL_BIAS + PIZ_EVENT_INFO_SCALE));
-quickmap_add(tll_info, gensym("mute"),                    (void *)(TLL_BIAS + PIZ_EVENT_INFO_MUTE));
-quickmap_add(tll_info, gensym("zone"),                    (void *)(TLL_BIAS + PIZ_EVENT_INFO_ZONE));
-quickmap_add(tll_info, gensym("count"),                   (void *)(TLL_BIAS + PIZ_EVENT_INFO_COUNT));
+quickmap_add(tll_info, gensym("bpm"),                     (void *)(TLL_BIAS + PIZ_INFORMATION_BPM));
+quickmap_add(tll_info, gensym("chance"),                  (void *)(TLL_BIAS + PIZ_INFORMATION_CHANCE));
+quickmap_add(tll_info, gensym("velocity"),                (void *)(TLL_BIAS + PIZ_INFORMATION_VELOCITY));
+quickmap_add(tll_info, gensym("channel"),                 (void *)(TLL_BIAS + PIZ_INFORMATION_CHANNEL));
+quickmap_add(tll_info, gensym("chord"),                   (void *)(TLL_BIAS + PIZ_INFORMATION_CHORD));
+quickmap_add(tll_info, gensym("cell"),                    (void *)(TLL_BIAS + PIZ_INFORMATION_CELL));
+quickmap_add(tll_info, gensym("value"),                   (void *)(TLL_BIAS + PIZ_INFORMATION_VALUE));
+quickmap_add(tll_info, gensym("scale"),                   (void *)(TLL_BIAS + PIZ_INFORMATION_SCALE));
+quickmap_add(tll_info, gensym("mute"),                    (void *)(TLL_BIAS + PIZ_INFORMATION_MUTE));
+quickmap_add(tll_info, gensym("zone"),                    (void *)(TLL_BIAS + PIZ_INFORMATION_ZONE));
+quickmap_add(tll_info, gensym("count"),                   (void *)(TLL_BIAS + PIZ_INFORMATION_COUNT));
     
-quickmap_add(tll_changed, gensym("bpm"),                  (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_BPM));
-quickmap_add(tll_changed, gensym("chance"),               (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_CHANCE));
-quickmap_add(tll_changed, gensym("velocity"),             (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_VELOCITY));
-quickmap_add(tll_changed, gensym("channel"),              (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_CHANNEL));
-quickmap_add(tll_changed, gensym("chord"),                (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_CHORD));
-quickmap_add(tll_changed, gensym("cell"),                 (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_CELL));
-quickmap_add(tll_changed, gensym("value"),                (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_VALUE));
-quickmap_add(tll_changed, gensym("scale"),                (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_SCALE));
-quickmap_add(tll_changed, gensym("mute"),                 (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_MUTE));
-quickmap_add(tll_changed, gensym("zone"),                 (void *)(TLL_BIAS + PIZ_EVENT_CHANGED_ZONE));
+quickmap_add(tll_changed, gensym("bpm"),                  (void *)(TLL_BIAS + PIZ_NOTIFICATION_BPM));
+quickmap_add(tll_changed, gensym("chance"),               (void *)(TLL_BIAS + PIZ_NOTIFICATION_CHANCE));
+quickmap_add(tll_changed, gensym("velocity"),             (void *)(TLL_BIAS + PIZ_NOTIFICATION_VELOCITY));
+quickmap_add(tll_changed, gensym("channel"),              (void *)(TLL_BIAS + PIZ_NOTIFICATION_CHANNEL));
+quickmap_add(tll_changed, gensym("chord"),                (void *)(TLL_BIAS + PIZ_NOTIFICATION_CHORD));
+quickmap_add(tll_changed, gensym("cell"),                 (void *)(TLL_BIAS + PIZ_NOTIFICATION_CELL));
+quickmap_add(tll_changed, gensym("value"),                (void *)(TLL_BIAS + PIZ_NOTIFICATION_VALUE));
+quickmap_add(tll_changed, gensym("scale"),                (void *)(TLL_BIAS + PIZ_NOTIFICATION_SCALE));
+quickmap_add(tll_changed, gensym("mute"),                 (void *)(TLL_BIAS + PIZ_NOTIFICATION_MUTE));
+quickmap_add(tll_changed, gensym("zone"),                 (void *)(TLL_BIAS + PIZ_NOTIFICATION_ZONE));
 //
 }
 
@@ -342,7 +342,7 @@ ulong tralala_parseEventNote(t_tll *x, long k, long *data, PIZEventCode code)
       
     TLL_DATA_LOCK
     
-    if (code == PIZ_EVENT_NOTE_REMOVED) {
+    if (code == PIZ_NOTIFICATION_REMOVED) {
     //
     if (dictionary_hasentry(x->status, s)) {
     //
@@ -358,7 +358,7 @@ ulong tralala_parseEventNote(t_tll *x, long k, long *data, PIZEventCode code)
     
     dictionary_deleteentry(x->current, s);
     //
-    } else if ((code == PIZ_EVENT_NOTE_ADDED) || (code == PIZ_EVENT_NOTE_CHANGED)) {
+    } else if ((code == PIZ_NOTIFICATION_ADDED) || (code == PIZ_NOTIFICATION_CHANGED)) {
     //
     long i;
     t_atom atoms[PIZ_EVENT_DATA_SIZE + 1];
@@ -394,10 +394,10 @@ ulong tralala_parseEventCode(t_tll *x, long k, long *data, PIZEventCode code, t_
     
     atom_setsym(atoms, s);
     
-    if (code == PIZ_EVENT_CHANGED_ZONE) {
+    if (code == PIZ_NOTIFICATION_ZONE) {
         dirty |= TLL_DIRTY_ZONE;
         
-    } else if (code == PIZ_EVENT_CHANGED_SCALE) {
+    } else if (code == PIZ_NOTIFICATION_SCALE) {
         t_symbol *sym1 = NULL;
         t_symbol *sym2 = NULL;
 
@@ -417,7 +417,7 @@ ulong tralala_parseEventCode(t_tll *x, long k, long *data, PIZEventCode code, t_
 
 void  tralala_parseEventInfo(t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s)
 {    
-    if (code == PIZ_EVENT_INFO_SCALE) {
+    if (code == PIZ_INFORMATION_SCALE) {
         t_symbol *sym1 = NULL;
         t_symbol *sym2 = NULL;
 

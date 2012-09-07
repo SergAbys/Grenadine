@@ -462,7 +462,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
     pizEventCode(event, &code);
     tralala_switchDaemon(x, code);
         
-    if ((code == PIZ_EVENT_NOTE_PLAYED) && (copy = pizEventNewCopy(event))) {
+    if ((code == PIZ_NOTIFICATION_PLAYED) && (copy = pizEventNewCopy(event))) {
     //
     TLL_DAEMON_LOCK
     pizLinklistAppend(x->daemon, (void *)copy);
@@ -507,7 +507,7 @@ void tralala_runTask (t_tll *x)
         
     switch (code) {
     //
-    case PIZ_EVENT_NOTE_PLAYED :
+    case PIZ_NOTIFICATION_PLAYED :
         pizEventData(event, &argc, &argv);
         a[0] = argv[PIZ_EVENT_DATA_PITCH];
         a[1] = argv[PIZ_EVENT_DATA_VELOCITY];
@@ -518,21 +518,21 @@ void tralala_runTask (t_tll *x)
         outlet_list(x->left, TLL_SYM_LIST, 4, x->played); 
         break;
         
-    case PIZ_EVENT_NOTE_DUMPED :
+    case PIZ_NOTIFICATION_DUMPED :
         pizEventData(event, &argc, &argv);
         atom_setlong_array(5, x->dumped, 5, argv);
         outlet_anything(x->middleLeft, TLL_SYM_NOTE, 5, x->dumped); 
         break;
 
-    case PIZ_EVENT_WILL_DUMP :
+    case PIZ_NOTIFICATION_WILL_DUMP :
         outlet_anything(x->middleLeft, TLL_SYM_CLEAR, 0, NULL);
         break;
 
-    case PIZ_EVENT_WILL_END :
+    case PIZ_NOTIFICATION_WILL_END :
         outlet_bang(x->middleRight);
         break;
     
-    case PIZ_EVENT_END :
+    case PIZ_NOTIFICATION_END :
         pizEventTime(event, &x->time);
         outlet_anything(x->middle, TLL_SYM_END, 1, &x->link);
         break;
@@ -671,10 +671,10 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong fl
 
 void tralala_switchDaemon(t_tll *x, PIZEventCode code)
 {
-    if ((code == PIZ_EVENT_END) || (code == PIZ_MESSAGE_STOP)) {
+    if ((code == PIZ_NOTIFICATION_END) || (code == PIZ_MESSAGE_STOP)) {
         TLL_FLAG_UNSET(TLL_FLAG_DAEMON)
 
-    } else if ((code == PIZ_EVENT_NOTE_PLAYED) && (TLL_FLAG_FALSE(TLL_FLAG_DAEMON))) {
+    } else if ((code == PIZ_NOTIFICATION_PLAYED) && (TLL_FLAG_FALSE(TLL_FLAG_DAEMON))) {
         TLL_FLAG_SET(TLL_FLAG_DAEMON)
         clock_fdelay(x->daemonClock, TLL_CLOCK_DAEMON_WORK); 
     }

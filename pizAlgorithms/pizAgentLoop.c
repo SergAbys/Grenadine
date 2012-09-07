@@ -52,66 +52,62 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-static const PIZMethodError pizEventMethods[ ]  = { NULL,
-                                                    pizAgentInit,
-                                                    pizAgentPlay,
-                                                    pizAgentStop,
-                                                    pizAgentLoop,
-                                                    pizAgentUnloop,
+static const PIZMethodError pizEventMethods[ ]  = { NULL,                         // MESSAGE_NONE
+                                                    pizAgentInit,                 // MESSAGE_INIT
+                                                    pizAgentPlay,                 // MESSAGE_PLAY
+                                                    pizAgentStop,                 // MESSAGE_STOP
+                                                    pizAgentLoop,                 // MESSAGE_LOOP
+                                                    pizAgentUnloop,               // MESSAGE_UNLOOP
+                                                    pizAgentLearn,                // MESSAGE_LEARN
+                                                    pizAgentForget,               // MESSAGE_FORGET
+                                                    pizAgentSetBpm,               // MESSAGE_BPM
+                                                    pizSequenceSetChance,         // MESSAGE_CHANCE
+                                                    pizSequenceSetVelocity,       // MESSAGE_VELOCITY
+                                                    pizSequenceSetChannel,        // MESSAGE_CHANNEL
+                                                    pizSequenceSetChord,          // MESSAGE_CHORD
+                                                    pizSequenceSetCell,           // MESSAGE_CELL
+                                                    pizSequenceSetValue,          // MESSAGE_VALUE
+                                                    pizSequenceSetScale,          // MESSAGE_SCALE
+                                                    pizSequenceSetMute,           // MESSAGE_MUTE
+                                                    pizSequenceSetZone,           // MESSAGE_ZONE
+                                                    pizSequenceNote,              // MESSAGE_NOTE
+                                                    pizSequenceClear,             // MESSAGE_CLEAR
+                                                    pizSequenceClean,             // MESSAGE_CLEAN
+                                                    pizSequenceTranspose,         // MESSAGE_TRANSPOSE
+                                                    pizSequenceRotate,            // MESSAGE_ROTATE
+                                                    pizSequenceScramble,          // MESSAGE_SCRAMBLE
+                                                    pizSequenceSort,              // MESSAGE_SORT
+                                                    pizSequenceChange,            // MESSAGE_CHANGE
+                                                    pizSequenceFill,              // MESSAGE_FILL
+                                                    pizSequenceKill,              // MESSAGE_KILL
+                                                    pizSequenceCycle,             // MESSAGE_CYCLE
+                                                    pizSequencePattern,           // MESSAGE_PATTERN
+                                                    pizSequenceAlgorithm,         // MESSAGE_ZOULOU
+                                                    pizSequenceAlgorithm,         // MESSAGE_ROMEO
+                                                    pizSequenceJuliet,            // MESSAGE_JULIET
+                                                    pizSequenceDump,              // MESSAGE_DUMP
+                                                    pizSequenceStatistics,        // MESSAGE_STATISTICS
+                                                    pizSequenceAttributes,        // MESSAGE_ATTRIBUTES
                                                     //
-                                                    pizAgentLearn,
-                                                    pizAgentForget,
-                                                    //
-                                                    pizAgentSetBpm,
-                                                    pizSequenceSetChance,
-                                                    pizSequenceSetVelocity,
-                                                    pizSequenceSetChannel,
-                                                    pizSequenceSetChord,
-                                                    pizSequenceSetCell,
-                                                    pizSequenceSetValue,
-                                                    pizSequenceSetScale,
-                                                    pizSequenceSetMute,
-                                                    pizSequenceSetZone,
-                                                    //
-                                                    pizSequenceNote,
-                                                    pizSequenceClear,
-                                                    pizSequenceClean,
-                                                    pizSequenceTranspose,
-                                                    pizSequenceRotate,
-                                                    pizSequenceScramble,
-                                                    pizSequenceSort,
-                                                    pizSequenceChange,
-                                                    pizSequenceFill,
-                                                    pizSequenceKill,
-                                                    pizSequenceCycle,
-                                                    pizSequencePattern,
-                                                    pizSequenceAlgorithm,
-                                                    pizSequenceAlgorithm,
-                                                    pizSequenceJuliet,
-                                                    //
-                                                    pizSequenceDump,
-                                                    pizSequenceStatistics,
-                                                    pizSequenceAttributes,
-                                                    //
-                                                    pizSequenceCellUp,
-                                                    pizSequenceCellDown,
-                                                    pizSequenceCellRight,
-                                                    pizSequenceCellLeft,
-                                                    pizSequenceValueUp,
-                                                    pizSequenceValueDown,
-                                                    pizSequenceValueRight,
-                                                    pizSequenceValueLeft,
-                                                    pizSequenceNoteDelete,
-                                                    pizSequenceNoteIncrement,
-                                                    pizSequenceNoteDecrement,
-                                                    pizSequenceNoteForward,
-                                                    pizSequenceNoteBackward,
-                                                    pizSequenceZoneIncrement,
-                                                    pizSequenceZoneDecrement,
-                                                    pizSequenceChannelIncrement,
-                                                    pizSequenceChannelDecrement
+                                                    pizSequenceCellUp,            // GRAPHIC_CELL_UP
+                                                    pizSequenceCellDown,          // GRAPHIC_CELL_DOWN
+                                                    pizSequenceCellRight,         // GRAPHIC_CELL_RIGHT
+                                                    pizSequenceCellLeft,          // GRAPHIC_CELL_LEFT
+                                                    pizSequenceValueUp,           // GRAPHIC_VALUE_UP
+                                                    pizSequenceValueDown,         // GRAPHIC_VALUE_DOWN
+                                                    pizSequenceValueRight,        // GRAPHIC_VALUE_RIGHT
+                                                    pizSequenceValueLeft,         // GRAPHIC_VALUE_LEFT
+                                                    pizSequenceNoteDelete,        // GRAPHIC_NOTE_DELETE
+                                                    pizSequenceNoteIncrement,     // GRAPHIC_NOTE_INCREMENT
+                                                    pizSequenceNoteDecrement,     // GRAPHIC_NOTE_DECREMENT
+                                                    pizSequenceNoteForward,       // GRAPHIC_NOTE_FORWARD
+                                                    pizSequenceNoteBackward,      // GRAPHIC_NOTE_BACKWARD
+                                                    pizSequenceZoneIncrement,     // GRAPHIC_ZONE_INCREMENT
+                                                    pizSequenceZoneDecrement,     // GRAPHIC_ZONE_DECREMENT
+                                                    pizSequenceChannelIncrement,  // GRAPHIC_CHANNEL_INCREMENT
+                                                    pizSequenceChannelDecrement   // GRAPHIC_CHANNEL_DECREMENT
                                                     };             
-                                                                                                    
+    
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
@@ -283,7 +279,7 @@ void pizAgentEventLoopDoStep(PIZAgent *x, bool blank)
     
     if (err1 == PIZ_GOOD) {
         if (pizSequenceIsAtEnd(x->sequence)) {
-            err2 |= pizAgentNotify(x, PIZ_EVENT_WILL_END, 0, NULL);
+            err2 |= pizAgentNotify(x, PIZ_NOTIFICATION_WILL_END, 0, NULL);
         }
         k = false;  
         
@@ -297,7 +293,7 @@ void pizAgentEventLoopDoStep(PIZAgent *x, bool blank)
         }
         
         pizSequenceJumpToStart(x->sequence);
-        err2 |= pizAgentNotify(x, PIZ_EVENT_END, 0, NULL);
+        err2 |= pizAgentNotify(x, PIZ_NOTIFICATION_END, 0, NULL);
     } 
     
     if ((err1 | err2) & PIZ_MEMORY) { 

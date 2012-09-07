@@ -479,9 +479,9 @@ long pizSequenceLengthDown(long value)
         case PIZ_QUARTER_NOTE_TRIPLET       : return PIZ_EIGHTH_NOTE_TRIPLET;
         case PIZ_QUARTER_NOTE               : return PIZ_EIGHTH_NOTE;
         case PIZ_QUARTER_NOTE_DOTTED        : return PIZ_EIGHTH_NOTE_DOTTED;
-        case PIZ_HALF_NOTE_TRIPLET          : return PIZ_EIGHTH_NOTE_TRIPLET;
-        case PIZ_HALF_NOTE                  : return PIZ_EIGHTH_NOTE;
-        case PIZ_HALF_NOTE_DOTTED           : return PIZ_EIGHTH_NOTE_DOTTED;
+        case PIZ_HALF_NOTE_TRIPLET          : return PIZ_QUARTER_NOTE_TRIPLET;
+        case PIZ_HALF_NOTE                  : return PIZ_QUARTER_NOTE;
+        case PIZ_HALF_NOTE_DOTTED           : return PIZ_QUARTER_NOTE_DOTTED;
         case PIZ_WHOLE_NOTE_TRIPLET         : return PIZ_HALF_NOTE_TRIPLET;
         case PIZ_WHOLE_NOTE                 : return PIZ_HALF_NOTE;
         case PIZ_WHOLE_NOTE_DOTTED          : return PIZ_HALF_NOTE_DOTTED;
