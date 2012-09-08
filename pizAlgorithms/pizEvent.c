@@ -81,14 +81,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_MSG_N
                                         PIZ_EVENT_HIGH,             // PIZ_MSG_STATISTICS
                                         PIZ_EVENT_HIGH,             // PIZ_MSG_ATTRIBUTES
                                         //  
-                                        PIZ_EVENT_LOW,              // PIZ_GUI_CELL_UP
-                                        PIZ_EVENT_LOW,              // PIZ_GUI_CELL_DOWN
-                                        PIZ_EVENT_LOW,              // PIZ_GUI_CELL_RIGHT
-                                        PIZ_EVENT_LOW,              // PIZ_GUI_CELL_LEFT
-                                        PIZ_EVENT_LOW,              // PIZ_GUI_VALUE_UP
-                                        PIZ_EVENT_LOW,              // PIZ_GUI_VALUE_DOWN
-                                        PIZ_EVENT_LOW,              // PIZ_GUI_VALUE_RIGHT
-                                        PIZ_EVENT_LOW,              // PIZ_GUI_VALUE_LEFT
+                                        PIZ_EVENT_LOW,              // PIZ_GUI_LENGTH
                                         PIZ_EVENT_LOW,              // PIZ_GUI_NOTE_DELETE
                                         PIZ_EVENT_LOW,              // PIZ_GUI_NOTE_INCREMENT
                                         PIZ_EVENT_LOW,              // PIZ_GUI_NOTE_DECREMENT
@@ -96,8 +89,6 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_MSG_N
                                         PIZ_EVENT_LOW,              // PIZ_GUI_NOTE_BACKWARD
                                         PIZ_EVENT_LOW,              // PIZ_GUI_ZONE_INCREMENT
                                         PIZ_EVENT_LOW,              // PIZ_GUI_ZONE_DECREMENT
-                                        PIZ_EVENT_LOW,              // PIZ_GUI_CHANNEL_INCREMENT
-                                        PIZ_EVENT_LOW,              // PIZ_GUI_CHANNEL_DECREMENT
                                         //
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_INFORM_BPM
                                         PIZ_EVENT_NOTIFICATION,     // PIZ_INFORM_CHANCE

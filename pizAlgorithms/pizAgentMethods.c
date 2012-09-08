@@ -133,7 +133,7 @@ PIZError pizAgentLearn(PIZAgent *x, const PIZEvent *event)
     return err;
 }
 
-PIZError pizAgentSetBpm(PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentBpm(PIZAgent *x, const PIZEvent *event)
 {
     long argc;
     long *argv = NULL;

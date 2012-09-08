@@ -59,7 +59,7 @@ static const PIZMethodError pizEventMethods[ ]  = { NULL,                       
                                                     pizAgentUnloop,               // PIZ_MSG_UNLOOP
                                                     pizAgentLearn,                // PIZ_MSG_LEARN
                                                     pizAgentForget,               // PIZ_MSG_FORGET
-                                                    pizAgentSetBpm,               // PIZ_MSG_BPM
+                                                    pizAgentBpm,                  // PIZ_MSG_BPM
                                                     pizSequenceSetChance,         // PIZ_MSG_CHANCE
                                                     pizSequenceSetVelocity,       // PIZ_MSG_VELOCITY
                                                     pizSequenceSetChannel,        // PIZ_MSG_CHANNEL
@@ -88,23 +88,14 @@ static const PIZMethodError pizEventMethods[ ]  = { NULL,                       
                                                     pizSequenceStatistics,        // PIZ_MSG_STATISTICS
                                                     pizSequenceAttributes,        // PIZ_MSG_ATTRIBUTES
                                                     //
-                                                    pizSequenceCellUp,            // PIZ_GUI_CELL_UP
-                                                    pizSequenceCellDown,          // PIZ_GUI_CELL_DOWN
-                                                    pizSequenceCellRight,         // PIZ_GUI_CELL_RIGHT
-                                                    pizSequenceCellLeft,          // PIZ_GUI_CELL_LEFT
-                                                    pizSequenceValueUp,           // PIZ_GUI_VALUE_UP
-                                                    pizSequenceValueDown,         // PIZ_GUI_VALUE_DOWN
-                                                    pizSequenceValueRight,        // PIZ_GUI_VALUE_RIGHT
-                                                    pizSequenceValueLeft,         // PIZ_GUI_VALUE_LEFT
+                                                    pizSequenceLength,            // PIZ_GUI_LENGTH
                                                     pizSequenceNoteDelete,        // PIZ_GUI_NOTE_DELETE
                                                     pizSequenceNoteIncrement,     // PIZ_GUI_NOTE_INCREMENT
                                                     pizSequenceNoteDecrement,     // PIZ_GUI_NOTE_DECREMENT
                                                     pizSequenceNoteForward,       // PIZ_GUI_NOTE_FORWARD
                                                     pizSequenceNoteBackward,      // PIZ_GUI_NOTE_BACKWARD
                                                     pizSequenceZoneIncrement,     // PIZ_GUI_ZONE_INCREMENT
-                                                    pizSequenceZoneDecrement,     // PIZ_GUI_ZONE_DECREMENT
-                                                    pizSequenceChannelIncrement,  // PIZ_GUI_CHANNEL_INCREMENT
-                                                    pizSequenceChannelDecrement   // PIZ_GUI_CHANNEL_DECREMENT
+                                                    pizSequenceZoneDecrement      // PIZ_GUI_ZONE_DECREMENT
                                                     };             
     
 // -------------------------------------------------------------------------------------------------------------

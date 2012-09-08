@@ -41,13 +41,13 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL void      tralala_mouseAddNote        (t_tll *x);
-PIZ_LOCAL void      tralala_mouseHitZone        (t_tll *x);
-PIZ_LOCAL long      tralala_mouseHitNote        (t_tll *x, long m);
-PIZ_LOCAL ulong     tralala_mouseMove           (t_tll *x);
-PIZ_LOCAL ulong     tralala_mouseSelectLasso    (t_tll *x);
-PIZ_LOCAL void      tralala_mouseReleaseLasso   (t_tll *x);
-PIZ_LOCAL void      tralala_mouseUnselectZone   (t_tll *x);
+PIZ_LOCAL void  tralala_mouseAddNote        (t_tll *x);
+PIZ_LOCAL void  tralala_mouseHitZone        (t_tll *x);
+PIZ_LOCAL long  tralala_mouseHitNote        (t_tll *x, long m);
+PIZ_LOCAL ulong tralala_mouseMove           (t_tll *x);
+PIZ_LOCAL ulong tralala_mouseSelectLasso    (t_tll *x);
+PIZ_LOCAL void  tralala_mouseReleaseLasso   (t_tll *x);
+PIZ_LOCAL void  tralala_mouseUnselectZone   (t_tll *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
