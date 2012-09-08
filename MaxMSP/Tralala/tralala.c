@@ -707,7 +707,7 @@ void tralala_keepAttributes(t_tll *x, t_symbol *name, t_dictionary *t)
 t_symbol *tralala_unique(t_tll *x)
 {
     char string[16];    
-    snprintf_zero(string, 16, "%s%ld", "_tll_", x->identifier);
+    snprintf_zero(string, 16, "%s%ld", "_tralala_", x->identifier);
     return gensym(string);
 }
 
