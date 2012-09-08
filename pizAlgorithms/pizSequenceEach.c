@@ -289,7 +289,6 @@ void pizSequenceEachFillTempNotes(PIZSequence *x, PIZNote *note, const PIZEvent 
     //
     }
     //
-    
     } else {
         x->temp.notes1[x->temp.index] = note;
         x->temp.index ++;

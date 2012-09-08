@@ -77,76 +77,47 @@ PIZError pizSequenceLength(PIZSequence *x, PIZEvent *event)
     long *argv = NULL;
     
     if (!(pizEventData(event, &argc, &argv))) {
-        ;
+    //
+    switch (argv[0]) {
+    //
+    case PIZ_LENGTH_CELL_UP : 
+        x->cell = pizSequenceLengthUp(x->cell);
+        x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CELL; break;
+        
+    case PIZ_LENGTH_CELL_DOWN : 
+        x->cell = pizSequenceLengthDown(x->cell);
+        x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CELL; break;
+        
+    case PIZ_LENGTH_CELL_RIGHT : 
+        x->cell = pizSequenceLengthRight(x->cell); 
+        x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CELL; break;
+        
+    case PIZ_LENGTH_CELL_LEFT : 
+        x->cell = pizSequenceLengthLeft(x->cell);
+        x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CELL; break;
+        
+    case PIZ_LENGTH_VALUE_UP : 
+        x->value = pizSequenceLengthUp(x->value);
+        x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_VALUE; break;
+        
+    case PIZ_LENGTH_VALUE_DOWN : 
+        x->value = pizSequenceLengthDown(x->value);
+        x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_VALUE; break;
+        
+    case PIZ_LENGTH_VALUE_RIGHT : 
+        x->value = pizSequenceLengthRight(x->value);
+        x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_VALUE; break;
+        
+    case PIZ_LENGTH_VALUE_LEFT : 
+        x->value = pizSequenceLengthLeft(x->value);
+        x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_VALUE; break;
+    //
+    }
+    //
     }
     
     return PIZ_GOOD;
 }
-
-/*
-PIZError pizSequenceCellUp(PIZSequence *x, PIZEvent *event)
-{
-    x->cell = pizSequenceLengthUp(x->cell);
-    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CELL;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceCellDown(PIZSequence *x, PIZEvent *event)
-{
-    x->cell = pizSequenceLengthDown(x->cell);
-    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CELL;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceCellRight(PIZSequence *x, PIZEvent *event)
-{
-    x->cell = pizSequenceLengthRight(x->cell);
-    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CELL;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceCellLeft(PIZSequence *x, PIZEvent *event)
-{
-    x->cell = pizSequenceLengthLeft(x->cell);
-    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_CELL;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceValueUp(PIZSequence *x, PIZEvent *event)
-{
-    x->value = pizSequenceLengthUp(x->value);
-    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_VALUE;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceValueDown(PIZSequence *x, PIZEvent *event)
-{
-    x->value = pizSequenceLengthDown(x->value);
-    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_VALUE;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceValueRight(PIZSequence *x, PIZEvent *event)
-{
-    x->value = pizSequenceLengthRight(x->value);
-    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_VALUE;
-    
-    return PIZ_GOOD;
-}
-
-PIZError pizSequenceValueLeft(PIZSequence *x, PIZEvent *event)
-{
-    x->value = pizSequenceLengthLeft(x->value);
-    x->flags |= PIZ_SEQUENCE_FLAG_NOTIFY_VALUE;
-    
-    return PIZ_GOOD;
-}*/
 
 PIZError pizSequenceNoteDelete(PIZSequence *x, PIZEvent *event)
 {
