@@ -51,34 +51,34 @@ int main(void)
     c->c_flags |= CLASS_FLAG_NEWDICTIONARY;
 	jbox_initclass(c, JBOX_FONTATTR);
     
-    class_addmethod(c, (method)tralala_assist,      "assist",               A_CANT,  0);
-    class_addmethod(c, (method)tralala_jsave,       "jsave",                A_CANT,  0);
-    class_addmethod(c, (method)tralala_paint,       "paint",                A_CANT,  0);
-    class_addmethod(c, (method)tralala_params,      "getdrawparams",        A_CANT,  0);
-    class_addmethod(c, (method)tralala_focusGained, "focusgained",          A_CANT,  0);
-    class_addmethod(c, (method)tralala_focusLost,   "focuslost",            A_CANT,  0);
-    class_addmethod(c, (method)tralala_key,         "key",                  A_CANT,  0);
-    class_addmethod(c, (method)tralala_mouseWheel,  "mousewheel",           A_CANT,  0);
-    class_addmethod(c, (method)tralala_mouseDown,   "mousedown",            A_CANT,  0);
-    class_addmethod(c, (method)tralala_mouseDrag,   "mousedrag",            A_CANT,  0);
-    class_addmethod(c, (method)tralala_mouseUp,     "mouseup",              A_CANT,  0);
-    class_addmethod(c, (method)tralala_notify,      "notify",               A_CANT,  0);
-    class_addmethod(c, (method)object_obex_dumpout, "dumpout",              A_CANT,  0);
-    class_addmethod(c, (method)tralala_store,       "store",                A_GIMME, 0);
-    class_addmethod(c, (method)tralala_store,       "save",                 A_GIMME, 0);
-    class_addmethod(c, (method)tralala_store,       "resave",               A_GIMME, 0);
-    class_addmethod(c, (method)tralala_recall,      "recall",               A_GIMME, 0);
-    class_addmethod(c, (method)tralala_recall,      "load",                 A_GIMME, 0);
-    class_addmethod(c, (method)tralala_recall,      "reload",               A_GIMME, 0);
-    class_addmethod(c, (method)tralala_remove,      "remove",               A_GIMME, 0);
-    class_addmethod(c, (method)tralala_play,        "bang",                 A_GIMME, 0);
-    class_addmethod(c, (method)tralala_play,        "play",                 A_GIMME, 0);
-    class_addmethod(c, (method)tralala_play,        "end",                  A_GIMME, 0);
-    class_addmethod(c, (method)tralala_loop,        "loop",                 A_GIMME, 0);
-    class_addmethod(c, (method)tralala_stop,        "stop",                 A_GIMME, 0);
-    class_addmethod(c, (method)tralala_unloop,      "unloop",               A_GIMME, 0);
-    class_addmethod(c, (method)tralala_list,        "list",                 A_GIMME, 0);
-    class_addmethod(c, (method)tralala_anything,    "anything",             A_GIMME, 0);
+    class_addmethod(c, (method)tralala_assist,      "assist",           A_CANT,  0);
+    class_addmethod(c, (method)tralala_jsave,       "jsave",            A_CANT,  0);
+    class_addmethod(c, (method)tralala_paint,       "paint",            A_CANT,  0);
+    class_addmethod(c, (method)tralala_params,      "getdrawparams",    A_CANT,  0);
+    class_addmethod(c, (method)tralala_focusGained, "focusgained",      A_CANT,  0);
+    class_addmethod(c, (method)tralala_focusLost,   "focuslost",        A_CANT,  0);
+    class_addmethod(c, (method)tralala_key,         "key",              A_CANT,  0);
+    class_addmethod(c, (method)tralala_mouseWheel,  "mousewheel",       A_CANT,  0);
+    class_addmethod(c, (method)tralala_mouseDown,   "mousedown",        A_CANT,  0);
+    class_addmethod(c, (method)tralala_mouseDrag,   "mousedrag",        A_CANT,  0);
+    class_addmethod(c, (method)tralala_mouseUp,     "mouseup",          A_CANT,  0);
+    class_addmethod(c, (method)tralala_notify,      "notify",           A_CANT,  0);
+    class_addmethod(c, (method)object_obex_dumpout, "dumpout",          A_CANT,  0);
+    class_addmethod(c, (method)tralala_store,       "store",            A_GIMME, 0);
+    class_addmethod(c, (method)tralala_store,       "save",             A_GIMME, 0);
+    class_addmethod(c, (method)tralala_store,       "resave",           A_GIMME, 0);
+    class_addmethod(c, (method)tralala_recall,      "recall",           A_GIMME, 0);
+    class_addmethod(c, (method)tralala_recall,      "load",             A_GIMME, 0);
+    class_addmethod(c, (method)tralala_recall,      "reload",           A_GIMME, 0);
+    class_addmethod(c, (method)tralala_remove,      "remove",           A_GIMME, 0);
+    class_addmethod(c, (method)tralala_play,        "bang",             A_GIMME, 0);
+    class_addmethod(c, (method)tralala_play,        "play",             A_GIMME, 0);
+    class_addmethod(c, (method)tralala_play,        "end",              A_GIMME, 0);
+    class_addmethod(c, (method)tralala_loop,        "loop",             A_GIMME, 0);
+    class_addmethod(c, (method)tralala_stop,        "stop",             A_GIMME, 0);
+    class_addmethod(c, (method)tralala_unloop,      "unloop",           A_GIMME, 0);
+    class_addmethod(c, (method)tralala_list,        "list",             A_GIMME, 0);
+    class_addmethod(c, (method)tralala_anything,    "anything",         A_GIMME, 0);
         
     CLASS_ATTR_RGBA         (c, "lassocolor", 0, t_tll, lasso); 
     CLASS_ATTR_DEFAULT_SAVE (c, "lassocolor", 0, "0.51 0.44 0.49 0.40"); 
@@ -397,7 +397,7 @@ void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
             x->name = name;
         }  
     
-        if ((s == TLL_SYM_SAVE) ||(s == TLL_SYM_RESAVE)) { 
+        if ((s == TLL_SYM_SAVE) || (s == TLL_SYM_RESAVE)) { 
             tralala_keepAttributes(x, name, t); 
         }
     
@@ -449,29 +449,32 @@ void tralala_remove(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 
 void tralala_callback(void *ptr, PIZEvent *event)
 {
-    PIZEvent *copy = NULL;
+    PIZEvent *copyRun = NULL;
+    PIZEvent *copyDaemon = NULL;
     t_tll *x = (t_tll *)ptr;
     PIZEventCode code = PIZ_MSG_NONE;
-
-    TLL_RUN_LOCK
-    pizLinklistAppend(x->run, (void *)event);
-    TLL_RUN_UNLOCK
-    
-    clock_fdelay(x->runClock, 0.);
     
     pizEventCode(event, &code);
     tralala_switchDaemon(x, code);
+    
+    if (copyRun = pizEventNewCopy(event)) {
+        TLL_RUN_LOCK
+        pizLinklistAppend(x->run, (void *)copyRun);
+        TLL_RUN_UNLOCK
         
-    if ((code == PIZ_NOTIFY_PLAYED) && (copy = pizEventNewCopy(event))) {
-    //
-    TLL_DAEMON_LOCK
-    pizLinklistAppend(x->daemon, (void *)copy);
-    TLL_DAEMON_UNLOCK
-        
-    TLL_FLAG_SET(TLL_DIRTY_RUN)
-    jbox_redraw((t_jbox *)x);
-    //
+        clock_fdelay(x->runClock, 0.);
     }
+        
+    if ((code == PIZ_NOTIFY_PLAYED) && (copyDaemon = pizEventNewCopy(event))) {
+        TLL_DAEMON_LOCK
+        pizLinklistAppend(x->daemon, (void *)copyDaemon);
+        TLL_DAEMON_UNLOCK
+            
+        TLL_FLAG_SET(TLL_DIRTY_RUN)
+        jbox_redraw((t_jbox *)x);
+    }
+    
+    pizEventFree(event);
 }
 
 void tralala_runTask (t_tll *x)
