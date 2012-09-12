@@ -151,7 +151,7 @@ typedef enum _PIZEventCode {
     PIZ_NOTIFY_DUMPED,
     PIZ_NOTIFY_END,
     PIZ_NOTIFY_WILL_END,
-    PIZ_NOTIFY_WILL_DUMP
+    PIZ_NOTIFY_WILL_DUMP 
     //
     } PIZEventCode;
 

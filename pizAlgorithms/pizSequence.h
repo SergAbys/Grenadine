@@ -243,7 +243,7 @@ PIZ_START_C_LINKAGE
 PIZ_LOCAL PIZSequence   *pizSequenceNew (struct _PIZAgent *agent);
 
 PIZ_LOCAL void          pizSequenceFree (PIZSequence *x);
-PIZ_LOCAL void          pizSequenceInit (PIZSequence *x);
+PIZ_LOCAL PIZError      pizSequenceInit (PIZSequence *x);
 
 PIZ_END_C_LINKAGE
 

@@ -164,9 +164,11 @@ void pizSequenceFree(PIZSequence *x)
     }
 }
 
-void pizSequenceInit(PIZSequence *x)
+PIZError pizSequenceInit(PIZSequence *x)
 {
     x->flags = PIZ_SEQUENCE_FLAG_NOTIFY_INIT;
+    
+    return PIZ_GOOD;
 }
 
 // -------------------------------------------------------------------------------------------------------------

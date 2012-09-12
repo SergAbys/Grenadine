@@ -54,9 +54,7 @@
 
 PIZError pizAgentInit(PIZAgent *x, const PIZEvent *event)
 {
-    pizSequenceInit(x->sequence);
-    
-    return PIZ_GOOD;
+    return pizSequenceInit(x->sequence);
 }
 
 PIZError pizAgentPlay(PIZAgent *x, const PIZEvent *event)
