@@ -82,6 +82,7 @@ typedef enum _PIZEventCode {
     PIZ_MSG_STOP,
     PIZ_MSG_LOOP,
     PIZ_MSG_UNLOOP,
+    PIZ_MSG_REFRESH,
     PIZ_MSG_LEARN,
     PIZ_MSG_FORGET,
     PIZ_MSG_BPM,

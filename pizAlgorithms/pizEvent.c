@@ -48,6 +48,7 @@ static const long pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // PIZ_MSG_N
                                         PIZ_EVENT_RUN,              // PIZ_MSG_STOP
                                         PIZ_EVENT_RUN,              // PIZ_MSG_LOOP
                                         PIZ_EVENT_RUN,              // PIZ_MSG_UNLOOP
+                                        PIZ_EVENT_RUN,              // PIZ_MSG_REFRESH
                                         //
                                         PIZ_EVENT_LOW,              // PIZ_MSG_LEARN
                                         PIZ_EVENT_LOW,              // PIZ_MSG_FORGET

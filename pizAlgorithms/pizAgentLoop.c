@@ -57,6 +57,7 @@ static const PIZMethodError pizEventMethods[ ]  = { NULL,                       
                                                     pizAgentStop,                 // PIZ_MSG_STOP
                                                     pizAgentLoop,                 // PIZ_MSG_LOOP
                                                     pizAgentUnloop,               // PIZ_MSG_UNLOOP
+                                                    pizAgentRefresh,              // PIZ_MSG_REFRESH
                                                     pizAgentLearn,                // PIZ_MSG_LEARN
                                                     pizAgentForget,               // PIZ_MSG_FORGET
                                                     pizAgentBpm,                  // PIZ_MSG_BPM

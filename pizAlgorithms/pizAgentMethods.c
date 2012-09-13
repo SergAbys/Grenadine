@@ -100,6 +100,11 @@ PIZError pizAgentUnloop(PIZAgent *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
+PIZError pizAgentRefresh(PIZAgent *x, const PIZEvent *event)
+{
+    return pizSequenceRefresh(x->sequence);
+}
+
 PIZError pizAgentForget(PIZAgent *x, const PIZEvent *event)
 {
     pizFactorOracleClear(x->oracle);
