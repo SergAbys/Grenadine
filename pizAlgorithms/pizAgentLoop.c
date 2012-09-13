@@ -110,7 +110,7 @@ static const PIZMethodError pizEventMethods[ ]  = { NULL,                       
 
 PIZ_LOCAL PIZError  pizAgentEventLoopDoEvent        (PIZAgent *x, PIZLinklist *q);
 PIZ_LOCAL void      pizAgentEventLoopDoStep         (PIZAgent *x, bool blank);
-PIZ_LOCAL void      pizAgentEventLoopDoRefresh      (PIZAgent *x);
+PIZ_LOCAL void      pizAgentEventLoopDoUpdate       (PIZAgent *x);
 
 PIZ_LOCAL void      pizAgentEventLoopInit           (PIZAgent *x);
 PIZ_LOCAL void      pizAgentEventLoopSleep          (PIZAgent *x);
@@ -168,7 +168,7 @@ void *pizAgentEventLoop(void *agent)
 
     while (pizAgentEventLoopIsWorkTime(x)) {
         if (pizAgentEventLoopDoEvent(x, x->low)) {
-            pizAgentEventLoopDoRefresh(x);
+            pizAgentEventLoopDoUpdate(x);
             break;
         } 
     }
@@ -293,9 +293,9 @@ void pizAgentEventLoopDoStep(PIZAgent *x, bool blank)
     } while (k);
 }
 
-void pizAgentEventLoopDoRefresh(PIZAgent *x)
+void pizAgentEventLoopDoUpdate(PIZAgent *x)
 {
-    if (pizSequenceRefresh(x->sequence) & PIZ_MEMORY) {
+    if (pizSequenceUpdate(x->sequence) & PIZ_MEMORY) {
         PIZ_AGENT_BAD_MEMORY
     }
 }

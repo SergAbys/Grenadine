@@ -527,6 +527,11 @@ void tralala_runTask (t_tll *x)
         outlet_anything(x->middleLeft, TLL_SYM_NOTE, 5, x->dumped); 
         break;
 
+    case PIZ_NOTIFY_END :
+        pizEventTime(event, &x->time);
+        outlet_anything(x->middle, TLL_SYM_END, 1, &x->link);
+        break;
+        
     case PIZ_NOTIFY_WILL_DUMP :
         outlet_anything(x->middleLeft, TLL_SYM_CLEAR, 0, NULL);
         break;
@@ -535,9 +540,7 @@ void tralala_runTask (t_tll *x)
         outlet_bang(x->middleRight);
         break;
     
-    case PIZ_NOTIFY_END :
-        pizEventTime(event, &x->time);
-        outlet_anything(x->middle, TLL_SYM_END, 1, &x->link);
+    case PIZ_NOTIFY_WILL_REFRESH :
         break;
     
     default :

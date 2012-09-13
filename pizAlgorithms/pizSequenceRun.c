@@ -68,7 +68,7 @@ void pizSequenceJumpToStart(PIZSequence *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizSequenceRefresh(PIZSequence *x)
+PIZError pizSequenceUpdate(PIZSequence *x)
 {
     long i;
     PIZNote *note = NULL;

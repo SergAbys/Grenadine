@@ -168,7 +168,7 @@ PIZError pizSequenceInit(PIZSequence *x)
 {
     x->flags = PIZ_SEQUENCE_FLAG_NOTIFY_INIT;
     
-    return PIZ_GOOD;
+    return pizAgentNotify(x->agent, PIZ_NOTIFY_WILL_REFRESH, 0, NULL);
 }
 
 // -------------------------------------------------------------------------------------------------------------
