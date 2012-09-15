@@ -60,6 +60,7 @@
 
 PIZ_LOCAL PIZError  pizSequenceInit         (PIZSequence *x, PIZEvent *event); //
 PIZ_LOCAL PIZError  pizSequenceRefresh      (PIZSequence *x, PIZEvent *event); //
+
 PIZ_LOCAL PIZError  pizSequenceNote         (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceClear        (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceClean        (PIZSequence *x, PIZEvent *event);
