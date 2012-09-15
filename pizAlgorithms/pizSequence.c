@@ -164,30 +164,5 @@ void pizSequenceFree(PIZSequence *x)
     }
 }
 
-PIZError pizSequenceInit(PIZSequence *x)
-{
-    x->flags = PIZ_SEQUENCE_FLAG_NOTIFY_INIT;
-    
-    return pizAgentNotify(x->agent, PIZ_NOTIFY_WILL_REFRESH, 0, NULL);
-}
-
-PIZError pizSequenceRefresh(PIZSequence *x)
-{
-    long i;
-    
-    pizItemsetClear(&x->removed);
-    pizItemsetClear(&x->changed);
-    pizItemsetClear(&x->addedLow);
-    pizItemsetClear(&x->addedHigh);
-        
-    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
-        if (x->lookup[i]) {
-            pizItemsetSetAtIndex(&x->addedHigh, i);
-        }
-    }
-    
-    return pizSequenceInit(x);
-}
-
 // -------------------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------:x

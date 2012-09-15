@@ -90,6 +90,11 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+
+typedef void (*PIZCallback)(void *, PIZEvent *); 
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 typedef struct _PIZAgent {
@@ -98,7 +103,7 @@ typedef struct _PIZAgent {
     PIZNano             grainSize;
     PIZTime             grainStart;
     PIZTime             grainEnd;
-    PIZMethod           callback;
+    PIZCallback         callback;
     void                *observer;
     PIZArray            *learn;
     PIZFactorOracle     *oracle;
@@ -119,16 +124,12 @@ typedef struct _PIZAgent {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_START_C_LINKAGE
-
 PIZAgent    *pizAgentNew    (void);
 
 void        pizAgentFree    (PIZAgent *x);
-PIZError    pizAgentAttach  (PIZAgent *x, void *observer, PIZMethod callback); 
+PIZError    pizAgentAttach  (PIZAgent *x, void *observer, PIZCallback callback); 
 PIZError    pizAgentDetach  (PIZAgent *x, void *observer);
 void        pizAgentDoEvent (PIZAgent *x, PIZEvent *event);
-
-PIZ_END_C_LINKAGE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

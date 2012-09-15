@@ -38,6 +38,8 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizAgentMethods.h"
+#include "pizSequenceRun.h"
+#include "pizSequenceMethods.h"
 #include "pizSequenceAttributes.h"
 
 // -------------------------------------------------------------------------------------------------------------
@@ -52,12 +54,12 @@
 #pragma mark ---
 #pragma mark -
 
-PIZError pizAgentInit(PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentInit(PIZAgent *x, PIZEvent *event)
 {
-    return pizSequenceInit(x->sequence);
+    return pizSequenceInit(x->sequence, event);
 }
 
-PIZError pizAgentPlay(PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentPlay(PIZAgent *x, PIZEvent *event)
 {
     if (x->flags & PIZ_AGENT_FLAG_RUNNING) {
         x->flags |= PIZ_AGENT_FLAG_REPLAY;
@@ -79,33 +81,33 @@ PIZError pizAgentPlay(PIZAgent *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizAgentStop(PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentStop(PIZAgent *x, PIZEvent *event)
 {
     x->flags &= ~(PIZ_AGENT_FLAG_LOOPED | PIZ_AGENT_FLAG_REPLAY | PIZ_AGENT_FLAG_RUNNING);
     
     return PIZ_GOOD;
 }
 
-PIZError pizAgentLoop(PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentLoop(PIZAgent *x, PIZEvent *event)
 {
     x->flags |= PIZ_AGENT_FLAG_LOOPED;
     
     return (pizAgentPlay(x, event));
 }
 
-PIZError pizAgentUnloop(PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentUnloop(PIZAgent *x, PIZEvent *event)
 {
     x->flags &= ~PIZ_AGENT_FLAG_LOOPED;
     
     return PIZ_GOOD;
 }
 
-PIZError pizAgentRefresh(PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentRefresh(PIZAgent *x, PIZEvent *event)
 {
-    return pizSequenceRefresh(x->sequence);
+    return pizSequenceRefresh(x->sequence, event);
 }
 
-PIZError pizAgentForget(PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentForget(PIZAgent *x, PIZEvent *event)
 {
     pizFactorOracleClear(x->oracle);
     pizGaloisLatticeClear(x->lattice);
@@ -113,7 +115,7 @@ PIZError pizAgentForget(PIZAgent *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizAgentLearn(PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentLearn(PIZAgent *x, PIZEvent *event)
 {   
     long argc;
     long *argv = NULL;
@@ -136,7 +138,7 @@ PIZError pizAgentLearn(PIZAgent *x, const PIZEvent *event)
     return err;
 }
 
-PIZError pizAgentBpm(PIZAgent *x, const PIZEvent *event)
+PIZError pizAgentBpm(PIZAgent *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;

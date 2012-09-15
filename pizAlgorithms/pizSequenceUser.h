@@ -48,7 +48,6 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-PIZ_START_C_LINKAGE
 
 PIZ_LOCAL PIZError pizSequenceLength            (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizSequenceNoteDelete        (PIZSequence *x, PIZEvent *event);
@@ -59,7 +58,6 @@ PIZ_LOCAL PIZError pizSequenceNoteBackward      (PIZSequence *x, PIZEvent *event
 PIZ_LOCAL PIZError pizSequenceZoneIncrement     (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizSequenceZoneDecrement     (PIZSequence *x, PIZEvent *event);
 
-PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // PIZ_SEQUENCE_USER_H

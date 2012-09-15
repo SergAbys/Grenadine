@@ -61,7 +61,6 @@ typedef struct _PIZKohonenMap {
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-PIZ_START_C_LINKAGE
 
 PIZKohonenMap   *pizKohonenMapNew       (long argc, long *argv);
 
@@ -71,7 +70,6 @@ PIZError        pizKohonenMapClear      (PIZKohonenMap *x);
 PIZError        pizKohonenMapProceed    (PIZKohonenMap *x, long argc, long *argv);
 long            pizKohonenMapCount      (const PIZKohonenMap *x);
 
-PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // PIZ_KOHONEN_MAP

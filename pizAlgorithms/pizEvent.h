@@ -170,7 +170,6 @@ typedef struct _PIZEvent {
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-PIZ_START_C_LINKAGE
 
 PIZEvent    *pizEventNew        (PIZEventCode code);
 PIZEvent    *pizEventNewCopy    (PIZEvent *event);
@@ -185,7 +184,6 @@ void        pizEventType        (const PIZEvent *x, PIZEventType *type);
 void        pizEventTime        (const PIZEvent *x, PIZTime *time);
 PIZError    pizEventData        (const PIZEvent *x, long *argc, long **argv);
 
-PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 

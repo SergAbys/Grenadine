@@ -37,7 +37,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizAgent.h"
+#include "pizAgentLoop.h"
 #include "pizSequenceRun.h"
 #include "pizSequenceEach.h"
 #include "pizSequenceMethods.h"
@@ -98,7 +98,36 @@ PIZ_LOCAL void      pizSequenceWithTempNotes    (PIZSequence *x, long selector, 
 #pragma mark ---
 #pragma mark -
 
-PIZError pizSequenceNote(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceInit(PIZSequence *x, PIZEvent *event)
+{
+    x->flags = PIZ_SEQUENCE_FLAG_NOTIFY_INIT;
+    
+    return pizAgentNotify(x->agent, PIZ_NOTIFY_WILL_REFRESH, 0, NULL);
+}
+
+PIZError pizSequenceRefresh(PIZSequence *x, PIZEvent *event)
+{
+    long i;
+    
+    pizItemsetClear(&x->removed);
+    pizItemsetClear(&x->changed);
+    pizItemsetClear(&x->addedLow);
+    pizItemsetClear(&x->addedHigh);
+        
+    for (i = 0; i < PIZ_ITEMSET_SIZE; i++) {
+        if (x->lookup[i]) {
+            pizItemsetSetAtIndex(&x->addedHigh, i);
+        }
+    }
+    
+    return pizSequenceInit(x, event);
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+PIZError pizSequenceNote(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -132,7 +161,7 @@ PIZError pizSequenceNote(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceClear(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceClear(PIZSequence *x, PIZEvent *event)
 {
     if (x->count) {
         pizSequenceForEach(x, pizSequenceEachRemove, NULL, PIZ_SEQUENCE_FLAG_NONE);
@@ -141,7 +170,7 @@ PIZError pizSequenceClear(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceClean(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceClean(PIZSequence *x, PIZEvent *event)
 {
     long i;
     
@@ -162,7 +191,7 @@ PIZError pizSequenceClean(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceTranspose(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceTranspose(PIZSequence *x, PIZEvent *event)
 {
     long argc, down, up;
     long *argv = NULL;
@@ -188,7 +217,7 @@ PIZError pizSequenceTranspose(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceRotate(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceRotate(PIZSequence *x, PIZEvent *event)
 {
     long i, k, argc, shift = 1, selector = 0;
     long *argv = NULL;
@@ -215,7 +244,7 @@ PIZError pizSequenceRotate(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceScramble(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceScramble(PIZSequence *x, PIZEvent *event)
 {
     long i, k, argc, selector = 0;
     long *argv = NULL;
@@ -246,7 +275,7 @@ PIZError pizSequenceScramble(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceSort(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSort(PIZSequence *x, PIZEvent *event)
 {
     long i, k, argc, down = 0, selector = 0;
     long *argv = NULL;
@@ -290,14 +319,14 @@ PIZError pizSequenceSort(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceChange(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceChange(PIZSequence *x, PIZEvent *event)
 {
     pizSequenceForEach(x, pizSequenceEachChange, event, PIZ_SEQUENCE_FLAG_EACH_RANDOM);
 
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceFill(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceFill(PIZSequence *x, PIZEvent *event)
 {
     ulong flags = PIZ_SEQUENCE_FLAG_EACH_RANDOM | PIZ_SEQUENCE_FLAG_EACH_SET;
     
@@ -306,7 +335,7 @@ PIZError pizSequenceFill(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceKill(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceKill(PIZSequence *x, PIZEvent *event)
 {
     long count = x->count;
      
@@ -317,7 +346,7 @@ PIZError pizSequenceKill(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceCycle(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceCycle(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -366,7 +395,7 @@ PIZError pizSequenceCycle(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceAlgorithm(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceAlgorithm(PIZSequence *x, PIZEvent *event)
 {
     long k;
     PIZError err = PIZ_GOOD;
@@ -403,7 +432,7 @@ PIZError pizSequenceAlgorithm(PIZSequence *x, const PIZEvent *event)
     return err;
 }
 
-PIZError pizSequencePattern(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequencePattern(PIZSequence *x, PIZEvent *event)
 {
     long i, k;  
 
@@ -418,7 +447,7 @@ PIZError pizSequencePattern(PIZSequence *x, const PIZEvent *event)
     return x->temp.error;
 }
 
-PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceJuliet(PIZSequence *x, PIZEvent *event)
 {
     long argc, iterate = 1;
     long *argv = NULL;
@@ -568,7 +597,7 @@ PIZError pizSequenceJuliet(PIZSequence *x, const PIZEvent *event)
     return hashError;
 }
 
-PIZError pizSequenceDump(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceDump(PIZSequence *x, PIZEvent *event)
 {
     x->temp.error = pizAgentNotify(x->agent, PIZ_NOTIFY_WILL_DUMP, 0, NULL);
     
@@ -577,12 +606,12 @@ PIZError pizSequenceDump(PIZSequence *x, const PIZEvent *event)
     return x->temp.error;
 }
 
-PIZError pizSequenceStatistics(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceStatistics(PIZSequence *x, PIZEvent *event)
 {
     return pizAgentNotify(x->agent, PIZ_INFORM_COUNT, 1, &x->count);
 }
 
-PIZError pizSequenceAttributes(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceAttributes(PIZSequence *x, PIZEvent *event)
 {
     PIZError err = PIZ_GOOD;
     long a[ ] = { x->key, x->type };

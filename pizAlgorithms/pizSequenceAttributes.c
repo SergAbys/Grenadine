@@ -39,6 +39,7 @@
 
 #include "pizSequenceRun.h"
 #include "pizSequenceEach.h"
+#include "pizSequenceUtils.h"
 #include "pizSequenceAttributes.h"
 
 // -------------------------------------------------------------------------------------------------------------
@@ -82,7 +83,7 @@ PIZ_LOCAL bool pizSequenceIsValidNoteValue(long value);
 #pragma mark ---
 #pragma mark -
 
-PIZError pizSequenceSetBpm(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetBpm(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -95,7 +96,7 @@ PIZError pizSequenceSetBpm(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceSetChance(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetChance(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -110,7 +111,7 @@ PIZError pizSequenceSetChance(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceSetVelocity(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetVelocity(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -125,7 +126,7 @@ PIZError pizSequenceSetVelocity(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceSetChannel(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetChannel(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -140,7 +141,7 @@ PIZError pizSequenceSetChannel(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceSetChord(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetChord(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -155,7 +156,7 @@ PIZError pizSequenceSetChord(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceSetCell(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetCell(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -170,7 +171,7 @@ PIZError pizSequenceSetCell(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceSetValue(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetValue(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -185,7 +186,7 @@ PIZError pizSequenceSetValue(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceSetScale(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetScale(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -216,7 +217,7 @@ PIZError pizSequenceSetScale(PIZSequence *x, const PIZEvent *event)
     return err;
 }   
 
-PIZError pizSequenceSetMute(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetMute(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;
@@ -229,7 +230,7 @@ PIZError pizSequenceSetMute(PIZSequence *x, const PIZEvent *event)
     return PIZ_GOOD;
 }
 
-PIZError pizSequenceSetZone(PIZSequence *x, const PIZEvent *event)
+PIZError pizSequenceSetZone(PIZSequence *x, PIZEvent *event)
 {
     long argc;
     long *argv = NULL;

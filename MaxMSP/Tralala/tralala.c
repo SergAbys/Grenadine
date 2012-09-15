@@ -262,7 +262,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
         } 
         
         if (!(err |= !(x->agent = pizAgentNew( )))) {
-            pizAgentAttach(x->agent, (void *)x, (PIZMethod)tralala_callback);
+            pizAgentAttach(x->agent, (void *)x, (PIZCallback)tralala_callback);
             defer_low(x, (method)tralala_init, NULL, 0, NULL);
         } 
     } 

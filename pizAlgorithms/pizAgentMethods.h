@@ -47,19 +47,17 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-PIZ_START_C_LINKAGE
 
-PIZ_LOCAL PIZError pizAgentInit         (PIZAgent *x, const PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentPlay         (PIZAgent *x, const PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentStop         (PIZAgent *x, const PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentLoop         (PIZAgent *x, const PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentUnloop       (PIZAgent *x, const PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentRefresh      (PIZAgent *x, const PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentLearn        (PIZAgent *x, const PIZEvent *event); //
-PIZ_LOCAL PIZError pizAgentForget       (PIZAgent *x, const PIZEvent *event);
-PIZ_LOCAL PIZError pizAgentBpm          (PIZAgent *x, const PIZEvent *event);
+PIZ_LOCAL PIZError pizAgentInit         (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizAgentPlay         (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizAgentStop         (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizAgentLoop         (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizAgentUnloop       (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizAgentRefresh      (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizAgentLearn        (PIZAgent *x, PIZEvent *event); //
+PIZ_LOCAL PIZError pizAgentForget       (PIZAgent *x, PIZEvent *event);
+PIZ_LOCAL PIZError pizAgentBpm          (PIZAgent *x, PIZEvent *event);
 
-PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // PIZ_AGENT_METHODS_H

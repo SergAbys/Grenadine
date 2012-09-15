@@ -137,7 +137,7 @@ void pizAgentFree(PIZAgent *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZError pizAgentAttach(PIZAgent *x, void *observer, PIZMethod callback)
+PIZError pizAgentAttach(PIZAgent *x, void *observer, PIZCallback callback)
 {
     PIZError err = PIZ_ERROR;
     

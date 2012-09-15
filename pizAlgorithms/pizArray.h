@@ -56,7 +56,6 @@ typedef struct _PIZArray {
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-PIZ_START_C_LINKAGE
 
 PIZArray    *pizArrayNew                 (long size);
 long        *pizArrayPtr                 (const PIZArray *x); 
@@ -73,7 +72,6 @@ void        pizArrayRemoveLast           (PIZArray *x);
 bool        pizArrayContainsValue        (const PIZArray *x, long value);
 PIZError    pizArrayIndexOfValue         (const PIZArray *x, long value, long *index);
 
-PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 

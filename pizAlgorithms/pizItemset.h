@@ -59,7 +59,6 @@ typedef struct _PIZItemset {
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-PIZ_START_C_LINKAGE
 
 void pizItemsetSetAtIndex    (PIZItemset *itemset, long index);
 void pizItemsetUnsetAtIndex  (PIZItemset *itemset, long index);
@@ -72,7 +71,6 @@ void pizItemsetIntersection  (const PIZItemset *a, const PIZItemset *b, PIZItems
 bool pizItemsetIsIncluded    (const PIZItemset *a, const PIZItemset *b);
 bool pizItemsetIsEqual       (const PIZItemset *a, const PIZItemset *b);
 
-PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 

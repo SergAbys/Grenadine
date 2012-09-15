@@ -68,7 +68,6 @@ typedef struct _PIZFactorOracle {
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-PIZ_START_C_LINKAGE
 
 PIZFactorOracle     *pizFactorOracleNew         (long argc, long *argv);
 
@@ -78,7 +77,6 @@ PIZError            pizFactorOracleClear        (PIZFactorOracle *x);
 PIZError            pizFactorOracleProceed      (PIZFactorOracle *x, long argc, long *argv);
 long                pizFactorOracleCount        (const PIZFactorOracle *x);
 
-PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // PIZ_FACTOR_ORACLE_H

@@ -38,6 +38,7 @@
 // -------------------------------------------------------------------------------------------------------------
 
 #include "pizAgent.h"
+#include "pizAgentLoop.h"
 #include "pizSequenceRun.h"
 #include "pizSequenceEach.h"
 #include "pizSequenceMethods.h"
@@ -49,7 +50,7 @@
 #pragma mark ---
 #pragma mark -
 
-void pizSequenceForEach(PIZSequence *x, PIZMethod method, const PIZEvent *e, ulong f)
+void pizSequenceForEach(PIZSequence *x, PIZMethodEach method, const PIZEvent *e, ulong flags)
 {
     long i;
     
@@ -77,7 +78,7 @@ void pizSequenceForEach(PIZSequence *x, PIZMethod method, const PIZEvent *e, ulo
         
         while (note) {
             pizLinklistNextWithPtr(x->timeline[p], (void *)note, (void **)&nextNote);
-            (*method)(x, note, e, f);
+            (*method)(x, note, e, flags);
             note = nextNote;
         }
     }
@@ -86,13 +87,13 @@ void pizSequenceForEach(PIZSequence *x, PIZMethod method, const PIZEvent *e, ulo
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-void pizSequenceEachRemove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag) 
+void pizSequenceEachRemove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags) 
 {
     long h = -1;
     long p = note->position;
     long tag = note->tag;
     
-    if (flag & PIZ_SEQUENCE_FLAG_EACH_RANDOM) {
+    if (flags & PIZ_SEQUENCE_FLAG_EACH_RANDOM) {
         h = 100 * (rand_r(&x->seed) / (RAND_MAX + 1.0));
     }
     
@@ -111,7 +112,7 @@ void pizSequenceEachRemove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulo
     }
 }
 
-void pizSequenceEachChange(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
+void pizSequenceEachChange(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags)
 {
     long argc;
     long *argv = NULL;
@@ -122,13 +123,13 @@ void pizSequenceEachChange(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulo
     long v = argv[1];
     long s = CLAMP(argv[0], PIZ_VALUE_PITCH, PIZ_VALUE_CHANNEL);
     
-    if (flag & PIZ_SEQUENCE_FLAG_EACH_RANDOM) {
+    if (flags & PIZ_SEQUENCE_FLAG_EACH_RANDOM) {
         h = 100 * (rand_r(&x->seed) / (RAND_MAX + 1.0));
     }
           
     if ((h == -1) || (h < x->chance)) {
     //
-    if (flag & PIZ_SEQUENCE_FLAG_EACH_SET) {
+    if (flags & PIZ_SEQUENCE_FLAG_EACH_SET) {
         t = v;
     } else {
         t = note->values[s] + v;
@@ -165,11 +166,11 @@ void pizSequenceEachChange(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulo
     }
 }
  
-void pizSequenceEachCycle(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
+void pizSequenceEachCycle(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags)
 {
     long t, h = -1;
     
-    if (flag & PIZ_SEQUENCE_FLAG_EACH_RANDOM) {
+    if (flags & PIZ_SEQUENCE_FLAG_EACH_RANDOM) {
         h = 100 * (rand_r(&x->seed) / (RAND_MAX + 1.0));
     }
           
@@ -187,7 +188,7 @@ void pizSequenceEachCycle(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulon
     }
 }
 
-void pizSequenceEachDump(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
+void pizSequenceEachDump(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags)
 {
     long a[ ] = { note->position, 
                   note->values[PIZ_VALUE_PITCH],
@@ -200,7 +201,7 @@ void pizSequenceEachDump(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
     x->temp.error |= pizAgentNotify(x->agent, PIZ_NOTIFY_DUMPED, 7, a);
 }
 
-void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
+void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags)
 {
     long offset = 0;
     long a = note->position;
@@ -209,19 +210,19 @@ void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
     long *argv = NULL;
     PIZError err = PIZ_GOOD; 
     
-    if (flag & PIZ_SEQUENCE_FLAG_EACH_BACKWARD) {
+    if (flags & PIZ_SEQUENCE_FLAG_EACH_BACKWARD) {
         do {
         b = pizSequenceSnapByCell(x, a + offset);
         offset -= x->cell;
         } while (b >= a);
         
-    } else if (flag & PIZ_SEQUENCE_FLAG_EACH_FORWARD) {
+    } else if (flags & PIZ_SEQUENCE_FLAG_EACH_FORWARD) {
         do {
         b = pizSequenceSnapByCell(x, a + offset);
         offset += x->cell;
         } while (b <= a);
         
-    } else if ((flag & PIZ_SEQUENCE_FLAG_EACH_PATTERN) && (!(pizEventData(e, &argc, &argv)))) {
+    } else if ((flags & PIZ_SEQUENCE_FLAG_EACH_PATTERN) && (!(pizEventData(e, &argc, &argv)))) {
         long k = (long)(a / (double)(x->cell));
         k += argv[k % argc];
         b = (MAX(k, 0)) * x->cell;
@@ -250,15 +251,15 @@ void pizSequenceEachMove(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong
     x->temp.error |= err;
 }
 
-void pizSequenceEachFillTempHash(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
+void pizSequenceEachFillTempHash(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags)
 {   
     long k = ((long)(note->position / (double)x->cell) * (PIZ_MAGIC_PITCH + 1)) + note->values[PIZ_VALUE_PITCH];
     x->temp.error |= pizHashTableAdd(x->temp.hash, k, (void *)note);
 }
 
-void pizSequenceEachFillTempNotes(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flag)
+void pizSequenceEachFillTempNotes(PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags)
 {
-    if (flag & PIZ_SEQUENCE_FLAG_EACH_NEARBY) {
+    if (flags & PIZ_SEQUENCE_FLAG_EACH_NEARBY) {
     //
     long argc;
     long *argv = NULL;
