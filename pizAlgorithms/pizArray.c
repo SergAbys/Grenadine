@@ -109,6 +109,12 @@ PIZError pizArrayAppend(PIZArray *x, long value)
     return err;
 }
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+#ifndef PIZ_EXTERN_INLINE
+
 void pizArrayClear(PIZArray *x)
 {
     x->index = 0;
@@ -129,14 +135,17 @@ long pizArrayCount(const PIZArray *x)
     return x->index;
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
 long *pizArrayPtr(const PIZArray *array)
 {
     return array->values;
 }
+
+void pizArrayRemoveLast(PIZArray *x)
+{
+    x->index --;
+}
+
+#endif // PIZ_EXTERN_INLINE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -151,11 +160,6 @@ void pizArrayRemoveAtIndex(PIZArray *array, long index)
     }
     
     array->index --;
-}
-
-void pizArrayRemoveLast(PIZArray *x)
-{
-    x->index --;
 }
 
 bool pizArrayContainsValue(const PIZArray *x, long value)

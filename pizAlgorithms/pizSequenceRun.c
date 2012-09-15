@@ -55,6 +55,8 @@ PIZ_LOCAL ulong pizSequenceStepMask(PIZSequence *x, long n, long count);
 #pragma mark ---
 #pragma mark -
 
+#ifndef PIZ_EXTERN_INLINE
+
 bool pizSequenceIsAtEnd(PIZSequence *x)
 {
     return (x->index >= x->end);
@@ -64,6 +66,8 @@ void pizSequenceJumpToStart(PIZSequence *x)
 {
     x->index = x->start;
 }
+
+#endif // PIZ_EXTERN_INLINE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

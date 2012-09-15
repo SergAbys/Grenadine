@@ -121,8 +121,10 @@ typedef enum {
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef __cplusplus 
+#ifdef __cplusplus 
     #define PIZ_EXTERN_INLINE
+    #define PIZ_EXTERN inline
+#else
     #define PIZ_EXTERN extern inline
 #endif 
 

@@ -77,6 +77,8 @@ void pizQueueFree(PIZQueue *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+#ifndef PIZ_EXTERN_INLINE
+
 void pizQueueClear(PIZQueue *x)
 {
     x->count       = 0;
@@ -84,6 +86,22 @@ void pizQueueClear(PIZQueue *x)
     x->tail        = 0;
     x->poppedValue = -1;
 }
+
+long pizQueueCount(const PIZQueue *x)
+{
+    return x->count;
+}
+
+long pizQueuePoppedValue(const PIZQueue *x)
+{
+    return x->poppedValue;
+}
+
+#endif // PIZ_EXTERN_INLINE
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZError pizQueueAppend(PIZQueue *x, long value) 
 {   
@@ -141,16 +159,6 @@ PIZError pizQueuePopLast(PIZQueue *x)
     }
     
     return err;
-}
-
-long pizQueueCount(const PIZQueue *x)
-{
-    return x->count;
-}
-
-long pizQueuePoppedValue(const PIZQueue *x)
-{
-    return x->poppedValue;
 }
 
 // -------------------------------------------------------------------------------------------------------------

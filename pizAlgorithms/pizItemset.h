@@ -74,8 +74,6 @@ bool pizItemsetIsEqual       (const PIZItemset *a, const PIZItemset *b);
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifdef PIZ_EXTERN_INLINE
-
 PIZ_EXTERN void pizItemsetSetAtIndex(PIZItemset *itemset, long index)
 {
     long i, p;
@@ -190,8 +188,6 @@ PIZ_EXTERN bool pizItemsetIsEqual(const PIZItemset *a, const PIZItemset *b)
         
     return k;
 }
-
-#endif // PIZ_EXTERN_INLINE
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

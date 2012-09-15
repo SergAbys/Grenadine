@@ -170,6 +170,8 @@ PIZEvent *pizEventNewCopy(PIZEvent *event)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+#ifndef PIZ_EXTERN_INLINE
+
 void pizEventFree(PIZEvent *x)
 {
     free(x);
@@ -179,6 +181,22 @@ void pizEventSetType(PIZEvent *x, PIZEventType type)
 {
     x->type = type;
 }
+
+void pizEventCode(const PIZEvent *x, PIZEventCode *code)
+{
+    (*code) = x->code;
+}
+
+void pizEventType(const PIZEvent *x, PIZEventType *type)
+{
+    (*type) = x->type;
+}
+
+#endif // PIZ_EXTERN_INLINE
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void pizEventSetTime(PIZEvent *x, const PIZTime *time)
 {
@@ -199,16 +217,6 @@ void pizEventSetData(PIZEvent *x, long argc, const long *argv)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-
-void pizEventCode(const PIZEvent *x, PIZEventCode *code)
-{
-    (*code) = x->code;
-}
-
-void pizEventType(const PIZEvent *x, PIZEventType *type)
-{
-    (*type) = x->type;
-}
 
 void pizEventTime(const PIZEvent *x, PIZTime *time)
 {

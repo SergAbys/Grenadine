@@ -43,6 +43,8 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+#ifndef PIZ_EXTERN_INLINE
+
 void pizItemsetSetAtIndex(PIZItemset *itemset, long index)
 {
     long i, p;
@@ -157,6 +159,8 @@ bool pizItemsetIsEqual(const PIZItemset *a, const PIZItemset *b)
         
     return k;
 }
+
+#endif // PIZ_EXTERN_INLINE
 
 // -------------------------------------------------------------------------------------------------------------
 // -----------------------------------------------------------------------------------------------------------:x

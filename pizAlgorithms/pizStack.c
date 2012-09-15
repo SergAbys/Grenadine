@@ -75,11 +75,29 @@ void pizStackFree(PIZStack *x)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+#ifndef PIZ_EXTERN_INLINE
+
 void pizStackClear(PIZStack *x)
 {
     x->index       = 0;
     x->poppedValue = -1;
 }
+
+long pizStackCount(const PIZStack *x)
+{
+    return x->index;
+}
+
+long pizStackPoppedValue(const PIZStack *x)
+{
+    return x->poppedValue;
+}
+
+#endif // PIZ_EXTERN_INLINE
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZError pizStackPush(PIZStack *x, long value) 
 {   
@@ -105,16 +123,6 @@ PIZError pizStackPop(PIZStack *x)
     }
     
     return err;
-}
-
-long pizStackCount(const PIZStack *x)
-{
-    return x->index;
-}
-
-long pizStackPoppedValue(const PIZStack *x)
-{
-    return x->poppedValue;
 }   
 
 // -------------------------------------------------------------------------------------------------------------

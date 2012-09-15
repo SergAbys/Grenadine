@@ -212,10 +212,22 @@ PIZError pizHashTableRemove(PIZHashTable *x, long key, void *ptr)
     return err;
 }
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+#ifndef PIZ_EXTERN_INLINE
+
 long pizHashTableCount(const PIZHashTable *x)
 {
     return x->count;
 }
+
+#endif // PIZ_EXTERN_INLINE
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 PIZError pizHashTablePtrWithKey(const PIZHashTable *x, long key, void **ptr)
 {

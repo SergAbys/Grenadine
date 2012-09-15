@@ -47,6 +47,12 @@
 
 static mach_timebase_info_data_t pizTimeBaseInfo;
 
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+#ifndef PIZ_EXTERN_INLINE
+
 void pizTimeSet(PIZTime *t) 
 {
     (*t) = mach_absolute_time( );
@@ -61,6 +67,23 @@ void pizTimeCopy(PIZTime *t, const PIZTime *toCopy)
 {
     (*t) = (*toCopy);
 }
+
+void pizTimespecWithNano(struct timespec *t, const PIZNano *ns)
+{
+    t->tv_sec  = (time_t)(*ns / PIZ_TIME_NANO_PER_SECOND);
+    t->tv_nsec = (long)(*ns % PIZ_TIME_NANO_PER_SECOND);
+}
+
+bool pizTimeIsZero (const PIZTime *t)
+{
+    return ((*t) == PIZ_TIME_ZERO);
+}
+
+#endif // PIZ_EXTERN_INLINE
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
 
 void pizTimeAddNano(PIZTime *t, const PIZNano *ns)
 {
@@ -89,17 +112,6 @@ PIZError pizTimeElapsedNano(const PIZTime *t0, const PIZTime *t1, PIZNano *resul
     }
 
     return err;
-}
-
-void pizTimespecWithNano(struct timespec *t, const PIZNano *ns)
-{
-    t->tv_sec  = (time_t)(*ns / PIZ_TIME_NANO_PER_SECOND);
-    t->tv_nsec = (long)(*ns % PIZ_TIME_NANO_PER_SECOND);
-}
-
-bool pizTimeIsZero (const PIZTime *t)
-{
-    return ((*t) == PIZ_TIME_ZERO);
 }
 
 #endif // __MACH__
