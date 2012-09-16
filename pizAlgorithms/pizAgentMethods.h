@@ -47,6 +47,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+PIZ_START_C_LINKAGE
 
 PIZ_LOCAL PIZError pizAgentInit         (PIZAgent *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizAgentPlay         (PIZAgent *x, PIZEvent *event);
@@ -58,6 +59,7 @@ PIZ_LOCAL PIZError pizAgentLearn        (PIZAgent *x, PIZEvent *event); //
 PIZ_LOCAL PIZError pizAgentForget       (PIZAgent *x, PIZEvent *event);
 PIZ_LOCAL PIZError pizAgentBpm          (PIZAgent *x, PIZEvent *event);
 
+PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // PIZ_AGENT_METHODS_H

@@ -70,6 +70,7 @@ typedef uint64_t PIZNano;
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+PIZ_START_C_LINKAGE
 
 void        pizTimeSet              (PIZTime *t);
 void        pizNanoSet              (PIZNano *ns, double f);
@@ -80,6 +81,7 @@ PIZError    pizTimeElapsedNano      (const PIZTime *t0, const PIZTime *t1, PIZNa
 void        pizTimespecWithNano     (struct timespec *t, const PIZNano *ns);
 bool        pizTimeIsZero           (const PIZTime *t);
 
+PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 

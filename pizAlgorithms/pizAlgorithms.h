@@ -1,5 +1,5 @@
 /**
- * \file    pizSequenceMethods.h
+ * \file    pizAlgorithms.h
  * \author  Jean Sapristi
  */
  
@@ -37,50 +37,28 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#ifndef PIZ_SEQUENCE_METHODS_H
-#define PIZ_SEQUENCE_METHODS_H
+#ifndef PIZ_ALGORITHMS_H
+#define PIZ_ALGORITHMS_H
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizEvent.h"
-#include "pizSequence.h"
+#ifdef __cplusplus 
+    namespace PIZ {
+#endif
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#define PIZ_SEQUENCE_FLAG_NONE              (0UL)
-#define PIZ_SEQUENCE_FLAG_ADD_SNAP          (1UL << 0)
-#define PIZ_SEQUENCE_FLAG_ADD_AMBITUS       (1UL << 1)
-#define PIZ_SEQUENCE_FLAG_ADD_CLIP          (1UL << 2) 
-#define PIZ_SEQUENCE_FLAG_ADD_LOW           (1UL << 3)
+#include "pizAgent.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-PIZ_START_C_LINKAGE
 
-PIZ_LOCAL PIZError  pizSequenceInit         (PIZSequence *x, PIZEvent *event); //
-PIZ_LOCAL PIZError  pizSequenceRefresh      (PIZSequence *x, PIZEvent *event); //
+#ifdef __cplusplus 
+    } using namespace PIZ;
+#endif
 
-PIZ_LOCAL PIZError  pizSequenceNote         (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceClear        (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceClean        (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceTranspose    (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceRotate       (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceScramble     (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSort         (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceChange       (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceFill         (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceKill         (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceCycle        (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceAlgorithm    (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequencePattern      (PIZSequence *x, PIZEvent *event); //
-PIZ_LOCAL PIZError  pizSequenceJuliet       (PIZSequence *x, PIZEvent *event); //
-PIZ_LOCAL PIZError  pizSequenceDump         (PIZSequence *x, PIZEvent *event); //
-PIZ_LOCAL PIZError  pizSequenceStatistics   (PIZSequence *x, PIZEvent *event); //
-PIZ_LOCAL PIZError  pizSequenceAttributes   (PIZSequence *x, PIZEvent *event); //
-
-PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
-#endif // PIZ_SEQUENCE_METHODS_H
+#endif // PIZ_ALGORITHMS_H

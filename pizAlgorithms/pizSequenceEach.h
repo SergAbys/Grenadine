@@ -63,6 +63,7 @@ typedef void (*PIZMethodEach)(PIZSequence*, PIZNote*, const PIZEvent*, ulong);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+PIZ_START_C_LINKAGE
 
 PIZ_LOCAL void pizSequenceForEach    (PIZSequence *x, PIZMethodEach method, const PIZEvent *e, ulong flags);
 
@@ -74,6 +75,7 @@ PIZ_LOCAL void pizSequenceEachDump          (PIZSequence *x, PIZNote *note, cons
 PIZ_LOCAL void pizSequenceEachFillTempHash  (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags); //
 PIZ_LOCAL void pizSequenceEachFillTempNotes (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags);
 
+PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // PIZ_SEQUENCE_EACH_H

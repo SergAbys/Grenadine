@@ -53,6 +53,7 @@
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+PIZ_START_C_LINKAGE
 
 PIZ_LOCAL PIZError  pizSequenceSetBpm           (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceSetChance        (PIZSequence *x, PIZEvent *event);
@@ -65,6 +66,7 @@ PIZ_LOCAL PIZError  pizSequenceSetScale         (PIZSequence *x, PIZEvent *event
 PIZ_LOCAL PIZError  pizSequenceSetMute          (PIZSequence *x, PIZEvent *event);
 PIZ_LOCAL PIZError  pizSequenceSetZone          (PIZSequence *x, PIZEvent *event);
 
+PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // PIZ_SEQUENCE_ATTRIBUTES_H

@@ -78,6 +78,7 @@ typedef struct _PIZNeuralGas {
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+PIZ_START_C_LINKAGE
 
 PIZNeuralGas    *pizNeuralGasNew        (long argc, long *argv);
 
@@ -87,6 +88,7 @@ PIZError        pizNeuralGasClear       (PIZNeuralGas *x);
 PIZError        pizNeuralGasProceed     (PIZNeuralGas *x, long argc, long *argv);
 long            pizNeuralGasCount       (const PIZNeuralGas *x);
 
+PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #endif // PIZ_NEURAL_GAS_H

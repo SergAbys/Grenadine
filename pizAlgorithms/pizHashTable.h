@@ -72,6 +72,7 @@ typedef struct _PIZHashTable {
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
+PIZ_START_C_LINKAGE
 
 PIZHashTable    *pizHashTableNew         (long argc, long *argv);
 
@@ -83,6 +84,7 @@ PIZError        pizHashTablePtrWithKey   (const PIZHashTable *x, long key, void 
 bool            pizHashTableContainsKey  (const PIZHashTable *x, long key);
 long            pizHashTableCount        (const PIZHashTable *x);
 
+PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
