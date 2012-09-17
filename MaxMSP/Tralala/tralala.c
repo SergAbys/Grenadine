@@ -221,7 +221,7 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
                         | JBOX_TRANSPARENT;
     
     jbox_new((t_jbox *)x, boxflags, argc, argv);
-    x->box.b_firstin = (void *)x;
+    x->box.b_firstin = (t_object *)x;
 
     x->right = outlet_new((t_object *)x, NULL);
     x->middleRight = bangout((t_object *)x);

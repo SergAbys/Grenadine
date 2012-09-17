@@ -420,17 +420,18 @@ void tralala_paintCurrentText(t_tll *x, t_object *pv, char *string)
     t_rect r;
     t_jgraphics *g = NULL; 
     t_jfont *font = NULL;
+    t_jgraphics_textlayout_flags flags = (t_jgraphics_textlayout_flags) (0);
     t_jgraphics_text_justification justification = JGRAPHICS_TEXT_JUSTIFICATION_RIGHT;
     
     jbox_get_rect_for_view((t_object *)x, pv, &r);
     
     g = (t_jgraphics *)patcherview_get_jgraphics(pv);
     font = jfont_create((jbox_get_fontname(((t_object *)x)))->s_name, 
-                (jbox_get_font_slant((t_object *)x)), 
-                (jbox_get_font_weight((t_object *)x)), 
+                (t_jgraphics_font_slant)(jbox_get_font_slant((t_object *)x)), 
+                (t_jgraphics_font_weight)(jbox_get_font_weight((t_object *)x)), 
                 (jbox_get_fontsize((t_object *)x))); 
     
-    jtextlayout_set(x->layer, string, font, 5., 5., r.width - 10., r.height - 5., justification, 0L);
+    jtextlayout_set(x->layer, string, font, 5., 5., r.width - 10., r.height - 5., justification, flags);
     
     if (TLL_FLAG_TRUE(TLL_FLAG_FOCUS)) {
         jtextlayout_settextcolor(x->layer, &x->text);

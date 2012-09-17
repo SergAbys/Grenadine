@@ -267,16 +267,15 @@ void tralala_parseEvent(t_tll *x, PIZEvent *event)
 
 void tralala_parseEntry(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong flags)
 {
-    PIZEventCode code = PIZ_MSG_NONE;
+    long t;
 
-    if (!(dictionary_getlong(tll_code, s, (long *)&code))) {
+    if (!(dictionary_getlong(tll_code, s, (long *)&t))) {
     //
     long k = 0;
     PIZEvent *event = NULL;
     PIZError err = PIZ_GOOD;
     long data[PIZ_EVENT_DATA_SIZE] = { 0 };
-    
-    code -= TLL_BIAS;
+    PIZEventCode code = (PIZEventCode)(t - TLL_BIAS);
     
     if (code == PIZ_MSG_NOTE) {
         tralala_parseEntryNote(x, argc, argv, &k, data);
