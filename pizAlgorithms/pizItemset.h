@@ -61,16 +61,16 @@ typedef struct _PIZItemset {
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-void pizItemsetSetAtIndex    (PIZItemset *itemset, long index);
-void pizItemsetUnsetAtIndex  (PIZItemset *itemset, long index);
-void pizItemsetClear         (PIZItemset *itemset);
-long pizItemsetCount         (const PIZItemset *itemset);
-bool pizItemsetIsSetAtIndex  (const PIZItemset *itemset, long index);
+void    pizItemsetSetAtIndex    (PIZItemset *itemset, long index);
+void    pizItemsetUnsetAtIndex  (PIZItemset *itemset, long index);
+void    pizItemsetClear         (PIZItemset *itemset);
+long    pizItemsetCount         (const PIZItemset *itemset);
+bool    pizItemsetIsSetAtIndex  (const PIZItemset *itemset, long index);
 
-void pizItemsetUnion         (const PIZItemset *a, const PIZItemset *b, PIZItemset *r);
-void pizItemsetIntersection  (const PIZItemset *a, const PIZItemset *b, PIZItemset *r);
-bool pizItemsetIsIncluded    (const PIZItemset *a, const PIZItemset *b);
-bool pizItemsetIsEqual       (const PIZItemset *a, const PIZItemset *b);
+void    pizItemsetUnion         (const PIZItemset *a, const PIZItemset *b, PIZItemset *r);
+void    pizItemsetIntersection  (const PIZItemset *a, const PIZItemset *b, PIZItemset *r);
+bool    pizItemsetIsIncluded    (const PIZItemset *a, const PIZItemset *b);
+bool    pizItemsetIsEqual       (const PIZItemset *a, const PIZItemset *b);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------

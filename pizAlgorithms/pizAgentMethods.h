@@ -49,15 +49,15 @@
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZError pizAgentInit       (PIZAgent *x, PIZEvent *event);
-PIZError pizAgentPlay       (PIZAgent *x, PIZEvent *event);
-PIZError pizAgentStop       (PIZAgent *x, PIZEvent *event);
-PIZError pizAgentLoop       (PIZAgent *x, PIZEvent *event);
-PIZError pizAgentUnloop     (PIZAgent *x, PIZEvent *event);
-PIZError pizAgentRefresh    (PIZAgent *x, PIZEvent *event);
-PIZError pizAgentLearn      (PIZAgent *x, PIZEvent *event); //
-PIZError pizAgentForget     (PIZAgent *x, PIZEvent *event);
-PIZError pizAgentBpm        (PIZAgent *x, PIZEvent *event);
+PIZError    pizAgentInit       (PIZAgent *x, PIZEvent *event);
+PIZError    pizAgentPlay       (PIZAgent *x, PIZEvent *event);
+PIZError    pizAgentStop       (PIZAgent *x, PIZEvent *event);
+PIZError    pizAgentLoop       (PIZAgent *x, PIZEvent *event);
+PIZError    pizAgentUnloop     (PIZAgent *x, PIZEvent *event);
+PIZError    pizAgentRefresh    (PIZAgent *x, PIZEvent *event);
+PIZError    pizAgentLearn      (PIZAgent *x, PIZEvent *event); //
+PIZError    pizAgentForget     (PIZAgent *x, PIZEvent *event);
+PIZError    pizAgentBpm        (PIZAgent *x, PIZEvent *event);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------

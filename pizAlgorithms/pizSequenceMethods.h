@@ -59,26 +59,26 @@
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZError  pizSequenceInit           (PIZSequence *x, PIZEvent *event); //
-PIZError  pizSequenceRefresh        (PIZSequence *x, PIZEvent *event); //
+PIZError    pizSequenceInit           (PIZSequence *x, PIZEvent *event); //
+PIZError    pizSequenceRefresh        (PIZSequence *x, PIZEvent *event); //
 
-PIZError  pizSequenceNote           (PIZSequence *x, PIZEvent *event);
-PIZError  pizSequenceClear          (PIZSequence *x, PIZEvent *event);
-PIZError  pizSequenceClean          (PIZSequence *x, PIZEvent *event);
-PIZError  pizSequenceTranspose      (PIZSequence *x, PIZEvent *event);
-PIZError  pizSequenceRotate         (PIZSequence *x, PIZEvent *event);
-PIZError  pizSequenceScramble       (PIZSequence *x, PIZEvent *event);
-PIZError  pizSequenceSort           (PIZSequence *x, PIZEvent *event);
-PIZError  pizSequenceChange         (PIZSequence *x, PIZEvent *event);
-PIZError  pizSequenceFill           (PIZSequence *x, PIZEvent *event);
-PIZError  pizSequenceKill           (PIZSequence *x, PIZEvent *event);
-PIZError  pizSequenceCycle          (PIZSequence *x, PIZEvent *event);
-PIZError  pizSequenceAlgorithm      (PIZSequence *x, PIZEvent *event);
-PIZError  pizSequencePattern        (PIZSequence *x, PIZEvent *event); //
-PIZError  pizSequenceJuliet         (PIZSequence *x, PIZEvent *event); //
-PIZError  pizSequenceDump           (PIZSequence *x, PIZEvent *event); //
-PIZError  pizSequenceStatistics     (PIZSequence *x, PIZEvent *event); //
-PIZError  pizSequenceAttributes     (PIZSequence *x, PIZEvent *event); //
+PIZError    pizSequenceNote           (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceClear          (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceClean          (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceTranspose      (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceRotate         (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceScramble       (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceSort           (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceChange         (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceFill           (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceKill           (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceCycle          (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequenceAlgorithm      (PIZSequence *x, PIZEvent *event);
+PIZError    pizSequencePattern        (PIZSequence *x, PIZEvent *event); //
+PIZError    pizSequenceJuliet         (PIZSequence *x, PIZEvent *event); //
+PIZError    pizSequenceDump           (PIZSequence *x, PIZEvent *event); //
+PIZError    pizSequenceStatistics     (PIZSequence *x, PIZEvent *event); //
+PIZError    pizSequenceAttributes     (PIZSequence *x, PIZEvent *event); //
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------

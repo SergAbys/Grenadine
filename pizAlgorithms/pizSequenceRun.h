@@ -64,12 +64,12 @@
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-bool     pizSequenceIsAtEnd      (PIZSequence *x);
-void     pizSequenceJumpToStart  (PIZSequence *x);
+bool        pizSequenceIsAtEnd      (PIZSequence *x);
+void        pizSequenceJumpToStart  (PIZSequence *x);
 
-PIZError pizSequenceUpdate       (PIZSequence *x); //
-PIZError pizSequenceStep         (PIZSequence *x); //
-PIZError pizSequenceStepBlank    (PIZSequence *x);
+PIZError    pizSequenceUpdate       (PIZSequence *x); //
+PIZError    pizSequenceStep         (PIZSequence *x); //
+PIZError    pizSequenceStepBlank    (PIZSequence *x);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------
