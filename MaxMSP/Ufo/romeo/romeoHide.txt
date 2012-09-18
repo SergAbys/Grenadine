@@ -23,10 +23,3 @@ _pizStackNew
 _pizStackPop
 _pizStackPoppedValue
 _pizStackPush
-_romeo_assist
-_romeo_clear
-_romeo_dump
-_romeo_free
-_romeo_int
-_romeo_learn
-_romeo_new

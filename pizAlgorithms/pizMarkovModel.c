@@ -51,7 +51,6 @@
 #define PIZ_SIZE_ALPHABET           128
 #define PIZ_MAXIMUM_SIZE_GRAPH      32
 #define PIZ_MAXIMUM_SIZE_VECTOR     32
-
 #define PIZ_DEFAULT_SIZE_GRAPH      6
 #define PIZ_DEFAULT_SIZE_VECTOR     6
 #define PIZ_DEFAULT_PERSISTENCE     0.5
@@ -61,7 +60,7 @@
 #pragma mark -
 
 PIZ_INLINE void pizMarkovModelBaumWelch             (PIZMarkovModel *x, long argc, long *argv);
-PIZ_LOCAL  void pizMarkovModelFillStochastically    (PIZMarkovModel *x, long argc, double *argv);
+PIZ_STATIC void pizMarkovModelFillStochastically    (PIZMarkovModel *x, long argc, double *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

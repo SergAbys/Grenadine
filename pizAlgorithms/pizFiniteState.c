@@ -47,7 +47,6 @@
 #define PIZ_MAXIMUM_THRESHOLD   100
 #define PIZ_INCREMENT_JUMP      1   
 #define PIZ_INCREMENT_FINAL     5 
-
 #define PIZ_INIT_SIZE_QUEUE     4
 #define PIZ_DEFAULT_THRESHOLD   35
 

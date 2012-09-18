@@ -87,7 +87,7 @@ static t_symbol *foxtrot_sym_start       = NULL;
 static t_symbol *foxtrot_sym_transitions = NULL;
 static t_symbol *foxtrot_sym_emissions   = NULL;
 
-int main(void)
+PIZ_PUBLIC int main(void)
 {
 //   
 t_class *c = NULL;

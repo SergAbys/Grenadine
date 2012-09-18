@@ -29,20 +29,20 @@ extern t_dictionary *tll_clipboard;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL ulong tralala_parseEventNote (t_tll *x, long k, long *data, PIZEventCode code);
-PIZ_LOCAL void  tralala_parseEventInfo (t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s);
-PIZ_LOCAL ulong tralala_parseEventCode (t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s);
+PIZ_STATIC ulong tralala_parseEventNote (t_tll *x, long k, long *data, PIZEventCode code);
+PIZ_STATIC void  tralala_parseEventInfo (t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s);
+PIZ_STATIC ulong tralala_parseEventCode (t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s);
 
-PIZ_LOCAL void  tralala_parseEntryNote (t_tll *x, long ac, t_atom *av, long *k, long *data);
-PIZ_LOCAL void  tralala_parseEntryZone (t_tll *x, long ac, t_atom *av, long *k, long *data);
-PIZ_LOCAL void  tralala_parseEntryCode (t_tll *x, long ac, t_atom *av, long *k, long *data, PIZEventCode code);
+PIZ_STATIC void  tralala_parseEntryNote (t_tll *x, long ac, t_atom *av, long *k, long *data);
+PIZ_STATIC void  tralala_parseEntryZone (t_tll *x, long ac, t_atom *av, long *k, long *data);
+PIZ_STATIC void  tralala_parseEntryCode (t_tll *x, long ac, t_atom *av, long *k, long *data, PIZEventCode code);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL PIZError tralala_pitchToLong      (t_tll *x, t_atom *a, long *t);
-PIZ_LOCAL void     tralala_symbolWithTag    (t_symbol **s, long tag);
+PIZ_STATIC PIZError tralala_pitchToLong     (t_tll *x, t_atom *a, long *t);
+PIZ_STATIC void     tralala_symbolWithTag   (t_symbol **s, long tag);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

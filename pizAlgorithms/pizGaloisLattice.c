@@ -44,7 +44,6 @@
 #pragma mark -
 
 #define PIZ_MAXIMUM_THRESHOLD   100
-
 #define PIZ_INIT_SIZE_ARRAY     4
 #define PIZ_DEFAULT_THRESHOLD   50
 
@@ -53,8 +52,8 @@
 #pragma mark -
 
 PIZ_INLINE void     pizGaloisLatticeReconnect       (PIZGaloisLattice *x, long g, long n);
-PIZ_LOCAL PIZError  pizGaloisLatticeMakeMap         (PIZGaloisLattice *x);
-PIZ_LOCAL void      pizGaloisLatticeKillConcept     (PIZGaloisLattice *x, long n);
+PIZ_STATIC PIZError pizGaloisLatticeMakeMap         (PIZGaloisLattice *x);
+PIZ_STATIC void     pizGaloisLatticeKillConcept     (PIZGaloisLattice *x, long n);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -23,16 +23,3 @@ _pizStackNew
 _pizStackPop
 _pizStackPoppedValue
 _pizStackPush
-_yankee_assist
-_yankee_clear
-_yankee_dump
-_yankee_free
-_yankee_int
-_yankee_learn
-_yankee_new
-_yankee_setAlpha
-_yankee_setBeta
-_yankee_setEpsilon1
-_yankee_setEpsilon2
-_yankee_setKappa
-_yankee_setLambda

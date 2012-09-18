@@ -65,15 +65,15 @@ typedef void (*PIZMethodEach)(PIZSequence*, PIZNote*, const PIZEvent*, ulong);
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL void pizSequenceForEach    (PIZSequence *x, PIZMethodEach method, const PIZEvent *e, ulong flags);
+void pizSequenceForEach             (PIZSequence *x, PIZMethodEach method, const PIZEvent *e, ulong flags);
 
-PIZ_LOCAL void pizSequenceEachRemove        (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags);
-PIZ_LOCAL void pizSequenceEachChange        (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags);
-PIZ_LOCAL void pizSequenceEachMove          (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags); //
-PIZ_LOCAL void pizSequenceEachCycle         (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags);
-PIZ_LOCAL void pizSequenceEachDump          (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags); //
-PIZ_LOCAL void pizSequenceEachFillTempHash  (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags); //
-PIZ_LOCAL void pizSequenceEachFillTempNotes (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags);
+void pizSequenceEachRemove          (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags);
+void pizSequenceEachChange          (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags);
+void pizSequenceEachMove            (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags); //
+void pizSequenceEachCycle           (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags);
+void pizSequenceEachDump            (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags); //
+void pizSequenceEachFillTempHash    (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags); //
+void pizSequenceEachFillTempNotes   (PIZSequence *x, PIZNote *note, const PIZEvent *e, ulong flags);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------

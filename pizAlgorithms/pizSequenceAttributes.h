@@ -55,16 +55,16 @@
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL PIZError  pizSequenceSetBpm           (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetChance        (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetVelocity      (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetChannel       (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetChord         (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetCell          (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetValue         (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetScale         (PIZSequence *x, PIZEvent *event); //
-PIZ_LOCAL PIZError  pizSequenceSetMute          (PIZSequence *x, PIZEvent *event);
-PIZ_LOCAL PIZError  pizSequenceSetZone          (PIZSequence *x, PIZEvent *event);
+PIZError  pizSequenceSetBpm         (PIZSequence *x, PIZEvent *event);
+PIZError  pizSequenceSetChance      (PIZSequence *x, PIZEvent *event);
+PIZError  pizSequenceSetVelocity    (PIZSequence *x, PIZEvent *event);
+PIZError  pizSequenceSetChannel     (PIZSequence *x, PIZEvent *event);
+PIZError  pizSequenceSetChord       (PIZSequence *x, PIZEvent *event);
+PIZError  pizSequenceSetCell        (PIZSequence *x, PIZEvent *event);
+PIZError  pizSequenceSetValue       (PIZSequence *x, PIZEvent *event);
+PIZError  pizSequenceSetScale       (PIZSequence *x, PIZEvent *event); //
+PIZError  pizSequenceSetMute        (PIZSequence *x, PIZEvent *event);
+PIZError  pizSequenceSetZone        (PIZSequence *x, PIZEvent *event);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------

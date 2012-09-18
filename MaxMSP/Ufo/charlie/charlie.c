@@ -81,7 +81,7 @@ PIZ_INLINE PIZError pizKohonenMapEncodeToArray  (const PIZKohonenMap *x, long n,
 
 static t_class *charlie_class;
 
-int main(void)
+PIZ_PUBLIC int main(void)
 {   
 //
 t_class *c = NULL;

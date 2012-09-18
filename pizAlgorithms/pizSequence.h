@@ -240,8 +240,8 @@ typedef struct _PIZSequence {
 
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL PIZSequence   *pizSequenceNew (struct _PIZAgent *agent);
-PIZ_LOCAL void          pizSequenceFree (PIZSequence *x);
+PIZSequence *pizSequenceNew (struct _PIZAgent *agent);
+void        pizSequenceFree (PIZSequence *x);
 
 PIZ_END_C_LINKAGE
 

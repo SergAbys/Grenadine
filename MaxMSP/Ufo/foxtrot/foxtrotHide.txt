@@ -1,11 +1,3 @@
-_foxtrot_assist
-_foxtrot_clear
-_foxtrot_dump
-_foxtrot_free
-_foxtrot_int
-_foxtrot_learn
-_foxtrot_new
-_foxtrot_setPersistence
 _pizArrayAppend
 _pizArrayAtIndex
 _pizArrayClear

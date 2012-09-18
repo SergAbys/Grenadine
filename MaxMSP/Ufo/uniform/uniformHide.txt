@@ -19,9 +19,3 @@ _pizStackNew
 _pizStackPop
 _pizStackPoppedValue
 _pizStackPush
-_uniform_assist
-_uniform_clear
-_uniform_free
-_uniform_int
-_uniform_learn
-_uniform_new

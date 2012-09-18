@@ -20,19 +20,19 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void tralala_paintRun                 (t_tll *x, t_object *pv);
-PIZ_LOCAL void tralala_paintLasso               (t_tll *x, t_object *pv);
-PIZ_LOCAL void tralala_paintCurrent             (t_tll *x, t_object *pv);
-PIZ_LOCAL void tralala_paintBackground          (t_tll *x, t_object *pv);
+PIZ_STATIC void tralala_paintRun                (t_tll *x, t_object *pv);
+PIZ_STATIC void tralala_paintLasso              (t_tll *x, t_object *pv);
+PIZ_STATIC void tralala_paintCurrent            (t_tll *x, t_object *pv);
+PIZ_STATIC void tralala_paintBackground         (t_tll *x, t_object *pv);
 
-PIZ_LOCAL void tralala_paintCurrentNote         (t_tll *x, t_object *pv);
-PIZ_LOCAL void tralala_paintCurrentText         (t_tll *x, t_object *pv, char *string);
-PIZ_LOCAL void tralala_paintCurrentZone         (t_tll *x, t_object *pv, long argc, t_atom *argv, long status);
+PIZ_STATIC void tralala_paintCurrentNote        (t_tll *x, t_object *pv);
+PIZ_STATIC void tralala_paintCurrentText        (t_tll *x, t_object *pv, char *string);
+PIZ_STATIC void tralala_paintCurrentZone        (t_tll *x, t_object *pv, long argc, t_atom *argv, long status);
 
-PIZ_LOCAL void tralala_paintStrncatZone         (char *dst, long argc, t_atom *argv, long status);
-PIZ_LOCAL void tralala_paintStrncatNote         (char *dst, long argc, t_atom *argv);
-PIZ_LOCAL void tralala_paintStrncatAttribute    (char *dst, long argc, t_atom *argv);
-PIZ_LOCAL void tralala_paintPitchAsString       (char *dst, long k, long size);
+PIZ_STATIC void tralala_paintStrncatZone        (char *dst, long argc, t_atom *argv, long status);
+PIZ_STATIC void tralala_paintStrncatNote        (char *dst, long argc, t_atom *argv);
+PIZ_STATIC void tralala_paintStrncatAttribute   (char *dst, long argc, t_atom *argv);
+PIZ_STATIC void tralala_paintPitchAsString      (char *dst, long k, long size);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

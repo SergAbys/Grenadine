@@ -51,7 +51,6 @@
 #define PIZ_SIZE_ALPHABET               128
 #define PIZ_MAXIMUM_SIZE_MAP            100
 #define PIZ_MAXIMUM_SIZE_VECTOR         256
-
 #define PIZ_DEFAULT_SIZE_MAP            20
 #define PIZ_DEFAULT_SIZE_VECTOR         4
 #define PIZ_DEFAULT_RANGE               10

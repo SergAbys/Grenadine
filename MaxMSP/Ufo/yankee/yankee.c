@@ -91,9 +91,9 @@ PIZ_INLINE PIZError pizNeuralGasEncodeToArray   (const PIZNeuralGas *x, long n, 
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-static t_class  *yankee_class;
+static t_class *yankee_class;
 
-int main(void)
+PIZ_PUBLIC int main(void)
 {   
     t_class *c = NULL;
     

@@ -69,7 +69,7 @@ PIZ_INLINE PIZError pizGaloisLatticeEncodeToArray   (const PIZGaloisLattice *x, 
 
 static t_class  *romeo_class;
 
-int main(void)
+PIZ_PUBLIC int main(void)
 {   
     t_class *c = NULL;
     

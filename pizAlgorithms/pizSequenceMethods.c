@@ -86,11 +86,11 @@ static const long   pizSequenceNeighbors[ ] = { -256,
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL PIZNote   *pizSequenceNewNote         (PIZSequence *x, long *argv, ulong flags);
-PIZ_LOCAL PIZError  pizSequenceGetTag           (PIZSequence *x, long *ptr);
+PIZ_STATIC PIZNote   *pizSequenceNewNote        (PIZSequence *x, long *argv, ulong flags);
+PIZ_STATIC PIZError  pizSequenceGetTag          (PIZSequence *x, long *ptr);
 
-PIZ_LOCAL long      pizSequenceFillTempNotes    (PIZSequence *x);
-PIZ_LOCAL void      pizSequenceWithTempNotes    (PIZSequence *x, long selector, bool reverse);
+PIZ_STATIC long      pizSequenceFillTempNotes   (PIZSequence *x);
+PIZ_STATIC void      pizSequenceWithTempNotes   (PIZSequence *x, long selector, bool reverse);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

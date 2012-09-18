@@ -1,13 +1,3 @@
-_charlie_assist
-_charlie_clear
-_charlie_dump
-_charlie_free
-_charlie_int
-_charlie_learn
-_charlie_new
-_charlie_setRange
-_charlie_setStep
-_charlie_setTraining
 _pizArrayAppend
 _pizArrayAtIndex
 _pizArrayClear

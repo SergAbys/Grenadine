@@ -50,7 +50,6 @@
 
 #define PIZ_SIZE_ALPHABET               128
 #define PIZ_MAXIMUM_SIZE_VECTOR         256
-
 #define PIZ_DEFAULT_SIZE_VECTOR         4
 #define PIZ_DEFAULT_MAXIMUM_SIZE        20
 #define PIZ_DEFAULT_LAMBDA              2

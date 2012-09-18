@@ -29,12 +29,12 @@ static t_int32_atomic tll_identifier;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_LOCAL void tralala_send             (t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags);
-PIZ_LOCAL void tralala_switchDaemon     (t_tll *x, PIZEventCode code);
-PIZ_LOCAL void tralala_keepAttributes   (t_tll *x, t_symbol *name, t_dictionary *t);
+PIZ_STATIC void tralala_send            (t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags);
+PIZ_STATIC void tralala_switchDaemon    (t_tll *x, PIZEventCode code);
+PIZ_STATIC void tralala_keepAttributes  (t_tll *x, t_symbol *name, t_dictionary *t);
 
-PIZ_LOCAL t_symbol *tralala_unique      (t_tll *x);
-PIZ_LOCAL t_symbol *tralala_slotName    (long argc, t_atom *argv);
+PIZ_STATIC t_symbol *tralala_unique     (t_tll *x);
+PIZ_STATIC t_symbol *tralala_slotName   (long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ PIZ_LOCAL t_symbol *tralala_slotName    (long argc, t_atom *argv);
 #pragma mark ---
 #pragma mark -
 
-int main(void)
+PIZ_PUBLIC int main(void)
 {	
     t_class	*c = NULL;
     

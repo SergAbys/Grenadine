@@ -57,7 +57,7 @@ void uniform_clear      (t_uniform *x);
 
 static t_class *uniform_class;
 
-int main(void)
+PIZ_PUBLIC int main(void)
 {   
 //
 t_class *c = NULL;

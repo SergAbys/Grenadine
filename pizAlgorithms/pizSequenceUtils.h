@@ -50,8 +50,8 @@
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZ_LOCAL long pizSequenceSnapByAmbitus (PIZSequence *x, long pitch);
-PIZ_LOCAL long pizSequenceSnapByCell    (PIZSequence *x, long position);
+long pizSequenceSnapByAmbitus   (PIZSequence *x, long pitch);
+long pizSequenceSnapByCell      (PIZSequence *x, long position);
 
 PIZ_END_C_LINKAGE
 // -------------------------------------------------------------------------------------------------------------

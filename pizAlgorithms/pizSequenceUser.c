@@ -54,16 +54,16 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
    
-PIZ_LOCAL PIZNote *pizSequenceNoteWithTag   (PIZSequence *x, long tag);
+PIZ_STATIC PIZNote *pizSequenceNoteWithTag  (PIZSequence *x, long tag);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL long pizSequenceLengthUp      (long value);
-PIZ_LOCAL long pizSequenceLengthDown    (long value);
-PIZ_LOCAL long pizSequenceLengthRight   (long value);
-PIZ_LOCAL long pizSequenceLengthLeft    (long value);
+PIZ_STATIC long pizSequenceLengthUp     (long value);
+PIZ_STATIC long pizSequenceLengthDown   (long value);
+PIZ_STATIC long pizSequenceLengthRight  (long value);
+PIZ_STATIC long pizSequenceLengthLeft   (long value);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

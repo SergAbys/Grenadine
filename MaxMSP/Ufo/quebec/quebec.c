@@ -10,6 +10,7 @@
 
 #include "ext.h"
 #include "ext_obex.h"
+#include "pizTypes.h"
 #include "jpatcher_api.h"
 
 // -------------------------------------------------------------------------------------------------------------
@@ -44,7 +45,7 @@ void quebec_dumpLocked  (t_quebec *x);
 
 static t_class *quebec_class;
 
-int main(void)
+PIZ_PUBLIC int main(void)
 {   
     t_class *c = NULL;
     

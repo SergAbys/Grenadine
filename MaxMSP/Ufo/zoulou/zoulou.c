@@ -90,7 +90,7 @@ static t_symbol *zoulou_sym_ref = NULL;
 static t_symbol *zoulou_sym_lrs = NULL;
 static t_symbol *zoulou_sym_arc = NULL;
 
-int main(void)
+PIZ_PUBLIC int main(void)
 {   
     t_class *c = NULL;
     

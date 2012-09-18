@@ -37,30 +37,30 @@ typedef ulong (*tllMethod)(t_tll *, long);
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL   ulong tralala_keyEnter              (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_keyAll                (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_keyCopy               (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_keyPaste              (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_keyDelete             (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_keyUp                 (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_keyDown               (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_keyLeft               (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_keyRight              (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_keyPageUp             (t_tll *x, long m);
-PIZ_LOCAL   ulong tralala_keyPageDown           (t_tll *x, long m);
+PIZ_STATIC ulong tralala_keyEnter       (t_tll *x, long m);
+PIZ_STATIC ulong tralala_keyAll         (t_tll *x, long m);
+PIZ_STATIC ulong tralala_keyCopy        (t_tll *x, long m);
+PIZ_STATIC ulong tralala_keyPaste       (t_tll *x, long m);
+PIZ_STATIC ulong tralala_keyDelete      (t_tll *x, long m);
+PIZ_STATIC ulong tralala_keyUp          (t_tll *x, long m);
+PIZ_STATIC ulong tralala_keyDown        (t_tll *x, long m);
+PIZ_STATIC ulong tralala_keyLeft        (t_tll *x, long m);
+PIZ_STATIC ulong tralala_keyRight       (t_tll *x, long m);
+PIZ_STATIC ulong tralala_keyPageUp      (t_tll *x, long m);
+PIZ_STATIC ulong tralala_keyPageDown    (t_tll *x, long m);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL   void  tralala_keySelectAll          (t_tll *x);
-PIZ_LOCAL   void  tralala_keyCopySelected       (t_tll *x, t_dictionary *d);
+PIZ_STATIC void tralala_keySelectAll        (t_tll *x);
+PIZ_STATIC void tralala_keyCopySelected     (t_tll *x, t_dictionary *d);
 
-PIZ_LOCAL   void  tralala_keyDuplicate          (t_tll *x, long m);
-PIZ_LOCAL   void  tralala_keyChangeZone         (t_tll *x, long m, long keycode);
-PIZ_LOCAL   void  tralala_keyChangeLength       (t_tll *x, long m, long k);
-PIZ_LOCAL   void  tralala_keyChangeNotes        (t_tll *x, long m, PIZEventCode code, long s);
-PIZ_INLINE  void  tralala_keyTagWithSymbol      (long *tag, t_symbol *s);
+PIZ_STATIC void tralala_keyDuplicate        (t_tll *x, long m);
+PIZ_STATIC void tralala_keyChangeZone       (t_tll *x, long m, long keycode);
+PIZ_STATIC void tralala_keyChangeLength     (t_tll *x, long m, long k);
+PIZ_STATIC void tralala_keyChangeNotes      (t_tll *x, long m, PIZEventCode code, long s);
+PIZ_INLINE void tralala_keyTagWithSymbol    (long *tag, t_symbol *s);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

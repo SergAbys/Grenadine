@@ -120,14 +120,14 @@ static const PIZMethodSequence pizMethodsSequence[ ] = {
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-PIZ_LOCAL PIZError  pizAgentEventLoopDoEvent        (PIZAgent *x, PIZLinklist *q);
-PIZ_LOCAL void      pizAgentEventLoopDoStep         (PIZAgent *x, bool blank);
-PIZ_LOCAL void      pizAgentEventLoopDoUpdate       (PIZAgent *x);
+PIZ_STATIC PIZError pizAgentEventLoopDoEvent        (PIZAgent *x, PIZLinklist *q);
+PIZ_STATIC void     pizAgentEventLoopDoStep         (PIZAgent *x, bool blank);
+PIZ_STATIC void     pizAgentEventLoopDoUpdate       (PIZAgent *x);
 
-PIZ_LOCAL void      pizAgentEventLoopInit           (PIZAgent *x);
-PIZ_LOCAL void      pizAgentEventLoopSleep          (PIZAgent *x);
-PIZ_LOCAL bool      pizAgentEventLoopIsCondition    (PIZAgent *x);
-PIZ_LOCAL bool      pizAgentEventLoopIsWorkTime     (PIZAgent *x);
+PIZ_STATIC void     pizAgentEventLoopInit           (PIZAgent *x);
+PIZ_STATIC void     pizAgentEventLoopSleep          (PIZAgent *x);
+PIZ_STATIC bool     pizAgentEventLoopIsCondition    (PIZAgent *x);
+PIZ_STATIC bool     pizAgentEventLoopIsWorkTime     (PIZAgent *x);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
