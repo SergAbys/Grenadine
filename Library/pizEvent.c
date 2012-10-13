@@ -1,10 +1,6 @@
+
 /*
- * \file	pizEvent.c
- * \author	Jean Sapristi
- */
- 
-/*
- *  Copyright (c) 2012, Jean Sapristi & Tom Javel, 
+ *  Copyright (c) 2012, Nicolas Danet, 
  *  "nicolas.danet@free.fr".
  *
  *	This software is governed by the CeCILL-C license under French law and
