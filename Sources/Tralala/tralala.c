@@ -223,31 +223,31 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     jbox_new((t_jbox *)x, boxflags, argc, argv);
     x->box.b_firstin = (t_object *)x;
 
-    x->right = outlet_new((t_object *)x, NULL);
-    x->middleRight = bangout((t_object *)x);
-    x->middle = outlet_new((t_object *)x, NULL);
-    x->middleLeft = outlet_new((t_object *)x, NULL);
-    x->left = listout((t_object *)x);
+    x->right        = outlet_new((t_object *)x, NULL);
+    x->middleRight  = bangout((t_object *)x);
+    x->middle       = outlet_new((t_object *)x, NULL);
+    x->middleLeft   = outlet_new((t_object *)x, NULL);
+    x->left         = listout((t_object *)x);
     
     object_obex_store((void *)x, TLL_SYM_DUMPOUT, (t_object *)x->right);
 
     jbox_ready((t_jbox *)x);
     attr_dictionary_process(x, d);
     
-    err |= !(x->temp[0] = pizArrayNew(0));
-    err |= !(x->temp[1] = pizArrayNew(0));
-    err |= !(x->temp[2] = pizArrayNew(0));
-    err |= !(x->runCopy = pizLinklistNew( ));
-    err |= !(x->run = pizLinklistNew( ));
-    err |= !(x->daemon = pizLinklistNew( ));
-    err |= !(x->data = dictionary_new( ));
-    err |= !(x->current = dictionary_new( ));
-    err |= !(x->status = dictionary_new( ));
-    err |= !(x->layer = jtextlayout_create( ));
-    err |= !(x->runClock = clock_new(x, (method)tralala_runTask));
+    err |= !(x->temp[0]     = pizArrayNew(0));
+    err |= !(x->temp[1]     = pizArrayNew(0));
+    err |= !(x->temp[2]     = pizArrayNew(0));
+    err |= !(x->runCopy     = pizLinklistNew( ));
+    err |= !(x->run         = pizLinklistNew( ));
+    err |= !(x->daemon      = pizLinklistNew( ));
+    err |= !(x->data        = dictionary_new( ));
+    err |= !(x->current     = dictionary_new( ));
+    err |= !(x->status      = dictionary_new( ));
+    err |= !(x->layer       = jtextlayout_create( ));
+    err |= !(x->runClock    = clock_new(x, (method)tralala_runTask));
     err |= !(x->daemonClock = clock_new(x, (method)tralala_daemonTask));
     err |= !(x->gainedClock = clock_new(x, (method)tralala_gainedTask));
-    err |= !(x->lostClock = clock_new(x, (method)tralala_lostTask));
+    err |= !(x->lostClock   = clock_new(x, (method)tralala_lostTask));
     
     err |= (systhread_mutex_new(&x->dataMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
     err |= (systhread_mutex_new(&x->runMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
@@ -386,25 +386,27 @@ void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
     t_symbol *name = NULL;
 
     if (t = dictionary_new( )) {
-        TLL_DATA_LOCK
-        dictionary_copyunique(t, x->current);
-        TLL_DATA_UNLOCK
-    
-        if (s == TLL_SYM_RESAVE) {
-            name = x->name;
-        } else {
-            name = tralala_slotName(argc, argv);
-            x->name = name;
-        }  
-    
-        if ((s == TLL_SYM_SAVE) || (s == TLL_SYM_RESAVE)) { 
-            tralala_reloadAttributes(x, name, t); 
-        }
-    
-        if (name) {
-            dictionary_appenddictionary(x->data, name, (t_object *)t);
-            jpatcher_set_dirty(jbox_get_patcher((t_object *)x), 1);
-        }
+    //
+    TLL_DATA_LOCK
+    dictionary_copyunique(t, x->current);
+    TLL_DATA_UNLOCK
+
+    if (s == TLL_SYM_RESAVE) {
+        name = x->name;
+    } else {
+        name = tralala_slotName(argc, argv);
+        x->name = name;
+    }  
+
+    if ((s == TLL_SYM_SAVE) || (s == TLL_SYM_RESAVE)) { 
+        tralala_reloadAttributes(x, name, t); 
+    }
+
+    if (name) {
+        dictionary_appenddictionary(x->data, name, (t_object *)t);
+        jpatcher_set_dirty(jbox_get_patcher((t_object *)x), 1);
+    }
+    //
     }
 }
 
