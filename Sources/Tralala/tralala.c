@@ -29,12 +29,12 @@ static t_int32_atomic tll_identifier;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_STATIC void tralala_send            (t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags);
-PIZ_STATIC void tralala_switchDaemon    (t_tll *x, PIZEventCode code);
-PIZ_STATIC void tralala_keepAttributes  (t_tll *x, t_symbol *name, t_dictionary *t);
+PIZ_STATIC void tralala_send                (t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags);
+PIZ_STATIC void tralala_handleDaemon        (t_tll *x, PIZEventCode code);
+PIZ_STATIC void tralala_reloadAttributes    (t_tll *x, t_symbol *name, t_dictionary *t);
 
-PIZ_STATIC t_symbol *tralala_unique     (t_tll *x);
-PIZ_STATIC t_symbol *tralala_slotName   (long argc, t_atom *argv);
+PIZ_STATIC t_symbol *tralala_unique         (t_tll *x);
+PIZ_STATIC t_symbol *tralala_slotName       (long argc, t_atom *argv);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -398,7 +398,7 @@ void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
         }  
     
         if ((s == TLL_SYM_SAVE) || (s == TLL_SYM_RESAVE)) { 
-            tralala_keepAttributes(x, name, t); 
+            tralala_reloadAttributes(x, name, t); 
         }
     
         if (name) {
@@ -455,7 +455,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
     PIZEventCode code = PIZ_MSG_NONE;
     
     pizEventCode(event, &code);
-    tralala_switchDaemon(x, code);
+    tralala_handleDaemon(x, code);
     
     if (copyRun = pizEventNewCopy(event)) {
         TLL_RUN_LOCK
@@ -670,12 +670,12 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong fl
     
     pizAgentDoEvent(x->agent, event);
     
-    tralala_switchDaemon(x, code);
+    tralala_handleDaemon(x, code);
     //
     }
 }
 
-void tralala_switchDaemon(t_tll *x, PIZEventCode code)
+void tralala_handleDaemon(t_tll *x, PIZEventCode code)
 {
     if ((code == PIZ_NOTIFY_END) || (code == PIZ_MSG_STOP)) {
         TLL_FLAG_UNSET(TLL_FLAG_DAEMON)
@@ -686,7 +686,7 @@ void tralala_switchDaemon(t_tll *x, PIZEventCode code)
     }
 }
 
-void tralala_keepAttributes(t_tll *x, t_symbol *name, t_dictionary *t)
+void tralala_reloadAttributes(t_tll *x, t_symbol *name, t_dictionary *t)
 {
     t_dictionary *d = NULL;
     t_symbol *s[ ] = { 

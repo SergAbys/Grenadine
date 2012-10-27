@@ -161,6 +161,7 @@ void tralala_recall         (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 void tralala_remove         (t_tll *x, t_symbol *s, long argc, t_atom *argv);
 
 void tralala_callback       (void *ptr, PIZEvent *event);
+
 void tralala_runTask        (t_tll *x);
 void tralala_daemonTask     (t_tll *x);
 
