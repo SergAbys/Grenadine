@@ -110,7 +110,7 @@ void *romeo_new(t_symbol *s, long argc, t_atom *argv)
                             
     if (x->values && x->galoisLattice) {
     
-        x->rightOutlet  = outlet_new(x, NULL);
+        x->rightOutlet = outlet_new(x, NULL);
         object_obex_store((void *)x, gensym("dumpout"), (t_object *)x->rightOutlet);
         x->leftOutlet = listout((t_object *)x);
                 
