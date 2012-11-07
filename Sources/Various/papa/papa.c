@@ -8,211 +8,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "ext.h"							
-#include "ext_obex.h"
-#include "jpatcher_api.h"
-#include "jgraphics.h"
-#include "ext_common.h"		
-#include "ext_systhread.h"
-#include "commonsyms.h"
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#include <stdlib.h>
-#include <math.h>	
-#include <time.h>
-
-// -------------------------------------------------------------------------------------------------------------	
-// -------------------------------------------------------------------------------------------------------------
-
-#define DEFAULT_SYNAPSE					0.62, 0.55, 0.83, 1.0
-#define DEFAULT_FEEDBACK				1.00, 0.60, 0.60, 1.0
-#define DEFAULT_WRONG					0.85, 0.85, 0.85, 1.0
-#define DEFAULT_BOX_LINEAR				0.92, 0.94, 0.67, 1.0
-#define DEFAULT_BOX_SIGMOID				0.68, 0.82, 0.82, 1.0
-#define DEFAULT_BOX_TANH				0.83, 0.74, 0.84, 1.0
-#define DEFAULT_BOX_ERROR				0.95, 0.95, 0.95, 1.0
-
-#define	DEFAULT_OUTPUT_LAYER_SIZE		4
-#define DEFAULT_BIAS					0.
-#define DEFAULT_THRESHOLD				0.
-#define DEFAULT_LEARNING				1.
-#define DEFAULT_SAVE_DATA_WITH_PATCHER	0
-#define DEFAULT_ERROR					0
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define MAXIMUM_OUTPUT_LAYER_SIZE		128
-#define	MAXIMUM_SYNAPSES_PER_NODE		128
-#define MAXIMUM_NODES_PER_LAYER			128
-#define MAXIMUM_SYNAPSES				2048 
-
-#define MAXIMUM_NODES					512
-#define QUEUE_SIZE						512
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-#define WEIGHT_FEEDBACK					1.
-#define WEIGHT_WRONG					0.
-
-#define STATE_WHITE						0
-#define STATE_GREY						1
-#define STATE_BLACK						2
-#define STATE_NO_BACKPROPAGATION	   -1
-
-#define DISTANCE_OUTPUT_LAYER		   -1
-#define DISTANCE_LONELY_NODE		   -2
-
-#define SYNAPSE							0
-#define SYNAPSE_FEEDBACK				1
-#define SYNAPSE_WRONG				   -1
-
-#define MODE_NORMAL						1
-#define MODE_NO_BACKWARD				0
-#define MODE_FINAL					   -1
-#define MODE_START					   -2
-
-#define TRANSFER_ERROR				   -1
-#define TRANSFER_LINEAR					0
-#define TRANSFER_SIGMOID				1
-#define TRANSFER_TANH					2
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-typedef struct _node {
-	long		mode;
-	long		state;
-	long		distance;
-	long		transfer;
-	long		index;
-	long		type		[MAXIMUM_SYNAPSES_PER_NODE];
-	long		destination	[MAXIMUM_SYNAPSES_PER_NODE];
-	double		weight		[MAXIMUM_SYNAPSES_PER_NODE];
-	double		potential;
-	double		delayA;
-	double		delayB;
-	double		signal;
-	double		error;
-	double		tempPotential;
-	double		tempSignal;
-	t_object	*object;
-	t_object	*box;
-	t_object	*line		[MAXIMUM_SYNAPSES_PER_NODE];
-	} t_node;
-	
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-typedef struct _papa {
-	t_object			ob;
-	t_object			*me;
-	t_object			*oscar;
-	t_object			*meBox;
-	t_object			*oscarBox;
-	t_node				*stock;
-	long				*graph;
-	long				*graphMap;
-	long				stockSize;
-	long				headQueue;
-	long				tailQueue;
-	long				valueQueue;
-	long				sizeInputLayer;
-	long				sizeOutputLayer;
-	long				sizeHiddenLayers;
-	long				maximumDistance;
-	long				saveDataWithPatcher;
-	long				papaTransfer;
-	long				oscarTransfer;
-	long				lockDump;
-	long				error;
-	long				*queue;
-	double				bias;
-	double				threshold;
-	double				learning;
-	double				totalError;
-	double				*vectorOut;
-	double				*vectorIn;
-	double				*vectorTarget;
-	t_atomarray			*headData;
-	t_atomarray			*graphData;
-	t_atomarray			*synapsesData;
-	t_jrgba				lineSynapse;
-	t_jrgba				lineFeedback;
-	t_jrgba				lineWrong;
-	t_jrgba				boxLinear;
-	t_jrgba				boxSigmoid;
-	t_jrgba				boxTanh;
-	t_jrgba				boxError;
-	t_systhread_mutex	mutex;
-	void				*clock;
-	void				*outlet[MAXIMUM_OUTPUT_LAYER_SIZE];
-	} t_papa;
-	
-// -------------------------------------------------------------------------------------------------------------	
-// -------------------------------------------------------------------------------------------------------------
-
-void	*papa_new						(t_symbol *s, long argc, t_atom *argv);
-void	papa_free						(t_papa *x);
-void	papa_assist						(t_papa *x, void *b, long m, long a, char *s);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void	papa_dblclick					(t_papa *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void	papa_clear						(t_papa *x);
-void	papa_anything					(t_papa *x, t_symbol *s, long argc, t_atom *argv);
-void	papa_int						(t_papa *x, long n);
-void	papa_float						(t_papa *x, double f);
-void	papa_list						(t_papa *x, t_symbol *s, long argc, t_atom *argv);
-void	papa_learn						(t_papa *x, t_symbol *s, long argc, t_atom *argv);
-void	papa_target						(t_papa *x, t_symbol *s, long argc, t_atom *argv);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void	papa_dump						(t_papa *x);
-void	papa_task						(t_papa *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void	papa_findOscar					(t_papa *x);
-long	papa_iterateToFindOscar			(t_papa *x, t_object *box);
-void	papa_rebuildFromData			(t_papa *x);
-void	papa_appendToDictionary			(t_papa *x, t_dictionary *bd);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void	papa_propagation				(t_papa *x);
-double	papa_computeErrors				(t_papa *x);
-void	papa_backpropagation			(t_papa *x);
-void	papa_initialisation				(t_papa *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-void	papa_buildGraph					(t_papa *x);
-long	papa_iterateToBuildGraph		(t_papa *x, t_object *box);
-long	papa_stockGetIndexByPtrOutlet	(t_papa *x, t_object *object, long n);
-long	papa_stockGetIndexByPtrInlet	(t_papa *x, t_object *object, long n);
-void	papa_graphBoxColor				(t_papa *x, t_object *box, long n);
-void	papa_freeGraph					(t_papa *x);
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-
-double	papa_randomGaussian				(void);
-long	papa_putFifo					(t_papa *x, long n);
-long	papa_getFifo					(t_papa *x);
+#include "papa.h"
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -241,72 +37,73 @@ int main (void)
 	class_addmethod (c, (method)papa_learn,					"learn",				A_GIMME, 0);
 	class_addmethod (c, (method)papa_target,				"target",				A_GIMME, 0);
 	
-	CLASS_ATTR_LONG					(c, "embed",			ATTR_FLAGS_NONE, t_papa, saveDataWithPatcher);
+	CLASS_ATTR_LONG                 (c, "embed",			ATTR_FLAGS_NONE, t_papa, saveDataWithPatcher);
 	CLASS_ATTR_STYLE_LABEL			(c, "embed",			ATTR_FLAGS_NONE, "onoff", "Save Data With Patcher");
-	CLASS_ATTR_CATEGORY				(c, "embed",			ATTR_FLAGS_NONE, "Hint");
-	CLASS_ATTR_SAVE					(c, "embed",			ATTR_FLAGS_NONE);
+	CLASS_ATTR_DEFAULT_SAVE         (c, "embed",			ATTR_FLAGS_NONE, "0");
 	CLASS_ATTR_FILTER_CLIP			(c, "embed",			0, 1);
 	
-	CLASS_STICKY_ATTR				(c, "category",			0, "Color");
-
 	CLASS_ATTR_RGBA					(c, "synapse",			ATTR_FLAGS_NONE, t_papa, lineSynapse);
+    CLASS_ATTR_DEFAULT_SAVE         (c, "synapse",          ATTR_FLAGS_NONE, "0.62 0.55 0.83 1.0");
 	CLASS_ATTR_STYLE_LABEL			(c, "synapse",			ATTR_FLAGS_NONE, "rgba", "Line Synapse");
-	CLASS_ATTR_SAVE					(c, "synapse",			ATTR_FLAGS_NONE);
 	CLASS_ATTR_RGBA					(c, "feedback",			ATTR_FLAGS_NONE, t_papa, lineFeedback);
+    CLASS_ATTR_DEFAULT_SAVE         (c, "feedback",         ATTR_FLAGS_NONE, "1.00 0.60 0.60 1.0");
 	CLASS_ATTR_STYLE_LABEL			(c, "feedback",			ATTR_FLAGS_NONE, "rgba", "Line Feedback");
-	CLASS_ATTR_SAVE					(c, "feedback",			ATTR_FLAGS_NONE);
 	CLASS_ATTR_RGBA					(c, "wrong",			ATTR_FLAGS_NONE, t_papa, lineWrong);
+    CLASS_ATTR_DEFAULT_SAVE         (c, "wrong",            ATTR_FLAGS_NONE, "0.85 0.85 0.85 1.0");
 	CLASS_ATTR_STYLE_LABEL			(c, "wrong",			ATTR_FLAGS_NONE, "rgba", "Line Wrong");
-	CLASS_ATTR_SAVE					(c, "wrong",			ATTR_FLAGS_NONE);
 	CLASS_ATTR_RGBA					(c, "linear",			ATTR_FLAGS_NONE, t_papa, boxLinear);
+    CLASS_ATTR_DEFAULT_SAVE         (c, "linear",           ATTR_FLAGS_NONE, "0.92 0.94 0.67 1.0");
 	CLASS_ATTR_STYLE_LABEL			(c, "linear",			ATTR_FLAGS_NONE, "rgba", "Box Linear");
-	CLASS_ATTR_SAVE					(c, "linear",			ATTR_FLAGS_NONE);
 	CLASS_ATTR_RGBA					(c, "sigmoid",			ATTR_FLAGS_NONE, t_papa, boxSigmoid);
+    CLASS_ATTR_DEFAULT_SAVE         (c, "sigmoid",          ATTR_FLAGS_NONE, "0.68 0.82 0.82 1.0");
 	CLASS_ATTR_STYLE_LABEL			(c, "sigmoid",			ATTR_FLAGS_NONE, "rgba", "Box Sigmoid");
-	CLASS_ATTR_SAVE					(c, "sigmoid",			ATTR_FLAGS_NONE);
 	CLASS_ATTR_RGBA					(c, "tanh",				ATTR_FLAGS_NONE, t_papa, boxTanh);
+    CLASS_ATTR_DEFAULT_SAVE         (c, "tanh",             ATTR_FLAGS_NONE, "0.83 0.74 0.84 1.0");
 	CLASS_ATTR_STYLE_LABEL			(c, "tanh",				ATTR_FLAGS_NONE, "rgba", "Box Tanh");
-	CLASS_ATTR_SAVE					(c, "tanh",				ATTR_FLAGS_NONE);
-	
-	CLASS_STICKY_ATTR_CLEAR			(c, "category");
-	
+    
 	CLASS_ATTR_DOUBLE				(c, "bias",				ATTR_FLAGS_NONE, t_papa, bias);
-	CLASS_ATTR_SAVE					(c, "bias",				ATTR_FLAGS_NONE);
+	CLASS_ATTR_DEFAULT_SAVE         (c, "bias",				ATTR_FLAGS_NONE, "0.");
 	CLASS_ATTR_LABEL				(c, "bias",				ATTR_FLAGS_NONE, "Bias");
 	CLASS_ATTR_FILTER_CLIP			(c, "bias",				-5., 5.);
 	CLASS_ATTR_DOUBLE				(c, "threshold",		ATTR_FLAGS_NONE, t_papa, threshold);
-	CLASS_ATTR_SAVE					(c, "threshold",		ATTR_FLAGS_NONE);
+	CLASS_ATTR_DEFAULT_SAVE         (c, "threshold",		ATTR_FLAGS_NONE, "0.");
 	CLASS_ATTR_LABEL				(c, "threshold",		ATTR_FLAGS_NONE, "Learning Threshold");
 	CLASS_ATTR_FILTER_MIN			(c, "threshold",		0.);
 	CLASS_ATTR_DOUBLE				(c, "learning",			ATTR_FLAGS_NONE, t_papa, learning);
-	CLASS_ATTR_SAVE					(c, "learning",			ATTR_FLAGS_NONE);
+	CLASS_ATTR_DEFAULT_SAVE         (c, "learning",			ATTR_FLAGS_NONE, "1.");
 	CLASS_ATTR_LABEL				(c, "learning",			ATTR_FLAGS_NONE, "Learning Rate");
 	CLASS_ATTR_FILTER_MIN			(c, "learning",			0.);
 	
 	CLASS_ATTR_LONG					(c, "papafunction",		ATTR_FLAGS_NONE, t_papa, papaTransfer);
 	CLASS_ATTR_ENUMINDEX			(c, "papafunction",		ATTR_FLAGS_NONE, "Linear Sigmoid Tanh");
-	CLASS_ATTR_LABEL				(c, "papafunction",		ATTR_FLAGS_NONE, "Transfer Function Papa");
-	CLASS_ATTR_SAVE					(c, "papafunction",		ATTR_FLAGS_NONE);
+	CLASS_ATTR_LABEL				(c, "papafunction",		ATTR_FLAGS_NONE, "Function Papa");
+	CLASS_ATTR_DEFAULT_SAVE         (c, "papafunction",		ATTR_FLAGS_NONE, "2");
 	CLASS_ATTR_FILTER_CLIP			(c, "papafunction",		0, 2);
-
 	CLASS_ATTR_LONG					(c, "oscarfunction",	ATTR_FLAGS_NONE, t_papa, oscarTransfer);
 	CLASS_ATTR_ENUMINDEX			(c, "oscarfunction",	ATTR_FLAGS_NONE, "Linear Sigmoid Tanh");
-	CLASS_ATTR_LABEL				(c, "oscarfunction",	ATTR_FLAGS_NONE, "Transfer Function Oscar");
-	CLASS_ATTR_SAVE					(c, "oscarfunction",	ATTR_FLAGS_NONE);
+	CLASS_ATTR_LABEL				(c, "oscarfunction",	ATTR_FLAGS_NONE, "Function Oscar");
+	CLASS_ATTR_DEFAULT_SAVE         (c, "oscarfunction",	ATTR_FLAGS_NONE, "0");
 	CLASS_ATTR_FILTER_CLIP			(c, "oscarfunction",	0, 2);
 	
 	CLASS_ATTR_LONG					(c, "error",			ATTR_FLAGS_NONE, t_papa, error);
 	CLASS_ATTR_STYLE_LABEL			(c, "error",			ATTR_FLAGS_NONE, "onoff", "Error");
-	CLASS_ATTR_SAVE					(c, "error",			ATTR_FLAGS_NONE);
+	CLASS_ATTR_DEFAULT_SAVE         (c, "error",			ATTR_FLAGS_NONE, "0");
 	CLASS_ATTR_FILTER_CLIP			(c, "error",			0, 1);
-	
-	CLASS_ATTR_ORDER				(c, "bias",				ATTR_FLAGS_NONE, "1");
+
+    CLASS_ATTR_ORDER				(c, "bias",				ATTR_FLAGS_NONE, "1");
 	CLASS_ATTR_ORDER				(c, "learning",			ATTR_FLAGS_NONE, "2");
 	CLASS_ATTR_ORDER				(c, "threshold",		ATTR_FLAGS_NONE, "3");
-	CLASS_ATTR_ORDER				(c, "error",			ATTR_FLAGS_NONE, "4");
-	CLASS_ATTR_ORDER				(c, "oscarfunction",	ATTR_FLAGS_NONE, "5");
-	CLASS_ATTR_ORDER				(c, "papafunction",		ATTR_FLAGS_NONE, "6");
-	
+	CLASS_ATTR_ORDER				(c, "oscarfunction",	ATTR_FLAGS_NONE, "4");
+	CLASS_ATTR_ORDER				(c, "papafunction",		ATTR_FLAGS_NONE, "5");
+    CLASS_ATTR_ORDER				(c, "synapse",          ATTR_FLAGS_NONE, "6");
+    CLASS_ATTR_ORDER				(c, "feedback",         ATTR_FLAGS_NONE, "7");
+    CLASS_ATTR_ORDER				(c, "wrong",            ATTR_FLAGS_NONE, "8");
+    CLASS_ATTR_ORDER				(c, "linear",           ATTR_FLAGS_NONE, "9");
+    CLASS_ATTR_ORDER				(c, "sigmoid",          ATTR_FLAGS_NONE, "10");
+    CLASS_ATTR_ORDER				(c, "tanh",             ATTR_FLAGS_NONE, "11");
+    CLASS_ATTR_ORDER				(c, "error",			ATTR_FLAGS_NONE, "12");
+    CLASS_ATTR_ORDER				(c, "embed",            ATTR_FLAGS_NONE, "13");
+    
 	papa_sym_error = gensym ("error");
 		
 	class_register (CLASS_BOX, c); 
@@ -322,7 +119,7 @@ int main (void)
 void *papa_new (t_symbol *s, long argc, t_atom *argv)
 {
 	t_papa *x = NULL;
-	
+    
 	if (x = (t_papa *)object_alloc (papa_class)) 
 		{
 			long			i;
@@ -330,44 +127,19 @@ void *papa_new (t_symbol *s, long argc, t_atom *argv)
 			
 			srand (time(NULL));
 			
-			x->sizeHiddenLayers			= 0;
-			x->sizeInputLayer			= 0;
-			x->headQueue				= 0;
-			x->tailQueue				= 0;
-			x->valueQueue				= 0;
-			x->maximumDistance			= 0;
-			x->stockSize				= 0;
-			x->lockDump					= 0;
-			x->totalError				= 0.;
-			x->error					= DEFAULT_ERROR;
-			x->saveDataWithPatcher		= DEFAULT_SAVE_DATA_WITH_PATCHER;
+            x->learning					= 1.;
+			x->sizeOutputLayer			= 4;
 			x->papaTransfer				= TRANSFER_TANH;
 			x->oscarTransfer			= TRANSFER_LINEAR;
-			x->bias						= DEFAULT_BIAS;
-			x->threshold				= DEFAULT_THRESHOLD;
-			x->learning					= DEFAULT_LEARNING;
-			x->sizeOutputLayer			= DEFAULT_OUTPUT_LAYER_SIZE;
-			x->me						= NULL;
-			x->oscar					= NULL;
-			x->meBox					= NULL;
-			x->oscarBox					= NULL;
-			x->stock					= NULL;
-			x->graph					= NULL;
-			x->graphMap					= NULL;
-			x->headData					= NULL;
-			x->graphData				= NULL;
-			x->synapsesData				= NULL;
-			x->vectorIn					= NULL;
-			x->vectorOut				= NULL;
-							
-			jrgba_set (&x->lineSynapse,		DEFAULT_SYNAPSE);
-			jrgba_set (&x->lineFeedback,	DEFAULT_FEEDBACK);
-			jrgba_set (&x->lineWrong,		DEFAULT_WRONG);
-			jrgba_set (&x->boxLinear,		DEFAULT_BOX_LINEAR);
-			jrgba_set (&x->boxSigmoid,		DEFAULT_BOX_SIGMOID);
-			jrgba_set (&x->boxTanh,			DEFAULT_BOX_TANH);
-			jrgba_set (&x->boxError,		DEFAULT_BOX_ERROR);
-			
+
+			jrgba_set (&x->lineSynapse,     0.62, 0.55, 0.83, 1.0);
+			jrgba_set (&x->lineFeedback,    1.00, 0.60, 0.60, 1.0);
+			jrgba_set (&x->lineWrong,       0.85, 0.85, 0.85, 1.0);
+			jrgba_set (&x->boxLinear,       0.92, 0.94, 0.67, 1.0);
+			jrgba_set (&x->boxSigmoid,      0.68, 0.82, 0.82, 1.0);
+			jrgba_set (&x->boxTanh,         0.83, 0.74, 0.84, 1.0);
+            jrgba_set (&x->boxError,        0.95, 0.95, 0.95, 1.0);
+            
 			x->queue = (long *)sysmem_newptrclear (sizeof(long) * (QUEUE_SIZE + 1));
 			
 			if (argc)
@@ -480,7 +252,7 @@ void papa_assist (t_papa *x, void *b, long m, long a, char *s)
 		{	
 			if (!a)
 				{
-					sprintf (s, "(list) error");
+					sprintf (s, "(anything)");
 				}
 			else
 				{

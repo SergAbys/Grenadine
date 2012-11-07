@@ -19,6 +19,7 @@
 		9692FC0D11EDA9D80074FAD7 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; name = maxmspsdk.xcconfig; path = ../maxmspsdk.xcconfig; sourceTree = SOURCE_ROOT; };
 		9692FC1111EDAA020074FAD7 /* papa.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = papa.c; sourceTree = "<group>"; };
 		96CFED7C141B32A900C05473 /* papaHide.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = papaHide.txt; sourceTree = "<group>"; };
+		96D8FA0F164971D500F6D066 /* papa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = papa.h; sourceTree = "<group>"; };
 		96F04F3116491F0200E1CF09 /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "../../../../../c74support/max-includes/MaxAPI.framework"; sourceTree = SOURCE_ROOT; };
 		96F04F3616491F7000E1CF09 /* commonsyms.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = commonsyms.c; path = "../../../../../c74support/max-includes/common/commonsyms.c"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -66,6 +67,7 @@
 		08FB77ADFE841716C02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				96D8FA0F164971D500F6D066 /* papa.h */,
 				9692FC1111EDAA020074FAD7 /* papa.c */,
 				96F04F3616491F7000E1CF09 /* commonsyms.c */,
 			);
