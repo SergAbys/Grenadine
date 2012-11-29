@@ -142,7 +142,7 @@ PIZ_PUBLIC int main(void)
     
     yankee_class = c;
     
-    return MAX_ERR_NONE;
+    return PIZ_GOOD;
 }
 
 // -------------------------------------------------------------------------------------------------------------

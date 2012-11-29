@@ -125,7 +125,7 @@ PIZ_PUBLIC int main(void)
     
     zoulou_class = c;
     
-    return MAX_ERR_NONE;
+    return PIZ_GOOD;
 }
 
 // -------------------------------------------------------------------------------------------------------------

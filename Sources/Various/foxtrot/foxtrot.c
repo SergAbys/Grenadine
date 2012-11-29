@@ -115,7 +115,7 @@ class_register(CLASS_BOX, c);
 
 foxtrot_class = c;
 
-return MAX_ERR_NONE;
+return PIZ_GOOD;
 //    
 }
 

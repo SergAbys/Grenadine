@@ -256,7 +256,8 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>6</integer>
+											<integer>3</integer>
+											<integer>2</integer>
 											<integer>0</integer>
 										</array>
 									</array>
@@ -421,8 +422,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96D69157161DD08000230BC9</string>
-				<string>96D69158161DD08000230BC9</string>
+				<string>96FC21E41667B50700F387EC</string>
+				<string>96FC21E51667B50700F387EC</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -456,7 +457,7 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>1C530D52069F1CE1000CFCEE</string>
-		<string>/Users/jeantoto/Max/Work/Grenadine/Projects/Ufo/foxtrot/foxtrot.xcodeproj</string>
+		<string>/Users/jeantoto/Max/Work/Grenadine/Sources/Various/foxtrot/foxtrot.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>403 250 446 411 0 0 1280 778 </string>
@@ -673,7 +674,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96D69159161DD08000230BC9</string>
+				<string>96FC21E61667B50700F387EC</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

@@ -195,7 +195,7 @@ PIZ_PUBLIC int main(void)
     tralala_parseInit(&tll_table);
     tll_clipboard = dictionary_new( );
 
-    return 0;
+    return PIZ_GOOD;
 }
 
 // -------------------------------------------------------------------------------------------------------------

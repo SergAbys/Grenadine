@@ -74,7 +74,7 @@ class_register(CLASS_BOX, c);
 
 uniform_class = c;
 
-return MAX_ERR_NONE;
+return PIZ_GOOD;
 //    
 }
 
