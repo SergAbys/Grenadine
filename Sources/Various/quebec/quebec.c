@@ -31,10 +31,12 @@ typedef struct _quebec {
 void *quebec_new        (t_symbol *s, long argc, t_atom *argv);
 void quebec_free        (t_quebec *x);
 void quebec_assist      (t_quebec *x, void *b, long m, long a, char *s);
-void quebec_notify      (t_quebec *x, t_symbol *s, t_symbol *msg, void *sender, void *data);
 
-void quebec_bang        (t_quebec *x);
+void quebec_notify      (t_quebec *x, t_symbol *s, t_symbol *msg, void *sender, void *data);
 void quebec_attachView  (t_quebec *x);
+
+void quebec_lock        (t_quebec *x, long n);
+void quebec_bang        (t_quebec *x);
 
 void quebec_dumpTitle   (t_quebec *x);
 void quebec_dumpLocked  (t_quebec *x);
@@ -51,9 +53,10 @@ PIZ_PUBLIC int main(void)
     
     c = class_new("quebec", (method)quebec_new, (method)quebec_free, (long)sizeof(t_quebec), 0L, A_GIMME, 0);
     
-    class_addmethod(c, (method)quebec_assist,  "assist", A_CANT, 0);
-    class_addmethod(c, (method)quebec_notify,  "notify", A_CANT, 0); 
-    class_addmethod(c, (method)quebec_bang,    "bang", 0); 
+    class_addmethod(c, (method)quebec_assist,   "assist",   A_CANT, 0);
+    class_addmethod(c, (method)quebec_notify,   "notify",   A_CANT, 0); 
+    class_addmethod(c, (method)quebec_lock,     "lock",     A_LONG, 0); 
+    class_addmethod(c, (method)quebec_bang,     "bang",     0); 
 
     class_register(CLASS_BOX, c); 
     
@@ -144,23 +147,31 @@ void quebec_notify(t_quebec *x, t_symbol *s, t_symbol *msg, void *sender, void *
     }
 }
 
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
-#pragma mark -
-
-void quebec_bang(t_quebec *x)
-{
-    if (!x->firstview) {    
-        defer_low(x, (method)quebec_attachView, NULL, 0, NULL);
-    }
-}
-
 void quebec_attachView(t_quebec *x)
 {
     if (x->patcher && (x->firstview = object_attr_getobj(x->patcher, gensym("firstview")))) {
         object_attach_byptr_register(x, x->firstview, CLASS_NOBOX);
         quebec_dumpTitle(x);
         quebec_dumpLocked(x);
+        outlet_anything(x->rightOutlet, gensym("attached"), 0, NULL);
+    }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+void quebec_lock(t_quebec *x, long n)
+{
+    if (x->firstview) {
+        patcherview_set_locked(x->firstview, !(n == 0));
+    }
+}
+
+void quebec_bang(t_quebec *x)
+{
+    if (!x->firstview) {    
+        defer_low(x, (method)quebec_attachView, NULL, 0, NULL);
     }
 }
 
