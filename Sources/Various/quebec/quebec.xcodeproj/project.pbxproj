@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		96965DE812B523C200691CC5 /* quebec.c in Sources */ = {isa = PBXBuildFile; fileRef = 96965DE712B523C200691CC5 /* quebec.c */; };
 		96A8BF85143F4FD200120979 /* quebecHide.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96A8BF84143F4FD200120979 /* quebecHide.txt */; };
+		96B63EAF168DEF5200D1B078 /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96B63EAE168DEF5200D1B078 /* libPizAlgorithms.a */; };
 		96D12F9D14B9912A0013AA74 /* maxmspsdk.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 96D12F9C14B9912A0013AA74 /* maxmspsdk.xcconfig */; };
-		96D69147161DD06200230BC9 /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96D69146161DD06200230BC9 /* libPizAlgorithms.a */; };
 		96DEAC2C1603719800797F70 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96DEAC2B1603719800797F70 /* MaxAPI.framework */; };
 /* End PBXBuildFile section */
 
@@ -18,8 +18,8 @@
 		8D01CCD20486CAD60068D4B7 /* quebec.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = quebec.mxo; sourceTree = BUILT_PRODUCTS_DIR; };
 		96965DE712B523C200691CC5 /* quebec.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = quebec.c; sourceTree = "<group>"; };
 		96A8BF84143F4FD200120979 /* quebecHide.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = quebecHide.txt; sourceTree = "<group>"; };
+		96B63EAE168DEF5200D1B078 /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../../Library/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
 		96D12F9C14B9912A0013AA74 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; name = maxmspsdk.xcconfig; path = ../maxmspsdk.xcconfig; sourceTree = SOURCE_ROOT; };
-		96D69146161DD06200230BC9 /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../../../Library/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
 		96DEAC2B1603719800797F70 /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "../../../../../c74support/max-includes/MaxAPI.framework"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -29,7 +29,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96DEAC2C1603719800797F70 /* MaxAPI.framework in Frameworks */,
-				96D69147161DD06200230BC9 /* libPizAlgorithms.a in Frameworks */,
+				96B63EAF168DEF5200D1B078 /* libPizAlgorithms.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,7 +51,7 @@
 		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				96D69146161DD06200230BC9 /* libPizAlgorithms.a */,
+				96B63EAE168DEF5200D1B078 /* libPizAlgorithms.a */,
 				96DEAC2B1603719800797F70 /* MaxAPI.framework */,
 			);
 			name = "External Frameworks and Libraries";
@@ -171,9 +171,11 @@
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../../Library/build/Release\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/../../Library/build/Release\"";
 				PRODUCT_NAME = quebec;
 				WRAPPER_EXTENSION = mxo;
 				ZERO_LINK = NO;
@@ -208,9 +210,11 @@
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../../Library/build/Release\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/../../Library/build/Release\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = quebec;
 				UNEXPORTED_SYMBOLS_FILE = quebecHide.txt;

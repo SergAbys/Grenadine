@@ -7,19 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		96B63E8A168DEF1900D1B078 /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96B63E89168DEF1900D1B078 /* libPizAlgorithms.a */; };
 		96C0FB4E12AA73CC009AF52A /* uniform.c in Sources */ = {isa = PBXBuildFile; fileRef = 96C0FB4D12AA73CC009AF52A /* uniform.c */; };
 		96D12FCB14B991F50013AA74 /* maxmspsdk.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 96D12FCA14B991F50013AA74 /* maxmspsdk.xcconfig */; };
 		96D5BAB3140A2FEA00E964E3 /* uniformHide.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96D5BAB2140A2FEA00E964E3 /* uniformHide.txt */; };
-		96D6912B161DD02E00230BC9 /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96D6912A161DD02E00230BC9 /* libPizAlgorithms.a */; };
 		96DEAC46160371C900797F70 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96DEAC45160371C900797F70 /* MaxAPI.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8D01CCD20486CAD60068D4B7 /* uniform.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = uniform.mxo; sourceTree = BUILT_PRODUCTS_DIR; };
+		96B63E89168DEF1900D1B078 /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../../Library/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
 		96C0FB4D12AA73CC009AF52A /* uniform.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = uniform.c; sourceTree = "<group>"; };
 		96D12FCA14B991F50013AA74 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; name = maxmspsdk.xcconfig; path = ../maxmspsdk.xcconfig; sourceTree = SOURCE_ROOT; };
 		96D5BAB2140A2FEA00E964E3 /* uniformHide.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = uniformHide.txt; sourceTree = "<group>"; };
-		96D6912A161DD02E00230BC9 /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../../../Library/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
 		96DEAC45160371C900797F70 /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "../../../../../c74support/max-includes/MaxAPI.framework"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -29,7 +29,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96DEAC46160371C900797F70 /* MaxAPI.framework in Frameworks */,
-				96D6912B161DD02E00230BC9 /* libPizAlgorithms.a in Frameworks */,
+				96B63E8A168DEF1900D1B078 /* libPizAlgorithms.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,7 +51,7 @@
 		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				96D6912A161DD02E00230BC9 /* libPizAlgorithms.a */,
+				96B63E89168DEF1900D1B078 /* libPizAlgorithms.a */,
 				96DEAC45160371C900797F70 /* MaxAPI.framework */,
 			);
 			name = "External Frameworks and Libraries";
@@ -175,6 +175,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../*Tralala/PizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../*Tralala/PizDataStructures/build/Release\"";
@@ -183,6 +184,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/../../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/../../../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/../../../Library/build/Release\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8 = "\"$(SRCROOT)/../../Library/build/Release\"";
 				PRODUCT_NAME = uniform;
 				USER_HEADER_SEARCH_PATHS = "\"/users/jeantoto/maxsdk-5.1.7/*tralala/pizdatastructures\" \"/users/jeantoto/maxsdk-5.1.7/*tralala/pizalgorithms\"";
 				WRAPPER_EXTENSION = mxo;
@@ -219,9 +221,11 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../../Library/build/Release\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/../../Library/build/Release\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = uniform;
 				UNEXPORTED_SYMBOLS_FILE = uniformHide.txt;

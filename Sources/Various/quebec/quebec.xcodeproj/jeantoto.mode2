@@ -256,8 +256,7 @@
 									<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 									<array>
 										<array>
-											<integer>3</integer>
-											<integer>2</integer>
+											<integer>6</integer>
 											<integer>0</integer>
 										</array>
 									</array>
@@ -424,8 +423,8 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>96FAD44A167777B700C46585</string>
-				<string>96FAD44B167777B700C46585</string>
+				<string>96B63EB1168DEF5500D1B078</string>
+				<string>96B63EB2168DEF5500D1B078</string>
 				<string>1C9437FD063B20B00039CFAC</string>
 				<string>1C9437FE063B20B00039CFAC</string>
 				<string>1C9437FF063B20B00039CFAC</string>
@@ -458,7 +457,6 @@
 	<integer>0</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>1C530D52069F1CE1000CFCEE</string>
 		<string>/Users/jeantoto/Max/Work/Grenadine/Sources/Various/quebec/quebec.xcodeproj</string>
 	</array>
@@ -677,7 +675,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D52069F1CE1000CFCEE</string>
-				<string>96FAD4421677779100C46585</string>
+				<string>96B63EB3168DEF5500D1B078</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>

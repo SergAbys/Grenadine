@@ -9,8 +9,8 @@
 /* Begin PBXBuildFile section */
 		9699D97214139B5800F86BD8 /* yankeeHide.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9699D97114139B5800F86BD8 /* yankeeHide.txt */; };
 		969A34D4117841580036C6BE /* yankee.c in Sources */ = {isa = PBXBuildFile; fileRef = 969A34D3117841580036C6BE /* yankee.c */; };
+		96B63E7C168DEEF100D1B078 /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96B63E7B168DEEF100D1B078 /* libPizAlgorithms.a */; };
 		96D12FDD14B9923D0013AA74 /* maxmspsdk.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 96D12FDC14B9923D0013AA74 /* maxmspsdk.xcconfig */; };
-		96D6911D161DD00900230BC9 /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96D6911C161DD00900230BC9 /* libPizAlgorithms.a */; };
 		96DEAC54160371E000797F70 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96DEAC53160371E000797F70 /* MaxAPI.framework */; };
 /* End PBXBuildFile section */
 
@@ -18,8 +18,8 @@
 		8D01CCD20486CAD60068D4B7 /* yankee.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = yankee.mxo; sourceTree = BUILT_PRODUCTS_DIR; };
 		9699D97114139B5800F86BD8 /* yankeeHide.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = yankeeHide.txt; sourceTree = "<group>"; };
 		969A34D3117841580036C6BE /* yankee.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = yankee.c; sourceTree = "<group>"; };
+		96B63E7B168DEEF100D1B078 /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../../Library/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
 		96D12FDC14B9923D0013AA74 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; name = maxmspsdk.xcconfig; path = ../maxmspsdk.xcconfig; sourceTree = SOURCE_ROOT; };
-		96D6911C161DD00900230BC9 /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../../../Library/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
 		96DEAC53160371E000797F70 /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "../../../../../c74support/max-includes/MaxAPI.framework"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -29,7 +29,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96DEAC54160371E000797F70 /* MaxAPI.framework in Frameworks */,
-				96D6911D161DD00900230BC9 /* libPizAlgorithms.a in Frameworks */,
+				96B63E7C168DEEF100D1B078 /* libPizAlgorithms.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,7 +51,7 @@
 		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				96D6911C161DD00900230BC9 /* libPizAlgorithms.a */,
+				96B63E7B168DEEF100D1B078 /* libPizAlgorithms.a */,
 				96DEAC53160371E000797F70 /* MaxAPI.framework */,
 			);
 			name = "External Frameworks and Libraries";
@@ -174,6 +174,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../*Tralala/PizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../*Tralala/PizDataStructures/build/Release\"";
@@ -182,6 +183,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/../../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/../../../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/../../../Library/build/Release\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8 = "\"$(SRCROOT)/../../Library/build/Release\"";
 				PRODUCT_NAME = yankee;
 				USER_HEADER_SEARCH_PATHS = "\"/users/jeantoto/maxsdk-5.1.7/*tralala/pizdatastructures\" \"/users/jeantoto/maxsdk-5.1.7/*tralala/pizalgorithms\"";
 				WRAPPER_EXTENSION = bundle;
@@ -217,9 +219,11 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../../Library/build/Release\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/../../Library/build/Release\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = yankee;
 				UNEXPORTED_SYMBOLS_FILE = yankeeHide.txt;

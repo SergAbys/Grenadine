@@ -10,10 +10,10 @@
 		9635AC981608BB94009FC890 /* tralalaHide.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9635AC971608BB94009FC890 /* tralalaHide.txt */; };
 		9676982713B7784800FE77F4 /* tralala.c in Sources */ = {isa = PBXBuildFile; fileRef = 9676982513B7784800FE77F4 /* tralala.c */; };
 		96A82A5215B873BA00CE73B3 /* tralalaKey.c in Sources */ = {isa = PBXBuildFile; fileRef = 96A82A5115B873BA00CE73B3 /* tralalaKey.c */; };
+		96B63E5F168DEE8200D1B078 /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96B63E5E168DEE8200D1B078 /* libPizAlgorithms.a */; };
 		96CF9326154C40F60027BB96 /* tralala.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 96CF9325154C40F60027BB96 /* tralala.xcconfig */; };
 		96DC326415581A5500C26797 /* tralalaParse.c in Sources */ = {isa = PBXBuildFile; fileRef = 96DC326315581A5500C26797 /* tralalaParse.c */; };
 		96DEABCD16036EBB00797F70 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96DEABCC16036EBB00797F70 /* MaxAPI.framework */; };
-		96E1FA40160F84E400CEE709 /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96E1FA3F160F84E400CEE709 /* libPizAlgorithms.a */; };
 		96E4A85715ADD2DA003BF81E /* tralalaPaint.c in Sources */ = {isa = PBXBuildFile; fileRef = 96E4A85615ADD2DA003BF81E /* tralalaPaint.c */; };
 		96E4A86115ADD3A1003BF81E /* tralalaMouse.c in Sources */ = {isa = PBXBuildFile; fileRef = 96E4A85F15ADD3A1003BF81E /* tralalaMouse.c */; };
 /* End PBXBuildFile section */
@@ -24,12 +24,12 @@
 		9676982513B7784800FE77F4 /* tralala.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tralala.c; sourceTree = "<group>"; };
 		96A82A5015B873BA00CE73B3 /* tralalaKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tralalaKey.h; sourceTree = "<group>"; };
 		96A82A5115B873BA00CE73B3 /* tralalaKey.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tralalaKey.c; sourceTree = "<group>"; };
+		96B63E5E168DEE8200D1B078 /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../Library/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
 		96CF9325154C40F60027BB96 /* tralala.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; path = tralala.xcconfig; sourceTree = "<group>"; };
 		96D843C315824D41005B41A9 /* tralala.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tralala.h; sourceTree = "<group>"; };
 		96DC326315581A5500C26797 /* tralalaParse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tralalaParse.c; sourceTree = "<group>"; };
 		96DC326715581AC500C26797 /* tralalaParse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tralalaParse.h; sourceTree = "<group>"; };
 		96DEABCC16036EBB00797F70 /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "../../../../c74support/max-includes/MaxAPI.framework"; sourceTree = SOURCE_ROOT; };
-		96E1FA3F160F84E400CEE709 /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../../Library/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
 		96E4A85515ADD2DA003BF81E /* tralalaPaint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tralalaPaint.h; sourceTree = "<group>"; };
 		96E4A85615ADD2DA003BF81E /* tralalaPaint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tralalaPaint.c; sourceTree = "<group>"; };
 		96E4A85F15ADD3A1003BF81E /* tralalaMouse.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tralalaMouse.c; sourceTree = "<group>"; };
@@ -42,7 +42,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96DEABCD16036EBB00797F70 /* MaxAPI.framework in Frameworks */,
-				96E1FA40160F84E400CEE709 /* libPizAlgorithms.a in Frameworks */,
+				96B63E5F168DEE8200D1B078 /* libPizAlgorithms.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,7 +64,7 @@
 		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				96E1FA3F160F84E400CEE709 /* libPizAlgorithms.a */,
+				96B63E5E168DEE8200D1B078 /* libPizAlgorithms.a */,
 				96DEABCC16036EBB00797F70 /* MaxAPI.framework */,
 			);
 			name = "External Frameworks and Libraries";
@@ -194,6 +194,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../pizAlgorithms/build/Release\"";
@@ -201,6 +202,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/../../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/../../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/../../Library/build/Release\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/../Library/build/Release\"";
 				PRODUCT_NAME = tralala;
 				USER_HEADER_SEARCH_PATHS = "$(inherited)";
 				WRAPPER_EXTENSION = mxo;
@@ -241,11 +243,13 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../pizAlgorithms/build/Debug\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/../../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/../../Library/build/Release\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/../Library/build/Release\"";
 				OTHER_LDFLAGS = "-bind_at_load";
 				PREBINDING = NO;
 				PRODUCT_NAME = tralala;

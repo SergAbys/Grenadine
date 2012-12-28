@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		96950DE5140D05FE003443D1 /* charlieHide.txt in Resources */ = {isa = PBXBuildFile; fileRef = 96950DE4140D05FE003443D1 /* charlieHide.txt */; };
-		96D69163161DD09900230BC9 /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96D69162161DD09900230BC9 /* libPizAlgorithms.a */; };
+		96B63ECB168DEF8500D1B078 /* libPizAlgorithms.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 96B63ECA168DEF8500D1B078 /* libPizAlgorithms.a */; };
 		96DEAC101603715600797F70 /* MaxAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96DEAC0F1603715600797F70 /* MaxAPI.framework */; };
 		96E263CA154C35D8007D24AB /* maxmspsdk.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 96E263C9154C35D8007D24AB /* maxmspsdk.xcconfig */; };
 		99042EDB0FEFB8AA00E07832 /* charlie.c in Sources */ = {isa = PBXBuildFile; fileRef = 99042EDA0FEFB8AA00E07832 /* charlie.c */; };
@@ -17,7 +17,7 @@
 /* Begin PBXFileReference section */
 		8D01CCD20486CAD60068D4B7 /* charlie.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = charlie.mxo; sourceTree = BUILT_PRODUCTS_DIR; };
 		96950DE4140D05FE003443D1 /* charlieHide.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = charlieHide.txt; sourceTree = "<group>"; };
-		96D69162161DD09900230BC9 /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../../../Library/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
+		96B63ECA168DEF8500D1B078 /* libPizAlgorithms.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libPizAlgorithms.a; path = ../../Library/build/Release/libPizAlgorithms.a; sourceTree = SOURCE_ROOT; };
 		96DEAC0F1603715600797F70 /* MaxAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MaxAPI.framework; path = "../../../../../c74support/max-includes/MaxAPI.framework"; sourceTree = SOURCE_ROOT; };
 		96E263C9154C35D8007D24AB /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xcconfig; name = maxmspsdk.xcconfig; path = ../maxmspsdk.xcconfig; sourceTree = SOURCE_ROOT; };
 		99042EDA0FEFB8AA00E07832 /* charlie.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = charlie.c; sourceTree = "<group>"; };
@@ -29,7 +29,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96DEAC101603715600797F70 /* MaxAPI.framework in Frameworks */,
-				96D69163161DD09900230BC9 /* libPizAlgorithms.a in Frameworks */,
+				96B63ECB168DEF8500D1B078 /* libPizAlgorithms.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,7 +51,7 @@
 		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				96D69162161DD09900230BC9 /* libPizAlgorithms.a */,
+				96B63ECA168DEF8500D1B078 /* libPizAlgorithms.a */,
 				96DEAC0F1603715600797F70 /* MaxAPI.framework */,
 			);
 			name = "External Frameworks and Libraries";
@@ -183,10 +183,12 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_11)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../*Tralala/PizDataStructures/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10 = "\"$(SRCROOT)/../../../pizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_11 = "\"$(SRCROOT)/../../../Library/build/Release\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12 = "\"$(SRCROOT)/../../Library/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../*Tralala/PizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/../../*Tralala/PizAlgorithms/build/Release\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/../../*Tralala/PizAlgorithms/build/Release\"";
@@ -225,8 +227,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../Library/build/Release\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../Library/build/Release\"";
 				PREBINDING = NO;
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = charlie;
