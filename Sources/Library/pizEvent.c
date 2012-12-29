@@ -78,7 +78,6 @@ static const PIZEventType pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // P
                                                 PIZ_EVENT_HIGH,             // PIZ_MSG_STATISTICS
                                                 PIZ_EVENT_HIGH,             // PIZ_MSG_ATTRIBUTES
                                                 //  
-                                                PIZ_EVENT_LOW,              // PIZ_GUI_LENGTH
                                                 PIZ_EVENT_LOW,              // PIZ_GUI_NOTE_DELETE
                                                 PIZ_EVENT_LOW,              // PIZ_GUI_NOTE_INCREMENT
                                                 PIZ_EVENT_LOW,              // PIZ_GUI_NOTE_DECREMENT

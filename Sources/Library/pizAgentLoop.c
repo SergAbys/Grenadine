@@ -96,7 +96,6 @@ static const PIZMethodSequence pizMethodsSequence[ ] = {
     pizSequenceStatistics,        // PIZ_MSG_STATISTICS
     pizSequenceAttributes,        // PIZ_MSG_ATTRIBUTES
     //
-    pizSequenceLength,            // PIZ_GUI_LENGTH
     pizSequenceNoteDelete,        // PIZ_GUI_NOTE_DELETE
     pizSequenceNoteIncrement,     // PIZ_GUI_NOTE_INCREMENT
     pizSequenceNoteDecrement,     // PIZ_GUI_NOTE_DECREMENT

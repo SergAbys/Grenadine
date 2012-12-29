@@ -165,17 +165,6 @@ enum {
     PIZ_ZONE_DOWN                       = 4,
     PIZ_ZONE_UP                         = 8
     };
-
-enum {
-    PIZ_LENGTH_CELL_UP                  = 1,
-    PIZ_LENGTH_CELL_DOWN                = 2,
-    PIZ_LENGTH_CELL_RIGHT,
-    PIZ_LENGTH_CELL_LEFT,
-    PIZ_LENGTH_VALUE_UP,
-    PIZ_LENGTH_VALUE_DOWN,
-    PIZ_LENGTH_VALUE_RIGHT,
-    PIZ_LENGTH_VALUE_LEFT
-    };
     
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

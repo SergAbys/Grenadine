@@ -46,7 +46,6 @@
 // -------------------------------------------------------------------------------------------------------------
 PIZ_START_C_LINKAGE
 
-PIZError    pizSequenceLength          (PIZSequence *x, PIZEvent *event);
 PIZError    pizSequenceNoteDelete      (PIZSequence *x, PIZEvent *event);
 PIZError    pizSequenceNoteIncrement   (PIZSequence *x, PIZEvent *event);
 PIZError    pizSequenceNoteDecrement   (PIZSequence *x, PIZEvent *event);

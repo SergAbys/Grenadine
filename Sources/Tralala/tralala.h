@@ -25,7 +25,7 @@
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-#include "pizAlgorithms.h"  
+#include "pizAgent.h"  
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -80,14 +80,14 @@ typedef uint32_t t_uint32_atomic;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_RUN_LOCK        systhread_mutex_lock(x->runMutex); 
-#define TLL_RUN_UNLOCK      systhread_mutex_unlock(x->runMutex); 
+#define TLL_RUN_LOCK            systhread_mutex_lock(x->runMutex); 
+#define TLL_RUN_UNLOCK          systhread_mutex_unlock(x->runMutex); 
 
-#define TLL_DATA_LOCK       systhread_mutex_lock(x->dataMutex); 
-#define TLL_DATA_UNLOCK     systhread_mutex_unlock(x->dataMutex); 
+#define TLL_DATA_LOCK           systhread_mutex_lock(x->dataMutex); 
+#define TLL_DATA_UNLOCK         systhread_mutex_unlock(x->dataMutex); 
 
-#define TLL_DAEMON_LOCK     systhread_mutex_lock(x->daemonMutex); 
-#define TLL_DAEMON_UNLOCK   systhread_mutex_unlock(x->daemonMutex); 
+#define TLL_DAEMON_LOCK         systhread_mutex_lock(x->daemonMutex); 
+#define TLL_DAEMON_UNLOCK       systhread_mutex_unlock(x->daemonMutex); 
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
