@@ -116,7 +116,7 @@ PIZ_PUBLIC int main(void)
     CLASS_ATTR_CATEGORY     (c, "hcolor4", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "hcolor5", 0, t_tll, hColor5); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor5", 0, "0.83 0.74 0.84 1."); 
+    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor5", 0, "1. 1. 0. 1."); 
     CLASS_ATTR_STYLE_LABEL  (c, "hcolor5", 0, "rgba", "Color Highlighted");
     CLASS_ATTR_CATEGORY     (c, "hcolor5", 0, "Color");
     

@@ -1,13 +1,10 @@
 MEMORANDUM :
 
-    Cmd and Click to create a note.
-    Alt and Move to duplicate the notes.
-    Ctrl (Shift) and Arrows to change the note values.
-    PgUp/PgDn and Arrows to change the note channel.
-    Caps Lock to select the zone.
-    Arrows (Shift) to change/move the zone.
-    Enter to reload the slot.
-    Cmd (Shift) and Arrows to change cell/note length.
+    Cmd : create a note.
+    Alt : duplicate the notes.
+    Ctrl {Shift} {fn} Arrows : change values.
+    Caps : select the zone.
+    Enter : reload the slot.
 
 LENGTH :
 
