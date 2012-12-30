@@ -35,7 +35,8 @@ CHANCE :
     romeo
 
 TOKENS :
-    
+
+    forget
     bpm
     chance
     velocity
@@ -65,7 +66,6 @@ TOKENS :
     attributes
     statistics
     learn
-    forget
 
     none
     ionian
