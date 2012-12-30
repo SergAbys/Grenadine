@@ -4,7 +4,6 @@ MEMORANDUM :
     Alt : duplicate the notes.
     Ctrl {Shift} {fn} Arrows : change values.
     Caps : select the zone.
-    Enter : reload the slot.
 
 LENGTH :
 
@@ -36,9 +35,7 @@ CHANCE :
     romeo
 
 TOKENS :
-	
-    learn
-    forget
+    
     bpm
     chance
     velocity
@@ -67,6 +64,8 @@ TOKENS :
     dump
     attributes
     statistics
+    learn
+    forget
 
     none
     ionian

@@ -47,7 +47,7 @@ static const PIZEventType pizEventTypes[ ]  = { PIZ_EVENT_RUN,              // P
                                                 PIZ_EVENT_RUN,              // PIZ_MSG_REFRESH
                                                 //
                                                 PIZ_EVENT_LOW,              // PIZ_MSG_LEARN
-                                                PIZ_EVENT_LOW,              // PIZ_MSG_FORGET
+                                                PIZ_EVENT_HIGH,             // PIZ_MSG_FORGET
                                                 //
                                                 PIZ_EVENT_HIGH,             // PIZ_MSG_BPM
                                                 PIZ_EVENT_HIGH,             // PIZ_MSG_CHANCE

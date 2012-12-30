@@ -31,7 +31,6 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_CLOCK_FOCUS         83.
 #define TLL_CLOCK_DAEMON_WORK   31.
 #define TLL_CLOCK_DAEMON_IDLE   3947. 
 
@@ -69,8 +68,8 @@ typedef uint32_t t_uint32_atomic;
 
 #ifdef __MACH__
 
-#define TLL_FLAG_SET(mask)      OSAtomicOr32Barrier((mask), &x->flags); 
-#define TLL_FLAG_UNSET(mask)    OSAtomicAnd32Barrier((~(mask)), &x->flags);
+#define TLL_FLAG_SET(mask)      OSAtomicOr32Barrier((mask), &x->flags) 
+#define TLL_FLAG_UNSET(mask)    OSAtomicAnd32Barrier((~(mask)), &x->flags)
 #define TLL_FLAG_TRUE(mask)     (x->flags & (mask)) 
 #define TLL_FLAG_FALSE(mask)    !(x->flags & (mask))
     
@@ -112,18 +111,14 @@ typedef struct _tll {
     t_pt                origin;
     t_jrgba             lasso;
     t_jrgba             color;
-    t_jrgba             uColor;
     t_jrgba             hColor1;
     t_jrgba             hColor2;
     t_jrgba             hColor3;
-    t_jrgba             hColor4;
-    t_jrgba             hColor5;
     t_jrgba             text;
     t_jrgba             uText;
     t_jrgba             border;
     t_jrgba             uBorder;
     t_jrgba             background;
-    t_jrgba             uBackground;
     t_symbol            *name;
     t_jtextlayout       *layer; 
     t_dictionary        *data;
@@ -136,8 +131,6 @@ typedef struct _tll {
     PIZArray            *temp[3];
     void                *runClock;
     void                *daemonClock;
-    void                *gainedClock;
-    void                *lostClock;
     void                *left;
     void                *middleLeft;
     void                *middle;

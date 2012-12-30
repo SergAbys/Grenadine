@@ -137,7 +137,7 @@ void *pizAgentEventLoop(void *agent)
     while (!PIZ_EXIT) { 
     //
     
-    PIZ_AGENT_LOCK_EVENT
+    PIZ_AGENT_EVENT_LOCK
     
     while (!(pizAgentEventLoopIsCondition(x))) {
         pthread_cond_wait(&x->condition, &x->eventLock);
@@ -147,7 +147,7 @@ void *pizAgentEventLoop(void *agent)
         } 
     }
     
-    PIZ_AGENT_UNLOCK_EVENT
+    PIZ_AGENT_EVENT_UNLOCK
         
     if (!PIZ_EXIT) {
     //
@@ -198,13 +198,13 @@ PIZError pizAgentNotify(PIZAgent *x, PIZEventCode n, long ac, long *av)
     pizEventSetData(notification, ac, av);
     pizEventSetTime(notification, &x->grainStart);
  
-    PIZ_AGENT_LOCK_OBSERVER
+    PIZ_AGENT_OBSERVER_LOCK
         
     if (x->observer && x->callback) {
         (*x->callback)(x->observer, notification);
     }
     
-    PIZ_AGENT_UNLOCK_OBSERVER
+    PIZ_AGENT_OBSERVER_UNLOCK
     
     return PIZ_GOOD;
     //
@@ -227,7 +227,7 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
     PIZMethodAgent f = NULL; 
     PIZMethodSequence g = NULL;
     
-    PIZ_AGENT_LOCK_EVENT
+    PIZ_AGENT_EVENT_LOCK
     
     if (!(pizLinklistPtrAtIndex(q, 0, (void **)&event))) {
         pizLinklistChuckWithPtr(q, event);
@@ -237,7 +237,7 @@ PIZError pizAgentEventLoopDoEvent(PIZAgent *x, PIZLinklist *q)
         err = PIZ_ERROR;
     }
     
-    PIZ_AGENT_UNLOCK_EVENT
+    PIZ_AGENT_EVENT_UNLOCK
                   
     if (event) {
     //

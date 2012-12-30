@@ -90,54 +90,39 @@ PIZ_PUBLIC int main(void)
     CLASS_ATTR_STYLE_LABEL  (c, "color", 0, "rgba", "Color");
     CLASS_ATTR_CATEGORY     (c, "color", 0, "Color");
     
-    CLASS_ATTR_RGBA         (c, "ucolor", 0, t_tll, uColor); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "ucolor", 0, "0.83 0.74 0.84 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "ucolor", 0, "rgba", "Color Unfocused");
-    CLASS_ATTR_CATEGORY     (c, "ucolor", 0, "Color");
-    
     CLASS_ATTR_RGBA         (c, "hcolor1", 0, t_tll, hColor1); 
     CLASS_ATTR_DEFAULT_SAVE (c, "hcolor1", 0, "0.83 0.74 0.84 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "hcolor1", 0, "rgba", "Color Highlighted");
+    CLASS_ATTR_STYLE_LABEL  (c, "hcolor1", 0, "rgba", "Color (Selected)");
     CLASS_ATTR_CATEGORY     (c, "hcolor1", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "hcolor2", 0, t_tll, hColor2); 
     CLASS_ATTR_DEFAULT_SAVE (c, "hcolor2", 0, "1. 1. 0. 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "hcolor2", 0, "rgba", "Color Highlighted");
+    CLASS_ATTR_STYLE_LABEL  (c, "hcolor2", 0, "rgba", "Color (Marked)");
     CLASS_ATTR_CATEGORY     (c, "hcolor2", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "hcolor3", 0, t_tll, hColor3); 
     CLASS_ATTR_DEFAULT_SAVE (c, "hcolor3", 0, "0.80 1. 0. 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "hcolor3", 0, "rgba", "Color Highlighted");
+    CLASS_ATTR_STYLE_LABEL  (c, "hcolor3", 0, "rgba", "Color (Played)");
     CLASS_ATTR_CATEGORY     (c, "hcolor3", 0, "Color");
-    
-    CLASS_ATTR_RGBA         (c, "hcolor4", 0, t_tll, hColor4); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor4", 0, "0.51 0.44 0.49 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "hcolor4", 0, "rgba", "Color Highlighted");
-    CLASS_ATTR_CATEGORY     (c, "hcolor4", 0, "Color");
-    
-    CLASS_ATTR_RGBA         (c, "hcolor5", 0, t_tll, hColor5); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "hcolor5", 0, "1. 1. 0. 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "hcolor5", 0, "rgba", "Color Highlighted");
-    CLASS_ATTR_CATEGORY     (c, "hcolor5", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "textcolor", 0, t_tll, text); 
     CLASS_ATTR_DEFAULT_SAVE (c, "textcolor", 0, "0.51 0.44 0.49 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "textcolor", 0, "rgba", "Text Color");
+    CLASS_ATTR_STYLE_LABEL  (c, "textcolor", 0, "rgba", "Text Color (Focused)");
     CLASS_ATTR_CATEGORY     (c, "textcolor", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "utextcolor", 0, t_tll, uText); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "utextcolor", 0, "0.83 0.74 0.84 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "utextcolor", 0, "rgba", "Text Unfocused");
+    CLASS_ATTR_DEFAULT_SAVE (c, "utextcolor", 0, "0.51 0.44 0.49 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "utextcolor", 0, "rgba", "Text Color");
     CLASS_ATTR_CATEGORY     (c, "utextcolor", 0, "Color");
-  
+
     CLASS_ATTR_RGBA         (c, "bordercolor", 0, t_tll, border); 
     CLASS_ATTR_DEFAULT_SAVE (c, "bordercolor", 0, "0. 0. 0. 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "bordercolor", 0, "rgba", "Border Color");
+    CLASS_ATTR_STYLE_LABEL  (c, "bordercolor", 0, "rgba", "Border Color (Focused)");
     CLASS_ATTR_CATEGORY     (c, "bordercolor", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "ubordercolor", 0, t_tll, uBorder); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "ubordercolor", 0, "0.83 0.74 0.84 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "ubordercolor", 0, "rgba", "Border Unfocused");
+    CLASS_ATTR_DEFAULT_SAVE (c, "ubordercolor", 0, "0. 0. 0. 1."); 
+    CLASS_ATTR_STYLE_LABEL  (c, "ubordercolor", 0, "rgba", "Border Color");
     CLASS_ATTR_CATEGORY     (c, "ubordercolor", 0, "Color");
     
     CLASS_ATTR_RGBA         (c, "bgcolor", 0, t_tll, background); 
@@ -145,11 +130,6 @@ PIZ_PUBLIC int main(void)
     CLASS_ATTR_STYLE_LABEL  (c, "bgcolor", 0, "rgba", "Background Color");
     CLASS_ATTR_CATEGORY     (c, "bgcolor", 0, "Color");
 
-    CLASS_ATTR_RGBA         (c, "ubgcolor", 0, t_tll, uBackground); 
-    CLASS_ATTR_DEFAULT_SAVE (c, "ubgcolor", 0, "1. 1. 1. 1."); 
-    CLASS_ATTR_STYLE_LABEL  (c, "ubgcolor", 0, "rgba", "Background Unfocused");
-    CLASS_ATTR_CATEGORY     (c, "ubgcolor", 0, "Color");
-    
     CLASS_ATTR_LONG         (c, "xoffset", 0, t_tll, offsetX);
     CLASS_ATTR_DEFAULT_SAVE (c, "xoffset", 0, "-37");
     CLASS_ATTR_LABEL        (c, "xoffset", 0, "Offset X");
@@ -168,19 +148,15 @@ PIZ_PUBLIC int main(void)
     CLASS_ATTR_CATEGORY     (c, "viewtext", 0, "Appearance");
   
     CLASS_ATTR_ORDER        (c, "color",            0, "1");
-    CLASS_ATTR_ORDER        (c, "ucolor",           0, "2");
-    CLASS_ATTR_ORDER        (c, "hcolor1",          0, "3");
-    CLASS_ATTR_ORDER        (c, "hcolor2",          0, "4");
-    CLASS_ATTR_ORDER        (c, "hcolor3",          0, "5");
-    CLASS_ATTR_ORDER        (c, "hcolor4",          0, "6");
-    CLASS_ATTR_ORDER        (c, "hcolor5",          0, "7");
-    CLASS_ATTR_ORDER        (c, "textcolor",        0, "8");
-    CLASS_ATTR_ORDER        (c, "utextcolor",       0, "9");
-    CLASS_ATTR_ORDER        (c, "bordercolor",      0, "10");
-    CLASS_ATTR_ORDER        (c, "ubordercolor",     0, "11");
-    CLASS_ATTR_ORDER        (c, "bgcolor",          0, "12");
-    CLASS_ATTR_ORDER        (c, "ubgcolor",         0, "13");
-    CLASS_ATTR_ORDER        (c, "lassocolor",       0, "14");
+    CLASS_ATTR_ORDER        (c, "hcolor1",          0, "2");
+    CLASS_ATTR_ORDER        (c, "hcolor2",          0, "3");
+    CLASS_ATTR_ORDER        (c, "hcolor3",          0, "4");
+    CLASS_ATTR_ORDER        (c, "textcolor",        0, "5");
+    CLASS_ATTR_ORDER        (c, "utextcolor",       0, "6");
+    CLASS_ATTR_ORDER        (c, "bordercolor",      0, "7");
+    CLASS_ATTR_ORDER        (c, "ubordercolor",     0, "8");
+    CLASS_ATTR_ORDER        (c, "bgcolor",          0, "9");
+    CLASS_ATTR_ORDER        (c, "lassocolor",       0, "10");
     
     CLASS_ATTR_DEFAULT      (c, "fontname", 0, "Arial");
     CLASS_ATTR_DEFAULT      (c, "fontsize", 0, "14.");
@@ -246,8 +222,6 @@ void *tralala_new(t_symbol *s, long argc, t_atom *argv)
     err |= !(x->layer       = jtextlayout_create( ));
     err |= !(x->runClock    = clock_new(x, (method)tralala_runTask));
     err |= !(x->daemonClock = clock_new(x, (method)tralala_daemonTask));
-    err |= !(x->gainedClock = clock_new(x, (method)tralala_gainedTask));
-    err |= !(x->lostClock   = clock_new(x, (method)tralala_lostTask));
     
     err |= (systhread_mutex_new(&x->dataMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
     err |= (systhread_mutex_new(&x->runMutex, SYSTHREAD_MUTEX_NORMAL) != MAX_ERR_NONE);
@@ -314,23 +288,11 @@ void tralala_free(t_tll *x)
     }
     
     if (x->runClock) {
-        clock_unset(x->runClock);
         object_free(x->runClock);
     }
     
     if (x->daemonClock) {
-        clock_unset(x->daemonClock);
         object_free(x->daemonClock);
-    }
-    
-    if (x->gainedClock) {
-        clock_unset(x->gainedClock);
-        object_free(x->gainedClock);
-    }
-    
-    if (x->lostClock) {
-        clock_unset(x->lostClock);
-        object_free(x->lostClock);
     }
     
     pizArrayFree(x->temp[0]);
@@ -472,7 +434,7 @@ void tralala_callback(void *ptr, PIZEvent *event)
         pizLinklistAppend(x->daemon, (void *)copyDaemon);
         TLL_DAEMON_UNLOCK
             
-        TLL_FLAG_SET(TLL_DIRTY_RUN)
+        TLL_FLAG_SET(TLL_DIRTY_RUN);
         jbox_redraw((t_jbox *)x);
     }
     
@@ -600,7 +562,7 @@ void tralala_daemonTask (t_tll *x)
     TLL_DAEMON_UNLOCK
     
     if (dirty) {
-        TLL_FLAG_SET(TLL_DIRTY_RUN)
+        TLL_FLAG_SET(TLL_DIRTY_RUN);
         jbox_redraw((t_jbox *)x);
     }
             
@@ -684,10 +646,10 @@ void tralala_send(t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong fl
 void tralala_manageDaemon(t_tll *x, PIZEventCode code)
 {
     if ((code == PIZ_NOTIFY_END) || (code == PIZ_MSG_STOP)) {
-        TLL_FLAG_UNSET(TLL_FLAG_DAEMON)
+        TLL_FLAG_UNSET(TLL_FLAG_DAEMON);
 
     } else if ((code == PIZ_NOTIFY_PLAYED) && (TLL_FLAG_FALSE(TLL_FLAG_DAEMON))) {
-        TLL_FLAG_SET(TLL_FLAG_DAEMON)
+        TLL_FLAG_SET(TLL_FLAG_DAEMON);
         clock_fdelay(x->daemonClock, TLL_CLOCK_DAEMON_WORK); 
     }
 }

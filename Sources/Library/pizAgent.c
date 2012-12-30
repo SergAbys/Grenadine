@@ -102,9 +102,9 @@ void pizAgentFree(PIZAgent *x)
     if (x) {
     //
     if (!x->error) {
-        PIZ_AGENT_LOCK_EVENT
+        PIZ_AGENT_EVENT_LOCK
         x->flags |= PIZ_AGENT_FLAG_EXIT;
-        PIZ_AGENT_UNLOCK_EVENT
+        PIZ_AGENT_EVENT_UNLOCK
         
         pthread_cond_signal(&x->condition);
         pthread_join(x->eventLoop, NULL); 
@@ -139,12 +139,12 @@ PIZError pizAgentAttach(PIZAgent *x, void *observer, PIZCallback callback)
     
     if (observer && callback) {
     //
-    PIZ_AGENT_LOCK_OBSERVER
+    PIZ_AGENT_OBSERVER_LOCK
     
     x->observer = observer;
     x->callback = callback;
     
-    PIZ_AGENT_UNLOCK_OBSERVER
+    PIZ_AGENT_OBSERVER_UNLOCK
 
     err = PIZ_GOOD;
     //
@@ -155,12 +155,12 @@ PIZError pizAgentAttach(PIZAgent *x, void *observer, PIZCallback callback)
 
 PIZError pizAgentDetach(PIZAgent *x, void *observer)
 {
-    PIZ_AGENT_LOCK_OBSERVER
+    PIZ_AGENT_OBSERVER_LOCK
         
     x->observer = NULL;
     x->callback = NULL;
         
-    PIZ_AGENT_UNLOCK_OBSERVER
+    PIZ_AGENT_OBSERVER_UNLOCK
     
     return PIZ_GOOD;
 }
@@ -182,9 +182,9 @@ void pizAgentDoEvent(PIZAgent *x, PIZEvent *event)
     if (q) {
         PIZError err = PIZ_GOOD;
 
-        PIZ_AGENT_LOCK_EVENT
+        PIZ_AGENT_EVENT_LOCK
         err = pizLinklistAppend(q, event);
-        PIZ_AGENT_UNLOCK_EVENT
+        PIZ_AGENT_EVENT_UNLOCK
         
         pthread_cond_signal(&x->condition);
         

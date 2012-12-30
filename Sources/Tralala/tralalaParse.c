@@ -93,8 +93,6 @@ table->yoffset          = gensym("yoffset");
 table->color            = gensym("color");
 table->hcolor1          = gensym("hcolor1");
 table->hcolor2          = gensym("hcolor2");
-table->hcolor5          = gensym("hcolor5");
-table->ucolor           = gensym("ucolor");
 table->lassocolor       = gensym("lassocolor");
 table->attr_modified    = gensym("attr_modified");
 table->getname          = gensym("getname");
@@ -261,7 +259,7 @@ void tralala_parseEvent(t_tll *x, PIZEvent *event)
         dirty |= tralala_parseEventNote(x, k, data, code);
     }
         
-    TLL_FLAG_SET(dirty)
+    TLL_FLAG_SET(dirty);
     jbox_redraw((t_jbox *)x);
 }
 

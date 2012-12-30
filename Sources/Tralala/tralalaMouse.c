@@ -77,11 +77,11 @@ void tralala_mouseDown(t_tll *x, t_object *pv, t_pt pt, long m)
             tralala_mouseUnselectAll(x);
         }
         
-        TLL_FLAG_SET(TLL_FLAG_LASSO)
+        TLL_FLAG_SET(TLL_FLAG_LASSO);
         
     } else {
         if (k == TLL_HIT_GRAB) {
-            TLL_FLAG_SET(TLL_FLAG_GRAB)
+            TLL_FLAG_SET(TLL_FLAG_GRAB);
         }
     }
     
@@ -89,7 +89,7 @@ void tralala_mouseDown(t_tll *x, t_object *pv, t_pt pt, long m)
         clock_fdelay(x->daemonClock, TLL_CLOCK_DAEMON_WORK);
     }
             
-    TLL_FLAG_SET(TLL_DIRTY_ZONE | TLL_DIRTY_NOTE)
+    TLL_FLAG_SET(TLL_DIRTY_ZONE | TLL_DIRTY_NOTE);
     jbox_redraw((t_jbox *)x);  
 }
 
@@ -99,15 +99,15 @@ void tralala_mouseDrag(t_tll *x, t_object *pv, t_pt pt, long m)
     x->cursor.y = pt.y - 1.;
     
     if (m & eShiftKey) {
-        TLL_FLAG_SET(TLL_FLAG_SHIFT)
+        TLL_FLAG_SET(TLL_FLAG_SHIFT);
     }
     
     if (TLL_FLAG_TRUE(TLL_FLAG_LASSO)) {
         if (tralala_mouseSelectLasso(x)) {
-            TLL_FLAG_SET(TLL_DIRTY_NOTE)
+            TLL_FLAG_SET(TLL_DIRTY_NOTE);
         }
 
-        TLL_FLAG_SET(TLL_DIRTY_LASSO)
+        TLL_FLAG_SET(TLL_DIRTY_LASSO);
         jbox_redraw((t_jbox *)x);
         
     } else if (TLL_FLAG_TRUE(TLL_FLAG_GRAB)) {
@@ -130,11 +130,11 @@ void tralala_mouseDrag(t_tll *x, t_object *pv, t_pt pt, long m)
 
 void tralala_mouseUp(t_tll *x, t_object *pv, t_pt pt, long m)
 {
-    TLL_FLAG_UNSET(TLL_FLAG_GRAB | TLL_FLAG_COPY | TLL_FLAG_SHIFT)
+    TLL_FLAG_UNSET(TLL_FLAG_GRAB | TLL_FLAG_COPY | TLL_FLAG_SHIFT);
     
     if (TLL_FLAG_TRUE(TLL_FLAG_LASSO)) {
         tralala_mouseReleaseLasso(x);
-        TLL_FLAG_SET(TLL_DIRTY_LASSO)
+        TLL_FLAG_SET(TLL_DIRTY_LASSO);
         jbox_redraw((t_jbox *)x);
     }
 }
@@ -409,15 +409,13 @@ void tralala_mouseReleaseLasso(t_tll *x)
     
     TLL_DATA_UNLOCK
     
-    TLL_FLAG_UNSET(TLL_FLAG_LASSO)
+    TLL_FLAG_UNSET(TLL_FLAG_LASSO);
 }
 
 void tralala_mouseUnselectZone(t_tll *x)
 {
     TLL_DATA_LOCK
-    
     dictionary_deleteentry(x->status, TLL_SYM_ZONE);
-    
     TLL_DATA_UNLOCK
 }
 
