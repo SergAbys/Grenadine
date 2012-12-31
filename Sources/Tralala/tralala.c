@@ -317,11 +317,11 @@ void tralala_assist(t_tll *x, void *b, long m, long a, char *s)
         
     } else {	
         switch (a) {
-            case 0 : sprintf(s, "(List) Played Notes");     break;
-            case 1 : sprintf(s, "(Anything) Dumped Notes"); break;
-            case 2 : sprintf(s, "(Anything) End");          break;
-            case 3 : sprintf(s, "(Bang) Will End");         break;
-            case 4 : sprintf(s, "(Anything) Dumpout");      break;
+            case 0 : sprintf(s, "(List) Played Notes");                 break;
+            case 1 : sprintf(s, "(Anything) Dumped Notes");             break;
+            case 2 : sprintf(s, "(Anything) End");                      break;
+            case 3 : sprintf(s, "(Bang) Will End");                     break;
+            case 4 : sprintf(s, "(Anything) Dumpout / Notifications");  break;
         }
     }
 }

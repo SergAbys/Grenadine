@@ -29,9 +29,9 @@ extern t_dictionary *tll_clipboard;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_STATIC ulong tralala_parseEventNote (t_tll *x, long k, long *data, PIZEventCode code);
-PIZ_STATIC void  tralala_parseEventInfo (t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s);
 PIZ_STATIC ulong tralala_parseEventCode (t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s);
+PIZ_STATIC void  tralala_parseEventInfo (t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s);
+PIZ_STATIC ulong tralala_parseEventNote (t_tll *x, long k, long *data, PIZEventCode code);
 
 PIZ_STATIC void  tralala_parseEntryNote (t_tll *x, long ac, t_atom *av, long *k, long *data);
 PIZ_STATIC void  tralala_parseEntryZone (t_tll *x, long ac, t_atom *av, long *k, long *data);
@@ -329,56 +329,6 @@ void tralala_parseDictionary(t_tll *x, t_dictionary *d, ulong flags)
 #pragma mark ---
 #pragma mark -
 
-ulong tralala_parseEventNote(t_tll *x, long k, long *data, PIZEventCode code)
-{
-    t_symbol *s = NULL;
-    ulong dirty = TLL_DIRTY_NOTE;
-    
-    dirty |= tralala_mouseAbort(x);
-    tralala_symbolWithTag(&s, *(data + PIZ_EVENT_DATA_TAG));
-      
-    TLL_DATA_LOCK
-    
-    if (code == PIZ_NOTIFY_REMOVED) {
-    //
-    if (dictionary_hasentry(x->status, s)) {
-    //
-    t_symbol *mark = NULL;
-    
-    if (!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) && (s == mark)) {
-        dictionary_deleteentry(x->status, TLL_SYM_MARK); 
-    }
-    
-    dictionary_deleteentry(x->status, s);
-    //
-    }
-    
-    dictionary_deleteentry(x->current, s);
-    //
-    } else if ((code == PIZ_NOTIFY_ADDED) || (code == PIZ_NOTIFY_CHANGED)) {
-    //
-    long i;
-    t_atom atoms[PIZ_EVENT_DATA_SIZE + 1];
-    
-    for (i = 0; i < k; i++) {
-        atom_setlong(atoms + i + 1, *(data + i));
-    }
-        
-    if (*(data + PIZ_EVENT_DATA_LOW)) {
-        dictionary_appendsym(x->status, TLL_SYM_MARK, s);
-        dictionary_appendlong(x->status, s, TLL_SELECTED);
-    }
-    
-    atom_setsym(atoms, TLL_SYM_NOTE);
-    dictionary_appendatoms(x->current, s, 6, atoms);
-    //
-    }
-    
-    TLL_DATA_UNLOCK
-    
-    return dirty;
-}
-
 ulong tralala_parseEventCode(t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s)
 {
     long i;
@@ -432,6 +382,56 @@ void  tralala_parseEventInfo(t_tll *x, long k, long *data, PIZEventCode code, t_
         atom_setlong_array(k, x->info, k, data);
         outlet_anything(x->right, s, k, x->info);
     }
+}
+
+ulong tralala_parseEventNote(t_tll *x, long k, long *data, PIZEventCode code)
+{
+    t_symbol *s = NULL;
+    ulong dirty = TLL_DIRTY_NOTE;
+    
+    dirty |= tralala_mouseAbort(x);
+    tralala_symbolWithTag(&s, *(data + PIZ_EVENT_DATA_TAG));
+      
+    TLL_DATA_LOCK
+    
+    if (code == PIZ_NOTIFY_REMOVED) {
+    //
+    if (dictionary_hasentry(x->status, s)) {
+    //
+    t_symbol *mark = NULL;
+    
+    if (!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) && (s == mark)) {
+        dictionary_deleteentry(x->status, TLL_SYM_MARK); 
+    }
+    
+    dictionary_deleteentry(x->status, s);
+    //
+    }
+    
+    dictionary_deleteentry(x->current, s);
+    //
+    } else if ((code == PIZ_NOTIFY_ADDED) || (code == PIZ_NOTIFY_CHANGED)) {
+    //
+    long i;
+    t_atom atoms[PIZ_EVENT_DATA_SIZE + 1];
+    
+    for (i = 0; i < k; i++) {
+        atom_setlong(atoms + i + 1, *(data + i));
+    }
+        
+    if (*(data + PIZ_EVENT_DATA_LOW)) {
+        dictionary_appendsym(x->status, TLL_SYM_MARK, s);
+        dictionary_appendlong(x->status, s, TLL_SELECTED);
+    }
+    
+    atom_setsym(atoms, TLL_SYM_NOTE);
+    dictionary_appendatoms(x->current, s, 6, atoms);
+    //
+    }
+    
+    TLL_DATA_UNLOCK
+    
+    return dirty;
 }
 
 // -------------------------------------------------------------------------------------------------------------

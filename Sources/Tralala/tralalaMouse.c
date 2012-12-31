@@ -73,10 +73,6 @@ void tralala_mouseDown(t_tll *x, t_object *pv, t_pt pt, long m)
         tralala_mouseAddNote(x);
 
     } else if (!(k = tralala_mouseHitNote(x, m))) {
-        if (!(m & eShiftKey)) {
-            tralala_mouseUnselectAll(x);
-        }
-        
         TLL_FLAG_SET(TLL_FLAG_LASSO);
         
     } else {
@@ -219,8 +215,12 @@ long tralala_mouseHitNote(t_tll *x, long m)
     long position = TLL_X_TO_POSITION(x->cursor.x - 1.);
     long pitch = TLL_Y_TO_PITCH(x->cursor.y - 1.);
     long k = TLL_HIT_NONE;
-    
+        
     TLL_DATA_LOCK
+    
+    if (!(m & eShiftKey)) {
+        dictionary_clear(x->status);
+    }
     
     dictionary_deleteentry(x->status, TLL_SYM_ZONE);
     
