@@ -25,7 +25,8 @@ extern t_tllSymbols tll_table;
 
 #define TLL_HIT_NONE    0
 #define TLL_HIT_SWAP    1
-#define TLL_HIT_GRAB    2
+#define TLL_HIT_PULL    2
+#define TLL_HIT_GRAB    3
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -76,7 +77,7 @@ void tralala_mouseDown(t_tll *x, t_object *pv, t_pt pt, long m)
         TLL_FLAG_SET(TLL_FLAG_LASSO);
         
     } else {
-        if (k == TLL_HIT_GRAB) {
+        if ((k == TLL_HIT_GRAB) || (k == TLL_HIT_PULL)) {
             TLL_FLAG_SET(TLL_FLAG_GRAB);
         }
     }
@@ -211,16 +212,13 @@ long tralala_mouseHitNote(t_tll *x, long m)
 {
     long i, n = 0;
     t_symbol *s = NULL;
+    t_symbol *mark = NULL;
     t_symbol **keys = NULL;
     long position = TLL_X_TO_POSITION(x->cursor.x - 1.);
     long pitch = TLL_Y_TO_PITCH(x->cursor.y - 1.);
     long k = TLL_HIT_NONE;
         
     TLL_DATA_LOCK
-    
-    if (!(m & eShiftKey)) {
-        dictionary_clear(x->status);
-    }
     
     dictionary_deleteentry(x->status, TLL_SYM_ZONE);
     
@@ -249,21 +247,34 @@ long tralala_mouseHitNote(t_tll *x, long m)
     }
     
     if (s) {
-        if (dictionary_hasentry(x->status, s) && (m & eShiftKey)) {
-            t_symbol *mark = NULL;
-            if(!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) && (s == mark)) {
-                dictionary_deleteentry(x->status, TLL_SYM_MARK); 
+        if (dictionary_hasentry(x->status, s)) {
+            if (m & eShiftKey) {
+                k = TLL_HIT_SWAP;
+            } else {
+                k = TLL_HIT_GRAB;
             }
-            
-            dictionary_deleteentry(x->status, s);
-            k = TLL_HIT_SWAP;
-            
         } else {
-            dictionary_appendsym(x->status, TLL_SYM_MARK, s);
-            dictionary_appendlong(x->status, s, TLL_SELECTED);
-            k = TLL_HIT_GRAB;
+            k = TLL_HIT_PULL;
         }
     } 
+    
+    if (!(m & eShiftKey) && ((k == TLL_HIT_NONE) || (k == TLL_HIT_PULL))) {
+        dictionary_clear(x->status);
+    }
+    
+    if (k == TLL_HIT_SWAP) {
+        if(!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) && (s == mark)) {
+            dictionary_deleteentry(x->status, TLL_SYM_MARK); 
+        }
+        dictionary_deleteentry(x->status, s);
+        
+    } else if (k == TLL_HIT_GRAB) {
+        dictionary_appendsym(x->status, TLL_SYM_MARK, s);
+        
+    } else if (k == TLL_HIT_PULL) {
+        dictionary_appendsym(x->status, TLL_SYM_MARK, s);
+        dictionary_appendlong(x->status, s, TLL_SELECTED);
+    }
     
     TLL_DATA_UNLOCK
     
