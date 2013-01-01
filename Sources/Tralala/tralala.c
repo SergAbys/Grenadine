@@ -31,7 +31,7 @@ static t_int32_atomic tll_identifier;
 
 PIZ_STATIC void tralala_send                (t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags);
 PIZ_STATIC void tralala_manageDaemon        (t_tll *x, PIZEventCode code);
-PIZ_STATIC void tralala_reloadAttributes    (t_tll *x, t_symbol *name, t_dictionary *t);
+PIZ_STATIC void tralala_filterAttributes    (t_tll *x, t_symbol *name, t_dictionary *t);
 
 PIZ_STATIC t_symbol *tralala_unique         (t_tll *x);
 PIZ_STATIC t_symbol *tralala_slotName       (long argc, t_atom *argv);
@@ -361,7 +361,7 @@ void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
     }  
 
     if ((s == TLL_SYM_SAVE) || (s == TLL_SYM_RESAVE)) { 
-        tralala_reloadAttributes(x, name, t); 
+        tralala_filterAttributes(x, name, t); 
     }
 
     if (name) {
@@ -654,8 +654,9 @@ void tralala_manageDaemon(t_tll *x, PIZEventCode code)
     }
 }
 
-void tralala_reloadAttributes(t_tll *x, t_symbol *name, t_dictionary *t)
+void tralala_filterAttributes(t_tll *x, t_symbol *name, t_dictionary *t)
 {
+    long i;
     t_dictionary *d = NULL;
     t_symbol *s[ ] = { 
         TLL_SYM_BPM, 
@@ -669,9 +670,13 @@ void tralala_reloadAttributes(t_tll *x, t_symbol *name, t_dictionary *t)
         TLL_SYM_MUTE
     };
     
+    for (i = 0; i < 9; i++) {
+        dictionary_deleteentry(t, s[i]);
+    }
+        
     if (!(dictionary_getdictionary(x->data, name, (t_object **)&d))) {
         dictionary_copyentries(d, t, s);
-    }
+    } 
 }
 
 // -------------------------------------------------------------------------------------------------------------
