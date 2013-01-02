@@ -31,7 +31,7 @@ static t_int32_atomic tll_identifier;
 
 PIZ_STATIC void tralala_send                (t_tll *x, PIZEventCode code, long argc, t_atom *argv, ulong flags);
 PIZ_STATIC void tralala_manageDaemon        (t_tll *x, PIZEventCode code);
-PIZ_STATIC void tralala_filterAttributes    (t_tll *x, t_symbol *name, t_dictionary *t);
+PIZ_STATIC void tralala_filterDictionary    (t_tll *x, t_symbol *name, t_dictionary *t);
 
 PIZ_STATIC t_symbol *tralala_unique         (t_tll *x);
 PIZ_STATIC t_symbol *tralala_slotName       (long argc, t_atom *argv);
@@ -317,11 +317,11 @@ void tralala_assist(t_tll *x, void *b, long m, long a, char *s)
         
     } else {	
         switch (a) {
-            case 0 : sprintf(s, "(List) Played Notes");                 break;
-            case 1 : sprintf(s, "(Anything) Dumped Notes");             break;
-            case 2 : sprintf(s, "(Anything) End");                      break;
-            case 3 : sprintf(s, "(Bang) Will End");                     break;
-            case 4 : sprintf(s, "(Anything) Dumpout / Notifications");  break;
+            case 0 : sprintf(s, "(List) Played Notes");     break;
+            case 1 : sprintf(s, "(Anything) Dumped Notes"); break;
+            case 2 : sprintf(s, "(Anything) End");          break;
+            case 3 : sprintf(s, "(Bang) Will End");         break;
+            case 4 : sprintf(s, "(Anything) Dumpout");      break;
         }
     }
 }
@@ -361,7 +361,7 @@ void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
     }  
 
     if ((s == TLL_SYM_SAVE) || (s == TLL_SYM_RESAVE)) { 
-        tralala_filterAttributes(x, name, t); 
+        tralala_filterDictionary(x, name, t); 
     }
 
     if (name) {
@@ -654,7 +654,7 @@ void tralala_manageDaemon(t_tll *x, PIZEventCode code)
     }
 }
 
-void tralala_filterAttributes(t_tll *x, t_symbol *name, t_dictionary *t)
+void tralala_filterDictionary(t_tll *x, t_symbol *name, t_dictionary *t)
 {
     long i;
     t_dictionary *d = NULL;

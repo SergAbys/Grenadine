@@ -31,7 +31,7 @@ PIZ_STATIC void tralala_paintCurrentZone        (t_tll *x, t_object *pv, long ar
 
 PIZ_STATIC void tralala_paintStrncatZone        (char *dst, long argc, t_atom *argv, long status);
 PIZ_STATIC void tralala_paintStrncatNote        (char *dst, long argc, t_atom *argv);
-PIZ_STATIC void tralala_paintStrncatAttribute   (char *dst, long argc, t_atom *argv);
+PIZ_STATIC void tralala_paintStrncatPanel       (char *dst, long argc, t_atom *argv);
 PIZ_STATIC void tralala_paintPitchAsString      (char *dst, long k, long size);
 
 // -------------------------------------------------------------------------------------------------------------
@@ -253,7 +253,7 @@ void tralala_paintCurrent(t_tll *x, t_object *pv)
     
     for (i = 0; i < 9; i++) {
         if (!(dictionary_getatoms(x->current, s[i], &argc, &argv)) && (argc > 1)) {
-            tralala_paintStrncatAttribute(string, argc, argv);
+            tralala_paintStrncatPanel(string, argc, argv);
         }
     }
     
@@ -491,7 +491,7 @@ void tralala_paintStrncatNote(char *dst, long argc, t_atom *argv)
     strncat_zero(dst, temp, TLL_STRING_SIZE);
 }
 
-void tralala_paintStrncatAttribute(char *dst, long argc, t_atom *argv)
+void tralala_paintStrncatPanel(char *dst, long argc, t_atom *argv)
 {
     long k = 0;
     char *p = NULL;

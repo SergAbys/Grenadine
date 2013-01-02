@@ -359,8 +359,6 @@ ulong tralala_parseEventCode(t_tll *x, long k, long *data, PIZEventCode code, t_
     dictionary_appendatoms(x->current, s, k + 1, atoms); 
     TLL_DATA_UNLOCK
     
-    outlet_anything(x->right, s, k, atoms + 1);
-     
     return dirty;
 }
 
