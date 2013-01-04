@@ -162,7 +162,7 @@ PIZ_PUBLIC int main(void)
     CLASS_ATTR_DEFAULT      (c, "fontsize", 0, "14.");
     CLASS_ATTR_DEFAULT      (c, "fontface", 0, "1");
 
-    CLASS_ATTR_DEFAULT      (c, "patching_rect", 0, "0. 0. 250. 200.");
+    CLASS_ATTR_DEFAULT      (c, "patching_rect", 0, "0. 0. 350. 200.");
     
     class_register(CLASS_BOX, c);
 
@@ -317,11 +317,11 @@ void tralala_assist(t_tll *x, void *b, long m, long a, char *s)
         
     } else {	
         switch (a) {
-            case 0 : sprintf(s, "(List) Played Notes");     break;
-            case 1 : sprintf(s, "(Anything) Dumped Notes"); break;
-            case 2 : sprintf(s, "(Anything) End");          break;
-            case 3 : sprintf(s, "(Bang) Will End");         break;
-            case 4 : sprintf(s, "(Anything) Dumpout");      break;
+            case 0 : sprintf(s, "(List) Played Notes");                 break;
+            case 1 : sprintf(s, "(Anything) Dumped Notes");             break;
+            case 2 : sprintf(s, "(Anything) End");                      break;
+            case 3 : sprintf(s, "(Bang) Will End");                     break;
+            case 4 : sprintf(s, "(Anything) Dumpout / Notifications");  break;
         }
     }
 }

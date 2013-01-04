@@ -42,6 +42,15 @@ extern t_tllSymbols tll_table;
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
+#define TLL_PT_INSIDE(a)    (((a).x + x->offsetX) >= 0.)      \
+                            && (((a).y + x->offsetY) >= 0.)   \
+                            && (((a).x + x->offsetX) <= (PIZ_SEQUENCE_SIZE_TIMELINE * TLL_PIXELS_PER_STEP)) \
+                            && (((a).y + x->offsetY) <= (((PIZ_MAGIC_PITCH + 1) * TLL_PIXELS_PER_SEMITONE))) 
+                            
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
 PIZ_STATIC void  tralala_mouseAddNote        (t_tll *x);
 PIZ_STATIC void  tralala_mouseHitZone        (t_tll *x);
 PIZ_STATIC long  tralala_mouseHitNote        (t_tll *x, long m);
@@ -58,6 +67,8 @@ PIZ_STATIC void  tralala_mouseUnselectZone   (t_tll *x);
 
 void tralala_mouseDown(t_tll *x, t_object *pv, t_pt pt, long m)
 {	
+    if (TLL_PT_INSIDE(pt)) {
+    //
     long k;
     
     x->cursor.x = pt.x - 1.;
@@ -88,10 +99,14 @@ void tralala_mouseDown(t_tll *x, t_object *pv, t_pt pt, long m)
             
     TLL_FLAG_SET(TLL_DIRTY_ZONE | TLL_DIRTY_NOTE);
     jbox_redraw((t_jbox *)x);  
+    //
+    }
 }
 
 void tralala_mouseDrag(t_tll *x, t_object *pv, t_pt pt, long m)
 {
+    if (TLL_PT_INSIDE(pt)) {
+    // 
     x->cursor.x = pt.x - 1.;
     x->cursor.y = pt.y - 1.;
     
@@ -122,6 +137,8 @@ void tralala_mouseDrag(t_tll *x, t_object *pv, t_pt pt, long m)
             if (k & TLL_MOVE_LEFT)  { tralala_key(x, pv, JKEY_LEFTARROW,    m, -1); }
             if (k & TLL_MOVE_RIGHT) { tralala_key(x, pv, JKEY_RIGHTARROW,   m, -1); }
         }
+    }
+    //
     }
 }
 
@@ -284,7 +301,7 @@ long tralala_mouseHitNote(t_tll *x, long m)
 ulong tralala_mouseMove(t_tll *x)
 {
     long h = 0;
-    long argc, cell;
+    long argc, cell = 0;
     t_atom *argv = NULL;
     long v = TLL_Y_TO_PITCH(x->cursor.y) - TLL_Y_TO_PITCH(x->origin.y);
     long h1 = TLL_X_TO_POSITION(x->cursor.x);
@@ -296,20 +313,28 @@ ulong tralala_mouseMove(t_tll *x)
     
     if (!(err |= (dictionary_getatoms(x->current, TLL_SYM_CELL, &argc, &argv)) != MAX_ERR_NONE)) {
         if (cell = atom_getlong(argv + 1)) {
-            h = ((long)(h1 / cell)) - ((long)(h2 / cell));
+            h = (long)((h1 - h2) / cell);
         }
     }
     
     TLL_DATA_UNLOCK
     
     if (!err) {
-       if (v > 0) { k |= TLL_MOVE_UP; } else if (v < 0) { k |= TLL_MOVE_DOWN; }
-       if (h > 0) { k |= TLL_MOVE_RIGHT; } else if (h < 0) { k |= TLL_MOVE_LEFT; }
-    }
-    
-    if (k) {
-        x->origin.x = x->cursor.x;
-        x->origin.y = x->cursor.y;
+        if (v > 0) { 
+            k |= TLL_MOVE_UP; 
+            x->origin.y -= TLL_PIXELS_PER_SEMITONE;
+        } else if (v < 0) { 
+            k |= TLL_MOVE_DOWN; 
+            x->origin.y += TLL_PIXELS_PER_SEMITONE;
+        }
+       
+        if (h > 0) { 
+            k |= TLL_MOVE_RIGHT; 
+            x->origin.x += cell * TLL_PIXELS_PER_STEP;
+        } else if (h < 0) { 
+            k |= TLL_MOVE_LEFT; 
+            x->origin.x -= cell * TLL_PIXELS_PER_STEP;
+        }
     }
     
     return k;

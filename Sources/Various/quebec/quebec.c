@@ -35,7 +35,6 @@ void quebec_assist      (t_quebec *x, void *b, long m, long a, char *s);
 void quebec_notify      (t_quebec *x, t_symbol *s, t_symbol *msg, void *sender, void *data);
 void quebec_attachView  (t_quebec *x);
 
-void quebec_lock        (t_quebec *x, long n);
 void quebec_bang        (t_quebec *x);
 
 void quebec_dumpTitle   (t_quebec *x);
@@ -55,7 +54,6 @@ PIZ_PUBLIC int main(void)
     
     class_addmethod(c, (method)quebec_assist,   "assist",   A_CANT, 0);
     class_addmethod(c, (method)quebec_notify,   "notify",   A_CANT, 0); 
-    class_addmethod(c, (method)quebec_lock,     "lock",     A_LONG, 0); 
     class_addmethod(c, (method)quebec_bang,     "bang",     0); 
 
     class_register(CLASS_BOX, c); 
@@ -160,13 +158,6 @@ void quebec_attachView(t_quebec *x)
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-
-void quebec_lock(t_quebec *x, long n)
-{
-    if (x->firstview) {
-        patcherview_set_locked(x->firstview, !(n == 0));
-    }
-}
 
 void quebec_bang(t_quebec *x)
 {

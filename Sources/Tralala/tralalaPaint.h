@@ -21,20 +21,20 @@
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_PIXELS_PER_STEP         1.
+#define TLL_PIXELS_PER_STEP         2.
 #define TLL_PIXELS_PER_SEMITONE     12.
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
-#define TLL_POSITION_TO_X(a)        ((a) * TLL_PIXELS_PER_STEP)
-#define TLL_PITCH_TO_Y_UP(a)        ((PIZ_MAGIC_PITCH - (a)) * TLL_PIXELS_PER_SEMITONE)
-#define TLL_PITCH_TO_Y_DOWN(a)      ((PIZ_MAGIC_PITCH - (a) + 1) * TLL_PIXELS_PER_SEMITONE)
-#define TLL_Y_TO_PITCH(a)           (PIZ_MAGIC_PITCH - ((long)((x->offsetY + (a)) / TLL_PIXELS_PER_SEMITONE)))
-#define TLL_X_TO_POSITION(a)        ((long)((x->offsetX + (a)) / TLL_PIXELS_PER_STEP))
-#define TLL_Y_OFFSET(a)             ((a) + x->offsetY)
-#define TLL_X_OFFSET(a)             ((a) + x->offsetX)
+#define TLL_POSITION_TO_X(a)    ((a) * TLL_PIXELS_PER_STEP)
+#define TLL_PITCH_TO_Y_UP(a)    ((PIZ_MAGIC_PITCH - (a)) * TLL_PIXELS_PER_SEMITONE)
+#define TLL_PITCH_TO_Y_DOWN(a)  ((PIZ_MAGIC_PITCH - (a) + 1) * TLL_PIXELS_PER_SEMITONE)
+#define TLL_Y_TO_PITCH(a)       (PIZ_MAGIC_PITCH - ((long)((x->offsetY + (a)) / TLL_PIXELS_PER_SEMITONE)))
+#define TLL_X_TO_POSITION(a)    ((long)((x->offsetX + (a)) / TLL_PIXELS_PER_STEP))
+#define TLL_Y_OFFSET(a)         ((a) + x->offsetY)
+#define TLL_X_OFFSET(a)         ((a) + x->offsetX)
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------

@@ -29,13 +29,13 @@ extern t_dictionary *tll_clipboard;
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 
-PIZ_STATIC ulong tralala_parseEventCode (t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s);
-PIZ_STATIC void  tralala_parseEventInfo (t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s);
-PIZ_STATIC ulong tralala_parseEventNote (t_tll *x, long k, long *data, PIZEventCode code);
-
 PIZ_STATIC void  tralala_parseEntryNote (t_tll *x, long ac, t_atom *av, long *k, long *data);
 PIZ_STATIC void  tralala_parseEntryZone (t_tll *x, long ac, t_atom *av, long *k, long *data);
 PIZ_STATIC void  tralala_parseEntryCode (t_tll *x, long ac, t_atom *av, long *k, long *data, PIZEventCode code);
+
+PIZ_STATIC ulong tralala_parseEventNote     (t_tll *x, long k, long *data, PIZEventCode code);
+PIZ_STATIC ulong tralala_parseEventNotify   (t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s);
+PIZ_STATIC void  tralala_parseEventInform   (t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s);
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
@@ -55,8 +55,8 @@ static t_quickmap   *tll_length;
 static t_quickmap   *tll_direction;
 static t_quickmap   *tll_select;
 static t_quickmap   *tll_key;
-static t_quickmap   *tll_info;
-static t_quickmap   *tll_changed;
+static t_quickmap   *tll_inform;
+static t_quickmap   *tll_notify;
 
 static t_dictionary *tll_code;
 
@@ -139,8 +139,8 @@ tll_length      = (t_quickmap *)quickmap_new( );
 tll_direction   = (t_quickmap *)quickmap_new( );
 tll_key         = (t_quickmap *)quickmap_new( );
 tll_select      = (t_quickmap *)quickmap_new( );
-tll_info        = (t_quickmap *)quickmap_new( );
-tll_changed     = (t_quickmap *)quickmap_new( );
+tll_inform      = (t_quickmap *)quickmap_new( );
+tll_notify      = (t_quickmap *)quickmap_new( );
 
 quickmap_add(tll_type, gensym("none"),                    (void *)(TLL_BIAS + PIZ_MODE_NONE));
 quickmap_add(tll_type, gensym("ionian"),                  (void *)(TLL_BIAS + PIZ_IONIAN));
@@ -209,59 +209,34 @@ quickmap_add(tll_key, gensym("A"),                        (void *)(TLL_BIAS + PI
 quickmap_add(tll_key, gensym("A#"),                       (void *)(TLL_BIAS + PIZ_KEY_A_SHARP));
 quickmap_add(tll_key, gensym("B"),                        (void *)(TLL_BIAS + PIZ_KEY_B));
 
-quickmap_add(tll_info, gensym("bpm"),                     (void *)(TLL_BIAS + PIZ_INFORM_BPM));
-quickmap_add(tll_info, gensym("chance"),                  (void *)(TLL_BIAS + PIZ_INFORM_CHANCE));
-quickmap_add(tll_info, gensym("velocity"),                (void *)(TLL_BIAS + PIZ_INFORM_VELOCITY));
-quickmap_add(tll_info, gensym("channel"),                 (void *)(TLL_BIAS + PIZ_INFORM_CHANNEL));
-quickmap_add(tll_info, gensym("chord"),                   (void *)(TLL_BIAS + PIZ_INFORM_CHORD));
-quickmap_add(tll_info, gensym("cell"),                    (void *)(TLL_BIAS + PIZ_INFORM_CELL));
-quickmap_add(tll_info, gensym("value"),                   (void *)(TLL_BIAS + PIZ_INFORM_VALUE));
-quickmap_add(tll_info, gensym("scale"),                   (void *)(TLL_BIAS + PIZ_INFORM_SCALE));
-quickmap_add(tll_info, gensym("mute"),                    (void *)(TLL_BIAS + PIZ_INFORM_MUTE));
-quickmap_add(tll_info, gensym("zone"),                    (void *)(TLL_BIAS + PIZ_INFORM_ZONE));
-quickmap_add(tll_info, gensym("count"),                   (void *)(TLL_BIAS + PIZ_INFORM_COUNT));
+quickmap_add(tll_inform, gensym("bpm"),                   (void *)(TLL_BIAS + PIZ_INFORM_BPM));
+quickmap_add(tll_inform, gensym("chance"),                (void *)(TLL_BIAS + PIZ_INFORM_CHANCE));
+quickmap_add(tll_inform, gensym("velocity"),              (void *)(TLL_BIAS + PIZ_INFORM_VELOCITY));
+quickmap_add(tll_inform, gensym("channel"),               (void *)(TLL_BIAS + PIZ_INFORM_CHANNEL));
+quickmap_add(tll_inform, gensym("chord"),                 (void *)(TLL_BIAS + PIZ_INFORM_CHORD));
+quickmap_add(tll_inform, gensym("cell"),                  (void *)(TLL_BIAS + PIZ_INFORM_CELL));
+quickmap_add(tll_inform, gensym("value"),                 (void *)(TLL_BIAS + PIZ_INFORM_VALUE));
+quickmap_add(tll_inform, gensym("scale"),                 (void *)(TLL_BIAS + PIZ_INFORM_SCALE));
+quickmap_add(tll_inform, gensym("mute"),                  (void *)(TLL_BIAS + PIZ_INFORM_MUTE));
+quickmap_add(tll_inform, gensym("zone"),                  (void *)(TLL_BIAS + PIZ_INFORM_ZONE));
+quickmap_add(tll_inform, gensym("count"),                 (void *)(TLL_BIAS + PIZ_INFORM_COUNT));
     
-quickmap_add(tll_changed, gensym("bpm"),                  (void *)(TLL_BIAS + PIZ_NOTIFY_BPM));
-quickmap_add(tll_changed, gensym("chance"),               (void *)(TLL_BIAS + PIZ_NOTIFY_CHANCE));
-quickmap_add(tll_changed, gensym("velocity"),             (void *)(TLL_BIAS + PIZ_NOTIFY_VELOCITY));
-quickmap_add(tll_changed, gensym("channel"),              (void *)(TLL_BIAS + PIZ_NOTIFY_CHANNEL));
-quickmap_add(tll_changed, gensym("chord"),                (void *)(TLL_BIAS + PIZ_NOTIFY_CHORD));
-quickmap_add(tll_changed, gensym("cell"),                 (void *)(TLL_BIAS + PIZ_NOTIFY_CELL));
-quickmap_add(tll_changed, gensym("value"),                (void *)(TLL_BIAS + PIZ_NOTIFY_VALUE));
-quickmap_add(tll_changed, gensym("scale"),                (void *)(TLL_BIAS + PIZ_NOTIFY_SCALE));
-quickmap_add(tll_changed, gensym("mute"),                 (void *)(TLL_BIAS + PIZ_NOTIFY_MUTE));
-quickmap_add(tll_changed, gensym("zone"),                 (void *)(TLL_BIAS + PIZ_NOTIFY_ZONE));
+quickmap_add(tll_notify, gensym("bpm"),                   (void *)(TLL_BIAS + PIZ_NOTIFY_BPM));
+quickmap_add(tll_notify, gensym("chance"),                (void *)(TLL_BIAS + PIZ_NOTIFY_CHANCE));
+quickmap_add(tll_notify, gensym("velocity"),              (void *)(TLL_BIAS + PIZ_NOTIFY_VELOCITY));
+quickmap_add(tll_notify, gensym("channel"),               (void *)(TLL_BIAS + PIZ_NOTIFY_CHANNEL));
+quickmap_add(tll_notify, gensym("chord"),                 (void *)(TLL_BIAS + PIZ_NOTIFY_CHORD));
+quickmap_add(tll_notify, gensym("cell"),                  (void *)(TLL_BIAS + PIZ_NOTIFY_CELL));
+quickmap_add(tll_notify, gensym("value"),                 (void *)(TLL_BIAS + PIZ_NOTIFY_VALUE));
+quickmap_add(tll_notify, gensym("scale"),                 (void *)(TLL_BIAS + PIZ_NOTIFY_SCALE));
+quickmap_add(tll_notify, gensym("mute"),                  (void *)(TLL_BIAS + PIZ_NOTIFY_MUTE));
+quickmap_add(tll_notify, gensym("zone"),                  (void *)(TLL_BIAS + PIZ_NOTIFY_ZONE));
 //
 }
 
 // -------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
-
-void tralala_parseEvent(t_tll *x, PIZEvent *event)
-{
-    long k;
-    long *data = NULL;
-    t_symbol *s = NULL;
-    ulong dirty = TLL_FLAG_NONE;
-    PIZEventCode code = PIZ_MSG_NONE;
-        
-    pizEventCode(event, &code);
-    pizEventData(event, &k, &data);
-        
-    if (!(quickmap_lookup_key2(tll_changed, (void *)(code + TLL_BIAS), (void **)&s))) {
-        dirty |= tralala_parseEventCode(x, k, data, code, s);
-        
-    } else if (!(quickmap_lookup_key2(tll_info, (void *)(code + TLL_BIAS), (void **)&s))) {
-        tralala_parseEventInfo(x, k, data, code, s);
-        
-    } else {
-        dirty |= tralala_parseEventNote(x, k, data, code);
-    }
-        
-    TLL_FLAG_SET(dirty);
-    jbox_redraw((t_jbox *)x);
-}
 
 void tralala_parseEntry(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong flags)
 {
@@ -298,6 +273,31 @@ void tralala_parseEntry(t_tll *x, t_symbol *s, long argc, t_atom *argv, ulong fl
     }
 }
 
+void tralala_parseEvent(t_tll *x, PIZEvent *event)
+{
+    long k;
+    long *data = NULL;
+    t_symbol *s = NULL;
+    ulong dirty = TLL_FLAG_NONE;
+    PIZEventCode code = PIZ_MSG_NONE;
+        
+    pizEventCode(event, &code);
+    pizEventData(event, &k, &data);
+        
+    if (!(quickmap_lookup_key2(tll_notify, (void *)(code + TLL_BIAS), (void **)&s))) {
+        dirty |= tralala_parseEventNotify(x, k, data, code, s);
+        
+    } else if (!(quickmap_lookup_key2(tll_inform, (void *)(code + TLL_BIAS), (void **)&s))) {
+        tralala_parseEventInform(x, k, data, code, s);
+        
+    } else {
+        dirty |= tralala_parseEventNote(x, k, data, code);
+    }
+        
+    TLL_FLAG_SET(dirty);
+    jbox_redraw((t_jbox *)x);
+}
+
 void tralala_parseDictionary(t_tll *x, t_dictionary *d, ulong flags)
 {
     long i, n = 0;
@@ -327,113 +327,6 @@ void tralala_parseDictionary(t_tll *x, t_dictionary *d, ulong flags)
 // -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 #pragma mark ---
-#pragma mark -
-
-ulong tralala_parseEventCode(t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s)
-{
-    long i;
-    ulong dirty = TLL_FLAG_NONE;
-    t_atom atoms[PIZ_EVENT_DATA_SIZE + 1];
-    
-    for (i = 0; i < k; i++) {
-        atom_setlong(atoms + i + 1, *(data + i));
-    }
-    
-    atom_setsym(atoms, s);
-    
-    if (code == PIZ_NOTIFY_ZONE) {
-        dirty |= TLL_DIRTY_ZONE;
-        
-    } else if (code == PIZ_NOTIFY_SCALE) {
-        t_symbol *sym1 = NULL;
-        t_symbol *sym2 = NULL;
-
-        quickmap_lookup_key2(tll_key,  (void *)((*(data + 0)) + TLL_BIAS), (void **)&sym1);
-        quickmap_lookup_key2(tll_type, (void *)((*(data + 1)) + TLL_BIAS), (void **)&sym2);
-
-        atom_setsym(atoms + 1, sym1);
-        atom_setsym(atoms + 2, sym2);
-    }
-    
-    TLL_DATA_LOCK
-    dictionary_appendatoms(x->current, s, k + 1, atoms); 
-    TLL_DATA_UNLOCK
-    
-    return dirty;
-}
-
-void  tralala_parseEventInfo(t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s)
-{    
-    if (code == PIZ_INFORM_SCALE) {
-        t_symbol *sym1 = NULL;
-        t_symbol *sym2 = NULL;
-
-        quickmap_lookup_key2(tll_key,  (void *)((*(data + 0)) + TLL_BIAS), (void **)&sym1);
-        quickmap_lookup_key2(tll_type, (void *)((*(data + 1)) + TLL_BIAS), (void **)&sym2);
-
-        atom_setsym(x->info + 0, sym1);
-        atom_setsym(x->info + 1, sym2);
-        
-        outlet_anything(x->right, s, 2, x->info);
-        
-    } else {
-        atom_setlong_array(k, x->info, k, data);
-        outlet_anything(x->right, s, k, x->info);
-    }
-}
-
-ulong tralala_parseEventNote(t_tll *x, long k, long *data, PIZEventCode code)
-{
-    t_symbol *s = NULL;
-    ulong dirty = TLL_DIRTY_NOTE;
-    
-    dirty |= tralala_mouseAbort(x);
-    tralala_symbolWithTag(&s, *(data + PIZ_EVENT_DATA_TAG));
-      
-    TLL_DATA_LOCK
-    
-    if (code == PIZ_NOTIFY_REMOVED) {
-    //
-    if (dictionary_hasentry(x->status, s)) {
-    //
-    t_symbol *mark = NULL;
-    
-    if (!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) && (s == mark)) {
-        dictionary_deleteentry(x->status, TLL_SYM_MARK); 
-    }
-    
-    dictionary_deleteentry(x->status, s);
-    //
-    }
-    
-    dictionary_deleteentry(x->current, s);
-    //
-    } else if ((code == PIZ_NOTIFY_ADDED) || (code == PIZ_NOTIFY_CHANGED)) {
-    //
-    long i;
-    t_atom atoms[PIZ_EVENT_DATA_SIZE + 1];
-    
-    for (i = 0; i < k; i++) {
-        atom_setlong(atoms + i + 1, *(data + i));
-    }
-        
-    if (*(data + PIZ_EVENT_DATA_LOW)) {
-        dictionary_appendsym(x->status, TLL_SYM_MARK, s);
-        dictionary_appendlong(x->status, s, TLL_SELECTED);
-    }
-    
-    atom_setsym(atoms, TLL_SYM_NOTE);
-    dictionary_appendatoms(x->current, s, 6, atoms);
-    //
-    }
-    
-    TLL_DATA_UNLOCK
-    
-    return dirty;
-}
-
-// -------------------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------------------
 #pragma mark -
 
 void tralala_parseEntryNote(t_tll *x, long ac, t_atom *av, long *k, long *data)
@@ -535,6 +428,106 @@ void tralala_parseEntryCode(t_tll *x, long ac, t_atom *av, long *k, long *data, 
             (*k) ++;
         }
     }
+}
+
+// -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+#pragma mark -
+
+ulong tralala_parseEventNote(t_tll *x, long k, long *data, PIZEventCode code)
+{
+    t_symbol *s = NULL;
+    ulong dirty = TLL_DIRTY_NOTE;
+    
+    dirty |= tralala_mouseAbort(x);
+    tralala_symbolWithTag(&s, *(data + PIZ_EVENT_DATA_TAG));
+      
+    TLL_DATA_LOCK
+    
+    if (code == PIZ_NOTIFY_REMOVED) {
+    //
+    if (dictionary_hasentry(x->status, s)) {
+    //
+    t_symbol *mark = NULL;
+    
+    if (!(dictionary_getsym(x->status, TLL_SYM_MARK, &mark)) && (s == mark)) {
+        dictionary_deleteentry(x->status, TLL_SYM_MARK); 
+    }
+    
+    dictionary_deleteentry(x->status, s);
+    //
+    }
+    
+    dictionary_deleteentry(x->current, s);
+    //
+    } else if ((code == PIZ_NOTIFY_ADDED) || (code == PIZ_NOTIFY_CHANGED)) {
+    //
+    atom_setsym(x->note, TLL_SYM_NOTE);
+    atom_setlong_array(5, x->note + 1, 5, data);
+    dictionary_appendatoms(x->current, s, 6, x->note);
+    
+    if (*(data + PIZ_EVENT_DATA_LOW)) {
+        dictionary_appendsym(x->status, TLL_SYM_MARK, s);
+        dictionary_appendlong(x->status, s, TLL_SELECTED);
+    }
+    //
+    }
+    
+    TLL_DATA_UNLOCK
+    
+    return dirty;
+}
+
+ulong tralala_parseEventNotify(t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s)
+{
+    ulong dirty = TLL_FLAG_NONE;
+    
+    atom_setsym(x->notify, s);
+    
+    if (code == PIZ_NOTIFY_ZONE) { 
+        dirty |= TLL_DIRTY_ZONE; 
+    }
+    
+    if (code == PIZ_NOTIFY_SCALE) {
+        t_symbol *sym1 = NULL;
+        t_symbol *sym2 = NULL;
+
+        quickmap_lookup_key2(tll_key,  (void *)((*(data + 0)) + TLL_BIAS), (void **)&sym1);
+        quickmap_lookup_key2(tll_type, (void *)((*(data + 1)) + TLL_BIAS), (void **)&sym2);
+
+        atom_setsym(x->notify + 1, sym1);
+        atom_setsym(x->notify + 2, sym2);
+        
+    } else {
+        atom_setlong_array(k, x->notify + 1, k, data);
+    }
+    
+    TLL_DATA_LOCK
+    dictionary_appendatoms(x->current, s, k + 1, x->notify); 
+    TLL_DATA_UNLOCK
+    
+    outlet_anything(x->right, s, k, x->notify + 1);
+    
+    return dirty;
+}
+
+void tralala_parseEventInform(t_tll *x, long k, long *data, PIZEventCode code, t_symbol *s)
+{    
+    if (code == PIZ_INFORM_SCALE) {
+        t_symbol *sym1 = NULL;
+        t_symbol *sym2 = NULL;
+
+        quickmap_lookup_key2(tll_key,  (void *)((*(data + 0)) + TLL_BIAS), (void **)&sym1);
+        quickmap_lookup_key2(tll_type, (void *)((*(data + 1)) + TLL_BIAS), (void **)&sym2);
+
+        atom_setsym(x->inform + 0, sym1);
+        atom_setsym(x->inform + 1, sym2);
+        
+    } else {
+        atom_setlong_array(k, x->inform, k, data);
+    }
+    
+    outlet_anything(x->right, s, k, x->inform);
 }
 
 // -------------------------------------------------------------------------------------------------------------

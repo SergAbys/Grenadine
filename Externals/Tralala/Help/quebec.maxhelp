@@ -27,41 +27,17 @@
 		"devicewidth" : 0.0,
 		"boxes" : [ 			{
 				"box" : 				{
-					"maxclass" : "message",
-					"text" : "lock 0",
-					"patching_rect" : [ 105.0, 135.0, 47.0, 21.0 ],
-					"fontname" : "Arial",
-					"presentation" : 0,
-					"bgcolor2" : [ 0.867, 0.867, 0.867, 1.0 ],
-					"gradient" : 0,
-					"fontface" : 0,
-					"background" : 0,
-					"fontsize" : 14.0,
-					"numinlets" : 2,
-					"bgcolor" : [ 0.866667, 0.866667, 0.866667, 0.0 ],
-					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
-					"textcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
-					"ignoreclick" : 0,
-					"numoutlets" : 1,
-					"hidden" : 0,
-					"id" : "obj-9",
-					"outlettype" : [ "" ]
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"maxclass" : "toggle",
 					"patching_rect" : [ 90.0, 255.0, 20.0, 20.0 ],
 					"presentation" : 0,
+					"bordercolor" : [ 0.5, 0.5, 0.5, 1.0 ],
 					"background" : 0,
+					"checkedcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"numinlets" : 1,
 					"bgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"ignoreclick" : 0,
 					"numoutlets" : 1,
-					"bordercolor" : [ 0.5, 0.5, 0.5, 1.0 ],
-					"checkedcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"hidden" : 0,
 					"id" : "obj-7",
 					"outlettype" : [ "int" ]
@@ -144,10 +120,10 @@
 					"pic" : "gooegg.jpg",
 					"presentation" : 0,
 					"xoffset" : 0.0,
-					"background" : 0,
-					"numinlets" : 1,
 					"autofit" : 0,
+					"background" : 0,
 					"yoffset" : 0.0,
+					"numinlets" : 1,
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"alpha" : 1.0,
 					"ignoreclick" : 0,
@@ -162,17 +138,17 @@
 				"box" : 				{
 					"maxclass" : "button",
 					"patching_rect" : [ 22.0, 217.0, 20.0, 20.0 ],
-					"blinkcolor" : [ 1.0, 0.890196, 0.090196, 1.0 ],
 					"presentation" : 0,
 					"fgcolor" : [ 1.0, 1.0, 1.0, 1.0 ],
 					"background" : 0,
-					"outlinecolor" : [ 0.71328, 0.71328, 0.71328, 1.0 ],
 					"numinlets" : 1,
 					"bgcolor" : [ 0.91328, 0.91328, 0.91328, 0.75 ],
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"ignoreclick" : 0,
 					"numoutlets" : 1,
 					"hidden" : 0,
+					"outlinecolor" : [ 0.71328, 0.71328, 0.71328, 1.0 ],
+					"blinkcolor" : [ 1.0, 0.890196, 0.090196, 1.0 ],
 					"id" : "obj-5",
 					"outlettype" : [ "bang" ]
 				}
@@ -233,15 +209,15 @@
 					"border" : 0,
 					"rounded" : 8,
 					"grad1" : [ 0.188235, 0.105882, 0.266667, 1.0 ],
+					"bordercolor" : [ 0.0, 0.0, 0.0, 1.0 ],
+					"grad2" : [ 0.858824, 0.858824, 0.858824, 1.0 ],
 					"background" : 1,
 					"numinlets" : 1,
-					"grad2" : [ 0.858824, 0.858824, 0.858824, 1.0 ],
 					"bgcolor" : [ 0.66667, 0.66667, 0.66667, 1.0 ],
 					"presentation_rect" : [ 0.0, 0.0, 0.0, 0.0 ],
 					"ignoreclick" : 1,
-					"numoutlets" : 0,
 					"shadow" : 0,
-					"bordercolor" : [ 0.0, 0.0, 0.0, 1.0 ],
+					"numoutlets" : 0,
 					"hidden" : 0,
 					"id" : "obj-23",
 					"angle" : 0.0
@@ -251,38 +227,8 @@
  ],
 		"lines" : [ 			{
 				"patchline" : 				{
-					"source" : [ "obj-4", 0 ],
-					"destination" : [ "obj-7", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.694118, 0.694118, 0.694118, 1.0 ],
-					"midpoints" : [  ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"source" : [ "obj-1", 1 ],
-					"destination" : [ "obj-4", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.694118, 0.694118, 0.694118, 1.0 ],
-					"midpoints" : [  ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"source" : [ "obj-9", 0 ],
+					"source" : [ "obj-2", 0 ],
 					"destination" : [ "obj-1", 0 ],
-					"hidden" : 0,
-					"color" : [ 0.694118, 0.694118, 0.694118, 1.0 ],
-					"midpoints" : [  ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"source" : [ "obj-1", 0 ],
-					"destination" : [ "obj-5", 0 ],
 					"hidden" : 0,
 					"color" : [ 0.694118, 0.694118, 0.694118, 1.0 ],
 					"midpoints" : [  ]
@@ -301,8 +247,28 @@
 			}
 , 			{
 				"patchline" : 				{
-					"source" : [ "obj-2", 0 ],
-					"destination" : [ "obj-1", 0 ],
+					"source" : [ "obj-1", 0 ],
+					"destination" : [ "obj-5", 0 ],
+					"hidden" : 0,
+					"color" : [ 0.694118, 0.694118, 0.694118, 1.0 ],
+					"midpoints" : [  ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"source" : [ "obj-1", 1 ],
+					"destination" : [ "obj-4", 0 ],
+					"hidden" : 0,
+					"color" : [ 0.694118, 0.694118, 0.694118, 1.0 ],
+					"midpoints" : [  ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"source" : [ "obj-4", 0 ],
+					"destination" : [ "obj-7", 0 ],
 					"hidden" : 0,
 					"color" : [ 0.694118, 0.694118, 0.694118, 1.0 ],
 					"midpoints" : [  ]

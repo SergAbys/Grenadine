@@ -98,7 +98,9 @@ typedef struct _tll {
     t_systhread_mutex   runMutex;
     t_systhread_mutex   dataMutex;
     t_systhread_mutex   daemonMutex;
-    t_atom              info[4];
+    t_atom              note[6];
+    t_atom              inform[4];
+    t_atom              notify[5];
     t_atom              played[4];
     t_atom              dumped[5];
     t_atom              link;
