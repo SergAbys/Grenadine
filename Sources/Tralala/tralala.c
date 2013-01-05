@@ -362,16 +362,12 @@ void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
         x->name = name;
     }  
 
-    if (name) {
-    //
     if ((s == TLL_SYM_SAVE) || (s == TLL_SYM_RESAVE)) { 
         tralala_filterDictionary(x, name, t); 
     }
 
     dictionary_appenddictionary(x->data, name, (t_object *)t);
     jpatcher_set_dirty(jbox_get_patcher((t_object *)x), 1);
-    //
-    }
     //
     }
 }
@@ -385,22 +381,26 @@ void tralala_recall(t_tll *x, t_symbol *s, long argc, t_atom *argv)
     
     if (s == TLL_SYM_RELOAD) {
         name = x->name;
-    } else {
+    } 
+    
+    if (!name) {
         name = tralala_slotName(argc, argv);
         x->name = name;
     }        
     
+    if (!(dictionary_getdictionary(x->data, name, (t_object **)&d))) {
+    //
     if ((s == TLL_SYM_LOAD) || (s == TLL_SYM_RELOAD)) {
         flags |= TLL_FLAG_FILTER;
-    } 
-    
-    if (name && !(dictionary_getdictionary(x->data, name, (t_object **)&d))) {
-        if (t = dictionary_new ( )) {
-            dictionary_copyunique(t, d);
-            tralala_send(x, PIZ_MSG_CLEAR, 0, NULL, TLL_FLAG_RUN);
-            tralala_parseDictionary(x, t, flags);
-            object_free(t);
-        }
+    }
+
+    if (t = dictionary_new ( )) {
+        dictionary_copyunique(t, d);
+        tralala_send(x, PIZ_MSG_CLEAR, 0, NULL, TLL_FLAG_RUN);
+        tralala_parseDictionary(x, t, flags);
+        object_free(t);
+    }
+    //
     }
 }
 
