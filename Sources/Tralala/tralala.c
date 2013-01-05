@@ -355,18 +355,22 @@ void tralala_store(t_tll *x, t_symbol *s, long argc, t_atom *argv)
 
     if (s == TLL_SYM_RESAVE) {
         name = x->name;
-    } else {
+    }
+    
+    if (!name) {
         name = tralala_slotName(argc, argv);
         x->name = name;
     }  
 
+    if (name) {
+    //
     if ((s == TLL_SYM_SAVE) || (s == TLL_SYM_RESAVE)) { 
         tralala_filterDictionary(x, name, t); 
     }
 
-    if (name) {
-        dictionary_appenddictionary(x->data, name, (t_object *)t);
-        jpatcher_set_dirty(jbox_get_patcher((t_object *)x), 1);
+    dictionary_appenddictionary(x->data, name, (t_object *)t);
+    jpatcher_set_dirty(jbox_get_patcher((t_object *)x), 1);
+    //
     }
     //
     }
