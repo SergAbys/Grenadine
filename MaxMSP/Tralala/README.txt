@@ -2,7 +2,7 @@ MEMORANDUM :
 
     Cmd : create a note.
     Alt : duplicate the notes.
-    Ctrl {Shift} {fn} Arrows : change values.
+    Ctrl {shift} {fn} Arrows : change values.
     Caps : select the zone.
 
 LENGTH :
