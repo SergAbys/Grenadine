@@ -33,7 +33,12 @@ The Cecill-C licence is LGPL-like. Contributions are welcomed, feedbacks appreci
 
 ### Tralala
 
-Algorithmic sequencer. Updated last : January 6, 2013.
+```
+[quebec]    : To Grab patcher notifications.
+[tralala]   : Algorithmic sequencer. Updated last : January 6, 2013.
+```
+
+#### Memorandum
 
 ```
 Cmd : create a note.
