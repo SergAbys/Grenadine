@@ -1,5 +1,3 @@
-- Tralala updated last : January 6, 2013.
-
 # Grenadine
 
 Grenadine is a project for generative music with agents and machine-learning ; currently just a collection of prototypes for Max/MSP.
@@ -16,10 +14,6 @@ Grenadine is a project for generative music with agents and machine-learning ; c
 
 To install just add the "MaxMSP" folder in your filepath. For now those externals are for macintosh only.  
 
-## Contributing
-
-The Cecill-C licence is LGPL-like. Contributions are welcomed, feedbacks appreciated. 
-
 ## Features
 
 ### Various
@@ -34,6 +28,8 @@ The Cecill-C licence is LGPL-like. Contributions are welcomed, feedbacks appreci
 ```
 
 ### Tralala
+
+Algorithmic sequencer. Updated last : January 6, 2013.
 
 ```
 Cmd : create a note.
@@ -157,3 +153,7 @@ A
 A#
 B
 ```
+
+## Contributing
+
+The Cecill-C licence is LGPL-like. Contributions are welcomed, feedbacks appreciated.
