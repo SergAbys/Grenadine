@@ -34,11 +34,11 @@ The Cecill-C licence is LGPL-like. Contributions are welcomed, feedbacks appreci
 ### Tralala
 
 ```
-[quebec]    : To Grab patcher notifications.
+[quebec]    : To grab patcher notifications.
 [tralala]   : Algorithmic sequencer. Updated last : January 6, 2013.
 ```
 
-#### Memorandum
+### Memorandum
 
 ```
 Cmd : create a note.
