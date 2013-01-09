@@ -1,6 +1,6 @@
 # Grenadine
 
-Grenadine is a project for generative music with agents and machine-learning ; currently just a collection of prototypes for Max/MSP.
+Grenadine is a prototype for generative music with agents and machine-learning ; currently just a collection of objects for Max/MSP.
 
 ## Thanks
 
