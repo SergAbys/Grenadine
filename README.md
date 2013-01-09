@@ -12,7 +12,11 @@ Grenadine is a project for generative music with agents and machine-learning ; c
   
 ## Installation
 
-To install just add the "MaxMSP" folder in your filepath. For now those externals are for macintosh only.  
+To install just add the "MaxMSP" folder in your filepath. For now, those externals are for macintosh only.  
+
+## Contributing
+
+The Cecill-C licence is LGPL-like. Contributions are welcomed, feedbacks appreciated.
 
 ## Features
 
@@ -153,7 +157,3 @@ A
 A#
 B
 ```
-
-## Contributing
-
-The Cecill-C licence is LGPL-like. Contributions are welcomed, feedbacks appreciated.
